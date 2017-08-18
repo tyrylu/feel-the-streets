@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource>
+  <object class="wxFrame" name="main_frame">
+  	
+  <object class="wxMenuBar" name="gamemenu">
+  </object>
+  <object class="wxPanel" name="panel">
+    </object>
+
+    <title>Feel the streets</title>
+  </object>
+<object class="wxDialog" name="objects_browser">
+    <object class="wxPanel">
+      <object class="wxGridBagSizer">
+<object class="sizeritem">
+          <cellpos>0,0</cellpos>
+          <object class="wxStaticText">
+            <label>Objekty</label>
+          </object>
+        </object>
+<object class="sizeritem">
+          <cellpos>1,0</cellpos>
+          <object class="wxListBox" name="objects">
+                                            </object>
+        </object>
+                <object class="sizeritem">
+          <cellpos>0,1</cellpos>
+          <object class="wxStaticText">
+            <label>Vlastnosti objektu</label>
+          </object>
+        </object>
+        <object class="sizeritem">
+          <cellpos>1,1</cellpos>
+          <object class="wxListBox" name="props">
+                     </object>
+        </object>
+        <object class="sizeritem">
+          <cellpos>2,0</cellpos>
+          <object class="wxButton" name="goto">
+            <label>Jít na</label>
+          <default>1</default>
+          </object>
+        </object>
+  <object class="sizeritem">
+          <cellpos>2,1</cellpos>
+          <object class="wxButton" name="close">
+            <label>Zavřít</label>
+          </object>
+        </object>
+                  </object>
+  </object>
+  <title>Titulek</title>
+  </object>
+  <object class="wxDialog" name="road_segments_browser">
+    <object class="wxPanel">
+      <object class="wxGridBagSizer">
+<object class="sizeritem">
+          <cellpos>0,0</cellpos>
+          <object class="wxStaticText">
+            <label>Úseky cesty</label>
+          </object>
+        </object>
+<object class="sizeritem">
+          <cellpos>1,0</cellpos>
+          <object class="wxListBox" name="segments">
+                                            </object>
+        </object>
+  <object class="sizeritem">
+          <cellpos>2,0</cellpos>
+          <object class="wxButton" name="close">
+<default>1</default>            
+<label>Zavřít</label>
+          </object>
+        </object>
+                  </object>
+  </object>
+  <title>Detaily cesty</title>
+  </object>
+  </resource>
+  
