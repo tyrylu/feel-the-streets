@@ -1,16 +1,19 @@
 import enum
-from sqlalchemy import Column, ForeignKey, Boolean, Enum, Integer, UnicodeText
-from .enums import LeisureType, SportType, AccessType
+from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer, UnicodeText
+from ..sa_types import IntEnum
+from .enums import LeisureType, SportType, AccessType, OSMObjectType
 from . import Addressable
 
 class Leisure(Addressable):
     __tablename__ = "leisures"
+    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["addressables.id", "addressables.osm_type"]),)
     __mapper_args__ = {'polymorphic_identity': 'leisure'}
-    id = Column(Integer, ForeignKey("addressables.id"), primary_key=True)
-    type = Column(Enum(LeisureType), nullable=False)
-    sport = Column(Enum(SportType))
+    id = Column(Integer, primary_key=True)
+    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    type = Column(IntEnum(LeisureType), nullable=False)
+    sport = Column(IntEnum(SportType))
     surface = Column(UnicodeText)
-    access = Column(Enum(AccessType))
+    access = Column(IntEnum(AccessType))
     description = Column(UnicodeText)
     opening_hours = Column(UnicodeText)
     designation = Column(UnicodeText)

@@ -1,7 +1,9 @@
 import enum
-from sqlalchemy import Column, ForeignKey, Boolean, Enum, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer, UnicodeText
+from ..sa_types import IntEnum
 from . import Named
-from .enums import BuildingType
+from .enums import BuildingType, OSMObjectType
+
 class TransportRelationship(enum.Enum):
     none = 0
     platform = 1
@@ -9,12 +11,14 @@ class TransportRelationship(enum.Enum):
 
 class Platform(Named):
     __tablename__ = "platforms"
+    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
     __mapper_args__ = {'polymorphic_identity': 'platform'}
-    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
+    id = Column(Integer, primary_key=True)
+    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
     train = Column(Boolean)
     bus = Column(Boolean)
     tram = Column(Boolean)
-    railway = Column(Enum(TransportRelationship))
+    railway = Column(IntEnum(TransportRelationship))
     shelter = Column(Boolean)
     bench = Column(Boolean)
     network = Column(UnicodeText)
@@ -23,4 +27,6 @@ class Platform(Named):
     lit = Column(Boolean)
     wheelchair = Column(Boolean)
     covered = Column(Boolean)
-    building = Column(Enum(BuildingType))
+    building = Column(IntEnum(BuildingType))
+    bin = Column(Boolean)
+    official_name = Column(UnicodeText)

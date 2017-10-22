@@ -1,10 +1,13 @@
-from sqlalchemy import Column, ForeignKey, Boolean, Enum, Integer
-from .enums import HistoricType
+from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer
+from ..sa_types import IntEnum
+from .enums import HistoricType, OSMObjectType
 from . import Named
 
 class Fountain(Named):
     __tablename__ = "fountains"
+    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
     __mapper_args__ = {'polymorphic_identity': 'fountain'}
-    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
+    id = Column(Integer, primary_key=True)
+    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
     drinking_water = Column(Boolean)
-    historic = Column(Enum(HistoricType))
+    historic = Column(IntEnum(HistoricType))

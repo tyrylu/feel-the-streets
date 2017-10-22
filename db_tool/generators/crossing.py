@@ -8,6 +8,8 @@ class CrossingGenerator(Generator):
         self.renames("highway", "type")
         self.removes("crossing_ref")
         self.renames("crossing", "type")
+        self.renames("traffic_signals:direction", "traffic_signals_direction")
+        self.renames("traffic_signals:sound", "traffic_signals_sound")
         self.removes_subtree("maxheight")
         self.replaces_property_value("type", "; ", "_")
     @staticmethod

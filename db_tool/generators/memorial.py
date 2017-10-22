@@ -7,6 +7,7 @@ class MemorialGenerator(HistoricGenerator):
         self.generates(Memorial)
         self.renames("memorial:type", "memorial_type")
         self.renames("memorial", "memorial_kind")
+        self.renames("heritage:operator", "heritage_operator")
 
     @staticmethod
     def accepts(props):

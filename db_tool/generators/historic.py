@@ -6,6 +6,7 @@ class HistoricGenerator(Generator):
         super().__init__()
         self.generates(Historic)
         self.renames("historic", "type")
+        self.renames("heritage:operator", "heritage_operator")
         self.removes("alt_name")
 
     @staticmethod

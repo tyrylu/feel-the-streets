@@ -1,13 +1,19 @@
 import enum
-from sqlalchemy import Column, ForeignKey, Enum, Integer
+from sqlalchemy import Column, ForeignKeyConstraint, Integer
+from ..sa_types import IntEnum
 from .entity import Entity
+from .enums import OSMObjectType
 
 class FireHydrantType(enum.Enum):
     unknown = 0
     pillar = 1
+    wall = 2
+    
 
 class FireHydrant(Entity):
     __tablename__ = "fire_hydrants"
+    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["entities.id", "entities.osm_type"]),)
     __mapper_args__ = {'polymorphic_identity': 'fire_hydrant'}
-    id = Column(Integer, ForeignKey("entities.id"), primary_key=True)
-    type = Column(Enum(FireHydrantType), nullable=False)
+    id = Column(Integer, primary_key=True)
+    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    type = Column(IntEnum(FireHydrantType), nullable=False)

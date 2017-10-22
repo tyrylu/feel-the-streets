@@ -82,3 +82,4 @@ from .tower import Tower
 from .piste import Piste
 from .garden import Garden
 from .building_part import BuildingPart
+from .route import Route

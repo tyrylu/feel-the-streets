@@ -1,28 +1,32 @@
 import enum
-from sqlalchemy import Column, ForeignKey, Boolean, Enum, Float, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
+from ..sa_types import IntEnum
 from . import Named
-from .enums import AccessType, Location
+from .enums import AccessType, Location, OSMObjectType
 
 class Direction(enum.Enum):
     unknown = 0
     up = 1
     down = 2
+    yes = 3
 
 class Steps(Named):
     __tablename__ = "steps"
+    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
     __mapper_args__ = {'polymorphic_identity': 'steps'}
-    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
-    direction = Column(Enum(Direction))
+    id = Column(Integer, primary_key=True)
+    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    direction = Column(IntEnum(Direction))
     step_count = Column(Integer)
     surface = Column(UnicodeText)
     width = Column(Float)
     bicycles_allowed = Column(Boolean)
     lit = Column(Boolean)
     layer = Column(Integer)
-    foot = Column(Enum(AccessType))
+    foot = Column(IntEnum(AccessType))
     tunnel = Column(UnicodeText)
-    access = Column(Enum(AccessType))
-    motor_vehicle = Column(Enum(AccessType))
+    access = Column(IntEnum(AccessType))
+    motor_vehicle = Column(IntEnum(AccessType))
     handrail = Column(Boolean)
     vehicle = Column(Boolean)
     bicycle = Column(Boolean)
@@ -33,4 +37,5 @@ class Steps(Named):
     note = Column(UnicodeText)
     material = Column(UnicodeText)
     tracktype = Column(UnicodeText)
-    location = Column(Enum(Location))
+    location = Column(IntEnum(Location))
+    wheelchair = Column(Boolean)

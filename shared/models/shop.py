@@ -1,21 +1,25 @@
 import enum
-from sqlalchemy import Column, ForeignKey, Boolean, Enum, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer, UnicodeText
+from ..sa_types import IntEnum
 from . import Building
-from .enums import ShopType, LandType
+from .enums import ShopType, LandType, OSMObjectType
 
 class SecondHandType(enum.Enum):
     none = 0
     only = 1
     yes = 2
+    no = 3
 
 class SkiingType(enum.Enum):
     nordic = 0
 
 class Shop(Building):
     __tablename__ = "shops"
+    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["buildings.id", "buildings.osm_type"]),)
     __mapper_args__ = {'polymorphic_identity': 'shop'}
-    id = Column(Integer, ForeignKey("buildings.id"), primary_key=True)
-    type = Column(Enum(ShopType), nullable=False)
+    id = Column(Integer, primary_key=True)
+    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    type = Column(IntEnum(ShopType), nullable=False)
     vehicle_parts = Column(UnicodeText)
     vehicle_repair = Column(UnicodeText)
     organic = Column(Boolean)
@@ -25,9 +29,9 @@ class Shop(Building):
     notes_payment = Column(Boolean)
     visa_payment = Column(Boolean)
     bitcoin_payment = Column(Boolean)
-    second_hand = Column(Enum(SecondHandType))
+    second_hand = Column(IntEnum(SecondHandType))
     brand = Column(UnicodeText)
     service = Column(UnicodeText)
-    skiing = Column(Enum(SkiingType)) # Do we want a skiing_shop?
-    landuse = Column(Enum(LandType))
+    skiing = Column(IntEnum(SkiingType)) # Do we want a skiing_shop?
+    landuse = Column(IntEnum(LandType))
     wine = Column(Boolean)

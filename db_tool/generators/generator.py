@@ -1,14 +1,16 @@
 import logging, pdb
-from sqlalchemy import Boolean, Enum, Float, Integer, inspect
+from sqlalchemy import Boolean, DateTime, Float, Integer, inspect
 from .utils import *
 from .converters import *
+from shared.sa_types import IntEnum
 
 log = logging.getLogger(__name__)
 
 class Generator:
-
+    instance_order = 0
     def __init__(self):
-        self._generated_from_way = None
+        Generator.instance_order += 1
+        self.order = Generator.instance_order
         self._generates = None
         self._removes = []
         self._renames = {}
@@ -38,17 +40,15 @@ class Generator:
     def replaces_property_value(self, property, string, replacement):
         self._replaces_property_value.append((property, string, replacement))
     
-    def generate_from(self, entity_spec, is_way, record):
-        self._generated_from_way = is_way
+    def generate_from(self, entity_spec, record):
         if not self._generates:
             raise RuntimeError('Generated class not specified.')
-        props = entity_spec['properties']
+        props = entity_spec.tags
         props = self._prepare_properties(entity_spec, props, record)
         return self._create_entity(props, record)
 
     def _prepare_properties(self, entity_spec, props, record):
-        props = self._prepare_id(entity_spec, props)
-        props = self._prepare_geometry(entity_spec, props)
+        props = self._prepare_basic_props(entity_spec, props)
         props = self._do_renames(props)
         props = self._do_unprefixes(props)
         props = self._do_replaces(props)
@@ -82,20 +82,21 @@ class Generator:
             if prop in props:
                 props[prop] = props[prop].replace(string, replacement)
         return props
+
     def _create_entity(self, props, record):
         if not self._check_required(props, record):
             return None
         props = self._remove_unknowns(props, record)
         return self._generates(**props)
 
-    def _prepare_id(self, entity, props):
-        props['id'] = int(entity['id'])
-        if self._generated_from_way:
-           props['id'] = -props['id']
-        return props
-
-    def _prepare_geometry(self, entity, props):
-        props['geometry'] = create_geometry(entity)
+    def _prepare_basic_props(self, entity, props):
+        props['id'] = entity.id
+        props["osm_type"] = entity.type
+        props["version"] = entity.version
+        props["changeset"] = entity.changeset
+        props["timestamp"] = entity.timestamp
+        props["user"] = entity.user
+        props["uid"] = entity.uid
         return props
 
     def _do_conversions(self, props, record):
@@ -105,12 +106,15 @@ class Generator:
                 value = props[col.name]
                 if isinstance(col.type, Boolean):
                     value = convert_boolean(self._generates.__name__, col.name, value, record)
-                elif isinstance(col.type, Enum):
-                    value = convert_enum(col.name, value, col.type.enum_class, record)
+                elif isinstance(col.type, IntEnum):
+                    value = convert_enum(col.name, value, col.type._enum_class, record)
                 elif isinstance(col.type, Float):
                     value = convert_float(self._generates.__name__, col.name, value, record)
                 elif isinstance(col.type, Integer):
                     value = convert_integer(self._generates.__name__, col.name, value, record)
+                elif isinstance(col.type, DateTime):
+                    value = convert_datetime(self._generates.__name__, col.name, value, record)
+                
                 if value:
                     props[col.name] = value
                 else:
@@ -118,17 +122,18 @@ class Generator:
         return props
     def _check_required(self, props, record):
         for column in inspect(self._generates).columns:
-            if column.name in {"discriminator", "address_id"}: continue
+            if column.name in {"discriminator", "address_id", "geometry"}: continue
             if not column.nullable and column.name not in props:
-                record.add_missing_property(self._generates.__qualname__, column.name)
+                record.add_missing_required_property(self._generates.__qualname__, column.name)
                 return False
         return True
+
     def _remove_unknowns(self, props, record):
         unknown = []
         for prop, val in props.items():
             if prop == "address": continue
             if prop not in inspect(self._generates).columns:
-                record.add_missing_property(self._generates.__name__, prop, val)
+                record.add_missing_property(self._generates.__name__, prop, val, self.order)
                 unknown.append(prop)
         for prop in unknown:
             del props[prop]

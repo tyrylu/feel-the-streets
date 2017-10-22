@@ -13,6 +13,7 @@ class TourismGenerator(AddressAwareGenerator):
         self.renames("internet_access:fee", "internet_access_fee")
         self.renames("roof:height", "roof_height")
         self.renames("roof:shape", "roof_shape")
+        self.renames("heritage:operator", "heritage_operator")
         self.unprefixes("contact")
         self.removes("alt_ref")
         self.removes("mtb")

@@ -8,6 +8,7 @@ class StepsGenerator(Generator):
         self.removes("highway")
         self.renames("bycicles", "bycicles_allowed")
         self.renames("incline", "direction")
+        self.removes("steps")
         self.removes_subtree("ramp")
     @staticmethod
     def accepts(props):

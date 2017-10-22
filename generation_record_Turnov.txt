@@ -1,7 +1,0 @@
-Out of 75653 processed features, 12884 were mapped to database entities.
-* 1 missing properties
-** Entity Platform is missing the property bin, appears 2 times.
-Values: "yes", "yes"
-* 0 missing enum members
-* 0 type violations
-* 0 Missing required properties

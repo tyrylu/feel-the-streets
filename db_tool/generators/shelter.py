@@ -7,6 +7,7 @@ class ShelterGenerator(Generator):
         self.generates(Shelter)
         self.removes("amenity")
         self.renames("shelter_type", "type")
+        self.removes_subtree("building:ruian")
     @staticmethod
     def accepts(props):
         return "amenity" in props and props["amenity"] == "shelter"

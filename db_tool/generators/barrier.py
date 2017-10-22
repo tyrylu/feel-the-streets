@@ -6,6 +6,10 @@ class BarrierGenerator(Generator):
         super().__init__()
         self.generates(Barrier)
         self.renames("barrier", "type")
+        self.renames("toll:hgv", "toll_hgv")
+        self.removes("motor_vehicle:conditional")
+        self.removes("access:conditional")
+        self.removes("note:en")
 
     def _prepare_properties(self, entity_spec, props, record):
         props["barrier"] = props["barrier"].replace("-", "_")

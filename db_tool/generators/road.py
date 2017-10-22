@@ -19,6 +19,7 @@ class RoadGenerator(Generator):
         self.renames("cycleway:right", "right_cycleway")
         self.renames("maxspeed:hgv", "maxspeed_hgv")
         self.renames("maxspeed:forward", "maxspeed_forward")
+        self.renames("proposed:bridge", "proposed_bridge")
         self.renames("maxspeed:backward", "maxspeed_backward")
         self.renames("oneway:bicycle", "bicycle_oneway")
         self.renames("vehicle", "vehicle_allowed")

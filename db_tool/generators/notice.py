@@ -5,7 +5,9 @@ class NoticeGenerator(AnnotatedGenerator):
     def __init__(self):
         super().__init__()
         self.generates(Notice)
+        self.renames("seamark:type", "type")
         self.unprefixes("seamark:notice")
+        self.unprefixes("notice")
 
     @staticmethod
     def accepts(props):

@@ -1,10 +1,14 @@
-from sqlalchemy import Column, ForeignKey, Float, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKeyConstraint, Float, Integer, UnicodeText
+from ..sa_types import IntEnum
 from . import Natural
+from .enums import OSMObjectType
 
 class Tree(Natural):
     __tablename__ = "trees"
+    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["naturals.id", "naturals.osm_type"]),)
     __mapper_args__ = {'polymorphic_identity': 'tree'}
-    id = Column(Integer, ForeignKey("naturals.id"), primary_key=True)
+    id = Column(Integer, primary_key=True)
+    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
     taxon = Column(UnicodeText)
     genus = Column(UnicodeText)
     leaf_type = Column(UnicodeText)

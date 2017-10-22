@@ -1,7 +1,8 @@
 import enum
-from sqlalchemy import Column, ForeignKey, Enum, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKeyConstraint, Integer, UnicodeText
+from ..sa_types import IntEnum
 from . import Named
-from .enums import HistoricType
+from .enums import HistoricType, OSMObjectType
 
 class BoundaryType(enum.Enum):
     national_park = 1
@@ -9,20 +10,27 @@ class BoundaryType(enum.Enum):
     marker = 3
     yes = 4 # Should perhaps rename to some?
     protected_area = 5
-
+    historic = 6
+    civil = 7
+    cliff = 8
+    
+    
 class MarkerType(enum.Enum):
     none = 0
     stone = 1
 
 class Boundary(Named):
     __tablename__ = "boundaries"
+    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
     __mapper_args__ = {'polymorphic_identity': 'boundary'}
-    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
-    type = Column(Enum(BoundaryType))
+    id = Column(Integer, primary_key=True)
+    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    type = Column(IntEnum(BoundaryType))
     admin_level = Column(Integer)
-    historic_type = Column(Enum(HistoricType))
-    marker_type = Column(Enum(MarkerType))
+    historic_type = Column(IntEnum(HistoricType))
+    marker_type = Column(IntEnum(MarkerType))
     wikipedia = Column(UnicodeText)
     note = Column(UnicodeText)
     start_date = Column(UnicodeText)
     wikidata = Column(UnicodeText)
+    population = Column(Integer)

@@ -1,7 +1,8 @@
 import enum
-from sqlalchemy import Column, ForeignKey, Boolean, Integer, Enum, UnicodeText
+from sqlalchemy import Column, ForeignKey, ForeignKeyConstraint, Boolean, Integer, UnicodeText
+from ..sa_types import IntEnum
 from sqlalchemy.orm import relationship
-from .enums import Amenity, TourismType, AerialWayType, RailWayType, ManMade, AccessType
+from .enums import Amenity, TourismType, AerialWayType, RailWayType, ManMade, AccessType, OSMObjectType
 from .entity import Entity
 
 class AreaType(enum.Enum):
@@ -11,14 +12,23 @@ class AreaType(enum.Enum):
     service = 3
     yes = 4
     path = 5
-
+    footway = 6
+    rest_area = 7
+    living_street = 8
+    residential = 9
+    track = 10
+    construction = 11
+    elevator = 12
+    
 class Area(Entity):
     __tablename__ = "areas"
+    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["entities.id", "entities.osm_type"]),)
     __mapper_args__ = {'polymorphic_identity': 'area'}
-    id = Column(Integer, ForeignKey("entities.id"), primary_key=True)
-    type = Column(Enum(AreaType), nullable=False)
+    id = Column(Integer, primary_key=True)
+    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    type = Column(IntEnum(AreaType), nullable=False)
     name = Column(UnicodeText)
-    amenity = Column(Enum(Amenity))
+    amenity = Column(IntEnum(Amenity))
     layer = Column(Integer)
     surface = Column(UnicodeText)
     bicycle = Column(Boolean)
@@ -26,9 +36,9 @@ class Area(Entity):
     lit = Column(Boolean)
     address_id = Column(Integer, ForeignKey("addresses.id"))
     address = relationship("Address")
-    tourism = Column(Enum(TourismType))
-    aeroway = Column(Enum(AerialWayType))
-    railway = Column(Enum(RailWayType))
-    man_made = Column(Enum(ManMade))
+    tourism = Column(IntEnum(TourismType))
+    aeroway = Column(IntEnum(AerialWayType))
+    railway = Column(IntEnum(RailWayType))
+    man_made = Column(IntEnum(ManMade))
     floating = Column(Boolean)
-    access = Column(Enum(AccessType))
+    access = Column(IntEnum(AccessType))

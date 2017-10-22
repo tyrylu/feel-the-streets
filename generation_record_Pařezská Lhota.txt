@@ -1,5 +1,0 @@
-Out of 3380 processed features, 458 were mapped to database entities.
-* 0 missing properties
-* 0 missing enum members
-* 0 type violations
-* 0 Missing required properties

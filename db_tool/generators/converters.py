@@ -1,4 +1,5 @@
 import logging
+import dateutil.parser
 
 log = logging.getLogger(__name__)
 def convert_boolean(class_name, prop, val, record):
@@ -10,6 +11,8 @@ def convert_boolean(class_name, prop, val, record):
 
 
 def convert_enum(prop, val, enum, record):
+    if isinstance(val, enum):
+        return val
     try:
         return enum[val]
     except:
@@ -29,4 +32,11 @@ def convert_integer(class_name, prop, val, record):
         return int(val)
     except:
         record.add_type_violation(class_name, prop, val, "int")
+        return None
+
+def convert_datetime(class_name, prop, val, record):
+    try:
+        return dateutil.parser.parse(val)
+    except:
+        record.add_type_violation(class_name, prop, val, "DateTime")
         return None

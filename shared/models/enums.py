@@ -1,5 +1,10 @@
 import enum
 
+class OSMObjectType(enum.Enum):
+    node = 0
+    way = 1
+    relation = 2
+
 class AccessType(enum.Enum):
     unspecified = -1
     no = 0
@@ -13,6 +18,22 @@ class AccessType(enum.Enum):
     designated = 8
     public = 9
     dismount = 10
+    openhour = 11
+    disabled = 12
+    psv = 13
+    agricultural = 14
+    hgv = 15
+    unknown = 16
+    official = 17
+    restricted = 18
+    emergency = 19
+    dedicated = 20
+    t = 21
+    permission = 22
+    mtb = 23
+    use_sidepath = 24
+    
+    
 
 class LeisureType(enum.Enum):
     none = 0
@@ -37,6 +58,32 @@ class LeisureType(enum.Enum):
     ice_rink = 19
     garden = 20
     fitness_centre = 21
+    bleachers = 22
+    hackerspace = 23
+    horse_riding = 24
+    table_tennis_table = 25
+    sauna = 26
+    fitness_station = 27
+    tanning_salon = 28
+    dance = 29
+    yes = 30
+    miniature_golf = 31
+    marina = 32
+    maze = 33
+    slipway = 34
+    badminton = 35
+    social_club = 36
+    adult_gaming_centre = 37
+    amusement_arcade = 38
+    meadow = 39
+    sport = 40
+    beach_resort = 41
+    outdoor_seating = 42
+    long_jump = 43
+    racetrack = 44
+    swimming_area = 45
+    
+    
 
 class Amenity(enum.Enum):
     none = 0
@@ -99,6 +146,81 @@ class Amenity(enum.Enum):
     waste_disposal = 57
     feeding_place = 58
     clinic = 59
+    swimming_pool = 60
+    ice_cream = 61
+    bycicle_rental = 62
+    embassy = 63
+    grit_bin = 64
+    ferry_terminal = 65
+    fodder_rack = 66
+    food_court = 67
+    compressed_air = 68
+    pub = 69
+    bureau_de_change = 70
+    charging_station = 71
+    feeding_rack = 72
+    ticket_validator = 73
+    baby_hatch = 74
+    bycicle_repair_station = 75
+    public_bookcase = 76
+    vehicle_inspection = 77
+    casino = 78
+    car_rental = 79
+    first_aid = 80
+    boat_rental = 81
+    retirement_home = 82
+    animal_shelter = 83
+    music_school = 84
+    dog_training = 85
+    exhibition_center = 86
+    proposed = 87
+    coworking_space = 88
+    canteen = 89
+    wine_bar = 90
+    dog_asylum = 91
+    authority = 92
+    charity = 93
+    bicycle_rental = 94
+    other = 95
+    gambling = 96
+    hospice = 97
+    winery = 98
+    board_games_club = 99
+    menza = 100
+    stripclub = 101
+    conference_centre = 102
+    animal_training = 103
+    dormitory = 104
+    dojo = 105
+    stock_exchange = 106
+    studio = 107
+    bicycle_repair_station = 108
+    feeder = 109
+    vacuum_cleaner = 110
+    shower = 111
+    loading_dock = 112
+    concert_hall = 113
+    sauna = 114
+    table = 115
+    shop = 116
+    trolley_bey = 117
+    construction = 118
+    left_luggage = 119
+    photo_booth = 120
+    planetarium = 121
+    art_school = 122
+    science = 123
+    station = 124
+    park = 125
+    social_centre = 126
+    bag_wrap = 127
+    seating = 128
+    check_in = 129
+    reception_desk = 130
+    yes = 131
+    luggage_locker = 132
+    bts = 133
+    
 
 
 
@@ -150,6 +272,153 @@ class ShopType(enum.Enum):
     hardware = 43
     pastry = 44
     scuba_diving = 45
+    jewelry = 46
+    butcher = 47
+    interior_decoration = 48
+    fashion = 49
+    copyshop = 50
+    pet = 51
+    vacant = 52
+    chemistry = 53
+    seafood = 54
+    musical_instrument = 55
+    organic = 56
+    tailor = 57
+    fabric = 58
+    frame = 59
+    hifi = 60
+    art = 61
+    pawnbroker = 62
+    antiques = 63
+    hobby = 64
+    cooking = 65
+    boutique = 66
+    fishing = 67
+    bathroom = 68
+    beverages = 69
+    herbalist = 70
+    clocks = 71
+    dry_cleaning = 72
+    watch = 73
+    locksmith = 74
+    travel_agency = 75
+    music = 76
+    fishmonger = 77
+    perfumery = 78
+    massage = 79
+    deli = 80
+    outdoor_hunting = 81
+    bag = 82
+    isp = 83
+    beauty = 84
+    cosmetics = 85
+    coins = 86
+    food = 87
+    weapons = 88
+    medical_supply = 89
+    video = 90
+    nutrition_supplements = 91
+    houseware = 92
+    photo = 93
+    beer = 94
+    variety_store = 95
+    erotic = 96
+    cheese = 97
+    baby_goods = 98
+    bathroom_furnishing = 99
+    carpet = 100
+    kitchen = 101
+    trade = 102
+    games = 103
+    tea = 104
+    bed = 105
+    ticket = 106
+    ice_cream = 107
+    souvenir = 108
+    vacuum_cleaner = 109
+    curtain = 110
+    estate_agent = 111
+    tobacco = 112
+    sewing = 113
+    bookmaker = 114
+    tiles = 115
+    electrical = 116
+    wood_floor = 117
+    radiotechnics = 118
+    no = 119
+    craft = 120
+    grocery = 121
+    glass = 122
+    military = 123
+    lighting = 124
+    appliances = 125
+    locks_and_keys = 126
+    ski = 127
+    painter = 128
+    glaziery = 129
+    stonework = 130
+    furniture_interior_decoration = 131
+    photoshop = 132
+    shoe_repair = 133
+    stationery_chemist = 134
+    drogist = 135
+    watches = 136
+    models = 137
+    fireworks = 138
+    children = 139
+    fairtrade = 140
+    lost_and_found = 141
+    empty = 142
+    medical_equipment = 143
+    second_hand = 144
+    handicraft = 145
+    hunting = 146
+    energy = 147
+    crystal = 148
+    leather = 149
+    army = 150
+    betting = 151
+    spiritual = 152
+    electronics_stationery = 153
+    farm = 154
+    Karavany = 155
+    money_lender = 156
+    insurance = 157
+    supplements = 158
+    shoemaker = 159
+    software = 160
+    lottery = 161
+    copyshop_toys = 162
+    plavecké_potřeby = 163
+    eBikes = 164
+    rc_models = 165
+    video_games = 166
+    Apple_service_and_accessories = 167
+    tattoo = 168
+    plumber = 169
+    duty_free = 170
+    hairdresser_beauty = 171
+    beekeeping = 172
+    fireplace = 173
+    hearing_aids = 174
+    haberdashery = 175
+    window_blind = 176
+    lamps = 177
+    výroba_reklamy = 178
+    glassware = 179
+    bathroom_furniture = 180
+    mushrooms = 181
+    italian_food = 182
+    greek = 183
+    chocolate = 184
+    floorer = 185
+    design = 186
+    sewing_machines = 187
+    carpeting = 188
+    auto_repair = 189
+    model = 190
+    
+    
     
 class Inclination(enum.Enum):
     unknown = 0
@@ -157,6 +426,11 @@ class Inclination(enum.Enum):
     down = 2
     yes = 3
     forward = 4
+    backward = 5
+    no = 6
+    anticlockwise = 7
+    
+    
 
 class ManMade(enum.Enum):
     none = 0
@@ -177,6 +451,42 @@ class ManMade(enum.Enum):
     crane = 16
     surveillance = 17
     cellar_entrance = 18
+    adit = 19
+    mast = 20
+    fodder_rack = 21
+    reservoir = 22
+    watermill = 23
+    water_works = 24
+    flagpole = 25
+    beacon = 26
+    beehive = 27
+    dyke = 28
+    street_cabinet = 29
+    cross = 30
+    campanile = 31
+    yes = 32
+    advertising = 33
+    insect_hotel = 34
+    monitoring_station = 35
+    embankment = 36
+    bunker_silo = 37
+    cooling_tower = 38
+    pillar = 39
+    communications_tower = 40
+    antenna = 41
+    storage_tank = 42
+    windsock = 43
+    telescope = 44
+    lighthouse = 45
+    stack = 46
+    fire_reserve = 47
+    gasometer = 48
+    silo = 49
+    clearcut = 50
+    canopy = 51
+    
+    
+    
 
 
 class SportType(enum.Enum):
@@ -211,6 +521,69 @@ class SportType(enum.Enum):
     shooting_range = 26
     skiing_cycling = 27
     ski_jumping = 28
+    gymnastics = 29
+    fitness = 30
+    table_tennis = 31
+    fishing = 32
+    archery = 33
+    box = 34
+    bowling = 35
+    trampoline = 36
+    dance = 37
+    chess = 38
+    paintball = 39
+    petanque = 40
+    exercise = 41
+    toboggan = 42
+    rowing = 43
+    laser_tag = 44
+    handball = 45
+    floorball = 46
+    hockey = 47
+    rugby = 48
+    hockeyball = 49
+    rugby_league = 50
+    horse_racing = 51
+    skating = 52
+    softball = 53
+    canoe = 54
+    bmx = 55
+    american_football = 56
+    motor = 57
+    parkour = 58
+    cycling_skiing = 59
+    sokol = 60
+    rugby_union = 61
+    boxing = 62
+    ropes_course = 63
+    scuba_diving = 64
+    snowboarding = 65
+    billiards = 66
+    bowls = 67
+    yoga = 68
+    kettlebell = 69
+    climbing_adventure = 70
+    miniature_golf = 71
+    dog_racing = 72
+    team_handball = 73
+    football = 74
+    field_hockey = 75
+    bobsleigh = 76
+    minigolf = 77
+    motocross = 78
+    workout = 79
+    dog_training = 80
+    fire_fighting = 81
+    curling = 82
+    kanoistika = 83
+    riding = 84
+    climbing_wall = 85
+    rc_car = 86
+    hardcourt_bikepolo = 87
+    long_jump = 88
+    
+    
+    
 
 class BarrierType(enum.Enum):
     none = 0
@@ -234,6 +607,25 @@ class BarrierType(enum.Enum):
     jersey_barrier = 18
     toll_booth = 19
     kerb = 20
+    portcullis = 21
+    hampshire_gate = 22
+    stile = 23
+    chain = 24
+    wire = 25
+    log = 26
+    yes = 27
+    height_restrictor = 28
+    city_wall = 29
+    wire_fence = 30
+    railing = 31
+    sally_port = 32
+    rope = 33
+    banister = 34
+    glass = 36
+    border_control = 37
+    
+    
+    
     
 class SmokingType(enum.Enum):
     none = 0
@@ -241,6 +633,8 @@ class SmokingType(enum.Enum):
     yes = 2
     no = 3
     separated = 4
+    isolated = 5
+    
     
 class TourismType(enum.Enum):
     none = 0
@@ -260,6 +654,13 @@ class TourismType(enum.Enum):
     gallery = 14
     zoo = 15
     yes = 16
+    chalet = 17
+    caravan_site = 18
+    disused = 19
+    apartment = 20
+    wine_cellar = 21
+    
+    
     
     
 class CrossingType(enum.Enum):
@@ -272,6 +673,14 @@ class CrossingType(enum.Enum):
     unmarked = 5
     crossing = 6
     island_ucontrolled = 7
+    marked = 8
+    surface = 9
+    yes = 10
+    bicycle = 11
+    cycle = 12
+    
+    
+    
 
 class HistoricType(enum.Enum):
     none = -1
@@ -283,6 +692,22 @@ class HistoricType(enum.Enum):
     boundary_stone = 5
     castle = 6
     archaeological_site = 7
+    tomb = 8
+    yes = 9
+    monastery = 10
+    quarry = 11
+    city_gate = 12
+    attraction = 13
+    battlefield = 14
+    restaurant = 15
+    aircraft = 16
+    building = 17
+    tank = 18
+    highwater_mark = 19
+    garages = 20
+    heritage = 21
+    
+    
 
 
 class TrafficCalmingType(enum.Enum):
@@ -295,6 +720,9 @@ class TrafficCalmingType(enum.Enum):
     rumble_strip = 6
     table = 7
     chicane = 8
+    island = 9
+    cushion = 10
+    
 
 class WaterWayType(enum.Enum):
     none = 0
@@ -306,6 +734,13 @@ class WaterWayType(enum.Enum):
     dam = 6
     ditch = 7
     drain = 8
+    waterfall = 9
+    wadi = 10
+    lock_gate = 11
+    boatyard = 12
+    lock = 13
+    
+    
 
 
 class NaturalType(enum.Enum):
@@ -330,6 +765,14 @@ class NaturalType(enum.Enum):
     beach = 17
     grassland = 18
     shingle = 19
+    heath = 20
+    sand = 21
+    bedrock = 22
+    sinkhole = 23
+    mud = 24
+    valley = 25
+    
+    
 
 class BuildingType(enum.Enum):
     none = -1
@@ -339,6 +782,18 @@ class BuildingType(enum.Enum):
     transportation = 3
     civic = 4
     train_station = 5
+    house = 6
+    garage = 7
+    roof = 8
+    warehouse = 9
+    industrial = 10
+    commercial = 11
+    shelter = 12
+    railway_station = 13
+    apartments = 14
+    cabin = 15
+    
+    
 
 class InfoType(enum.Enum):
     none = 0
@@ -346,6 +801,14 @@ class InfoType(enum.Enum):
     office = 2
     map = 3
     board = 4
+    history = 5
+    plants = 6
+    terminal = 7
+    tree = 8
+    bicyclemap = 9
+    nature = 10
+    
+    
     
 
 class AerialWayType(enum.Enum):
@@ -362,6 +825,17 @@ class AerialWayType(enum.Enum):
     runway = 9
     drag_lift = 10
     lift = 11
+    apron = 12
+    terminal = 13
+    hangar = 14
+    holding_position = 15
+    navigationaid = 16
+    gate = 17
+    papi = 18
+    parking_position = 19
+    proposed = 20
+    
+    
 
 
 class RailWayType(enum.Enum):
@@ -371,7 +845,7 @@ class RailWayType(enum.Enum):
     turntable = 2
     level_crossing = 3
     buffer_stop = 4
-    halt= 5
+    halt = 5
     crossing = 6
     station = 7
     switch = 8
@@ -381,6 +855,25 @@ class RailWayType(enum.Enum):
     railway_crossing = 12
     narrow_gauge = 13
     service_station = 14
+    junction = 15
+    disused = 16
+    razed = 17
+    proposed = 18
+    dismantled = 19
+    miniature = 20
+    railway = 21
+    subway_entrance = 22
+    signal = 23
+    crossover = 24
+    subway = 25
+    construction = 26
+    funicular = 27
+    roundhouse = 28
+    yes = 29
+    signal_box = 30
+    stop = 31
+    
+    
 
 class TunnelType(enum.Enum):
     no = 0
@@ -392,6 +885,12 @@ class BridgeType(enum.Enum):
     no = 0
     yes = 1
     viaduct = 2
+    culvert = 3
+    covered = 4
+    boardwalk = 5
+    trestle = 6
+    
+    
 
 class RoadType(enum.Enum):
     none = -1
@@ -426,6 +925,27 @@ class RoadType(enum.Enum):
     proposed = 29
     speed_camera = 30
     stop = 31
+    incline_steep = 32
+    trolleybus_stop = 33
+    elevator = 34
+    speed_radar = 35
+    motorway = 36
+    motorway_link = 37
+    raceway = 38
+    platform = 39
+    corridor = 40
+    yes = 41
+    abandoned = 42
+    traffic_island = 43
+    give_way = 44
+    milestone = 45
+    emergency_access_point = 46
+    turning_loop = 47
+    services = 48
+    rest_area = 49
+    emergency_bay = 50
+    
+    
 
 class LandType(enum.Enum):
     forest = 0
@@ -450,16 +970,93 @@ class LandType(enum.Enum):
     plant_nursery = 18
     shingle = 19
     retail = 20
+    basin = 21
+    construction = 22
+    farmyard = 23
+    greenfield = 24
+    proposed = 25
+    highway = 26
+    vineyard = 27
+    greenhouse_horticulture = 28
+    animal_keeping = 29
+    garden = 30
+    paddock = 31
+    churchyard = 32
+    yes = 33
+    river = 34
+    playground = 35
+    flowerbed = 36
+    
+    
 
 class BuildingPartType(enum.Enum):
     yes = 0
     civic = 1
     industrial = 2
+    balcony = 3
+    garages = 4
+    residential = 5
+    tower = 6
+    ramp = 7
+    elevator = 8
+    steps = 9
+    roof = 10
+    
+    
 
 class RoofShape(enum.Enum):
     flat = 0
     pyramidal = 1
     hipped = 2
+    gabled = 3
+    skillion = 4
+    sawtooth = 5
+    dome = 6
+    round = 7
+    gambrel = 8
+    mansard = 9
+    onion = 10
+    side_hipped = 11
+    saltbox = 12
+    tripple_skillion = 13
+    
+    
 
 class Location(enum.Enum):
     indoor = 0
+    underground = 1
+    kiosk = 2
+    outdoor = 3
+
+class BridgeStructure(enum.Enum):
+    beam = 1
+    arch = 2
+    
+    
+class Role(enum.Enum):
+    outer = 0
+    inner = 1
+    guidepost = 2
+    route = 3
+    platform = 4
+    stop = 5
+    admin_centre = 6
+    subarea = 7
+
+class ConstructionType(enum.Enum):
+    railway = 0
+    motorway = 1
+    motorway_link = 2
+    restaurant = 3
+    information = 4
+    residential = 5
+    retail = 6
+    building = 7
+    
+
+class IndustrialType(enum.Enum):
+    factory = 0
+    distributor = 1
+    power = 2
+    depot = 3
+    

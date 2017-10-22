@@ -8,6 +8,9 @@ class SocialFacilityGenerator(AddressAwareGenerator):
         self.removes("amenity")
         self.renames("social_facility", "facility_type")
         self.renames("social_facility:for", "expected_users")
+        self.renames("building", "building_type")
+        self.renames("building:flats", "flats")
+        self.removes_subtree("building:ruian")
         self.removes_subtree("health_specialty")
 
     @staticmethod

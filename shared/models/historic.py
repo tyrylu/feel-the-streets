@@ -1,13 +1,16 @@
 import enum
-from sqlalchemy import Column, ForeignKey, Boolean, Enum, Float, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
+from ..sa_types import IntEnum
 from . import Named
-from .enums import HistoricType
+from .enums import HistoricType, OSMObjectType
 
 class Historic(Named):
     __tablename__ = "historic"
+    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
     __mapper_args__ = {'polymorphic_identity': 'historic'}
-    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
-    type = Column(Enum(HistoricType), nullable=False)
+    id = Column(Integer, primary_key=True)
+    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    type = Column(IntEnum(HistoricType), nullable=False)
     ele = Column(Float)
     inscription = Column(UnicodeText)
     religion = Column(UnicodeText)
@@ -17,3 +20,5 @@ class Historic(Named):
     start_date = Column(UnicodeText)
     ruins = Column(Boolean)
     wikidata = Column(UnicodeText)
+    heritage = Column(Integer)
+    heritage_operator = Column(UnicodeText)

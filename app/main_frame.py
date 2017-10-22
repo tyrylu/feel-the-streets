@@ -7,6 +7,7 @@ from .controllers import InteractivePersonController, ApplicationController, Sou
 from .uimanager import get
 from .services import map
 from shared.models import Entity
+from shared.models.enums import OSMObjectType
 
 class MainFrame(wx.Frame):
     def __init__(self):
@@ -19,7 +20,7 @@ class MainFrame(wx.Frame):
             self._map = map()
         
     def post_create(self):
-        entity = self._map._db.query(Entity).filter(Entity.id > 0)[0]
+        entity = self._map._db.query(Entity).filter(Entity.osm_type == OSMObjectType.node)[0]
         lon = self._map._db.scalar(entity.geometry.x)
         lat = self._map._db.scalar(entity.geometry.y)
         person = Person(self._map, LatLon(lat, lon))
