@@ -6,6 +6,7 @@ class CraftGenerator(AddressAwareGenerator):
         super().__init__()
         self.generates(Craft)
         self.renames("craft", "type")
+        self.unprefixes("contact")
 
     @staticmethod
     def accepts(props):

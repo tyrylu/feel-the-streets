@@ -9,6 +9,9 @@ class FireHydrantType(enum.Enum):
     pillar = 1
     wall = 2
     
+class FireHydrantPosition(enum.Enum):
+    sidewalk = 0
+    green = 1
 
 class FireHydrant(Entity):
     __tablename__ = "fire_hydrants"
@@ -17,3 +20,4 @@ class FireHydrant(Entity):
     id = Column(Integer, primary_key=True)
     osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
     type = Column(IntEnum(FireHydrantType), nullable=False)
+    position = Column(IntEnum(FireHydrantPosition))

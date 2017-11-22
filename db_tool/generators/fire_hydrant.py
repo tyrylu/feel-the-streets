@@ -6,7 +6,7 @@ class FireHydrantGenerator(Generator):
         super().__init__()
         self.generates(FireHydrant)
         self.removes("emergency")
-        self.renames("fire_hydrant:type", "type")
+        self.unprefixes("fire_hydrant")
 
     @staticmethod
     def accepts(props):

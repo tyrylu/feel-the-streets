@@ -6,6 +6,8 @@ class BicycleParkingGenerator(AmenityGenerator):
         super().__init__()
         self.generates(BicycleParking)
         self.renames("bicycle_parking", "parking_type")
+        self.renames("surveillance:type", "surveillance_type")
+        self.renames("surveillance:zone", "surveillance_zone")
 
     @staticmethod
     def accepts(props):

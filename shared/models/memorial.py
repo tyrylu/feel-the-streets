@@ -2,7 +2,7 @@ import enum
 from sqlalchemy import Column, ForeignKeyConstraint, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Historic
-from .enums import OSMObjectType
+from .enums import OSMObjectType, WheelchairAccess
 
 class MemorialType(enum.Enum):
     unknown = 0
@@ -35,3 +35,11 @@ class Memorial(Historic):
     memorial_kind = Column(IntEnum(MemorialKind))
     url = Column(UnicodeText)
     artist_name = Column(UnicodeText)
+    wheelchair = Column(IntEnum(WheelchairAccess))
+    artwork_type = Column(IntEnum(MemorialKind))
+    direction = Column(UnicodeText)
+    addr = Column(UnicodeText)
+    text = Column(UnicodeText)
+    network = Column(UnicodeText)
+    person_date_of_birth = Column(UnicodeText) # Make it a date in a later pass
+    person_date_of_death = Column(UnicodeText)

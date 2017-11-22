@@ -1,8 +1,8 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer
+from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Amenity
-from .enums import OSMObjectType
+from .enums import OSMObjectType, SurveillanceType, SurveillanceKind, SurveillanceZone
 
 class BicycleParkingType(enum.Enum):
     unknown = 0
@@ -16,7 +16,6 @@ class BicycleParkingType(enum.Enum):
     wall_hoops = 8
     rack = 9
     
-
 class BicycleParking(Amenity):
     __tablename__ = "bicycle_parkings"
     __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["amenities.id", "amenities.osm_type"]),)
@@ -24,4 +23,6 @@ class BicycleParking(Amenity):
     id = Column(Integer, primary_key=True)
     osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
     parking_type = Column(IntEnum(BicycleParkingType))
-    lit = Column(Boolean)
+    surveillance = Column(IntEnum(SurveillanceType))
+    surveillance_type = Column(IntEnum(SurveillanceKind))
+    surveillance_zone = Column(IntEnum(SurveillanceZone))

@@ -5,6 +5,7 @@ class PlatformGenerator(Generator):
     def __init__(self):
         super().__init__()
         self.generates(Platform)
+        self.renames("route:ref", "route_ref")
         self.removes("public_transport")
         self.removes("highway")
         self.removes_subtree("building")

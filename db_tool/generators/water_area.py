@@ -10,4 +10,4 @@ class WaterAreaGenerator(Generator):
 
     @staticmethod
     def accepts(props):
-        return "natural" in props and props["natural"] == "water"
+        return ("type" in props and props["type"] == "water") or "water" in props

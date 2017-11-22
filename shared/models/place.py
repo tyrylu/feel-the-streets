@@ -30,3 +30,13 @@ class Place(Named):
     is_in = Column(UnicodeText)
     wikidata = Column(UnicodeText)
     ele = Column(Integer)
+    loc_name = Column(UnicodeText)
+    old_name = Column(UnicodeText)
+    postal_code = Column(UnicodeText)
+    alt_name = Column(UnicodeText)
+    alt_name_de = Column(UnicodeText)
+    website = Column(UnicodeText)
+    email = Column(UnicodeText)
+    phone = Column(UnicodeText)
+    note = Column(UnicodeText)
+    

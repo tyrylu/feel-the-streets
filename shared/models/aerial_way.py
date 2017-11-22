@@ -1,5 +1,5 @@
 import enum
-from sqlalchemy import Column, Boolean, ForeignKeyConstraint, Integer, UnicodeText
+from sqlalchemy import Column, Boolean, ForeignKeyConstraint, Float, Integer, UnicodeText
 from ..sa_types import IntEnum
 from .enums import AerialWayType, RoadType, RoofShape, BridgeStructure, OSMObjectType
 from . import Named
@@ -32,3 +32,8 @@ class AerialWay(Named):
     bridge_structure = Column(IntEnum(BridgeStructure))
     bridge = Column(Boolean)
     wikidata = Column(UnicodeText)
+    operator = Column(UnicodeText)
+    is_in = Column(UnicodeText)
+    maxweight = Column(Float)
+    description = Column(UnicodeText)
+    area = Column(Boolean)

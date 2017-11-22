@@ -6,6 +6,8 @@ class PowerGenerator(Generator):
         super().__init__()
         self.generates(Power)
         self.renames("power", "type")
+        self.renames("voltage-high", "high_voltage")
+        self.renames("voltage-low", "low_voltage")
 
     @staticmethod
     def accepts(props):

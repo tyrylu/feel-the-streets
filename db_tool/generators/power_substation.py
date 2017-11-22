@@ -7,6 +7,11 @@ class PowerSubstationGenerator(Generator):
         self.generates(PowerSubstation)
         self.removes("power")
         self.renames("substation", "type")
+        self.renames("building:levels", "building_levels")
+        self.renames("roof:shape", "roof_shape")
+        self.renames("building:colour", "building_colour")
+        self.renames("roof:colour", "roof_colour")
+        self.removes("building:ruian:type")
 
     @staticmethod
     def accepts(props):

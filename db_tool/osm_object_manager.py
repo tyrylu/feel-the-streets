@@ -9,7 +9,7 @@ import requests
 import overpass
 from shared.models.enums import OSMObjectType
 from .osm_object import OSMObject
-from .utils import object_should_have_closed_geometry, ensure_closed
+from .utils import object_should_have_closed_geometry, ensure_closed, coords_to_text, connect_polygon_segments
 
 
 
@@ -152,22 +152,29 @@ class OSMObjectManager:
                     member_obj.tags["role"] = member.role
                 yield member_obj
 
-    def get_geometry_as_wkt(self, object):
+    def _get_way_coords(self, way):
+        if way.type is not OSMObjectType.way:
+            raise ValueError("Passed object is not a way.")
+        coords = []
+        for related in self.related_objects_of(way):
+            coords.append((related.lon, related.lat))
+        return coords
+
+    def get_geometry_as_wkt(self, object, close_lines_if_possible=False):
         if object.type is OSMObjectType.node:
             return "POINT(%s %s)"%(object.lon, object.lat)
         elif object.type is OSMObjectType.way:
-            coords = []
-            for related in self.related_objects_of(object):
-                coords.append((related.lon, related.lat))
-            if object_should_have_closed_geometry(object) and len(coords) > 2:
+            coords = self._get_way_coords(object)
+            if close_lines_if_possible and len(coords) <= 2:
+                return None
+            if (object_should_have_closed_geometry(object) or close_lines_if_possible) and len(coords) > 2:
                 coords = ensure_closed(coords)
                 template = "POLYGON((%s))"
             else:
                 template = "LINESTRING(%s)"
-            coords_text = ", ".join("%s %s"%(coord[0], coord[1]) for coord in coords)
+            coords_text = coords_to_text(coords)
             return template%coords_text
         elif object.type is OSMObjectType.relation:
-            semantic = False
             geom_type = object.tags.get("type", None)
             if geom_type and geom_type == "multipolygon":
                 first_related = next(self.related_objects_of(object))
@@ -178,10 +185,11 @@ class OSMObjectManager:
                     multi =  self._construct_multipolygon_from_polygons(object)
                 if multi:
                     return multi
-                else:
-                    semantic = False
-            elif not semantic:
-                return "GEOMETRYCOLLECTION(%s)"%", ".join(self.get_geometry_as_wkt(related) for related in self.related_objects_of(object))
+                else: # Geometry collection fallback
+                    return "GEOMETRYCOLLECTION(%s)"%", ".join(geom for geom in (self.get_geometry_as_wkt(related) for related in self.related_objects_of(object)) if geom)
+            else:
+                return "GEOMETRYCOLLECTION(%s)"%", ".join(geom for geom in (self.get_geometry_as_wkt(related) for related in self.related_objects_of(object)) if geom)
+
 
     def _construct_multipolygon_from_complex_polygons(self, object):
         outers = []
@@ -190,33 +198,45 @@ class OSMObjectManager:
             if "role" not in related.tags:
                 log.warn("Complex multipolygon part %s missing role specifier.", related)
                 return None
-            points_str = self.get_geometry_as_wkt(related).replace("LINESTRING", "")
+            points = self._get_way_coords(related)
             if related.tags["role"] == "outer":
-                outers.append(points_str)
+                outers.append(points)
             elif related.tags["role"] == "inner":
-                inners.append(points_str)
+                inners.append(points)
             else:
                 log.warn("Unknown multipolygon part role %s.", related.tags["role"])
                 return None
+        outers = connect_polygon_segments(outers)
+        inners = connect_polygon_segments(inners)
         if len(outers) != 1 and len(inners):    
             log.warn("Multiple outer rings and some inner ring(s), ambiguous.")
             return None
         polys = []
         for inner in inners:
-            polys.append("(%s,%s)"%(outers[0], inner))
+            if len(inner) < 4:
+                log.warn("Not enough polygon points, falling back to geometry collection for relation %s.", object.id)
+                return None
+            polys.append("((%s),(%s))"%(coords_to_text(outers[0]), coords_to_text(inner)))
         if not inners:
             for outer in outers:
-                polys.append("(%s)"%outer)
-        return "MULTIPOLYGON(%s)"%", ".join(polys)
-        def _construct_multipolygon_from_polygons(self, object):
-            parts = []
-            for related in self.related_objects_of(object):
-                rel_geom = self.get_geometry_as_wkt(related)
-                if not rel_geom.startswith("POLYGON"):
-                    log.warn("Multipolygon promise broken for object %s with geometry %s.", related, rel_geom)
-                    continue
-                parts.append(rel_geom.replace("POLYGON", ""))
-                return "MULTIPOLYGON(%s)"%", ".join(parts)
+                if len(outer) < 4:
+                    log.warn("Not enough polygon points, falling back to geometry collection for relation %s.", object.id)
+                    return None
+
+                polys.append("((%s))"%coords_to_text(outer))
+        if len(polys) == 1:
+            return "POLYGON%s"%polys[0]
+        else:
+            return "MULTIPOLYGON(%s)"%", ".join(polys)
+    def _construct_multipolygon_from_polygons(self, object):
+        parts = []
+        for related in self.related_objects_of(object):
+            rel_geom = self.get_geometry_as_wkt(related)
+            if not rel_geom.startswith("POLYGON"):
+                log.warn("Multipolygon promise broken for object %s with geometry %s.", related, rel_geom)
+                continue
+            parts.append(rel_geom.replace("POLYGON", ""))
+            return "MULTIPOLYGON(%s)"%", ".join(parts)
     @property
     def relations(self):
         return self._rels.values()

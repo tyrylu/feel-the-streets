@@ -5,8 +5,9 @@ class PowerLineGenerator(Generator):
     def __init__(self):
         super().__init__()
         self.generates(PowerLine)
+        self.renames("line", "type")
         self.removes("power")
 
     @staticmethod
     def accepts(props):
-        return "power" in props and props["power"] == "line"
+        return "power" in props and props["power"] in {"line", "minor_line", "cable"} or "route" in props and props["route"] == "power"

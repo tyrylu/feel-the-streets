@@ -2,7 +2,7 @@ import enum
 from sqlalchemy import Column, ForeignKey, ForeignKeyConstraint, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
 from sqlalchemy.orm import relationship
-from .enums import Amenity, TourismType, AerialWayType, RailWayType, ManMade, AccessType, OSMObjectType
+from .enums import Amenity, TourismType, AerialWayType, RailWayType, ManMade, AccessType, OSMObjectType, LeisureType, SportType, BarrierType
 from .entity import Entity
 
 class AreaType(enum.Enum):
@@ -19,7 +19,10 @@ class AreaType(enum.Enum):
     track = 10
     construction = 11
     elevator = 12
-    
+
+class AttractionType(enum.Enum):
+    animal = 0
+
 class Area(Entity):
     __tablename__ = "areas"
     __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["entities.id", "entities.osm_type"]),)
@@ -42,3 +45,14 @@ class Area(Entity):
     man_made = Column(IntEnum(ManMade))
     floating = Column(Boolean)
     access = Column(IntEnum(AccessType))
+    old_name = Column(UnicodeText)
+    wikidata = Column(UnicodeText)
+    wikipedia = Column(UnicodeText)
+    leisure = Column(IntEnum(LeisureType))
+    sport = Column(IntEnum(SportType))
+    note = Column(UnicodeText)
+    alt_name = Column(UnicodeText)
+    website = Column(UnicodeText)
+    barrier = Column(IntEnum(BarrierType))
+    animal = Column(UnicodeText)
+    attraction = Column(IntEnum(AttractionType))

@@ -36,3 +36,5 @@ class Board(Tourism):
     osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
     board_type = Column(IntEnum(BoardType))
     board_number = Column(Integer)
+    board_ref = Column(Integer)
+    

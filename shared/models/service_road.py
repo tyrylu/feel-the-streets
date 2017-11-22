@@ -1,7 +1,13 @@
+import enum
 from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Float, Integer
 from ..sa_types import IntEnum
 from . import Road
-from .enums import Amenity, OSMObjectType
+from .enums import Amenity, OSMObjectType, AccessType
+
+
+class Priority(enum.Enum):
+    backward = 0
+
 
 class ServiceRoad(Road):
     __tablename__ = "service_roads"
@@ -12,5 +18,4 @@ class ServiceRoad(Road):
     emergency = Column(Boolean)
     delivery = Column(Boolean)
     amenity = Column(IntEnum(Amenity))
-    maxwidth = Column(Float)
-    bus = Column(Boolean)
+    priority = Column(IntEnum(Priority))

@@ -2,7 +2,7 @@ import enum
 from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Named
-from .enums import OSMObjectType
+from .enums import OSMObjectType, WheelchairAccess
 
 class StopType(enum.Enum):
     must_infer = -1
@@ -15,7 +15,15 @@ class StopType(enum.Enum):
     disused = 6
     construction = 7
     stop_area = 8
+    facility = 9
+    public_transport = 10
+    halt = 11
     
+
+class Direction(enum.Enum):
+        north = 0
+        south = 1
+        
 
 class Stop(Named):
     __tablename__ = "stops"
@@ -39,7 +47,7 @@ class Stop(Named):
     building = Column(Boolean)
     area = Column(Boolean)
     zone = Column(Integer)
-    wheelchair = Column(Boolean)
+    wheelchair = Column(IntEnum(WheelchairAccess))
     note = Column(UnicodeText)
     trolleybus = Column(Boolean)
     alt_name = Column(UnicodeText)
@@ -54,4 +62,11 @@ class Stop(Named):
     short_name = Column(UnicodeText)
     bin = Column(Boolean)
     official_name = Column(UnicodeText)
+    comment = Column(UnicodeText)
+    complete = Column(Boolean)
+    disused = Column(Boolean)
+    uic_name = Column(UnicodeText)
+    uic_ref = Column(Integer)
+    direction = Column(IntEnum(Direction))
+    alt_name_de = Column(UnicodeText)
     

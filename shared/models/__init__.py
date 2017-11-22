@@ -22,7 +22,6 @@ from .graveyard import Graveyard
 from .water_area import WaterArea
 from .leisure import Leisure
 from .water_way import WaterWay
-from .sports_centre import SportsCentre
 from .power_plant import PowerPlant
 from .boundary import Boundary
 from .power_line import PowerLine
@@ -83,3 +82,13 @@ from .piste import Piste
 from .garden import Garden
 from .building_part import BuildingPart
 from .route import Route
+from .border import Border
+from .site import Site
+from .collection import Collection
+from .restriction import Restriction
+from .transformer import Transformer
+from .health_care import HealthCare
+from .golf_course import GolfCourse
+from .playground import Playground
+from .surveillance import Surveillance
+from .cafe import Cafe

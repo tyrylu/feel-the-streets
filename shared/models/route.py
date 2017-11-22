@@ -2,17 +2,7 @@ import enum
 from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Named
-from .enums import OSMObjectType
-
-class RouteType(enum.Enum):
-    hiking = 1
-    bicycle = 2
-    tracks = 3
-    train = 4
-    road = 5
-    power = 6
-    foot = 7
-    
+from .enums import OSMObjectType, WheelchairAccess, RouteType
 
 class RouteImportance(enum.Enum):
     major = 0
@@ -27,6 +17,15 @@ class RouteImportance(enum.Enum):
     bicycle = 10
     wheelchair = 11
 
+class RouteState(enum.Enum):
+    recommended = 0
+    proposed = 1
+    alternate = 2
+    
+    
+
+class RouteService(enum.Enum):
+    long_distance = 0
 class Route(Named):
     __tablename__ = "routes"
     __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
@@ -34,7 +33,7 @@ class Route(Named):
     id = Column(Integer, primary_key=True)
     osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
     type = Column(IntEnum(RouteType), nullable=False)
-    complete = Column(Boolean)
+    complete = Column(UnicodeText)
     destinations = Column(UnicodeText)
     kct_red = Column(IntEnum(RouteImportance))
     network = Column(UnicodeText)
@@ -50,3 +49,16 @@ class Route(Named):
     kct_none = Column(IntEnum(RouteImportance))
     wikidata = Column(UnicodeText)
     wikipedia = Column(UnicodeText)
+    to = Column(UnicodeText)
+    fixme = Column(UnicodeText)
+    distance = Column(UnicodeText)
+    state = Column(IntEnum(RouteState))
+    website = Column(UnicodeText)
+    lcn_description = Column(UnicodeText)
+    colour = Column(UnicodeText)
+    service = Column(IntEnum(RouteService))
+    via = Column(UnicodeText)
+    public_transport_version = Column(Integer)
+    wheelchair = Column(IntEnum(WheelchairAccess))
+    text_colour = Column(UnicodeText)
+    

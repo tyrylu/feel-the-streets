@@ -10,4 +10,4 @@ class EntranceGenerator(Generator):
 
     @staticmethod
     def accepts(props):
-        return "entrance" in props
+        return "entrance" in props or ("type" in props and props["type"] == "entrance")

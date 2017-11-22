@@ -9,8 +9,10 @@ class TrackGenerator(RoadGenerator):
         self.renames("mtb:scale:uphill", "mtb_scale_uphill")
         self.renames("mtb:scale:uphill", "mtb_scale_uphill")
         self.renames("leisure", "type")
-        self.removes("survey_date")
-        self.removes("survey:date")
+        self.renames("bicycle:class", "bicycle_class")
+        self.renames("ticks:description", "ticks_description")
+        self.renames("motor_vehicle:note", "motor_vehicle_note")
+        self.renames("survey:date", "survey_date")
         
         
     def _prepare_properties(self, entity_spec, props, record):

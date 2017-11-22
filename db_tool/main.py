@@ -56,7 +56,7 @@ def interpret(query, api, db, is_way, record):
 
 def main():
     location = input("Location name: ")
-    logging.basicConfig(level=logging.DEBUG,handlers=[AggregatingFileHandler("db_generation_%s.log"%location, "w", "UTF-8")])
+    logging.basicConfig(level=logging.INFO, handlers=[AggregatingFileHandler("db_generation_%s.log"%location, "w", "UTF-8")])
     api = overpass.API(timeout=60)
     db = Database(location)
     db.create()

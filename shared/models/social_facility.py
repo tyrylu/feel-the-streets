@@ -33,3 +33,5 @@ class SocialFacility(Amenity):
     expected_users = Column(IntEnum(SocialFacilityUser))
     building_type = Column(IntEnum(BuildingType))
     flats = Column(Integer)
+    levels = Column(Integer)
+    

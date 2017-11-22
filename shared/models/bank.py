@@ -17,7 +17,10 @@ class Bank(Addressable):
     wheelchair = Column(Boolean)
     drive_through = Column(Boolean)
     phone = Column(UnicodeText)
+    email = Column(UnicodeText)
     flats = Column(Integer)
     levels = Column(Integer)
     building_type = Column(IntEnum(BuildingType))
     start_date = Column(UnicodeText)
+    level = Column(Integer)
+    

@@ -1,7 +1,7 @@
 import enum
 from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
-from ..sa_types import IntEnum
-from .enums import BarrierType, AccessType, ManMade, OSMObjectType
+from ..sa_types import IntEnum, DimensionalFloat
+from .enums import BarrierType, AccessType, ManMade, OSMObjectType, TrafficCalmingType
 from . import Named
 
 class BollardType(enum.Enum):
@@ -9,6 +9,14 @@ class BollardType(enum.Enum):
     removable = 2
     yes = 3
     irremovable = 4
+
+class WallType(enum.Enum):
+    gabion = 0
+    brick = 1
+
+class StileType(enum.Enum):
+    ladder = 0
+    stepover = 1
     
 class Barrier(Named):
     __tablename__ = "barriers"
@@ -17,9 +25,9 @@ class Barrier(Named):
     id = Column(Integer, primary_key=True)
     osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
     type = Column(IntEnum(BarrierType), nullable=False)
-    foot = Column(Boolean)
-    bicycle = Column(Boolean)
-    vehicle = Column(Boolean)
+    foot = Column(IntEnum(AccessType))
+    bicycle = Column(IntEnum(AccessType))
+    vehicle = Column(IntEnum(AccessType))
     horse = Column(Boolean)
     access = Column(IntEnum(AccessType))
     entrance = Column(UnicodeText)
@@ -27,9 +35,9 @@ class Barrier(Named):
     note = Column(UnicodeText)
     maxwidth = Column(Integer)
     fence_type = Column(UnicodeText)
-    height = Column(Float)
+    height = Column(DimensionalFloat("meter"))
     material = Column(UnicodeText)
-    motorcar = Column(Boolean)
+    motorcar = Column(IntEnum(AccessType))
     motorcycle = Column(Boolean)
     toll = Column(Boolean)
     operator = Column(UnicodeText)
@@ -44,4 +52,8 @@ class Barrier(Named):
     fixme = Column(UnicodeText)
     two_sided = Column(Boolean)
     historic = Column(Boolean)
-    
+    complete = Column(Boolean)
+    layer = Column(Integer)
+    wall = Column(IntEnum(WallType)) # Create subclass?
+    stile = Column(IntEnum(StileType)) # Subclass?
+    traffic_calming = Column(IntEnum(TrafficCalmingType))

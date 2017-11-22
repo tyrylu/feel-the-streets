@@ -1,7 +1,7 @@
 import enum
 from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
-from .enums import LeisureType, SportType, AccessType, OSMObjectType
+from .enums import LeisureType, SportType, AccessType, OSMObjectType, BarrierType, FenceType
 from . import Addressable
 
 class Leisure(Addressable):
@@ -32,3 +32,10 @@ class Leisure(Addressable):
     shot_put = Column(Boolean)
     covered = Column(Boolean)
     wikidata = Column(UnicodeText)
+    old_name = Column(UnicodeText)
+    barrier = Column(IntEnum(BarrierType))
+    fence_type = Column(IntEnum(FenceType))
+    wheelchair = Column(Boolean)
+    entrance = Column(Boolean)
+    baby = Column(Boolean)
+    

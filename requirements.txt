@@ -6,4 +6,5 @@ blinker
 wxpython
 anglr
 python-dateutil
+pint
 # And not including those, it requires a few libraries whose binaries aren't readily available: shapely

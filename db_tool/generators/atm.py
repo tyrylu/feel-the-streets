@@ -6,6 +6,7 @@ class ATMGenerator(AddressAwareGenerator):
         super().__init__()
         self.generates(ATM)
         self.removes("amenity")
+        self.removes("atm")
         self.renames("contact:website", "contact_website")
 
     @staticmethod

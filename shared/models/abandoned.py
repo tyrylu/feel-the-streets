@@ -2,7 +2,7 @@ import enum
 from sqlalchemy import Column, ForeignKeyConstraint, Integer
 from ..sa_types import IntEnum
 from . import Named
-from .enums import OSMObjectType
+from .enums import OSMObjectType, AccessType
 
 class AbandonedType(enum.Enum):
     path = 0
@@ -15,4 +15,5 @@ class Abandoned(Named):
     id = Column(Integer, primary_key=True)
     osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
     type = Column(IntEnum(AbandonedType))
+    bicycle = Column(IntEnum(AccessType))
     

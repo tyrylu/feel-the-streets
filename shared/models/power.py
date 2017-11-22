@@ -1,8 +1,8 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Integer
+from sqlalchemy import Column, ForeignKeyConstraint, Integer, UnicodeText
 from ..sa_types import IntEnum
 from .entity import Entity
-from .enums import OSMObjectType
+from .enums import OSMObjectType, BuildingType, Location
 
 class PowerType(enum.Enum):
     tower = 0
@@ -18,6 +18,9 @@ class PowerType(enum.Enum):
     switch = 10
     transition = 11
     sub_station = 12
+    switchgear = 13
+    pole = 14
+    
 
 class Power(Entity):
     __tablename__ = "powers"
@@ -26,3 +29,10 @@ class Power(Entity):
     id = Column(Integer, primary_key=True)
     osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
     type = Column(IntEnum(PowerType), nullable=False)
+    building = Column(IntEnum(BuildingType))
+    layer = Column(Integer)
+    fixme = Column(UnicodeText)
+    location = Column(IntEnum(Location))
+    high_voltage = Column(Integer)
+    voltage = Column(Integer)
+    low_voltage = Column(Integer)

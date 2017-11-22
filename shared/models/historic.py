@@ -22,3 +22,7 @@ class Historic(Named):
     wikidata = Column(UnicodeText)
     heritage = Column(Integer)
     heritage_operator = Column(UnicodeText)
+    wikimedia_commons = Column(UnicodeText)
+    image = Column(UnicodeText)
+    description = Column(UnicodeText)
+    

@@ -13,6 +13,7 @@ class StopGenerator(Generator):
         self.renames("railway", "type")
         self.renames("shelter", "has_shelter")
         self.renames("route:ref", "route_ref")
+        self.renames("alt_name:de", "alt_name_de")
         self.removes("railway", True)
     @staticmethod
     def accepts(props):

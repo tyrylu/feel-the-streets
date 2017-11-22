@@ -54,3 +54,4 @@ class Craft(Named):
     landuse = Column(IntEnum(LandType))
     email = Column(UnicodeText)
     phone = Column(UnicodeText)
+    level = Column(Integer)

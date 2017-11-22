@@ -2,7 +2,7 @@ import enum
 from sqlalchemy import Column, ForeignKeyConstraint, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Named
-from .enums import OSMObjectType
+from .enums import OSMObjectType, BuildingType
 
 class GeneratorSource(enum.Enum):
     unknown = 0
@@ -27,3 +27,10 @@ class PowerGenerator(Named):
     type = Column(IntEnum(GeneratorType))
     electricity_output = Column(UnicodeText)
     method = Column(UnicodeText)
+    building = Column(IntEnum(BuildingType))
+    hot_water_output = Column(UnicodeText)
+    frequency = Column(Integer)
+    operator = Column(UnicodeText)
+    start_date = Column(UnicodeText)
+    steam_output = Column(UnicodeText)
+    

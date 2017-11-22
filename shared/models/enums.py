@@ -32,6 +32,7 @@ class AccessType(enum.Enum):
     permission = 22
     mtb = 23
     use_sidepath = 24
+    on_request = 25
     
     
 
@@ -678,6 +679,8 @@ class CrossingType(enum.Enum):
     yes = 10
     bicycle = 11
     cycle = 12
+    controlled = 13
+    
     
     
     
@@ -706,6 +709,10 @@ class HistoricType(enum.Enum):
     highwater_mark = 19
     garages = 20
     heritage = 21
+    border_control = 22
+    railway = 23
+    
+    
     
     
 
@@ -792,6 +799,7 @@ class BuildingType(enum.Enum):
     railway_station = 13
     apartments = 14
     cabin = 15
+    garages = 16
     
     
 
@@ -872,6 +880,11 @@ class RailWayType(enum.Enum):
     yes = 29
     signal_box = 30
     stop = 31
+    milestone = 32
+    border = 33
+    defect_detector = 34
+    isolated_track_section = 35
+    
     
     
 
@@ -880,6 +893,8 @@ class TunnelType(enum.Enum):
     yes = 1
     culvert = 2
     building_passage = 3
+    avalanche_protector = 4
+    
 
 class BridgeType(enum.Enum):
     no = 0
@@ -889,6 +904,8 @@ class BridgeType(enum.Enum):
     covered = 4
     boardwalk = 5
     trestle = 6
+    cantilever = 7
+    
     
     
 
@@ -944,6 +961,9 @@ class RoadType(enum.Enum):
     services = 48
     rest_area = 49
     emergency_bay = 50
+    virtual = 51
+    stop_line = 52
+    
     
     
 
@@ -1019,6 +1039,7 @@ class RoofShape(enum.Enum):
     side_hipped = 11
     saltbox = 12
     tripple_skillion = 13
+    pitched = 14
     
     
 
@@ -1027,10 +1048,12 @@ class Location(enum.Enum):
     underground = 1
     kiosk = 2
     outdoor = 3
+    overground = 4
 
 class BridgeStructure(enum.Enum):
     beam = 1
     arch = 2
+    truss = 3
     
     
 class Role(enum.Enum):
@@ -1042,6 +1065,39 @@ class Role(enum.Enum):
     stop = 5
     admin_centre = 6
     subarea = 7
+    outline = 8
+    forward = 9
+    backward = 10
+    to = 11
+    line = 12
+    building = 13
+    main_stream = 14
+    substation = 15
+    from_ = 16
+    part = 17
+    landuse = 18
+    generator = 19
+    link = 20
+    via = 21
+    service_station = 22
+    address = 23
+    platform_exit_only = 24
+    entrance = 25
+    information = 26
+    yard = 27
+    station = 28
+    halt = 29
+    service_yard = 30
+    tram_stop = 31
+    map = 32
+    backward_stop = 33
+    platform_on_demand = 34
+    alternate = 35
+    forward_stop = 36
+    bus_stop = 37
+    stop_on_demand = 38
+    
+    
 
 class ConstructionType(enum.Enum):
     railway = 0
@@ -1052,6 +1108,8 @@ class ConstructionType(enum.Enum):
     residential = 5
     retail = 6
     building = 7
+    garages = 8
+    terrace = 9
     
 
 class IndustrialType(enum.Enum):
@@ -1060,3 +1118,150 @@ class IndustrialType(enum.Enum):
     power = 2
     depot = 3
     
+
+class RoofOrientation(enum.Enum):
+    across = 0
+    along = 1
+    
+
+class Surface(enum.Enum):
+    dirt = 0
+    concrete = 1
+    asphalt = 2
+    grass = 3
+    clay = 4
+    sand = 5
+    artificial_grass = 6
+    tartan = 7
+    gravel = 8
+    unpaved = 9
+    plastic = 10
+    ground = 11
+    paved = 12
+    paving_stones = 13
+    cobblestone = 14
+    sett = 16
+    compacted = 17
+    wood = 18
+    steel = 19
+    fine_gravel = 20
+    mud = 21
+    concrete_slabs = 22
+    yes = 23
+    metal = 24
+    grass_paver = 25
+    earth = 26
+    rocks = 27
+    stone = 28
+    pebblestone = 29
+    
+
+class ReservationType(enum.Enum):
+    yes = 1
+    recommended = 2
+
+class WifiType(enum.Enum):
+    no = 0
+    yes = 1
+    free = 2
+
+
+class GolfRelation(enum.Enum):
+    bunker = 0
+    green = 1
+
+class KerbType(enum.Enum):
+    lowered = 1
+
+class WheelchairAccess(enum.Enum):
+    no = 0
+    yes = 1
+    limited = 2
+
+
+class SidewalkType(enum.Enum):
+    unknown = 0
+    left = 1
+    right = 2
+    both = 3
+    no = 4
+    separate = 5
+    none = 6
+    
+
+
+class RoofMaterial(enum.Enum):
+    roof_tiles = 0
+    tin = 1
+    tile = 2
+    glass = 3
+    tar_paper = 4
+    copper = 5
+
+class SurveillanceType(enum.Enum):
+    none = 0
+    public = 1
+    outdoor = 2
+    indoor = 3
+    webcam = 4
+    
+
+class FenceType(enum.Enum):
+    chain_link = 0
+    electric = 1
+    chain = 2
+    wire = 3
+    metal = 4
+    
+
+class ParkingType(enum.Enum):
+    multipolygon = 0 # Map it to unspecified
+    surface = 1
+    multi_storey = 2
+    underground = 3
+    rooftop = 4
+    asphalt = 5
+    lane = 6
+    kiss_and_ride = 7
+    garage = 8
+    carports = 9
+    sheds = 10
+
+class RestrictionType(enum.Enum):
+    no_right_turn = 0
+    only_right_turn = 1
+    only_straight_on = 2
+    no_left_turn = 3
+    no_u_turn = 4
+    restriction = 5
+    no_straight_on = 6
+    only_left_turn = 7
+    
+
+
+class RouteType(enum.Enum):
+    hiking = 1
+    bicycle = 2
+    tracks = 3
+    train = 4
+    road = 5
+    power = 6
+    foot = 7
+    ski = 8
+    bus = 9
+    trolleybus = 10
+    tram = 11
+    abandoned = 12
+    railway = 13
+    wheelchair = 14
+    mtb = 15
+    ferry = 16
+    
+
+class SurveillanceKind(enum.Enum):
+    guard = 0
+    camera = 1
+
+class SurveillanceZone(enum.Enum):
+    building = 0
+    town = 1

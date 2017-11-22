@@ -11,7 +11,6 @@ class Tree(Natural):
     osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
     taxon = Column(UnicodeText)
     genus = Column(UnicodeText)
-    leaf_type = Column(UnicodeText)
     leaf_cycle = Column(UnicodeText)
     species = Column(UnicodeText)
     taxon_cs = Column(UnicodeText)

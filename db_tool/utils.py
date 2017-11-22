@@ -29,3 +29,29 @@ def ensure_closed(coords):
     if coords[0] != coords[-1]:
         coords.append(coords[0])
     return coords
+
+def coords_to_text(coords):
+    return ", ".join("%s %s"%(coord[0], coord[1]) for coord in coords)
+
+def _find_connectable_segments(segments):
+    if len(segments) == 1:
+        return None, None # Nothing to connect remains
+    starts = {}
+    ends = {}
+    for segment in segments:
+        starts[segment[0]] = segment
+        ends[segment[-1]] = segment
+    for end in ends.keys():
+        if end in starts:
+            return ends[end], starts[end]
+    return None, None
+def connect_polygon_segments(segments):
+    while True:
+        first, second = _find_connectable_segments(segments)
+        if first is None:
+            break
+        segments.remove(second)
+        first.extend(second[1:])
+    for i, segment in enumerate(segments):
+        segments[i] = ensure_closed(segment)
+    return segments

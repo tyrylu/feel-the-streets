@@ -1,5 +1,5 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Integer
+from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer
 from ..sa_types import IntEnum
 from . import Amenity
 from .enums import OSMObjectType
@@ -20,6 +20,9 @@ class SupportType(enum.Enum):
     tower = 5
     wall = 6
     
+class ClockVisibility(enum.Enum):
+    area = 0
+    street = 1
 
 class Clock(Amenity):
     __tablename__ = "clocks"
@@ -30,3 +33,8 @@ class Clock(Amenity):
     display = Column(IntEnum(DisplayType))
     support = Column(IntEnum(SupportType))
     faces = Column(Integer)
+    visibility = Column(IntEnum(ClockVisibility))
+    barometer = Column(Boolean)
+    date = Column(Boolean)
+    hygrometer = Column(Boolean)
+    thermometer = Column(Boolean)

@@ -11,3 +11,4 @@ class PowerPlant(Building):
     osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
     electricity_output = Column(UnicodeText)
     frequency= Column(Integer)
+    

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, ForeignKeyConstraint, Integer, UnicodeText
 from ..sa_types import IntEnum
-from .enums import TrafficCalmingType, OSMObjectType
+from .enums import TrafficCalmingType, OSMObjectType, Surface
 from .entity import Entity
 
 class TrafficCalming(Entity):
@@ -11,3 +11,4 @@ class TrafficCalming(Entity):
     osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
     type = Column(IntEnum(TrafficCalmingType), nullable=False)
     note = Column(UnicodeText)
+    surface = Column(IntEnum(Surface))

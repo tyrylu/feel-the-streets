@@ -2,7 +2,7 @@ import enum
 from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Named
-from .enums import OSMObjectType
+from .enums import OSMObjectType, BarrierType, FenceType, Location
 
 class RecyclingType(enum.Enum):
     unknown = 0
@@ -17,7 +17,7 @@ class Recycling(Named):
     id = Column(Integer, primary_key=True)
     osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
     type = Column(IntEnum(RecyclingType))
-    telephone = Column(UnicodeText)
+    phone = Column(UnicodeText)
     website = Column(UnicodeText)
     opening_hours = Column(UnicodeText)
     glass = Column(Boolean)
@@ -39,3 +39,19 @@ class Recycling(Named):
     hazardous_waste = Column(Boolean)
     tyres = Column(Boolean)
     organic = Column(Boolean)
+    barrier = Column(IntEnum(BarrierType))
+    scrap_metal = Column(Boolean)
+    fence_type = Column(IntEnum(FenceType))
+    operator = Column(UnicodeText)
+    waste = Column(Boolean)
+    cardboard = Column(Boolean)
+    magazines = Column(Boolean)
+    newspaper = Column(Boolean)
+    paper_packaging = Column(Boolean)
+    location = Column(IntEnum(Location))
+    books = Column(Boolean)
+    green_waste = Column(Boolean)
+    wood = Column(Boolean)
+    glass_green = Column(Boolean)
+    glass_white = Column(Boolean)
+    # Make the specific recycable things a flags field.

@@ -6,13 +6,17 @@ from .enums import OSMObjectType
 
 class NoticeCategory(enum.Enum):
     no_passage_left = 1
-    no_passsage_right = 2
+    no_passage_right = 2
+    
 
 class NoticeFunction(enum.Enum):
     prohibition = 1
 
 class NoticeImpact(enum.Enum):
     upstream = 1
+    downstream = 2
+class NoticeType(enum.Enum):
+    notice = 0
 
 class Notice(Annotated):
     __tablename__ = "notices"
@@ -21,6 +25,7 @@ class Notice(Annotated):
     id = Column(Integer, primary_key=True)
     osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
     category = Column(IntEnum(NoticeCategory))
-function = Column(IntEnum(NoticeFunction))
-impact = Column(IntEnum(NoticeImpact))
-orientation = Column(Integer)
+    function = Column(IntEnum(NoticeFunction))
+    impact = Column(IntEnum(NoticeImpact))
+    orientation = Column(Integer)
+    type = Column(IntEnum(NoticeType))

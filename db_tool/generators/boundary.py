@@ -8,6 +8,9 @@ class BoundaryGenerator(Generator):
         self.renames("boundary", "type")
         self.renames("historic", "historic_type")
         self.renames("marker", "marker_type")
+        self.renames("iso3166-2", "iso3166_2")
+        self.renames("alt_name:de", "alt_name_de")
+        self.renames("old_name:de", "odl_name_de")
         
 
     @staticmethod

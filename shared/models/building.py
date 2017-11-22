@@ -1,7 +1,7 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer, UnicodeText
-from ..sa_types import IntEnum
-from .enums import LeisureType, Amenity, ManMade, SmokingType, TourismType, SportType, InfoType, HistoricType, RoofShape, Location, AccessType, OSMObjectType, IndustrialType
+from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
+from ..sa_types import IntEnum, DimensionalFloat
+from .enums import LeisureType, Amenity, ManMade, SmokingType, TourismType, SportType, InfoType, HistoricType, RoofShape, Location, AccessType, OSMObjectType, IndustrialType, LandType, BuildingPartType, BarrierType, RoofOrientation, ConstructionType, ReservationType, WifiType, WheelchairAccess, RoofMaterial
 from . import Addressable
 
 class TakeAway(enum.Enum):
@@ -9,11 +9,19 @@ class TakeAway(enum.Enum):
     yes = 1
     only = 2
 
+class BuildingUsage(enum.Enum):
+    residential = 0
+    commercial = 1
 
 class EmergencyType(enum.Enum):
     no = 0
     yes = 1
     ambulance_station = 2
+class Cladding(enum.Enum):
+    glass = 0
+class Material(enum.Enum):
+    glass = 0
+    steel = 1
 
 class Building(Addressable):
     __tablename__ = "buildings"
@@ -40,9 +48,9 @@ class Building(Addressable):
     man_made = Column(IntEnum(ManMade))
     operator = Column(UnicodeText)
     industrial_type = Column(IntEnum(IndustrialType))
-    roof_height = Column(Integer)
+    roof_height = Column(Float)
     roof_shape = Column(IntEnum(RoofShape))
-    height = Column(Integer)
+    height = Column(DimensionalFloat("meter"))
     internet_access_fee = Column(Boolean)
     wikidata = Column(UnicodeText)
     internet_access = Column(UnicodeText)
@@ -69,3 +77,46 @@ class Building(Addressable):
     heritage = Column(Integer)
     heritage_operator = Column(UnicodeText)
     access = Column(IntEnum(AccessType))
+    architect = Column(UnicodeText)
+    designation = Column(UnicodeText)
+    abandoned = Column(Boolean)
+    wheelchair = Column(IntEnum(WheelchairAccess))
+    level = Column(Integer)
+    landuse = Column(IntEnum(LandType))
+    roof_levels = Column(Integer)
+    roof_material = Column(IntEnum(RoofMaterial))
+    part = Column(IntEnum(BuildingPartType))
+    loc_name = Column(UnicodeText)
+    service_times = Column(UnicodeText)
+    image = Column(UnicodeText)
+    disused = Column(Boolean)
+    barrier = Column(IntEnum(BarrierType))
+    underground_levels = Column(Integer)
+    roof_angle = Column(Integer)
+    roof_orientation = Column(IntEnum(RoofOrientation))
+    min_level = Column(Integer)
+    cladding = Column(IntEnum(Cladding))
+    material = Column(IntEnum(Material))
+    brand = Column(UnicodeText)
+    stars = Column(Integer)
+    fee = Column(Boolean)
+    date = Column(UnicodeText)
+    int_name = Column(UnicodeText)
+    fax = Column(UnicodeText)
+    use = Column(IntEnum(BuildingUsage))
+    roof_colour = Column(UnicodeText)
+    wheelchair_description = Column(UnicodeText)
+    comment = Column(UnicodeText)
+    construction = Column(IntEnum(ConstructionType))
+    self_service = Column(Boolean)
+    microbrewery = Column(Boolean)
+    ruins = Column(Boolean)
+    wheelchair_toilets = Column(IntEnum(AccessType))
+    wifi = Column(IntEnum(WifiType))
+    opening_hours_url = Column(UnicodeText)
+    reservation = Column(IntEnum(ReservationType))
+    visa_payment = Column(Boolean)
+    visa_debit_payment = Column(Boolean)
+    visa_electron_payment = Column(Boolean)
+    healthcare_speciality = Column(UnicodeText) # Find out why it appears there
+    

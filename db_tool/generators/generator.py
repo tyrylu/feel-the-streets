@@ -2,7 +2,7 @@ import logging, pdb
 from sqlalchemy import Boolean, DateTime, Float, Integer, inspect
 from .utils import *
 from .converters import *
-from shared.sa_types import IntEnum
+from shared.sa_types import IntEnum, DimensionalFloat
 
 log = logging.getLogger(__name__)
 
@@ -49,12 +49,19 @@ class Generator:
 
     def _prepare_properties(self, entity_spec, props, record):
         props = self._prepare_basic_props(entity_spec, props)
+        props = self._lowercase_props(props)
         props = self._do_renames(props)
         props = self._do_unprefixes(props)
         props = self._do_replaces(props)
         props = self._do_removals(props)
         props = self._do_conversions(props, record)
         return props
+
+    def _lowercase_props(self, props):
+        ret = {}
+        for prop, val in props.items():
+            ret[prop.lower()] = val
+        return ret
 
     def _do_removals(self, props):
         for prop, remove_root, remove_subtree in self._removes:
@@ -114,6 +121,8 @@ class Generator:
                     value = convert_integer(self._generates.__name__, col.name, value, record)
                 elif isinstance(col.type, DateTime):
                     value = convert_datetime(self._generates.__name__, col.name, value, record)
+                elif isinstance(col.type, DimensionalFloat):
+                    value = convert_dimensional_float(self._generates.__name__, col.name, value, record)
                 
                 if value:
                     props[col.name] = value

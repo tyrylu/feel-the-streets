@@ -1,8 +1,8 @@
 import enum
-from sqlalchemy import Column, ForeignKey, ForeignKeyConstraint, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKey, ForeignKeyConstraint, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
 from sqlalchemy.orm import relationship
-from .enums import ShopType, ManMade, BarrierType, NaturalType, LeisureType, LandType, OSMObjectType, ConstructionType, IndustrialType
+from .enums import ShopType, ManMade, BarrierType, NaturalType, LeisureType, LandType, OSMObjectType, ConstructionType, IndustrialType, Surface, FenceType
 from . import Named
 
 class MeadowType(enum.Enum):
@@ -11,9 +11,6 @@ class MeadowType(enum.Enum):
     pasture = 2
     perpetual = 3
 
-class FenceType(enum.Enum):
-    chain_link = 0
-    electric = 1
 class MilitaryType(enum.Enum):
     none = 0
     barracks = 1
@@ -29,9 +26,6 @@ class PlantType(enum.Enum):
 class ResidentialType(enum.Enum):
     urban = 0
     
-class SurfaceType(enum.Enum):
-    dirt = 0
-    concrete = 1
 class Land(Named):
     __tablename__ = "lands"
     __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
@@ -73,5 +67,5 @@ class Land(Named):
     fixme = Column(UnicodeText)
     loc_name = Column(UnicodeText)
     residential = Column(IntEnum(ResidentialType))
-    surface = Column(IntEnum(SurfaceType))
+    surface = Column(IntEnum(Surface))
     plant = Column(IntEnum(PlantType))

@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKeyConstraint, Integer, Boolean, UnicodeText
 from ..sa_types import IntEnum
 from . import Addressable
-from .enums import OSMObjectType
+from .enums import OSMObjectType, WheelchairAccess
 
 class ATM(Addressable):
     __tablename__ = "atms"
@@ -16,3 +16,7 @@ class ATM(Addressable):
     description = Column(UnicodeText)
     drive_through = Column(Boolean)
     phone = Column(UnicodeText)
+    wheelchair = Column(IntEnum(WheelchairAccess))
+    level = Column(Integer)
+    brand = Column(UnicodeText)
+    

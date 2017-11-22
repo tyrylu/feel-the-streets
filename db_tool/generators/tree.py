@@ -13,4 +13,4 @@ class TreeGenerator(NaturalGenerator):
 
     @staticmethod
     def accepts(props):
-        return NaturalGenerator.accepts(props) and props["natural"] == "tree"
+        return NaturalGenerator.accepts(props) and props["natural"] in {"tree", "tree_row"}

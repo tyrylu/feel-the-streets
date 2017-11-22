@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, ForeignKeyConstraint, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
 from sqlalchemy.orm import relationship
-from .enums import BuildingType, ShopType, OSMObjectType
+from .enums import BuildingType, ShopType, OSMObjectType, WheelchairAccess
 from .entity import Entity
 
 class Fuel(Entity):
@@ -25,3 +25,4 @@ class Fuel(Entity):
     note = Column(UnicodeText)
     start_date = Column(UnicodeText)
     website = Column(UnicodeText)
+    wheelchair = Column(IntEnum(WheelchairAccess))

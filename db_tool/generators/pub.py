@@ -11,6 +11,7 @@ class PubGenerator(AddressAwareGenerator):
         self.removes("building")
         self.removes_subtree("ruian")
         self.unprefixes("building")
+        self.removes("uir_adr:adresa_kod")
 
     @staticmethod
     def accepts(props):

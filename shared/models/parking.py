@@ -2,22 +2,9 @@ import enum
 from sqlalchemy import Column, ForeignKey, ForeignKeyConstraint, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
 from sqlalchemy.orm import relationship
-from .enums import AccessType, BuildingType, OSMObjectType
+from .enums import AccessType, BuildingType, OSMObjectType, WheelchairAccess, BarrierType, ParkingType, ConstructionType, LandType
 from . import Named
 
-class ParkingType(enum.Enum):
-    unspecified = 0
-    surface = 1
-    multi_storey = 2
-    underground = 3
-    rooftop = 4
-    asphalt = 5
-    lane = 6
-    kiss_and_ride = 7
-    garage = 8
-    carports = 9
-    
-    
 class Parking(Named):
     __tablename__ = "parkings"
     __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
@@ -39,3 +26,16 @@ class Parking(Named):
     park_ride = Column(Boolean)
     layer = Column(Integer)
     website = Column(UnicodeText)
+    building_levels = Column(Integer)
+    opening_hours = Column(UnicodeText)
+    start_date = Column(UnicodeText)
+    wheelchair = Column(IntEnum(WheelchairAccess))
+    barrier = Column(IntEnum(BarrierType))
+    capacity_for_parents = Column(Boolean)
+    capacity_for_women = Column(Boolean)
+    lit = Column(Boolean)
+    description = Column(UnicodeText)
+    fixme = Column(UnicodeText)
+    covered = Column(Boolean)
+    construction = Column(IntEnum(ConstructionType))
+    landuse = Column(IntEnum(LandType))

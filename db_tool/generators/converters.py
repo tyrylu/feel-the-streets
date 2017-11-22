@@ -1,3 +1,4 @@
+from pint import _APP_REGISTRY as registry
 import logging
 import dateutil.parser
 
@@ -39,4 +40,11 @@ def convert_datetime(class_name, prop, val, record):
         return dateutil.parser.parse(val)
     except:
         record.add_type_violation(class_name, prop, val, "DateTime")
+        return None
+
+def convert_dimensional_float(class_name, prop, val, record):
+    try:
+        return registry(val)
+    except:
+        record.add_type_violation(class_name, prop, val, "DimensionalFloat")
         return None

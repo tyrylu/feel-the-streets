@@ -1,7 +1,7 @@
 import enum
 from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
 from ..sa_types import IntEnum
-from .enums import ManMade, TourismType, NaturalType, OSMObjectType
+from .enums import ManMade, TourismType, NaturalType, OSMObjectType, LandType, BarrierType, FenceType, GolfRelation
 from . import Named
 
 class Natural(Named):
@@ -26,3 +26,11 @@ class Natural(Named):
     surface = Column(UnicodeText)
     material = Column(UnicodeText)
     wikidata = Column(UnicodeText)
+    landuse = Column(IntEnum(LandType))
+    barrier = Column(IntEnum(BarrierType))
+    fence_type = Column(IntEnum(FenceType))
+    leaf_type = Column(UnicodeText) # Map them correctly to a tree
+    golf = Column(IntEnum(GolfRelation))
+    natural_1 = Column(IntEnum(NaturalType))
+    description = Column(UnicodeText)
+    

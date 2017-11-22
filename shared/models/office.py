@@ -1,8 +1,8 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Addressable
-from .enums import SmokingType, OSMObjectType
+from .enums import SmokingType, OSMObjectType, LandType, BarrierType, WheelchairAccess
 
 class OfficeType(enum.Enum):
     yes = -1
@@ -58,3 +58,19 @@ class Office(Addressable):
     official_name = Column(UnicodeText)
     levels = Column(Integer)
     government = Column(IntEnum(GovernmentRelation))
+    landuse = Column(IntEnum(LandType))
+    short_name = Column(UnicodeText)
+    wikidata = Column(UnicodeText)
+    wikipedia = Column(UnicodeText)
+    barrier = Column(IntEnum(BarrierType))
+    phone = Column(UnicodeText)
+    denomination = Column(UnicodeText)
+    religion = Column(UnicodeText)
+    wheelchair = Column(IntEnum(WheelchairAccess))
+    operator = Column(UnicodeText)
+    brand = Column(UnicodeText)
+    email = Column(UnicodeText)
+    description = Column(UnicodeText)
+    bitcoin_payment = Column(Boolean)
+    level = Column(Integer)
+    

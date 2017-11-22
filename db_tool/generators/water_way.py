@@ -8,6 +8,8 @@ class WaterWayGenerator(Generator):
         self.renames("waterway", "type")
         self.renames("boat", "boats_allowed")
         self.renames("motorboat", "motor_boats_allowed")
+        self.renames("mtb:scale", "mtb_scale")
+        self.renames("life_cycle:start_date", "start_date")
         self.removes("vehicle:conditional")
 
     @staticmethod

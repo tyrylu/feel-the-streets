@@ -14,6 +14,8 @@ class TourismGenerator(AddressAwareGenerator):
         self.renames("roof:height", "roof_height")
         self.renames("roof:shape", "roof_shape")
         self.renames("heritage:operator", "heritage_operator")
+        self.renames("artwork:type", "artwork_type")
+        self.renames("payment:bitcoin", "bitcoin_payment")
         self.unprefixes("contact")
         self.removes("alt_ref")
         self.removes("mtb")

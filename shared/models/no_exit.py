@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKeyConstraint, Integer
+from sqlalchemy import Column, ForeignKeyConstraint, Integer, UnicodeText
 from ..sa_types import IntEnum
 from .entity import Entity
 from .enums import OSMObjectType
@@ -9,3 +9,5 @@ class NoExit(Entity):
     __mapper_args__ = {'polymorphic_identity': 'no_exit'}
     id = Column(Integer, primary_key=True)
     osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    fixme = Column(UnicodeText)
+    note = Column(UnicodeText)

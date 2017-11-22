@@ -1,8 +1,8 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Integer
+from sqlalchemy import Column, ForeignKeyConstraint, Integer, UnicodeText
 from ..sa_types import IntEnum
 from .entity import Entity
-from .enums import BuildingType, OSMObjectType
+from .enums import BuildingType, OSMObjectType, TourismType
 
 class ShelterType(enum.Enum):
     unknown = 0
@@ -22,3 +22,5 @@ class Shelter(Entity):
     osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
     type = Column(IntEnum(ShelterType))
     building = Column(IntEnum(BuildingType))
+    tourism = Column(IntEnum(TourismType))
+    bench = Column(UnicodeText)

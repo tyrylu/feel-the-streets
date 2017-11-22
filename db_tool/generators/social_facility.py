@@ -9,7 +9,7 @@ class SocialFacilityGenerator(AddressAwareGenerator):
         self.renames("social_facility", "facility_type")
         self.renames("social_facility:for", "expected_users")
         self.renames("building", "building_type")
-        self.renames("building:flats", "flats")
+        self.unprefixes("building")
         self.removes_subtree("building:ruian")
         self.removes_subtree("health_specialty")
 

@@ -16,6 +16,8 @@ class WaterAreaType(enum.Enum):
     basin = 8
     intermittent = 9
     lagoon = 10
+    water = 11
+    
     
 
 class WaterArea(Named):

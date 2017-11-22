@@ -1,7 +1,7 @@
 import enum
 from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
 from ..sa_types import IntEnum
-from .enums import TourismType, SmokingType, BarrierType, InfoType, ManMade, HistoricType, Amenity, BuildingType, NaturalType, BuildingPartType, RoofShape, OSMObjectType
+from .enums import TourismType, SmokingType, BarrierType, InfoType, ManMade, HistoricType, Amenity, BuildingType, NaturalType, BuildingPartType, RoofShape, OSMObjectType, WheelchairAccess, AccessType, LeisureType
 from . import Addressable
 
 class ArtWorkType(enum.Enum):
@@ -15,8 +15,9 @@ class ArtWorkType(enum.Enum):
     relief = 7
     architecture = 8
     installation = 9
-    
-    
+
+class AttractionType(enum.Enum):
+    animal = 0
 class Tourism(Addressable):
     __tablename__ = "tourisms"
     __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["addressables.id", "addressables.osm_type"]),)
@@ -63,3 +64,20 @@ class Tourism(Addressable):
     wikidata = Column(UnicodeText)
     heritage = Column(Integer)
     heritage_operator = Column(UnicodeText)
+    fee = Column(Boolean)
+    old_name = Column(UnicodeText)
+    designation = Column(UnicodeText)
+    rooms = Column(Integer)
+    image = Column(UnicodeText)
+    wheelchair = Column(IntEnum(WheelchairAccess))
+    access = Column(IntEnum(AccessType))
+    disused = Column(Boolean)
+    layer = Column(Integer)
+    architect = Column(UnicodeText)
+    leisure = Column(IntEnum(LeisureType))
+    alt_name = Column(UnicodeText)
+    level = Column(Integer)
+    loc_name = Column(UnicodeText)
+    bitcoin_payment = Column(Boolean)
+    noname = Column(Boolean)
+    attraction = Column(IntEnum(AttractionType))

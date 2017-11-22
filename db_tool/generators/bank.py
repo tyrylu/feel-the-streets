@@ -9,6 +9,7 @@ class BankGenerator(AddressAwareGenerator):
         self.removes("bic")
         self.removes_subtree("ruian")
         self.unprefixes("building")
+        self.unprefixes("contact")
         self.renames("building", "building_type")
 
     @staticmethod

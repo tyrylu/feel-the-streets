@@ -1,7 +1,7 @@
 import enum
 from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
 from ..sa_types import IntEnum
-from .enums import CrossingType, TrafficCalmingType, RailWayType, OSMObjectType
+from .enums import CrossingType, TrafficCalmingType, RailWayType, OSMObjectType, KerbType
 from .entity import Entity
 
 class BicycleType(enum.Enum):
@@ -10,8 +10,6 @@ class BicycleType(enum.Enum):
     dismount = 2
     designated = 3
 
-class KerbType(enum.Enum):
-    lowered = 1
 
 class TrafficSignalsType(enum.Enum):
     signals = 1
@@ -20,9 +18,9 @@ class TrafficSignalsType(enum.Enum):
     pedestrian = 4
 
 class CurbType(enum.Enum):
-        no = 0
-        yes = 1
-        both = 2
+    no = 0
+    yes = 1
+    both = 2
 
 class TrafficSignalsDirection(enum.Enum):
     forward = 1
@@ -66,4 +64,3 @@ class Crossing(Entity):
     sound = Column(Boolean)
     direction = Column(IntEnum(TrafficSignalsDirection))
     level = Column(Integer)
-    

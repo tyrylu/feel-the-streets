@@ -2,7 +2,7 @@ import enum
 from sqlalchemy import Column, ForeignKeyConstraint, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Named
-from .enums import HistoricType, OSMObjectType
+from .enums import HistoricType, OSMObjectType, BarrierType
 
 class BoundaryType(enum.Enum):
     national_park = 1
@@ -13,6 +13,8 @@ class BoundaryType(enum.Enum):
     historic = 6
     civil = 7
     cliff = 8
+    country_border = 9
+    
     
     
 class MarkerType(enum.Enum):
@@ -34,3 +36,13 @@ class Boundary(Named):
     start_date = Column(UnicodeText)
     wikidata = Column(UnicodeText)
     population = Column(Integer)
+    iso3166_2 = Column(UnicodeText)
+    end_date = Column(UnicodeText)
+    website = Column(UnicodeText)
+    barrier = Column(IntEnum(BarrierType))
+    protect_class = Column(Integer)
+    fixname = Column(UnicodeText)
+    alt_name_de = Column(UnicodeText)
+    old_name_de = Column(UnicodeText)
+    
+    
