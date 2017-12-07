@@ -7,8 +7,8 @@ from .generation_record import GenerationRecord
 
 log = logging.getLogger(__name__)
 class OSMObjectTranslator:
-    def __init__(self):
-        self.manager = OSMObjectManager()
+    def __init__(self, use_cache, cache_responses):
+        self.manager = OSMObjectManager(use_cache, cache_responses)
         self.record = GenerationRecord()
         self._generators = []
         for member in generators.__dict__.values():

@@ -1,13 +1,15 @@
+import collections
 import os
 import logging
-from sqlalchemy import create_engine, event
+from sqlalchemy import create_engine, event, text, inspect
 from sqlalchemy.orm import sessionmaker
-from geoalchemy import GeometryDDL
+from geoalchemy import GeometryDDL, Geometry
 from .models import Base, Entity
 
 
 log = logging.getLogger(__name__)
 os.environ["PATH"] = r"C:\users\lukas\apps;%s"%os.environ["PATH"]
+
 class Database:
     def __init__(self, area_name):
         db_path = "%s.db"%area_name
@@ -15,6 +17,9 @@ class Database:
         self._engine = create_engine("sqlite:///%s"%db_path)
         event.listen(self._engine, "connect", self._post_connect)
         self._session = sessionmaker(bind=self._engine)()
+        self._per_table_values = collections.defaultdict(list)
+        self._bind_processors = {}
+        
 
     def _post_connect(self, dbapi_connection, connection_record):
         dbapi_connection.enable_load_extension(True)
@@ -48,5 +53,37 @@ class Database:
     def merge(self, entity):
         return self._session.merge(entity)
 
-    def bulk_save_objects(self, *args, **kwargs):
-        self._session.bulk_save_objects(*args, **kwargs)
+    def schedule_entity_addition(self, entity):
+        per_table_values = collections.defaultdict(dict)
+        for table in inspect(entity.__class__).tables:
+            for column in table.columns.values():
+                #processor = self._lookup_bind_processor(column.type)
+                value = getattr(entity, column.name)
+                # Manual override for geometry columns
+                if isinstance(column.type, Geometry) and value is not None:
+                    value = value.desc
+                per_table_values[column.table][column.name] = value
+        for table, row in per_table_values.items():
+            self._per_table_values[table].append(row)
+    
+    def _lookup_bind_processor(self, sa_type):
+        if not sa_type in self._bind_processors:
+            self._bind_processors[sa_type] = sa_type.bind_processor(self._engine.dialect)
+        return self._bind_processors[sa_type]
+    def add_entities(self):
+        with self._engine.begin() as conn:
+            conn.execute("pragma synchronous=off")
+            for table, rows in self._per_table_values.items():
+                values_dict = {}
+                for col in table.columns.values():
+                    if isinstance(col.type, Geometry):
+                        values_dict[col.name] = text("GeomFromText(:%s, 4326)"%col.name)
+                    else:
+                        values_dict[col.name] = ":%s"%col.name
+                stmt = table.insert().values(values_dict)
+                log.info("Adding %s rows to the %s table.", len(rows), table.name)
+                length = len(rows)
+                chunk_size = 10000
+                for i in range(0, length, chunk_size):
+                    log.info("Inserting rows from index %s.", i)
+                    conn.execute(stmt, rows[i:i+chunk_size])

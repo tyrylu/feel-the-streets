@@ -2,23 +2,8 @@ import enum
 from sqlalchemy import Column, ForeignKey, ForeignKeyConstraint, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
 from sqlalchemy.orm import relationship
-from .enums import Amenity, TourismType, AerialWayType, RailWayType, ManMade, AccessType, OSMObjectType, LeisureType, SportType, BarrierType
+from .enums import Amenity, TourismType, AerialWayType, RailWayType, ManMade, AccessType, OSMObjectType, LeisureType, SportType, BarrierType, AreaType
 from .entity import Entity
-
-class AreaType(enum.Enum):
-    unclassified = 0
-    pedestrian = 1
-    platform = 2
-    service = 3
-    yes = 4
-    path = 5
-    footway = 6
-    rest_area = 7
-    living_street = 8
-    residential = 9
-    track = 10
-    construction = 11
-    elevator = 12
 
 class AttractionType(enum.Enum):
     animal = 0

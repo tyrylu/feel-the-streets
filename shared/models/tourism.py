@@ -1,8 +1,11 @@
 import enum
 from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
 from ..sa_types import IntEnum
-from .enums import TourismType, SmokingType, BarrierType, InfoType, ManMade, HistoricType, Amenity, BuildingType, NaturalType, BuildingPartType, RoofShape, OSMObjectType, WheelchairAccess, AccessType, LeisureType
+from .enums import TourismType, SmokingType, BarrierType, InfoType, ManMade, HistoricType, Amenity, BuildingType, NaturalType, BuildingPartType, RoofShape, OSMObjectType, WheelchairAccess, AccessType, LeisureType, Location
 from . import Addressable
+
+class Denotation(enum.Enum):
+    natural_monument = 0
 
 class ArtWorkType(enum.Enum):
     none = 0
@@ -81,3 +84,24 @@ class Tourism(Addressable):
     bitcoin_payment = Column(Boolean)
     noname = Column(Boolean)
     attraction = Column(IntEnum(AttractionType))
+    religion = Column(UnicodeText)
+    caravans = Column(Boolean)
+    tents = Column(Boolean)
+    en_description = Column(UnicodeText)
+    facebook = Column(UnicodeText)
+    species = Column(UnicodeText) # What they do there?
+    taxon_cs = Column(UnicodeText)
+    fax = Column(UnicodeText)
+    short_name = Column(UnicodeText)
+    ref_1 = Column(UnicodeText)
+    min_height = Column(Integer)
+    location = Column(IntEnum(Location))
+    denotation = Column(IntEnum(Denotation))
+    leaf_type = Column(UnicodeText) # Why is it here?
+    taxon = Column(UnicodeText)
+    official_name = Column(UnicodeText)
+    colour = Column(UnicodeText)
+    lit = Column(Boolean)
+    artwork_subject = Column(UnicodeText)
+    author = Column(UnicodeText)
+    

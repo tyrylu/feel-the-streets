@@ -14,7 +14,7 @@ class DimensionalFloat(types.TypeDecorator):
         super().__init__(*args, **kwargs)
 
     def process_bind_param(self, value, dialect):
-        if value is not None and isinstance(value, pint.Quantity):
+        if value is not None and isinstance(value, registry.Quantity):
             return value.to(self._canonical_unit).magnitude
     
     def process_result_value(self, value, dialect):

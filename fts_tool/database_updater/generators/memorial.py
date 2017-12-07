@@ -15,4 +15,4 @@ class MemorialGenerator(HistoricGenerator):
 
     @staticmethod
     def accepts(props):
-        return HistoricGenerator.accepts(props) and props["historic"] == "memorial"
+        return "memorial" in props

@@ -10,6 +10,13 @@ class LandGenerator(AddressAwareGenerator):
         self.renames("meadow", "meadow_type")
         self.renames("natural", "natural_type")
         self.renames("military", "military_type")
+        self.renames("uhul:slt", "uhul_slt")
+        self.renames("uhul:area", "uhul_area")
+        self.renames("uhul:id", "uhul_id")
+        self.renames("url", "website")
+        self.renames("bridge:structure", "bridge_structure")
+        self.renames("barrier:height", "barrier_height")
+        
         self.removes_subtree("note")
 
     @staticmethod

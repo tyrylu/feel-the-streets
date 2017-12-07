@@ -33,7 +33,12 @@ class WaterWay(Named):
     life_cycle = Column(IntEnum(LifeCycle))
     start_date = Column(UnicodeText)
     area = Column(Boolean)
-    
+    wikipedia = Column(UnicodeText)
+    whitewater_section_grade = Column(UnicodeText)
+    have_riverbank = Column(Boolean)
+    whitewater_section_name = Column(UnicodeText)
+    whitewater_rapid_name = Column(UnicodeText)
+        
     @property
     def effective_width(self):
         if self.width:

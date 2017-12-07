@@ -16,6 +16,8 @@ class TourismGenerator(AddressAwareGenerator):
         self.renames("heritage:operator", "heritage_operator")
         self.renames("artwork:type", "artwork_type")
         self.renames("payment:bitcoin", "bitcoin_payment")
+        self.renames("description:en", "en_description")
+        self.renames("taxon:cs", "taxon_cs")
         self.unprefixes("contact")
         self.removes("alt_ref")
         self.removes("mtb")

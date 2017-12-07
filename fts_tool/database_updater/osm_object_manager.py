@@ -16,13 +16,13 @@ from .utils import object_should_have_closed_geometry, ensure_closed, coords_to_
 log = logging.getLogger(__name__)
 class OSMObjectManager:
     _query_template = "[out:json][timeout:{timeout}];{query};out meta;"
-    def __init__(self):
+    def __init__(self, use_cache, cache_responses):
         self._api = overpass.API(timeout=600)
         self._nodes = {}
         self._ways = {}
         self._rels = {}
-        self._cache_responses = "--cache-responses" in sys.argv
-        self._use_cache = "--use-cache" in sys.argv
+        self._cache_responses = cache_responses
+        self._use_cache = use_cache
 
     def lookup_objects_in(self, area):
         self.lookup_nodes_in(area)
@@ -153,8 +153,6 @@ class OSMObjectManager:
                 yield member_obj
 
     def _get_way_coords(self, way):
-        if way.type is not OSMObjectType.way:
-            raise ValueError("Passed object is not a way.")
         coords = []
         for related in self.related_objects_of(way):
             coords.append((related.lon, related.lat))
@@ -197,6 +195,9 @@ class OSMObjectManager:
         for related in self.related_objects_of(object):
             if "role" not in related.tags:
                 log.warn("Complex multipolygon part %s missing role specifier.", related)
+                return None
+            if related.type is not OSMObjectType.way:
+                log.warn("Creating a point sequence from object of type %s not supported yet.", object.type.name)
                 return None
             points = self._get_way_coords(related)
             if related.tags["role"] == "outer":

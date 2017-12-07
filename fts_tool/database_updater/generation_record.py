@@ -1,3 +1,4 @@
+import pickle
 import attr
 from collections import defaultdict
 
@@ -88,6 +89,7 @@ class GenerationRecord:
     def _lookup_missing_required_property(self, entity, property):
         return self._lookup_in_list_or_none(self.missing_required_properties, lambda mi: mi.property_name == property and mi.entity == entity)
     def save_to_file(self, name):
+        self.sort_by_occurrences()
         fp = open(name, "w", encoding="utf-8")
         fp.write("Out of %s processed features, %s were mapped to database entities.\n"%(self.total_entities, self.processed_entities))
         fp.write("* missing properties of %s entities\n"%len(self.missing_properties))
@@ -112,3 +114,19 @@ class GenerationRecord:
         for required in self.missing_required_properties:
             fp.write("Property %s is probably not required on entity %s, appears %s times.\n"%(required.property_name, required.entity, required.occurrences))
         fp.close()
+
+    def save_to_pickle(self, pickle_path):
+        self.sort_by_occurrences()
+        with open(pickle_path, "wb") as fp:
+            pickle.dump(self, fp)
+
+    @staticmethod
+    def from_pickle(self, pickle_path):
+        with open(pickle_path, "rb") as fp:
+            return pickle.load(fp)
+    
+    def sort_by_occurrences(self):
+        for missings in self.missing_properties.values():
+            missings.sort(key=lambda occ: len(occ.values), reverse=True)
+        for missings in self.missing_enum_members.values():
+            missings.sort(key=lambda occ: occ.occurrences, reverse=True)

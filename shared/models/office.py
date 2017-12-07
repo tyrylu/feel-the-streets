@@ -2,7 +2,21 @@ import enum
 from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Addressable
-from .enums import SmokingType, OSMObjectType, LandType, BarrierType, WheelchairAccess
+from .enums import SmokingType, OSMObjectType, LandType, BarrierType, WheelchairAccess, RoofShape, RoofMaterial, IndoorType
+
+class InternetAccess(enum.Enum):
+    yes = 0
+    wlan = 1
+
+class Function(enum.Enum):
+    retail = 0
+    headquarters = 1
+
+class AuthorityType(enum.Enum):
+    finance = 0
+    culture = 1
+    interior = 2
+    yes = 3
 
 class OfficeType(enum.Enum):
     yes = -1
@@ -73,4 +87,15 @@ class Office(Addressable):
     description = Column(UnicodeText)
     bitcoin_payment = Column(Boolean)
     level = Column(Integer)
+    authority = Column(IntEnum(AuthorityType))
+    old_name = Column(UnicodeText)
+    alt_name = Column(UnicodeText)
+    roof_material = Column(IntEnum(RoofMaterial))
+    roof_shape = Column(IntEnum(RoofShape))
+    roof_height = Column(Integer)
+    roof_colour = Column(UnicodeText)
+    flats = Column(Integer)
+    function = Column(IntEnum(Function))
+    indoor = Column(IntEnum(IndoorType))
+    internet_access = Column(IntEnum(InternetAccess))
     

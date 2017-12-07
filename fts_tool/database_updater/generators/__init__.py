@@ -3,6 +3,8 @@ from .crossing import CrossingGenerator
 from .protected_area import ProtectedAreaGenerator
 from .platform import PlatformGenerator
 from .stop import StopGenerator
+from .border import BorderGenerator
+from .boundary import BoundaryGenerator
 from .water_way import WaterWayGenerator
 from .track import TrackGenerator
 from .aerial_way import AerialWayGenerator
@@ -48,15 +50,13 @@ from .water_area import WaterAreaGenerator
 from .natural import NaturalGenerator
 from .sport import SportGenerator
 from .bunker import BunkerGenerator
-from .land import LandGenerator
-from .border import BorderGenerator
-from .boundary import BoundaryGenerator
+from .place import PlaceGenerator
 from .garden import GardenGenerator
+from .land import LandGenerator
 from .golfcourse import GolfCourseGenerator
 from .playground import PlaygroundGenerator
 from .leisure import LeisureGenerator
 from .barrier import BarrierGenerator
-from .place import PlaceGenerator
 from .memorial import MemorialGenerator
 from .historic import HistoricGenerator
 from .traffic_sign import TrafficSignGenerator

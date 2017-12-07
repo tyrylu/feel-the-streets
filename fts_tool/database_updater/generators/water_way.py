@@ -9,6 +9,9 @@ class WaterWayGenerator(Generator):
         self.renames("boat", "boats_allowed")
         self.renames("motorboat", "motor_boats_allowed")
         self.renames("mtb:scale", "mtb_scale")
+        self.renames("whitewater:section_grade", "whitewater_section_grade")
+        self.renames("whitewater:section_name", "whitewater_section_name")
+        self.renames("whitewater:rapid_name", "whitewater_rapid_name")
         self.renames("life_cycle:start_date", "start_date")
         self.removes("vehicle:conditional")
 

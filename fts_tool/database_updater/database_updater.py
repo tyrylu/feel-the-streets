@@ -11,17 +11,20 @@ from .utils import get_srid_from_point
 log = logging.getLogger(__name__)
 
 class DatabaseUpdater:
-    def __init__(self, location):
+    def __init__(self, location, check_geometries, use_cache, cache_responses):
         self._location = location
-        self.translator = OSMObjectTranslator()
+        self.translator = OSMObjectTranslator(use_cache, cache_responses)
         self._db = Database(location)
+        self._check_geoms = check_geometries
         self._db.create_if_needed()
-        self._check_geoms = "--check-geometries" in sys.argv
 
-    def update_database(self):
-        entities = []
+    def entities_in_location(self, check_geometry_size=False):
         for entity, object in self.translator.translated_objects_in(self._location):
             geometry = self.translator.manager.get_geometry_as_wkt(object)
+            geom_size = len(geometry)
+            if check_geometry_size and geom_size > 1000000:
+                log.warn("Skipping object with tags %s because of the excessively huge geometry of size %s.", object.tags, geom_size)
+                continue
             if not geometry:
                 log.error("Failed to generate geometry for %s.", object)
                 continue
@@ -31,12 +34,16 @@ class DatabaseUpdater:
                 except Exception as exc:
                     log.error("Failed to parse geometry of %s, error %s.", object, exc)
                     continue
-            entity.geometry = geometry
-            self._db.add(entity)
+            entity.geometry = WKTSpatialElement(geometry)
             self._maybe_polygonize(entity)
-        log.info("Committing changes.")
-        self._db.commit()
-        self._db.commit()
+            yield entity
+        self.translator.record.save_to_file("generation_record_%s.txt"%self._location)
+        self.translator.record.save_to_pickle("%s.grd"%self._location)
+        
+    def update_database(self):
+        for entity in self.entities_in_location():
+            self._db.schedule_entity_addition(entity)
+        self._db.add_entities()
 
     def _maybe_polygonize(self, entity):
         if hasattr(entity, "effective_width") and entity.effective_width > 0 and self._db.scalar(gf.geometry_type(entity.geometry)) == "LINESTRING":

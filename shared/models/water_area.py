@@ -29,3 +29,7 @@ class WaterArea(Named):
     type = Column(IntEnum(WaterAreaType))
     reservoir_type = Column(UnicodeText)
     alt_name = Column(UnicodeText)
+    wikidata = Column(UnicodeText)
+    wikipedia = Column(UnicodeText)
+    alt_name = Column(UnicodeText)
+    

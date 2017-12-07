@@ -45,3 +45,7 @@ class ManMade(Named):
     access = Column(IntEnum(AccessType))
     pump = Column(IntEnum(PumpType)) # Separate entity?
     street_cabinet = Column(IntEnum(StreetCabinetType)) # Separate entity?
+    count = Column(Integer)
+    usage = Column(UnicodeText) # Probably have something in common
+    floating = Column(Boolean)
+    note = Column(UnicodeText)

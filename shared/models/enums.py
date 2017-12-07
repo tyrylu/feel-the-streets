@@ -390,7 +390,7 @@ class ShopType(enum.Enum):
     software = 160
     lottery = 161
     copyshop_toys = 162
-    plavecké_potřeby = 163
+    #plavecké_potřeby = 163
     eBikes = 164
     rc_models = 165
     video_games = 166
@@ -405,7 +405,7 @@ class ShopType(enum.Enum):
     haberdashery = 175
     window_blind = 176
     lamps = 177
-    výroba_reklamy = 178
+    #výroba_reklamy = 178
     glassware = 179
     bathroom_furniture = 180
     mushrooms = 181
@@ -1049,6 +1049,7 @@ class Location(enum.Enum):
     kiosk = 2
     outdoor = 3
     overground = 4
+    bridge = 5
 
 class BridgeStructure(enum.Enum):
     beam = 1
@@ -1154,6 +1155,7 @@ class Surface(enum.Enum):
     rocks = 27
     stone = 28
     pebblestone = 29
+    panel = 30
     
 
 class ReservationType(enum.Enum):
@@ -1265,3 +1267,36 @@ class SurveillanceKind(enum.Enum):
 class SurveillanceZone(enum.Enum):
     building = 0
     town = 1
+
+class IndoorType(enum.Enum):
+    room = 0
+    level = 1
+    
+
+class AreaType(enum.Enum):
+    unclassified = 0
+    pedestrian = 1
+    platform = 2
+    service = 3
+    yes = 4
+    path = 5
+    footway = 6
+    rest_area = 7
+    living_street = 8
+    residential = 9
+    track = 10
+    construction = 11
+    elevator = 12
+
+class PlaceType(enum.Enum):
+    village = 0
+    hamlet = 1
+    suburb = 2
+    town = 3
+    locality = 4
+    city = 5
+    neighbourhood = 6
+    islet = 7
+    island = 8
+    square = 9
+    farm = 10

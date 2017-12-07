@@ -1,9 +1,13 @@
 import enum
-from sqlalchemy import Column, ForeignKey, ForeignKeyConstraint, Boolean, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKey, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
 from ..sa_types import IntEnum
 from sqlalchemy.orm import relationship
-from .enums import ShopType, ManMade, BarrierType, NaturalType, LeisureType, LandType, OSMObjectType, ConstructionType, IndustrialType, Surface, FenceType
+from .enums import ShopType, ManMade, BarrierType, NaturalType, LeisureType, LandType, OSMObjectType, ConstructionType, IndustrialType, Surface, FenceType, AccessType, BridgeStructure
 from . import Named
+
+class Trees(enum.Enum):
+    cherry_trees = 0
+    apple_trees = 1
 
 class MeadowType(enum.Enum):
     none = 0
@@ -25,7 +29,12 @@ class PlantType(enum.Enum):
     tree = 0
 class ResidentialType(enum.Enum):
     urban = 0
-    
+
+class DepotType(enum.Enum):
+    bus = 0
+    tram = 1
+    subway = 2
+
 class Land(Named):
     __tablename__ = "lands"
     __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
@@ -69,3 +78,31 @@ class Land(Named):
     residential = Column(IntEnum(ResidentialType))
     surface = Column(IntEnum(Surface))
     plant = Column(IntEnum(PlantType))
+    uhul_slt = Column(UnicodeText)
+    is_in = Column(UnicodeText)
+    access = Column(IntEnum(AccessType))
+    leaf_type = Column(UnicodeText) # Find out why it is there and make it an enumerate
+    start_date = Column(UnicodeText)
+    uhul_area = Column(UnicodeText)
+    uhul_id = Column(UnicodeText)
+    wood = Column(UnicodeText) # And again, why it is there?
+    landuse_1 = Column(IntEnum(LandType))
+    ele = Column(Float)
+    id_fb = Column(Integer)
+    fenced = Column(Boolean)
+    depot = Column(IntEnum(DepotType)) # Separate entity?
+    sorting_name = Column(UnicodeText)
+    height = Column(Float)
+    trees = Column(IntEnum(Trees))
+    reservoir_type = Column(UnicodeText) # Separate entity?
+    genus = Column(UnicodeText)
+    bridge_structure = Column(IntEnum(BridgeStructure))
+    level = Column(Integer)
+    finely_mown = Column(Boolean)
+    golf = Column(UnicodeText) # Separate entity?
+    mown = Column(Boolean)
+    email = Column(UnicodeText)
+    phone = Column(UnicodeText)
+    colour = Column(UnicodeText)
+    barrier_height = Column(Float)
+    

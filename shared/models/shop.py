@@ -24,10 +24,6 @@ class Shop(Building):
     vehicle_repair = Column(UnicodeText)
     organic = Column(Boolean)
     coins_payment = Column(Boolean)
-    maestro_payment = Column(Boolean)
-    mastercard_payment = Column(Boolean)
-    notes_payment = Column(Boolean)
-    bitcoin_payment = Column(Boolean)
     second_hand = Column(IntEnum(SecondHandType))
     service = Column(UnicodeText)
     skiing = Column(IntEnum(SkiingType)) # Do we want a skiing_shop?

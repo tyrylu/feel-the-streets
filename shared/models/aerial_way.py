@@ -1,7 +1,7 @@
 import enum
 from sqlalchemy import Column, Boolean, ForeignKeyConstraint, Float, Integer, UnicodeText
 from ..sa_types import IntEnum
-from .enums import AerialWayType, RoadType, RoofShape, BridgeStructure, OSMObjectType
+from .enums import AerialWayType, RoadType, RoofShape, BridgeStructure, OSMObjectType, AccessType, ManMade
 from . import Named
 
 class AerodromeType(enum.Enum):
@@ -37,3 +37,14 @@ class AerialWay(Named):
     maxweight = Column(Float)
     description = Column(UnicodeText)
     area = Column(Boolean)
+    ele = Column(Float)
+    start_date = Column(UnicodeText)
+    height = Column(Float)
+    layer = Column(Integer)
+    note = Column(UnicodeText)
+    access = Column(IntEnum(AccessType))
+    lit = Column(Boolean)
+    navigationaid = Column(UnicodeText)
+    man_made = Column(IntEnum(ManMade))
+    frequency = Column(UnicodeText)
+    

@@ -4,6 +4,11 @@ from ..sa_types import IntEnum
 from . import Named
 from .enums import OSMObjectType, WheelchairAccess
 
+class Transport(enum.Enum):
+    subway = 0
+
+class StationType(enum.Enum):
+    subway = 0
 class StopType(enum.Enum):
     must_infer = -1
     bus_stop = 0
@@ -69,4 +74,15 @@ class Stop(Named):
     uic_ref = Column(Integer)
     direction = Column(IntEnum(Direction))
     alt_name_de = Column(UnicodeText)
+    old_name_de = Column(UnicodeText)
+    website = Column(UnicodeText)
+    colour = Column(UnicodeText)
+    network_en = Column(UnicodeText)
+    station = Column(IntEnum(StationType))
+    subway = Column(Boolean)
+    transport = Column(IntEnum(Transport))
+    network_cs = Column(UnicodeText)
+    start_date = Column(UnicodeText)
+    description = Column(UnicodeText)
+    rail = Column(Boolean)
     

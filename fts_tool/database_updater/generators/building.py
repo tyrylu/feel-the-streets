@@ -9,7 +9,9 @@ class BuildingGenerator(AddressAwareGenerator):
         self.renames("roof:height", "roof_height")
         self.renames("roof:shape", "roof_shape")
         self.renames("building:roof:shape", "roof_shape")
+        self.renames("roof:type", "roof_shape")
         self.renames("building:roof:angle", "roof_angle")
+        self.renames("roof:slope:angle", "roof_angle")
         self.renames("roof:orientation", "roof_orientation")
         self.renames("building:roof:orientation", "roof_orientation")
         self.renames("internet_access:fee", "internet_access_fee")
@@ -22,6 +24,7 @@ class BuildingGenerator(AddressAwareGenerator):
         self.renames("payment:visa_debit", "visa_debit_payment")
         self.renames("payment:visa_electron", "visa_electron_payment")
         self.renames("roof:levels", "roof_levels")
+        self.renames("building:roof:levels", "roof_levels")
         self.renames("roof:material", "roof_material")
         self.renames("roof", "roof_shape")
         self.renames("building:roof", "roof_shape")
@@ -51,7 +54,21 @@ class BuildingGenerator(AddressAwareGenerator):
         
         self.unprefixes("contact")
         self.renames("historic", "historic_type")
-
+        self.renames("id:čvut", "cvut_id")
+        self.renames("description:en", "description_en")
+        self.renames("internet_access:ssid", "internet_access_ssid")
+        self.renames("payment:cash", "cash_payment")
+        self.renames("note:en", "note_en")
+        self.renames("payment:bitcoin", "bitcoin_payment")
+        self.renames("toilets:disposal", "toilets_disposal")
+        self.renames("payment:coins", "cash_payment")
+        self.renames("payment:maestro", "maestro_payment")
+        self.renames("payment:mastercard", "mastercard_payment")
+        self.renames("payment:notes", "notes_payment")
+        self.renames("diet:vegan", "vegan_diet")
+        self.renames("payment:credit_cards", "credit_cards_payment")
+        self.renames("payment:debit_cards", "debit_cards_payment")
+        
         
 
     @staticmethod

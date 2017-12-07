@@ -27,7 +27,6 @@ class Tower(ManMade):
     tower_type = Column(IntEnum(TowerType))
     building_part = Column(IntEnum(BuildingPartType))
     building = Column(IntEnum(BuildingType))
-    note = Column(UnicodeText)
     tourism = Column(IntEnum(TourismType))
     fee = Column(Boolean)
     mobile_phone_communication  = Column(Boolean)

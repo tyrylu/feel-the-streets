@@ -8,6 +8,7 @@ class LeisureGenerator(AddressAwareGenerator):
         self.renames("leisure", "type")
         self.renames("dog", "dogs_allowed")
         self.renames("athletics:shot-put", "shot_put")
+        self.unprefixes("contact")
         self.unprefixes("athletics")
         self.removes_subtree("piste")
 

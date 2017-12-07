@@ -3,9 +3,13 @@ from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Float, Integer, Un
 from ..sa_types import IntEnum, DimensionalFloat
 from geoalchemy import GeometryColumn, LineString
 import shapely.wkt as wkt
-from .enums import AccessType, WaterWayType, NaturalType, Inclination, CrossingType, TrafficCalmingType, RailWayType, BridgeType, RoadType, Location, BridgeStructure, OSMObjectType, Surface, KerbType, SidewalkType, WheelchairAccess, ManMade, HistoricType, RestrictionType, SportType
+from .enums import AccessType, WaterWayType, NaturalType, Inclination, CrossingType, TrafficCalmingType, RailWayType, BridgeType, RoadType, Location, BridgeStructure, OSMObjectType, Surface, KerbType, SidewalkType, WheelchairAccess, ManMade, HistoricType, RestrictionType, SportType, AreaType, TourismType, Amenity, PlaceType
 from . import Named
 
+class ParkingCondition(enum.Enum):
+    residents = 0
+    ticket = 1
+    free = 2
 class JunctionType(enum.Enum):
     none = 0
     roundabout = 1
@@ -55,6 +59,9 @@ class FootwayType(enum.Enum):
 
 class RoadPriority(enum.Enum):
     designated = 0
+    backward = 1
+    forward = 2
+
 
 class FootType(enum.Enum):
     no = 0
@@ -310,6 +317,7 @@ class Road(Named):
     ref_name_note = Column(UnicodeText)
     ref_name = Column(UnicodeText)
     hgv_6t = Column(IntEnum(AccessType))
+    advisory_maxspeed = Column(Integer)
     old_ref = Column(Integer)
     bridge_ref = Column(UnicodeText)
     hgv_conditional_maxspeed = Column(UnicodeText)
@@ -331,6 +339,52 @@ class Road(Named):
     rcn = Column(Boolean)
     rcn_ref = Column(Integer)
     distance = Column(Integer)
+    highway_area = Column(IntEnum(AreaType))
+    tourism = Column(IntEnum(TourismType))
+    loc_name = Column(UnicodeText)
+    place = Column(IntEnum(PlaceType))
+    hazmat_e = Column(Boolean)
+    destination_name = Column(UnicodeText)
+    psv_lanes = Column(UnicodeText)
+    name_note = Column(UnicodeText)
+    taxi_lanes = Column(UnicodeText)
+    disused = Column(Boolean)
+    
+    vehicle_lanes = Column(UnicodeText)
+    both_ways_lanes = Column(Integer)
+    maxspeed_source = Column(UnicodeText)
+    voltage = Column(Integer)
+    both_cycleway = Column(Boolean)
+    vorh_parking_condition = Column(IntEnum(ParkingCondition))
+    both_default_parking_condition = Column(IntEnum(ParkingCondition))
+    both_residents_parking_condition = Column(Integer)
+    both_parking_condition_time_interval = Column(UnicodeText)
+    zone_maxspeed = Column(Integer)
+    psv_oneway = Column(Boolean)
+    removed_cycleway = Column(IntEnum(CycleWayType))
+    incline_steep = Column(Boolean)
+    bicycle_lanes = Column(UnicodeText)
+    hazmat = Column(Boolean)
+    amenity = Column(IntEnum(Amenity))
+    ski = Column(Boolean)
+    tourist_bus = Column(Boolean)
+    pedestrians = Column(Boolean)
+    hgv_maxweight = Column(Integer)
+    priority = Column(IntEnum(RoadPriority))
+    hgv_lanes = Column(UnicodeText)
+    fee = Column(UnicodeText)
+    reg_name_note = Column(UnicodeText)
+    reg_name = Column(UnicodeText)
+    cs_note = Column(UnicodeText)
+    height = Column(DimensionalFloat("meter"))
+    repeat_on = Column(UnicodeText)
+    stroller = Column(Boolean)
+    
+    bdouble = Column(Boolean)
+
+    
+    
+        
     
     
     

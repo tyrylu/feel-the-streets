@@ -9,8 +9,10 @@ class RouteGenerator(Generator):
         self.renames("from", "from_")
         self.renames("lcn:description", "lcn_description")
         self.renames("public_transport:version", "public_transport_version")
+        self.renames("note1", "note_1")
+        self.renames("text_color", "text_colour")
         self.unprefixes("osmc")
 
     @staticmethod
     def accepts(props):
-        return "route" in props
+        return "route" in props or ("type" in props and props["type"] == "route")

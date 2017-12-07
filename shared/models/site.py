@@ -6,6 +6,7 @@ from .enums import OSMObjectType
 
 class SiteType(enum.Enum):
     site = 0
+    stop_area = 1
 
 class Site(Named):
     __tablename__ = "sites"
@@ -15,3 +16,5 @@ class Site(Named):
     osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
     type = Column(IntEnum(SiteType))
     website = Column(UnicodeText)
+    wikidata = Column(UnicodeText)
+    wikipedia = Column(UnicodeText)

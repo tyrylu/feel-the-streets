@@ -2,20 +2,8 @@ import enum
 from sqlalchemy import Column, ForeignKeyConstraint, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Named
-from .enums import OSMObjectType
+from .enums import OSMObjectType, PlaceType
 
-class PlaceType(enum.Enum):
-    village = 0
-    hamlet = 1
-    suburb = 2
-    town = 3
-    locality = 4
-    city = 5
-    neighbourhood = 6
-    islet = 7
-    island = 8
-    square = 9
-    farm = 10
     
 
 class Place(Named):

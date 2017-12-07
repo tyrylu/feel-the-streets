@@ -44,5 +44,7 @@ class Boundary(Named):
     fixname = Column(UnicodeText)
     alt_name_de = Column(UnicodeText)
     old_name_de = Column(UnicodeText)
-    
+    old_name = Column(UnicodeText)
+    description = Column(UnicodeText)
+    year = Column(UnicodeText)
     
