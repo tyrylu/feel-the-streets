@@ -10,8 +10,8 @@ def closest_point_from_geoms(geoms, point):
         dist = point.distance(geom_point)
         if dist < min:
             min = dist
-            min_point = point
-    return point
+            min_point = geom_point
+    return min_point
 
 def closest_point_to(point, geom, convert=True):
     if convert:
