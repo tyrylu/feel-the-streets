@@ -1,37 +1,26 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKey, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Named
-from .enums import OSMObjectType, WheelchairAccess, RouteType
-
-class RouteImportance(enum.Enum):
-    major = 0
-    local = 1
-    learning = 3
-    ruin = 4
-    peak = 5
-    spring = 6
-    interesting_object = 7
-    horse = 8
-    ski = 9
-    bicycle = 10
-    wheelchair = 11
+from .enums import OSMObjectType, WheelchairAccess, RouteType, RouteImportance
 
 class RouteState(enum.Enum):
     recommended = 0
     proposed = 1
     alternate = 2
-    
-    
+    connection = 3
 
 class RouteService(enum.Enum):
     long_distance = 0
+
+class FerryType(enum.Enum):
+    local = 0
+    unclassified = 1
+
 class Route(Named):
     __tablename__ = "routes"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'route'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'route', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
     type = Column(IntEnum(RouteType), nullable=False)
     complete = Column(UnicodeText)
     destinations = Column(UnicodeText)
@@ -76,4 +65,15 @@ class Route(Named):
     opening_hours = Column(UnicodeText)
     duration = Column(UnicodeText)
     fee = Column(Boolean)
-    
+    road_components = Column(Integer)
+    ferry = Column(IntEnum(FerryType))
+    start_date = Column(UnicodeText)
+    a = Column(Integer)
+    destination = Column(UnicodeText)
+    official_name = Column(UnicodeText)
+    opening_date = Column(UnicodeText)
+    roundtrip = Column(Boolean)
+    nat_ref = Column(UnicodeText)
+    kct_white = Column(IntEnum(RouteImportance))
+    note_cz = Column(UnicodeText)
+

@@ -1,29 +1,13 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKey, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import ManMade
-from .enums import BuildingPartType, OSMObjectType, BuildingType, TourismType
-
-class TowerType(enum.Enum):
-    unknown  = 0
-    communication = 1
-    observation = 2
-    climbing = 3
-    bell_tower = 4
-    bts = 5
-    lighting = 6
-    church = 7
-    cooling = 8
-
-    
-    
+from .enums import BuildingPartType, OSMObjectType, BuildingType, TourismType, RoofShape, TowerType
 
 class Tower(ManMade):
     __tablename__ = "towers"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["man_made.id", "man_made.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'tower'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'tower', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("man_made.id"), primary_key=True)
     tower_type = Column(IntEnum(TowerType))
     building_part = Column(IntEnum(BuildingPartType))
     building = Column(IntEnum(BuildingType))
@@ -31,3 +15,16 @@ class Tower(ManMade):
     fee = Column(Boolean)
     mobile_phone_communication  = Column(Boolean)
     tower_construction = Column(UnicodeText)
+    colour = Column(UnicodeText)
+    roof_shape = Column(IntEnum(RoofShape))
+    levels = Column(Integer)
+    alt_name = Column(UnicodeText)
+    min_height = Column(Integer)
+    roof_colour = Column(UnicodeText)
+    phone = Column(UnicodeText)
+    ele = Column(Integer)
+    opening_hours = Column(UnicodeText)
+    flats = Column(Integer)
+    microwave_communication = Column(Boolean)
+    television_communication = Column(Boolean)
+    communication = Column(UnicodeText)

@@ -2,7 +2,7 @@ import enum
 from sqlalchemy import Column, ForeignKey, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
 from ..sa_types import IntEnum
 from sqlalchemy.orm import relationship
-from .enums import ShopType, ManMade, BarrierType, NaturalType, LeisureType, LandType, OSMObjectType, ConstructionType, IndustrialType, Surface, FenceType, AccessType, BridgeStructure
+from .enums import ShopType, ManMade, BarrierType, NaturalType, LeisureType, LandType, OSMObjectType, ConstructionType, IndustrialType, Surface, FenceType, AccessType, BridgeStructure, LandCover, ResidentialType, SiteType, Denomination, MilitaryType
 from . import Named
 
 class Trees(enum.Enum):
@@ -15,20 +15,13 @@ class MeadowType(enum.Enum):
     pasture = 2
     perpetual = 3
 
-class MilitaryType(enum.Enum):
-    none = 0
-    barracks = 1
-    danger_area = 2
-class LandCover(enum.Enum):
-    grass = 0
-
 class BasinType(enum.Enum):
     detention = 0
+    retention = 1
+    infiltration = 2
 
 class PlantType(enum.Enum):
     tree = 0
-class ResidentialType(enum.Enum):
-    urban = 0
 
 class DepotType(enum.Enum):
     bus = 0
@@ -37,10 +30,8 @@ class DepotType(enum.Enum):
 
 class Land(Named):
     __tablename__ = "lands"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'land'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'land', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
     type = Column(IntEnum(LandType), nullable=False)
     shop_type = Column(IntEnum(ShopType))
     website = Column(UnicodeText)
@@ -70,7 +61,8 @@ class Land(Named):
     construction = Column(IntEnum(ConstructionType))
     old_name = Column(UnicodeText)
     industrial = Column(IntEnum(IndustrialType))
-    basin = Column(IntEnum(BasinType)) # Separate entity?
+    basin = Column(IntEnum(BasinType))
+    # Separate entity?
     alt_name = Column(UnicodeText)
     fence_type = Column(IntEnum(FenceType))
     fixme = Column(UnicodeText)
@@ -81,28 +73,36 @@ class Land(Named):
     uhul_slt = Column(UnicodeText)
     is_in = Column(UnicodeText)
     access = Column(IntEnum(AccessType))
-    leaf_type = Column(UnicodeText) # Find out why it is there and make it an enumerate
+    leaf_type = Column(UnicodeText)
+    # Find out why it is there and make it an enumerate
     start_date = Column(UnicodeText)
     uhul_area = Column(UnicodeText)
     uhul_id = Column(UnicodeText)
-    wood = Column(UnicodeText) # And again, why it is there?
+    wood = Column(UnicodeText)
+    # And again, why it is there?
     landuse_1 = Column(IntEnum(LandType))
     ele = Column(Float)
     id_fb = Column(Integer)
     fenced = Column(Boolean)
-    depot = Column(IntEnum(DepotType)) # Separate entity?
+    depot = Column(IntEnum(DepotType))
+    # Separate entity?
     sorting_name = Column(UnicodeText)
     height = Column(Float)
     trees = Column(IntEnum(Trees))
-    reservoir_type = Column(UnicodeText) # Separate entity?
+    reservoir_type = Column(UnicodeText)
+    # Separate entity?
     genus = Column(UnicodeText)
     bridge_structure = Column(IntEnum(BridgeStructure))
     level = Column(Integer)
     finely_mown = Column(Boolean)
-    golf = Column(UnicodeText) # Separate entity?
+    golf = Column(UnicodeText)
+    # Separate entity?
     mown = Column(Boolean)
     email = Column(UnicodeText)
     phone = Column(UnicodeText)
     colour = Column(UnicodeText)
     barrier_height = Column(Float)
-    
+    denomination = Column(IntEnum(Denomination))
+    clc_code = Column(Integer)
+    site_type = Column(IntEnum(SiteType))
+

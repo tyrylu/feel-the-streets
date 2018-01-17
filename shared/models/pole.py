@@ -1,18 +1,13 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKey, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
 from .named import Named
-from .enums import OSMObjectType, TourismType
-
-class TransformerType(enum.Enum):
-    distribution = 0
+from .enums import OSMObjectType, TourismType, TransformerType, PowerType, InfoType
 
 class Pole(Named):
     __tablename__ = "poles"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'pole'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'pole', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
     transformer_type = Column(IntEnum(TransformerType))
     voltage = Column(UnicodeText)
     operator = Column(UnicodeText)
@@ -20,3 +15,7 @@ class Pole(Named):
     fixme = Column(UnicodeText)
     hiking = Column(Boolean)
     tourism = Column(IntEnum(TourismType))
+    pole = Column(IntEnum(PowerType))
+    disused = Column(Boolean)
+    ele = Column(Integer)
+    information = Column(IntEnum(InfoType))

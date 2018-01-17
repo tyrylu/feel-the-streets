@@ -1,23 +1,8 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKey, Boolean, Float, Integer, UnicodeText
 from ..sa_types import IntEnum, DimensionalFloat
-from .enums import LeisureType, Amenity, ManMade, SmokingType, TourismType, SportType, InfoType, HistoricType, RoofShape, Location, AccessType, OSMObjectType, IndustrialType, LandType, BuildingPartType, BarrierType, RoofOrientation, ConstructionType, ReservationType, WifiType, WheelchairAccess, RoofMaterial, IndoorType, FenceType, Surface
+from .enums import LeisureType, Amenity, ManMade, SmokingType, TourismType, SportType, InfoType, HistoricType, RoofShape, Location, AccessType, OSMObjectType, IndustrialType, LandType, BuildingPartType, BarrierType, RoofOrientation, ConstructionType, ReservationType, WifiType, WheelchairAccess, RoofMaterial, IndoorType, FenceType, Surface, ResidentialType, GardenType, EmergencyType, Material, ArtWorkType, AdvertisingType, BuildingType, SurveillanceType, ToiletsDisposal, FastFoodType, DiplomacyRelation, DietType
 from . import Addressable
-
-class DietType(enum.Enum):
-    no = 0
-    yes = 1
-    only = 2
-
-class FastFoodType(enum.Enum):
-    yes = 0
-    cafeteria = 1
-
-class ToiletsDisposal(enum.Enum):
-    flush = 0
-class DiplomacyRelation(enum.Enum):
-    ambassadors_residence = 0
-    embassy = 1
 
 class TakeAway(enum.Enum):
     no = 0
@@ -27,26 +12,37 @@ class TakeAway(enum.Enum):
 class BuildingUsage(enum.Enum):
     residential = 0
     commercial = 1
+    shop = 2
+    garages = 3
 
-class EmergencyType(enum.Enum):
-    no = 0
-    yes = 1
-    ambulance_station = 2
 class Cladding(enum.Enum):
     glass = 0
-class Material(enum.Enum):
-    glass = 0
-    steel = 1
+
+class BridgeSupport(enum.Enum):
+    pier = 0
+
+class Ethnicity(enum.Enum):
+    czech = 0
+
+class SeaMarkType(enum.Enum):
+    anchor_berth = 0
+
+class Architecture(enum.Enum):
+    romanesque = 0
+    modern = 1
+
+class CampSiteRelation(enum.Enum):
+    reception = 0
+
+class EducationType(enum.Enum):
+    music = 0
 
 class Building(Addressable):
     __tablename__ = "buildings"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["addressables.id", "addressables.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'building'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'building', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("addressables.id"), primary_key=True)
     levels = Column(Integer)
     flats = Column(Integer)
-    opening_hours = Column(UnicodeText)
     amenity = Column(IntEnum(Amenity))
     religion = Column(UnicodeText)
     official_name = Column(UnicodeText)
@@ -67,16 +63,12 @@ class Building(Addressable):
     roof_shape = Column(IntEnum(RoofShape))
     height = Column(DimensionalFloat("meter"))
     internet_access_fee = Column(Boolean)
-    wikidata = Column(UnicodeText)
-    internet_access = Column(UnicodeText)
     sport = Column(IntEnum(SportType))
     covered = Column(Boolean)
-    alt_name = Column(UnicodeText)
     wikipedia = Column(UnicodeText)
     old_name = Column(UnicodeText)
     short_name = Column(UnicodeText)
     information_type = Column(IntEnum(InfoType))
-    description = Column(UnicodeText)
     location = Column(IntEnum(Location))
     product = Column(UnicodeText)
     dispensing = Column(Boolean)
@@ -85,7 +77,6 @@ class Building(Addressable):
     historic_type = Column(IntEnum(HistoricType))
     cuisine = Column(UnicodeText)
     phone = Column(UnicodeText)
-    email = Column(UnicodeText)
     outdoor_seating = Column(Boolean)
     brewery = Column(UnicodeText)
     vegetarian_diet = Column(IntEnum(DietType))
@@ -96,12 +87,10 @@ class Building(Addressable):
     designation = Column(UnicodeText)
     abandoned = Column(Boolean)
     wheelchair = Column(IntEnum(WheelchairAccess))
-    level = Column(Integer)
     landuse = Column(IntEnum(LandType))
     roof_levels = Column(Integer)
     roof_material = Column(IntEnum(RoofMaterial))
     part = Column(IntEnum(BuildingPartType))
-    loc_name = Column(UnicodeText)
     service_times = Column(UnicodeText)
     image = Column(UnicodeText)
     disused = Column(Boolean)
@@ -121,7 +110,6 @@ class Building(Addressable):
     use = Column(IntEnum(BuildingUsage))
     roof_colour = Column(UnicodeText)
     wheelchair_description = Column(UnicodeText)
-    comment = Column(UnicodeText)
     construction = Column(IntEnum(ConstructionType))
     self_service = Column(Boolean)
     microbrewery = Column(Boolean)
@@ -133,11 +121,13 @@ class Building(Addressable):
     visa_payment = Column(Boolean)
     visa_debit_payment = Column(Boolean)
     visa_electron_payment = Column(Boolean)
-    healthcare_speciality = Column(UnicodeText) # Find out why it appears there
+    healthcare_speciality = Column(UnicodeText)
+    # Find out why it appears there
     sorting_name = Column(UnicodeText)
     alt_name_1 = Column(UnicodeText)
     alt_name_2 = Column(UnicodeText)
-    end_date = Column(UnicodeText) # Make it a date
+    end_date = Column(UnicodeText)
+    # Make it a date
     cvut_id = Column(UnicodeText)
     description_en = Column(UnicodeText)
     internet_access_ssid = Column(UnicodeText)
@@ -168,7 +158,52 @@ class Building(Addressable):
     indoor = Column(IntEnum(IndoorType))
     automated = Column(Boolean)
     vegan_diet = Column(IntEnum(DietType))
-    fast_food = Column(IntEnum(FastFoodType)) # Separate entity?
+    fast_food = Column(IntEnum(FastFoodType))
+    # Separate entity?
     credit_cards_payment = Column(Boolean)
     debit_cards_payment = Column(Boolean)
-    
+    roof_slope_direction = Column(Float)
+    roof_direction = Column(UnicodeText)
+    bridge_support = Column(IntEnum(BridgeSupport))
+    room = Column(IntEnum(Amenity))
+    floating = Column(Boolean)
+    memorial = Column(UnicodeText)
+    gluten_free_diet = Column(Boolean)
+    ethnicity = Column(IntEnum(Ethnicity))
+    residential = Column(IntEnum(ResidentialType))
+    fenced = Column(Boolean)
+    disused_man_made = Column(IntEnum(ManMade))
+    vertical_part = Column(Boolean)
+    mooring = Column(IntEnum(AccessType))
+    seamark_type = Column(IntEnum(SeaMarkType))
+    flat = Column(IntEnum(Surface))
+    raw_diet = Column(Boolean)
+    en_wheelchair_description = Column(UnicodeText)
+    electronic_purses_payment = Column(Boolean)
+    kids_area = Column(Boolean)
+    beer_1 = Column(UnicodeText)
+    country = Column(UnicodeText)
+    garden_type = Column(IntEnum(GardenType))
+    meal_voucher_payment = Column(UnicodeText)
+    artwork_type = Column(IntEnum(ArtWorkType))
+    architecture = Column(IntEnum(Architecture))
+    currency_czk = Column(Boolean)
+    real_ale = Column(Boolean)
+    camp_site = Column(IntEnum(CampSiteRelation))
+    advertising = Column(IntEnum(AdvertisingType))
+    american_express_payment = Column(Boolean)
+    cryptocurrencies_payment = Column(Boolean)
+    entrance = Column(Boolean)
+    name_1 = Column(UnicodeText)
+    reg_name = Column(UnicodeText)
+    secondary_use = Column(UnicodeText)
+    building_1 = Column(IntEnum(BuildingType))
+    inscription = Column(UnicodeText)
+    surveillance = Column(IntEnum(SurveillanceType))
+    roof_access = Column(IntEnum(AccessType))
+    hei = Column(UnicodeText)
+    owner = Column(UnicodeText)
+    meal_vouchers_payment = Column(Boolean)
+    amenity_1 = Column(IntEnum(Amenity))
+    education = Column(IntEnum(EducationType))
+

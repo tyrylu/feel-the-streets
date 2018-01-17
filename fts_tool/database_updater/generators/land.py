@@ -16,9 +16,10 @@ class LandGenerator(AddressAwareGenerator):
         self.renames("url", "website")
         self.renames("bridge:structure", "bridge_structure")
         self.renames("barrier:height", "barrier_height")
-        
+
         self.removes_subtree("note")
 
+        self.renames("clc:code", "clc_code")
     @staticmethod
     def accepts(props):
         return "landuse" in props

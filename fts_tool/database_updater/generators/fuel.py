@@ -11,7 +11,9 @@ class FuelGenerator(AddressAwareGenerator):
         self.renames("building", "building_type")
         self.removes_subtree("ruian")
         self.unprefixes("building")
-        
+
+        self.renames("roof:shape", "roof_shape")
+        self.renames("roof:colour", "roof_colour")
     @staticmethod
     def accepts(props):
         return "amenity" in props and props["amenity"] == "fuel"

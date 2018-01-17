@@ -1,17 +1,19 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKey, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
-from .enums import WaterWayType, TunnelType, OSMObjectType, RoadType, Surface
+from .enums import WaterWayType, TunnelType, OSMObjectType, RoadType, Surface, NoticeFunction, NoticeType, SportType, NoticeImpact, NoticeCategory
 from . import Named
 
 class LifeCycle(enum.Enum):
     in_use = 0
+
+class Cemt(enum.Enum):
+    Va = 0
+
 class WaterWay(Named):
     __tablename__ = "water_ways"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'water_way'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'water_way', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
     type = Column(IntEnum(WaterWayType), nullable=False)
     alt_name = Column(UnicodeText)
     tunnel = Column(IntEnum(TunnelType))
@@ -38,7 +40,18 @@ class WaterWay(Named):
     have_riverbank = Column(Boolean)
     whitewater_section_name = Column(UnicodeText)
     whitewater_rapid_name = Column(UnicodeText)
-        
+    whitewater_rapid_grade = Column(UnicodeText)
+    cemt = Column(IntEnum(Cemt))
+    seamark_notice_function = Column(IntEnum(NoticeFunction))
+    seamark_type = Column(IntEnum(NoticeType))
+    cutting = Column(Boolean)
+    sport = Column(IntEnum(SportType))
+    seamark_notice_impact = Column(IntEnum(NoticeImpact))
+    seamark_notice_category = Column(IntEnum(NoticeCategory))
+    maxspeed = Column(Integer)
+    seasonal = Column(Boolean)
+    sac_scale = Column(UnicodeText)
+
     @property
     def effective_width(self):
         if self.width:

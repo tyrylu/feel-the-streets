@@ -7,6 +7,7 @@ class AddressableGenerator(AddressAwareGenerator):
         self.generates(Addressable)
         self.removes_subtree("uir_adr")
 
+        self.renames("disused:name", "disused_name")
     @staticmethod
     def accepts(props):
         return "addr:housenumber" in props

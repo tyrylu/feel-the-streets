@@ -3,7 +3,7 @@ from sqlalchemy import Column, ForeignKey, ForeignKeyConstraint, Boolean, Intege
 from ..sa_types import IntEnum
 from sqlalchemy.orm import relationship
 from . import Named
-from .enums import BuildingType, LandType, OSMObjectType
+from .enums import BuildingType, LandType, OSMObjectType, WheelchairAccess
 
 class CraftType(enum.Enum):
     carpenter = 0
@@ -34,14 +34,11 @@ class CraftType(enum.Enum):
     winery = 25
     caterer = 26
     gardener = 27
-    
-    
+
 class Craft(Named):
     __tablename__ = "crafts"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'craft'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'craft', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
     type = Column(IntEnum(CraftType), nullable=False)
     address_id = Column(Integer, ForeignKey("addresses.id"))
     address = relationship("Address")
@@ -55,3 +52,13 @@ class Craft(Named):
     email = Column(UnicodeText)
     phone = Column(UnicodeText)
     level = Column(Integer)
+    wheelchair = Column(IntEnum(WheelchairAccess))
+    note = Column(UnicodeText)
+    internet_access = Column(Boolean)
+    wikidata = Column(UnicodeText)
+    facebook = Column(UnicodeText)
+    fax = Column(UnicodeText)
+    layer = Column(Integer)
+    databox = Column(UnicodeText)
+    start_date = Column(Integer)
+    bitcoin_payment = Column(Boolean)

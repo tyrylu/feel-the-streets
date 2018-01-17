@@ -33,8 +33,11 @@ class AccessType(enum.Enum):
     mtb = 23
     use_sidepath = 24
     on_request = 25
-    
-    
+    opposite = 26
+    destinaton = 27
+    limited = 28
+
+
 
 class LeisureType(enum.Enum):
     none = 0
@@ -83,8 +86,11 @@ class LeisureType(enum.Enum):
     long_jump = 43
     racetrack = 44
     swimming_area = 45
-    
-    
+    me = 46
+    bowling_alley = 47
+    multipolygon = 48
+
+
 
 class Amenity(enum.Enum):
     none = 0
@@ -123,7 +129,8 @@ class Amenity(enum.Enum):
     clock = 33
     veterinary = 34
     bicycle_parking = 35
-    bbq = 36 # A barbecue grill
+    bbq = 36
+    # A barbecue grill
     marketplace = 37
     taxi = 38
     drinking_water = 39
@@ -221,7 +228,17 @@ class Amenity(enum.Enum):
     yes = 131
     luggage_locker = 132
     bts = 133
-    
+    elevator = 134
+    academy = 135
+    residential = 136
+    trolley_bay = 137
+    architect_office = 138
+    customs = 139
+    stairs = 140
+    office = 141
+    brewery = 142
+    love_hotel = 143
+
 
 
 
@@ -485,9 +502,12 @@ class ManMade(enum.Enum):
     silo = 49
     clearcut = 50
     canopy = 51
-    
-    
-    
+    windmill = 52
+    wayside_shrine = 53
+    mineshaft = 54
+
+
+
 
 
 class SportType(enum.Enum):
@@ -582,9 +602,13 @@ class SportType(enum.Enum):
     rc_car = 86
     hardcourt_bikepolo = 87
     long_jump = 88
-    
-    
-    
+    footbal = 89
+    model_aerodrome = 90
+    aikido = 91
+    jumping = 92
+
+
+
 
 class BarrierType(enum.Enum):
     none = 0
@@ -600,7 +624,8 @@ class BarrierType(enum.Enum):
     entrance = 10
     fence = 11
     cattle_grid = 12
-    kissing_gate = 13 # Really?
+    kissing_gate = 13
+    # Really?
     guard_rail = 14
     hedge = 15
     retaining_wall = 16
@@ -624,10 +649,13 @@ class BarrierType(enum.Enum):
     banister = 34
     glass = 36
     border_control = 37
-    
-    
-    
-    
+    recommended = 38
+    no = 39
+    ramp = 40
+
+
+
+
 class SmokingType(enum.Enum):
     none = 0
     outside = 1
@@ -635,8 +663,9 @@ class SmokingType(enum.Enum):
     no = 3
     separated = 4
     isolated = 5
-    
-    
+    dedicated = 6
+
+
 class TourismType(enum.Enum):
     none = 0
     attraction = 1
@@ -711,10 +740,13 @@ class HistoricType(enum.Enum):
     heritage = 21
     border_control = 22
     railway = 23
-    
-    
-    
-    
+    palace = 24
+    gate = 25
+    stone = 26
+
+
+
+
 
 
 class TrafficCalmingType(enum.Enum):
@@ -746,8 +778,9 @@ class WaterWayType(enum.Enum):
     lock_gate = 11
     boatyard = 12
     lock = 13
-    
-    
+    dock = 14
+
+
 
 
 class NaturalType(enum.Enum):
@@ -778,8 +811,9 @@ class NaturalType(enum.Enum):
     sinkhole = 23
     mud = 24
     valley = 25
-    
-    
+    hill = 26
+
+
 
 class BuildingType(enum.Enum):
     none = -1
@@ -800,8 +834,12 @@ class BuildingType(enum.Enum):
     apartments = 14
     cabin = 15
     garages = 16
-    
-    
+    service = 17
+    transformer_tower = 18
+    ruins = 19
+    construction = 20
+
+
 
 class InfoType(enum.Enum):
     none = 0
@@ -884,9 +922,13 @@ class RailWayType(enum.Enum):
     border = 33
     defect_detector = 34
     isolated_track_section = 35
-    
-    
-    
+    traverser = 36
+    staton = 37
+    site = 38
+    workshop = 39
+
+
+
 
 class TunnelType(enum.Enum):
     no = 0
@@ -963,9 +1005,15 @@ class RoadType(enum.Enum):
     emergency_bay = 50
     virtual = 51
     stop_line = 52
-    
-    
-    
+    toll_bridge = 53
+    speed_display = 54
+    bus_stop = 55
+    contruction = 56
+    steps = 57
+    camera = 58
+
+
+
 
 class LandType(enum.Enum):
     forest = 0
@@ -1006,8 +1054,11 @@ class LandType(enum.Enum):
     river = 34
     playground = 35
     flowerbed = 36
-    
-    
+    park = 37
+    community_food_growing = 38
+    vliage_grenn = 39
+
+
 
 class BuildingPartType(enum.Enum):
     yes = 0
@@ -1021,8 +1072,14 @@ class BuildingPartType(enum.Enum):
     elevator = 8
     steps = 9
     roof = 10
-    
-    
+    column = 11
+    chimney = 12
+    wall = 13
+    commercial = 14
+    greenhouse = 15
+    garage = 16
+
+
 
 class RoofShape(enum.Enum):
     flat = 0
@@ -1040,8 +1097,14 @@ class RoofShape(enum.Enum):
     saltbox = 12
     tripple_skillion = 13
     pitched = 14
-    
-    
+    triple_skillion = 15
+    ga = 16
+    yes = 17
+    pyrmidal = 18
+    tile = 19
+    many = 20
+
+
 
 class Location(enum.Enum):
     indoor = 0
@@ -1055,8 +1118,11 @@ class BridgeStructure(enum.Enum):
     beam = 1
     arch = 2
     truss = 3
-    
-    
+    humpback = 4
+    suspension = 5
+    simple_suspension = 6
+
+
 class Role(enum.Enum):
     outer = 0
     inner = 1
@@ -1097,8 +1163,45 @@ class Role(enum.Enum):
     forward_stop = 36
     bus_stop = 37
     stop_on_demand = 38
-    
-    
+    across = 39
+    under = 40
+    board = 41
+    stop_entry_only = 42
+    stop_exit_only = 43
+    proposed = 44
+    house = 45
+    platform_entry_only = 46
+    through = 47
+    shelter = 48
+    device = 49
+    buildingpart = 50
+    side_stream = 51
+    sub_station = 52
+    excursion = 53
+    entrance_exit = 54
+    end = 55
+    alternation = 56
+    stop_position = 57
+    level_1 = 58
+    street = 59
+    shell = 60
+    stop_area = 61
+    perimeter = 62
+    begin = 63
+    parking = 64
+    stop_2 = 65
+    stop_10 = 66
+    stop_14 = 67
+    MHD = 68
+    reception = 69
+    hostel = 70
+    stop_1 = 71
+    stop_0_backward = 72
+    label = 73
+    place_of_worship = 74
+    stop_32 = 75
+
+
 
 class ConstructionType(enum.Enum):
     railway = 0
@@ -1111,14 +1214,25 @@ class ConstructionType(enum.Enum):
     building = 7
     garages = 8
     terrace = 9
-    
+    yes = 10
+    commercial = 11
+    apartments = 12
+    office = 13
+    hotel = 14
+    house = 15
+    transportation = 16
+    parking = 17
+    bus_stop = 18
+    reatil = 19
+
 
 class IndustrialType(enum.Enum):
     factory = 0
     distributor = 1
     power = 2
     depot = 3
-    
+    brewery = 4
+
 
 class RoofOrientation(enum.Enum):
     across = 0
@@ -1156,11 +1270,25 @@ class Surface(enum.Enum):
     stone = 28
     pebblestone = 29
     panel = 30
-    
+    pannel = 31
+    artificial_turf = 32
+    concrete_plates = 33
+    brash = 34
+    asp = 35
+    set = 36
+    ettand = 37
+    metal_grid = 38
+    rubber = 39
+    sd = 40
+    soil = 41
+    tiled = 42
+    synthetic_turf = 43
+
 
 class ReservationType(enum.Enum):
     yes = 1
     recommended = 2
+    no = 3
 
 class WifiType(enum.Enum):
     no = 0
@@ -1171,14 +1299,17 @@ class WifiType(enum.Enum):
 class GolfRelation(enum.Enum):
     bunker = 0
     green = 1
+    driving_range = 2
 
 class KerbType(enum.Enum):
     lowered = 1
+    raised = 2
 
 class WheelchairAccess(enum.Enum):
     no = 0
     yes = 1
     limited = 2
+    unknown = 3
 
 
 class SidewalkType(enum.Enum):
@@ -1199,6 +1330,18 @@ class RoofMaterial(enum.Enum):
     glass = 3
     tar_paper = 4
     copper = 5
+    metal = 6
+    concrete = 7
+    stone = 8
+    slate = 9
+    gravel = 10
+    grass = 11
+    limestone = 12
+    plaster = 13
+    wood = 14
+    plastic = 15
+    sandstone = 16
+    linestone = 17
 
 class SurveillanceType(enum.Enum):
     none = 0
@@ -1214,10 +1357,16 @@ class FenceType(enum.Enum):
     chain = 2
     wire = 3
     metal = 4
-    
+    wood = 5
+    corrugated_metal = 6
+    balustrade = 7
+    railing = 8
+    bars = 9
+
 
 class ParkingType(enum.Enum):
-    multipolygon = 0 # Map it to unspecified
+    multipolygon = 0
+     # Map it to unspecified
     surface = 1
     multi_storey = 2
     underground = 3
@@ -1228,6 +1377,7 @@ class ParkingType(enum.Enum):
     garage = 8
     carports = 9
     sheds = 10
+    yes = 11
 
 class RestrictionType(enum.Enum):
     no_right_turn = 0
@@ -1238,7 +1388,8 @@ class RestrictionType(enum.Enum):
     restriction = 5
     no_straight_on = 6
     only_left_turn = 7
-    
+    no_exit = 8
+
 
 
 class RouteType(enum.Enum):
@@ -1258,7 +1409,14 @@ class RouteType(enum.Enum):
     wheelchair = 14
     mtb = 15
     ferry = 16
-    
+    route = 17
+    subway = 18
+    tourist_train = 19
+    light_rail = 20
+    running = 21
+    funicular = 22
+
+
 
 class SurveillanceKind(enum.Enum):
     guard = 0
@@ -1267,11 +1425,17 @@ class SurveillanceKind(enum.Enum):
 class SurveillanceZone(enum.Enum):
     building = 0
     town = 1
+    traffic = 2
+    parking = 3
+    gate = 4
 
 class IndoorType(enum.Enum):
     room = 0
     level = 1
-    
+    area = 2
+    no = 3
+    yes = 4
+
 
 class AreaType(enum.Enum):
     unclassified = 0
@@ -1300,3 +1464,356 @@ class PlaceType(enum.Enum):
     island = 8
     square = 9
     farm = 10
+    isolated_dwelling = 11
+    country = 12
+
+class AttractionType(enum.Enum):
+    animal = 0
+    water_slide = 1
+    fossils = 2
+
+class TransformerType(enum.Enum):
+    distribution = 0
+    traction = 1
+    minor_distribution = 2
+
+class TrailVisibility(enum.Enum):
+    excellent = 0
+    good = 1
+    intermediate = 2
+
+class ResidentialType(enum.Enum):
+    urban = 0
+    university = 1
+
+class MemorialKind(enum.Enum):
+    unknown = 0
+    war_memorial = 1
+    plaque = 2
+    statue = 3
+    bust = 4
+    stele = 5
+    tablet = 6
+    stone = 7
+    artwork = 8
+    bas_relief = 9
+    memorial = 10
+
+
+class GardenType(enum.Enum):
+    residential = 0
+    botanical = 1
+    monastery = 2
+    castle = 3
+    arboretum = 4
+    residentia = 5
+    residental = 6
+
+class RouteImportance(enum.Enum):
+    major = 0
+    local = 1
+    learning = 3
+    ruin = 4
+    peak = 5
+    spring = 6
+    interesting_object = 7
+    horse = 8
+    ski = 9
+    bicycle = 10
+    wheelchair = 11
+
+class EmergencyType(enum.Enum):
+    no = 0
+    yes = 1
+    ambulance_station = 2
+    access_point = 3
+
+class Support(enum.Enum):
+    wall_mounted = 0
+    pedestal = 1
+    pole = 2
+
+class NoticeFunction(enum.Enum):
+    prohibition = 1
+    information = 2
+    restriction = 3
+
+class NoticeType(enum.Enum):
+    notice = 0
+    small_craft_facility = 1
+
+class MemorialType(enum.Enum):
+    unknown = 0
+    plaque = 1
+    stolperstein = 2
+    statue = 3
+    plate = 4
+    war_memorial = 5
+    
+class Material(enum.Enum):
+    glass = 0
+    steel = 1
+    stone = 2
+    concrete = 3
+    brick = 4
+    wood = 5
+    limestone = 6
+    tiles = 7
+    sandstone = 8
+    mdf = 9
+    granite = 10
+    mirror = 11
+    plastic = 12
+    metal = 13
+    bronze = 14
+    rope = 15
+    ground = 16
+
+class ArtWorkType(enum.Enum):
+    statue = 0
+    architecture = 1
+    sculpture = 2
+    mural = 3
+    photo = 4
+    tower = 5
+    installation = 6
+    relief = 7
+    topiary = 8
+    graffiti = 9
+    bust = 10
+
+class AdvertisingType(enum.Enum):
+    billboard = 0
+    totem = 1
+class NoticeImpact(enum.Enum):
+    upstream = 1
+    downstream = 2
+    right_bank = 3
+
+class LandCover(enum.Enum):
+    grass = 0
+    water = 1
+
+class NoticeCategory(enum.Enum):
+    no_passage_left = 1
+    no_passage_right = 2
+    no_anchoring = 3
+    berthing_permitted = 4
+    limited_headroom = 5
+    channel_distance_right = 6
+    no_wash = 7
+    weir = 8
+    no_entry = 9
+    channel_distance_left = 10
+    no_berthing = 11
+    turning_area = 12
+
+class InternetAccess(enum.Enum):
+    yes = 0
+    wlan = 1
+
+class SiteType(enum.Enum):
+    site = 0
+    stop_area = 1
+    settlement = 2
+    fortification = 3
+    stree = 4
+
+class CurbType(enum.Enum):
+    no = 0
+    yes = 1
+    both = 2
+
+class Service(enum.Enum):
+    alley = 0
+    parking_aisle = 1
+
+class Direction(enum.Enum):
+        north = 0
+        south = 1
+        backward = 2
+        forward = 3
+        west = 4
+        SW = 5
+        S = 6
+        NE = 7
+        NW = 8
+        SSE = 9
+        E = 10
+        WNW = 11
+        SE = 12
+        WSW = 13
+        W = 14
+        ENE = 15
+
+
+class ToiletsDisposal(enum.Enum):
+    flush = 0
+    chemical = 1
+
+class FastFoodType(enum.Enum):
+    yes = 0
+    cafeteria = 1
+
+class DiplomacyRelation(enum.Enum):
+    ambassadors_residence = 0
+    embassy = 1
+    ambassadors_resaidence = 2
+
+class DietType(enum.Enum):
+    no = 0
+    yes = 1
+    only = 2
+
+class BicycleType(enum.Enum):
+    no = 0
+    yes = 1
+    dismount = 2
+    designated = 3
+
+
+class Denomination(enum.Enum):
+    roman_catholic = 0
+    catholic = 1
+    evangelical = 2
+
+class TrafficSignType(enum.Enum):
+    city_limit = 0
+    maxspeed = 1
+
+class EntranceType(enum.Enum):
+    main = 0
+    yes = 1
+    service = 2
+    emergency = 3
+    home = 4
+    private = 5
+    exit = 6
+    garage = 7
+    entrance = 8
+    gate = 9
+
+
+class PowerSubstationType(enum.Enum):
+    unspecified = 0
+    distribution = 1
+    industrial = 2
+    minor_distribution = 3
+    traction = 4
+    transmission = 5
+    
+
+class GeneratorSource(enum.Enum):
+    unknown = 0
+    hydro = 1
+    solar = 2
+    solar_photovoltaic_panel = 3
+    gas = 4
+
+class MilitaryType(enum.Enum):
+    none = 0
+    barracks = 1
+    danger_area = 2
+    checkpoint = 3
+class PowerType(enum.Enum):
+    tower = 0
+    substation = 1
+    portal = 2
+    station = 3
+    transformer = 4
+    cable_distribution_cabinet = 5
+    minor_line = 6
+    cable = 7
+    insulator = 8
+    terminal = 9
+    switch = 10
+    transition = 11
+    sub_station = 12
+    switchgear = 13
+    pole = 14
+    
+
+class TowerType(enum.Enum):
+    unknown  = 0
+    communication = 1
+    observation = 2
+    climbing = 3
+    bell_tower = 4
+    bts = 5
+    lighting = 6
+    church = 7
+    cooling = 8
+    campanile = 9
+    meteo = 10
+    fire = 11
+    anchor = 12
+
+
+
+
+class ShelterType(enum.Enum):
+    unknown = 0
+    public_transport = 1
+    picnic_shelter = 2
+    wather_shelter = 3
+    weather_shelter = 6
+    wildlife_hide = 7
+    
+    
+
+class SupportType(enum.Enum):
+    none = 0
+    wall_mounted = 1
+    ground = 2
+    pole = 3
+    billboard = 4
+    tower = 5
+    wall = 6
+    
+class OfficeType(enum.Enum):
+    yes = -1
+    employment_agency = 0
+    insurance = 1
+    physician = 2
+    government = 3
+    ngo = 4
+    administrative = 5
+    company = 6
+    tax = 7
+    religion = 8
+    it = 9
+    architect = 10
+    estate_agent = 11
+    therapist = 12
+    telecommunication = 13
+    lawyer = 14
+    water_utility = 15
+    educational_institution = 16
+    coworking = 17
+    translation = 18
+    research = 19
+    coworking_space = 20
+    travel_agent = 21
+    camping = 22
+    money_lender = 23
+    guide = 24
+    financial = 25
+    publisher = 26
+    print_distribution = 27
+    logistics = 28
+    reception = 29
+    
+
+class ParkingLaneType(enum.Enum):
+    no_parking = 0
+    diagonal = 1
+    no_stopping = 2
+    parallel = 3
+    perpendicular = 4
+    inline = 5
+    marked = 6
+    on_street = 7
+    yes = 8
+    orthogonal = 9
+    both = 10
+

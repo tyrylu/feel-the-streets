@@ -22,6 +22,17 @@ class AmenityGenerator(AddressAwareGenerator):
         self.removes("uir_adr:adresa_kod")
         self.unprefixes("contact")
 
+        self.renames("toilets:disposal", "toilets_disposal")
+        self.renames("socket:schuko", "schuko_socket")
+        self.renames("socket:schuko:voltage", "schuko_socket_voltage")
+        self.renames("socket:type2:voltage", "type2_socket_voltage")
+        self.renames("toilets:wheelchair", "wheelchair_toilets")
+        self.renames("diet:vegan", "vegan_diet")
+        self.renames("short_name:en", "short_name_en")
+        self.renames("socket:chademo", "chademo_socket")
+        self.renames("socket:chademo:power", "chademo_socket_power")
+        self.renames("socket:type2", "type2_socket")
+        self.renames("socket:schuko:current", "schuko_socket_current")
     @staticmethod
     def accepts(props):
         return "amenity" in props and "building" not in props

@@ -9,4 +9,4 @@ class GardenGenerator(LeisureGenerator):
 
     @staticmethod
     def accepts(props):
-        return ("leisure" in props and props["leisure"] == "garden") or ("landuse" in props and props["landuse"] == "garden")
+        return ("leisure" in props and props["leisure"] == "garden") or ("landuse" in props and props["landuse"] == "garden") or "garden:type" in props

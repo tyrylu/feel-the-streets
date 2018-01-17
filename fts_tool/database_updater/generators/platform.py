@@ -9,6 +9,7 @@ class PlatformGenerator(Generator):
         self.removes("public_transport")
         self.removes("highway")
         self.removes_subtree("building")
+        self.renames("indoor:level", "indoor_level")
     @staticmethod
     def accepts(props):
         return "public_transport" in props and props["public_transport"] == "platform"

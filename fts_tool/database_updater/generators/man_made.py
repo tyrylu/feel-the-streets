@@ -10,6 +10,10 @@ class ManMadeGenerator(Generator):
         self.unprefixes("contact")
         self.removes("observatory:type")
 
+        self.renames("wifi:ssid", "wifi_ssid")
+        self.renames("building:material", "building_material")
+        self.renames("note:en", "note_en")
+        self.renames("monitoring:air_quality", "air_quality_monitoring")
     @staticmethod
     def accepts(props):
         return "razed:man_made" in props or "man_made" in props

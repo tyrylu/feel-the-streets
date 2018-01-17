@@ -2,7 +2,7 @@ import enum
 from sqlalchemy import Column, ForeignKey, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
 from ..sa_types import IntEnum
 from sqlalchemy.orm import relationship
-from .enums import CrossingType, BuildingType, RailWayType, TunnelType, BridgeType, Location, AccessType, BridgeStructure, OSMObjectType, WheelchairAccess
+from .enums import CrossingType, BuildingType, RailWayType, TunnelType, BridgeType, Location, AccessType, BridgeStructure, OSMObjectType, WheelchairAccess, EntranceType, BarrierType
 from . import Named
 
 class AvalancheProtectorType(enum.Enum):
@@ -23,11 +23,12 @@ class TrackClass(enum.Enum):
     D4 = 2
     D3 = 3
     
-
 class SignalPosition(enum.Enum):
     left = 0
     right = 1
     overhead = 2
+    bridge = 3
+    above = 4
 
 class StructureGauge(enum.Enum):
     GC = 1
@@ -42,6 +43,7 @@ class SignalDirection(enum.Enum):
 class Colour(enum.Enum):
     green = 1
     red = 2
+    yellow = 3
 
 class SwitchType(enum.Enum):
     abt = 1
@@ -52,15 +54,19 @@ class SwitchType(enum.Enum):
 class SignalForm(enum.Enum):
     sign = 0
     light = 1
+    semaphore = 2
 
 class SignalFunction(enum.Enum):
     block = 0
     entry = 1
     exit = 2
     intermediate = 3
+    between = 4
+
 class SignalHeight(enum.Enum):
     normal = 0
     dwarf = 1
+    main = 2
 
 class SignalType(enum.Enum):
     down = 0
@@ -81,6 +87,7 @@ class ElectricitySignal(enum.Enum):
     pantograph_down = 2
     power_off = 3
     power_off_advance = 4
+    end_of_catenary = 5
 
 class CrossingBarrier(enum.Enum):
     no = 0
@@ -88,12 +95,16 @@ class CrossingBarrier(enum.Enum):
     full = 2
     half = 3
     double_half = 4
+    lift_gate = 5
+    both = 6
+
+class SwitchConfiguration(enum.Enum):
+    inside = 0
+
 class RailWay(Named):
     __tablename__ = "rail_ways"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'rail_way'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'rail_way', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
     type = Column(IntEnum(RailWayType), nullable=False)
     gauge = Column(UnicodeText)
     usage = Column(IntEnum(RailWayUsage))
@@ -135,7 +146,8 @@ class RailWay(Named):
     old_name = Column(UnicodeText)
     wikidata = Column(UnicodeText)
     wikipedia = Column(UnicodeText)
-    image = Column(UnicodeText) # Some Column(URL) would be more appropriate
+    image = Column(UnicodeText)
+    # Some Column(URL) would be more appropriate
     network = Column(UnicodeText)
     etcs = Column(UnicodeText)
     radio = Column(UnicodeText)
@@ -170,7 +182,8 @@ class RailWay(Named):
     disused_railway = Column(IntEnum(RailWayType))
     loc_name = Column(UnicodeText)
     shelter = Column(Boolean)
-    check_date = Column(UnicodeText) # Find a way how to parse the dates nicely
+    check_date = Column(UnicodeText)
+    # Find a way how to parse the dates nicely
     pzb = Column(Boolean)
     tunnel_name = Column(UnicodeText)
     height = Column(Float)
@@ -254,3 +267,28 @@ class RailWay(Named):
     catenary_mast_milestone = Column(Boolean)
     emergency_brake_override_milestone = Column(Boolean)
     hot_box_defect_detector = Column(Boolean)
+    network_en = Column(UnicodeText)
+    speed_limit_signal_deactivatedd = Column(Boolean)
+    tram = Column(Boolean)
+    entrance = Column(IntEnum(EntranceType))
+    abandoned = Column(IntEnum(RailWayType))
+    switch_configuration = Column(IntEnum(SwitchConfiguration))
+    crossing_on_demand = Column(Boolean)
+    distant_signal_repeated = Column(Boolean)
+    workrules = Column(UnicodeText)
+    switch_resetting = Column(Boolean)
+    wheelchair_toilets = Column(Boolean)
+    barrier = Column(IntEnum(BarrierType))
+    combined_signal = Column(UnicodeText)
+    combined_signal_function = Column(IntEnum(SignalFunction))
+    wrong_road_signal = Column(UnicodeText)
+    electricity_signal_turn_direction = Column(UnicodeText)
+    oneway_1 = Column(Boolean)
+    website = Column(UnicodeText)
+    historic = Column(Boolean)
+    combined_signal_states = Column(UnicodeText)
+    route_signal = Column(UnicodeText)
+    route_signal_states = Column(UnicodeText)
+    todo = Column(UnicodeText)
+    is_in = Column(UnicodeText)
+    platforms = Column(Integer)

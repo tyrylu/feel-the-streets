@@ -1,20 +1,15 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKey, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Named
-from .enums import OSMObjectType
-
-class SiteType(enum.Enum):
-    site = 0
-    stop_area = 1
+from .enums import OSMObjectType, SiteType
 
 class Site(Named):
     __tablename__ = "sites"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'site'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'site', 'polymorphic_load': 'inline'}
+    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
     type = Column(IntEnum(SiteType))
     website = Column(UnicodeText)
     wikidata = Column(UnicodeText)
     wikipedia = Column(UnicodeText)
+    layer = Column(Integer)

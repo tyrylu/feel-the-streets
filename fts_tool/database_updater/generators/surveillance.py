@@ -7,6 +7,9 @@ class SurveillanceGenerator(Generator):
         self.generates(Surveillance)
         self.renames("surveillance", "type")
 
+        self.renames("camera:mount", "camera_mount")
+        self.renames("camera:direction", "camera_direction")
+        self.renames("surveillance:zone", "surveillance_zone")
     @staticmethod
     def accepts(props):
         return "surveillance" in props

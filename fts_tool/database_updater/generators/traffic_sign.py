@@ -7,6 +7,7 @@ class TrafficSignGenerator(Generator):
         self.generates(TrafficSign)
         self.renames("traffic_sign", "type")
 
+        self.renames("traffic_sign:backward", "backward")
     @staticmethod
     def accepts(props):
         return "traffic_sign" in props

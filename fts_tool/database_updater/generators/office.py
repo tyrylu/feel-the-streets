@@ -16,12 +16,13 @@ class OfficeGenerator(AddressAwareGenerator):
         self.renames("roof:shape", "roof_shape")
         self.renames("roof:height", "roof_height")
         self.renames("roof:colour", "roof_colour")
-        
+
         self.removes_subtree("ruian")
         self.unprefixes("building")
         self.unprefixes("contact")
         self.removes("uir_adr:adresa_kod")
 
+        self.renames("description:en", "description_en")
     @staticmethod
     def accepts(props):
         return "office" in props

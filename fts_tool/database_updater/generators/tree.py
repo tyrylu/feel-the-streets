@@ -9,8 +9,9 @@ class TreeGenerator(NaturalGenerator):
         self.renames("genus:cz", "genus_cs")
         self.renames("species:cs", "species_cs")
         self.removes_subtree("species")
-        
 
+
+        self.renames("genus:en", "genus_en")
     @staticmethod
     def accepts(props):
         return NaturalGenerator.accepts(props) and props["natural"] in {"tree", "tree_row"}

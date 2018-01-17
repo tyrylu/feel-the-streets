@@ -13,6 +13,7 @@ class SocialFacilityGenerator(AddressAwareGenerator):
         self.removes_subtree("building:ruian")
         self.removes_subtree("health_specialty")
 
+        self.renames("contact:phone", "phone")
     @staticmethod
     def accepts(props):
         return "amenity" in props and props["amenity"] == "social_facility"

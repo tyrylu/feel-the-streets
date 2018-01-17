@@ -1,18 +1,33 @@
 import enum
-from sqlalchemy import Column, Boolean, ForeignKeyConstraint, Float, Integer, UnicodeText
+from sqlalchemy import Column, Boolean, ForeignKey, Float, Integer, UnicodeText
 from ..sa_types import IntEnum
-from .enums import AerialWayType, RoadType, RoofShape, BridgeStructure, OSMObjectType, AccessType, ManMade
+from .enums import AerialWayType, RoadType, RoofShape, BridgeStructure, OSMObjectType, AccessType, ManMade, BarrierType
 from . import Named
 
 class AerodromeType(enum.Enum):
     private = 0
+    international = 1
+
+class Subtype(enum.Enum):
+    gp = 0
+    loc = 1
+
+class BeaconType(enum.Enum):
+    ILS = 0
+
+class RunwayType(enum.Enum):
+    blast_pad = 0
+
+class MilitaryRelationship(enum.Enum):
+    airfield = 0
+
+class AirMarkType(enum.Enum):
+    beacon = 0
 
 class AerialWay(Named):
     __tablename__ = "aerialways"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'aerialway'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'aerialway', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
     type = Column(IntEnum(AerialWayType), nullable=False)
     capacity = Column(Integer)
     occupancy = Column(Integer)
@@ -47,4 +62,21 @@ class AerialWay(Named):
     navigationaid = Column(UnicodeText)
     man_made = Column(IntEnum(ManMade))
     frequency = Column(UnicodeText)
-    
+    disused_aeroway = Column(IntEnum(AerialWayType))
+    subtype = Column(IntEnum(Subtype))
+    note_cs = Column(UnicodeText)
+    oneway = Column(Boolean)
+    proposed = Column(IntEnum(AerialWayType))
+    beacon_type = Column(IntEnum(BeaconType))
+    runway = Column(IntEnum(RunwayType))
+    barrier = Column(IntEnum(BarrierType))
+    email = Column(UnicodeText)
+    phone = Column(UnicodeText)
+    military = Column(IntEnum(MilitaryRelationship))
+    loc_name = Column(UnicodeText)
+    min_height = Column(Integer)
+    emergency = Column(Boolean)
+    building_levels = Column(Integer)
+    airmark = Column(IntEnum(AirMarkType))
+    iata = Column(UnicodeText)
+

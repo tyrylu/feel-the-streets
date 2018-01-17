@@ -1,10 +1,10 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKey, Boolean, Float, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Named
-from .enums import AccessType, Location, OSMObjectType, SidewalkType
+from .enums import AccessType, Location, OSMObjectType, SidewalkType, TrailVisibility, Service
 
-class Direction(enum.Enum):
+class StepsDirection(enum.Enum):
     unknown = 0
     up = 1
     down = 2
@@ -14,15 +14,14 @@ class StepCondition(enum.Enum):
     even = 0
     uneven = 1
     rough = 2
+
 class StepHeight(enum.Enum):
     normal = 0
+    flat = 1
 
 class StepLength(enum.Enum):
     normal = 0
-
-class TrailVisibility(enum.Enum):
-    excellent = 0
-    good = 1
+    short = 1
 
 class HandrailType(enum.Enum):
     no = 0
@@ -31,17 +30,11 @@ class HandrailType(enum.Enum):
     right = 3
     both = 4
 
-class Service(enum.Enum):
-    alley = 0
-    parking_aisle = 1
-
 class Steps(Named):
     __tablename__ = "steps"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'steps'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
-    direction = Column(IntEnum(Direction))
+    __mapper_args__ = {'polymorphic_identity': 'steps', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
+    direction = Column(IntEnum(StepsDirection))
     step_count = Column(Integer)
     surface = Column(UnicodeText)
     width = Column(Float)
@@ -82,4 +75,7 @@ class Steps(Named):
     service = Column(IntEnum(Service))
     step_height = Column(IntEnum(StepHeight))
     step_length = Column(IntEnum(StepLength))
-    
+    motorcar = Column(Boolean)
+    winter_service = Column(Boolean)
+    cutting = Column(Boolean)
+

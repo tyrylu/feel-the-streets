@@ -1,15 +1,31 @@
-import shapely.wkt as wkt
+import shapely.wkb as wkb
 from shared.geometry_utils import *
 from . import services
 
-def closest_point_to(point, db_geom):
-    geom = wkt.loads(services.map()._db.scalar(db_geom.wkt))
-    if isinstance(geom, geometry.point.Point):
+def closest_point_from_geoms(geoms, point):
+    min = float("inf")
+    min_point = None
+    for geom in geoms:
+        geom_point = closest_point_to(point, geom, convert=False)
+        dist = point.distance(geom_point)
+        if dist < min:
+            min = dist
+            min_point = point
+    return point
+
+def closest_point_to(point, geom, convert=True):
+    if convert:
+        geom = wkb.loads(geom.desc.desc)
+    if geom.geom_type == "Point":
         return geom
-    elif isinstance(geom, geometry.linestring.LineString):
+    elif geom.geom_type == "LineString":
         return geom.interpolate(geom.project(point))
-    elif isinstance(geom, geometry.polygon.Polygon):
+    elif geom.geom_type == "Polygon":
         return geom.exterior.interpolate(geom.exterior.project(point))
+    elif geom.geom_type == "GeometryCollection":
+        return closest_point_from_geoms(geom.geoms, point)
+    else:
+        raise RuntimeError("Can not process geometry of type %s."%geom.geom_type)
 
 def get_road_section_angle(pov, road):
     pov_point = to_shapely_point(pov.position)

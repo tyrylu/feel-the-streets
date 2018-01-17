@@ -1,26 +1,15 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKey, Boolean, Float, Integer, UnicodeText
 from ..sa_types import IntEnum
-from .enums import CrossingType, TrafficCalmingType, RailWayType, OSMObjectType, KerbType
+from .enums import CrossingType, TrafficCalmingType, RailWayType, OSMObjectType, KerbType, CurbType, BicycleType, RoadType, BarrierType, ParkingLaneType
 from .entity import Entity
-
-class BicycleType(enum.Enum):
-    no = 0
-    yes = 1
-    dismount = 2
-    designated = 3
-
 
 class TrafficSignalsType(enum.Enum):
     signals = 1
     signal = 2
     blinker = 3
     pedestrian = 4
-
-class CurbType(enum.Enum):
-    no = 0
-    yes = 1
-    both = 2
+    emergency = 5
 
 class TrafficSignalsDirection(enum.Enum):
     forward = 1
@@ -31,10 +20,8 @@ class CicleWayKind(enum.Enum):
 
 class Crossing(Entity):
     __tablename__ = "crossings"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["entities.id", "entities.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'crossing'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'crossing', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("entities.id"), primary_key=True)
     type = Column(IntEnum(CrossingType), nullable=False)
     name = Column(UnicodeText)
     button_operated = Column(Boolean)
@@ -64,3 +51,8 @@ class Crossing(Entity):
     sound = Column(Boolean)
     direction = Column(IntEnum(TrafficSignalsDirection))
     level = Column(Integer)
+    traffic_sign = Column(IntEnum(RoadType))
+    barrier = Column(IntEnum(BarrierType))
+    both_parking_lane = Column(IntEnum(ParkingLaneType))
+    short_name = Column(UnicodeText)
+    highway_2 = Column(IntEnum(RoadType))

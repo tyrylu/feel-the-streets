@@ -6,6 +6,7 @@ class BoardGenerator(TourismGenerator):
         super().__init__()
         self.generates(Board)
 
+        self.renames("language:cs", "language_cs")
     def _prepare_properties(self, entity_spec, props, record):
         if "board_type" in props: props["board_type"] = props["board_type"].replace(";", "_")
         props = super()._prepare_properties(entity_spec, props, record)

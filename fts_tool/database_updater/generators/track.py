@@ -13,8 +13,11 @@ class TrackGenerator(RoadGenerator):
         self.renames("ticks:description", "ticks_description")
         self.renames("motor_vehicle:note", "motor_vehicle_note")
         self.renames("survey:date", "survey_date")
-        
-        
+
+
+        self.renames("proposed:segregated", "proposed_segregated")
+        self.renames("incline:steep", "steep_incline")
+        self.renames("lanes:sprint", "sprint_lanes")
     def _prepare_properties(self, entity_spec, props, record):
         if "area" in props and props["area"] == "no": # Can someone explain the thinking behind this to me?
             del props["area"]

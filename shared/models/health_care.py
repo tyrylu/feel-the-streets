@@ -1,5 +1,5 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Integer
+from sqlalchemy import Column, ForeignKey, Integer
 from ..sa_types import IntEnum
 from .building import Building
 from .enums import OSMObjectType
@@ -24,12 +24,9 @@ class HealthCareSpeciality(enum.Enum):
     vascular_surgery = 8
     orthopaedics = 9
     
-
 class HealthCare(Building):
     __tablename__ = "healthcares"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["buildings.id", "buildings.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'healthcare'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'healthcare', 'polymorphic_load': 'inline'}
+    id = Column(Integer, ForeignKey("buildings.id"), primary_key=True)
     type = Column(IntEnum(HealthCareType), nullable=False)
     speciality = Column(IntEnum(HealthCareSpeciality)) # Make it a list

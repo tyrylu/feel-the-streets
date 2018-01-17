@@ -8,7 +8,8 @@ import shapely.wkt as wkt
 class Entity(Base):
     __tablename__ = "entities"
     id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    osm_id = Column(Integer, nullable=False)
+    osm_type = Column(IntEnum(OSMObjectType), nullable=False)
     version = Column(Integer, nullable=False)
     changeset = Column(Integer, nullable=False)
     timestamp = Column(DateTime, nullable=False)

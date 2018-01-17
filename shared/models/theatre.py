@@ -6,10 +6,8 @@ from .enums import OSMObjectType
 
 class Theatre(Named):
     __tablename__ = "theatres"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'theatre'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'theatre', 'polymorphic_load': 'inline'}
+    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
     address_id = Column(Integer, ForeignKey("addresses.id"))
     address = relationship("Address")
     is_in = Column(UnicodeText)

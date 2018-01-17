@@ -1,27 +1,19 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer
+from sqlalchemy import Column, ForeignKey, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Named
-from .enums import OSMObjectType, WheelchairAccess, AccessType
+from .enums import OSMObjectType, WheelchairAccess, AccessType, EntranceType, MilitaryType
 
-class EntranceType(enum.Enum):
-    main = 0
-    yes = 1
-    service = 2
-    emergency = 3
-    home = 4
-    private = 5
-    exit = 6
-    garage = 7
-    entrance = 8
-    
-    
+class DoorType(enum.Enum):
+    yes = 0
+    overhead = 1
+    hinged = 2
+    rotating = 3
+
 class Entrance(Named):
     __tablename__ = "entrances"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'entrance'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'entrance', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
     type = Column(IntEnum(EntranceType), nullable=False)
     level = Column(Integer)
     bicycle = Column(Boolean)
@@ -31,3 +23,8 @@ class Entrance(Named):
     motorcar = Column(Boolean)
     motorcycle = Column(Boolean)
     access = Column(IntEnum(AccessType))
+    door = Column(IntEnum(DoorType))
+    note = Column(UnicodeText)
+    description = Column(UnicodeText)
+    military = Column(IntEnum(MilitaryType))
+    fixme = Column(UnicodeText)

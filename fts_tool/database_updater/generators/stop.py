@@ -19,6 +19,7 @@ class StopGenerator(Generator):
         self.renames("network:cs", "network_cs")
         self.renames("zona", "zone")
         self.removes("railway", True)
+        self.renames("toilets:wheelchair", "wheelchair_toilets")
     @staticmethod
     def accepts(props):
         return ("public_transport" in props and props["public_transport"] in {"stop_position", "station", "stop_area"}) or ("highway" in props and props["highway"] == "bus_stop") or ("amenity" in props and props["amenity"] == "bus_station") or ("railway" in props and props["railway"] == "tram_stop")

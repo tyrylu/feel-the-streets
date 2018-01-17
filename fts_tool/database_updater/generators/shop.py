@@ -18,7 +18,8 @@ class ShopGenerator(BuildingGenerator):
         self.unprefixes("drink")
         self.removes_subtree("service")
         self.removes("siing")
-        
+
+        self.renames("payment:jcb", "jcb_payment")
     def _prepare_properties(self, entity_spec, props, record):        
         props["shop"] = props["shop"].replace(";", "_")
         if "sport" in props:

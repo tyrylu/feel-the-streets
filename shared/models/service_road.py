@@ -1,15 +1,15 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Float, Integer
+from sqlalchemy import Column, ForeignKey, Boolean, Float, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Road
-from .enums import Amenity, OSMObjectType, AccessType
-
+from .enums import Amenity, OSMObjectType, AccessType, ParkingType
 
 class ServiceRoad(Road):
     __tablename__ = "service_roads"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["roads.id", "roads.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'service_road'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
-    emergency = Column(Boolean)
+    __mapper_args__ = {'polymorphic_identity': 'service_road', 'polymorphic_load': 'inline'}
+    id = Column(Integer, ForeignKey("roads.id"), primary_key=True)
     delivery = Column(Boolean)
+    frequency = Column(Integer)
+    vehicle_backward = Column(IntEnum(AccessType))
+    parking = Column(IntEnum(ParkingType))
+    todo = Column(UnicodeText)

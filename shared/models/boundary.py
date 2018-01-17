@@ -1,32 +1,41 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKey, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Named
-from .enums import HistoricType, OSMObjectType, BarrierType
+from .enums import HistoricType, OSMObjectType, BarrierType, Surface, NaturalType, TrailVisibility, ManMade, TourismType, RoadType
 
 class BoundaryType(enum.Enum):
     national_park = 1
     administrative = 2
     marker = 3
-    yes = 4 # Should perhaps rename to some?
+    yes = 4
+     # Should perhaps rename to some?
     protected_area = 5
     historic = 6
     civil = 7
     cliff = 8
     country_border = 9
-    
-    
-    
+    religious_administration = 10
+    stone = 11
+
+
 class MarkerType(enum.Enum):
     none = 0
     stone = 1
+    rock = 2
+    plate = 3
+    no = 4
+    engraving = 5
+    FIXME = 6
+    spring = 7
+
+class TrackType(enum.Enum):
+    grade3 = 0
 
 class Boundary(Named):
     __tablename__ = "boundaries"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'boundary'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'boundary', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
     type = Column(IntEnum(BoundaryType))
     admin_level = Column(Integer)
     historic_type = Column(IntEnum(HistoricType))
@@ -47,4 +56,19 @@ class Boundary(Named):
     old_name = Column(UnicodeText)
     description = Column(UnicodeText)
     year = Column(UnicodeText)
-    
+    odl_name_de = Column(UnicodeText)
+    track_type = Column(IntEnum(TrackType))
+    surface = Column(IntEnum(Surface))
+    bicycle = Column(Boolean)
+    width = Column(Integer)
+    inscription = Column(Integer)
+    old_name_cs = Column(UnicodeText)
+    natural = Column(IntEnum(NaturalType))
+    vehicle_conitional = Column(UnicodeText)
+    trail_visibility = Column(IntEnum(TrailVisibility))
+    ele = Column(Integer)
+    man_made = Column(IntEnum(ManMade))
+    tourism = Column(IntEnum(TourismType))
+    designation = Column(UnicodeText)
+    highway = Column(IntEnum(RoadType))
+

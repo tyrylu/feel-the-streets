@@ -13,6 +13,9 @@ class RouteGenerator(Generator):
         self.renames("text_color", "text_colour")
         self.unprefixes("osmc")
 
+        self.renames("osmonitor:road_components", "road_components")
+        self.renames("capacity", "a")
+        self.renames("note:cz", "note_cz")
     @staticmethod
     def accepts(props):
         return "route" in props or ("type" in props and props["type"] == "route")

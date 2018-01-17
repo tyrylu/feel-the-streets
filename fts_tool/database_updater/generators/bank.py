@@ -12,6 +12,7 @@ class BankGenerator(AddressAwareGenerator):
         self.unprefixes("contact")
         self.renames("building", "building_type")
 
+        self.renames("payment:contactless", "contactless_payment")
     @staticmethod
     def accepts(props):
         return "amenity" in props and props["amenity"] == "bank"

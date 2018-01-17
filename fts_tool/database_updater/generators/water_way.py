@@ -15,6 +15,11 @@ class WaterWayGenerator(Generator):
         self.renames("life_cycle:start_date", "start_date")
         self.removes("vehicle:conditional")
 
+        self.renames("whitewater:rapid_grade", "whitewater_rapid_grade")
+        self.renames("seamark:notice:function", "seamark_notice_function")
+        self.renames("seamark:type", "seamark_type")
+        self.renames("seamark:notice:impact", "seamark_notice_impact")
+        self.renames("seamark:notice:category", "seamark_notice_category")
     @staticmethod
     def accepts(props):
         return "waterway" in props

@@ -1,19 +1,23 @@
 import enum
-from sqlalchemy import Column, ForeignKey, ForeignKeyConstraint, Boolean, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKey, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
 from ..sa_types import IntEnum
 from sqlalchemy.orm import relationship
-from .enums import AccessType, BuildingType, OSMObjectType, WheelchairAccess, BarrierType, ParkingType, ConstructionType, LandType
+from .enums import AccessType, BuildingType, OSMObjectType, WheelchairAccess, BarrierType, ParkingType, ConstructionType, LandType, GardenType
 from . import Named
+
+class Smoothness(enum.Enum):
+    excellent = 0
+    intermediate = 1
+    good = 2
 
 class Parking(Named):
     __tablename__ = "parkings"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'parking'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'parking', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
     paid = Column(UnicodeText)
     capacity = Column(Integer)
-    capacity_for_disabled = Column(UnicodeText) # Someone treats it as a bool, someone as an int.
+    capacity_for_disabled = Column(UnicodeText)
+     # Someone treats it as a bool, someone as an int.
     operator = Column(UnicodeText)
     access = Column(IntEnum(AccessType))
     type = Column(IntEnum(ParkingType))
@@ -39,3 +43,17 @@ class Parking(Named):
     covered = Column(Boolean)
     construction = Column(IntEnum(ConstructionType))
     landuse = Column(IntEnum(LandType))
+    maxstay = Column(UnicodeText)
+    maxheight = Column(Float)
+    smoothness = Column(IntEnum(Smoothness))
+    fenced = Column(Boolean)
+    level = Column(UnicodeText)
+    email = Column(UnicodeText)
+    bus = Column(Boolean)
+    garden_type = Column(IntEnum(GardenType))
+    foot = Column(Boolean)
+    height = Column(UnicodeText)
+    demolished_building = Column(IntEnum(BuildingType))
+    bicycle = Column(Boolean)
+    motorcycle = Column(Boolean)
+    old_name = Column(UnicodeText)

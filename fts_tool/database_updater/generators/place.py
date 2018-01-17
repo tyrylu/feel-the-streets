@@ -11,6 +11,8 @@ class PlaceGenerator(Generator):
         self.removes_subtree("is_in")
         self.removes_subtree("old_name")
 
+        self.renames("wikipedia:cs", "wikipedia_cs")
+        self.renames("alt_name:cs", "alt_name_cs")
     @staticmethod
     def accepts(props):
         return "place" in props

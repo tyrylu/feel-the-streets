@@ -6,8 +6,11 @@ entity_class = input("Entity class to generate: ")
 superclass = input("Superclass (empty for Generator): ")
 if not superclass:
     superclass = "Generator"
+if not superclass.endswith("Generator"):
+    print("Adding Generator suffix implicitly.")
+    superclass += "Generator"
 acceptance_check = input("Generator acceptance condition: ")
-generator_module = entity_class.lower()
+generator_module = inflection.underscore(entity_class)
 generator_class = "%sGenerator"%entity_class
 if superclass == "Generator":
     superclass_module = "generator"

@@ -95,6 +95,19 @@ class RailWayGenerator(AddressAwareGenerator):
         self.removes("railway:ref", True)
         self.removes("ref")
         self.removes("uic_ref")
+        self.renames("network:en", "network_en")
+        self.renames("switch:configuration", "switch_configuration")
+        self.renames("crossing:on_demand", "crossing_on_demand")
+        self.renames("signal:distant:repeated", "distant_signal_repeated")
+        self.renames("switch:resetting", "switch_resetting")
+        self.renames("toilets:wheelchair", "wheelchair_toilets")
+        self.renames("signal:combined", "combined_signal")
+        self.renames("signal:combined:function", "combined_signal_function")
+        self.renames("signal:wrong_road", "wrong_road_signal")
+        self.renames("signal:electricity:turn_direction", "electricity_signal_turn_direction")
+        self.renames("signal:combined:states", "combined_signal_states")
+        self.renames("signal:route", "route_signal")
+        self.renames("signal:route:states", "route_signal_states")
     @staticmethod
     def accepts(props):
         return "railway" in props

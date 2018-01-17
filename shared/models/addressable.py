@@ -3,7 +3,7 @@ from sqlalchemy import Column, Boolean, Integer, ForeignKey, ForeignKeyConstrain
 from ..sa_types import IntEnum
 from sqlalchemy.orm import relationship
 from . import Named
-from .enums import OSMObjectType
+from .enums import OSMObjectType, InternetAccess
 
 class ClubType(enum.Enum):
     yes = 1
@@ -14,10 +14,8 @@ class ClubType(enum.Enum):
 
 class Addressable(Named):
     __tablename__ = "addressables"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'addressable'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'addressable', 'polymorphic_load': 'inline'}
+    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
     address_id = Column(Integer, ForeignKey("addresses.id"))
     address = relationship("Address")
     note = Column(UnicodeText)
@@ -26,6 +24,16 @@ class Addressable(Named):
     website = Column(UnicodeText)
     ele = Column(Float)
     club = Column(IntEnum(ClubType))
-    
+    description = Column(UnicodeText)
+    level = Column(Integer)
+    email = Column(UnicodeText)
+    wikidata = Column(UnicodeText)
+    alt_name = Column(UnicodeText)
+    loc_name = Column(UnicodeText)
+    comment = Column(UnicodeText)
+    opening_hours = Column(UnicodeText)
+    disused_name = Column(UnicodeText)
+    internet_access = Column(IntEnum(InternetAccess))
+
     def __str__(self):
         return super().__str__() + (", " + str(self.address) if self.address else "")

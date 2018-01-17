@@ -1,13 +1,13 @@
-from sqlalchemy import Column, ForeignKeyConstraint, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKey, Integer, UnicodeText
 from ..sa_types import IntEnum
 from .entity import Entity
 from .enums import OSMObjectType
 
 class NoExit(Entity):
     __tablename__ = "no_exits"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["entities.id", "entities.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'no_exit'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'no_exit', 'polymorphic_load': 'inline'}
+    id = Column(Integer, ForeignKey("entities.id"), primary_key=True)
     fixme = Column(UnicodeText)
     note = Column(UnicodeText)
+    todo = Column(UnicodeText)
+    operator = Column(UnicodeText)

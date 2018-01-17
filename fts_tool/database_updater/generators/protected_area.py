@@ -11,6 +11,7 @@ class ProtectedAreaGenerator(Generator):
         self.removes("iucn_level")
         self.removes("area:ha")
         self.removes_subtree("protection_title")
+        self.renames("description:cz", "description_cz")
     @staticmethod
     def accepts(props):
         return "protection_title" in props or "boundary" in props and props["boundary"] == "protected_area"

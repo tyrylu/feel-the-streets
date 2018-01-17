@@ -97,7 +97,7 @@ class Generator:
         return self._generates(**props)
 
     def _prepare_basic_props(self, entity, props):
-        props['id'] = entity.id
+        props['osm_id'] = entity.id
         props["osm_type"] = entity.type
         props["version"] = entity.version
         props["changeset"] = entity.changeset
@@ -131,7 +131,7 @@ class Generator:
         return props
     def _check_required(self, props, record):
         for column in inspect(self._generates).columns:
-            if column.name in {"discriminator", "address_id", "geometry"}: continue
+            if column.name in {"discriminator", "address_id", "geometry", "id"}: continue
             if not column.nullable and column.name not in props:
                 record.add_missing_required_property(self._generates.__qualname__, column.name)
                 return False

@@ -9,6 +9,7 @@ class BicycleParkingGenerator(AmenityGenerator):
         self.renames("surveillance:type", "surveillance_type")
         self.renames("surveillance:zone", "surveillance_zone")
 
+        self.renames("service:bicycle:chain_tool", "service_chain_tool")
     @staticmethod
     def accepts(props):
         return AmenityGenerator.accepts(props) and "bicycle_parking" in props

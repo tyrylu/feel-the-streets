@@ -1,15 +1,16 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKey, Boolean, Float, Integer, UnicodeText
 from ..sa_types import IntEnum, DimensionalFloat
 from geoalchemy import GeometryColumn, LineString
 import shapely.wkt as wkt
-from .enums import AccessType, WaterWayType, NaturalType, Inclination, CrossingType, TrafficCalmingType, RailWayType, BridgeType, RoadType, Location, BridgeStructure, OSMObjectType, Surface, KerbType, SidewalkType, WheelchairAccess, ManMade, HistoricType, RestrictionType, SportType, AreaType, TourismType, Amenity, PlaceType
+from .enums import AccessType, WaterWayType, NaturalType, Inclination, CrossingType, TrafficCalmingType, RailWayType, BridgeType, RoadType, Location, BridgeStructure, OSMObjectType, Surface, KerbType, SidewalkType, WheelchairAccess, ManMade, HistoricType, RestrictionType, SportType, AreaType, TourismType, Amenity, PlaceType, RouteImportance, EmergencyType, Support, BarrierType, CurbType, BuildingType, TrafficSignType, ParkingLaneType
 from . import Named
 
 class ParkingCondition(enum.Enum):
     residents = 0
     ticket = 1
     free = 2
+
 class JunctionType(enum.Enum):
     none = 0
     roundabout = 1
@@ -22,6 +23,7 @@ class TactilePaving(enum.Enum):
     no = 0
     yes = 1
     incorrect = 2
+
 class CycleWayType(enum.Enum):
     none = 0
     opposite_lane = 1
@@ -35,18 +37,19 @@ class CycleWayType(enum.Enum):
     opposite_track = 9
     yes = 10
     segregated = 11
+    soft_lane = 12
+    oposite_track = 13
 
 class CutlineType(enum.Enum):
         pipeline = 0
     
 class MaxspeedType(enum.Enum):
     sign = 0
-    
-class ParkingCondition(enum.Enum):
-        free = 0
-    
+    zone = 1
+
 class BuswayLaneType(enum.Enum):
     lane = 0
+
 class FootwayType(enum.Enum):
     unknown = 0
     sidewalk = 1
@@ -55,13 +58,13 @@ class FootwayType(enum.Enum):
     yes = 4
     right = 5
     left = 6
-    
+    o = 7
 
 class RoadPriority(enum.Enum):
     designated = 0
     backward = 1
     forward = 2
-
+    end = 3
 
 class FootType(enum.Enum):
     no = 0
@@ -79,39 +82,60 @@ class DestinationSymbol(enum.Enum):
     motorroad = 7
     centre = 8
     
-    
-
 class Busway(enum.Enum):
     lane = 0
+
 class Symbol(enum.Enum):
     stadium = 0
 
 class AbuttersType(enum.Enum):
     residential = 0
-class ParkingLaneType(enum.Enum):
-    no_parking = 0
-    diagonal = 1
-    no_stopping = 2
-    parallel = 3
-    perpendicular = 4
-    inline = 5
-    marked = 6
-    on_street = 7
 
 class Cutting(enum.Enum):
     no = 0
     yes = 1
     right = 2
+    left = 3
+
 class RampType(enum.Enum):
     yes = 0
     up = 1
 
+class ShoulderType(enum.Enum):
+    no = 0
+    right = 1
+
+class Hazard(enum.Enum):
+    pedestrians = 0
+    traffic_signals = 1
+    wild_animals = 2
+    curves = 3
+
+class Divider(enum.Enum):
+    line = 0
+
+class ODBL(enum.Enum):
+    clean = 0
+
+class ArcadeType(enum.Enum):
+    open = 0
+
+class TMC_CID_58_TABCD_1_Class(enum.Enum):
+    Point = 0
+
+class Conveying(enum.Enum):
+    forward = 0
+    backward = 1
+    reversible = 2
+    yes = 3
+
+class Stairwell(enum.Enum):
+    stair_landing = 0
+
 class Road(Named):
     __tablename__ = "roads"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'road'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'road', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
     original_geometry = GeometryColumn(LineString(2))
     type = Column(IntEnum(RoadType))
     railway = Column(IntEnum(RailWayType))
@@ -300,7 +324,8 @@ class Road(Named):
     vehicle_forward = Column(IntEnum(AccessType))
     both_sidewalk_kerb = Column(IntEnum(KerbType))
     parking_lane_left_parallel = Column(IntEnum(ParkingLaneType))
-    leaf_type = Column(UnicodeText) # Find out what they're doing there
+    leaf_type = Column(UnicodeText)
+    # Find out what they're doing there
     vehicle_forward_conditional = Column(UnicodeText)
     transit_lanes = Column(UnicodeText)
     bicycle_forward_lanes = Column(UnicodeText)
@@ -310,7 +335,8 @@ class Road(Named):
     forward_maxheight = Column(Float)
     technical_bicycle_class = Column(Integer)
     ramp = Column(IntEnum(RampType))
-    survey_date = Column(UnicodeText) # Make it a date
+    survey_date = Column(UnicodeText)
+    # Make it a date
     abandoned_higway = Column(IntEnum(RoadType))
     indoor = Column(Boolean)
     informal = Column(Boolean)
@@ -349,7 +375,7 @@ class Road(Named):
     name_note = Column(UnicodeText)
     taxi_lanes = Column(UnicodeText)
     disused = Column(Boolean)
-    
+
     vehicle_lanes = Column(UnicodeText)
     both_ways_lanes = Column(Integer)
     maxspeed_source = Column(UnicodeText)
@@ -379,15 +405,100 @@ class Road(Named):
     height = Column(DimensionalFloat("meter"))
     repeat_on = Column(UnicodeText)
     stroller = Column(Boolean)
-    
-    bdouble = Column(Boolean)
 
-    
-    
-        
-    
-    
-    
+    bdouble = Column(Boolean)
+    shoulder = Column(IntEnum(ShoulderType))
+    both_parking_condition = Column(UnicodeText)
+    hazard = Column(IntEnum(Hazard))
+    divider = Column(IntEnum(Divider))
+    kct_green = Column(IntEnum(RouteImportance))
+    bus_lanes = Column(Integer)
+    his_1991_name = Column(UnicodeText)
+    conditional_overtaking = Column(UnicodeText)
+    horse_suitable = Column(Boolean)
+    veh_ban_from = Column(UnicodeText)
+    emergency = Column(IntEnum(EmergencyType))
+    hgv_backward_conditional_maxspeed = Column(UnicodeText)
+    hgv_backward = Column(IntEnum(AccessType))
+    electrified = Column(UnicodeText)
+    forward_overtaking = Column(Boolean)
+    hgv_backward_maxspeed = Column(Integer)
+    support = Column(IntEnum(Support))
+    right_parking_condition_time_interval = Column(UnicodeText)
+    parking_lane = Column(IntEnum(ParkingLaneType))
+    official_name = Column(UnicodeText)
+    his_1945_name = Column(UnicodeText)
+    both_residents_parking_condition_time_interval = Column(UnicodeText)
+    odbl = Column(IntEnum(ODBL))
+    forward_placement = Column(UnicodeText)
+    backward_overtaking = Column(Boolean)
+    his_1896_name = Column(UnicodeText)
+    both_parking = Column(UnicodeText)
+    his_1400_1800_name = Column(UnicodeText)
+    his_1870_1940_name = Column(UnicodeText)
+    backward_bus = Column(IntEnum(AccessType))
+    shelter = Column(Boolean)
+    indoor_level = Column(UnicodeText)
+    backward_change = Column(Boolean)
+    junction_ref = Column(Integer)
+    capacity = Column(Integer)
+    right_parking_condition_maxstay = Column(UnicodeText)
+    destination_note = Column(UnicodeText)
+    barrier = Column(IntEnum(BarrierType))
+    right_residents_parking_condition = Column(Integer)
+    destination_street = Column(UnicodeText)
+    left_arcade = Column(IntEnum(ArcadeType))
+    conditional_maxwidth = Column(UnicodeText)
+    his_1930_name = Column(UnicodeText)
+    tmc_cid_58_tabcd_1_class = Column(IntEnum(TMC_CID_58_TABCD_1_Class))
+    tmc_cid_58_tabcd_1_lclversion = Column(Float)
+    tmc_cid_58_tabcd_1_nextlocationcode = Column(Integer)
+    hgv_conditional_overtaking = Column(UnicodeText)
+    psv_lanes_times = Column(UnicodeText)
+    his_1990_name = Column(UnicodeText)
+    check_date = Column(UnicodeText)
+    his_1962_name = Column(UnicodeText)
+    stroller_ramp = Column(Boolean)
+    depth = Column(Float)
+    forward_hazard = Column(UnicodeText)
+    both_sidewalk_surface = Column(IntEnum(Surface))
+    conveying = Column(IntEnum(Conveying))
+    his_1940_1945_name = Column(UnicodeText)
+    right_parking_default_condition = Column(IntEnum(ParkingCondition))
+    hgv_12 = Column(IntEnum(AccessType))
+    alt_name_cs = Column(UnicodeText)
+    abandoned_railway = Column(IntEnum(RailWayType))
+    his_1840_1870_name = Column(UnicodeText)
+    tram = Column(Boolean)
+    his_1951_1990_name = Column(UnicodeText)
+    length = Column(Integer)
+    attraction = Column(Boolean)
+    website = Column(UnicodeText)
+    sloped_curb = Column(IntEnum(CurbType))
+    bridge_height = Column(Integer)
+    oneway_railway = Column(Boolean)
+    building = Column(IntEnum(BuildingType))
+    proposed_highway = Column(IntEnum(RoadType))
+    taxi_lanes_forward = Column(UnicodeText)
+    destination_colour_tx_lanes = Column(UnicodeText)
+    max = Column(Integer)
+    surface_1 = Column(IntEnum(Surface))
+    right_bicycle_sidewalk = Column(Boolean)
+    left_bicycle_sidewalk = Column(Boolean)
+    abandoned_highway = Column(IntEnum(RoadType))
+    backward_conditional_maxspeed = Column(UnicodeText)
+    traffic_sign = Column(IntEnum(TrafficSignType))
+    description_ref = Column(UnicodeText)
+    hgv_tolltype = Column(UnicodeText)
+    maxheight_note = Column(UnicodeText)
+    steps = Column(Boolean)
+
+
+
+
+
+
+
     @property
     def effective_width(self):
         if self.width:

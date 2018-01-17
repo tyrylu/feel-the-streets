@@ -10,7 +10,7 @@ from .database_updater import DatabaseUpdater
 def update_database(location, use_cache, save_responses, check_geometries):
     _configure_logging(location)
     updater = DatabaseUpdater(location, check_geometries, use_cache, save_responses)
-    updater.update_database()
+    updater.update_database(True)
     input("Database update successful, press enter to exit.")
     
 @cli.command()    

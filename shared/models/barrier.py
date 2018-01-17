@@ -1,7 +1,7 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKey, Boolean, Float, Integer, UnicodeText
 from ..sa_types import IntEnum, DimensionalFloat
-from .enums import BarrierType, AccessType, ManMade, OSMObjectType, TrafficCalmingType
+from .enums import BarrierType, AccessType, ManMade, OSMObjectType, TrafficCalmingType, KerbType, RoadType, BridgeStructure, RailWayType, Service
 from . import Named
 
 class BollardType(enum.Enum):
@@ -13,17 +13,31 @@ class BollardType(enum.Enum):
 class WallType(enum.Enum):
     gabion = 0
     brick = 1
+    noise_barrier = 2
+    dry_stone = 3
+    flood_wall = 4
+    jersey_barrier = 5
+    retaining_wall = 6
 
 class StileType(enum.Enum):
     ladder = 0
     stepover = 1
     
+class LiftgateType(enum.Enum):
+    double = 0
+    single = 1
+
+class LeafType(enum.Enum):
+    needleleaved = 0
+    broadleaved = 1
+
+class SwingGateType(enum.Enum):
+    single = 0
+
 class Barrier(Named):
     __tablename__ = "barriers"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'barrier'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'barrier', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
     type = Column(IntEnum(BarrierType), nullable=False)
     foot = Column(IntEnum(AccessType))
     bicycle = Column(IntEnum(AccessType))
@@ -54,6 +68,40 @@ class Barrier(Named):
     historic = Column(Boolean)
     complete = Column(Boolean)
     layer = Column(Integer)
-    wall = Column(IntEnum(WallType)) # Create subclass?
-    stile = Column(IntEnum(StileType)) # Subclass?
+    wall = Column(IntEnum(WallType))
+    # Create subclass?
+    stile = Column(IntEnum(StileType))
+    # Subclass?
     traffic_calming = Column(IntEnum(TrafficCalmingType))
+    level = Column(Integer)
+    wheelchair = Column(Boolean)
+    liftgate_type = Column(IntEnum(LiftgateType))
+    maxheight = Column(Float)
+    wikidata = Column(UnicodeText)
+    fee = Column(UnicodeText)
+    alt_name = Column(UnicodeText)
+    kerb = Column(IntEnum(KerbType))
+    disused = Column(Boolean)
+    width = Column(Float)
+    leaf_type = Column(IntEnum(LeafType))
+    colour = Column(UnicodeText)
+    building_colour = Column(UnicodeText)
+    wikipedia = Column(UnicodeText)
+    hgv = Column(Boolean)
+    website = Column(UnicodeText)
+    count = Column(Integer)
+    network = Column(UnicodeText)
+    state = Column(IntEnum(BarrierType))
+    sorting_name = Column(UnicodeText)
+    abandoned_highway = Column(IntEnum(RoadType))
+    bridge_structure = Column(IntEnum(BridgeStructure))
+    stroller = Column(Boolean)
+    pedestrians = Column(IntEnum(AccessType))
+    mofa = Column(Boolean)
+    ford = Column(Boolean)
+    disused_railway = Column(IntEnum(RailWayType))
+    service = Column(IntEnum(Service))
+    goods = Column(Boolean)
+    comment = Column(UnicodeText)
+    agricultural = Column(Boolean)
+    swing_gate_type = Column(IntEnum(SwingGateType))

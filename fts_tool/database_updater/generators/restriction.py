@@ -8,6 +8,8 @@ class RestrictionGenerator(Generator):
         self.renames("restriction", "type")
         self.renames("except", "except_")
 
+        self.renames("restriction:hgv", "hgv_restriction")
+        self.renames("restriction:conditional", "conditional")
     @staticmethod
     def accepts(props):
         return "type" in props and props["type"] == "restriction"

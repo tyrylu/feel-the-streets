@@ -9,6 +9,8 @@ class DisusedGenerator(Generator):
         self.renames("destroyed:amenity", "destroyed_amenity")
         self.renames("destroyed:name", "destroyed_name")
 
+        self.renames("disused:highway", "highway")
+        self.renames("disused:name", "name")
     @staticmethod
     def accepts(props):
         return "disused" in props or "disused:amenity" in props

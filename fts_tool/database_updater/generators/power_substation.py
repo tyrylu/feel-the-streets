@@ -13,6 +13,8 @@ class PowerSubstationGenerator(Generator):
         self.renames("roof:colour", "roof_colour")
         self.removes("building:ruian:type")
 
+        self.renames("roof:levels", "roof_levels")
+        self.renames("voltage-low", "low_voltage")
     @staticmethod
     def accepts(props):
         return "power" in props and props["power"] == "substation"

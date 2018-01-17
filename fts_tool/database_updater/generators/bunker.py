@@ -8,6 +8,7 @@ class BunkerGenerator(Generator):
         self.removes("military")
         self.renames("bunker_type", "type")
 
+        self.renames("tower:type", "tower_type")
     @staticmethod
     def accepts(props):
         return "military" in props and props["military"] == "bunker"

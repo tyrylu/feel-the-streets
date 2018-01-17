@@ -1,14 +1,15 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Float, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKey, Boolean, Float, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Named
-from .enums import OSMObjectType, WheelchairAccess
+from .enums import OSMObjectType, WheelchairAccess, ConstructionType, Direction, ShelterType
 
 class Transport(enum.Enum):
     subway = 0
 
 class StationType(enum.Enum):
     subway = 0
+
 class StopType(enum.Enum):
     must_infer = -1
     bus_stop = 0
@@ -24,18 +25,10 @@ class StopType(enum.Enum):
     public_transport = 10
     halt = 11
     
-
-class Direction(enum.Enum):
-        north = 0
-        south = 1
-        
-
 class Stop(Named):
     __tablename__ = "stops"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'stop'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'stop', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
     type = Column(IntEnum(StopType))
     bus = Column(Boolean)
     tram = Column(Boolean)
@@ -56,7 +49,8 @@ class Stop(Named):
     note = Column(UnicodeText)
     trolleybus = Column(Boolean)
     alt_name = Column(UnicodeText)
-    route_ref = Column(UnicodeText) # More exactly it is an array of ints...
+    route_ref = Column(UnicodeText)
+    # More exactly it is an array of ints...
     local_ref = Column(UnicodeText)
     fixme = Column(UnicodeText)
     ele = Column(Float)
@@ -85,4 +79,13 @@ class Stop(Named):
     start_date = Column(UnicodeText)
     description = Column(UnicodeText)
     rail = Column(Boolean)
-    
+    level = Column(Integer)
+    construction = Column(IntEnum(ConstructionType))
+    access = Column(Boolean)
+    wheelchair_toilets = Column(Boolean)
+    lines = Column(UnicodeText)
+    destination = Column(UnicodeText)
+    check_date = Column(UnicodeText)
+    oneway = Column(Boolean)
+    shelter_type = Column(IntEnum(ShelterType))
+

@@ -16,6 +16,7 @@ class DatabaseUpdater:
         self.translator = OSMObjectTranslator(use_cache, cache_responses)
         self._db = Database(location)
         self._check_geoms = check_geometries
+        self._assigned_id = 1
         self._db.create_if_needed()
 
     def entities_in_location(self, check_geometry_size=False):
@@ -36,17 +37,19 @@ class DatabaseUpdater:
                     continue
             entity.geometry = WKTSpatialElement(geometry)
             self._maybe_polygonize(entity)
+            entity.id = self._assigned_id
+            self._assigned_id += 1
             yield entity
         self.translator.record.save_to_file("generation_record_%s.txt"%self._location)
         self.translator.record.save_to_pickle("%s.grd"%self._location)
         
-    def update_database(self):
-        for entity in self.entities_in_location():
+    def update_database(self, exclude_huge=False):
+        for entity in self.entities_in_location(exclude_huge):
             self._db.schedule_entity_addition(entity)
         self._db.add_entities()
 
     def _maybe_polygonize(self, entity):
-        if hasattr(entity, "effective_width") and entity.effective_width > 0 and self._db.scalar(gf.geometry_type(entity.geometry)) == "LINESTRING":
+        if hasattr(entity, "effective_width") and entity.effective_width > 0 and entity.geometry.geom_wkt.startswith("LINESTRING"):
             entity.original_geometry = entity.geometry
             log.debug("Creating containment polygon for entity %s.", entity.id)
             x = self._db.scalar(entity.original_geometry.point_n(1).x())

@@ -1,5 +1,6 @@
 from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
+from .idx_entities_geometry import IdxEntitiesGeometry
 from .entity import Entity
 from .address import Address
 from .named import Named
@@ -7,7 +8,7 @@ from .commented import Commented
 from .addressable import Addressable
 from .elevated import Elevated
 from .road import Road
-from .railway import RailWay
+from .rail_way import RailWay
 from .parking import Parking
 from .land import Land
 from .building import Building
@@ -92,3 +93,10 @@ from .golf_course import GolfCourse
 from .playground import Playground
 from .surveillance import Surveillance
 from .cafe import Cafe
+from .associated_street import AssociatedStreet
+from .bridge import Bridge
+from .rf import RF
+from .street import Street
+from .level import Level
+from .public_transport import PublicTransport
+from .enforcement import Enforcement

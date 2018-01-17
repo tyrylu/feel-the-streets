@@ -1,5 +1,5 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Integer
+from sqlalchemy import Column, ForeignKey, Boolean, Integer
 from ..sa_types import IntEnum
 from . import Tourism
 from .enums import OSMObjectType
@@ -26,15 +26,17 @@ class BoardType(enum.Enum):
     historic = 18
     timetable = 19
     transport = 20
+    yes = 21
+    architeture = 22
 
-   
+
 class Board(Tourism):
     __tablename__ = "boards"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["tourisms.id", "tourisms.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'board'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'board', 'polymorphic_load': 'inline'}
+    id = Column(Integer, ForeignKey("tourisms.id"), primary_key=True)
     board_type = Column(IntEnum(BoardType))
     board_number = Column(Integer)
     board_ref = Column(Integer)
-    
+    education = Column(Boolean)
+    language_cs = Column(Boolean)
+

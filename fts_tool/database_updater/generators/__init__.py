@@ -10,9 +10,9 @@ from .track import TrackGenerator
 from .aerial_way import AerialWayGenerator
 from .service_road import ServiceRoadGenerator
 from .road import RoadGenerator
-from .railway import RailWayGenerator
+from .rail_way import RailWayGenerator
 from .parking import ParkingGenerator
-from .grave_yard import GraveYardGenerator
+from .graveyard import GraveyardGenerator
 from .shelter import ShelterGenerator
 from .recycling import RecyclingGenerator
 from .fuel import FuelGenerator
@@ -53,7 +53,7 @@ from .bunker import BunkerGenerator
 from .place import PlaceGenerator
 from .garden import GardenGenerator
 from .land import LandGenerator
-from .golfcourse import GolfCourseGenerator
+from .golf_course import GolfCourseGenerator
 from .playground import PlaygroundGenerator
 from .leisure import LeisureGenerator
 from .barrier import BarrierGenerator
@@ -82,6 +82,13 @@ from .abandoned import AbandonedGenerator
 from .fee import FeeGenerator
 from .piste import PisteGenerator
 from .annotated import AnnotatedGenerator
+from .associated_street import AssociatedStreetGenerator
+from .rf import RFGenerator
+from .enforcement import EnforcementGenerator
+from .bridge import BridgeGenerator
+from .level import LevelGenerator
+from .public_transport import PublicTransportGenerator
+from .street import StreetGenerator
 from .named import NamedGenerator
 from .commented import CommentedGenerator
 from .elevated import ElevatedGenerator

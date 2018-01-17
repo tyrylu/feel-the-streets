@@ -12,6 +12,7 @@ class LeisureGenerator(AddressAwareGenerator):
         self.unprefixes("athletics")
         self.removes_subtree("piste")
 
+        self.renames("boats:small", "small_boats")
     def _prepare_properties(self, entity_spec, props, record):
         if "sport" in props:
             props["sport"] = props["sport"].replace("9", "nine_")

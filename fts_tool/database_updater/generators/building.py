@@ -47,11 +47,12 @@ class BuildingGenerator(AddressAwareGenerator):
         self.renames("roof:angle", "roof_angle")
         self.renames("roof:colour", "roof_colour")
         self.renames("toilets:wheelchair", "wheelchair_toilets")
-        self.renames("healthcare:speciality", "healthcare_speciality") # It should go out 
+        self.renames("healthcare:speciality", "healthcare_speciality")
+        # It should go out 
         self.renames("wheelchair:toilets", "wheelchair_toilets")
         self.renames("ph", "phone")
         self.renames("opening_hours:url", "opening_hours_url")
-        
+
         self.unprefixes("contact")
         self.renames("historic", "historic_type")
         self.renames("id:čvut", "cvut_id")
@@ -68,9 +69,26 @@ class BuildingGenerator(AddressAwareGenerator):
         self.renames("diet:vegan", "vegan_diet")
         self.renames("payment:credit_cards", "credit_cards_payment")
         self.renames("payment:debit_cards", "debit_cards_payment")
-        
-        
 
+
+
+        self.renames("roof:slope:direction", "roof_slope_direction")
+        self.renames("roof:direction", "roof_direction")
+        self.renames("bridge:support", "bridge_support")
+        self.renames("diet:gluten_free", "gluten_free_diet")
+        self.renames("man_made:disused", "disused_man_made")
+        self.renames("part:vertical", "vertical_part")
+        self.renames("seamark:type", "seamark_type")
+        self.renames("diet:raw", "raw_diet")
+        self.renames("wheelchair:description:en", "en_wheelchair_description")
+        self.renames("payment:electronic_purses", "electronic_purses_payment")
+        self.renames("garden:type", "garden_type")
+        self.renames("payment:meal_voucher", "meal_voucher_payment")
+        self.renames("currency:czk", "currency_czk")
+        self.renames("payment:american_express", "american_express_payment")
+        self.renames("payment:cryptocurrencies", "cryptocurrencies_payment")
+        self.renames("access:roof", "roof_access")
+        self.renames("payment:meal_vouchers", "meal_vouchers_payment")
     @staticmethod
     def accepts(props):
         return ("building" in props and "aerialway" not in props) or "shop" in props or "building:levels" in props or ("amenity" in props and props["amenity"] in {"kindergarten", "school", "college", "hospital", "restaurant", "doctors", "veterinary", "dentist", "clinic"}) or ("type" in props and props["type"] == "building")

@@ -7,6 +7,7 @@ class GolfCourseGenerator(LeisureGenerator):
         self.generates(GolfCourse)
         self.renames("golf:course", "golf_course_type")
 
+        self.renames("golf:par", "par")
     @staticmethod
     def accepts(props):
         return LeisureGenerator.accepts(props) and "golf:course" in props

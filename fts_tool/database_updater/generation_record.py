@@ -121,7 +121,7 @@ class GenerationRecord:
             pickle.dump(self, fp)
 
     @staticmethod
-    def from_pickle(self, pickle_path):
+    def from_pickle(pickle_path):
         with open(pickle_path, "rb") as fp:
             return pickle.load(fp)
     

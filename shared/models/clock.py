@@ -1,8 +1,8 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Boolean, Integer
+from sqlalchemy import Column, ForeignKey, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Amenity
-from .enums import OSMObjectType
+from .enums import OSMObjectType, TourismType, SupportType, EntranceType
 
 class DisplayType(enum.Enum):
     none = 0
@@ -11,25 +11,15 @@ class DisplayType(enum.Enum):
     digital = 3
     unorthodox = 4
 
-class SupportType(enum.Enum):
-    none = 0
-    wall_mounted = 1
-    ground = 2
-    pole = 3
-    billboard = 4
-    tower = 5
-    wall = 6
-    
 class ClockVisibility(enum.Enum):
     area = 0
     street = 1
+    house = 2
 
 class Clock(Amenity):
     __tablename__ = "clocks"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["amenities.id", "amenities.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'clock'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'clock', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("amenities.id"), primary_key=True)
     display = Column(IntEnum(DisplayType))
     support = Column(IntEnum(SupportType))
     faces = Column(Integer)
@@ -38,3 +28,7 @@ class Clock(Amenity):
     date = Column(Boolean)
     hygrometer = Column(Boolean)
     thermometer = Column(Boolean)
+    tourism = Column(IntEnum(TourismType))
+    inscription = Column(UnicodeText)
+    artist_name = Column(UnicodeText)
+    entrance = Column(IntEnum(EntranceType))

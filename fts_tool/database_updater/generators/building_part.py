@@ -13,6 +13,9 @@ class BuildingPartGenerator(Generator):
         self.renames("roof:orientation", "roof_orientation")
         self.removes("building:ruian:type")
 
+        self.renames("roof:colour", "roof_colour")
+        self.renames("roof:slope:direction", "roof_slope_direction")
+        self.renames("building:material", "building_material")
     @staticmethod
     def accepts(props):
         return "building:part" in props

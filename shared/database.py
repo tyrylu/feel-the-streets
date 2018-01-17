@@ -1,11 +1,11 @@
-import collections
+from collections import defaultdict
 import os
 import logging
 from sqlalchemy import create_engine, event, text, inspect
 from sqlalchemy.orm import sessionmaker
 from geoalchemy import GeometryDDL, Geometry
 from .models import Base, Entity
-
+from . import sqlalchemy_logging
 
 log = logging.getLogger(__name__)
 os.environ["PATH"] = r"C:\users\lukas\apps;%s"%os.environ["PATH"]
@@ -17,10 +17,9 @@ class Database:
         self._engine = create_engine("sqlite:///%s"%db_path)
         event.listen(self._engine, "connect", self._post_connect)
         self._session = sessionmaker(bind=self._engine)()
-        self._per_table_values = collections.defaultdict(list)
-        self._bind_processors = {}
+        self._per_table_values = defaultdict(list)
+        self._foreign_ids = defaultdict(lambda: 1)
         
-
     def _post_connect(self, dbapi_connection, connection_record):
         dbapi_connection.enable_load_extension(True)
         dbapi_connection.load_extension("mod_spatialite")
@@ -54,10 +53,10 @@ class Database:
         return self._session.merge(entity)
 
     def schedule_entity_addition(self, entity):
-        per_table_values = collections.defaultdict(dict)
+        per_table_values = defaultdict(dict)
+        self._set_foreign_keys(entity)
         for table in inspect(entity.__class__).tables:
             for column in table.columns.values():
-                #processor = self._lookup_bind_processor(column.type)
                 value = getattr(entity, column.name)
                 # Manual override for geometry columns
                 if isinstance(column.type, Geometry) and value is not None:
@@ -65,11 +64,25 @@ class Database:
                 per_table_values[column.table][column.name] = value
         for table, row in per_table_values.items():
             self._per_table_values[table].append(row)
-    
-    def _lookup_bind_processor(self, sa_type):
-        if not sa_type in self._bind_processors:
-            self._bind_processors[sa_type] = sa_type.bind_processor(self._engine.dialect)
-        return self._bind_processors[sa_type]
+
+    def _set_foreign_keys(self, entity):
+        """Foreign key generation and other related functionality."""
+        for table in inspect(entity.__class__).tables:
+            for column in table.columns.values():
+                if column.name.endswith("_id") and column.foreign_keys:
+                    value_attr = column.name[:-3]
+                    foreign_value = getattr(entity, value_attr)
+                    if foreign_value:
+                        foreign_id = self._set_foreign_id(foreign_value)
+                        setattr(entity, column.name, foreign_id)
+                        self.schedule_entity_addition(foreign_value)
+
+    def _set_foreign_id(self, foreign_entity):
+        table = foreign_entity.__tablename__
+        free_id = self._foreign_ids[table]
+        self._foreign_ids[table] += 1
+        foreign_entity.id = free_id
+        return free_id
     def add_entities(self):
         with self._engine.begin() as conn:
             conn.execute("pragma synchronous=off")

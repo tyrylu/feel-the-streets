@@ -8,18 +8,16 @@ from . import services
 
 class ObjectsBrowserDialog(wx.Dialog):
     xrc_name = "objects_browser"
+
     def post_init(self, title, person, unsorted_objects):
-        self.Title = title
+        unsorted_objects = list(unsorted_objects)
+        self.Title = title + " (zobrazeno %d objektů)"%len(unsorted_objects)
         self.EscapeId = xrc.XRCID("close")
         self._person = person
         objects_list = self.FindWindowByName("objects")
-        cur_point = to_shapely_point(person.position)
         objects = []
         for obj in unsorted_objects:
-            closest = closest_point_to(cur_point, obj.geometry)
-            closest_latlon = to_latlon(closest)
-            dist = distance_between(person.position, closest_latlon)
-            objects.append((dist, obj, closest_latlon))
+            objects.append((obj.distance_from_current, obj, obj.closest_point_to_current))
         objects.sort(key=lambda e: e[0])
         for dist, obj, closest in objects:
             bearing = bearing_to(person.position, closest)

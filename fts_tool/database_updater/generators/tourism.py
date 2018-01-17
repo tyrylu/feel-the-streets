@@ -24,6 +24,11 @@ class TourismGenerator(AddressAwareGenerator):
         self.removes_subtree("tower")
         self.removes_subtree("building:ruian")
 
+        self.renames("artist:wikidata", "artist_wikidata")
+        self.renames("note:en", "en_note")
+        self.renames("payment:litecoin", "litecoin_payment")
+        self.renames("high_water:height", "high_water_height")
+        self.renames("alt_name:cs", "alt_name_cs")
     @staticmethod
     def accepts(props):
         return "tourism" in props

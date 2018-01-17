@@ -7,8 +7,9 @@ class PowerPlantGenerator(BuildingGenerator):
         self.generates(PowerPlant)
         self.removes("power")
         self.renames("plant:output:electricity", "electricity_output")
-        
 
+
+        self.renames("plant:source", "plant_source")
     @staticmethod
     def accepts(props):
         return "power" in props and props["power"] == "plant"

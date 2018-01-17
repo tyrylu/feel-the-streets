@@ -13,9 +13,12 @@ class ParkingGenerator(AddressAwareGenerator):
         self.renames("capacity:parent", "capacity_for_parents")
         self.renames("capacity:women", "capacity_for_women")
         self.renames("url", "website")
-        self.renames("fee", "paid") # Don't ask me if there is a difference.
+        self.renames("fee", "paid")
+         # Don't ask me if there is a difference.
         self.renames("parking", "type")
-        
+
+        self.renames("garden:type", "garden_type")
+        self.renames("demolished:building", "demolished_building")
     def _prepare_properties(self, entity_spec, props, record):
         if "parking" in props: props["parking"] = props["parking"].replace("-", "_")
         return super()._prepare_properties(entity_spec, props, record)

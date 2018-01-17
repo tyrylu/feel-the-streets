@@ -1,7 +1,7 @@
 from .generator import Generator
 from shared.models import Graveyard
 
-class GraveYardGenerator(Generator):
+class GraveyardGenerator(Generator):
     def __init__(self):
         super().__init__()
         self.generates(Graveyard)

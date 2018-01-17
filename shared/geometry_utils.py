@@ -17,7 +17,6 @@ def distance_between(point1, point2):
     except VincentyError:
         return 0
     
-       
 def bearing_to(initial, target):
     try:
         return initial.initialBearingTo(target)
@@ -163,3 +162,17 @@ def create_containment_polygon(line, width):
         if not (seg.length == left.length == right.length):
             log.debug(f"Length mismatch: segment - left side: {seg.length - left.length}, segment - righ side: {seg.length - right.length}")
     return geometry.polygon.Polygon(vertices)
+
+def xy_ranges_bounding_square(center_latlon, side):
+    # First, get the x bounds
+    side1 = center_latlon.destination(side/2, 0)
+    edge1 = side1.destination(side/2, 270)
+    min_x = edge1.lon
+    max_y = edge1.lat
+    edge2 = side1.destination(side/2, 90)
+    print(f"Distance between edge1 and edge2: {edge1.distanceTo(edge2)}")
+    max_x = edge2.lon
+    edge3 = edge2.destination(side, 180)
+    min_y = edge3.lat
+    # Note that if the square would be positioned just right, the max/min invariants would not hold, but for the foreseeable future usages it should be okay.
+    return min_x, min_y, max_x, max_y

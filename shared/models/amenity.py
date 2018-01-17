@@ -1,29 +1,31 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Integer, Boolean, UnicodeText
+from sqlalchemy import Column, ForeignKey, Integer, Boolean, UnicodeText
 from ..sa_types import IntEnum
 from . import Addressable
-from .enums import Amenity, AccessType, SmokingType, HistoricType, BarrierType, OSMObjectType, LandType, LeisureType, SportType, WifiType, ParkingType, Surface, Location, WheelchairAccess
+from .enums import Amenity, AccessType, SmokingType, HistoricType, BarrierType, OSMObjectType, LandType, LeisureType, SportType, WifiType, ParkingType, Surface, Location, WheelchairAccess, PlaceType, ToiletsDisposal, FastFoodType, ManMade, DiplomacyRelation, DietType, FenceType
 
 class CoverType(enum.Enum):
     no = 0
     yes = 1
     booth = 2
 
-class PlaceType(enum.Enum):
-    none = 0
-    neighbourhood = 1
 class ValvesType(enum.Enum):
     schrader = 0
 
+class Genre(enum.Enum):
+    black_light_theatre = 0
+    cabaret = 1
+
+class StudioType(enum.Enum):
+    audio = 0
+    video_editing = 1
+
 class Amenity(Addressable):
     __tablename__ = "amenities"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["addressables.id", "addressables.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'amenity'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'amenity', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("addressables.id"), primary_key=True)
     type = Column(IntEnum(Amenity))
     religion = Column(UnicodeText)
-    opening_hours = Column(UnicodeText)
     operator = Column(UnicodeText)
     cuisine = Column(UnicodeText)
     phone = Column(UnicodeText)
@@ -49,8 +51,6 @@ class Amenity(Addressable):
     url = Column(UnicodeText)
     denomination = Column(UnicodeText)
     vegetarian_diet = Column(Boolean)
-    email = Column(UnicodeText)
-    internet_access = Column(UnicodeText)
     historic = Column(IntEnum(HistoricType))
     dispensing = Column(Boolean)
     barrier = Column(IntEnum(BarrierType))
@@ -63,7 +63,6 @@ class Amenity(Addressable):
     open_air = Column(Boolean)
     short_name = Column(UnicodeText)
     wikipedia = Column(UnicodeText)
-    description = Column(UnicodeText)
     landuse = Column(IntEnum(LandType))
     leisure = Column(IntEnum(LeisureType))
     start_date = Column(UnicodeText)
@@ -81,7 +80,6 @@ class Amenity(Addressable):
     drinking_water = Column(Boolean)
     cargo = Column(UnicodeText)
     charge = Column(UnicodeText)
-    level = Column(Integer)
     int_name = Column(UnicodeText)
     internet_access_fee = Column(Boolean)
     internet_access_ssid = Column(UnicodeText)
@@ -97,5 +95,38 @@ class Amenity(Addressable):
     dog = Column(Boolean)
     female = Column(Boolean)
     male = Column(Boolean)
-    comment = Column(UnicodeText)
-    voltage = Column(Integer) # Find out what they are
+    voltage = Column(Integer)
+    toilets_disposal = Column(IntEnum(ToiletsDisposal))
+    country = Column(UnicodeText)
+    schuko_socket = Column(Integer)
+    schuko_socket_voltage = Column(UnicodeText)
+    type2_socket_voltage = Column(UnicodeText)
+    waste = Column(UnicodeText)
+    fast_food = Column(IntEnum(FastFoodType))
+    man_made = Column(IntEnum(ManMade))
+    wheelchair_toilets = Column(Boolean)
+    fax = Column(UnicodeText)
+    diplomatic = Column(IntEnum(DiplomacyRelation))
+    automated = Column(Boolean)
+    toilets = Column(Boolean)
+    vegan_diet = Column(IntEnum(DietType))
+    indoor_seating = Column(Boolean)
+    short_name_en = Column(UnicodeText)
+    fence_type = Column(IntEnum(FenceType))
+    beer = Column(UnicodeText)
+    atm = Column(Boolean)
+    chademo_socket = Column(Integer)
+    community = Column(UnicodeText)
+    gambling = Column(Boolean)
+    disused = Column(Boolean)
+    foot = Column(Boolean)
+    genre = Column(IntEnum(Genre))
+    beer_garden = Column(Boolean)
+    chademo_socket_power = Column(UnicodeText)
+    studio = Column(IntEnum(StudioType))
+    wine = Column(Boolean)
+    sorting_name = Column(UnicodeText)
+    room = Column(IntEnum(Amenity))
+    type2_socket = Column(Integer)
+    schuko_socket_current = Column(UnicodeText)
+    # Find out what they are

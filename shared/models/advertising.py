@@ -1,21 +1,15 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Integer, Enum
+from sqlalchemy import Column, ForeignKey, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
 from .entity import Entity
-from .enums import OSMObjectType
-
-class AdvertisingType(enum.Enum):
-    column = 0
-    billboard = 1
-    totem = 2
-    
-    
+from .enums import OSMObjectType, AdvertisingType
 
 class Advertising(Entity):
     __tablename__ = "advertisings"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["entities.id", "entities.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'advertising'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'advertising', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("entities.id"), primary_key=True)
     type = Column(IntEnum(AdvertisingType), nullable=False)
     height = Column(Integer)
+    lit = Column(Boolean)
+    direction = Column(Integer)
+    name = Column(UnicodeText)

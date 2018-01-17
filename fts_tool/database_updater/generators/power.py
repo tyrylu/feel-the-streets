@@ -9,6 +9,7 @@ class PowerGenerator(Generator):
         self.renames("voltage-high", "high_voltage")
         self.renames("voltage-low", "low_voltage")
 
+        self.renames("location:transition", "transition_location")
     @staticmethod
     def accepts(props):
         return "power" in props and props["power"] != "plant"

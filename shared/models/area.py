@@ -2,18 +2,13 @@ import enum
 from sqlalchemy import Column, ForeignKey, ForeignKeyConstraint, Boolean, Integer, UnicodeText
 from ..sa_types import IntEnum
 from sqlalchemy.orm import relationship
-from .enums import Amenity, TourismType, AerialWayType, RailWayType, ManMade, AccessType, OSMObjectType, LeisureType, SportType, BarrierType, AreaType
+from .enums import Amenity, TourismType, AerialWayType, RailWayType, ManMade, AccessType, OSMObjectType, LeisureType, SportType, BarrierType, AreaType, AttractionType, LandType, HistoricType
 from .entity import Entity
-
-class AttractionType(enum.Enum):
-    animal = 0
 
 class Area(Entity):
     __tablename__ = "areas"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["entities.id", "entities.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'area'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'area', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("entities.id"), primary_key=True)
     type = Column(IntEnum(AreaType), nullable=False)
     name = Column(UnicodeText)
     amenity = Column(IntEnum(Amenity))
@@ -41,3 +36,8 @@ class Area(Entity):
     barrier = Column(IntEnum(BarrierType))
     animal = Column(UnicodeText)
     attraction = Column(IntEnum(AttractionType))
+    sorting_name = Column(UnicodeText)
+    landuse = Column(IntEnum(LandType))
+    historic = Column(IntEnum(HistoricType))
+    url = Column(UnicodeText)
+    email = Column(UnicodeText)

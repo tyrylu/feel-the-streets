@@ -1,17 +1,13 @@
 import enum
-from sqlalchemy import Column, ForeignKeyConstraint, Integer, UnicodeText
+from sqlalchemy import Column, ForeignKey, Integer, UnicodeText
 from ..sa_types import IntEnum
 from . import Named
-from .enums import OSMObjectType, PlaceType
-
-    
+from .enums import OSMObjectType, PlaceType, AttractionType, LeisureType, LandType
 
 class Place(Named):
     __tablename__ = "places"
-    __table_args__ = (ForeignKeyConstraint(["id", "osm_type"], ["named.id", "named.osm_type"]),)
-    __mapper_args__ = {'polymorphic_identity': 'place'}
-    id = Column(Integer, primary_key=True)
-    osm_type = Column(IntEnum(OSMObjectType), primary_key=True)
+    __mapper_args__ = {'polymorphic_identity': 'place', 'polymorphic_load': 'selectin'}
+    id = Column(Integer, ForeignKey("named.id"), primary_key=True)
     type = Column(IntEnum(PlaceType), nullable=False)
     population = Column(Integer)
     wikipedia = Column(UnicodeText)
@@ -27,4 +23,13 @@ class Place(Named):
     email = Column(UnicodeText)
     phone = Column(UnicodeText)
     note = Column(UnicodeText)
-    
+    sorting_name = Column(UnicodeText)
+    short_name = Column(UnicodeText)
+    attraction = Column(IntEnum(AttractionType))
+    leisure = Column(IntEnum(LeisureType))
+    landuse = Column(IntEnum(LandType))
+    start_date = Column(Integer)
+    int_name = Column(UnicodeText)
+    wikipedia_cs = Column(UnicodeText)
+    alt_name_cs = Column(UnicodeText)
+
