@@ -1,11 +1,12 @@
+import wx
+from geodesy.ellipsoidalVincenty import LatLon
+from shared.models import Road
 from ..uimanager import get, menu_command
 from ..services import speech
-from geodesy.ellipsoidalVincenty import LatLon
 from ..objects_browser import ObjectsBrowserDialog
 from ..road_segments_browser import RoadSegmentsBrowserDialog
-from ..geometry_utils import get_road_section_angle
-from shared.models import Road
-import wx
+from ..geometry_utils import get_road_section_angle, distance_filter
+from ..search import perform_search
 
 class InteractivePersonController: 
     def __init__(self, person):
@@ -25,7 +26,8 @@ class InteractivePersonController:
             speech().speak("Není známo.")
     @menu_command("Informace", "Aktuální pozice podrobně", "shift+l")
     def do_position_detailed(self, evt):
-        dlg = get().prepare_xrc_dialog(ObjectsBrowserDialog, title="Aktuální pozice", unsorted_objects=self._person.is_inside_of, person=self._person)
+        filtered_inside_of = distance_filter(self._person.is_inside_of, self._person.position, float("inf"))
+        dlg = get().prepare_xrc_dialog(ObjectsBrowserDialog, title="Aktuální pozice", unsorted_objects=filtered_inside_of, person=self._person)
         if dlg.ShowModal() == 1:
             self._person.move_to(dlg.selected_object[2])
         dlg.Destroy()
@@ -93,7 +95,7 @@ class InteractivePersonController:
         self._person.direction = rot
 
     @menu_command("Pohyb", "Otočit o...", "Ctrl+r")
-    def rotate_about(self, evt):
+    def rotate_by(self, evt):
         amount = wx.GetTextFromUser("Zadej úhel", "Údaj")
         self._person.direction += float(amount)
     def _maybe_select_road(self):
@@ -106,6 +108,15 @@ class InteractivePersonController:
             road_reprs = [str(r) for r in roads]
             road_idx = wx.GetSingleChoice("Zvolte cestu, nad kterou se má operace provést", "Požadavek", aChoices=road_reprs)
             if road_idx is not None:
-                return roads[road_reprs.find(road_idx)]
+                return roads[road_reprs.index(road_idx)]
             else:
                 return None
+            
+    @menu_command("Informace", "Hledat...", "ctrl+f")
+    def do_search(self, evt):
+        results = perform_search(self._person.position)
+        if results:
+            browser = get().prepare_xrc_dialog(ObjectsBrowserDialog, title="Výsledky vyhledávání", unsorted_objects=results, person=self._person)
+            if browser.ShowModal() == 1:
+                self._person.move_to(browser.selected_object[2])
+                browser.Destroy()

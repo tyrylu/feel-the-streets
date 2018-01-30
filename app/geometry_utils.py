@@ -1,6 +1,7 @@
 import shapely.wkb as wkb
 from shared.geometry_utils import *
 from . import services
+from .measuring import measure
 
 def closest_point_from_geoms(geoms, point):
     min = float("inf")
@@ -22,7 +23,7 @@ def closest_point_to(point, geom, convert=True):
         return geom.interpolate(geom.project(point))
     elif geom.geom_type == "Polygon":
         return geom.exterior.interpolate(geom.exterior.project(point))
-    elif geom.geom_type == "GeometryCollection":
+    elif geom.geom_type in {"GeometryCollection", "MultiPolygon"}:
         return closest_point_from_geoms(geom.geoms, point)
     else:
         raise RuntimeError("Can not process geometry of type %s."%geom.geom_type)
@@ -33,3 +34,17 @@ def get_road_section_angle(pov, road):
     closest_segment = get_closest_line_segment(pov_point, road_line)
     closest_segment.calculate_angle()
     return closest_segment.angle
+
+def distance_filter(entities, position, distance):
+    with measure("Shapely & pygeodesi distance filtering"):
+        res_entities = []
+        shapely_point = to_shapely_point(position)
+        for entity in entities:
+            closest = closest_point_to(shapely_point, entity.geometry)
+            closest_latlon = to_latlon(closest)
+            cur_distance = distance_between(closest_latlon, position)
+            if cur_distance <= distance:
+                entity.distance_from_current = cur_distance
+                entity.closest_point_to_current = closest_latlon
+                res_entities.append(entity)
+        return res_entities
