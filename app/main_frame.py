@@ -28,4 +28,5 @@ class MainFrame(wx.Frame):
         self._app_controller = ApplicationController(self)
         self._sound_controller = SoundController(person)
         self._announcements_controller = AnnouncementsController(person)
+        person.move_to_current()
     

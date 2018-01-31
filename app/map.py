@@ -13,7 +13,7 @@ class Map:
     def intersections_at_position(self, position):
         x, y = (position.lon, position.lat)
         point = geoalchemy.WKTSpatialElement("POINT(%s %s)"%(position.lon, position.lat))
-        return self._db.query(Entity).filter((Entity.id == IdxEntitiesGeometry.pkid) & (IdxEntitiesGeometry.xmin <= x) & (IdxEntitiesGeometry.xmax >= x) & (IdxEntitiesGeometry.ymin <= y) & (IdxEntitiesGeometry.ymax >= y))
+        return self._db.query(Entity).filter((Entity.id == IdxEntitiesGeometry.pkid) & (Entity.geometry.intersects(point)) & (IdxEntitiesGeometry.xmin <= x) & (IdxEntitiesGeometry.xmax >= x) & (IdxEntitiesGeometry.ymin <= y) & (IdxEntitiesGeometry.ymax >= y))
     
     def within_distance(self, position, distance):
         point = geoalchemy.WKTSpatialElement("POINT(%s %s)"%(position.lon, position.lat))

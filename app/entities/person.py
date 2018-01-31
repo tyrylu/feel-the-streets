@@ -2,6 +2,7 @@ import attr
 import faker
 from . import entity_pre_move, entity_post_move, entity_pre_enter, entity_post_enter, entity_pre_leave, entity_post_leave, entity_rotated
 from shapely.geometry.point import Point
+from ..measuring import measure
 
 @attr.s(hash=True)
 class Person:
@@ -11,7 +12,7 @@ class Person:
     direction = attr.ib(default=0, hash=False)
     name = attr.ib(default=attr.Factory(faker.Faker().name))
     is_inside_of = attr.ib(default=attr.Factory(set), hash=False)
-    def __attrs_post_init__(self):
+    def move_to_current(self):
         self.move_to(self.position)
 
     def move_to(self, pos):
@@ -19,7 +20,8 @@ class Person:
             for func, ret in entity_pre_move.send(self, new_pos=pos):
                 if not ret:
                     return False
-        new_inside_of = set(self.map.intersections_at_position(pos))
+        with measure("Inside of query"):
+            new_inside_of = set(self.map.intersections_at_position(pos))
         if entity_pre_enter.has_receivers_for(self) or entity_post_enter.has_receivers_for(self):
             enters = new_inside_of.difference(self.is_inside_of)
         if entity_pre_enter.has_receivers_for(self):

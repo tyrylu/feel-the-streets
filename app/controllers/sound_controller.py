@@ -1,7 +1,6 @@
 import collections
 import random
 import attr
-import blinker
 import anglr
 from ..services import sound
 from ..entities import entity_post_move, entity_post_enter, entity_post_leave, entity_rotated
@@ -43,6 +42,7 @@ class SoundController:
             count = sound().get_group_size(base_group)
             group = "%s.%02d"%(base_group, random.randint(1, count))
             self._groups_map[sender][enters] = group
+    
     def post_leave(self, sender, leaves):
         if isinstance(leaves, Road):
             if sender not in self._groups_map:

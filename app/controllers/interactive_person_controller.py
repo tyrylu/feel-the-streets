@@ -44,7 +44,7 @@ class InteractivePersonController:
         dlg.Destroy()   
     @menu_command("Pohyb", "Krok vpřed", "up")
     def do_forward(self, evt):
-       self._person.step_forward() 
+        self._person.step_forward() 
     @menu_command("Pohyb", "Krok vzad", "down")
     def do_backward(self, evt):
         self._person.step_backward() 
