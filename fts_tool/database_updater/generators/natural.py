@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import Natural
+from shared.entities import Natural
 
 class NaturalGenerator(Generator):
     def __init__(self):

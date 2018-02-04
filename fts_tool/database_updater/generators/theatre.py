@@ -1,13 +1,10 @@
 from .address_aware import AddressAwareGenerator
-from shared.models import Theatre
+from shared.entities import Theatre
 
 class TheatreGenerator(AddressAwareGenerator):
     def __init__(self):
         super().__init__()
         self.generates(Theatre)
-        self.removes("amenity")
-        self.removes("building")
-        self.removes_subtree("building:ruian")
         self.unprefixes_properties("building")
         
     @staticmethod

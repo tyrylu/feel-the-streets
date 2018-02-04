@@ -1,5 +1,5 @@
 from .address_aware import AddressAwareGenerator
-from shared.models import Area
+from shared.entities import Area
 
 class AreaGenerator(AddressAwareGenerator):
     def __init__(self):

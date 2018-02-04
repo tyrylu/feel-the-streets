@@ -1,5 +1,5 @@
 import attr
-from shared.models.enums import OSMObjectType
+from shared.entities.enums import OSMObjectType
 
 @attr.s
 class OSMRelationMember:

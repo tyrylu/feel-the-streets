@@ -36,7 +36,9 @@ class DatabaseUpdater:
                     log.error("Failed to parse geometry of %s, error %s.", object, exc)
                     continue
             entity.geometry = WKTSpatialElement(geometry)
-            self._maybe_polygonize(entity)
+            osm_entity = entity.create_osm_entity()
+            if hasattr(osm_entity, "effective_width"):
+                entity.effective_width = osm_entity.effective_width
             entity.id = self._assigned_id
             self._assigned_id += 1
             yield entity
@@ -47,13 +49,4 @@ class DatabaseUpdater:
         for entity in self.entities_in_location(exclude_huge):
             self._db.schedule_entity_addition(entity)
         self._db.add_entities()
-
-    def _maybe_polygonize(self, entity):
-        if hasattr(entity, "effective_width") and entity.effective_width > 0 and entity.geometry.geom_wkt.startswith("LINESTRING"):
-            entity.original_geometry = entity.geometry
-            log.debug("Creating containment polygon for entity %s.", entity.id)
-            x = self._db.scalar(entity.original_geometry.point_n(1).x())
-            y = self._db.scalar(entity.original_geometry.point_n(1).y())
-            entity.geometry = WKTSpatialElement(self._db.scalar(entity.original_geometry.transform(get_srid_from_point(x, y)).buffer(entity.effective_width).transform(4326).wkt()))
-        return entity
 

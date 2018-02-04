@@ -7,11 +7,9 @@ import sys
 import gzip
 import requests
 import overpass
-from shared.models.enums import OSMObjectType
+from shared.entities.enums import OSMObjectType
 from .osm_object import OSMObject
 from .utils import object_should_have_closed_geometry, ensure_closed, coords_to_text, connect_polygon_segments
-
-
 
 log = logging.getLogger(__name__)
 class OSMObjectManager:

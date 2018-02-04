@@ -1,5 +1,5 @@
 from .man_made import ManMadeGenerator
-from shared.models import Tower
+from shared.entities import Tower
 
 class TowerGenerator(ManMadeGenerator):
     def __init__(self):

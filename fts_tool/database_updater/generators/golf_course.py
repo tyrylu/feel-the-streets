@@ -1,5 +1,5 @@
 from .leisure import LeisureGenerator
-from shared.models import GolfCourse
+from shared.entities import GolfCourse
 
 class GolfCourseGenerator(LeisureGenerator):
     def __init__(self):

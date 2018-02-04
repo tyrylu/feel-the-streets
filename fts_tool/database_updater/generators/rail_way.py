@@ -1,5 +1,5 @@
 from .address_aware import AddressAwareGenerator
-from shared.models import RailWay
+from shared.entities import RailWay
 
 class RailWayGenerator(AddressAwareGenerator):
     def __init__(self):
@@ -88,13 +88,8 @@ class RailWayGenerator(AddressAwareGenerator):
         self.renames("railway:milestone:catenary_mast", "catenary_mast_milestone")
         self.renames("railway:milestone:emergency_brake_override", "emergency_brake_override_milestone")
         self.renames("defect_detector:hot_box", "hot_box_defect_detector")
-        self.removes_subtree("ruian")
-        self.removes("maxspeed:source")
         self.unprefixes("building")
         self.unprefixes("railway")
-        self.removes("railway:ref", True)
-        self.removes("ref")
-        self.removes("uic_ref")
         self.renames("network:en", "network_en")
         self.renames("switch:configuration", "switch_configuration")
         self.renames("crossing:on_demand", "crossing_on_demand")

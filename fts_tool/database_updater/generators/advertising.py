@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import Advertising
+from shared.entities import Advertising
 
 class AdvertisingGenerator(Generator):
     def __init__(self):

@@ -1,11 +1,10 @@
 from .generator import Generator
-from shared.models import Pole
+from shared.entities import Pole
 
 class PoleGenerator(Generator):
     def __init__(self):
         super().__init__()
         self.generates(Pole)
-        self.removes("power")
         self.renames("transformer", "transformer_type")
 
     @staticmethod

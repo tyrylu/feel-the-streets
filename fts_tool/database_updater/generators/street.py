@@ -1,5 +1,5 @@
 from .named import NamedGenerator
-from shared.models import Street
+from shared.entities import Street
 
 class StreetGenerator(NamedGenerator):
     def __init__(self):

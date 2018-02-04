@@ -1,4 +1,4 @@
-from shared.models import Crossing
+from shared.entities import Crossing
 from .generator import Generator
 
 class CrossingGenerator(Generator):
@@ -6,11 +6,9 @@ class CrossingGenerator(Generator):
         super().__init__()
         self.generates(Crossing)
         self.renames("highway", "type")
-        self.removes("crossing_ref")
         self.renames("crossing", "type")
         self.renames("traffic_signals:direction", "traffic_signals_direction")
         self.renames("traffic_signals:sound", "traffic_signals_sound")
-        self.removes_subtree("maxheight")
         self.replaces_property_value("type", "; ", "_")
         self.renames("parking:lane:both", "both_parking_lane")
     @staticmethod

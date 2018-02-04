@@ -1,8 +1,9 @@
-import logging, pdb
-from sqlalchemy import Boolean, DateTime, Float, Integer, inspect
+from enum import Enum
+from datetime import datetime
+import logging
 from .utils import *
 from .converters import *
-from shared.sa_types import IntEnum, DimensionalFloat
+from shared.validated_quantity import Quantity
 
 log = logging.getLogger(__name__)
 
@@ -12,24 +13,12 @@ class Generator:
         Generator.instance_order += 1
         self.order = Generator.instance_order
         self._generates = None
-        self._removes = []
         self._renames = {}
         self._unprefixes = []
         self._replaces_property_value = []
-        self.removes('source', True)
-        self.removes('ref', True)
-        self.removes_subtree('dibavod')
-        self.removes_subtree('name')
-        self.removes('created_by')
 
     def generates(self, entity_class):
         self._generates = entity_class
-
-    def removes(self, property, including_subtree=False):
-        self._removes.append((property, True, including_subtree))
-
-    def removes_subtree(self, root_property, including_root=False):
-        self._removes.append((root_property, including_root, True))
 
     def renames(self, old_name, new_name):
         self._renames[old_name] = new_name
@@ -43,17 +32,18 @@ class Generator:
     def generate_from(self, entity_spec, record):
         if not self._generates:
             raise RuntimeError('Generated class not specified.')
+        self._set_common_attrs(entity_spec)
         props = entity_spec.tags
         props = self._prepare_properties(entity_spec, props, record)
-        return self._create_entity(props, record)
+        if not self._check_required(props, record):
+            return None
+        return props
 
     def _prepare_properties(self, entity_spec, props, record):
-        props = self._prepare_basic_props(entity_spec, props)
         props = self._lowercase_props(props)
         props = self._do_renames(props)
         props = self._do_unprefixes(props)
         props = self._do_replaces(props)
-        props = self._do_removals(props)
         props = self._do_conversions(props, record)
         return props
 
@@ -62,17 +52,6 @@ class Generator:
         for prop, val in props.items():
             ret[prop.lower()] = val
         return ret
-
-    def _do_removals(self, props):
-        for prop, remove_root, remove_subtree in self._removes:
-            if remove_root:
-                val = props.pop(prop, None)
-                if val:
-                    pass
-
-            if remove_subtree:
-                props = remove_subproperties(props, prop)
-        return props
 
     def _do_renames(self, props):
         for old_name, new_name in self._renames.items():
@@ -90,60 +69,53 @@ class Generator:
                 props[prop] = props[prop].replace(string, replacement)
         return props
 
-    def _create_entity(self, props, record):
-        if not self._check_required(props, record):
-            return None
-        props = self._remove_unknowns(props, record)
-        return self._generates(**props)
-
-    def _prepare_basic_props(self, entity, props):
-        props['osm_id'] = entity.id
-        props["osm_type"] = entity.type
-        props["version"] = entity.version
-        props["changeset"] = entity.changeset
-        props["timestamp"] = entity.timestamp
-        props["user"] = entity.user
-        props["uid"] = entity.uid
-        return props
-
     def _do_conversions(self, props, record):
-        for col in inspect(self._generates).columns:
-            if col.name == "geometry": continue
-            if col.name in props:
-                value = props[col.name]
-                if isinstance(col.type, Boolean):
-                    value = convert_boolean(self._generates.__name__, col.name, value, record)
-                elif isinstance(col.type, IntEnum):
-                    value = convert_enum(col.name, value, col.type._enum_class, record)
-                elif isinstance(col.type, Float):
-                    value = convert_float(self._generates.__name__, col.name, value, record)
-                elif isinstance(col.type, Integer):
-                    value = convert_integer(self._generates.__name__, col.name, value, record)
-                elif isinstance(col.type, DateTime):
-                    value = convert_datetime(self._generates.__name__, col.name, value, record)
-                elif isinstance(col.type, DimensionalFloat):
-                    value = convert_dimensional_float(self._generates.__name__, col.name, value, record)
+        for field in self._generates.__fields__.values():
+            if field.name in props:
+                value = props[field.name]
+                if field.type_ is bool:
+                    value = convert_boolean(self._generates.__name__, field.name, value, record)
+                elif issubclass(field.type_, Enum):
+                    value = convert_enum(field.name, value, field.type_, record)
+                elif field.type_ is float:
+                    value = convert_float(self._generates.__name__, field.name, value, record)
+                elif field.type_ is int:
+                    value = convert_integer(self._generates.__name__, field.name, value, record)
+                elif field.type_ is datetime:
+                    value = convert_datetime(self._generates.__name__, field.name, value, record)
+                elif field.type_ is Quantity:
+                    value = convert_dimensional_float(self._generates.__name__, field.name, value, record)
                 
                 if value:
-                    props[col.name] = value
+                    props[field.name] = value
                 else:
-                    del props[col.name]
+                    del props[field.name]
         return props
+    
     def _check_required(self, props, record):
-        for column in inspect(self._generates).columns:
-            if column.name in {"discriminator", "address_id", "geometry", "id"}: continue
-            if not column.nullable and column.name not in props:
-                record.add_missing_required_property(self._generates.__qualname__, column.name)
+        for field in self._generates.__fields__.values():
+            if field.required and field.name not in props:
+                record.add_missing_required_property(self._generates.__qualname__, field.name)
                 return False
         return True
 
-    def _remove_unknowns(self, props, record):
-        unknown = []
+    def _check_unknowns(self, props, record):
+        field_names = set(self._generates.__fields__.keys())
         for prop, val in props.items():
-            if prop == "address": continue
-            if prop not in inspect(self._generates).columns:
+            if prop not in field_names:
                 record.add_missing_property(self._generates.__name__, prop, val, self.order)
-                unknown.append(prop)
-        for prop in unknown:
-            del props[prop]
-        return props
+    
+    def _set_common_attrs(self, osm_object):
+        props = osm_object.tags
+        props['osm_id'] = osm_object.id
+        props["osm_type"] = osm_object.type
+        props["version"] = osm_object.version
+        props["changeset"] = osm_object.changeset
+        props["timestamp"] = osm_object.timestamp
+        props["user"] = osm_object.user
+        props["uid"] = osm_object.uid
+
+
+    @staticmethod
+    def accepts(props):
+        return False

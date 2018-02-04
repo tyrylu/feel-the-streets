@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import Checkpoint
+from shared.entities import Checkpoint
 
 class CheckpointGenerator(Generator):
     def __init__(self):

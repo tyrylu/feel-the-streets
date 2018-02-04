@@ -1,13 +1,10 @@
 from .generator import Generator
-from shared.models import Stop
+from shared.entities import Stop
 
 class StopGenerator(Generator):
     def __init__(self):
         super().__init__()
         self.generates(Stop)
-        self.removes("public_transport")
-        self.removes("source_ref")
-        self.removes("vehicle:conditional")
         self.renames("highway", "type")
         self.renames("amenity", "type")
         self.renames("railway", "type")
@@ -18,7 +15,6 @@ class StopGenerator(Generator):
         self.renames("network:en", "network_en")
         self.renames("network:cs", "network_cs")
         self.renames("zona", "zone")
-        self.removes("railway", True)
         self.renames("toilets:wheelchair", "wheelchair_toilets")
     @staticmethod
     def accepts(props):

@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import Accessible
+from shared.entities import Accessible
 
 class AccessibleGenerator(Generator):
     def __init__(self):

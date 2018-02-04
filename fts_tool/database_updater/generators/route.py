@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import Route
+from shared.entities import Route
 
 class RouteGenerator(Generator):
     def __init__(self):
@@ -12,10 +12,9 @@ class RouteGenerator(Generator):
         self.renames("note1", "note_1")
         self.renames("text_color", "text_colour")
         self.unprefixes("osmc")
-
         self.renames("osmonitor:road_components", "road_components")
-        self.renames("capacity", "a")
         self.renames("note:cz", "note_cz")
+    
     @staticmethod
     def accepts(props):
         return "route" in props or ("type" in props and props["type"] == "route")

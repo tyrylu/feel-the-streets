@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import Piste
+from shared.entities import Piste
 
 class PisteGenerator(Generator):
     def __init__(self):

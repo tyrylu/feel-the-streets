@@ -1,29 +1,35 @@
-from sqlalchemy import Column, String, DateTime, Integer
-from ..sa_types import IntEnum
+import json
+from sqlalchemy import Column, Float, String, UnicodeText, Integer
 from geoalchemy import GeometryColumn, Geometry
 from . import Base
-from .enums import OSMObjectType, Role
 import shapely.wkt as wkt
+from ..services import entity_registry
 
 class Entity(Base):
     __tablename__ = "entities"
     id = Column(Integer, primary_key=True)
-    osm_id = Column(Integer, nullable=False)
-    osm_type = Column(IntEnum(OSMObjectType), nullable=False)
-    version = Column(Integer, nullable=False)
-    changeset = Column(Integer, nullable=False)
-    timestamp = Column(DateTime, nullable=False)
-    uid = Column(Integer, nullable=False)
-    user = Column(String(256), nullable=False)
-    parent_id = Column(Integer)
-    parent_osm_type = Column(IntEnum(OSMObjectType))
-    role = Column(IntEnum(Role))
     geometry = GeometryColumn(Geometry, nullable=False)
     discriminator = Column(String(64), nullable=False)
-    __mapper_args__ = {'polymorphic_on': discriminator}
+    data = Column(UnicodeText, nullable=False)
+    effective_width = Column(Float)
     
     def __str__(self):
         return self.__class__.__name__
     
     def get_shapely_geometry(self, db):
         return wkt.loads(db.scalar(self.geometry.wkt))
+
+    def create_osm_entity(self):
+        entity_attrs = json.loads(self.data)
+        entity_attrs["db_entity"] = self
+        return entity_registry().lookup_entity_class_by_discriminator(self.discriminator).parse_obj(entity_attrs)
+    
+    @classmethod
+    def get_validators(cls):
+        yield cls.validate
+    
+    @classmethod
+    def validate(cls, val):
+        if not isinstance(val, Entity):
+            raise TypeError("Not an entity subclass.")
+        return val

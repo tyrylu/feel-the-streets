@@ -1,12 +1,11 @@
 from .generator import Generator
-from shared.models import PowerLine
+from shared.entities import PowerLine
 
 class PowerLineGenerator(Generator):
     def __init__(self):
         super().__init__()
         self.generates(PowerLine)
         self.renames("line", "type")
-        self.removes("power")
 
         self.renames("line:colour", "line_colour")
     @staticmethod

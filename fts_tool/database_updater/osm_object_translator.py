@@ -1,9 +1,12 @@
+from inspect import isclass
+import json
 import logging
-import inspect
-from . import generators
-from .generators.generator import Generator
 from .osm_object_manager import OSMObjectManager
 from .generation_record import GenerationRecord
+from .generators import Generator
+from . import generators
+from .json_encoding_utils import extended_types_encoder
+from shared.models import Entity
 
 log = logging.getLogger(__name__)
 class OSMObjectTranslator:
@@ -12,15 +15,18 @@ class OSMObjectTranslator:
         self.record = GenerationRecord()
         self._generators = []
         for member in generators.__dict__.values():
-            if inspect.isclass(member) and issubclass(member, Generator):
+            if isclass(member) and issubclass(member, Generator):
                 self._generators.append(member)
-        
-    def translate_object(self, object):
-        for member in self._generators:
-            if member.accepts(object.tags):
-                instance = member()
-                return instance.generate_from(object, self.record)
 
+    def translate_object(self, object):
+        generator = self._lookup_generator(object.tags)
+        if generator:
+            generator_instance = generator()
+            new_tags = generator_instance.generate_from(object, self.record)
+            if new_tags:
+                entity = Entity(data=json.dumps(new_tags, default=extended_types_encoder, ensure_ascii=False), discriminator=generator_instance._generates.__name__)
+                return entity
+    
     def translated_objects_in(self, area):
         log.info("Looking up all objects in area %s.", area)
         self.manager.lookup_objects_in(area)
@@ -43,3 +49,8 @@ class OSMObjectTranslator:
             if entity:
                 self.record.processed_entities += 1
                 yield entity, node
+
+    def _lookup_generator(self, props):
+        for generator in self._generators:
+            if generator.accepts(props):
+                return generator

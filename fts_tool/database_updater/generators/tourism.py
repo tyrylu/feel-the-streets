@@ -1,5 +1,5 @@
 from .address_aware import AddressAwareGenerator
-from shared.models import Tourism
+from shared.entities import Tourism
 
 class TourismGenerator(AddressAwareGenerator):
     def __init__(self):
@@ -19,10 +19,6 @@ class TourismGenerator(AddressAwareGenerator):
         self.renames("description:en", "en_description")
         self.renames("taxon:cs", "taxon_cs")
         self.unprefixes("contact")
-        self.removes("alt_ref")
-        self.removes("mtb")
-        self.removes_subtree("tower")
-        self.removes_subtree("building:ruian")
 
         self.renames("artist:wikidata", "artist_wikidata")
         self.renames("note:en", "en_note")

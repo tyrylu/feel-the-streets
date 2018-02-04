@@ -21,7 +21,7 @@ class Person:
                 if not ret:
                     return False
         with measure("Inside of query"):
-            new_inside_of = set(self.map.intersections_at_position(pos))
+            new_inside_of = set(entity.create_osm_entity() for entity in self.map.intersections_at_position(pos))
         if entity_pre_enter.has_receivers_for(self) or entity_post_enter.has_receivers_for(self):
             enters = new_inside_of.difference(self.is_inside_of)
         if entity_pre_enter.has_receivers_for(self):

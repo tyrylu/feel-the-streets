@@ -1,7 +1,7 @@
 import wx
 from . import widget_for
 
-@widget_for("Integer")
+@widget_for(int)
 class SpinCtrl:
     value_label = "Hodnota"
 

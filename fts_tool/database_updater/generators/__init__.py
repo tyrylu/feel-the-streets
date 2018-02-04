@@ -1,3 +1,4 @@
+from .generator import Generator
 from .steps import StepsGenerator
 from .crossing import CrossingGenerator
 from .protected_area import ProtectedAreaGenerator
@@ -94,4 +95,3 @@ from .commented import CommentedGenerator
 from .elevated import ElevatedGenerator
 from .accessible import AccessibleGenerator
 from .building_part import BuildingPartGenerator
-from .no_op import NoOpGenerator

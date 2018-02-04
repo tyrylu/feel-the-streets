@@ -1,5 +1,5 @@
 from .amenity import AmenityGenerator
-from shared.models import BicycleParking
+from shared.entities import BicycleParking
 
 class BicycleParkingGenerator(AmenityGenerator):
     def __init__(self):

@@ -1,5 +1,5 @@
 from .address_aware import AddressAwareGenerator
-from shared.models import Craft
+from shared.entities import Craft
 
 class CraftGenerator(AddressAwareGenerator):
     def __init__(self):

@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import TrafficSign
+from shared.entities import TrafficSign
 
 class TrafficSignGenerator(Generator):
     def __init__(self):

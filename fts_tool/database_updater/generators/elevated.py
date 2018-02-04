@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import Elevated
+from shared.entities import Elevated
 
 class ElevatedGenerator(Generator):
     def __init__(self):

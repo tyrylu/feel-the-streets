@@ -3,7 +3,6 @@ from .geometry_utils import closest_point_to, distance_between, bearing_to, to_s
 
 from shapely.geometry.point import Point
 import wx.xrc as xrc
-from sqlalchemy import inspect
 from . import services
 
 class ObjectsBrowserDialog(wx.Dialog):
@@ -17,7 +16,7 @@ class ObjectsBrowserDialog(wx.Dialog):
         objects_list = self.FindWindowByName("objects")
         objects = []
         for obj in unsorted_objects:
-            objects.append((obj.distance_from_current, obj, obj.closest_point_to_current))
+            objects.append((obj.db_entity.distance_from_current, obj, obj.db_entity.closest_point_to_current))
         objects.sort(key=lambda e: e[0])
         for dist, obj, closest in objects:
             bearing = bearing_to(person.position, closest)
@@ -35,14 +34,12 @@ class ObjectsBrowserDialog(wx.Dialog):
         selected = self._objects[sel][1]
         props_list = self.FindWindowByName("props")
         props_list.Clear()
-        
-        for name, attr in inspect(selected).attrs.items():
-            val = attr.value
+        for name, attr in selected.__fields__.items():
+            val = getattr(selected, attr.name)
             if not val:
                 continue
-            if name == "geometry" or name == "original_geometry":
-                val = services.map().geometry_to_wkt(val)
             props_list.Append("%s: %s"%(name, val))
+
     @property
     def selected_object(self):
         return self._objects[self.FindWindowByName("objects").Selection]

@@ -1,5 +1,5 @@
 from .tourism import TourismGenerator
-from shared.models import Board
+from shared.entities import Board
 
 class BoardGenerator(TourismGenerator):
     def __init__(self):

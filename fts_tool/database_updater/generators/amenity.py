@@ -1,5 +1,5 @@
 from .address_aware import AddressAwareGenerator
-from shared.models import Amenity
+from shared.entities import Amenity
 
 class AmenityGenerator(AddressAwareGenerator):
     def __init__(self):
@@ -14,14 +14,7 @@ class AmenityGenerator(AddressAwareGenerator):
         self.renames("capacity:car", "car_capacity")
         self.renames("authentication:nfc", "nfc_authentication")
         self.replaces_property_value("post_code", " ", "")
-        self.removes_subtree("currency")
-        self.removes_subtree("payment")
-        self.removes_subtree("note")
-        self.removes("source_ref")
-        self.removes("wikidata")
-        self.removes("uir_adr:adresa_kod")
         self.unprefixes("contact")
-
         self.renames("toilets:disposal", "toilets_disposal")
         self.renames("socket:schuko", "schuko_socket")
         self.renames("socket:schuko:voltage", "schuko_socket_voltage")
@@ -33,6 +26,7 @@ class AmenityGenerator(AddressAwareGenerator):
         self.renames("socket:chademo:power", "chademo_socket_power")
         self.renames("socket:type2", "type2_socket")
         self.renames("socket:schuko:current", "schuko_socket_current")
+        
     @staticmethod
     def accepts(props):
         return "amenity" in props and "building" not in props

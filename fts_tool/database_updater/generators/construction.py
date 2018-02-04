@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import Construction
+from shared.entities import Construction
 
 class ConstructionGenerator(Generator):
     def __init__(self):

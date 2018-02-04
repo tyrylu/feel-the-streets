@@ -1,7 +1,7 @@
 import wx
 from . import widget_for
 
-@widget_for("Boolean")
+@widget_for(bool)
 class CheckBoxWidget:
 
     value_label = ""

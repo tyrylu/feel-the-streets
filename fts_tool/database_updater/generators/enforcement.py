@@ -1,5 +1,5 @@
 from .named import NamedGenerator
-from shared.models import Enforcement
+from shared.entities import Enforcement
 
 class EnforcementGenerator(NamedGenerator):
     def __init__(self):

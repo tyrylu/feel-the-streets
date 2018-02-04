@@ -1,5 +1,5 @@
 from .named import NamedGenerator
-from shared.models import Bridge
+from shared.entities import Bridge
 
 class BridgeGenerator(NamedGenerator):
     def __init__(self):

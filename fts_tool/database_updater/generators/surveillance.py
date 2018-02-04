@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import Surveillance
+from shared.entities import Surveillance
 
 class SurveillanceGenerator(Generator):
     def __init__(self):

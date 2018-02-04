@@ -1,5 +1,5 @@
 from .building import BuildingGenerator
-from shared.models import HealthCare
+from shared.entities import HealthCare
 
 class HealthCareGenerator(BuildingGenerator):
     def __init__(self):

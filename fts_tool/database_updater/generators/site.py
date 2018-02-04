@@ -1,5 +1,5 @@
 from .named import NamedGenerator
-from shared.models import Site
+from shared.entities import Site
 
 class SiteGenerator(NamedGenerator):
     def __init__(self):

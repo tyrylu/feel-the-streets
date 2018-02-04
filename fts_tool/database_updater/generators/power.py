@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import Power
+from shared.entities import Power
 
 class PowerGenerator(Generator):
     def __init__(self):

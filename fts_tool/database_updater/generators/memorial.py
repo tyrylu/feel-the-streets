@@ -1,5 +1,5 @@
 from .historic import HistoricGenerator
-from shared.models import Memorial
+from shared.entities import Memorial
 
 class MemorialGenerator(HistoricGenerator):
     def __init__(self):

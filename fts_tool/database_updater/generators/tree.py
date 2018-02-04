@@ -1,5 +1,5 @@
 from .natural import NaturalGenerator
-from shared.models import Tree
+from shared.entities import Tree
 
 class TreeGenerator(NaturalGenerator):
     def __init__(self):
@@ -8,7 +8,6 @@ class TreeGenerator(NaturalGenerator):
         self.renames("taxon:cs", "taxon_cs")
         self.renames("genus:cz", "genus_cs")
         self.renames("species:cs", "species_cs")
-        self.removes_subtree("species")
 
 
         self.renames("genus:en", "genus_en")

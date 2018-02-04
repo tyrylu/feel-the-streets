@@ -1,5 +1,5 @@
 from .address_aware import AddressAwareGenerator
-from shared.models import Building
+from shared.entities import Building
 
 class BuildingGenerator(AddressAwareGenerator):
     def __init__(self):
@@ -29,16 +29,6 @@ class BuildingGenerator(AddressAwareGenerator):
         self.renames("roof", "roof_shape")
         self.renames("building:roof", "roof_shape")
         self.renames("wheelchair:description", "wheelchair_description")
-        self.removes("building")
-        self.removes("type")
-        self.removes_subtree("ref")
-        self.removes_subtree("ruian")
-        self.removes_subtree("isced")
-        self.removes_subtree("uir_adr")
-        self.removes_subtree("wikipedia")
-        self.removes_subtree("old_name")
-        self.removes_subtree("alt_name")
-        self.removes("ruian")
         self.renames("community_centre:for", "community_centre_for")
         self.renames("leisure", "leisure_type")
         self.renames("tourism", "tourism_type")

@@ -1,5 +1,5 @@
 from .building import BuildingGenerator
-from shared.models import Shop
+from shared.entities import Shop
 
 class ShopGenerator(BuildingGenerator):
     def __init__(self):
@@ -16,8 +16,6 @@ class ShopGenerator(BuildingGenerator):
         self.renames("payment:bitcoin", "bitcoin_payment")
         self.renames("secondhand", "second_hand")
         self.unprefixes("drink")
-        self.removes_subtree("service")
-        self.removes("siing")
 
         self.renames("payment:jcb", "jcb_payment")
     def _prepare_properties(self, entity_spec, props, record):        

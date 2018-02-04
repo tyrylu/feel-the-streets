@@ -30,7 +30,7 @@ def closest_point_to(point, geom, convert=True):
 
 def get_road_section_angle(pov, road):
     pov_point = to_shapely_point(pov.position)
-    road_line = road.get_original_shapely_geometry(services.map()._db)
+    road_line = wkb.loads(road.db_entity.geometry.desc.desc)
     closest_segment = get_closest_line_segment(pov_point, road_line)
     closest_segment.calculate_angle()
     return closest_segment.angle
@@ -46,5 +46,18 @@ def distance_filter(entities, position, distance):
             if cur_distance <= distance:
                 entity.distance_from_current = cur_distance
                 entity.closest_point_to_current = closest_latlon
+                res_entities.append(entity)
+        return res_entities
+def effective_width_filter(entities, position):
+    with measure("Shapely & pygeodesi effective distance filtering"):
+        res_entities = []
+        shapely_point = to_shapely_point(position)
+        for entity in entities:
+            if not entity.effective_width:
+                continue
+            closest = closest_point_to(shapely_point, entity.geometry)
+            closest_latlon = to_latlon(closest)
+            cur_distance = distance_between(closest_latlon, position)
+            if cur_distance <= entity.effective_width:
                 res_entities.append(entity)
         return res_entities

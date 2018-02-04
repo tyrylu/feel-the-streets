@@ -1,5 +1,5 @@
 from .named import NamedGenerator
-from shared.models import Level
+from shared.entities import Level
 
 class LevelGenerator(NamedGenerator):
     def __init__(self):

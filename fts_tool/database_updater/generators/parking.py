@@ -1,12 +1,10 @@
 from .address_aware import AddressAwareGenerator
-from shared.models import Parking
+from shared.entities import Parking
 
 class ParkingGenerator(AddressAwareGenerator):
     def __init__(self):
         super().__init__()
         self.generates(Parking)
-        self.removes("amenity")
-        self.removes_subtree("building:ruian")
         self.renames("building", "building_type")
         self.renames("capacity:disabled", "capacity_for_disabled")
         self.renames("building:levels", "building_levels")

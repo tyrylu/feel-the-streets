@@ -1,5 +1,5 @@
 from .named import NamedGenerator
-from shared.models import RF
+from shared.entities import RF
 
 class RFGenerator(NamedGenerator):
     def __init__(self):

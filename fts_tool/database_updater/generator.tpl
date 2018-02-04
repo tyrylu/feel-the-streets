@@ -1,5 +1,5 @@
 from .{{ superclass_module }} import {{ superclass }}
-from shared.models import {{ entity_class }}
+from shared.entities import {{ entity_class }}
 
 class {{ generator_class }}({{ superclass }}):
     def __init__(self):

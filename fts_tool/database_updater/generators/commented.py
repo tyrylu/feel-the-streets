@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import Commented
+from shared.entities import Commented
 
 class CommentedGenerator(Generator):
     def __init__(self):

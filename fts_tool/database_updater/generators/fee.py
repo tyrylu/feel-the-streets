@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import Fee
+from shared.entities import Fee
 
 class FeeGenerator(Generator):
     def __init__(self):

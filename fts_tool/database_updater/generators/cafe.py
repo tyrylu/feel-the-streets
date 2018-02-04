@@ -1,5 +1,5 @@
 from .amenity import AmenityGenerator
-from shared.models import Cafe
+from shared.entities import Cafe
 
 class CafeGenerator(AmenityGenerator):
     def __init__(self):

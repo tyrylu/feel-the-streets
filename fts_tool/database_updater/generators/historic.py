@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import Historic
+from shared.entities import Historic
 
 class HistoricGenerator(Generator):
     def __init__(self):
@@ -7,7 +7,6 @@ class HistoricGenerator(Generator):
         self.generates(Historic)
         self.renames("historic", "type")
         self.renames("heritage:operator", "heritage_operator")
-        self.removes("alt_name")
 
         self.renames("memorial:type", "memorial_type")
         self.renames("memorial:name", "memorial_name")

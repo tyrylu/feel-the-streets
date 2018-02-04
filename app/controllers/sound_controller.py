@@ -4,8 +4,8 @@ import attr
 import anglr
 from ..services import sound
 from ..entities import entity_post_move, entity_post_enter, entity_post_leave, entity_rotated
-from shared.models import Road
-from shared.models.road import RoadType
+from shared.entities import Road
+from shared.entities.enums import RoadType
 
 @attr.s
 class SoundController:

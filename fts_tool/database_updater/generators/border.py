@@ -1,5 +1,5 @@
 from .boundary import BoundaryGenerator
-from shared.models import Border
+from shared.entities import Border
 
 class BorderGenerator(BoundaryGenerator):
     def __init__(self):

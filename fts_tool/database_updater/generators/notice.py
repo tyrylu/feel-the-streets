@@ -1,5 +1,5 @@
 from .annotated import AnnotatedGenerator
-from shared.models import Notice
+from shared.entities import Notice
 
 class NoticeGenerator(AnnotatedGenerator):
     def __init__(self):

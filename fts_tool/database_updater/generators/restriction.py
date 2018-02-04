@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import Restriction
+from shared.entities import Restriction
 
 class RestrictionGenerator(Generator):
     def __init__(self):

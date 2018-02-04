@@ -1,5 +1,5 @@
 from .leisure import LeisureGenerator
-from shared.models import Playground
+from shared.entities import Playground
 
 class PlaygroundGenerator(LeisureGenerator):
     def __init__(self):

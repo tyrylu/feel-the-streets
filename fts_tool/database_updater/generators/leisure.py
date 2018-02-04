@@ -1,5 +1,5 @@
 from .address_aware import AddressAwareGenerator
-from shared.models import Leisure
+from shared.entities import Leisure
 
 class LeisureGenerator(AddressAwareGenerator):
     def __init__(self):
@@ -10,7 +10,6 @@ class LeisureGenerator(AddressAwareGenerator):
         self.renames("athletics:shot-put", "shot_put")
         self.unprefixes("contact")
         self.unprefixes("athletics")
-        self.removes_subtree("piste")
 
         self.renames("boats:small", "small_boats")
     def _prepare_properties(self, entity_spec, props, record):

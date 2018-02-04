@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import Road
+from shared.entities import Road
 
 class RoadGenerator(Generator):
     def __init__(self):
@@ -33,7 +33,6 @@ class RoadGenerator(Generator):
         self.renames("destination:symbol", "destination_symbol")
         self.renames("railway:lanes:backward", "railway_lanes_backward")
         self.renames("railway:lanes:forward", "railway_lanes_forward")
-        self.removes("mtb", True)
         self.renames("change:lanes:backward", "change_lanes_backward")
         self.renames("change:lanes:forward", "change_lanes_forward")
         self.renames("psv:lanes:backward", "psv_lanes_backward")
@@ -61,7 +60,6 @@ class RoadGenerator(Generator):
         self.renames("overtaking:hgv", "hgv_overtaking")
         self.renames("overtaking:trailer", "trailer_overtaking")
 
-        self.removes("bad_source:old:uhul:ortofoto")
         self.renames("bus:lanes:backward", "bus_lanes_backward")
         self.renames("bus:lanes:forward", "bus_lanes_forward")
         self.renames("railway:lanes", "railway_lanes")
@@ -139,22 +137,6 @@ class RoadGenerator(Generator):
         self.renames("hgv:lanes", "hgv_lanes")
         self.renames("note:reg_name", "reg_name_note")
         self.renames("note:cs", "cs_note")
-        self.removes("motorroad")
-        self.removes("veh_ban_until")
-        self.removes("vehicle:conditional")
-        self.removes("history")
-        self.removes("hgv:conditional")
-        self.removes("construction")
-        self.removes("mtb")
-        self.removes_subtree("aerialway")
-        self.removes_subtree("turn")
-        self.removes_subtree("toll")
-        self.removes_subtree("piste")
-        self.removes_subtree("demolished")
-        self.removes_subtree("maxweight")
-        self.removes_subtree("colonnade")
-        self.removes_subtree("access")
-        self.removes_subtree("vehicle:backward")
 
 
         self.renames("lanes:bus", "bus_lanes")

@@ -1,5 +1,5 @@
 from .amenity import AmenityGenerator
-from shared.models import Clock
+from shared.entities import Clock
 
 class ClockGenerator(AmenityGenerator):
     def __init__(self):

@@ -1,5 +1,5 @@
 import os
-from .di import Singleton
+from shared.di import Singleton
 from accessible_output2.outputs import auto
 from .sound_manager import SoundManager, SoundProperties
 from .map import Map

@@ -1,5 +1,5 @@
 from .power import PowerGenerator
-from shared.models import Transformer
+from shared.entities import Transformer
 
 class TransformerGenerator(PowerGenerator):
     def __init__(self):

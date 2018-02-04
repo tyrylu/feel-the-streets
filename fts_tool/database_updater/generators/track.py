@@ -1,5 +1,5 @@
 from .road import RoadGenerator
-from shared.models import Track
+from shared.entities import Track
 
 class TrackGenerator(RoadGenerator):
     def __init__(self):

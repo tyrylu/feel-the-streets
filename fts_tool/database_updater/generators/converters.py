@@ -1,7 +1,8 @@
-from pint import _APP_REGISTRY as registry
 import logging
 import dateutil.parser
+from shared.services import unit_registry
 
+registry = unit_registry()
 log = logging.getLogger(__name__)
 def convert_boolean(class_name, prop, val, record):
     if val == "yes": return True

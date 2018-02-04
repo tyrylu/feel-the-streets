@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import SchoolThing
+from shared.entities import SchoolThing
 
 class SchoolThingGenerator(Generator):
     def __init__(self):

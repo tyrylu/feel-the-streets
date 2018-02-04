@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import Abandoned
+from shared.entities import Abandoned
 
 class AbandonedGenerator(Generator):
     def __init__(self):

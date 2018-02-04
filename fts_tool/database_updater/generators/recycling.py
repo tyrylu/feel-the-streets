@@ -1,11 +1,10 @@
 from .generator import Generator
-from shared.models import Recycling
+from shared.entities import Recycling
 
 class RecyclingGenerator(Generator):
     def __init__(self):
         super().__init__()
         self.generates(Recycling)
-        self.removes("amenity")
         self.renames("recycling_type", "type")
         self.unprefixes("recycling")
         self.renames("telephone", "phone")

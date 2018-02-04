@@ -1,5 +1,5 @@
 from .named import NamedGenerator
-from shared.models import Collection
+from shared.entities import Collection
 
 class CollectionGenerator(NamedGenerator):
     def __init__(self):

@@ -33,7 +33,7 @@ class Database:
             log.debug("Running geometry DDL...")
             GeometryDDL(Entity.__table__)
             log.debug("Creating database tables...")
-            Base.metadata.create_all(self._engine)
+            Entity.__table__.create(self._engine)
             self._creating = False
 
     def add(self, instance):

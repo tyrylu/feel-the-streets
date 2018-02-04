@@ -1,13 +1,14 @@
 import random
 import wx
 import glob
+from sqlalchemy import func
 from geodesy.ellipsoidalVincenty import LatLon
 from .entities import Person
 from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController
 from .uimanager import get
 from .services import map
 from shared.models import Entity
-from shared.models.enums import OSMObjectType
+from shared.entities.enums import OSMObjectType
 
 class MainFrame(wx.Frame):
     def __init__(self):
@@ -20,7 +21,7 @@ class MainFrame(wx.Frame):
             self._map = map()
         
     def post_create(self):
-        entity = self._map._db.query(Entity).filter(Entity.osm_type == OSMObjectType.node)[0]
+        entity = self._map._db.query(Entity).filter(func.json_extract(Entity.data, "$.osm_type") == OSMObjectType.node.value).first()
         lon = self._map._db.scalar(entity.geometry.x)
         lat = self._map._db.scalar(entity.geometry.y)
         person = Person(self._map, LatLon(lat, lon))

@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import Barrier
+from shared.entities import Barrier
 
 class BarrierGenerator(Generator):
     def __init__(self):
@@ -7,9 +7,6 @@ class BarrierGenerator(Generator):
         self.generates(Barrier)
         self.renames("barrier", "type")
         self.renames("toll:hgv", "toll_hgv")
-        self.removes("motor_vehicle:conditional")
-        self.removes("access:conditional")
-        self.removes("note:en")
 
         self.renames("lift_gate:type", "liftgate_type")
         self.renames("building:colour", "building_colour")

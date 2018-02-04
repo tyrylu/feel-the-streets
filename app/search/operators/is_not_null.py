@@ -6,5 +6,5 @@ class IsNotNull(WidgetlessOperator):
     label = "Je nenulové"
 
     @staticmethod
-    def get_comparison_expression(column, value_widget):
-        return column != None
+    def get_comparison_expression(field, value_expr, value_widget):
+        return value_expr != None

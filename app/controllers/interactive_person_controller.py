@@ -1,6 +1,6 @@
 import wx
 from geodesy.ellipsoidalVincenty import LatLon
-from shared.models import Road
+from shared.entities import Road
 from ..uimanager import get, menu_command
 from ..services import speech
 from ..objects_browser import ObjectsBrowserDialog
@@ -26,8 +26,8 @@ class InteractivePersonController:
             speech().speak("Není známo.")
     @menu_command("Informace", "Aktuální pozice podrobně", "shift+l")
     def do_position_detailed(self, evt):
-        filtered_inside_of = distance_filter(self._person.is_inside_of, self._person.position, float("inf"))
-        dlg = get().prepare_xrc_dialog(ObjectsBrowserDialog, title="Aktuální pozice", unsorted_objects=filtered_inside_of, person=self._person)
+        filtered_inside_of = distance_filter((entity.db_entity for entity in self._person.is_inside_of), self._person.position, float("inf"))
+        dlg = get().prepare_xrc_dialog(ObjectsBrowserDialog, title="Aktuální pozice", unsorted_objects=self._person.is_inside_of, person=self._person)
         if dlg.ShowModal() == 1:
             self._person.move_to(dlg.selected_object[2])
         dlg.Destroy()

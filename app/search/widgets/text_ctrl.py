@@ -1,7 +1,7 @@
 import wx
 from . import widget_for
 
-@widget_for("UnicodeText", "String")
+@widget_for(str)
 class TextCtrl:
 
     value_label = "Hodnota"

@@ -1,5 +1,5 @@
 from .address_aware import AddressAwareGenerator
-from shared.models import Land
+from shared.entities import Land
 
 class LandGenerator(AddressAwareGenerator):
     def __init__(self):
@@ -17,7 +17,6 @@ class LandGenerator(AddressAwareGenerator):
         self.renames("bridge:structure", "bridge_structure")
         self.renames("barrier:height", "barrier_height")
 
-        self.removes_subtree("note")
 
         self.renames("clc:code", "clc_code")
     @staticmethod

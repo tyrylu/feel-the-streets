@@ -1,13 +1,18 @@
 WIDGETS = {}
 
-def widget_for(*class_names):
+def widget_for(*classes):
     def wrap(klass):
-        for class_name in class_names:
-            if class_name in WIDGETS:
-                raise RuntimeError("Duplicate widget registration for %s."%class_name)
-            WIDGETS[class_name] = klass
+        for class_ in classes:
+            if class_ in WIDGETS:
+                raise RuntimeError("Duplicate widget registration for %s."%class_)
+            WIDGETS[class_] = klass
         return klass
     return wrap
 
-def widget_for_column_class(column_class_name):
-    return WIDGETS[column_class_name]
+def widget_for_column_class(column_class):
+    if column_class in WIDGETS:
+        return WIDGETS[column_class]
+    else:
+        for candidate, widget in WIDGETS.items():
+            if issubclass(column_class, candidate):
+                return widget

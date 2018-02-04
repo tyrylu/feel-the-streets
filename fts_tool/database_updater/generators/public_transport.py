@@ -1,5 +1,5 @@
 from .named import NamedGenerator
-from shared.models import PublicTransport
+from shared.entities import PublicTransport
 
 class PublicTransportGenerator(NamedGenerator):
     def __init__(self):

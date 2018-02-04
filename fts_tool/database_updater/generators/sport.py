@@ -1,5 +1,5 @@
 from .address_aware import AddressAwareGenerator
-from shared.models import Sport
+from shared.entities import Sport
 
 class SportGenerator(AddressAwareGenerator):
     def __init__(self):
@@ -7,7 +7,6 @@ class SportGenerator(AddressAwareGenerator):
         self.generates(Sport)
         self.renames("sport", "type")
         self.renames("opening_hours:url", "opening_hours_url")
-        self.removes_subtree("piste")
         self.unprefixes("contact")
 
         self.renames("climbing:length", "climbing_length")

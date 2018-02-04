@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import TrafficCalming
+from shared.entities import TrafficCalming
 
 class TrafficCalmingGenerator(Generator):
     def __init__(self):

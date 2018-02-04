@@ -1,11 +1,10 @@
 from .generator import Generator
-from shared.models import Steps
+from shared.entities import Steps
 
 class StepsGenerator(Generator):
     def __init__(self):
         super().__init__()
         self.generates(Steps)
-        self.removes("highway")
         self.renames("bycicles", "bycicles_allowed")
         self.renames("incline", "direction")
         self.renames("mtb:scale", "mtb_scale")
@@ -19,8 +18,6 @@ class StepsGenerator(Generator):
         self.renames("step.height", "step_height")
         self.renames("step:length", "step_length")
         self.renames("step.length", "step_length")
-        self.removes("steps")
-        self.removes_subtree("ramp")
     @staticmethod
     def accepts(props):
         return "highway" in props and props["highway"] == "steps" or "step_count" in props or "step.condition" in props

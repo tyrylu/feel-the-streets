@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import BuildingPart
+from shared.entities import BuildingPart
 
 class BuildingPartGenerator(Generator):
     def __init__(self):
@@ -11,7 +11,6 @@ class BuildingPartGenerator(Generator):
         self.renames("roof:height", "roof_height")
         self.renames("roof:material", "roof_material")
         self.renames("roof:orientation", "roof_orientation")
-        self.removes("building:ruian:type")
 
         self.renames("roof:colour", "roof_colour")
         self.renames("roof:slope:direction", "roof_slope_direction")

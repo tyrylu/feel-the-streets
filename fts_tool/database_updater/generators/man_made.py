@@ -1,5 +1,5 @@
 from .generator import Generator
-from shared.models import ManMade
+from shared.entities import ManMade
 
 class ManMadeGenerator(Generator):
     def __init__(self):
@@ -8,7 +8,6 @@ class ManMadeGenerator(Generator):
         self.renames("razed:man_made", "type")
         self.renames("man_made", "type")
         self.unprefixes("contact")
-        self.removes("observatory:type")
 
         self.renames("wifi:ssid", "wifi_ssid")
         self.renames("building:material", "building_material")
