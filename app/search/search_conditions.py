@@ -96,9 +96,9 @@ class SpecifySearchConditionsDialog(wx.Dialog):
         if self._search_expression_parts:
             for part in self._search_expression_parts:
                 conditions = conditions & part
-            query = map()._db.query(Entity).filter(conditions)
-            print(f"Result count: {query.count()}")
-            return query
+        query = map()._db.query(Entity).filter(conditions)
+        print(f"Result count: {query.count()}")
+        return query
 
 
     def on_remove_clicked(self, evt):   

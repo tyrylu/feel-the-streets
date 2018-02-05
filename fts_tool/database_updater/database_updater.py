@@ -26,15 +26,11 @@ class DatabaseUpdater:
             if check_geometry_size and geom_size > 1000000:
                 log.warn("Skipping object with tags %s because of the excessively huge geometry of size %s.", object.tags, geom_size)
                 continue
+            geometry = self._ensure_valid_geometry(geometry)
             if not geometry:
                 log.error("Failed to generate geometry for %s.", object)
                 continue
-            if self._check_geoms:
-                try:
-                    shapely.wkt.loads(geometry)
-                except Exception as exc:
-                    log.error("Failed to parse geometry of %s, error %s.", object, exc)
-                    continue
+
             entity.geometry = WKTSpatialElement(geometry)
             osm_entity = entity.create_osm_entity()
             if hasattr(osm_entity, "effective_width"):
@@ -50,3 +46,16 @@ class DatabaseUpdater:
             self._db.schedule_entity_addition(entity)
         self._db.add_entities()
 
+    def _ensure_valid_geometry(self, geometry):
+        try:
+            sh_geom = shapely.wkt.loads(geometry)
+            if not sh_geom.is_valid:
+                log.debug("Invalid geometry %s.", geometry)
+                sh_geom = sh_geom.buffer(0)
+                if not sh_geom.is_valid:
+                    log.error("Zero buffer failed to fix the entity validity.")
+                    return None
+        except Exception as exc:
+            log.error("Failed to parse geometry %s, error %s.", geometry, exc)
+            return None
+        return sh_geom.wkt
