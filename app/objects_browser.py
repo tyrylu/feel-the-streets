@@ -1,9 +1,9 @@
 import wx
-from .geometry_utils import closest_point_to, distance_between, bearing_to, to_shapely_point, to_latlon
-
-from shapely.geometry.point import Point
 import wx.xrc as xrc
+from shapely.geometry.point import Point
+from shared.humanization_utils import underscored_to_words
 from . import services
+from .geometry_utils import closest_point_to, distance_between, bearing_to, to_shapely_point, to_latlon
 
 class ObjectsBrowserDialog(wx.Dialog):
     xrc_name = "objects_browser"
@@ -34,11 +34,13 @@ class ObjectsBrowserDialog(wx.Dialog):
         selected = self._objects[sel][1]
         props_list = self.FindWindowByName("props")
         props_list.Clear()
-        for name, attr in selected.__fields__.items():
+        for attr in selected.__fields__.values():
+            if attr.name == "db_entity":
+                continue
             val = getattr(selected, attr.name)
             if not val:
                 continue
-            props_list.Append("%s: %s"%(name, val))
+            props_list.Append("%s: %s"%(underscored_to_words(attr.name), val))
 
     @property
     def selected_object(self):

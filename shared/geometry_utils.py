@@ -1,7 +1,7 @@
 import logging
 import attr
 import shapely.geometry as geometry
-from geodesy.ellipsoidalVincenty import LatLon, VincentyError
+from pygeodesy.ellipsoidalVincenty import LatLon, VincentyError
 
 log = logging.getLogger(__name__)
 
@@ -170,7 +170,6 @@ def xy_ranges_bounding_square(center_latlon, side):
     min_x = edge1.lon
     max_y = edge1.lat
     edge2 = side1.destination(side/2, 90)
-    print(f"Distance between edge1 and edge2: {edge1.distanceTo(edge2)}")
     max_x = edge2.lon
     edge3 = edge2.destination(side, 180)
     min_y = edge3.lat

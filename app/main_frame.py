@@ -2,7 +2,7 @@ import random
 import wx
 import glob
 from sqlalchemy import func
-from geodesy.ellipsoidalVincenty import LatLon
+from pygeodesy.ellipsoidalVincenty import LatLon
 from .entities import Person
 from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController
 from .uimanager import get

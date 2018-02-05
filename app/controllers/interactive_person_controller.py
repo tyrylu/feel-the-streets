@@ -1,5 +1,5 @@
 import wx
-from geodesy.ellipsoidalVincenty import LatLon
+from pygeodesy.ellipsoidalVincenty import LatLon
 from shared.entities import Road
 from ..uimanager import get, menu_command
 from ..services import speech
@@ -72,14 +72,14 @@ class InteractivePersonController:
     @menu_command("Informace", "Úhel aktuální části cesty", "d")
     def current_road_section_angle(self, evt):
          for obj in self._person.is_inside_of:
-            if isinstance(obj, Road):
+            if isinstance(obj, Road) and not obj.area:
                 angle = get_road_section_angle(self._person, obj)
                 speech().speak("%s: %.2f°"%(obj, angle))
 
     @menu_command("Informace", "Detaily cesty", "ctrl+d")
     def road_details(self, evt):
         road = self._maybe_select_road()
-        if not road:
+        if not road or road.area:
             return
         dlg = get().prepare_xrc_dialog(RoadSegmentsBrowserDialog, person=self._person, road=road)
         dlg.ShowModal()

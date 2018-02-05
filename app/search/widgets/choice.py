@@ -20,4 +20,4 @@ class Choice:
     
     @staticmethod
     def get_value_for_query(column, value_widget):
-        return list(iter(column.type_))[value_widget.Selection]
+        return value_widget.Selection
