@@ -98,7 +98,7 @@
           <cellpos>2,0</cellpos>
           <cellspan>1,3</cellspan>
           <object class="wxButton" name="add">
-            <label>Přidat podmínku</label>
+            <label>&amp;Přidat podmínku</label>
           </object>
         </object>
         <object class="sizeritem">
@@ -133,6 +133,7 @@
         <object class="sizeritem">
           <cellpos>7,0</cellpos>
           <object class="wxButton" name="wxID_OK">
+            <default>1</default>
             <label>Zahájit vyhledávání</label>
           </object>
         </object>
