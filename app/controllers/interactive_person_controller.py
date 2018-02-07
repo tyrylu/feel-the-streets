@@ -120,3 +120,5 @@ class InteractivePersonController:
             if browser.ShowModal() == 1:
                 self._person.move_to(browser.selected_object[2])
                 browser.Destroy()
+        else:
+            wx.MessageBox("Zadaným podmínkám vyhledávání neodpovídá žádný objekt.", "Informace", style=wx.ICON_INFORMATION)
