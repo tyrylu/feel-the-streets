@@ -13,6 +13,7 @@ def perform_search(position):
     if entity:
         conditions_dialog = get().prepare_xrc_dialog(SpecifySearchConditionsDialog, entity=entities[entity_names.index(entity)], alternate_bind_of=["on_fields_tree_sel_changed"])
         if conditions_dialog.ShowModal() != wx.ID_OK:
+            conditions_dialog.Destroy()
             return
         query = conditions_dialog.create_query()
         distance = float("inf")

@@ -2,3 +2,7 @@ __pycache__
 *.db
 *.log
 query_cache/*
+*.grd
+generation_record*
+*.prof
+*.lprof
