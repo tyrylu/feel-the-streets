@@ -1,3 +1,4 @@
+import json
 import datetime
 from pydantic import BaseModel
 from .enums import OSMObjectType
@@ -22,3 +23,10 @@ class OSMEntity(BaseModel):
         return hash(repr(self))
     def __str__(self):
         return self.__class__.__name__
+
+    @property
+    def additional_fields(self):
+        names = set(self.__fields__.keys())
+        props = json.loads(self.db_entity.data)
+        unknown_props = {key: val for key, val in props.items() if key not in names}
+        return unknown_props

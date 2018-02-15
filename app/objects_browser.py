@@ -41,6 +41,12 @@ class ObjectsBrowserDialog(wx.Dialog):
             if not val:
                 continue
             props_list.Append("%s: %s"%(underscored_to_words(attr.name), val))
+        first = True
+        for name, value in selected.additional_fields.items():
+            if first:
+                props_list.Append("Další pole - nelze podle nich vyhledávat")
+                first = False
+            props_list.Append("%s: %s"%(underscored_to_words(name), value))
 
     @property
     def selected_object(self):
