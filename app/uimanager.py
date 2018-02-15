@@ -46,7 +46,7 @@ class UIManager(object):
         olen = len(only)
         for h in handlers:
             try:
-                on, name, event = h.split("_", 2)
+                _on, name, event = h.split("_", 2)
             except ValueError: raise ValueError("Supposed handler %s has wrong name."%h)
             if olen != 0 and name not in only: continue
             event = self._lookup_event(event)
@@ -132,7 +132,7 @@ class UIManager(object):
         evt.Skip()
 
     def _alternate_bind(self, parent, meth, evtobj):
-        on, name, event = meth.split("_", 2)
+        _on, name, event = meth.split("_", 2)
         evt = self._lookup_event(event)
         parent.FindWindowByName(name).Bind(evt, getattr(evtobj, meth))
 
@@ -147,8 +147,8 @@ class UIManager(object):
         if not issubclass(obj.__class__, wx.Window): return None
         return obj
     def _menu_item_callables(self, source):
-        for member in dir(source):
-            member_obj = getattr(source, member)
+        for member_name in source.__class__.__dict__.keys():
+            member_obj = getattr(source, member_name)
             if hasattr(member_obj, "item_label"):
                 yield member_obj
 
