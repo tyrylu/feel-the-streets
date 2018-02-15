@@ -3,8 +3,9 @@ import os
 import logging
 from sqlalchemy import create_engine, event, text, inspect
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import func
 from geoalchemy import GeometryDDL, Geometry
-from .models import Base, Entity
+from .models import Base, Entity, IdxEntitiesGeometry, Bookmark
 from . import sqlalchemy_logging
 
 log = logging.getLogger(__name__)
@@ -34,6 +35,7 @@ class Database:
             GeometryDDL(Entity.__table__)
             log.debug("Creating database tables...")
             Entity.__table__.create(self._engine)
+            Bookmark.__table__.create(self._engine)
             self._creating = False
 
     def add(self, instance):
@@ -41,16 +43,21 @@ class Database:
 
     def commit(self):
         self._session.commit()
+    
     def merge(self, entity):
         self._session.merge(entity)
+    
     def query(self, *entities, **kwargs):
         return self._session.query(*entities, **kwargs)
 
     def scalar(self, *args, **kwargs):
         return self._session.scalar(*args, **kwargs)
 
-    def merge(self, entity):
-        return self._session.merge(entity)
+    @property
+    def bounds(self):
+        min = func.min
+        max = func.max
+        return self._session.query(min(IdxEntitiesGeometry.xmin), max(IdxEntitiesGeometry.xmax), min(IdxEntitiesGeometry.ymin), max(IdxEntitiesGeometry.ymax)).one()
 
     def schedule_entity_addition(self, entity):
         per_table_values = defaultdict(dict)

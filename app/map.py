@@ -1,11 +1,14 @@
 import shapely.wkb as wkb
 from sqlalchemy import func
-from shared.database import Database
+
 import geoalchemy
-from shared.models import Entity, IdxEntitiesGeometry
-from shared.geometry_utils import xy_ranges_bounding_square, to_shapely_point
-from .measuring import measure
+from shared.database import Database
+from shared.geometry_utils import to_shapely_point, xy_ranges_bounding_square
+from shared.models import Bookmark, Entity, IdxEntitiesGeometry
+
 from .geometry_utils import distance_filter, effective_width_filter
+from .measuring import measure
+
 
 class Map:
     def __init__(self, map_name):
@@ -41,3 +44,13 @@ class Map:
 
     def geometry_to_wkt(self, geometry):
         return wkb.loads(geometry.desc.desc).wkt
+
+
+    def add_bookmark(self, name, lat, lon):
+        bookmark = Bookmark(name=name, longitude=lon, latitude=lat)
+        self._db.add(bookmark)
+        self._db.commit()
+
+    @property
+    def bookmarks(self):
+        return self._db.query(Bookmark)

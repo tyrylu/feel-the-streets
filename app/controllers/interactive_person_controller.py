@@ -87,7 +87,6 @@ class InteractivePersonController:
 
     @menu_command("Pohyb", "Otočit se podle cesty", "shift+d")
     def rotate_to_road(self, evt):
-        print("Rotate?")
         road = self._maybe_select_road()
         if not road:
             return
@@ -98,6 +97,7 @@ class InteractivePersonController:
     def rotate_by(self, evt):
         amount = wx.GetTextFromUser("Zadej úhel", "Údaj")
         self._person.direction += float(amount)
+    
     def _maybe_select_road(self):
         roads = [r for r in self._person.is_inside_of if isinstance(r, Road)]
         if not roads:
@@ -122,3 +122,20 @@ class InteractivePersonController:
                 browser.Destroy()
         else:
             wx.MessageBox("Zadaným podmínkám vyhledávání neodpovídá žádný objekt.", "Informace", style=wx.ICON_INFORMATION)
+    
+    @menu_command("Záložky", "Přidat záložku...", "ctrl+b")
+    def add_bookmark(self, evt):
+        name = wx.GetTextFromUser("Zadej jméno nové záložky", "Informace")
+        if not name:
+            return
+        self._person.map.add_bookmark(name, lon=self._person.position.lon, lat=self._person.position.lat)
+    
+    @menu_command("Záložky", "Jít na záložku...", "b")
+    def go_to_bookmark(self, evt):
+        bookmarks = list(self._person.map.bookmarks)
+        names = [b.name for b in bookmarks]
+        name = wx.GetSingleChoice("Vyber záložku", "Informace", aChoices=names)
+        if not name:
+            return
+        bookmark = bookmarks[names.index(name)]
+        self._person.move_to(LatLon(bookmark.latitude, bookmark.longitude))
