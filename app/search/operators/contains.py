@@ -3,7 +3,7 @@ from .operator import Operator
 
 @operator_for(str)
 class Contains(Operator):
-    label = "Obsahuje"
+    label = _("Contains")
 
     @classmethod
     def get_comparison_expression(cls, field, value_expr, value_widget):

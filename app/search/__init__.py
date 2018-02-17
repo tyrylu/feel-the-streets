@@ -9,7 +9,7 @@ from ..geometry_utils import distance_filter
 def perform_search(position):
     entities = list(entity_registry().known_entity_classes)
     entity_names = [get_class_display_name(klass) for klass in entities]
-    entity = wx.GetSingleChoice("Zvolte třídu, nad kterou se má hledání provést", "Třída k prohledání", aChoices=entity_names)
+    entity = wx.GetSingleChoice(_("Select the class to search"), _("Search class"), aChoices=entity_names)
     if entity:
         conditions_dialog = get().prepare_xrc_dialog(SpecifySearchConditionsDialog, entity=entities[entity_names.index(entity)], alternate_bind_of=["on_fields_tree_sel_changed"])
         if conditions_dialog.ShowModal() != wx.ID_OK:

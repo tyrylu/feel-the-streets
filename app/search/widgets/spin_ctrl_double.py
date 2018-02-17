@@ -5,7 +5,7 @@ from . import widget_for
 widget_for(float, Quantity)
 class SpinCtrlDouble:
 
-    value_label = "Hodnota"
+    value_label = _("Value")
     @staticmethod
     def get_value_widget(parent, column):
         return wx.SpinCtrlDouble(parent, min=float("-inf"), max=float("inf"))

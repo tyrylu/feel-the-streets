@@ -11,7 +11,7 @@
         <object class="sizeritem">
           <cellpos>0,0</cellpos>
           <object class="wxStaticText">
-            <label>Objekty</label>
+            <label>Objects</label>
           </object>
         </object>
         <object class="sizeritem">
@@ -21,7 +21,7 @@
         <object class="sizeritem">
           <cellpos>0,1</cellpos>
           <object class="wxStaticText">
-            <label>Vlastnosti objektu</label>
+            <label>Object properties</label>
           </object>
         </object>
         <object class="sizeritem">
@@ -31,19 +31,19 @@
         <object class="sizeritem">
           <cellpos>2,0</cellpos>
           <object class="wxButton" name="goto">
-            <label>Jít na</label>
+            <label>Go to</label>
             <default>1</default>
           </object>
         </object>
         <object class="sizeritem">
           <cellpos>2,1</cellpos>
           <object class="wxButton" name="close">
-            <label>Zavřít</label>
+            <label>Close</label>
           </object>
         </object>
       </object>
     </object>
-    <title>Titulek</title>
+    <title>Title</title>
   </object>
   <object class="wxDialog" name="road_segments_browser">
     <object class="wxPanel">
@@ -51,7 +51,7 @@
         <object class="sizeritem">
           <cellpos>0,0</cellpos>
           <object class="wxStaticText">
-            <label>Úseky cesty</label>
+            <label>Road segments</label>
           </object>
         </object>
         <object class="sizeritem">
@@ -62,12 +62,12 @@
           <cellpos>2,0</cellpos>
           <object class="wxButton" name="close">
             <default>1</default>
-            <label>Zavřít</label>
+            <label>Close</label>
           </object>
         </object>
       </object>
     </object>
-    <title>Detaily cesty</title>
+    <title>Road details</title>
   </object>
   <object class="wxDialog" name="specify_search_conditions">
     <object class="wxPanel" name="main_panel">
@@ -75,7 +75,7 @@
         <object class="sizeritem">
           <cellpos>0,0</cellpos>
           <object class="wxStaticText">
-            <label>Pole třídy</label>
+            <label>Class fields</label>
           </object>
         </object>
         <object class="sizeritem">
@@ -87,7 +87,7 @@
         <object class="sizeritem">
           <cellpos>0,1</cellpos>
           <object class="wxStaticText">
-            <label>Operátor</label>
+            <label>Operator</label>
           </object>
         </object>
         <object class="sizeritem">
@@ -98,14 +98,14 @@
           <cellpos>2,0</cellpos>
           <cellspan>1,3</cellspan>
           <object class="wxButton" name="add">
-            <label>&amp;Přidat podmínku</label>
+            <label>&amp;Add condition</label>
           </object>
         </object>
         <object class="sizeritem">
           <cellpos>3,0</cellpos>
           <cellspan>1,3</cellspan>
           <object class="wxStaticText">
-            <label>Aktuální podmínky vyhledávání</label>
+            <label>Current search criteria</label>
           </object>
         </object>
         <object class="sizeritem">
@@ -117,13 +117,13 @@
           <cellpos>5,0</cellpos>
           <cellspan>1,3</cellspan>
           <object class="wxButton" name="remove">
-            <label>Odstranit</label>
+            <label>Remove</label>
           </object>
         </object>
         <object class="sizeritem">
           <cellpos>6,0</cellpos>
           <object class="wxStaticText">
-            <label>Hledat objekty do vzdálenosti (v metrech, 0 bez limitu)</label>
+            <label>Search objects to distance (in meters, 0 no limit)</label>
           </object>
         </object>
         <object class="sizeritem">
@@ -134,18 +134,18 @@
           <cellpos>7,0</cellpos>
           <object class="wxButton" name="wxID_OK">
             <default>1</default>
-            <label>Zahájit vyhledávání</label>
+            <label>Start search</label>
           </object>
         </object>
         <object class="sizeritem">
           <cellpos>7,1</cellpos>
           <object class="wxButton" name="wxID_CANCEL">
-            <label>Zrušit</label>
+            <label>Cancel</label>
           </object>
         </object>
       </object>
     </object>
-    <title>Podmínky vyhledávání</title>
+    <title>Search criteria</title>
   </object>
 </resource>
   

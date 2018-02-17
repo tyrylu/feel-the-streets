@@ -3,7 +3,7 @@ from .operator import Operator
 
 @operator_for(str)
 class EndsWith(Operator):
-    label = "Končí na"
+    label = _("Ends with")
 
     @classmethod
     def get_comparison_expression(cls, field, value_expr, value_widget):

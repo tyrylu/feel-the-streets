@@ -3,7 +3,7 @@ from .operator import Operator
 
 @operator_for("*", priority=-1)
 class Equals(Operator):
-    label = "Je rovno"
+    label = _("Equals")
 
     @classmethod
     def get_comparison_expression(cls, field, value_expr, value_widget):

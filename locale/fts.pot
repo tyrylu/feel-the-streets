@@ -1,0 +1,376 @@
+# Translations template for Feel the streets.
+# Copyright (C) 2018 ORGANIZATION
+# This file is distributed under the same license as the Feel the streets project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Feel the streets 0.0.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2018-02-17 23:27+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.3\n"
+
+#: app/main_frame.py:18
+msgid "Select the map"
+msgstr ""
+
+#: app/main_frame.py:18
+msgid "Map selection"
+msgstr ""
+
+#: app/objects_browser.py:13
+msgid " ({num_objects} objects shown)"
+msgstr ""
+
+#: app/objects_browser.py:24
+msgid "{object}: distance {distance:.2} meters, {rel_bearing:.2}° relatively"
+msgstr ""
+
+#: app/objects_browser.py:47
+msgid "Other fields - they can not be searched and are not processed in any way"
+msgstr ""
+
+#: app/road_segments_browser.py:20
+msgid "{distance:.2} meters in angle {angle:.2}°"
+msgstr ""
+
+#: app/road_segments_browser.py:26
+msgid "{start_distance:.2} meters of {distance:.2} meters in angle {angle:.2}° distant from road center by {middle_distance:.2}"
+msgstr ""
+
+#: app/ui.xrc:5
+msgid "Feel the streets"
+msgstr ""
+
+#: app/ui.xrc:13
+msgid "Objects"
+msgstr ""
+
+#: app/ui.xrc:23
+msgid "Object properties"
+msgstr ""
+
+#: app/ui.xrc:33
+msgid "Go to"
+msgstr ""
+
+#: app/ui.xrc:40 app/ui.xrc:64
+msgid "Close"
+msgstr ""
+
+#: app/ui.xrc:45
+msgid "Title"
+msgstr ""
+
+#: app/ui.xrc:53
+msgid "Road segments"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:90 app/ui.xrc:69
+msgid "Road details"
+msgstr ""
+
+#: app/ui.xrc:77
+msgid "Class fields"
+msgstr ""
+
+#: app/ui.xrc:89
+msgid "Operator"
+msgstr ""
+
+#: app/ui.xrc:100
+msgid "&amp;Add condition"
+msgstr ""
+
+#: app/ui.xrc:107
+msgid "Current search criteria"
+msgstr ""
+
+#: app/ui.xrc:119
+msgid "Remove"
+msgstr ""
+
+#: app/ui.xrc:125
+msgid "Search objects to distance (in meters, 0 no limit)"
+msgstr ""
+
+#: app/ui.xrc:136
+msgid "Start search"
+msgstr ""
+
+#: app/ui.xrc:142
+msgid "Cancel"
+msgstr ""
+
+#: app/ui.xrc:147
+msgid "Search criteria"
+msgstr ""
+
+#: app/controllers/announcements_controller.py:12
+msgid "You are entering {enters}."
+msgstr ""
+
+#: app/controllers/announcements_controller.py:16
+msgid "You are leaving {leaves}"
+msgstr ""
+
+#: app/controllers/application_controller.py:8
+msgid "Program"
+msgstr ""
+
+#: app/controllers/application_controller.py:8
+msgid "Quit"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:16
+#: app/controllers/interactive_person_controller.py:20
+#: app/controllers/interactive_person_controller.py:29
+#: app/controllers/interactive_person_controller.py:37
+#: app/controllers/interactive_person_controller.py:65
+#: app/controllers/interactive_person_controller.py:83
+#: app/controllers/interactive_person_controller.py:90
+#: app/controllers/interactive_person_controller.py:126
+#: app/controllers/interactive_person_controller.py:135
+msgid "Information"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:16
+msgid "Current coordinates"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:20
+msgid "Position"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:27
+msgid "Not known."
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:29
+msgid "Detailed current position"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:32
+msgid "Current position"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:37
+msgid "Nearest"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:41
+msgid "Nothing."
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:43
+msgid "Near by objects"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:49
+#: app/controllers/interactive_person_controller.py:53
+#: app/controllers/interactive_person_controller.py:57
+#: app/controllers/interactive_person_controller.py:61
+#: app/controllers/interactive_person_controller.py:69
+#: app/controllers/interactive_person_controller.py:73
+#: app/controllers/interactive_person_controller.py:77
+#: app/controllers/interactive_person_controller.py:99
+#: app/controllers/interactive_person_controller.py:107
+msgid "Movement"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:49
+msgid "Step forward"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:53
+msgid "Step backward"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:57
+msgid "Turn 5 degrees to the right"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:61
+msgid "Turn 5 degrees to the left"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:65
+msgid "Current direction"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:67
+msgid "{degrees} degrees"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:69
+msgid "Turn 90 degrees to the right"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:73
+msgid "Turn 90 degrees to the left"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:77
+msgid "Coordinate jump..."
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:79
+msgid "Enter the longitude"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:79
+#: app/controllers/interactive_person_controller.py:80
+msgid "Coordinate"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:80
+msgid "Enter the latitude"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:83
+msgid "Current road section angle"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:88
+msgid "{road}: {angle:.2}°"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:99
+msgid "Turn according to a road"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:107
+msgid "Turn about..."
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:109
+msgid "Enter the angle"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:109
+msgid "Data"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:120
+msgid "Select the road which should be the target of the operation"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:120
+msgid "Request"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:126
+msgid "Search..."
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:130
+msgid "Search results"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:135
+msgid "No object matches the given search criteria."
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:137
+#: app/controllers/interactive_person_controller.py:144
+msgid "Bookmarks"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:137
+msgid "Add bookmark..."
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:139
+msgid "Enter a name for the new bookmark"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:139
+#: app/controllers/interactive_person_controller.py:148
+msgid "Data entry"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:144
+msgid "Go to bookmark..."
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:148
+msgid "Select a bookmark"
+msgstr ""
+
+#: app/search/__init__.py:12
+msgid "Select the class to search"
+msgstr ""
+
+#: app/search/__init__.py:12
+msgid "Search class"
+msgstr ""
+
+#: app/search/operators/contains.py:6
+msgid "Contains"
+msgstr ""
+
+#: app/search/operators/contains_cs.py:6
+msgid "Contains (case sensitively)"
+msgstr ""
+
+#: app/search/operators/ends_with.py:6
+msgid "Ends with"
+msgstr ""
+
+#: app/search/operators/ends_with_cs.py:6
+msgid "Ends with (case sensitively)"
+msgstr ""
+
+#: app/search/operators/eq.py:6
+msgid "Equals"
+msgstr ""
+
+#: app/search/operators/ge.py:7
+msgid "Is greater than or equal"
+msgstr ""
+
+#: app/search/operators/gt.py:7
+msgid "Is greater than"
+msgstr ""
+
+#: app/search/operators/is_not_null.py:6
+msgid "Is not null"
+msgstr ""
+
+#: app/search/operators/is_null.py:6
+msgid "Is null"
+msgstr ""
+
+#: app/search/operators/le.py:7
+msgid "Is less than or equal"
+msgstr ""
+
+#: app/search/operators/lt.py:7
+msgid "Is less than"
+msgstr ""
+
+#: app/search/operators/neq.py:6
+msgid "Is not equal"
+msgstr ""
+
+#: app/search/operators/starts_with.py:6
+msgid "Starts with"
+msgstr ""
+
+#: app/search/operators/starts_with_cs.py:6
+msgid "Starts with (case sensitively)"
+msgstr ""
+
+#: app/search/widgets/check_box.py:10 app/search/widgets/choice.py:9
+#: app/search/widgets/spin_ctrl.py:6 app/search/widgets/spin_ctrl_double.py:8
+#: app/search/widgets/text_ctrl.py:7
+msgid "Value"
+msgstr ""
+

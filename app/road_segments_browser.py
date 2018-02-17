@@ -17,13 +17,13 @@ class RoadSegmentsBrowserDialog(wx.Dialog):
             segment.calculate_angle()
             segment.calculate_length()
             if not segment.current:
-                message = "%.2f metrů v úhlu %.2f°"%(segment.length, segment.angle)
+                message = _("{distance:.2} meters in angle {angle:.2}°").format(distance=segment.length, angle=segment.angle)
             else:
                 segment_point = segment.line.interpolate(segment.line.project(to_shapely_point(person.position)))
                 segment_latlon = to_latlon(segment_point)
                 middle_distance = distance_between(person.position, segment_latlon)
                 start_distance = distance_between(to_latlon(segment.start), segment_latlon)
-                message = "%.2f metrů z %.2f metrů v úhlu %.2f° ve vzdálenosti %.2f od středu"%(start_distance, segment.length, segment.angle, middle_distance)
+                message = _("{start_distance:.2} meters of {distance:.2} meters in angle {angle:.2}° distant from road center by {middle_distance:.2}").format(start_distance=start_distance, distance=segment.length, angle=segment.angle, middle_distance=middle_distance)
             segments_list.Append(message)
             if segment.current:
                 current_idx = idx

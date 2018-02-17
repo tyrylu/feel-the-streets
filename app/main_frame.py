@@ -15,7 +15,7 @@ class MainFrame(wx.Frame):
         super().__init__()
         maps = glob.glob("*.db")
         user_maps = [map.split(".")[0] for map in maps]
-        map_name = wx.GetSingleChoice("Zvolte mapu", "Výběr mapy", aChoices=user_maps)
+        map_name = wx.GetSingleChoice(_("Select the map"), _("Map selection"), aChoices=user_maps)
         if map_name:
             map.set_call_args(map_name)
             self._map = map()

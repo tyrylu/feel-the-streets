@@ -4,7 +4,7 @@ from shared.validated_quantity import Quantity
 
 @operator_for(Quantity, float, int)
 class LessThan(Operator):
-    label = "Je menší než"
+    label = _("Is less than")
 
     @classmethod
     def get_comparison_expression(cls, field, value_expr, value_widget):

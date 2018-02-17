@@ -3,7 +3,7 @@ from .operator import Operator
 
 @operator_for(str, priority=1)
 class EndsWithCaseSensitively(Operator):
-    label = "Končí na (včetně shody velikosti písmen)"
+    label = _("Ends with (case sensitively)")
 
     @classmethod
     def get_comparison_expression(cls, field, value_expr, value_widget):

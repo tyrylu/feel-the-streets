@@ -10,7 +10,7 @@ class ObjectsBrowserDialog(wx.Dialog):
 
     def post_init(self, title, person, unsorted_objects):
         unsorted_objects = list(unsorted_objects)
-        self.Title = title + " (zobrazeno %d objektů)"%len(unsorted_objects)
+        self.Title = title + _(" ({num_objects} objects shown)").format(num_objects=len(unsorted_objects))
         self.EscapeId = xrc.XRCID("close")
         self._person = person
         objects_list = self.FindWindowByName("objects")
@@ -21,7 +21,7 @@ class ObjectsBrowserDialog(wx.Dialog):
         for dist, obj, closest in objects:
             bearing = bearing_to(person.position, closest)
             rel_bearing = (bearing - self._person.direction) % 360
-            objects_list.Append("%s: vzdálenost %.2f metrů, %.2f° relativně"%(obj, dist, rel_bearing))
+            objects_list.Append(_("{object}: distance {distance:.2} meters, {rel_bearing:.2}° relatively").format(object=obj, distance=dist, rel_bearing=rel_bearing))
         self._objects = objects
         objects_list.Selection = 0
         self.on_objects_listbox(None)
@@ -44,7 +44,7 @@ class ObjectsBrowserDialog(wx.Dialog):
         first = True
         for name, value in selected.additional_fields.items():
             if first:
-                props_list.Append("Další pole - nelze podle nich vyhledávat")
+                props_list.Append(_("Other fields - they can not be searched and are not processed in any way"))
                 first = False
             props_list.Append("%s: %s"%(underscored_to_words(name), value))
 

@@ -1,0 +1,383 @@
+# Czech translations for Feel the streets.
+# Copyright (C) 2018 ORGANIZATION
+# This file is distributed under the same license as the Feel the streets
+# project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Feel the streets 0.0.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2018-02-17 23:27+0100\n"
+"PO-Revision-Date: 2018-02-17 23:45+0100\n"
+"Language: cs\n"
+"Language-Team: cs <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.3\n"
+"Last-Translator: \n"
+"X-Generator: Poedit 2.0.5\n"
+
+#: app/main_frame.py:18
+msgid "Select the map"
+msgstr "Vyberte mapu"
+
+#: app/main_frame.py:18
+msgid "Map selection"
+msgstr "Výběr mapy"
+
+#: app/objects_browser.py:13
+msgid " ({num_objects} objects shown)"
+msgstr " (zobrazeno {num_objects} objektů)"
+
+#: app/objects_browser.py:24
+msgid "{object}: distance {distance:.2} meters, {rel_bearing:.2}° relatively"
+msgstr "{object}: vzdálenost {distance:.2} metrů, {rel_bearing:.2}° relativně"
+
+#: app/objects_browser.py:47
+msgid "Other fields - they can not be searched and are not processed in any way"
+msgstr ""
+"Ostatní pole - nejsou prohledávatelná ani žádným dalším způsobem zpracovávána"
+
+#: app/road_segments_browser.py:20
+msgid "{distance:.2} meters in angle {angle:.2}°"
+msgstr "{distance:.2} metrů v úhlu {angle:.2}°"
+
+#: app/road_segments_browser.py:26
+msgid ""
+"{start_distance:.2} meters of {distance:.2} meters in angle {angle:.2}° "
+"distant from road center by {middle_distance:.2}"
+msgstr ""
+"{start_distance:.2} metrů z {distance:.2} metrů v úhlu {angle:.2}° ve "
+"vzdálenosti {middle_distance:.2} od středu"
+
+#: app/ui.xrc:5
+msgid "Feel the streets"
+msgstr "Feel the streets"
+
+#: app/ui.xrc:13
+msgid "Objects"
+msgstr "Objekty"
+
+#: app/ui.xrc:23
+msgid "Object properties"
+msgstr "Vlastnosti objektu"
+
+#: app/ui.xrc:33
+msgid "Go to"
+msgstr "Jít na"
+
+#: app/ui.xrc:40 app/ui.xrc:64
+msgid "Close"
+msgstr "Zavřít"
+
+#: app/ui.xrc:45
+msgid "Title"
+msgstr "Titulek"
+
+#: app/ui.xrc:53
+msgid "Road segments"
+msgstr "Úseky cesty"
+
+#: app/controllers/interactive_person_controller.py:90 app/ui.xrc:69
+msgid "Road details"
+msgstr "Detaily cesty"
+
+#: app/ui.xrc:77
+msgid "Class fields"
+msgstr "Pole třídy"
+
+#: app/ui.xrc:89
+msgid "Operator"
+msgstr "Operátor"
+
+#: app/ui.xrc:100
+msgid "&amp;Add condition"
+msgstr "&amp;Přidat podmínku"
+
+#: app/ui.xrc:107
+msgid "Current search criteria"
+msgstr "Aktuální podmínky vyhledávání"
+
+#: app/ui.xrc:119
+msgid "Remove"
+msgstr "Odstranit"
+
+#: app/ui.xrc:125
+msgid "Search objects to distance (in meters, 0 no limit)"
+msgstr "Hledat objekty do vzdálenosti (v metrech, 0 je bez limitu)"
+
+#: app/ui.xrc:136
+msgid "Start search"
+msgstr "Zahájit vyhledávání"
+
+#: app/ui.xrc:142
+msgid "Cancel"
+msgstr "Zrušit"
+
+#: app/ui.xrc:147
+msgid "Search criteria"
+msgstr "Podmínky vyhledávání"
+
+#: app/controllers/announcements_controller.py:12
+msgid "You are entering {enters}."
+msgstr "Vstupujete do {enters}"
+
+#: app/controllers/announcements_controller.py:16
+msgid "You are leaving {leaves}"
+msgstr "Opouštíte {leaves}"
+
+#: app/controllers/application_controller.py:8
+msgid "Program"
+msgstr "Program"
+
+#: app/controllers/application_controller.py:8
+msgid "Quit"
+msgstr "Ukončit"
+
+#: app/controllers/interactive_person_controller.py:16
+#: app/controllers/interactive_person_controller.py:20
+#: app/controllers/interactive_person_controller.py:29
+#: app/controllers/interactive_person_controller.py:37
+#: app/controllers/interactive_person_controller.py:65
+#: app/controllers/interactive_person_controller.py:83
+#: app/controllers/interactive_person_controller.py:90
+#: app/controllers/interactive_person_controller.py:126
+#: app/controllers/interactive_person_controller.py:135
+msgid "Information"
+msgstr "Informace"
+
+#: app/controllers/interactive_person_controller.py:16
+msgid "Current coordinates"
+msgstr "Aktuální souřadnice"
+
+#: app/controllers/interactive_person_controller.py:20
+msgid "Position"
+msgstr "Pozice"
+
+#: app/controllers/interactive_person_controller.py:27
+msgid "Not known."
+msgstr "Není známo"
+
+#: app/controllers/interactive_person_controller.py:29
+msgid "Detailed current position"
+msgstr "Aktuální pozice podrobně"
+
+#: app/controllers/interactive_person_controller.py:32
+msgid "Current position"
+msgstr "Aktuální pozice"
+
+#: app/controllers/interactive_person_controller.py:37
+msgid "Nearest"
+msgstr "Nejbližší"
+
+#: app/controllers/interactive_person_controller.py:41
+msgid "Nothing."
+msgstr "Nic."
+
+#: app/controllers/interactive_person_controller.py:43
+msgid "Near by objects"
+msgstr "Blízké objekty"
+
+#: app/controllers/interactive_person_controller.py:49
+#: app/controllers/interactive_person_controller.py:53
+#: app/controllers/interactive_person_controller.py:57
+#: app/controllers/interactive_person_controller.py:61
+#: app/controllers/interactive_person_controller.py:69
+#: app/controllers/interactive_person_controller.py:73
+#: app/controllers/interactive_person_controller.py:77
+#: app/controllers/interactive_person_controller.py:99
+#: app/controllers/interactive_person_controller.py:107
+msgid "Movement"
+msgstr "Pohyb"
+
+#: app/controllers/interactive_person_controller.py:49
+msgid "Step forward"
+msgstr "Krok vpřed"
+
+#: app/controllers/interactive_person_controller.py:53
+msgid "Step backward"
+msgstr "Krok vzad"
+
+#: app/controllers/interactive_person_controller.py:57
+msgid "Turn 5 degrees to the right"
+msgstr "Otočit se o 5 stupňů do prava"
+
+#: app/controllers/interactive_person_controller.py:61
+msgid "Turn 5 degrees to the left"
+msgstr "Otočit se o 5 stupňů do leva"
+
+#: app/controllers/interactive_person_controller.py:65
+msgid "Current direction"
+msgstr "Aktuální směr"
+
+#: app/controllers/interactive_person_controller.py:67
+msgid "{degrees} degrees"
+msgstr "{degrees} stupňů"
+
+#: app/controllers/interactive_person_controller.py:69
+msgid "Turn 90 degrees to the right"
+msgstr "Otočit se o 90 stupňů do prava"
+
+#: app/controllers/interactive_person_controller.py:73
+msgid "Turn 90 degrees to the left"
+msgstr "Otočit se o 90 stupňů do leva"
+
+#: app/controllers/interactive_person_controller.py:77
+msgid "Coordinate jump..."
+msgstr "Skok na souřadnice..."
+
+#: app/controllers/interactive_person_controller.py:79
+msgid "Enter the longitude"
+msgstr "Zadej zeměpisnou délku"
+
+#: app/controllers/interactive_person_controller.py:79
+#: app/controllers/interactive_person_controller.py:80
+msgid "Coordinate"
+msgstr "Souřadnice"
+
+#: app/controllers/interactive_person_controller.py:80
+msgid "Enter the latitude"
+msgstr "Zadej zeměpisnou šířku"
+
+#: app/controllers/interactive_person_controller.py:83
+msgid "Current road section angle"
+msgstr "Úhel aktuální čáti cesty"
+
+#: app/controllers/interactive_person_controller.py:88
+msgid "{road}: {angle:.2}°"
+msgstr "{road}: {angle:.2}°"
+
+#: app/controllers/interactive_person_controller.py:99
+msgid "Turn according to a road"
+msgstr "Otočit se podle cesty"
+
+#: app/controllers/interactive_person_controller.py:107
+msgid "Turn about..."
+msgstr "Otočit se o..."
+
+#: app/controllers/interactive_person_controller.py:109
+msgid "Enter the angle"
+msgstr "Zadej úhel"
+
+#: app/controllers/interactive_person_controller.py:109
+msgid "Data"
+msgstr "Údaj"
+
+#: app/controllers/interactive_person_controller.py:120
+msgid "Select the road which should be the target of the operation"
+msgstr "Zvolte cestu, nad kterou se má operace provést"
+
+#: app/controllers/interactive_person_controller.py:120
+msgid "Request"
+msgstr "Požadavek"
+
+#: app/controllers/interactive_person_controller.py:126
+msgid "Search..."
+msgstr "Hledat..."
+
+#: app/controllers/interactive_person_controller.py:130
+msgid "Search results"
+msgstr "Výsledky vyhledávání"
+
+#: app/controllers/interactive_person_controller.py:135
+msgid "No object matches the given search criteria."
+msgstr "Zadaným podmínkám vyhledávání neodpovídá žádný objekt."
+
+#: app/controllers/interactive_person_controller.py:137
+#: app/controllers/interactive_person_controller.py:144
+msgid "Bookmarks"
+msgstr "Záložky"
+
+#: app/controllers/interactive_person_controller.py:137
+msgid "Add bookmark..."
+msgstr "Přidat záložku..."
+
+#: app/controllers/interactive_person_controller.py:139
+msgid "Enter a name for the new bookmark"
+msgstr "Zadej jméno nové záložky"
+
+#: app/controllers/interactive_person_controller.py:139
+#: app/controllers/interactive_person_controller.py:148
+msgid "Data entry"
+msgstr "Datový vstup"
+
+#: app/controllers/interactive_person_controller.py:144
+msgid "Go to bookmark..."
+msgstr "Jít na záložku..."
+
+#: app/controllers/interactive_person_controller.py:148
+msgid "Select a bookmark"
+msgstr "Zvolte záložku"
+
+#: app/search/__init__.py:12
+msgid "Select the class to search"
+msgstr "Zvolte třídu k prohledání"
+
+#: app/search/__init__.py:12
+msgid "Search class"
+msgstr "Třída k prohledání"
+
+#: app/search/operators/contains.py:6
+msgid "Contains"
+msgstr "Obsahuje"
+
+#: app/search/operators/contains_cs.py:6
+msgid "Contains (case sensitively)"
+msgstr "Obsahuje (včteně velikosti písmen)"
+
+#: app/search/operators/ends_with.py:6
+msgid "Ends with"
+msgstr "Končí na"
+
+#: app/search/operators/ends_with_cs.py:6
+msgid "Ends with (case sensitively)"
+msgstr "Končí na (včetně velikosti písmen)"
+
+#: app/search/operators/eq.py:6
+msgid "Equals"
+msgstr "Je rovno"
+
+#: app/search/operators/ge.py:7
+msgid "Is greater than or equal"
+msgstr "Je větší než nebo rovno"
+
+#: app/search/operators/gt.py:7
+msgid "Is greater than"
+msgstr "Je větší než"
+
+#: app/search/operators/is_not_null.py:6
+msgid "Is not null"
+msgstr "Není nedefinovaný"
+
+#: app/search/operators/is_null.py:6
+msgid "Is null"
+msgstr "Je nedefinovaný"
+
+#: app/search/operators/le.py:7
+msgid "Is less than or equal"
+msgstr "Je menší než nebo rovno"
+
+#: app/search/operators/lt.py:7
+msgid "Is less than"
+msgstr "Je menší než"
+
+#: app/search/operators/neq.py:6
+msgid "Is not equal"
+msgstr "Není rovno"
+
+#: app/search/operators/starts_with.py:6
+msgid "Starts with"
+msgstr "Začíná na"
+
+#: app/search/operators/starts_with_cs.py:6
+msgid "Starts with (case sensitively)"
+msgstr "Začíná na (včetně velikosti písmen)"
+
+#: app/search/widgets/check_box.py:10 app/search/widgets/choice.py:9
+#: app/search/widgets/spin_ctrl.py:6 app/search/widgets/spin_ctrl_double.py:8
+#: app/search/widgets/text_ctrl.py:7
+msgid "Value"
+msgstr "Hodnota"

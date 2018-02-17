@@ -3,7 +3,7 @@ from .operator import Operator
 
 @operator_for(str)
 class StartsWith(Operator):
-    label = "Začíná na"
+    label = _("Starts with")
 
     @classmethod
     def get_comparison_expression(cls, field, value_expr, value_widget):

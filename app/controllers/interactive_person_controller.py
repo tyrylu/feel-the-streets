@@ -13,70 +13,81 @@ class InteractivePersonController:
         self._person = person
         get().register_menu_commands(self)
     
-    @menu_command("Informace", "Aktuální souřadnice", "c")
+    @menu_command(_("Information"), _("Current coordinates"), "c")
     def do_current_coords(self, evt):
-        speech().speak("Zeměpisná délka: %s, zeměpisná šířka: %s."%(self._person.position.lon, self._person.position.lat))
-    @menu_command("Informace", "Pozice", "l")
+        speech().speak(("Longitude: {longitude}, latitude: {latitude}.").format(longitude=self._person.position.lon, latitude=self._person.position.lat))
+    
+    @menu_command(_("Information"), _("Position"), "l")
     def do_position(self, evt):
         position_known = False
         for obj in self._person.is_inside_of:
             position_known = True
             speech().speak(str(obj))
         if not position_known:
-            speech().speak("Není známo.")
-    @menu_command("Informace", "Aktuální pozice podrobně", "shift+l")
+            speech().speak(_("Not known."))
+    
+    @menu_command(_("Information"), _("Detailed current position"), "shift+l")
     def do_position_detailed(self, evt):
         filtered_inside_of = distance_filter((entity.db_entity for entity in self._person.is_inside_of), self._person.position, float("inf"))
-        dlg = get().prepare_xrc_dialog(ObjectsBrowserDialog, title="Aktuální pozice", unsorted_objects=self._person.is_inside_of, person=self._person)
+        dlg = get().prepare_xrc_dialog(ObjectsBrowserDialog, title=_("Current position"), unsorted_objects=self._person.is_inside_of, person=self._person)
         if dlg.ShowModal() == 1:
             self._person.move_to(dlg.selected_object[2])
         dlg.Destroy()
-    @menu_command("Informace", "Nejbližší", "n")
+    
+    @menu_command(_("Information"), _("Nearest"), "n")
     def do_nearest(self, evt):
         objects = self._person.map.within_distance(self._person.position, 100)
         if not objects:
-            speech().speak("Nic.")
+            speech().speak(_("Nothing."))
             return
-        dlg = get().prepare_xrc_dialog(ObjectsBrowserDialog, title="Blízké objekty", person=self._person, unsorted_objects=objects)
+        dlg = get().prepare_xrc_dialog(ObjectsBrowserDialog, title=_("Near by objects"), person=self._person, unsorted_objects=objects)
         action = dlg.ShowModal()
         if action == 1:
             self._person.move_to(dlg.selected_object[2])
         dlg.Destroy()   
-    @menu_command("Pohyb", "Krok vpřed", "up")
+    
+    @menu_command(_("Movement"), _("Step forward"), "up")
     def do_forward(self, evt):
         self._person.step_forward() 
-    @menu_command("Pohyb", "Krok vzad", "down")
+
+    @menu_command(_("Movement"), _("Step backward"), "down")
     def do_backward(self, evt):
         self._person.step_backward() 
-    @menu_command("Pohyb", "Otočit o 5 stupňů do prava", "right")
+    
+    @menu_command(_("Movement"), _("Turn 5 degrees to the right"), "right")
     def turn_right(self, evt):
         self._person.rotate(5)
-    @menu_command("Pohyb", "Otočit o 5 stupňů do leva", "left")
+    
+    @menu_command(_("Movement"), _("Turn 5 degrees to the left"), "left")
     def turn_left(self, evt):
         self._person.rotate(-5)
-    @menu_command("Informace", "Aktuální směr", "r")
+    
+    @menu_command(_("Information"), _("Current direction"), "r")
     def do_current_rotation(self, evt):
-        speech().speak("%s stupňů"%self._person.direction)
-    @menu_command("Pohyb", "Otočit o 90 stupňů do prava", "ctrl+right")
+        speech().speak(_("{degrees} degrees").format(degrees=self._person.direction))
+    
+    @menu_command(_("Movement"), _("Turn 90 degrees to the right"), "ctrl+right")
     def turn_right90(self, evt):
         self._person.rotate(90)
-    @menu_command("Pohyb", "Otočit o 90 stupňů do leva", "ctrl+left")
+    
+    @menu_command(_("Movement"), _("Turn 90 degrees to the left"), "ctrl+left")
     def turn_left90(self, evt):
         self._person.rotate(-90)
-    @menu_command("Pohyb", "Skok na souřadnice...", "j")
+    
+    @menu_command(_("Movement"), _("Coordinate jump..."), "j")
     def do_jump(self, evt):
-        x = wx.GetTextFromUser("Zadejte zeměpisnou délku", "Souřadnice")
-        y = wx.GetTextFromUser("Zadejte zeměpisnou šířku", "Souřadnice")
+        x = wx.GetTextFromUser(_("Enter the longitude"), _("Coordinate"))
+        y = wx.GetTextFromUser(_("Enter the latitude"), _("Coordinate"))
         self._person.move_to(LatLon(y, x))
 
-    @menu_command("Informace", "Úhel aktuální části cesty", "d")
+    @menu_command(_("Information"), _("Current road section angle"), "d")
     def current_road_section_angle(self, evt):
          for obj in self._person.is_inside_of:
             if isinstance(obj, Road) and not obj.area:
                 angle = get_road_section_angle(self._person, obj)
-                speech().speak("%s: %.2f°"%(obj, angle))
+                speech().speak(_("{road}: {angle:.2}°").format(road=obj, angle=angle))
 
-    @menu_command("Informace", "Detaily cesty", "ctrl+d")
+    @menu_command(_("Information"), _("Road details"), "ctrl+d")
     def road_details(self, evt):
         road = self._maybe_select_road()
         if not road or road.area:
@@ -85,7 +96,7 @@ class InteractivePersonController:
         dlg.ShowModal()
         dlg.Destroy()
 
-    @menu_command("Pohyb", "Otočit se podle cesty", "shift+d")
+    @menu_command(_("Movement"), _("Turn according to a road"), "shift+d")
     def rotate_to_road(self, evt):
         road = self._maybe_select_road()
         if not road:
@@ -93,9 +104,9 @@ class InteractivePersonController:
         rot = get_road_section_angle(self._person, road)
         self._person.direction = rot
 
-    @menu_command("Pohyb", "Otočit o...", "Ctrl+r")
+    @menu_command(_("Movement"), _("Turn about..."), "Ctrl+r")
     def rotate_by(self, evt):
-        amount = wx.GetTextFromUser("Zadej úhel", "Údaj")
+        amount = wx.GetTextFromUser(_("Enter the angle"), _("Data"))
         self._person.direction += float(amount)
     
     def _maybe_select_road(self):
@@ -106,35 +117,35 @@ class InteractivePersonController:
             return roads[0]
         else:
             road_reprs = [str(r) for r in roads]
-            road_idx = wx.GetSingleChoice("Zvolte cestu, nad kterou se má operace provést", "Požadavek", aChoices=road_reprs)
+            road_idx = wx.GetSingleChoice(_("Select the road which should be the target of the operation"), _("Request"), aChoices=road_reprs)
             if road_idx is not None:
                 return roads[road_reprs.index(road_idx)]
             else:
                 return None
             
-    @menu_command("Informace", "Hledat...", "ctrl+f")
+    @menu_command(_("Information"), _("Search..."), "ctrl+f")
     def do_search(self, evt):
         results = perform_search(self._person.position)
         if results:
-            browser = get().prepare_xrc_dialog(ObjectsBrowserDialog, title="Výsledky vyhledávání", unsorted_objects=results, person=self._person)
+            browser = get().prepare_xrc_dialog(ObjectsBrowserDialog, title=_("Search results"), unsorted_objects=results, person=self._person)
             if browser.ShowModal() == 1:
                 self._person.move_to(browser.selected_object[2])
                 browser.Destroy()
         else:
-            wx.MessageBox("Zadaným podmínkám vyhledávání neodpovídá žádný objekt.", "Informace", style=wx.ICON_INFORMATION)
+            wx.MessageBox(_("No object matches the given search criteria."), _("Information"), style=wx.ICON_INFORMATION)
     
-    @menu_command("Záložky", "Přidat záložku...", "ctrl+b")
+    @menu_command(_("Bookmarks"), _("Add bookmark..."), "ctrl+b")
     def add_bookmark(self, evt):
-        name = wx.GetTextFromUser("Zadej jméno nové záložky", "Informace")
+        name = wx.GetTextFromUser(_("Enter a name for the new bookmark"), _("Data entry"))
         if not name:
             return
         self._person.map.add_bookmark(name, lon=self._person.position.lon, lat=self._person.position.lat)
     
-    @menu_command("Záložky", "Jít na záložku...", "b")
+    @menu_command(_("Bookmarks"), _("Go to bookmark..."), "b")
     def go_to_bookmark(self, evt):
         bookmarks = list(self._person.map.bookmarks)
         names = [b.name for b in bookmarks]
-        name = wx.GetSingleChoice("Vyber záložku", "Informace", aChoices=names)
+        name = wx.GetSingleChoice(_("Select a bookmark"), _("Data entry"), aChoices=names)
         if not name:
             return
         bookmark = bookmarks[names.index(name)]

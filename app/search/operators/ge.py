@@ -4,7 +4,7 @@ from .operator import Operator
 
 @operator_for(Quantity, float, int)
 class GreaterThanOrEqual(Operator):
-    label = "Je větší nebo rovno než"
+    label = _("Is greater than or equal")
 
     @classmethod
     def get_comparison_expression(cls, field, value_expr, value_widget):

@@ -3,7 +3,7 @@ from .operator import Operator
 
 @operator_for(str, priority=1)
 class ContainsCaseSensitively(Operator):
-    label = "Obsahuje (včetně shody velikosti písmen)"
+    label = _("Contains (case sensitively)")
 
     @classmethod
     def get_comparison_expression(cls, field, value_expr, value_widget):

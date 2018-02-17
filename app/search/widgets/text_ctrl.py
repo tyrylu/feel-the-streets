@@ -4,7 +4,7 @@ from . import widget_for
 @widget_for(str)
 class TextCtrl:
 
-    value_label = "Hodnota"
+    value_label = _("Value")
     @staticmethod
     def get_value_widget(parent, column):
         return wx.TextCtrl(parent)

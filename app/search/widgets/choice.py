@@ -6,7 +6,7 @@ from shared.humanization_utils import underscored_to_words
 @widget_for(Enum)
 class Choice:
 
-    value_label = "Hodnota"
+    value_label = _("Value")
     @staticmethod
     def get_value_widget(parent, column):
         choice = wx.Choice(parent)

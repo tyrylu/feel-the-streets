@@ -3,7 +3,7 @@ from . import widget_for
 
 @widget_for(int)
 class SpinCtrl:
-    value_label = "Hodnota"
+    value_label = _("Value")
 
     @staticmethod
     def get_value_widget(parent, column):

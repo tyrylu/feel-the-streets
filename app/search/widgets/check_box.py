@@ -7,7 +7,7 @@ class CheckBoxWidget:
     value_label = ""
     @staticmethod
     def get_value_widget(parent, column):
-        return wx.CheckBox(parent, label="Hodnota")
+        return wx.CheckBox(parent, label=_("Value"))
 
     @staticmethod
     def get_value_as_string(value_widget):

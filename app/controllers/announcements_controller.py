@@ -9,8 +9,8 @@ class AnnouncementsController:
     
     def _on_post_enter(self, sender, enters):
         if sender is self._point_of_view:
-            speech().speak("Vstupujete do %s."%enters)
+            speech().speak(_("You are entering {enters}.").format(enters=enters))
             
     def _on_post_leave(self, sender, leaves):
         if sender is self._point_of_view:
-            speech().speak("Opouštíte %s."%leaves)
+            speech().speak(_("You are leaving {leaves}").format(leaves=leaves))
