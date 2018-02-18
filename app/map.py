@@ -54,3 +54,7 @@ class Map:
     @property
     def bookmarks(self):
         return self._db.query(Bookmark)
+
+    def remove_bookmark(self, mark):
+        self._db._session.delete(mark)
+        self._db.commit()

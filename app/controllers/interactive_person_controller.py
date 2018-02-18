@@ -2,7 +2,7 @@ import wx
 from pygeodesy.ellipsoidalVincenty import LatLon
 from shared.entities import Road
 from ..uimanager import get, menu_command
-from ..services import speech
+from ..services import speech, map
 from ..objects_browser import ObjectsBrowserDialog
 from ..road_segments_browser import RoadSegmentsBrowserDialog
 from ..geometry_utils import get_road_section_angle, distance_filter
@@ -85,7 +85,7 @@ class InteractivePersonController:
          for obj in self._person.is_inside_of:
             if isinstance(obj, Road) and not obj.area:
                 angle = get_road_section_angle(self._person, obj)
-                speech().speak(_("{road}: {angle:.2}°").format(road=obj, angle=angle))
+                speech().speak(_("{road}: {angle:.2f}°").format(road=obj, angle=angle))
 
     @menu_command(_("Information"), _("Road details"), "ctrl+d")
     def road_details(self, evt):
@@ -150,3 +150,14 @@ class InteractivePersonController:
             return
         bookmark = bookmarks[names.index(name)]
         self._person.move_to(LatLon(bookmark.latitude, bookmark.longitude))
+
+    @menu_command(_("Bookmarks"), _("Remove bookmark..."), "ctrl+shift+b")
+    def remove_bookmark(self, evt):
+        bookmarks = list(self._person.map.bookmarks)
+        reprs = [_("{name}: longitude: {longitude}, latitude: {latitude}").format(name=b.name, longitude=b.longitude, latitude=b.latitude) for b in bookmarks]
+        repr = wx.GetSingleChoice(_("Select a bookmark"), _("Data entry"), aChoices=reprs)
+        if not repr:
+            return
+        bookmark = bookmarks[reprs.index(repr)]
+        if wx.MessageBox(_("Do you really want to delete the bookmark {name}?").format(name=bookmark.name), _("Question"), style=wx.ICON_QUESTION|wx.YES_NO|wx.NO_DEFAULT) == wx.YES:
+            map().remove_bookmark(bookmark)
