@@ -1,20 +1,22 @@
 import random
 import wx
 import glob
+import os
 from sqlalchemy import func
 from pygeodesy.ellipsoidalVincenty import LatLon
 from .entities import Person
 from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController
 from .uimanager import get
 from .services import map
+from shared import Database
 from shared.models import Entity
 from shared.entities.enums import OSMObjectType
 
 class MainFrame(wx.Frame):
     def __init__(self):
         super().__init__()
-        maps = glob.glob("*.db")
-        user_maps = [map.split(".")[0] for map in maps]
+        maps = glob.glob("%s/*.db"%Database.get_database_storage_root())
+        user_maps = [os.path.basename(map).split(".")[0] for map in maps]
         map_name = wx.GetSingleChoice(_("Select the map"), _("Map selection"), aChoices=user_maps)
         if map_name:
             map.set_call_args(map_name)

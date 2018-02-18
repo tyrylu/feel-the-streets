@@ -1,6 +1,7 @@
 import sys
 import time
 import logging
+import os
 import geoalchemy.functions as gf
 from geoalchemy import WKTSpatialElement
 import shapely.wkt
@@ -38,8 +39,9 @@ class DatabaseUpdater:
             entity.id = self._assigned_id
             self._assigned_id += 1
             yield entity
-        self.translator.record.save_to_file("generation_record_%s.txt"%self._location)
-        self.translator.record.save_to_pickle("%s.grd"%self._location)
+        os.makedirs("generation_records", exist_ok=True)
+        self.translator.record.save_to_file(os.path.join("generation_records", "%s.txt"%self._location))
+        self.translator.record.save_to_pickle(os.path.join("generation_records", "%s.grd"%self._location))
         
     def update_database(self, exclude_huge=False):
         for entity in self.entities_in_location(exclude_huge):

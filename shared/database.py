@@ -12,8 +12,15 @@ log = logging.getLogger(__name__)
 os.environ["PATH"] = r"C:\users\lukas\apps;%s"%os.environ["PATH"]
 
 class Database:
+    @classmethod
+    def get_database_storage_root(cls):
+        root = "databases"
+        if not os.path.exists(root):
+            os.makedirs(root)
+        return root
+
     def __init__(self, area_name):
-        db_path = "%s.db"%area_name
+        db_path = os.path.join(self.get_database_storage_root(), "%s.db"%area_name)
         self._creating = False
         self._engine = create_engine("sqlite:///%s"%db_path)
         event.listen(self._engine, "connect", self._post_connect)

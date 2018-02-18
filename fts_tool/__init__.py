@@ -1,12 +1,14 @@
 import sys
+import os
 import click
 import logging
 from .log_aggregation import AggregatingFileHandler
 
 def _configure_logging(suffix):
+    os.makedirs("logs", exist_ok=True)
     sh = logging.StreamHandler(sys.stdout)
     sh.setLevel(logging.INFO)
-    logging.basicConfig(level=logging.INFO, handlers=[AggregatingFileHandler("db_generation_%s.log"%suffix, "w", "UTF-8"), sh])
+    logging.basicConfig(level=logging.INFO, handlers=[AggregatingFileHandler(os.path.join("logs", "db_generation_%s.log"%suffix), "w", "UTF-8"), sh])
 
 @click.group()
 def cli():
