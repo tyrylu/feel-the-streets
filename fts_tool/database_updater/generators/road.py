@@ -19,6 +19,8 @@ class RoadGenerator(Generator):
         self.renames("cycleway:right", "right_cycleway")
         self.renames("maxspeed:hgv", "maxspeed_hgv")
         self.replaces_property_value("maxspeed", "CZ:urban", "50")
+        self.replaces_property_value("maxheight", "default", "4.5") # An approximation
+        self.replaces_property_value("lanes_maxwidth", "|", "")
         self.renames("maxspeed:forward", "maxspeed_forward")
         self.renames("proposed:bridge", "proposed_bridge")
         self.renames("maxspeed:backward", "maxspeed_backward")

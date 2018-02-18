@@ -54,7 +54,7 @@ class Steps(Named):
     wheelchair: bool = None
     conveying: bool = None
     level: str = None
-    mtb_scale: int = None
+    mtb_scale: str = None
     mtb_scale_uphill: int = None
     bridge: bool = None
     left_handrail: bool = None

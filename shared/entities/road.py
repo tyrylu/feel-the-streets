@@ -1,5 +1,5 @@
 import enum
-from .enums import AccessType, WaterWayType, NaturalType, Inclination, CrossingType, TrafficCalmingType, RailWayType, BridgeType, RoadType, Location, BridgeStructure, Surface, KerbType, SidewalkType, WheelchairAccess, ManMade, HistoricType, RestrictionType, SportType, AreaType, TourismType, Amenity, PlaceType, RouteImportance, EmergencyType, Support, BarrierType, CurbType, BuildingType, TrafficSignType, ParkingLaneType
+from .enums import AccessType, WaterWayType, NaturalType, Inclination, CrossingType, TrafficCalmingType, RailWayType, BridgeType, RoadType, Location, BridgeStructure, Surface, KerbType, SidewalkType, WheelchairAccess, ManMade, HistoricType, RestrictionType, SportType, AreaType, TourismType, Amenity, PlaceType, RouteImportance, EmergencyType, Support, BarrierType, CurbType, BuildingType, TrafficSignType, ParkingLaneType, IndoorType
 from . import Named
 from ..validated_quantity import quantity
 
@@ -157,7 +157,7 @@ class Road(Named):
     maxheight: float = None
     segregated: bool = None
     tracktype: str = None
-    maxweight: float = None
+    maxweight: quantity("tonne") = None
     access: AccessType = None
     surface: Surface = None
     width: quantity("meter") = None
@@ -178,7 +178,7 @@ class Road(Named):
     maxlength: int = None
     opening_date: str = None
     route: str = None
-    noexit: bool = None
+    noexit: AccessType = None
     maxspeed: int = None
     owed: AccessType = None
     comment: str = None
@@ -274,7 +274,7 @@ class Road(Named):
     priority_road: RoadPriority = None
     lcn: bool = None
     overtaking: bool = None
-    bus: bool = None
+    bus: AccessType = None
     pl_highway_class: str = None
     pl_highway_category: int = None
     bus_maxspeed: int = None
@@ -293,7 +293,7 @@ class Road(Named):
     destination_sign: str = None
     area: bool = None
     short_name: str = None
-    hgv_6_5t: bool = None
+    hgv_6_5t: AccessType = None
     destination_int_ref_lanes: str = None
     destination_ref_lanes: str = None
     destination_symbol_lanes: str = None
@@ -331,7 +331,7 @@ class Road(Named):
     survey_date: str = None
     # Make it a date
     abandoned_higway: RoadType = None
-    indoor: bool = None
+    indoor: IndoorType = None
     informal: bool = None
     ref_name_note: str = None
     ref_name: str = None
@@ -345,7 +345,7 @@ class Road(Named):
     destination_country: str = None
     dual_carriageway: bool = None
     access_note: str = None
-    nat_ref: int = None
+    nat_ref: str = None
     left_footway_width: float = None
     hazmat_water: bool = None
     hgv_12t: AccessType = None
@@ -373,7 +373,7 @@ class Road(Named):
     both_ways_lanes: int = None
     maxspeed_source: str = None
     voltage: int = None
-    both_cycleway: bool = None
+    both_cycleway: CycleWayType = None
     vorh_parking_condition: ParkingCondition = None
     both_default_parking_condition: ParkingCondition = None
     both_residents_parking_condition: int = None

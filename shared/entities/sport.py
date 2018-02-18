@@ -1,5 +1,6 @@
 import enum
-from .enums import SportType, LeisureType, Surface, BarrierType, LandType, AccessType, ReservationType, GolfRelation, FenceType, ManMade
+from .enums import SportType, LeisureType, Surface, BarrierType, LandType, AccessType, ReservationType, GolfRelation, FenceType, ManMade, WheelchairAccess
+from ..validated_quantity import quantity
 from . import Addressable
 
 class SwimmingType(enum.Enum):
@@ -20,7 +21,7 @@ class Sport(Addressable):
     layer: int = None
     barrier: BarrierType = None
     seasonal: bool = None
-    wheelchair: bool = None
+    wheelchair: WheelchairAccess = None
     landuse: LandType = None
     access: AccessType = None
     lit: bool = None
@@ -37,7 +38,7 @@ class Sport(Addressable):
     reservation: ReservationType = None
     capacity: int = None
     fence_type: FenceType = None
-    height: float = None
+    height: quantity("meter") = None
     facebook: str = None
     climbing_length: int = None
     official_name: str = None

@@ -5,6 +5,7 @@ class RailWayGenerator(AddressAwareGenerator):
     def __init__(self):
         super().__init__()
         self.generates(RailWay)
+        self.replaces_property_value("length", "~", "")
         self.renames("railway", "type")
         self.renames("bridge", "is_bridge")
         self.renames("crossing:light", "crossing_light")

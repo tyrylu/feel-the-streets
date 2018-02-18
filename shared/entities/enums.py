@@ -1435,6 +1435,7 @@ class IndoorType(enum.Enum):
     area = 2
     no = 3
     yes = 4
+    corridor = 5
 
 
 class AreaType(enum.Enum):

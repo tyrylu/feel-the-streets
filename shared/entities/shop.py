@@ -2,7 +2,7 @@ import enum
 from . import Building
 from .enums import ShopType
 
-class SecondHandType(enum.Enum):
+class ShopItemAvailability(enum.Enum):
     none = 0
     only = 1
     yes = 2
@@ -30,9 +30,9 @@ class Shop(Building):
     type: ShopType = None
     vehicle_parts: str = None
     vehicle_repair: str = None
-    organic: bool = None
+    organic: ShopItemAvailability = None
     coins_payment: bool = None
-    second_hand: SecondHandType = None
+    second_hand: ShopItemAvailability = None
     service: str = None
     skiing: SkiingType = None
      # Do we want a skiing_shop?

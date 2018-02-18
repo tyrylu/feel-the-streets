@@ -1,6 +1,6 @@
 import enum
 from . import Named
-from .enums import BuildingType, WheelchairAccess, BicycleType
+from .enums import BuildingType, WheelchairAccess, BicycleType, AccessType
 
 class TransportRelationship(enum.Enum):
     none = 0
@@ -25,7 +25,7 @@ class Platform(Named):
     bin: bool = None
     official_name: str = None
     area: bool = None
-    foot: bool = None
+    foot: AccessType = None
     layer: int = None
     trolleybus: bool = None
     tunnel: bool = None
