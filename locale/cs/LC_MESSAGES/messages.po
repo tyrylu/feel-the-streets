@@ -8,8 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-17 23:27+0100\n"
-"PO-Revision-Date: 2018-02-17 23:45+0100\n"
+"POT-Creation-Date: 2018-02-18 22:14+0100\n"
+"PO-Revision-Date: 2018-02-18 22:18+0100\n"
+"Last-Translator: \n"
 "Language: cs\n"
 "Language-Team: cs <LL@li.org>\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
@@ -17,14 +18,13 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.3\n"
-"Last-Translator: \n"
 "X-Generator: Poedit 2.0.5\n"
 
-#: app/main_frame.py:18
+#: app/main_frame.py:20
 msgid "Select the map"
 msgstr "Vyberte mapu"
 
-#: app/main_frame.py:18
+#: app/main_frame.py:20
 msgid "Map selection"
 msgstr "Výběr mapy"
 
@@ -33,8 +33,8 @@ msgid " ({num_objects} objects shown)"
 msgstr " (zobrazeno {num_objects} objektů)"
 
 #: app/objects_browser.py:24
-msgid "{object}: distance {distance:.2} meters, {rel_bearing:.2}° relatively"
-msgstr "{object}: vzdálenost {distance:.2} metrů, {rel_bearing:.2}° relativně"
+msgid "{object}: distance {distance:.2f} meters, {rel_bearing:.2f}° relatively"
+msgstr "{object}: vzdálenost {distance:.2f} metrů, {rel_bearing:.2f}° relativně"
 
 #: app/objects_browser.py:47
 msgid "Other fields - they can not be searched and are not processed in any way"
@@ -42,16 +42,16 @@ msgstr ""
 "Ostatní pole - nejsou prohledávatelná ani žádným dalším způsobem zpracovávána"
 
 #: app/road_segments_browser.py:20
-msgid "{distance:.2} meters in angle {angle:.2}°"
-msgstr "{distance:.2} metrů v úhlu {angle:.2}°"
+msgid "{distance:.2f} meters in angle {angle:.2f}°"
+msgstr "{distance:.2f} metrů v úhlu {angle:.2f}°"
 
 #: app/road_segments_browser.py:26
 msgid ""
-"{start_distance:.2} meters of {distance:.2} meters in angle {angle:.2}° "
-"distant from road center by {middle_distance:.2}"
+"{start_distance:.2f} meters of {distance:.2f} meters in angle {angle:.2f}° "
+"distant from road center by {middle_distance:.2f}"
 msgstr ""
-"{start_distance:.2} metrů z {distance:.2} metrů v úhlu {angle:.2}° ve "
-"vzdálenosti {middle_distance:.2} od středu"
+"{start_distance:.2f} metrů z {distance:.2f} metrů v úhlu {angle:.2f}° ve "
+"vzdálenosti {middle_distance:.2f} od středu"
 
 #: app/ui.xrc:5
 msgid "Feel the streets"
@@ -247,8 +247,8 @@ msgid "Current road section angle"
 msgstr "Úhel aktuální čáti cesty"
 
 #: app/controllers/interactive_person_controller.py:88
-msgid "{road}: {angle:.2}°"
-msgstr "{road}: {angle:.2}°"
+msgid "{road}: {angle:.2f}°"
+msgstr "{road}: {angle:.2f}°"
 
 #: app/controllers/interactive_person_controller.py:99
 msgid "Turn according to a road"
@@ -288,6 +288,7 @@ msgstr "Zadaným podmínkám vyhledávání neodpovídá žádný objekt."
 
 #: app/controllers/interactive_person_controller.py:137
 #: app/controllers/interactive_person_controller.py:144
+#: app/controllers/interactive_person_controller.py:154
 msgid "Bookmarks"
 msgstr "Záložky"
 
@@ -301,6 +302,7 @@ msgstr "Zadej jméno nové záložky"
 
 #: app/controllers/interactive_person_controller.py:139
 #: app/controllers/interactive_person_controller.py:148
+#: app/controllers/interactive_person_controller.py:158
 msgid "Data entry"
 msgstr "Datový vstup"
 
@@ -309,8 +311,25 @@ msgid "Go to bookmark..."
 msgstr "Jít na záložku..."
 
 #: app/controllers/interactive_person_controller.py:148
+#: app/controllers/interactive_person_controller.py:158
 msgid "Select a bookmark"
 msgstr "Zvolte záložku"
+
+#: app/controllers/interactive_person_controller.py:154
+msgid "Remove bookmark..."
+msgstr "Odstranit záložku..."
+
+#: app/controllers/interactive_person_controller.py:157
+msgid "{name}: longitude: {longitude}, latitude: {latitude}"
+msgstr "{name}: zeměpisná délka: {longitude}, zeměpisná šířka: {latitude}"
+
+#: app/controllers/interactive_person_controller.py:162
+msgid "Do you really want to delete the bookmark {name}?"
+msgstr "Opravdu si přejete záložku {bookmark} odstranit?"
+
+#: app/controllers/interactive_person_controller.py:162
+msgid "Question"
+msgstr "Otázka"
 
 #: app/search/__init__.py:12
 msgid "Select the class to search"

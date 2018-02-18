@@ -21,7 +21,7 @@ class ObjectsBrowserDialog(wx.Dialog):
         for dist, obj, closest in objects:
             bearing = bearing_to(person.position, closest)
             rel_bearing = (bearing - self._person.direction) % 360
-            objects_list.Append(_("{object}: distance {distance:.2} meters, {rel_bearing:.2}° relatively").format(object=obj, distance=dist, rel_bearing=rel_bearing))
+            objects_list.Append(_("{object}: distance {distance:.2f} meters, {rel_bearing:.2f}° relatively").format(object=obj, distance=dist, rel_bearing=rel_bearing))
         self._objects = objects
         objects_list.Selection = 0
         self.on_objects_listbox(None)

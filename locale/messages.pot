@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-17 23:27+0100\n"
+"POT-Creation-Date: 2018-02-18 22:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.3\n"
 
-#: app/main_frame.py:18
+#: app/main_frame.py:20
 msgid "Select the map"
 msgstr ""
 
-#: app/main_frame.py:18
+#: app/main_frame.py:20
 msgid "Map selection"
 msgstr ""
 
@@ -30,7 +30,7 @@ msgid " ({num_objects} objects shown)"
 msgstr ""
 
 #: app/objects_browser.py:24
-msgid "{object}: distance {distance:.2} meters, {rel_bearing:.2}° relatively"
+msgid "{object}: distance {distance:.2f} meters, {rel_bearing:.2f}° relatively"
 msgstr ""
 
 #: app/objects_browser.py:47
@@ -38,11 +38,11 @@ msgid "Other fields - they can not be searched and are not processed in any way"
 msgstr ""
 
 #: app/road_segments_browser.py:20
-msgid "{distance:.2} meters in angle {angle:.2}°"
+msgid "{distance:.2f} meters in angle {angle:.2f}°"
 msgstr ""
 
 #: app/road_segments_browser.py:26
-msgid "{start_distance:.2} meters of {distance:.2} meters in angle {angle:.2}° distant from road center by {middle_distance:.2}"
+msgid "{start_distance:.2f} meters of {distance:.2f} meters in angle {angle:.2f}° distant from road center by {middle_distance:.2f}"
 msgstr ""
 
 #: app/ui.xrc:5
@@ -239,7 +239,7 @@ msgid "Current road section angle"
 msgstr ""
 
 #: app/controllers/interactive_person_controller.py:88
-msgid "{road}: {angle:.2}°"
+msgid "{road}: {angle:.2f}°"
 msgstr ""
 
 #: app/controllers/interactive_person_controller.py:99
@@ -280,6 +280,7 @@ msgstr ""
 
 #: app/controllers/interactive_person_controller.py:137
 #: app/controllers/interactive_person_controller.py:144
+#: app/controllers/interactive_person_controller.py:154
 msgid "Bookmarks"
 msgstr ""
 
@@ -293,6 +294,7 @@ msgstr ""
 
 #: app/controllers/interactive_person_controller.py:139
 #: app/controllers/interactive_person_controller.py:148
+#: app/controllers/interactive_person_controller.py:158
 msgid "Data entry"
 msgstr ""
 
@@ -301,7 +303,24 @@ msgid "Go to bookmark..."
 msgstr ""
 
 #: app/controllers/interactive_person_controller.py:148
+#: app/controllers/interactive_person_controller.py:158
 msgid "Select a bookmark"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:154
+msgid "Remove bookmark..."
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:157
+msgid "{name}: longitude: {longitude}, latitude: {latitude}"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:162
+msgid "Do you really want to delete the bookmark {name}?"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:162
+msgid "Question"
 msgstr ""
 
 #: app/search/__init__.py:12
