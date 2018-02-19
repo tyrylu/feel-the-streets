@@ -49,6 +49,8 @@ class DatabaseUpdater:
         self._db.add_entities()
 
     def _ensure_valid_geometry(self, geometry):
+        if geometry.startswith("POINT") or geometry.startswith("LINESTRING"):
+            return geometry
         try:
             sh_geom = shapely.wkt.loads(geometry)
             if not sh_geom.is_valid:
@@ -57,6 +59,8 @@ class DatabaseUpdater:
                 if not sh_geom.is_valid:
                     log.error("Zero buffer failed to fix the entity validity.")
                     return None
+            else:
+                log.info("Geometry valid.")
         except Exception as exc:
             log.error("Failed to parse geometry %s, error %s.", geometry, exc)
             return None

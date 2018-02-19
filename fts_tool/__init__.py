@@ -7,7 +7,7 @@ from .log_aggregation import AggregatingFileHandler
 def _configure_logging(suffix):
     os.makedirs("logs", exist_ok=True)
     sh = logging.StreamHandler(sys.stdout)
-    sh.setLevel(logging.INFO)
+    sh.setLevel(logging.DEBUG)
     logging.basicConfig(level=logging.INFO, handlers=[AggregatingFileHandler(os.path.join("logs", "db_generation_%s.log"%suffix), "w", "UTF-8"), sh])
 
 @click.group()
