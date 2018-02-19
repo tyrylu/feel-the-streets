@@ -23,15 +23,19 @@ class OSMObjectManager:
         self._use_cache = use_cache
 
     def lookup_objects_in(self, area):
-        self.lookup_nodes_in(area)
-        self.lookup_ways_in(area)
-        self.lookup_relations_in(area)
+        query = '((area["name"="{area}"];node(area);area["name"="{area}"];way(area);area["name"="{area}"];rel(area);>>);>>)'.format(area=area)
+        objects = self._cache_results_of(query)
+        self._ensure_has_cached_dependencies_for(objects)
+        #self.lookup_nodes_in(area)
+        #self.lookup_ways_in(area)
+        #self.lookup_relations_in(area)
 
     def _cache_objects_of(self, response):
         log.info("Converting and caching results.")
         for osm_object in response["elements"]:
             dest = self._get_container_for_objects_of_type(osm_object.type)
             dest[osm_object.id] = osm_object
+    
     def _run_query(self, query, timeout):
         if self._use_cache:
             query_hash = hashlib.new("sha3_256", query.encode("UTF-8")).hexdigest()
@@ -41,7 +45,9 @@ class OSMObjectManager:
                     log.debug("Returning cached query result.")
                     return json.load(fp)
         try:
+            start = time.time()
             resp = self._api.Get(self._query_template.format(timeout=timeout, query=query), build=False, responseformat="json")
+            log.info("Query successful, duration %s seconds.", time.time() - start)
         except overpass.MultipleRequestsError:
             log.warn("Multiple requests, killing them despite not knowing what they are.")
             requests.get("http://overpass-api.de/api/kill_my_queries")
@@ -58,8 +64,9 @@ class OSMObjectManager:
         
     def _run_query_and_convert(self, query, timeout=900):
         resp = self._run_query(query, timeout)
-        resp["elements"] = [OSMObject.from_dict(e) for e in resp["elements"]]
+        resp["elements"] = [OSMObject.from_dict(e) for e in resp["elements"] if e["type"] != "area"]
         return resp
+    
     def _cache_results_of(self, query):
         log.debug("Caching results of query %s.", query)
         resp = self._run_query_and_convert(query)
