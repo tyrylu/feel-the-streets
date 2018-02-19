@@ -40,7 +40,11 @@ def create_address(props):
     if "provisional_number" in args and ";" in args["provisional_number"]:
         log.warn("Semicolon in an address provisional number of address %s.", args)
         del args["provisional_number"]
-
+    try:
+        int(args.get("conscription_number", 0))
+    except ValueError:
+        log.warn("Non integral conscription number %s.", args["conscription_number"])
+        del args["conscription_number"]
     if args:
         return args
     else:
