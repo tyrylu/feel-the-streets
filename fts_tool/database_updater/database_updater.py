@@ -59,8 +59,6 @@ class DatabaseUpdater:
                 if not sh_geom.is_valid:
                     log.error("Zero buffer failed to fix the entity validity.")
                     return None
-            else:
-                log.info("Geometry valid.")
         except Exception as exc:
             log.error("Failed to parse geometry %s, error %s.", geometry, exc)
             return None
