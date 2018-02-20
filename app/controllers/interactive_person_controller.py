@@ -16,9 +16,8 @@ class InteractivePersonController:
     @menu_command(_("Information"), _("Current coordinates"), "c")
     def do_current_coords(self, evt):
         speech().speak(("Longitude: {longitude}, latitude: {latitude}.").format(longitude=self._person.position.lon, latitude=self._person.position.lat))
-    
-    @menu_command(_("Information"), _("Position"), "l")
-    def do_position(self, evt):
+
+    def _position_impl(self, objects):    
         position_known = False
         for obj in self._person.is_inside_of:
             position_known = True
@@ -26,17 +25,30 @@ class InteractivePersonController:
         if not position_known:
             speech().speak(_("Not known."))
     
-    @menu_command(_("Information"), _("Detailed current position"), "shift+l")
-    def do_position_detailed(self, evt):
-        filtered_inside_of = distance_filter((entity.db_entity for entity in self._person.is_inside_of), self._person.position, float("inf"))
+    @menu_command(_("Information"), _("Position"), "l")
+    def do_position(self, evt):
+        self._position_impl(self._person.is_inside_of)
+    
+    @menu_command(_("Information"), _("Position - all objects, may be slow"), "ctrl+l")
+    def do_position_slow(self, evt):
+        self._position_impl((res.create_osm_entity() for res in map().intersections_at_position(self._person.position, fast=False)))
+    
+    def _position_detailed_impl(self, objects):
+        filtered_inside_of = distance_filter((entity.db_entity for entity in objects), self._person.position, float("inf"))
         dlg = get().prepare_xrc_dialog(ObjectsBrowserDialog, title=_("Current position"), unsorted_objects=self._person.is_inside_of, person=self._person)
         if dlg.ShowModal() == 1:
             self._person.move_to(dlg.selected_object[2])
         dlg.Destroy()
     
-    @menu_command(_("Information"), _("Nearest"), "n")
-    def do_nearest(self, evt):
-        objects = self._person.map.within_distance(self._person.position, 100)
+    @menu_command(_("Information"), _("Detailed current position"), "shift+l")
+    def position_detailed(self, evt):
+        self._position_detailed_impl(self._person.is_inside_of)
+
+    @menu_command(_("Information"), _("Detailed current position - all objects, may be slow"), "ctrl+shift+l")
+    def do_position_detailed_slow(self, evt):
+        self._position_detailed_impl((res.create_osm_entity() for res in map().intersections_at_position(self._person.position, fast=False)))
+    
+    def _nearest_impl(self, objects):
         if not objects:
             speech().speak(_("Nothing."))
             return
@@ -45,7 +57,13 @@ class InteractivePersonController:
         if action == 1:
             self._person.move_to(dlg.selected_object[2])
         dlg.Destroy()   
-    
+    @menu_command(_("Information"), _("Nearest"), "n")
+    def do_nearest(self, evt):
+        self._nearest_impl(self._person.map.within_distance(self._person.position, 100))
+
+    @menu_command(_("Information"), _("Nearest - all objects, may be slow"), "ctrl+n")
+    def do_nearest_slow(self, evt):
+        self._nearest_impl(self._person.map.within_distance(self._person.position, 100, exclude_routes=False))
     @menu_command(_("Movement"), _("Step forward"), "up")
     def do_forward(self, evt):
         self._person.step_forward() 
