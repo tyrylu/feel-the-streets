@@ -21,4 +21,4 @@ def extract_xrc(fileobj, keywords, comment_tags, options):
     for lineno, line in enumerate(fileobj):
         match = matching_re.search(line)
         if match:
-            yield (lineno, None, match.group(2).decode("utf-8"), [])
+            yield (lineno, None, match.group(2).decode("utf-8").replace("&amp;", "&"), [])
