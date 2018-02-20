@@ -138,8 +138,7 @@ class OSMObjectManager:
         return self._get_container_for_objects_of_type(type)[id]
 
     def _enrich_tags(self, object, parent):
-        object.tags["parent_osm_type"] = parent.type
-        object.tags["parent_id"] = parent.id
+        object.tags["parent_osm_id"] = "{0}{1}".format(parent.type.name[0], parent.id)
 
     def related_objects_of(self, object):
         if object.type is OSMObjectType.node:

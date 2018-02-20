@@ -107,14 +107,12 @@ class Generator:
     
     def _set_common_attrs(self, osm_object):
         props = osm_object.tags
-        props['osm_id'] = osm_object.id
-        props["osm_type"] = osm_object.type
+        props['osm_id'] = "{0}{1}".format(osm_object.type.name[0], osm_object.id)
         props["version"] = osm_object.version
         props["changeset"] = osm_object.changeset
         props["timestamp"] = osm_object.timestamp
         props["user"] = osm_object.user
         props["uid"] = osm_object.uid
-
 
     @staticmethod
     def accepts(props):

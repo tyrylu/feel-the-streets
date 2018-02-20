@@ -24,7 +24,7 @@ class MainFrame(wx.Frame):
         
     def post_create(self):
         self._app_controller = ApplicationController(self)
-        entity = self._map._db.query(Entity).filter(func.json_extract(Entity.data, "$.osm_type") == OSMObjectType.node.value).first()
+        entity = self._map._db.query(Entity).filter(func.json_extract(Entity.data, "$.osm_id").startswith("n")).first()
         lon = self._map._db.scalar(entity.geometry.x)
         lat = self._map._db.scalar(entity.geometry.y)
         person = Person(self._map, LatLon(lat, lon))
