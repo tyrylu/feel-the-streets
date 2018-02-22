@@ -1,35 +1,49 @@
-import attr
+from pydantic import BaseModel
+from typing import Dict, List
+from xml.etree.ElementTree import Element
 from shared.entities.enums import OSMObjectType
 
-@attr.s
-class OSMRelationMember:
-    type = attr.ib()
-    ref = attr.ib()
-    role = attr.ib()
+class OSMRelationMember(BaseModel):
+    type: OSMObjectType
+    ref: int
+    role: str
 
-    @classmethod
-    def from_dict(cls, member_data):
-        member_data["type"] = OSMObjectType[member_data["type"]]
-        return cls(**member_data)
-
-@attr.s
-class OSMObject:
-    id = attr.ib()
-    type = attr.ib()
-    timestamp = attr.ib()
-    version = attr.ib()
-    changeset = attr.ib()
-    user = attr.ib()
-    uid = attr.ib()
-    tags = attr.ib(default=attr.Factory(dict))
-    lat = attr.ib(default=None)
-    lon = attr.ib(default=None)
-    nodes = attr.ib(default=attr.Factory(list))
-    members = attr.ib(default=attr.Factory(list))
+class OSMObject(BaseModel):
+    id: int
+    type: OSMObjectType
+    timestamp: str
+    version: int
+    changeset: int
+    user: str
+    uid: int
+    tags: Dict[str, str] = {}
+    lat: float = None
+    lon: float = None
+    nodes: List[int] = None
+    members: List[OSMRelationMember] = None
 
     @classmethod
     def from_dict(cls, element_data):
-        element_data["type"] = OSMObjectType[element_data["type"]]
-        if "members" in element_data:
-            element_data["members"] = [OSMRelationMember.from_dict(m) for m in element_data["members"]]
-        return cls(**element_data)
+        return cls.parse_obj(element_data)
+
+    @classmethod
+    def from_xml(cls, element: Element):
+        data = element.attrib.copy()
+        data["type"] = element.tag
+        tags = {}
+        for tag in element.findall("tag"):
+            tags[tag.attrib["k"]] = tag.attrib["v"]
+        data["tags"] = tags
+        nodes = []
+        for node in element.findall("nd"):
+            nodes.append(node.attrib["ref"])
+        data["nodes"] = nodes
+        members = []
+        for member in element.findall("member"):
+            members.append(OSMRelationMember.parse_obj(member.attrib))
+        data["members"] = members
+        return cls.parse_obj(data)
+
+    @property
+    def unique_id(self):
+            return "{0}{1}".format(self.type.name[0], self.id)

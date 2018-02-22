@@ -1,6 +1,7 @@
 import click
 from .. import _configure_logging, cli
 from .database_updater import DatabaseUpdater
+from .change_action_processor import ChangeActionProcessor
 
 @cli.command()
 @click.option("-l", "--location", prompt=True, help="The location for which to update the database")
@@ -24,3 +25,12 @@ def interpret(location, use_cache, save_responses, check_geometries):
     for entity in updater.entities_in_location():
         pass
     input("Entity interpretation sequence successful.")
+
+@cli.command()
+@click.option("-l", "--location", help="The location for change retrieval", prompt=True)
+@click.option("-d", "--date", help="Date to start the change sequence generation from, overrides the last date in the database", default=None)
+def changes(location, date):
+    _configure_logging(location)
+    processor = ChangeActionProcessor(location)
+    for action in processor.new_semantic_changes(date):
+        print(action)

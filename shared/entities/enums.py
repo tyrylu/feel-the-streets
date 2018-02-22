@@ -1,9 +1,9 @@
 import enum
 
 class OSMObjectType(enum.Enum):
-    node = 0
-    way = 1
-    relation = 2
+    node = "node"
+    way = "way"
+    relation = "relation"
 
 class AccessType(enum.Enum):
     unspecified = -1

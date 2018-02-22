@@ -6,14 +6,19 @@ import hashlib
 import sys
 import gzip
 import requests
+import xml.etree.ElementTree as et
 import overpass
 from shared.entities.enums import OSMObjectType
 from .osm_object import OSMObject
+from .osm_change import OSMObjectChange, OSMChangeType
 from .utils import object_should_have_closed_geometry, ensure_closed, coords_to_text, connect_polygon_segments
 
 log = logging.getLogger(__name__)
 class OSMObjectManager:
     _query_template = "[out:json][timeout:{timeout}];{query};out meta;"
+    _diff_template = "[out:xml][timeout:{timeout}][adiff:\"{after}\"];{query};out meta;"
+    _retrieve_data_template = '((area["name"="{area}"];node(area);area["name"="{area}"];way(area);area["name"="{area}"];rel(area);>>);>>)'
+
     def __init__(self, use_cache, cache_responses):
         self._api = overpass.API(timeout=600)
         self._nodes = {}
@@ -23,7 +28,7 @@ class OSMObjectManager:
         self._use_cache = use_cache
 
     def lookup_objects_in(self, area):
-        query = '((area["name"="{area}"];node(area);area["name"="{area}"];way(area);area["name"="{area}"];rel(area);>>);>>)'.format(area=area)
+        query = self._retrieve_data_template.format(area=area)
         objects = self._cache_results_of(query)
         self._ensure_has_cached_dependencies_for(objects)
         #self.lookup_nodes_in(area)
@@ -36,7 +41,7 @@ class OSMObjectManager:
             dest = self._get_container_for_objects_of_type(osm_object.type)
             dest[osm_object.id] = osm_object
     
-    def _run_query(self, query, timeout):
+    def _run_query(self, query, timeout, is_lookup=True, format="json"):
         if self._use_cache:
             query_hash = hashlib.new("sha3_256", query.encode("UTF-8")).hexdigest()
             cache_path = os.path.join("query_cache", query_hash)
@@ -46,7 +51,11 @@ class OSMObjectManager:
                     return json.load(fp)
         try:
             start = time.time()
-            resp = self._api.Get(self._query_template.format(timeout=timeout, query=query), build=False, responseformat="json")
+            if is_lookup:
+             raw_query = self._query_template.format(timeout=timeout, query=query)
+            else:
+                raw_query = query
+            resp = self._api.Get(raw_query, build=False, responseformat=format)
             log.info("Query successful, duration %s seconds.", time.time() - start)
         except overpass.MultipleRequestsError:
             log.warn("Multiple requests, killing them despite not knowing what they are.")
@@ -144,11 +153,13 @@ class OSMObjectManager:
         if object.type is OSMObjectType.node:
             return []
         elif object.type is OSMObjectType.way:
+            self._ensure_has_cached_dependencies_for([object])
             for child_id in object.nodes:
                 child = self.get_object(OSMObjectType.node, child_id)
                 self._enrich_tags(child, object)
                 yield child
         elif object.type is OSMObjectType.relation:
+            self._ensure_has_cached_dependencies_for([object])
             for member in object.members:
                 member_obj = self.get_object(member.type, member.ref)
                 self._enrich_tags(member_obj, object)
@@ -265,3 +276,11 @@ class OSMObjectManager:
     @property
     def cached_nodes(self):
         return len(self._nodes)
+    
+    def lookup_differences_in(self, area, after, timeout=900):
+        retrieve_data = self._retrieve_data_template.format(area=area)
+        query = self._diff_template.format(after=after, timeout=timeout, query=retrieve_data)
+        log.info("Retrieving augmented diff for area %s starting from %s.", area, after)
+        xml_data = self._run_query(query, timeout=timeout, is_lookup=False, format="xml")
+        root = et.fromstring(xml_data)
+        return [OSMObjectChange.from_xml(element) for element in root.findall("action")]

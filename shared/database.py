@@ -66,6 +66,12 @@ class Database:
         max = func.max
         return self._session.query(min(IdxEntitiesGeometry.xmin), max(IdxEntitiesGeometry.xmax), min(IdxEntitiesGeometry.ymin), max(IdxEntitiesGeometry.ymax)).one()
 
+    @property
+    def last_timestamp(self):
+        max = func.max
+        json_extract = func.json_extract
+        return self.scalar(max(json_extract(Entity.data, "$.timestamp")))
+    
     def schedule_entity_addition(self, entity):
         per_table_values = defaultdict(dict)
         self._set_foreign_keys(entity)
@@ -114,3 +120,10 @@ class Database:
                 for i in range(0, length, chunk_size):
                     log.info("Inserting rows from index %s.", i)
                     conn.execute(stmt, rows[i:i+chunk_size])
+
+
+    def has_entity(self, osm_id):
+            return self.query(Entity).filter(func.json_extract(Entity.data, "$.osm_id") == osm_id).count() == 1
+
+    def get_entity_by_osm_id(self, osm_id):
+        return self.query(Entity).filter(func.json_extract(Entity.data, "$.osm_id") == osm_id).one_or_none()

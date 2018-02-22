@@ -10,7 +10,6 @@ from .uimanager import get
 from .services import map
 from shared import Database
 from shared.models import Entity
-from shared.entities.enums import OSMObjectType
 
 class MainFrame(wx.Frame):
     def __init__(self):

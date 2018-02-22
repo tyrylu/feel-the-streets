@@ -28,3 +28,7 @@ class OSMEntity(BaseModel):
         props = json.loads(self.db_entity.data)
         unknown_props = {key: val for key, val in props.items() if key not in names}
         return unknown_props
+
+    @property
+    def effective_width(self):
+        return None
