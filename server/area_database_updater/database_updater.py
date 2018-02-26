@@ -43,7 +43,7 @@ class DatabaseUpdater:
         self.translator.record.save_to_file(os.path.join("generation_records", "%s.txt"%self._location))
         self.translator.record.save_to_pickle(os.path.join("generation_records", "%s.grd"%self._location))
         
-    def update_database(self, exclude_huge=False):
+    def create_database(self, exclude_huge=False):
         for entity in self.entities_in_location(exclude_huge):
             self._db.schedule_entity_addition(entity)
         self._db.add_entities()
