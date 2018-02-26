@@ -18,9 +18,12 @@ class Database:
         if not os.path.exists(root):
             os.makedirs(root)
         return root
-
+    @classmethod
+    def get_database_file(cls, area_name):
+        return os.path.join(cls.get_database_storage_root(), "%s.db"%area_name)
+    
     def __init__(self, area_name):
-        db_path = os.path.join(self.get_database_storage_root(), "%s.db"%area_name)
+        db_path = self.get_database_file(area_name)
         self._creating = False
         self._engine = create_engine("sqlite:///%s"%db_path)
         event.listen(self._engine, "connect", self._post_connect)
