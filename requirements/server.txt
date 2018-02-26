@@ -1,0 +1,6 @@
+-r common.txt
+flask
+flask-sqlalchemy
+flask-migrate
+
+python-dotenv
