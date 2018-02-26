@@ -1,7 +1,8 @@
 python-dateutil
 pint
-attr
+attrs
 pygeodesy
 pydantic
 sqlalchemy
+pika
 # And not including those, it requires a few libraries whose binaries aren't readily available: shapely

@@ -4,3 +4,4 @@ flask-sqlalchemy
 flask-migrate
 
 python-dotenv
+huey
