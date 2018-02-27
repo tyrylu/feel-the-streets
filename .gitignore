@@ -3,6 +3,7 @@ __pycache__
 *.log
 query_cache/*
 *.grd
-generation_record*
+generation_records/*
 *.prof
 *.lprof
+.env
