@@ -5,6 +5,7 @@ from sqlalchemy import create_engine, event, text, inspect
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import func
 from geoalchemy import GeometryDDL, Geometry
+import appdirs
 from .models import Base, Entity, IdxEntitiesGeometry, Bookmark
 from . import sqlalchemy_logging
 
@@ -13,8 +14,11 @@ os.environ["PATH"] = r"C:\users\lukas\apps;%s"%os.environ["PATH"]
 
 class Database:
     @classmethod
-    def get_database_storage_root(cls):
-        root = "databases"
+    def get_database_storage_root(cls, server_side=True):
+        if server_side:
+            root = "databases"
+        else:
+            root = appdirs.user_data_dir("fts", appauthor=False)
         if not os.path.exists(root):
             os.makedirs(root)
         return root

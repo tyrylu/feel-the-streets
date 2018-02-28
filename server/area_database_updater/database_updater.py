@@ -12,11 +12,10 @@ from .utils import get_srid_from_point
 log = logging.getLogger(__name__)
 
 class DatabaseUpdater:
-    def __init__(self, location, check_geometries, use_cache, cache_responses):
+    def __init__(self, location, use_cache, cache_responses):
         self._location = location
         self.translator = OSMObjectTranslator(use_cache, cache_responses)
         self._db = Database(location)
-        self._check_geoms = check_geometries
         self._assigned_id = 1
         self._db.create_if_needed()
 

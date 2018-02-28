@@ -1,0 +1,11 @@
+[Unit]
+Description=Huey consumer of the fts application
+Requires=rabbitmq-server.service
+After=rabbitmq-server.service
+[Service]
+ExecStart=/usr/bin/python3 server.huey
+WorkingDirectory=/srv/feel-the-streets
+User=www-data
+Group=www-data
+[Install]
+WantedBy=multi-user.target

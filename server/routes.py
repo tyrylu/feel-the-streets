@@ -1,12 +1,12 @@
 from flask import jsonify, request, Response, send_file, abort
 from . import app, db
 from .models import Area, AreaState
-from .tasks import create_database
+from .tasks import create_database_task
 from shared import Database
 
 @app.route("/api/areas", methods=["GET"])
 def areas():
-    return jsonify(Area.query.all())
+    return jsonify([area.json_dict for area in Area.query.all()])
 
 @app.route("/api/areas", methods=["POST"])
 def maybe_create_area():
@@ -15,22 +15,22 @@ def maybe_create_area():
         name = json_body.get("name", None)
     if not json_body or not name:
         abort(400)
-    area = Area.query.get(name=name)
+    area = Area.query.filter_by(name=name).first()
     if area:
-        return jsonify(area)
+        return jsonify(area.json_dict)
     else:
         area = Area(name=name)
         db.session.add(area)
         db.session.commit()
-        resp = jsonify(area)
+        resp = jsonify(area.json_dict)
         resp.status_code = 201
-        create_database(name)
+        create_database_task(name)
         return resp
 
 @app.route("/api/areas/<area_name>")
 def area_detail(area_name):
     area = Area.query.filter_by(name=area_name).first_or_404()
-    return jsonify(area)
+    return jsonify(area.json_dict)
 
 @app.route("/api/areas/<area_name>/download")
 def download_area_data(area_name):

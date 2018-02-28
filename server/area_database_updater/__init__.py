@@ -7,7 +7,7 @@ from .log_aggregation import AggregatingFileHandler
 
 def create_database(location, use_cache=False, save_responses=False):
     _configure_logging(location)
-    updater = DatabaseUpdater(location, use_cache, save_responses)
+    updater = DatabaseUpdater(location=location, use_cache=use_cache, cache_responses=save_responses)
     updater.create_database(True)
 
     

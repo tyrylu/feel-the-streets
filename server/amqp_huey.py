@@ -1,9 +1,14 @@
+import base64
 import contextlib
+import logging
 import time
 import pika
 from huey.api import Huey
 from huey.constants import EmptyData
 from huey.storage import BaseStorage
+
+# The pika logging is too verbose even on info.
+logging.getLogger("pika").setLevel(logging.WARNING)
 
 class AMQPStorage(BaseStorage):
     def __init__(self, name='huey', broker_url='amqp://guest:guest@localhost', **storage_kwargs):
@@ -109,6 +114,8 @@ class AMQPStorage(BaseStorage):
         # We currently assume that ts represents current time. No usage pattern in the huey consumer indicates it being anything else.
         chan = self.connection.channel()
         items = self._all_messages_in_queue_matching(chan, self._schedule_queue_name, lambda resp, props, body: True)
+        if not items:
+            return []
         bodies = [item[2] for item in items]
         max_delivery_tag = max(items, key=lambda item: item[0].delivery_tag)
         chan.basic_ack(max_delivery_tag, multiple=True)
@@ -130,16 +137,26 @@ class AMQPStorage(BaseStorage):
         chan.close()
 
     def put_data(self, key, value):
+        value = base64.b64encode(value).decode("ascii")
         with self._key_value_storage(republish=True) as storage:
             storage[key] = value
 
     def peek_data(self, key):
         with self._key_value_storage(republish=False) as storage:
-            return storage.get(key, EmptyData)
+            data = storage.get(key, None)
+            if data:
+                return base64.b64decode(data)
+            else:
+                return EmptyData
     
     def pop_data(self, key):
         with self._key_value_storage(republish=True) as storage:
-            return storage.pop(key, EmptyData)
+            val = storage.pop(key, None)
+            if val:
+                return base64.b64decode(val)
+            else:
+                return EmptyData
+    
     def has_data_for_key(self, key):
         with self._key_value_storage(republish=False) as storage:
             return key in storage
