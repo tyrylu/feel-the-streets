@@ -40,3 +40,8 @@ def download_area_data(area_name):
         abort(400)
     else:
         return send_file(Database.get_database_file(area_name))
+
+
+@app.route("/api/ping")
+def ping():
+    return jsonify(dict(reply="pong"))
