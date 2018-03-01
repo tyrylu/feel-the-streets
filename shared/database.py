@@ -12,7 +12,6 @@ from .time_utils import ts_to_utc
 from . import sqlalchemy_logging
 
 log = logging.getLogger(__name__)
-os.environ["PATH"] = r"C:\users\lukas\apps;%s"%os.environ["PATH"]
 
 class Database:
     @classmethod
@@ -47,7 +46,13 @@ class Database:
         
     def _post_connect(self, dbapi_connection, connection_record):
         dbapi_connection.enable_load_extension(True)
-        dbapi_connection.load_extension("mod_spatialite")
+        if os.name == "nt":
+            extension = "dll"
+        elif os.name == "posix":
+            extension = "so"
+        else:
+            raise RuntimeError("Operating system %s not tested, mod_spatialite loading specifics not known."%os.name)
+        dbapi_connection.load_extension("mod_spatialite.%s"%extension)
         if self._creating: 
             log.debug("Initializing spatial metadata...")
             dbapi_connection.execute("SELECT InitSpatialMetadata(1)")
