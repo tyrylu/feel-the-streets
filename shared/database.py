@@ -1,3 +1,4 @@
+import glob
 from collections import defaultdict
 import os
 import logging
@@ -7,6 +8,7 @@ from sqlalchemy import func
 from geoalchemy import GeometryDDL, Geometry
 import appdirs
 from .models import Base, Entity, IdxEntitiesGeometry, Bookmark
+from .time_utils import ts_to_utc
 from . import sqlalchemy_logging
 
 log = logging.getLogger(__name__)
@@ -16,18 +18,26 @@ class Database:
     @classmethod
     def get_database_storage_root(cls, server_side=True):
         if server_side:
-            root = "databases"
+            root = "areas"
         else:
-            root = appdirs.user_data_dir("fts", appauthor=False)
+            root = os.path.join(appdirs.user_data_dir("fts", appauthor=False), "areas")
         if not os.path.exists(root):
             os.makedirs(root)
         return root
     @classmethod
-    def get_database_file(cls, area_name):
-        return os.path.join(cls.get_database_storage_root(), "%s.db"%area_name)
+    def get_database_file(cls, area_name, server_side=True):
+        return os.path.join(cls.get_database_storage_root(server_side), "%s.db"%area_name)
     
-    def __init__(self, area_name):
-        db_path = self.get_database_file(area_name)
+    @classmethod
+    def get_local_databases_info(cls, server_side=True):
+        entries = []
+        for fname in glob.glob(os.path.join(cls.get_database_storage_root(server_side), "*.db")):
+            info = os.stat(fname)
+            entries.append(dict(name=os.path.basename(fname).replace(".db", ""), state="local", created_at=ts_to_utc(info.st_ctime), updated_at=ts_to_utc(info.st_mtime)))
+        return entries
+
+    def __init__(self, area_name, server_side=True):
+        db_path = self.get_database_file(area_name, server_side)
         self._creating = False
         self._engine = create_engine("sqlite:///%s"%db_path)
         event.listen(self._engine, "connect", self._post_connect)

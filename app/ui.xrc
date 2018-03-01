@@ -147,5 +147,43 @@
     </object>
     <title>Search criteria</title>
   </object>
+  <object class="wxDialog" name="area_selection">
+    <object class="wxPanel">
+      <object class="wxGridBagSizer">
+        <object class="sizeritem">
+          <cellpos>0,0</cellpos>
+          <cellspan>1,3</cellspan>
+          <object class="wxStaticText">
+            <label>Available areas</label>
+          </object>
+        </object>
+        <object class="sizeritem">
+          <cellpos>1,0</cellpos>
+          <cellspan>1,3</cellspan>
+          <object class="wxListBox" name="areas"></object>
+        </object>
+        <object class="sizeritem">
+          <cellpos>2,0</cellpos>
+          <object class="wxButton" name="wxID_OK">
+            <default>1</default>
+            <label>&amp;Select</label>
+          </object>
+        </object>
+        <object class="sizeritem">
+          <cellpos>2,1</cellpos>
+          <object class="wxButton" name="request">
+            <label>&amp;Request a new area</label>
+          </object>
+        </object>
+        <object class="sizeritem">
+          <cellpos>2,2</cellpos>
+          <object class="wxButton" name="wxID_CANCEL">
+            <label>&amp;Exit</label>
+          </object>
+        </object>
+      </object>
+    </object>
+    <title>Select an area</title>
+  </object>
 </resource>
   

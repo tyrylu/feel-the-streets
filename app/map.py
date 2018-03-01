@@ -11,8 +11,8 @@ from .measuring import measure
 
 
 class Map:
-    def __init__(self, map_name):
-        self._db = Database(map_name)
+    def __init__(self, map_name, server_side):
+        self._db = Database(map_name, server_side=False)
     
     def intersections_at_position(self, position, fast=True):
         x, y = (position.lon, position.lat)

@@ -5,7 +5,7 @@ from . import uimanager
 from . import locale_setup
 
 def main():
-    #logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
     app = wx.App()
     locale_setup.setup_locale()
     ui_file = os.path.join(os.path.dirname(__file__), "ui.xrc")
