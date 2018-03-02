@@ -9,7 +9,7 @@ This application requires Python 3.6 to work, because it utilizes the new variab
 For the rest of the requirements see the requirement files.
 The majority of them can be installed by invoking a pip install -r requirements/app.txt for the desktop app, or pip install -r requirements/server.txt for the server component.
 Using a shared pipfile would be nice, but until pipfile supports more than the dev packages directive, it is not possible.
-
+In addition to the python requirements, it requires the loadable spatialite sqlite3 extension. In Debian, it is the libsqlite3-mod-spatialite package.
 Components
 ----------
 The basic components in the repository are:
@@ -25,3 +25,5 @@ Not including the python package requirements, the server requires a running Rab
 The requirement for the extension might be relaxed in the future, but it is not a high priority task, but if someone wants, he can submit a pull request which makes it at least optional. It is doable, but i am afraid that the scheduling code will not be as efficient.
 If you want to run the flask development server, first set the FLASK_APP environment variable. Assuming you are in the project root, its value would be server.
 Next, you just run flask run.
+
+Debian packages
