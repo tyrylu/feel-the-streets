@@ -25,7 +25,7 @@ def request_area_creation(area_name):
     if resp.status_code in {200, 201}:
         return resp.json()
     else:
-        log.warn("Unexpected status code during an area creation request: %s.", resp.status_code)
+        log.warn("Unexpected status code during an area creation request: %s, response %s.", resp.status_code, resp.content)
         return None
 
 def download_area_database(area_name, progress_callback=None):

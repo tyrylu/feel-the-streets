@@ -1,5 +1,5 @@
 import wx
-from .server_interaction import has_api_connectivity, get_areas
+from .server_interaction import has_api_connectivity, get_areas, request_area_creation
 from shared import Database
 from shared.time_utils import utc_timestamp_to_local_string
 
@@ -24,3 +24,13 @@ class AreaSelectionDialog(wx.Dialog):
     @property
     def selected_map(self):
         return self._area_names[self._areas.Selection]
+    
+    def on_request_clicked(self, evt):
+        name = wx.GetTextFromUser(_("Enter the name of the requested area"), _("Area name requested"))
+        if not name:
+            return
+        reply = request_area_creation(name)
+        if reply and isinstance(reply, dict) and "state" in reply and reply["state"] == "creating":
+            wx.MessageBox(_("The area creation request has been sent successfully. The area will become updated in a few minutes."), _("Success"), style=wx.ICON_INFORMATION)
+        else:
+            wx.MessageBox(_("The area creation request failed. Response from server: {reply}").format(reply=reply), _("Failure"), style=wx.ICON_ERROR)
