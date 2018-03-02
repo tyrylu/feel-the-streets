@@ -30,7 +30,7 @@ class AMQPStorage(BaseStorage):
         self.connection = pika.BlockingConnection(pika.URLParameters(self._broker_url))
         self.channel = self.connection.channel()
         self.initialize_queues()
-        if self._consume
+        if self._consume:
             self.start_consuming()
 
     def initialize_queues(self):

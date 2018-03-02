@@ -2,6 +2,7 @@ from flask import jsonify, request, Response, send_file, abort
 from . import app, db
 from .models import Area, AreaState
 from .tasks import create_database_task
+from .task_utils import enqueue_with_retries
 from shared import Database
 
 @app.route("/api/areas", methods=["GET"])
@@ -24,7 +25,7 @@ def maybe_create_area():
         db.session.commit()
         resp = jsonify(area.json_dict)
         resp.status_code = 201
-        create_database_task(name)
+        enqueue_with_retries(create_database_task, name=name)
         return resp
 
 @app.route("/api/areas/<area_name>")
