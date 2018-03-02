@@ -7,5 +7,6 @@ ExecStart=/usr/local/bin/huey_consumer  server.huey
 WorkingDirectory=/srv/feel-the-streets
 User=www-data
 Group=www-data
+Environment="CONSUME=True"
 [Install]
 WantedBy=multi-user.target

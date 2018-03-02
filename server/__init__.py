@@ -11,5 +11,5 @@ dotenv.load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-huey = AMQPHuey(broker_url=app.config["AMQP_BROKER_URL"])
+huey = AMQPHuey(broker_url=app.config["AMQP_BROKER_URL"], consume=bool(os.environ.get("CONSUME", "False")))
 from . import models, routes

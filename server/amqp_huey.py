@@ -12,9 +12,10 @@ from huey.storage import BaseStorage
 logging.getLogger("pika").setLevel(logging.WARNING)
 
 class AMQPStorage(BaseStorage):
-    def __init__(self, name='huey', broker_url='amqp://guest:guest@localhost', **storage_kwargs):
+    def __init__(self, name='huey', broker_url='amqp://guest:guest@localhost', consume=False, **storage_kwargs):
         super(AMQPStorage, self).__init__(name)
         self._broker_url = broker_url
+        self._consume = consume
         self._task_queue_name = self.name
         self._schedule_queue_name = "%s.schedule"%self.name
         self._key_value_queue_name = "%s.key_value"%self.name
@@ -29,7 +30,8 @@ class AMQPStorage(BaseStorage):
         self.connection = pika.BlockingConnection(pika.URLParameters(self._broker_url))
         self.channel = self.connection.channel()
         self.initialize_queues()
-        self.start_consuming()
+        if self._consume
+            self.start_consuming()
 
     def initialize_queues(self):
         chan = self.channel
@@ -188,7 +190,7 @@ class AMQPStorage(BaseStorage):
 
 
 class AMQPHuey(Huey):
-    def get_storage(self, broker_url='amqp://guest:guest@localhost', **kwargs):
+    def get_storage(self, broker_url='amqp://guest:guest@localhost', consume=False, **kwargs):
         return AMQPStorage(
             name=self.name,
             broker_url=broker_url,
