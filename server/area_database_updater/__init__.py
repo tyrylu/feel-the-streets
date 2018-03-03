@@ -15,14 +15,14 @@ def changes(location, date):
     _configure_logging(location)
     processor = ChangeActionProcessor(location)
     
-    import sys
-import os
+
+
 import click
-import logging
-from .log_aggregation import AggregatingFileHandler
+
 
 def _configure_logging(suffix):
     os.makedirs("logs", exist_ok=True)
     sh = logging.StreamHandler(sys.stdout)
     sh.setLevel(logging.DEBUG)
     logging.basicConfig(level=logging.INFO, handlers=[AggregatingFileHandler(os.path.join("logs", "db_generation_%s.log"%suffix), "w", "UTF-8"), sh])
+    logging.getLogger("shapely.geos").setLevel(logging.WARN)

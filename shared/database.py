@@ -1,15 +1,13 @@
 import glob
-from collections import defaultdict
 import os
 import logging
-from sqlalchemy import create_engine, event, text, inspect
+from sqlalchemy import create_engine, event, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import func
-from geoalchemy import GeometryDDL, Geometry
+from geoalchemy import GeometryDDL
 import appdirs
-from .models import Base, Entity, IdxEntitiesGeometry, Bookmark
+from .models import Entity, IdxEntitiesGeometry, Bookmark
 from .time_utils import ts_to_utc
-from . import sqlalchemy_logging
 
 log = logging.getLogger(__name__)
 
@@ -41,8 +39,9 @@ class Database:
         self._engine = create_engine("sqlite:///%s"%db_path)
         event.listen(self._engine, "connect", self._post_connect)
         self._session = sessionmaker(bind=self._engine)()
-        self._per_table_values = defaultdict(list)
-        self._foreign_ids = defaultdict(lambda: 1)
+        self._entity_insertion_context = None
+        self._entity_insertion_transaction = None
+        self._entity_insert_statement = None
         
     def _post_connect(self, dbapi_connection, connection_record):
         dbapi_connection.enable_load_extension(True)
@@ -94,58 +93,21 @@ class Database:
         json_extract = func.json_extract
         return self.scalar(max(json_extract(Entity.data, "$.timestamp")))
     
-    def schedule_entity_addition(self, entity):
-        per_table_values = defaultdict(dict)
-        self._set_foreign_keys(entity)
-        for table in inspect(entity.__class__).tables:
-            for column in table.columns.values():
-                value = getattr(entity, column.name)
-                # Manual override for geometry columns
-                if isinstance(column.type, Geometry) and value is not None:
-                    value = value.desc
-                per_table_values[column.table][column.name] = value
-        for table, row in per_table_values.items():
-            self._per_table_values[table].append(row)
+    def prepare_entity_insertions(self):
+        self._entity_insertion_context = self._engine.connect()
+        self._entity_insertion_transaction = self._entity_insertion_context.begin()
+        self._entity_insertion_context.execute("pragma synchronous=off")
+        self._entity_insert_statement = Entity.__table__.insert().values(dict(id=":id", data=":data", discriminator=":discriminator", effective_width=":effective_width", geometry=text("GeomFromText(:geometry, 4326)")))
 
-    def _set_foreign_keys(self, entity):
-        """Foreign key generation and other related functionality."""
-        for table in inspect(entity.__class__).tables:
-            for column in table.columns.values():
-                if column.name.endswith("_id") and column.foreign_keys:
-                    value_attr = column.name[:-3]
-                    foreign_value = getattr(entity, value_attr)
-                    if foreign_value:
-                        foreign_id = self._set_foreign_id(foreign_value)
-                        setattr(entity, column.name, foreign_id)
-                        self.schedule_entity_addition(foreign_value)
+    def insert_entity(self, entity):
+        self._entity_insertion_context.execute(self._entity_insert_statement, dict(id=entity.id, discriminator=entity.discriminator, data=entity.data, effective_width=entity.effective_width, geometry=entity.geometry.desc))
 
-    def _set_foreign_id(self, foreign_entity):
-        table = foreign_entity.__tablename__
-        free_id = self._foreign_ids[table]
-        self._foreign_ids[table] += 1
-        foreign_entity.id = free_id
-        return free_id
-    def add_entities(self):
-        with self._engine.begin() as conn:
-            conn.execute("pragma synchronous=off")
-            for table, rows in self._per_table_values.items():
-                values_dict = {}
-                for col in table.columns.values():
-                    if isinstance(col.type, Geometry):
-                        values_dict[col.name] = text("GeomFromText(:%s, 4326)"%col.name)
-                    else:
-                        values_dict[col.name] = ":%s"%col.name
-                stmt = table.insert().values(values_dict)
-                log.info("Adding %s rows to the %s table.", len(rows), table.name)
-                length = len(rows)
-                chunk_size = 10000
-                for i in range(0, length, chunk_size):
-                    log.info("Inserting rows from index %s.", i)
-                    conn.execute(stmt, rows[i:i+chunk_size])
-
-
+    def commit_entity_insertions(self):
+        self._entity_insertion_transaction.commit()
+        self._entity_insertion_context.close()
+    
     def has_entity(self, osm_id):
-            return self.query(Entity).filter(func.json_extract(Entity.data, "$.osm_id") == osm_id).count() == 1
+        return self.query(Entity).filter(func.json_extract(Entity.data, "$.osm_id") == osm_id).count() == 1
 
     def get_entity_by_osm_id(self, osm_id):
         return self.query(Entity).filter(func.json_extract(Entity.data, "$.osm_id") == osm_id).one_or_none()

@@ -1,16 +1,20 @@
 import time
 import logging
-import json
 import os
 import hashlib
-import sys
 import gzip
+from urllib.request import urlopen
+from urllib.parse import urlencode
+import shutil
 import requests
+import json
 import xml.etree.ElementTree as et
-import overpass
+import ijson.backends.yajl2 as ijson
 from shared.entities.enums import OSMObjectType
+import filedict
 from .osm_object import OSMObject
-from .osm_change import OSMObjectChange, OSMChangeType
+from .osm_change import OSMObjectChange
+from . import requests_response_stream
 from .utils import object_should_have_closed_geometry, ensure_closed, coords_to_text, connect_polygon_segments
 
 log = logging.getLogger(__name__)
@@ -18,83 +22,77 @@ class OSMObjectManager:
     _query_template = "[out:json][timeout:{timeout}];{query};out meta;"
     _diff_template = "[out:xml][timeout:{timeout}][adiff:\"{after}\"];{query};out meta;"
     _retrieve_data_template = '((area["name"="{area}"];node(area);area["name"="{area}"];way(area);area["name"="{area}"];rel(area);>>);>>)'
-
+    _interpret_url = "http://overpass-api.de/api/interpreter"
     def __init__(self, use_cache, cache_responses):
-        self._api = overpass.API(timeout=600)
-        self._nodes = {}
-        self._ways = {}
-        self._rels = {}
+        dict_storage = "generation_temp"
+        self._dict_storage = dict_storage
+        os.makedirs(dict_storage, exist_ok=True)
+        self._nodes = filedict.FileDict(os.path.join(dict_storage, "nodes"))
+        self._ways = filedict.FileDict(os.path.join(dict_storage, "ways"))
+        self._rels = filedict.FileDict(os.path.join(dict_storage, "rels"))
         self._cache_responses = cache_responses
         self._use_cache = use_cache
 
     def lookup_objects_in(self, area):
         query = self._retrieve_data_template.format(area=area)
-        objects = self._cache_results_of(query)
-        self._ensure_has_cached_dependencies_for(objects)
-        #self.lookup_nodes_in(area)
-        #self.lookup_ways_in(area)
-        #self.lookup_relations_in(area)
-
+        fp = self._run_query_raw(query, 900, True)
+        log.info("Retrieving and converting results.")
+        for elem in ijson.items(fp, "elements.item"):
+            if elem["type"] == "area":
+                continue
+            obj = OSMObject.from_dict(elem)
+            self._get_container_for_objects_of_type(obj.type)[obj.id] = obj
+    
     def _cache_objects_of(self, response):
         log.info("Converting and caching results.")
         for osm_object in response["elements"]:
             dest = self._get_container_for_objects_of_type(osm_object.type)
             dest[osm_object.id] = osm_object
     
-    def _run_query(self, query, timeout, is_lookup=True, format="json"):
+    def _run_query(self, query, timeout, is_lookup=True):
+        return json.load(self._run_query_raw(query, timeout, is_lookup))
+
+    def _run_query_raw(self, query, timeout, is_lookup=True):
         if self._use_cache:
             query_hash = hashlib.new("sha3_256", query.encode("UTF-8")).hexdigest()
             cache_path = os.path.join("query_cache", query_hash)
             if os.path.exists(cache_path):
                 with gzip.open(cache_path, "rt", encoding="UTF-8") as fp:
                     log.debug("Returning cached query result.")
-                    return json.load(fp)
-        try:
-            start = time.time()
-            if is_lookup:
-             raw_query = self._query_template.format(timeout=timeout, query=query)
-            else:
-                raw_query = query
-            resp = self._api.Get(raw_query, build=False, responseformat=format)
-            log.info("Query successful, duration %s seconds.", time.time() - start)
-        except overpass.MultipleRequestsError:
-            log.warn("Multiple requests, killing them despite not knowing what they are.")
-            requests.get("http://overpass-api.de/api/kill_my_queries")
-            return self._run_query(query, timeout)
+                    return fp
+        start = time.time()
+        if is_lookup:
+            raw_query = self._query_template.format(timeout=timeout, query=query)
+        else:
+            raw_query = query
+        resp = urlopen("{0}?{1}".format(self._interpret_url, urlencode({"data":raw_query})))
+        if resp.status == 429:
+            log.warning("Multiple requests, killing them despite not knowing what they are.")
+            urlopen("http://overpass-api.de/api/kill_my_queries")
+            return self._run_query(query, timeout, is_lookup=is_lookup)
+        fp = resp
+        log.info("Query successful, duration %s seconds.", time.time() - start)
         if self._cache_responses:
             query_hash = hashlib.new("sha3_256", query.encode("UTF-8")).hexdigest()
             if not os.path.exists("query_cache"):
                 log.info("Creating query cache directory because it is needed.")
                 os.mkdir("query_cache")
-            with gzip.open(os.path.join("query_cache", query_hash), "wt", encoding="UTF-8") as fp:
-                json.dump(resp, fp)
+            with gzip.open(os.path.join("query_cache", query_hash), "wt", encoding="UTF-8") as cache_fp:
+                cache_fp.write(fp.read())
+                fp.seek(0)
         log.debug("Returning live result from overpass-api.de.")
-        return resp
+        return fp
         
     def _run_query_and_convert(self, query, timeout=900):
         resp = self._run_query(query, timeout)
         resp["elements"] = [OSMObject.from_dict(e) for e in resp["elements"] if e["type"] != "area"]
         return resp
-    
+
     def _cache_results_of(self, query):
         log.debug("Caching results of query %s.", query)
         resp = self._run_query_and_convert(query)
         self._cache_objects_of(resp)
         return resp["elements"]
-
-    def lookup_nodes_in(self, area):
-        log.info("Looking for nodes in %s.", area)
-        self._cache_results_of('area["name"="%s"];node(area)'%area)
-
-    def lookup_ways_in(self, area):
-        log.info("Looking for ways in %s.", area)
-        objects = self._cache_results_of('area["name"="%s"];way(area)'%area)
-        self._ensure_has_cached_dependencies_for(objects)
-
-    def lookup_relations_in(self, area):
-        log.info("Looking for relations in %s.", area)
-        objects = self._cache_results_of('area["name"="%s"];rel(area)'%area)
-        self._ensure_has_cached_dependencies_for(objects)
 
     def _get_container_for_objects_of_type(self, type):
         if type is OSMObjectType.node:
@@ -129,7 +127,7 @@ class OSMObjectManager:
                     else:
                         log.debug("%s %s is not missing.", member.type.name.upper(), member.ref)
         for type, ids in missing.items():
-            if totals[type]:
+            if totals[type] and ids:
                 log.info("Out of %s dependent %ss %s was missing.", totals[type], type.name, len(ids))
             if ids:
                 self._lookup_objects(type, *ids)
@@ -151,7 +149,7 @@ class OSMObjectManager:
 
     def related_objects_of(self, object):
         if object.type is OSMObjectType.node:
-            return []
+            return
         elif object.type is OSMObjectType.way:
             self._ensure_has_cached_dependencies_for([object])
             for child_id in object.nodes:
@@ -209,10 +207,10 @@ class OSMObjectManager:
         inners = []
         for related in self.related_objects_of(object):
             if "role" not in related.tags:
-                log.warn("Complex multipolygon part %s missing role specifier.", related)
+                log.warning("Complex multipolygon part %s missing role specifier.", related)
                 return None
             if related.type is not OSMObjectType.way:
-                log.warn("Creating a point sequence from object of type %s not supported yet.", object.type.name)
+                log.warning("Creating a point sequence from object of type %s not supported yet.", object.type.name)
                 return None
             points = self._get_way_coords(related)
             if related.tags["role"] == "outer":
@@ -220,25 +218,24 @@ class OSMObjectManager:
             elif related.tags["role"] == "inner":
                 inners.append(points)
             else:
-                log.warn("Unknown multipolygon part role %s.", related.tags["role"])
+                log.warning("Unknown multipolygon part role %s.", related.tags["role"])
                 return None
         outers = connect_polygon_segments(outers)
         inners = connect_polygon_segments(inners)
         if len(outers) != 1 and len(inners):    
-            log.warn("Multiple outer rings and some inner ring(s), ambiguous.")
+            log.warning("Multiple outer rings and some inner ring(s), ambiguous.")
             return None
         polys = []
         for inner in inners:
             if len(inner) < 4:
-                log.warn("Not enough polygon points, falling back to geometry collection for relation %s.", object.id)
+                log.warning("Not enough polygon points, falling back to geometry collection for relation %s.", object.id)
                 return None
             polys.append("((%s),(%s))"%(coords_to_text(outers[0]), coords_to_text(inner)))
         if not inners:
             for outer in outers:
                 if len(outer) < 4:
-                    log.warn("Not enough polygon points, falling back to geometry collection for relation %s.", object.id)
+                    log.warning("Not enough polygon points, falling back to geometry collection for relation %s.", object.id)
                     return None
-
                 polys.append("((%s))"%coords_to_text(outer))
         if len(polys) == 1:
             return "POLYGON%s"%polys[0]
@@ -249,7 +246,7 @@ class OSMObjectManager:
         for related in self.related_objects_of(object):
             rel_geom = self.get_geometry_as_wkt(related)
             if not rel_geom.startswith("POLYGON"):
-                log.warn("Multipolygon promise broken for object %s with geometry %s.", related, rel_geom)
+                log.warning("Multipolygon promise broken for object %s with geometry %s.", related, rel_geom)
                 continue
             parts.append(rel_geom.replace("POLYGON", ""))
             return "MULTIPOLYGON(%s)"%", ".join(parts)
@@ -281,6 +278,13 @@ class OSMObjectManager:
         retrieve_data = self._retrieve_data_template.format(area=area)
         query = self._diff_template.format(after=after, timeout=timeout, query=retrieve_data)
         log.info("Retrieving augmented diff for area %s starting from %s.", area, after)
-        xml_data = self._run_query(query, timeout=timeout, is_lookup=False, format="xml")
+        xml_data = self._run_query(query, timeout=timeout, is_lookup=False)
         root = et.fromstring(xml_data)
         return [OSMObjectChange.from_xml(element) for element in root.findall("action")]
+
+
+    def __del__(self):
+        self._nodes.close()
+        self._ways.close()
+        self._rels.close()
+        shutil.rmtree(self._dict_storage)
