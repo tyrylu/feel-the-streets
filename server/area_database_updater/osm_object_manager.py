@@ -6,7 +6,6 @@ import gzip
 from urllib.request import urlopen
 from urllib.parse import urlencode
 import shutil
-import requests
 import json
 import xml.etree.ElementTree as et
 import ijson.backends.yajl2 as ijson
@@ -14,7 +13,6 @@ from shared.entities.enums import OSMObjectType
 import filedict
 from .osm_object import OSMObject
 from .osm_change import OSMObjectChange
-from . import requests_response_stream
 from .utils import object_should_have_closed_geometry, ensure_closed, coords_to_text, connect_polygon_segments
 
 log = logging.getLogger(__name__)
