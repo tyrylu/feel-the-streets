@@ -191,7 +191,9 @@ class AMQPStorage(BaseStorage):
 
 class AMQPHuey(Huey):
     def get_storage(self, broker_url='amqp://guest:guest@localhost', consume=False, **kwargs):
+        print(kwargs)
         return AMQPStorage(
             name=self.name,
             broker_url=broker_url,
+            consume=consume,
             **kwargs)
