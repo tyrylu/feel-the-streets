@@ -25,7 +25,7 @@ def maybe_create_area():
         db.session.commit()
         resp = jsonify(area.json_dict)
         resp.status_code = 201
-        enqueue_with_retries(create_database_task, name=name)
+        enqueue_with_retries(create_database_task, area_name=name)
         return resp
 
 @app.route("/api/areas/<area_name>")
