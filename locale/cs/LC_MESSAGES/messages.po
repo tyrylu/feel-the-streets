@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-20 18:42+0100\n"
-"PO-Revision-Date: 2018-02-20 18:42+0100\n"
+"POT-Creation-Date: 2018-03-04 18:36+0100\n"
+"PO-Revision-Date: 2018-03-04 18:41+0100\n"
 "Last-Translator: \n"
 "Language: cs\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -20,13 +20,57 @@ msgstr ""
 "Generated-By: Babel 2.5.3\n"
 "X-Generator: Poedit 2.0.6\n"
 
-#: app/main_frame.py:20
-msgid "Select the map"
-msgstr "Vyberte mapu"
+#: app/area_selection.py:24
+msgid "{name}: {state}, last updated {updated_at}, created {created_at}"
+msgstr "{name}: {state}, poslední změna {updated_at}, vznik {created_at}"
 
-#: app/main_frame.py:20
-msgid "Map selection"
-msgstr "Výběr mapy"
+#: app/area_selection.py:31
+msgid "Enter the name of the requested area"
+msgstr "Zadejte název požadované oblasti."
+
+#: app/area_selection.py:31
+msgid "Area name requested"
+msgstr "Požadováno jméno oblasti"
+
+#: app/area_selection.py:36
+msgid ""
+"The area creation request has been sent successfully. The area will become "
+"updated in a few minutes."
+msgstr ""
+"Požadavek na vytvoření oblasti byl úspěšně odeslán. Oblast bude aktualizována "
+"během několika minut, záleží na její velikosti."
+
+#: app/area_selection.py:36
+msgid "Success"
+msgstr "Úspěch"
+
+#: app/area_selection.py:38
+msgid "The area creation request failed. Response from server: {reply}"
+msgstr "Požadavek na vytvoření oblasti neuspěl. Odpověď serveru: {reply}"
+
+#: app/area_selection.py:38
+msgid "Failure"
+msgstr "Selhání"
+
+#: app/main_frame.py:29
+msgid "Download of the selected area had failed."
+msgstr "Stažení zvolené oblasti se nezdařilo."
+
+#: app/main_frame.py:29
+msgid "Download failure"
+msgstr "Selhání stahování"
+
+#: app/main_frame.py:46
+msgid "Download in progress"
+msgstr "Probíhá stahování"
+
+#: app/main_frame.py:46
+msgid "Downloading the selected database."
+msgstr "Stahování zvolené databáze."
+
+#: app/main_frame.py:47
+msgid "Downloading the selected database. Downloaded {so_far} of {total}."
+msgstr "Stahování zvolené databáze. Staženo {so_far} z {total}."
 
 #: app/objects_browser.py:13
 msgid " ({num_objects} objects shown)"
@@ -120,6 +164,26 @@ msgstr "Zrušit"
 #: app/ui.xrc:147
 msgid "Search criteria"
 msgstr "Podmínky vyhledávání"
+
+#: app/ui.xrc:156
+msgid "Available areas"
+msgstr "Dostupné oblasti"
+
+#: app/ui.xrc:168
+msgid "&Select"
+msgstr "&Vybrat"
+
+#: app/ui.xrc:174
+msgid "&Request a new area"
+msgstr "&Vyžádat novou oblast"
+
+#: app/ui.xrc:180
+msgid "&Exit"
+msgstr "&Konec"
+
+#: app/ui.xrc:185
+msgid "Select an area"
+msgstr "Zvolte oblast"
 
 #: app/controllers/announcements_controller.py:12
 msgid "You are entering {enters}."
@@ -415,3 +479,6 @@ msgstr "Začíná na (včetně velikosti písmen)"
 #: app/search/widgets/text_ctrl.py:7
 msgid "Value"
 msgstr "Hodnota"
+
+#~ msgid "Select the map"
+#~ msgstr "Vyberte mapu"

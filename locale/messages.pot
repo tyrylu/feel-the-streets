@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-20 18:42+0100\n"
+"POT-Creation-Date: 2018-03-04 18:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,52 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.3\n"
 
-#: app/main_frame.py:20
-msgid "Select the map"
+#: app/area_selection.py:24
+msgid "{name}: {state}, last updated {updated_at}, created {created_at}"
 msgstr ""
 
-#: app/main_frame.py:20
-msgid "Map selection"
+#: app/area_selection.py:31
+msgid "Enter the name of the requested area"
+msgstr ""
+
+#: app/area_selection.py:31
+msgid "Area name requested"
+msgstr ""
+
+#: app/area_selection.py:36
+msgid "The area creation request has been sent successfully. The area will become updated in a few minutes."
+msgstr ""
+
+#: app/area_selection.py:36
+msgid "Success"
+msgstr ""
+
+#: app/area_selection.py:38
+msgid "The area creation request failed. Response from server: {reply}"
+msgstr ""
+
+#: app/area_selection.py:38
+msgid "Failure"
+msgstr ""
+
+#: app/main_frame.py:29
+msgid "Download of the selected area had failed."
+msgstr ""
+
+#: app/main_frame.py:29
+msgid "Download failure"
+msgstr ""
+
+#: app/main_frame.py:46
+msgid "Download in progress"
+msgstr ""
+
+#: app/main_frame.py:46
+msgid "Downloading the selected database."
+msgstr ""
+
+#: app/main_frame.py:47
+msgid "Downloading the selected database. Downloaded {so_far} of {total}."
 msgstr ""
 
 #: app/objects_browser.py:13
@@ -111,6 +151,26 @@ msgstr ""
 
 #: app/ui.xrc:147
 msgid "Search criteria"
+msgstr ""
+
+#: app/ui.xrc:156
+msgid "Available areas"
+msgstr ""
+
+#: app/ui.xrc:168
+msgid "&Select"
+msgstr ""
+
+#: app/ui.xrc:174
+msgid "&Request a new area"
+msgstr ""
+
+#: app/ui.xrc:180
+msgid "&Exit"
+msgstr ""
+
+#: app/ui.xrc:185
+msgid "Select an area"
 msgstr ""
 
 #: app/controllers/announcements_controller.py:12
