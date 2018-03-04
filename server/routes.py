@@ -7,7 +7,7 @@ from shared import Database
 
 @app.route("/api/areas", methods=["GET"])
 def areas():
-    return jsonify([area.json_dict for area in Area.query.all()])
+    return jsonify([area.json_dict for area in Area.query.all().order_by(Area.name)])
 
 @app.route("/api/areas", methods=["POST"])
 def maybe_create_area():
