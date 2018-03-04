@@ -41,7 +41,7 @@ class DatabaseUpdater:
         self._db.prepare_entity_insertions()
         for entity in self.entities_in_location(exclude_huge):
             self._db.insert_entity(entity)
-        log.info("Commiting the insertion transaction.")
+        log.info("Committing the insertion transaction.")
         self._db.commit_entity_insertions()
 
     def _ensure_valid_geometry(self, geometry):
