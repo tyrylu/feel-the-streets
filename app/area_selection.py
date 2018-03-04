@@ -7,6 +7,7 @@ class AreaSelectionDialog(wx.Dialog):
     xrc_name = "area_selection"
 
     def post_init(self):
+        self.Raise()
         self._areas = self.FindWindowByName("areas")
         if has_api_connectivity():
             available = get_areas()
@@ -20,7 +21,8 @@ class AreaSelectionDialog(wx.Dialog):
         for area in areas:
             area["created_at"] = utc_timestamp_to_local_string(area["created_at"])
             area["updated_at"] = utc_timestamp_to_local_string(area["updated_at"])
-            self._areas.Append(_("{name}: created at: {created_at}, last updated: {updated_at}, state: {state}").format(**area))
+            self._areas.Append(_("{name}: {state}, last updated {updated_at}, created {created_at}").format(**area))
+    
     @property
     def selected_map(self):
         return self._area_names[self._areas.Selection]
