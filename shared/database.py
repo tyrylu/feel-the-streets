@@ -12,15 +12,17 @@ from .time_utils import ts_to_utc
 log = logging.getLogger(__name__)
 
 class Database:
+    
     @classmethod
     def get_database_storage_root(cls, server_side=True):
         if server_side:
-            root = "areas"
+            root = os.path.abspath("areas")
         else:
             root = os.path.join(appdirs.user_data_dir("fts", appauthor=False), "areas")
         if not os.path.exists(root):
             os.makedirs(root)
         return root
+    
     @classmethod
     def get_database_file(cls, area_name, server_side=True):
         return os.path.join(cls.get_database_storage_root(server_side), "%s.db"%area_name)
