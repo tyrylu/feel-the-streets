@@ -136,7 +136,10 @@ class FileDict(collections.UserDict):
         except AttributeError:
             pass
         else:
-            self.__conn.commit()
+            try:
+                self.__conn.commit()
+            except sqlite3.ProgrammingError:
+                pass
 
     @property
     def batch(self):
@@ -145,7 +148,10 @@ class FileDict(collections.UserDict):
     def close(self, commit=False):
         if commit:
             self.__conn.commit()
-        self.__conn.close()
+        try:
+            self.__conn.close()
+        except sqlite3.ProgrammingError:
+            pass
         if hasattr(self, "__conn"):
             delattr(self, "__conn")
     class _Batch:

@@ -1,13 +1,17 @@
 import glob
 import os
 import logging
+import json
+import sqlalchemy
 from sqlalchemy import create_engine, event, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import func
-from geoalchemy import GeometryDDL
+from geoalchemy import GeometryDDL, WKTSpatialElement
 import appdirs
 from .models import Entity, IdxEntitiesGeometry, Bookmark
 from .time_utils import ts_to_utc
+from .diff_utils import apply_dict_change
+from .semantic_change import ChangeType
 
 log = logging.getLogger(__name__)
 
@@ -36,13 +40,12 @@ class Database:
         return entries
 
     def __init__(self, area_name, server_side=True):
+        self._area_name = area_name
         db_path = self.get_database_file(area_name, server_side)
         self._creating = False
         self._engine = create_engine("sqlite:///%s"%db_path)
         event.listen(self._engine, "connect", self._post_connect)
         self._session = sessionmaker(bind=self._engine)()
-        self._entity_insertion_context = None
-        self._entity_insertion_transaction = None
         self._entity_insert_statement = None
         
     def _post_connect(self, dbapi_connection, connection_record):
@@ -96,20 +99,39 @@ class Database:
         return self.scalar(max(json_extract(Entity.data, "$.timestamp")))
     
     def prepare_entity_insertions(self):
-        self._entity_insertion_context = self._engine.connect()
-        self._entity_insertion_transaction = self._entity_insertion_context.begin()
-        self._entity_insertion_context.execute("pragma synchronous=off")
+        self._session.execute("pragma synchronous=off")
         self._entity_insert_statement = Entity.__table__.insert().values(dict(id=":id", data=":data", discriminator=":discriminator", effective_width=":effective_width", geometry=text("GeomFromText(:geometry, 4326)")))
 
     def insert_entity(self, entity):
-        self._entity_insertion_context.execute(self._entity_insert_statement, dict(id=entity.id, discriminator=entity.discriminator, data=entity.data, effective_width=entity.effective_width, geometry=entity.geometry.desc))
+        self._session.execute(self._entity_insert_statement, dict(id=entity.id, discriminator=entity.discriminator, data=entity.data, effective_width=entity.effective_width, geometry=entity.geometry.desc))
 
     def commit_entity_insertions(self):
-        self._entity_insertion_transaction.commit()
-        self._entity_insertion_context.close()
-    
+        self._session.commit()
+
+   
     def has_entity(self, osm_id):
         return self.query(Entity).filter(func.json_extract(Entity.data, "$.osm_id") == osm_id).count() == 1
 
     def get_entity_by_osm_id(self, osm_id):
-        return self.query(Entity).filter(func.json_extract(Entity.data, "$.osm_id") == osm_id).one_or_none()
+        # The text construct is necessary, because sqlite will not use a functional index if one of the function's arguments is supplied through a placeholder.
+        return self.query(Entity).filter(func.json_extract(Entity.data, text('"$.osm_id"')) == osm_id).one_or_none()
+
+    def apply_change(self, change):
+        entity = None
+        if change.type is ChangeType.create:
+            entity = Entity()
+            self.add(entity)
+        elif change.type in {ChangeType.update, ChangeType.delete}:
+            entity = self.get_entity_by_osm_id(change.osm_id)
+        if change.type is ChangeType.delete:
+            self._session.delete(entity)
+        else:
+            for subchange in change.property_changes:
+                apply_dict_change(subchange, entity.__dict__)
+            if isinstance(entity.geometry, str):
+                entity.geometry = WKTSpatialElement(entity.geometry)
+            if change.data_changes:
+                entity_data = json.loads(entity.data)
+                for subchange in change.data_changes:
+                    apply_dict_change(subchange, entity_data)
+                entity.data = json.dumps(entity_data)

@@ -2,8 +2,8 @@ import json
 import logging
 from .osm_change import OSMChangeType
 from .osm_object_translator import OSMObjectTranslator
-from .semantic_change import Change, ChangeType
-from .diff_utils import DictChange, diff
+from shared.semantic_change import Change, ChangeType
+from shared.diff_utils import DictChange, diff
 from shared import Database
 
 log = logging.getLogger(__name__)
@@ -12,14 +12,15 @@ class ChangeActionProcessor:
     def __init__(self, location):
         self._location = location
         self._db = Database(location)
-        self._translator = OSMObjectTranslator(True, True)
+        self._translator = OSMObjectTranslator(False, False)
 
     def new_semantic_changes(self, date=None):
         if not date:
             date = self._db.last_timestamp
         change_actions = self._translator.manager.lookup_differences_in(self._location, date)
-        log.info("Processing %s change actions.", len(change_actions))
+        num = 0
         for action in change_actions:
+            num += 1
             if action.type is OSMChangeType.delete and self._db.has_entity(action.old.unique_id):
                 yield self._gen_entity_deletion_change(action.old)
             elif action.type is OSMChangeType.create:
@@ -30,9 +31,10 @@ class ChangeActionProcessor:
                 change = self._gen_entity_modification_change(action)
                 if change:
                     yield change
-    
+        log.info("Processed %s osm object changes.", num)
     def _gen_entity_deletion_change(self, entity):
             return Change(osm_id=entity.unique_id, type=ChangeType.delete)
+    
     def _gen_entity_creation_change(self, entity):
         db_entity = self._translator.translate_object(entity)
         if not db_entity:

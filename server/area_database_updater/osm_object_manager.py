@@ -3,8 +3,9 @@ import logging
 import os
 import hashlib
 import gzip
-from urllib.request import urlopen
+from urllib.request import urlopen, Request
 from urllib.parse import urlencode
+from urllib.error import HTTPError
 import shutil
 import json
 import xml.etree.ElementTree as et
@@ -12,7 +13,7 @@ import ijson.backends.yajl2 as ijson
 from shared.entities.enums import OSMObjectType
 import filedict
 from .osm_object import OSMObject
-from .osm_change import OSMObjectChange
+from .osm_change_creator import OSMObjectChangeCreator
 from .utils import object_should_have_closed_geometry, ensure_closed, coords_to_text, connect_polygon_segments
 
 log = logging.getLogger(__name__)
@@ -63,11 +64,13 @@ class OSMObjectManager:
             raw_query = self._query_template.format(timeout=timeout, query=query)
         else:
             raw_query = query
-        resp = urlopen("{0}?{1}".format(self._interpret_url, urlencode({"data":raw_query})))
-        if resp.status == 429:
-            log.warning("Multiple requests, killing them despite not knowing what they are.")
-            urlopen("http://overpass-api.de/api/kill_my_queries")
-            return self._run_query(query, timeout, is_lookup=is_lookup)
+        try:
+            resp = urlopen(self._interpret_url, data=urlencode({"data":raw_query}).encode("utf-8"))
+        except HTTPError as exc:
+            if exc.code == 429:
+                log.warning("Multiple requests, killing them despite not knowing what they are.")
+                urlopen("http://overpass-api.de/api/kill_my_queries")
+                return self._run_query(query, timeout, is_lookup=is_lookup)
         fp = resp
         log.info("Query successful, duration %s seconds.", time.time() - start)
         if self._cache_responses:
@@ -276,13 +279,23 @@ class OSMObjectManager:
         retrieve_data = self._retrieve_data_template.format(area=area)
         query = self._diff_template.format(after=after, timeout=timeout, query=retrieve_data)
         log.info("Retrieving augmented diff for area %s starting from %s.", area, after)
-        xml_data = self._run_query(query, timeout=timeout, is_lookup=False)
-        root = et.fromstring(xml_data)
-        return [OSMObjectChange.from_xml(element) for element in root.findall("action")]
-
-
-    def __del__(self):
+        response = self._run_query_raw(query, timeout=timeout, is_lookup=False)
+        creator = OSMObjectChangeCreator()
+        parser = et.XMLParser(target=creator)
+        while True:
+            chunk = response.read(16*1024)
+            if not chunk:
+                break
+            parser.feed(chunk)
+            for action in creator.new_actions():
+                yield action
+        parser.close()
+    
+    def remove_temp_data(self):
         self._nodes.close()
         self._ways.close()
         self._rels.close()
-        shutil.rmtree(self._dict_storage)
+        shutil.rmtree(self._dict_storage, ignore_errors=True)
+
+    def __del__(self):
+        self.remove_temp_data()

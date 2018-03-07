@@ -1,5 +1,5 @@
 import json
-from sqlalchemy import Column, Float, String, UnicodeText, Integer
+from sqlalchemy import Column, Float, String, UnicodeText, Integer, Index, func, text
 from geoalchemy import GeometryColumn, Geometry
 from . import Base
 import shapely.wkt as wkt
@@ -12,7 +12,8 @@ class Entity(Base):
     discriminator = Column(String(64), nullable=False)
     data = Column(UnicodeText, nullable=False)
     effective_width = Column(Float)
-    
+    __table_args__ = (Index("entity_by_osm_id", func.json_extract(data, text("$.osm_id"))),)
+
     def __str__(self):
         return self.__class__.__name__
     
