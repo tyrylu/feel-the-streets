@@ -24,9 +24,9 @@ def update_area_databases_task(date=None):
         log.info("Processing area %s.", area.name)
         area.state = AreaState.getting_changes
         db.session.commit()
-        processor = ChangeActionProcessor(area.name, area.newest_osm_object_timestamp)
+        processor = ChangeActionProcessor(area.name)
         first = True
-        for change in processor.new_semantic_changes(date=date):
+        for change in processor.new_semantic_changes(date=area.newest_osm_object_timestamp):
             if first:
                 area.state = AreaState.applying_changes
                 db.session.commit()
