@@ -24,13 +24,15 @@ def update_area_databases_task(date=None):
         log.info("Processing area %s.", area.name)
         area.state = AreaState.getting_changes
         db.session.commit()
-        processor = ChangeActionProcessor(area.name)
+        processor = ChangeActionProcessor(area.name, area.newest_osm_object_timestamp)
         first = True
         for change in processor.new_semantic_changes(date=date):
             if first:
                 area.state = AreaState.applying_changes
                 db.session.commit()
                 first = False
+            if change.new and change.new.timestamp > area.newest_osm_object_timestamp:
+                area.newest_osm_object_timestamp = change.new.timestamp
             processor._db.apply_change(change)
             msg_bin = pickle.dumps(change, protocol=pickle.HIGHEST_PROTOCOL)
             huey.storage.channel.basic_publish(area.name, body=msg_bin, properties=pika.BasicProperties(delivery_mode=2), routing_key="")

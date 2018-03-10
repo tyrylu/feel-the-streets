@@ -14,6 +14,7 @@ class Area(db.Model):
     state = db.Column(db.Enum(AreaState), nullable=False, default=AreaState.creating)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    newest_osm_object_timestamp = db.Column(db.UnicodeText) # Used to track the latest change time even if the change is just a geometry alteration without any semantic change, more reliable than the highest timestamp of the semantically maingful object.
 
     @property
     def json_dict(self):
