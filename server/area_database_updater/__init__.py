@@ -21,6 +21,7 @@ import click
 
 
 def _configure_logging(suffix):
+    import shared.sqlalchemy_logging
     os.makedirs("logs", exist_ok=True)
     sh = logging.StreamHandler(sys.stdout)
     sh.setLevel(logging.DEBUG)

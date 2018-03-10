@@ -9,7 +9,7 @@ from huey.constants import EmptyData
 from huey.storage import BaseStorage
 
 # The pika logging is too verbose even on info.
-logging.getLogger("pika").setLevel(logging.WARNING)
+#logging.getLogger("pika").setLevel(logging.WARNING)
 
 class AMQPStorage(BaseStorage):
     def __init__(self, name='huey', broker_url='amqp://guest:guest@localhost', consume=False, **storage_kwargs):

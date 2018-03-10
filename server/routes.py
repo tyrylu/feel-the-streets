@@ -1,9 +1,11 @@
 from flask import jsonify, request, Response, send_file, abort
 from . import app, db
+from .amqp_connectivity import administrative_channel
 from .models import Area, AreaState
 from .tasks import create_database_task
 from .task_utils import enqueue_with_retries
 from shared import Database
+from shared.amqp_queue_naming import get_client_queue_name
 
 @app.route("/api/areas", methods=["GET"])
 def areas():
@@ -35,13 +37,18 @@ def area_detail(area_name):
 
 @app.route("/api/areas/<area_name>/download")
 def download_area_data(area_name):
+    if "client_id" not in request.args:
+        abort(400)
     area = Area.query.filter_by(name=area_name).first_or_404()
     if area.state in {AreaState.creating, AreaState.applying_changes}:
         # We can not guarantee data integrity in those cases. The database is incomplete, or the client could get partial changes from the queue or none at all.
         abort(400)
     else:
+        with administrative_channel() as chan:
+            queue_name = get_client_queue_name(request.args["client_id"], area)
+            chan.queue_declare(queue_name, durable=True)
+            chan.queue_bind(queue=queue_name, exchange=area_name)
         return send_file(Database.get_database_file(area_name))
-
 
 @app.route("/api/ping")
 def ping():

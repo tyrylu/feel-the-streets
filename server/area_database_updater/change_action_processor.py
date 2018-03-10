@@ -32,6 +32,7 @@ class ChangeActionProcessor:
                 if change:
                     yield change
         log.info("Processed %s osm object changes.", num)
+    
     def _gen_entity_deletion_change(self, entity):
             return Change(osm_id=entity.unique_id, type=ChangeType.delete)
     
@@ -47,7 +48,6 @@ class ChangeActionProcessor:
         geometry = self._translator.manager.get_geometry_as_wkt(entity)
         change.property_changes.append(DictChange.creating("geometry", geometry))
         return change
-
 
     def _gen_entity_modification_change(self, action):
         old_entity = self._db.get_entity_by_osm_id(action.old.unique_id)

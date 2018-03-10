@@ -1,9 +1,10 @@
+import itertools
 import time
 import logging
 import os
 import hashlib
 import gzip
-from urllib.request import urlopen, Request
+from urllib.request import urlopen
 from urllib.parse import urlencode
 from urllib.error import HTTPError
 import shutil
@@ -21,7 +22,8 @@ class OSMObjectManager:
     _query_template = "[out:json][timeout:{timeout}];{query};out meta;"
     _diff_template = "[out:xml][timeout:{timeout}][adiff:\"{after}\"];{query};out meta;"
     _retrieve_data_template = '((area["name"="{area}"];node(area);area["name"="{area}"];way(area);area["name"="{area}"];rel(area);>>);>>)'
-    _interpret_url = "http://overpass-api.de/api/interpreter"
+    _api_urls = itertools.cycle(["https://z.overpass-api.de/api", "https://lz4.overpass-api.de/api"])
+
     def __init__(self, use_cache, cache_responses):
         dict_storage = "generation_temp"
         self._dict_storage = dict_storage
@@ -64,13 +66,15 @@ class OSMObjectManager:
             raw_query = self._query_template.format(timeout=timeout, query=query)
         else:
             raw_query = query
+        api_url = next(self._api_urls)
+        interpret_url = "{0}/interpreter".format(api_url)
         try:
-            resp = urlopen(self._interpret_url, data=urlencode({"data":raw_query}).encode("utf-8"))
+            resp = urlopen(interpret_url, data=urlencode({"data":raw_query}).encode("utf-8"))
         except HTTPError as exc:
             if exc.code == 429:
                 log.warning("Multiple requests, killing them despite not knowing what they are.")
-                urlopen("http://overpass-api.de/api/kill_my_queries")
-                return self._run_query(query, timeout, is_lookup=is_lookup)
+                urlopen("{0}/kill_my_queries".format(api_url))
+                return self._run_query_raw(query, timeout, is_lookup=is_lookup)
         fp = resp
         log.info("Query successful, duration %s seconds.", time.time() - start)
         if self._cache_responses:
@@ -275,6 +279,10 @@ class OSMObjectManager:
     def cached_nodes(self):
         return len(self._nodes)
     
+    @property
+    def cached_total(self):
+        return self.cached_nodes + self.cached_relations + self.cached_ways
+    
     def lookup_differences_in(self, area, after, timeout=900):
         retrieve_data = self._retrieve_data_template.format(area=area)
         query = self._diff_template.format(after=after, timeout=timeout, query=retrieve_data)
@@ -299,3 +307,5 @@ class OSMObjectManager:
 
     def __del__(self):
         self.remove_temp_data()
+
+    

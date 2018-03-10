@@ -1,5 +1,6 @@
 import enum
 import pydantic
+from typing import Union, Optional
 
 class ChangeKind(enum.Enum):
     add = 0
@@ -9,8 +10,8 @@ class ChangeKind(enum.Enum):
 class DictChange(pydantic.BaseModel):
     kind: ChangeKind
     key: str
-    old_value: pydantic.constr(max_length=2**32) = None
-    new_value: pydantic.constr(max_length=2**32) = None
+    old_value: Union[int, float, str] = None
+    new_value: Union[int, float, str, dict] = None
 
     @classmethod
     def updating(cls, key, old, new):
@@ -78,8 +79,8 @@ def apply_dict_change(change, target):
         temp_target[change.key.split(".")[-1]] = change.new_value
     elif change.kind is ChangeKind.remove:
         intermediary, temp_target = _get_change_target(target, change.key)
-        del temp_target[change.key]
+        del temp_target[change.key.split(".")[-1]]
         for key, container in intermediary:
-            if ke in container and not container[key]:
+            if key in container and not container[key]:
                 del container[key]
     return target
