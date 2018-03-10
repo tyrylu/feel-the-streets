@@ -10,8 +10,8 @@ class ChangeKind(enum.Enum):
 class DictChange(pydantic.BaseModel):
     kind: ChangeKind
     key: str
-    old_value: Union[int, float, str] = None
-    new_value: Union[int, float, str, dict] = None
+    old_value: Union[int, float, pydantic.constr(max_length=2**32)] = None
+    new_value: Union[int, float, pydantic.constr(max_length=2**32), dict] = None
 
     @classmethod
     def updating(cls, key, old, new):
