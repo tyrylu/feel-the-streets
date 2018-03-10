@@ -13,13 +13,16 @@ class ChangeActionProcessor:
         self._location = location
         self._db = Database(location)
         self._translator = OSMObjectTranslator(False, False)
+        self._newest_timestamp = None
 
     def new_semantic_changes(self, date=None):
+        self._newest_timestamp = "1970-01-01"
         if not date:
             date = self._db.last_timestamp
-        change_actions = self._translator.manager.lookup_differences_in(self._location, date)
         num = 0
-        for action in change_actions:
+        for action in self._translator.manager.lookup_differences_in(self._location, date):
+            if action.new and action.new.timestamp > self._newest_timestamp:
+                self._newest_timestamp = action.new.timestamp
             num += 1
             if action.type is OSMChangeType.delete and self._db.has_entity(action.old.unique_id):
                 yield self._gen_entity_deletion_change(action.old)
@@ -75,3 +78,7 @@ class ChangeActionProcessor:
         else:
             props["geometry"] = self._translator.manager.get_geometry_as_wkt(entity)
         return props, data
+
+    @property
+    def newest_timestamp(self):
+        return self._newest_timestamp
