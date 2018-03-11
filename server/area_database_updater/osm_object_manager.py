@@ -33,6 +33,7 @@ class OSMObjectManager:
         self._rels = filedict.FileDict(os.path.join(dict_storage, "rels"))
         self._cache_responses = cache_responses
         self._use_cache = use_cache
+        self._removed = False
 
     def lookup_objects_in(self, area):
         query = self._retrieve_data_template.format(area=area)
@@ -300,10 +301,13 @@ class OSMObjectManager:
         parser.close()
     
     def remove_temp_data(self):
+        if self._removed:
+            return
         self._nodes.close()
         self._ways.close()
         self._rels.close()
         shutil.rmtree(self._dict_storage, ignore_errors=True)
+        self._removed = True
 
     def __del__(self):
         self.remove_temp_data()
