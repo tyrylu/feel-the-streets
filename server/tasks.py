@@ -36,7 +36,8 @@ def update_area_databases_task(date=None):
             huey.storage.channel.basic_publish(area.name, body=msg_bin, properties=pika.BasicProperties(delivery_mode=2), routing_key="")
         processor._db.commit()
         area.state = AreaState.updated
-        area.newest_osm_object_timestamp = processor.newest_timestamp
+        if not processor.newest_timestamp.startswith("1970"):
+            area.newest_osm_object_timestamp = processor.newest_timestamp
         db.session.commit()
         log.info("Geometry difference checks required retrieving %s objects.", processor._translator.manager.cached_total)
         processor._translator.manager.remove_temp_data()
