@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-03-04 18:36+0100\n"
+"POT-Creation-Date: 2018-03-11 15:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,7 +33,7 @@ msgstr ""
 msgid "The area creation request has been sent successfully. The area will become updated in a few minutes."
 msgstr ""
 
-#: app/area_selection.py:36
+#: app/area_selection.py:36 app/main_frame.py:79
 msgid "Success"
 msgstr ""
 
@@ -45,24 +45,40 @@ msgstr ""
 msgid "Failure"
 msgstr ""
 
-#: app/main_frame.py:29
-msgid "Download of the selected area had failed."
-msgstr ""
-
-#: app/main_frame.py:29
-msgid "Download failure"
-msgstr ""
-
-#: app/main_frame.py:46
+#: app/main_frame.py:50
 msgid "Download in progress"
 msgstr ""
 
-#: app/main_frame.py:46
+#: app/main_frame.py:50
 msgid "Downloading the selected database."
 msgstr ""
 
-#: app/main_frame.py:47
+#: app/main_frame.py:51
 msgid "Downloading the selected database. Downloaded {so_far} of {total}."
+msgstr ""
+
+#: app/main_frame.py:56
+msgid "Download of the selected area had failed."
+msgstr ""
+
+#: app/main_frame.py:56
+msgid "Download failure"
+msgstr ""
+
+#: app/main_frame.py:67
+msgid "Change application"
+msgstr ""
+
+#: app/main_frame.py:67
+msgid "Applying changes for the selected database."
+msgstr ""
+
+#: app/main_frame.py:72
+msgid "Applying changes for the selected database, change {nth} of {total}"
+msgstr ""
+
+#: app/main_frame.py:79
+msgid "Successfully applied {total} changes. A changelog of size {size} was generated, do you want to view it now?"
 msgstr ""
 
 #: app/objects_browser.py:13
@@ -83,6 +99,34 @@ msgstr ""
 
 #: app/road_segments_browser.py:26
 msgid "{start_distance:.2f} meters of {distance:.2f} meters in angle {angle:.2f}° distant from road center by {middle_distance:.2f}"
+msgstr ""
+
+#: app/semantic_changelog_generator.py:8
+msgid "{property} was added, value {value}"
+msgstr ""
+
+#: app/semantic_changelog_generator.py:10
+msgid "{property} changed from {old} to {new}"
+msgstr ""
+
+#: app/semantic_changelog_generator.py:12
+msgid "{property} was removed"
+msgstr ""
+
+#: app/semantic_changelog_generator.py:18
+msgid "Object {osm_id} was deleted"
+msgstr ""
+
+#: app/semantic_changelog_generator.py:20
+msgid "New object created"
+msgstr ""
+
+#: app/semantic_changelog_generator.py:32
+msgid "Object {osm_id} was changed"
+msgstr ""
+
+#: app/semantic_changelog_generator.py:35
+msgid "Geometry was changed."
 msgstr ""
 
 #: app/ui.xrc:5

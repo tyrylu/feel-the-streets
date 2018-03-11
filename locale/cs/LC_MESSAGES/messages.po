@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-03-04 18:36+0100\n"
-"PO-Revision-Date: 2018-03-04 18:41+0100\n"
+"POT-Creation-Date: 2018-03-11 15:17+0100\n"
+"PO-Revision-Date: 2018-03-11 15:26+0100\n"
 "Last-Translator: \n"
 "Language: cs\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -40,7 +40,7 @@ msgstr ""
 "Požadavek na vytvoření oblasti byl úspěšně odeslán. Oblast bude aktualizována "
 "během několika minut, záleží na její velikosti."
 
-#: app/area_selection.py:36
+#: app/area_selection.py:36 app/main_frame.py:79
 msgid "Success"
 msgstr "Úspěch"
 
@@ -52,25 +52,45 @@ msgstr "Požadavek na vytvoření oblasti neuspěl. Odpověď serveru: {reply}"
 msgid "Failure"
 msgstr "Selhání"
 
-#: app/main_frame.py:29
-msgid "Download of the selected area had failed."
-msgstr "Stažení zvolené oblasti se nezdařilo."
-
-#: app/main_frame.py:29
-msgid "Download failure"
-msgstr "Selhání stahování"
-
-#: app/main_frame.py:46
+#: app/main_frame.py:50
 msgid "Download in progress"
 msgstr "Probíhá stahování"
 
-#: app/main_frame.py:46
+#: app/main_frame.py:50
 msgid "Downloading the selected database."
 msgstr "Stahování zvolené databáze."
 
-#: app/main_frame.py:47
+#: app/main_frame.py:51
 msgid "Downloading the selected database. Downloaded {so_far} of {total}."
 msgstr "Stahování zvolené databáze. Staženo {so_far} z {total}."
+
+#: app/main_frame.py:56
+msgid "Download of the selected area had failed."
+msgstr "Stažení zvolené oblasti se nezdařilo."
+
+#: app/main_frame.py:56
+msgid "Download failure"
+msgstr "Selhání stahování"
+
+#: app/main_frame.py:67
+msgid "Change application"
+msgstr "Provádění změn"
+
+#: app/main_frame.py:67
+msgid "Applying changes for the selected database."
+msgstr "Provádění změn nad zvolenou databází."
+
+#: app/main_frame.py:72
+msgid "Applying changes for the selected database, change {nth} of {total}"
+msgstr "Provádění změn nad zvolenou databází, změna {nth} z {total}."
+
+#: app/main_frame.py:79
+msgid ""
+"Successfully applied {total} changes. A changelog of size {size} was "
+"generated, do you want to view it now?"
+msgstr ""
+"Úspěšně bylo provedeno {total} změn. Byl vytvořen protokol změn o velikosti "
+"{size}, přejete si ho nyní vidět?"
 
 #: app/objects_browser.py:13
 msgid " ({num_objects} objects shown)"
@@ -96,6 +116,34 @@ msgid ""
 msgstr ""
 "{start_distance:.2f} metrů z {distance:.2f} metrů v úhlu {angle:.2f}° ve "
 "vzdálenosti {middle_distance:.2f} od středu"
+
+#: app/semantic_changelog_generator.py:8
+msgid "{property} was added, value {value}"
+msgstr "{property} byl(a) přidán(a), hodnota {value}"
+
+#: app/semantic_changelog_generator.py:10
+msgid "{property} changed from {old} to {new}"
+msgstr "{property} byl(a) změněn(a) z {old} na {new}"
+
+#: app/semantic_changelog_generator.py:12
+msgid "{property} was removed"
+msgstr "{property} byl(a) odstraněn(a)"
+
+#: app/semantic_changelog_generator.py:18
+msgid "Object {osm_id} was deleted"
+msgstr "Objekt{osm_id} byl odstraněn"
+
+#: app/semantic_changelog_generator.py:20
+msgid "New object created"
+msgstr "Vytvořen nový objekt"
+
+#: app/semantic_changelog_generator.py:32
+msgid "Object {osm_id} was changed"
+msgstr "Objekt {osm_id} byl změněn"
+
+#: app/semantic_changelog_generator.py:35
+msgid "Geometry was changed."
+msgstr "Geometrie byla změněna"
 
 #: app/ui.xrc:5
 msgid "Feel the streets"
