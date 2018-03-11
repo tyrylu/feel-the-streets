@@ -22,7 +22,7 @@ def create_database_task(area_name):
 @huey.periodic_task(crontab(hour=22, minute=39))
 def update_area_databases_task(date=None):
     _configure_logging("update")
-    for area in Area.query.all(): #filter_by(state=AreaState.updated):
+    for area in Area.query.filter_by(state=AreaState.updated):
         log.info("Processing area %s.", area.name)
         area.state = AreaState.getting_changes
         db.session.commit()
