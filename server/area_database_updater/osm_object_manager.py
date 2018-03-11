@@ -298,7 +298,10 @@ class OSMObjectManager:
             parser.feed(chunk)
             for action in creator.new_actions():
                 yield action
-        parser.close()
+        try:
+            parser.close()
+        except Exception as exc:
+            log.warning("Error during parser tear down: %s", exc)
     
     def remove_temp_data(self):
         if self._removed:
