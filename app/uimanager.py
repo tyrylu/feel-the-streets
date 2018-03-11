@@ -123,6 +123,19 @@ class UIManager(object):
         self.auto_bind(inst, inst, alternate_bind_of=alternate_bind_of)
         if hasattr(inst, "post_init"): inst.post_init(**post_init_kwargs)
         return inst
+    def prepare_xrc_frame(self, cls, alternate_bind_of=[], parent=None, **post_init_kwargs):
+        if not parent: parent = self.top_level
+        inst = cls()
+        if hasattr(wx, "PreFrame"):
+            pre = wx.PreFrame()
+            self.resource.LoadOnFrame(pre, parent, cls.xrc_name)
+            inst.PostCreate(pre)
+        else: # Phoenix
+            self.resource.LoadFrame(inst, parent, cls.xrc_name)
+        self.auto_bind(inst, inst, alternate_bind_of=alternate_bind_of)
+        if hasattr(inst, "post_init"): inst.post_init(**post_init_kwargs)
+        return inst
+        
         
     def _unwind_stack(self, evt):
         try: self._dlg_stack.remove(self.current_dialog)

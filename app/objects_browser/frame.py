@@ -2,16 +2,15 @@ import wx
 import wx.xrc as xrc
 from shapely.geometry.point import Point
 from shared.humanization_utils import underscored_to_words
-from . import services
-from .geometry_utils import closest_point_to, distance_between, bearing_to, to_shapely_point, to_latlon
+from .. import services
+from ..geometry_utils import closest_point_to, distance_between, bearing_to, to_shapely_point, to_latlon
 
-class ObjectsBrowserDialog(wx.Dialog):
+class ObjectsBrowserFrame(wx.Frame):
     xrc_name = "objects_browser"
 
     def post_init(self, title, person, unsorted_objects):
         unsorted_objects = list(unsorted_objects)
         self.Title = title + _(" ({num_objects} objects shown)").format(num_objects=len(unsorted_objects))
-        self.EscapeId = xrc.XRCID("close")
         self._person = person
         objects_list = self.FindWindowByName("objects")
         objects = []
@@ -25,10 +24,15 @@ class ObjectsBrowserDialog(wx.Dialog):
         self._objects = objects
         objects_list.Selection = 0
         self.on_objects_listbox(None)
+        self.Bind(wx.EVT_CHAR_HOOK, self._close_using_esc)
+    
     def on_close_clicked(self, evt):
-        self.EndModal(0)
+        self.Close()
+    
     def on_goto_clicked(self, evt):
-        self.EndModal(1)
+        self._person.move_to(self.selected_object[2])
+        self.Close()
+    
     def on_objects_listbox(self, evt):
         sel = self.FindWindowByName("objects").Selection
         selected = self._objects[sel][1]
@@ -47,7 +51,38 @@ class ObjectsBrowserDialog(wx.Dialog):
                 props_list.Append(_("Other fields - they can not be searched and are not processed in any way"))
                 first = False
             props_list.Append("%s: %s"%(underscored_to_words(name), value))
+        props_list.Selection = 0
 
     @property
     def selected_object(self):
         return self._objects[self.FindWindowByName("objects").Selection]
+
+
+    def _close_using_esc(self, evt):
+        if evt.KeyCode == wx.WXK_ESCAPE:
+            self.Close()
+        else:
+            evt.Skip()
+
+    def on_copypropvalue_selected(self, evt):
+        prop_list = self.FindWindowByName("props")
+        prop = prop_list.GetString(prop_list.Selection)
+        val = prop.split(": ", 1)[1]
+        if wx.TheClipboard.Open():
+            wx.TheClipboard.SetData(wx.TextDataObject(val))
+            wx.TheClipboard.Close()
+    
+    def on_copypropname_selected(self, evt):
+        prop_list = self.FindWindowByName("props")
+        prop = prop_list.GetString(prop_list.Selection)
+        name = prop.split(": ", 1)[0]
+        if wx.TheClipboard.Open():
+            wx.TheClipboard.SetData(wx.TextDataObject(name))
+            wx.TheClipboard.Close()
+
+    def on_copypropline_selected(self, evt):
+        prop_list = self.FindWindowByName("props")
+        prop = prop_list.GetString(prop_list.Selection)
+        if wx.TheClipboard.Open():
+            wx.TheClipboard.SetData(wx.TextDataObject(prop))
+            wx.TheClipboard.Close()

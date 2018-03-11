@@ -3,7 +3,7 @@ from pygeodesy.ellipsoidalVincenty import LatLon
 from shared.entities import Road
 from ..uimanager import get, menu_command
 from ..services import speech, map
-from ..objects_browser import ObjectsBrowserDialog
+from ..objects_browser import ObjectsBrowserFrame
 from ..road_segments_browser import RoadSegmentsBrowserDialog
 from ..geometry_utils import get_road_section_angle, distance_filter
 from ..search import perform_search
@@ -35,10 +35,8 @@ class InteractivePersonController:
     
     def _position_detailed_impl(self, objects):
         filtered_inside_of = distance_filter((entity.db_entity for entity in objects), self._person.position, float("inf"))
-        dlg = get().prepare_xrc_dialog(ObjectsBrowserDialog, title=_("Current position"), unsorted_objects=self._person.is_inside_of, person=self._person)
-        if dlg.ShowModal() == 1:
-            self._person.move_to(dlg.selected_object[2])
-        dlg.Destroy()
+        dlg = get().prepare_xrc_frame(ObjectsBrowserFrame, title=_("Current position"), unsorted_objects=self._person.is_inside_of, person=self._person)
+        dlg.Show()
     
     @menu_command(_("Information"), _("Detailed current position"), "shift+l")
     def position_detailed(self, evt):
@@ -52,11 +50,9 @@ class InteractivePersonController:
         if not objects:
             speech().speak(_("Nothing."))
             return
-        dlg = get().prepare_xrc_dialog(ObjectsBrowserDialog, title=_("Near by objects"), person=self._person, unsorted_objects=objects)
-        action = dlg.ShowModal()
-        if action == 1:
-            self._person.move_to(dlg.selected_object[2])
-        dlg.Destroy()   
+        dlg = get().prepare_xrc_frame(ObjectsBrowserFrame, title=_("Near by objects"), person=self._person, unsorted_objects=objects)
+        dlg.Show()
+    
     @menu_command(_("Information"), _("Nearest"), "n")
     def do_nearest(self, evt):
         self._nearest_impl(self._person.map.within_distance(self._person.position, 100))
@@ -64,6 +60,7 @@ class InteractivePersonController:
     @menu_command(_("Information"), _("Nearest - all objects, may be slow"), "ctrl+n")
     def do_nearest_slow(self, evt):
         self._nearest_impl(self._person.map.within_distance(self._person.position, 100, exclude_routes=False))
+    
     @menu_command(_("Movement"), _("Step forward"), "up")
     def do_forward(self, evt):
         self._person.step_forward() 
@@ -145,10 +142,8 @@ class InteractivePersonController:
     def do_search(self, evt):
         results = perform_search(self._person.position)
         if results:
-            browser = get().prepare_xrc_dialog(ObjectsBrowserDialog, title=_("Search results"), unsorted_objects=results, person=self._person)
-            if browser.ShowModal() == 1:
-                self._person.move_to(browser.selected_object[2])
-                browser.Destroy()
+            browser = get().prepare_xrc_frame(ObjectsBrowserFrame, title=_("Search results"), unsorted_objects=results, person=self._person)
+            browser.Show()
         else:
             wx.MessageBox(_("No object matches the given search criteria."), _("Information"), style=wx.ICON_INFORMATION)
     
