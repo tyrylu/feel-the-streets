@@ -33,7 +33,8 @@ def get_change_description(change, include_geometry_changes=False):
         for subchange in change.property_changes:
             if subchange.key == "geometry" and not include_geometry_changes:
                 msg += _("Geometry was changed.") + "\n"
-            msg += get_dictchange_description(subchange) + "\n"
+            else:
+                msg += get_dictchange_description(subchange) + "\n"
         for subchange in change.data_changes:
             msg += get_dictchange_description(subchange) + "\n"
         return msg
