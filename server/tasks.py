@@ -1,6 +1,7 @@
 import pika
 import logging
 import pickle
+from huey import crontab
 from . import db, huey
 from .models import Area, AreaState
 from .area_database_updater import create_database, _configure_logging
@@ -18,6 +19,7 @@ def create_database_task(area_name):
         chan.exchange_declare(area_name, exchange_type="fanout", durable=True)
     log.info("Generation sequence complete.")
 
+@huey.periodic_task(crontab(hour=22, minute=39))
 def update_area_databases_task(date=None):
     _configure_logging("update")
     for area in Area.query.all(): #filter_by(state=AreaState.updated):
