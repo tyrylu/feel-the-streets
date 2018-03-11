@@ -9,7 +9,7 @@ from shared.amqp_queue_naming import get_client_queue_name
 
 @app.route("/api/areas", methods=["GET"])
 def areas():
-    return jsonify([area.json_dict for area in Area.query.all().order_by(Area.name)])
+    return jsonify([area.json_dict for area in Area.query.order_by(Area.name)])
 
 @app.route("/api/areas", methods=["POST"])
 def maybe_create_area():
