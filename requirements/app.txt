@@ -6,4 +6,4 @@ faker
 blinker
 wxpython
 anglr
-humanfriendly
+bitmath

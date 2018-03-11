@@ -1,10 +1,10 @@
-import random
 import wx
 import os
 import datetime
+import webbrowser
 from sqlalchemy import func
 from pygeodesy.ellipsoidalVincenty import LatLon
-import humanfriendly
+import bitmath
 from .entities import Person
 from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController
 from .uimanager import get
@@ -14,6 +14,10 @@ from .server_interaction import download_area_database, SemanticChangeRetriever
 from .semantic_changelog_generator import get_change_description
 from shared import Database
 from shared.models import Entity
+
+def format_size(num_bytes):
+    size = bitmath.Byte(num_bytes)
+    return size.best_prefix().format("{value:.2f} {unit}")
 
 class MainFrame(wx.Frame):
 
@@ -44,8 +48,7 @@ class MainFrame(wx.Frame):
     def _download_progress_callback(self, total, so_far):
         if not self._download_progress_dialog:
             self._download_progress_dialog = wx.ProgressDialog(_("Download in progress"), _("Downloading the selected database."), parent=self, style=wx.PD_APP_MODAL|wx.PD_ESTIMATED_TIME|wx.PD_ELAPSED_TIME|wx.PD_AUTO_HIDE, maximum=total)
-        self._download_progress_dialog.Update(so_far, _("Downloading the selected database. Downloaded {so_far} of {total}.").format(so_far=humanfriendly.format_size(so_far), total=humanfriendly.format_size(total)))
-
+        self._download_progress_dialog.Update(so_far, _("Downloading the selected database. Downloaded {so_far} of {total}.").format(so_far=format_size(so_far), total=format_size(total)))
 
     def _download_database(self, area):
         res = download_area_database(area, self._download_progress_callback)
@@ -71,5 +74,9 @@ class MainFrame(wx.Frame):
             changelog.write(get_change_description(change))
         db.commit()
         changelog.close()
+        retriever.acknowledge_changes_for(area)
         changelog_size = os.path.getsize(changelog_path)
-        resp = wx.MessageBox(_("Successfully applied {total} changes. A changelog of size {size} was generated, do you want to view it now?").format(total=pending_count, size=changelog_size), _("Success"), style=wx.ICON_QUESTION|wx.YES_NO)
+        resp = wx.MessageBox(_("Successfully applied {total} changes. A changelog of size {size} was generated, do you want to view it now?").format(total=pending_count, size=format_size(changelog_size)), _("Success"), style=wx.ICON_QUESTION|wx.YES_NO)
+        if resp == wx.YES:
+            # Somewhat hacky, but os.startfile is not cross platform and the webbrowser way appears to be.
+            webbrowser.open(changelog_path)
