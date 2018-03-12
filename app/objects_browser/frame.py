@@ -8,6 +8,11 @@ from ..geometry_utils import closest_point_to, distance_between, bearing_to, to_
 from . import object_actions
 from .object_actions.action import ObjectAction
 
+def action_execution_handler_factory(action, entity):
+    def handler(evt):
+        return action.execute(entity)
+    return handler
+
 class ObjectsBrowserFrame(wx.Frame):
     xrc_name = "objects_browser"
 
@@ -27,8 +32,7 @@ class ObjectsBrowserFrame(wx.Frame):
         self._objects = objects
         self.Bind(wx.EVT_CHAR_HOOK, self._close_using_esc)
         self._all_actions = []
-        for member_name in dir(object_actions):
-            member = getattr(object_actions, member_name)
+        for member in object_actions.__dict__.values():
             if inspect.isclass(member) and issubclass(member, ObjectAction):
                 self._all_actions.append(member)
         objects_list.Selection = 0
@@ -67,7 +71,7 @@ class ObjectsBrowserFrame(wx.Frame):
         for action in self._all_actions:
             if action.executable(selected):
                 mi = menu.Append(wx.ID_ANY, action.label)
-                self.Bind(wx.EVT_MENU, lambda evt: action.execute(selected), mi)
+                self.Bind(wx.EVT_MENU, action_execution_handler_factory(action, selected), mi)
 
     @property
     def selected_object(self):
