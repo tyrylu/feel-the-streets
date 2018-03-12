@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-03-11 23:24+0100\n"
-"PO-Revision-Date: 2018-03-11 23:26+0100\n"
+"POT-Creation-Date: 2018-03-12 12:43+0100\n"
+"PO-Revision-Date: 2018-03-12 13:55+0100\n"
 "Last-Translator: \n"
 "Language: cs\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -465,18 +465,22 @@ msgstr "Opravdu si přejete záložku {bookmark} odstranit?"
 msgid "Question"
 msgstr "Otázka"
 
-#: app/objects_browser/frame.py:13
+#: app/objects_browser/frame.py:16
 msgid " ({num_objects} objects shown)"
 msgstr " (zobrazeno {num_objects} objektů)"
 
-#: app/objects_browser/frame.py:23
+#: app/objects_browser/frame.py:26
 msgid "{object}: distance {distance:.2f} meters, {rel_bearing:.2f}° relatively"
 msgstr "{object}: vzdálenost {distance:.2f} metrů, {rel_bearing:.2f}° relativně"
 
-#: app/objects_browser/frame.py:51
+#: app/objects_browser/frame.py:60
 msgid "Other fields - they can not be searched and are not processed in any way"
 msgstr ""
 "Ostatní pole - nejsou prohledávatelná ani žádným dalším způsobem zpracovávána"
+
+#: app/objects_browser/object_actions/open_website.py:8
+msgid "Open website"
+msgstr "Otevřít webovou stránku"
 
 #: app/search/__init__.py:12
 msgid "Select the class to search"
@@ -547,6 +551,398 @@ msgstr "Začíná na (včetně velikosti písmen)"
 #: app/search/widgets/text_ctrl.py:7
 msgid "Value"
 msgstr "Hodnota"
+
+#: shared/entities/abandoned.py:9
+msgid "Abandoned"
+msgstr "Opuštěné"
+
+#: shared/entities/accessible.py:3
+msgid "Accessible"
+msgstr "Přístupné"
+
+#: shared/entities/address.py:2
+msgid "Address"
+msgstr "Adresa"
+
+#: shared/entities/addressable.py:11
+msgid "Addressable"
+msgstr "Adresovatelné"
+
+#: shared/entities/advertising.py:4
+msgid "Advertising"
+msgstr "Reklama"
+
+#: shared/entities/aerial_way.py:24
+msgid "Aerial way"
+msgstr ""
+
+#: shared/entities/amenity.py:20
+msgid "Amenity"
+msgstr ""
+
+#: shared/entities/annotated.py:3
+msgid "Annotated"
+msgstr "S poznámkou"
+
+#: shared/entities/area.py:4
+msgid "Area"
+msgstr "Oblast"
+
+#: shared/entities/associated_street.py:2
+msgid "Associated street"
+msgstr ""
+
+#: shared/entities/atm.py:3
+msgid "ATM"
+msgstr "Bankomat"
+
+#: shared/entities/bank.py:3
+msgid "Bank"
+msgstr "Banka"
+
+#: shared/entities/barrier.py:35
+msgid "Barrier"
+msgstr "Překážka"
+
+#: shared/entities/bench.py:2
+msgid "Bench"
+msgstr "Lavička"
+
+#: shared/entities/bicycle_parking.py:16
+msgid "Bicycle parking"
+msgstr ""
+
+#: shared/entities/board.py:28
+msgid "Board"
+msgstr "Cedule"
+
+#: shared/entities/border.py:7
+msgid "Border"
+msgstr "Státní hranice"
+
+#: shared/entities/boundary.py:31
+msgid "Boundary"
+msgstr "Hranice"
+
+#: shared/entities/bridge.py:2
+msgid "Bridge"
+msgstr "Most"
+
+#: shared/entities/building.py:38
+msgid "Building"
+msgstr "Budova"
+
+#: shared/entities/building_part.py:3
+msgid "Building part"
+msgstr "Část budovy"
+
+#: shared/entities/bunker.py:7
+msgid "Bunker"
+msgstr "Bunkr"
+
+#: shared/entities/cafe.py:6
+msgid "Cafe"
+msgstr "Kavárna"
+
+#: shared/entities/castle.py:2
+msgid "Castle"
+msgstr "Hrad"
+
+#: shared/entities/checkpoint.py:9
+msgid "Checkpoint"
+msgstr "Kontrolní bod"
+
+#: shared/entities/clock.py:16
+msgid "Clock"
+msgstr "Hodiny"
+
+#: shared/entities/collection.py:6
+msgid "Collection"
+msgstr "Kolekce"
+
+#: shared/entities/commented.py:2
+msgid "Commented"
+msgstr "Okomentované"
+
+#: shared/entities/construction.py:4
+msgid "Construction"
+msgstr "Konstrukce"
+
+#: shared/entities/craft.py:34
+msgid "Craft"
+msgstr ""
+
+#: shared/entities/crossing.py:18
+msgid "Crossing"
+msgstr "Křižovatka"
+
+#: shared/entities/demolished_building.py:2
+msgid "Demolished building"
+msgstr "Zbouraná budova"
+
+#: shared/entities/disused.py:8
+msgid "Disused"
+msgstr "Nepoužívané"
+
+#: shared/entities/elevated.py:2
+msgid "Elevated"
+msgstr "Označené údajem o nadmořské výšce"
+
+#: shared/entities/enforcement.py:3
+msgid "Enforcement"
+msgstr "Vynucení"
+
+#: shared/entities/entrance.py:10
+msgid "Entrance"
+msgstr "Vchod"
+
+#: shared/entities/fee.py:2
+msgid "Fee"
+msgstr "Mající vlastnost platby"
+
+#: shared/entities/fire_hydrant.py:14
+msgid "Fire hydrant"
+msgstr "Požární hydrant"
+
+#: shared/entities/fountain.py:3
+msgid "Fountain"
+msgstr "Fontána"
+
+#: shared/entities/fuel.py:4
+msgid "Fuel"
+msgstr "Čerpací stanice"
+
+#: shared/entities/garden.py:3
+msgid "Garden"
+msgstr "Zahrada"
+
+#: shared/entities/golf_course.py:8
+msgid "Golf course"
+msgstr "Golfový kurz"
+
+#: shared/entities/graveyard.py:3
+msgid "Graveyard"
+msgstr "Hřbitov"
+
+#: shared/entities/health_care.py:23
+msgid "Health care"
+msgstr "Péče o zdraví"
+
+#: shared/entities/historic.py:9
+msgid "Historic"
+msgstr "Historické"
+
+#: shared/entities/land.py:27
+msgid "Land"
+msgstr "Pozemek"
+
+#: shared/entities/leisure.py:4
+msgid "Leisure"
+msgstr "Volnočasová aktivita"
+
+#: shared/entities/level.py:3
+msgid "Level"
+msgstr "Úroveň"
+
+#: shared/entities/man_made.py:14
+msgid "Man made"
+msgstr "Vytvořeno člověkem"
+
+#: shared/entities/memorial.py:3
+msgid "Memorial"
+msgstr "Pomník"
+
+#: shared/entities/named.py:2
+msgid "Named"
+msgstr "Pojmenované"
+
+#: shared/entities/natural.py:14
+msgid "Natural"
+msgstr "Přírodní"
+
+#: shared/entities/no_exit.py:2
+msgid "No exit"
+msgstr "Bez východu"
+
+#: shared/entities/notice.py:3
+msgid "Notice"
+msgstr "Oznámení"
+
+#: shared/entities/office.py:24
+msgid "Office"
+msgstr "Kancelář"
+
+#: shared/entities/osm_entity.py:6
+msgid "OSMEntity"
+msgstr "Entita OSM"
+
+#: shared/entities/parking.py:9
+msgid "Parking"
+msgstr "Parkoviště"
+
+#: shared/entities/piste.py:2
+msgid "Piste"
+msgstr "Sjezdovka"
+
+#: shared/entities/place.py:3
+msgid "Place"
+msgstr "Místo"
+
+#: shared/entities/platform.py:10
+msgid "Platform"
+msgstr "Nástupiště"
+
+#: shared/entities/playground.py:13
+msgid "Playground"
+msgstr "Dětské hřiště"
+
+#: shared/entities/pole.py:3
+msgid "Pole"
+msgstr "Sloup"
+
+#: shared/entities/post_box.py:2
+msgid "Post box"
+msgstr "Poštovní schránka"
+
+#: shared/entities/power.py:3
+msgid "Power"
+msgstr "Energie"
+
+#: shared/entities/power_generator.py:10
+msgid "Power generator"
+msgstr "Elektrický generátor"
+
+#: shared/entities/power_line.py:15
+msgid "Power line"
+msgstr "Elektrické vedení"
+
+#: shared/entities/power_plant.py:3
+msgid "Power plant"
+msgstr "Elektrárna"
+
+#: shared/entities/power_substation.py:7
+msgid "Power substation"
+msgstr "transformovna"
+
+#: shared/entities/protected_area.py:9
+msgid "Protected area"
+msgstr "Chráněná oblast"
+
+#: shared/entities/pub.py:3
+msgid "Pub"
+msgstr "Hospoda"
+
+#: shared/entities/public_transport.py:3
+msgid "Public transport"
+msgstr "Veřejná doprava"
+
+#: shared/entities/rail_way.py:100
+msgid "Rail way"
+msgstr "Koleje"
+
+#: shared/entities/recycling.py:10
+msgid "Recycling"
+msgstr "Recyklace"
+
+#: shared/entities/restriction.py:8
+msgid "Restriction"
+msgstr "Omezení"
+
+#: shared/entities/rf.py:13
+msgid "RF"
+msgstr "Vysílač"
+
+#: shared/entities/road.py:131
+msgid "Road"
+msgstr "Silnice"
+
+#: shared/entities/route.py:17
+msgid "Route"
+msgstr "Trasa"
+
+#: shared/entities/school_thing.py:6
+msgid "School thing"
+msgstr "Se školou související"
+
+#: shared/entities/service_road.py:3
+msgid "Service road"
+msgstr "Servisní silnice"
+
+#: shared/entities/shelter.py:3
+msgid "Shelter"
+msgstr "Přístřešek"
+
+#: shared/entities/shop.py:28
+msgid "Shop"
+msgstr "Obchod"
+
+#: shared/entities/site.py:3
+msgid "Site"
+msgstr "Areál"
+
+#: shared/entities/social_facility.py:20
+msgid "Social facility"
+msgstr ""
+
+#: shared/entities/sport.py:15
+msgid "Sport"
+msgstr "Sport"
+
+#: shared/entities/steps.py:30
+msgid "Steps"
+msgstr "Schody"
+
+#: shared/entities/stop.py:25
+msgid "Stop"
+msgstr "Zastávka"
+
+#: shared/entities/street.py:3
+msgid "Street"
+msgstr "Ulice"
+
+#: shared/entities/surveillance.py:12
+msgid "Surveillance"
+msgstr "Sledování"
+
+#: shared/entities/theatre.py:2
+msgid "Theatre"
+msgstr "Divadlo"
+
+#: shared/entities/tourism.py:13
+msgid "Tourism"
+msgstr "Turismus"
+
+#: shared/entities/tower.py:3
+msgid "Tower"
+msgstr "Věž"
+
+#: shared/entities/track.py:3
+msgid "Track"
+msgstr "Stezka"
+
+#: shared/entities/traffic_calming.py:3
+msgid "Traffic calming"
+msgstr ""
+
+#: shared/entities/traffic_sign.py:3
+msgid "Traffic sign"
+msgstr "Dopravní značka"
+
+#: shared/entities/transformer.py:3
+msgid "Transformer"
+msgstr "Transformátor"
+
+#: shared/entities/tree.py:2
+msgid "Tree"
+msgstr "Strom"
+
+#: shared/entities/water_area.py:19
+msgid "Water area"
+msgstr "Vodní oblast"
+
+#: shared/entities/water_way.py:10
+msgid "Water way"
+msgstr "Vodní tok"
 
 #~ msgid "Select the map"
 #~ msgstr "Vyberte mapu"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-03-11 23:24+0100\n"
+"POT-Creation-Date: 2018-03-12 12:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -450,16 +450,20 @@ msgstr ""
 msgid "Question"
 msgstr ""
 
-#: app/objects_browser/frame.py:13
+#: app/objects_browser/frame.py:16
 msgid " ({num_objects} objects shown)"
 msgstr ""
 
-#: app/objects_browser/frame.py:23
+#: app/objects_browser/frame.py:26
 msgid "{object}: distance {distance:.2f} meters, {rel_bearing:.2f}° relatively"
 msgstr ""
 
-#: app/objects_browser/frame.py:51
+#: app/objects_browser/frame.py:60
 msgid "Other fields - they can not be searched and are not processed in any way"
+msgstr ""
+
+#: app/objects_browser/object_actions/open_website.py:8
+msgid "Open website"
 msgstr ""
 
 #: app/search/__init__.py:12
@@ -530,5 +534,397 @@ msgstr ""
 #: app/search/widgets/spin_ctrl.py:6 app/search/widgets/spin_ctrl_double.py:8
 #: app/search/widgets/text_ctrl.py:7
 msgid "Value"
+msgstr ""
+
+#: shared/entities/abandoned.py:9
+msgid "Abandoned"
+msgstr ""
+
+#: shared/entities/accessible.py:3
+msgid "Accessible"
+msgstr ""
+
+#: shared/entities/address.py:2
+msgid "Address"
+msgstr ""
+
+#: shared/entities/addressable.py:11
+msgid "Addressable"
+msgstr ""
+
+#: shared/entities/advertising.py:4
+msgid "Advertising"
+msgstr ""
+
+#: shared/entities/aerial_way.py:24
+msgid "Aerial way"
+msgstr ""
+
+#: shared/entities/amenity.py:20
+msgid "Amenity"
+msgstr ""
+
+#: shared/entities/annotated.py:3
+msgid "Annotated"
+msgstr ""
+
+#: shared/entities/area.py:4
+msgid "Area"
+msgstr ""
+
+#: shared/entities/associated_street.py:2
+msgid "Associated street"
+msgstr ""
+
+#: shared/entities/atm.py:3
+msgid "ATM"
+msgstr ""
+
+#: shared/entities/bank.py:3
+msgid "Bank"
+msgstr ""
+
+#: shared/entities/barrier.py:35
+msgid "Barrier"
+msgstr ""
+
+#: shared/entities/bench.py:2
+msgid "Bench"
+msgstr ""
+
+#: shared/entities/bicycle_parking.py:16
+msgid "Bicycle parking"
+msgstr ""
+
+#: shared/entities/board.py:28
+msgid "Board"
+msgstr ""
+
+#: shared/entities/border.py:7
+msgid "Border"
+msgstr ""
+
+#: shared/entities/boundary.py:31
+msgid "Boundary"
+msgstr ""
+
+#: shared/entities/bridge.py:2
+msgid "Bridge"
+msgstr ""
+
+#: shared/entities/building.py:38
+msgid "Building"
+msgstr ""
+
+#: shared/entities/building_part.py:3
+msgid "Building part"
+msgstr ""
+
+#: shared/entities/bunker.py:7
+msgid "Bunker"
+msgstr ""
+
+#: shared/entities/cafe.py:6
+msgid "Cafe"
+msgstr ""
+
+#: shared/entities/castle.py:2
+msgid "Castle"
+msgstr ""
+
+#: shared/entities/checkpoint.py:9
+msgid "Checkpoint"
+msgstr ""
+
+#: shared/entities/clock.py:16
+msgid "Clock"
+msgstr ""
+
+#: shared/entities/collection.py:6
+msgid "Collection"
+msgstr ""
+
+#: shared/entities/commented.py:2
+msgid "Commented"
+msgstr ""
+
+#: shared/entities/construction.py:4
+msgid "Construction"
+msgstr ""
+
+#: shared/entities/craft.py:34
+msgid "Craft"
+msgstr ""
+
+#: shared/entities/crossing.py:18
+msgid "Crossing"
+msgstr ""
+
+#: shared/entities/demolished_building.py:2
+msgid "Demolished building"
+msgstr ""
+
+#: shared/entities/disused.py:8
+msgid "Disused"
+msgstr ""
+
+#: shared/entities/elevated.py:2
+msgid "Elevated"
+msgstr ""
+
+#: shared/entities/enforcement.py:3
+msgid "Enforcement"
+msgstr ""
+
+#: shared/entities/entrance.py:10
+msgid "Entrance"
+msgstr ""
+
+#: shared/entities/fee.py:2
+msgid "Fee"
+msgstr ""
+
+#: shared/entities/fire_hydrant.py:14
+msgid "Fire hydrant"
+msgstr ""
+
+#: shared/entities/fountain.py:3
+msgid "Fountain"
+msgstr ""
+
+#: shared/entities/fuel.py:4
+msgid "Fuel"
+msgstr ""
+
+#: shared/entities/garden.py:3
+msgid "Garden"
+msgstr ""
+
+#: shared/entities/golf_course.py:8
+msgid "Golf course"
+msgstr ""
+
+#: shared/entities/graveyard.py:3
+msgid "Graveyard"
+msgstr ""
+
+#: shared/entities/health_care.py:23
+msgid "Health care"
+msgstr ""
+
+#: shared/entities/historic.py:9
+msgid "Historic"
+msgstr ""
+
+#: shared/entities/land.py:27
+msgid "Land"
+msgstr ""
+
+#: shared/entities/leisure.py:4
+msgid "Leisure"
+msgstr ""
+
+#: shared/entities/level.py:3
+msgid "Level"
+msgstr ""
+
+#: shared/entities/man_made.py:14
+msgid "Man made"
+msgstr ""
+
+#: shared/entities/memorial.py:3
+msgid "Memorial"
+msgstr ""
+
+#: shared/entities/named.py:2
+msgid "Named"
+msgstr ""
+
+#: shared/entities/natural.py:14
+msgid "Natural"
+msgstr ""
+
+#: shared/entities/no_exit.py:2
+msgid "No exit"
+msgstr ""
+
+#: shared/entities/notice.py:3
+msgid "Notice"
+msgstr ""
+
+#: shared/entities/office.py:24
+msgid "Office"
+msgstr ""
+
+#: shared/entities/osm_entity.py:6
+msgid "OSMEntity"
+msgstr ""
+
+#: shared/entities/parking.py:9
+msgid "Parking"
+msgstr ""
+
+#: shared/entities/piste.py:2
+msgid "Piste"
+msgstr ""
+
+#: shared/entities/place.py:3
+msgid "Place"
+msgstr ""
+
+#: shared/entities/platform.py:10
+msgid "Platform"
+msgstr ""
+
+#: shared/entities/playground.py:13
+msgid "Playground"
+msgstr ""
+
+#: shared/entities/pole.py:3
+msgid "Pole"
+msgstr ""
+
+#: shared/entities/post_box.py:2
+msgid "Post box"
+msgstr ""
+
+#: shared/entities/power.py:3
+msgid "Power"
+msgstr ""
+
+#: shared/entities/power_generator.py:10
+msgid "Power generator"
+msgstr ""
+
+#: shared/entities/power_line.py:15
+msgid "Power line"
+msgstr ""
+
+#: shared/entities/power_plant.py:3
+msgid "Power plant"
+msgstr ""
+
+#: shared/entities/power_substation.py:7
+msgid "Power substation"
+msgstr ""
+
+#: shared/entities/protected_area.py:9
+msgid "Protected area"
+msgstr ""
+
+#: shared/entities/pub.py:3
+msgid "Pub"
+msgstr ""
+
+#: shared/entities/public_transport.py:3
+msgid "Public transport"
+msgstr ""
+
+#: shared/entities/rail_way.py:100
+msgid "Rail way"
+msgstr ""
+
+#: shared/entities/recycling.py:10
+msgid "Recycling"
+msgstr ""
+
+#: shared/entities/restriction.py:8
+msgid "Restriction"
+msgstr ""
+
+#: shared/entities/rf.py:13
+msgid "RF"
+msgstr ""
+
+#: shared/entities/road.py:131
+msgid "Road"
+msgstr ""
+
+#: shared/entities/route.py:17
+msgid "Route"
+msgstr ""
+
+#: shared/entities/school_thing.py:6
+msgid "School thing"
+msgstr ""
+
+#: shared/entities/service_road.py:3
+msgid "Service road"
+msgstr ""
+
+#: shared/entities/shelter.py:3
+msgid "Shelter"
+msgstr ""
+
+#: shared/entities/shop.py:28
+msgid "Shop"
+msgstr ""
+
+#: shared/entities/site.py:3
+msgid "Site"
+msgstr ""
+
+#: shared/entities/social_facility.py:20
+msgid "Social facility"
+msgstr ""
+
+#: shared/entities/sport.py:15
+msgid "Sport"
+msgstr ""
+
+#: shared/entities/steps.py:30
+msgid "Steps"
+msgstr ""
+
+#: shared/entities/stop.py:25
+msgid "Stop"
+msgstr ""
+
+#: shared/entities/street.py:3
+msgid "Street"
+msgstr ""
+
+#: shared/entities/surveillance.py:12
+msgid "Surveillance"
+msgstr ""
+
+#: shared/entities/theatre.py:2
+msgid "Theatre"
+msgstr ""
+
+#: shared/entities/tourism.py:13
+msgid "Tourism"
+msgstr ""
+
+#: shared/entities/tower.py:3
+msgid "Tower"
+msgstr ""
+
+#: shared/entities/track.py:3
+msgid "Track"
+msgstr ""
+
+#: shared/entities/traffic_calming.py:3
+msgid "Traffic calming"
+msgstr ""
+
+#: shared/entities/traffic_sign.py:3
+msgid "Traffic sign"
+msgstr ""
+
+#: shared/entities/transformer.py:3
+msgid "Transformer"
+msgstr ""
+
+#: shared/entities/tree.py:2
+msgid "Tree"
+msgstr ""
+
+#: shared/entities/water_area.py:19
+msgid "Water area"
+msgstr ""
+
+#: shared/entities/water_way.py:10
+msgid "Water way"
 msgstr ""
 
