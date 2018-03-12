@@ -1,9 +1,12 @@
+import inspect
 import wx
 import wx.xrc as xrc
 from shapely.geometry.point import Point
 from shared.humanization_utils import underscored_to_words
 from .. import services
 from ..geometry_utils import closest_point_to, distance_between, bearing_to, to_shapely_point, to_latlon
+from . import object_actions
+from .object_actions.action import ObjectAction
 
 class ObjectsBrowserFrame(wx.Frame):
     xrc_name = "objects_browser"
@@ -22,10 +25,16 @@ class ObjectsBrowserFrame(wx.Frame):
             rel_bearing = (bearing - self._person.direction) % 360
             objects_list.Append(_("{object}: distance {distance:.2f} meters, {rel_bearing:.2f}° relatively").format(object=obj, distance=dist, rel_bearing=rel_bearing))
         self._objects = objects
+        self.Bind(wx.EVT_CHAR_HOOK, self._close_using_esc)
+        self._all_actions = []
+        for member_name in dir(object_actions):
+            member = getattr(object_actions, member_name)
+            if inspect.isclass(member) and issubclass(member, ObjectAction):
+                self._all_actions.append(member)
         objects_list.Selection = 0
         self.on_objects_listbox(None)
-        self.Bind(wx.EVT_CHAR_HOOK, self._close_using_esc)
-    
+
+
     def on_close_clicked(self, evt):
         self.Close()
     
@@ -52,11 +61,17 @@ class ObjectsBrowserFrame(wx.Frame):
                 first = False
             props_list.Append("%s: %s"%(underscored_to_words(name), value))
         props_list.Selection = 0
+        menu = self.MenuBar.Menus[0][0]
+        for item in menu.MenuItems:
+            menu.Delete(item)
+        for action in self._all_actions:
+            if action.executable(selected):
+                mi = menu.Append(wx.ID_ANY, action.label)
+                self.Bind(wx.EVT_MENU, lambda evt: action.execute(selected), mi)
 
     @property
     def selected_object(self):
         return self._objects[self.FindWindowByName("objects").Selection]
-
 
     def _close_using_esc(self, evt):
         if evt.KeyCode == wx.WXK_ESCAPE:
