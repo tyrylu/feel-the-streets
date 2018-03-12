@@ -1,5 +1,5 @@
 import re
-from shared.humanization_utils import format_class_name
+from shared.humanization_utils import format_class_name, underscored_to_words
 
 def extract_xrc(fileobj, keywords, comment_tags, options):
     """Extract messages from xrc files.
@@ -25,8 +25,8 @@ def extract_xrc(fileobj, keywords, comment_tags, options):
             yield (lineno, None, match.group(2).decode("utf-8").replace("&amp;", "&"), [])
 
 
-def extract_entity_name(fileobj, keywords, comment_tags, options):
-    """Extracts the entity names for translation.
+def extract_entity_related_strings(fileobj, keywords, comment_tags, options):
+    """Extracts the entity, property and enum value names for translation.
 
     :param fileobj: the file-like object the messages should be extracted
                     from
@@ -46,3 +46,9 @@ def extract_entity_name(fileobj, keywords, comment_tags, options):
             parent = match.group(2)
             if parent != "BaseModel" or parent != "enum.Enum":
                 yield (lineno, "", format_class_name(match.group(1)), [])
+        prop_math = re.match(r"([a-z0-9_]+): [a-zA-Z]", line)
+        if prop_math:
+            yield(lineno, "", underscored_to_words(prop_math.group(1)), [])
+        enum_math = re.match(r"([a-z0-9_]+) = \d+", line)
+        if enum_math:
+            yield (lineno, "", underscored_to_words(enum_math.group(1)), [])
