@@ -3,6 +3,7 @@ import datetime
 from pydantic import BaseModel
 from .enums import OSMObjectType
 from ..models import Entity
+from ..humanization_utils import get_class_display_name
 
 class OSMEntity(BaseModel):
     osm_id: str
@@ -20,7 +21,7 @@ class OSMEntity(BaseModel):
     def __hash__(self):
         return hash(repr(self))
     def __str__(self):
-        return self.__class__.__name__
+        return get_class_display_name(self.__class__)
 
     @property
     def additional_fields(self):
