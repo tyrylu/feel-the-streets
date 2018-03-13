@@ -5,11 +5,11 @@ from shared.humanization_utils import underscored_to_words
 
 def get_dictchange_description(dictchange):
     if dictchange.kind is ChangeKind.add:
-        return _("{property} was added, value {value}").format(property=underscored_to_words(dictchange.key), value=dictchange.new_value)
+        return _("{property}: addition with value {value}").format(property=underscored_to_words(dictchange.key), value=dictchange.new_value)
     elif dictchange.kind is ChangeKind.change:
-        return _("{property} changed from {old} to {new}").format(property=underscored_to_words(dictchange.key), old=dictchange.old_value, new=dictchange.new_value)
+        return _("{property}: change from {old} to {new}").format(property=underscored_to_words(dictchange.key), old=dictchange.old_value, new=dictchange.new_value)
     elif dictchange.kind is ChangeKind.remove:
-        return _("{property} was removed").format(property=underscored_to_words(dictchange.key))
+        return _("{property}: removal").format(property=underscored_to_words(dictchange.key))
     else:
         raise RuntimeError("Unknown dictchange kind %s."%dictchange.kind)
 
