@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-03-12 14:17+0100\n"
-"PO-Revision-Date: 2018-03-12 14:41+0100\n"
+"POT-Creation-Date: 2018-03-13 18:50+0100\n"
+"PO-Revision-Date: 2018-03-13 18:53+0100\n"
 "Last-Translator: \n"
 "Language: cs\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -105,16 +105,16 @@ msgstr ""
 "vzdálenosti {middle_distance:.2f} od středu"
 
 #: app/semantic_changelog_generator.py:8
-msgid "{property} was added, value {value}"
-msgstr "{property} byl(a) přidán(a), hodnota {value}"
+msgid "{property}: addition with value {value}"
+msgstr "{property}: přidání s hodnotou {value}"
 
 #: app/semantic_changelog_generator.py:10
-msgid "{property} changed from {old} to {new}"
-msgstr "{property} byl(a) změněn(a) z {old} na {new}"
+msgid "{property}: change from {old} to {new}"
+msgstr "{property}: změna z {old} na {new}"
 
 #: app/semantic_changelog_generator.py:12
-msgid "{property} was removed"
-msgstr "{property} byl(a) odstraněn(a)"
+msgid "{property}: removal"
+msgstr "{property}: odstranění"
 
 #: app/semantic_changelog_generator.py:18
 msgid "Object {osm_id} was deleted"
@@ -483,15 +483,15 @@ msgstr "Opravdu si přejete záložku {bookmark} odstranit?"
 msgid "Question"
 msgstr "Otázka"
 
-#: app/objects_browser/frame.py:16
+#: app/objects_browser/frame.py:22
 msgid " ({num_objects} objects shown)"
 msgstr " (zobrazeno {num_objects} objektů)"
 
-#: app/objects_browser/frame.py:26
+#: app/objects_browser/frame.py:32
 msgid "{object}: distance {distance:.2f} meters, {rel_bearing:.2f}° relatively"
 msgstr "{object}: vzdálenost {distance:.2f} metrů, {rel_bearing:.2f}° relativně"
 
-#: app/objects_browser/frame.py:60
+#: app/objects_browser/frame.py:67
 msgid "Other fields - they can not be searched and are not processed in any way"
 msgstr ""
 "Ostatní pole - nejsou prohledávatelná ani žádným dalším způsobem zpracovávána"
@@ -499,6 +499,14 @@ msgstr ""
 #: app/objects_browser/object_actions/open_website.py:8
 msgid "Open website"
 msgstr "Otevřít webovou stránku"
+
+#: app/objects_browser/object_actions/open_wikidata_record.py:8
+msgid "Open wikidata record"
+msgstr "Otevřít wikidata záznam"
+
+#: app/objects_browser/object_actions/open_wikipedia_article.py:8
+msgid "Open wikipedia article"
+msgstr "Otevřít článek na wikipedii"
 
 #: app/search/__init__.py:12
 msgid "Select the class to search"
@@ -8251,9 +8259,8 @@ msgid "Military type"
 msgstr ""
 
 #: shared/entities/land.py:40
-#, fuzzy
 msgid "Resource"
-msgstr "Volnočasová aktivita"
+msgstr "Zdroj"
 
 #: shared/entities/land.py:43 shared/entities/natural.py:50
 msgid "Leaf cycle"
@@ -8265,9 +8272,8 @@ msgid "Landcover"
 msgstr ""
 
 #: shared/entities/land.py:64
-#, fuzzy
 msgid "Plant"
-msgstr "Elektrárna"
+msgstr "Květina"
 
 #: shared/entities/land.py:65 shared/entities/natural.py:42
 msgid "Uhul slt"
@@ -8290,9 +8296,8 @@ msgid "Id fb"
 msgstr ""
 
 #: shared/entities/land.py:83
-#, fuzzy
 msgid "Trees"
-msgstr "Ulice"
+msgstr "Stromy"
 
 #: shared/entities/land.py:84 shared/entities/water_area.py:21
 msgid "Reservoir type"
@@ -8352,9 +8357,8 @@ msgid "Small boats"
 msgstr ""
 
 #: shared/entities/man_made.py:6
-#, fuzzy
 msgid "Manual"
-msgstr "Přírodní"
+msgstr "Manuální"
 
 #: shared/entities/man_made.py:16
 msgid "Classification"
@@ -8367,9 +8371,8 @@ msgstr ""
 #: shared/entities/man_made.py:37 shared/entities/platform.py:30
 #: shared/entities/rail_way.py:111 shared/entities/road.py:169
 #: shared/entities/steps.py:39 shared/entities/water_way.py:13
-#, fuzzy
 msgid "Tunnel"
-msgstr "Čerpací stanice"
+msgstr "Tunel"
 
 #: shared/entities/man_made.py:41
 msgid "Pump"
@@ -8393,9 +8396,8 @@ msgid "Memorial kind"
 msgstr "Pomník"
 
 #: shared/entities/memorial.py:6
-#, fuzzy
 msgid "Text"
-msgstr "Ulice"
+msgstr "Text"
 
 #: shared/entities/memorial.py:9
 msgid "Person date of death"
@@ -8460,9 +8462,8 @@ msgid "Category"
 msgstr ""
 
 #: shared/entities/notice.py:5 shared/entities/office.py:49
-#, fuzzy
 msgid "Function"
-msgstr "Otázka"
+msgstr "Funkce"
 
 #: shared/entities/notice.py:6
 msgid "Impact"
@@ -8510,43 +8511,41 @@ msgstr ""
 msgid "Phone 1"
 msgstr ""
 
-#: shared/entities/osm_entity.py:6
+#: shared/entities/osm_entity.py:7
 msgid "OSMEntity"
 msgstr "Entita OSM"
 
-#: shared/entities/osm_entity.py:7
-msgid "Osm id"
-msgstr ""
-
 #: shared/entities/osm_entity.py:8
-msgid "Timestamp"
-msgstr ""
+msgid "Osm id"
+msgstr "Osm id"
 
 #: shared/entities/osm_entity.py:9
-#, fuzzy
-msgid "Version"
-msgstr "Otázka"
+msgid "Timestamp"
+msgstr "Časová známka"
 
 #: shared/entities/osm_entity.py:10
-msgid "Changeset"
-msgstr ""
+msgid "Version"
+msgstr "Verze"
 
 #: shared/entities/osm_entity.py:11
-msgid "Uid"
-msgstr ""
+msgid "Changeset"
+msgstr "Sada změn"
 
 #: shared/entities/osm_entity.py:12
-#, fuzzy
-msgid "User"
-msgstr "Bunkr"
+msgid "Uid"
+msgstr "Id uživatele"
 
 #: shared/entities/osm_entity.py:13
-msgid "Parent osm id"
-msgstr ""
+msgid "User"
+msgstr "Uživatel"
 
 #: shared/entities/osm_entity.py:14
+msgid "Parent osm id"
+msgstr "Osm id rodiče"
+
+#: shared/entities/osm_entity.py:15
 msgid "Db entity"
-msgstr ""
+msgstr "Databázová entita"
 
 #: shared/entities/parking.py:10
 msgid "Paid"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-03-12 14:17+0100\n"
+"POT-Creation-Date: 2018-03-13 18:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,15 +90,15 @@ msgid "{start_distance:.2f} meters of {distance:.2f} meters in angle {angle:.2f}
 msgstr ""
 
 #: app/semantic_changelog_generator.py:8
-msgid "{property} was added, value {value}"
+msgid "{property}: addition with value {value}"
 msgstr ""
 
 #: app/semantic_changelog_generator.py:10
-msgid "{property} changed from {old} to {new}"
+msgid "{property}: change from {old} to {new}"
 msgstr ""
 
 #: app/semantic_changelog_generator.py:12
-msgid "{property} was removed"
+msgid "{property}: removal"
 msgstr ""
 
 #: app/semantic_changelog_generator.py:18
@@ -469,20 +469,28 @@ msgstr ""
 msgid "Question"
 msgstr ""
 
-#: app/objects_browser/frame.py:16
+#: app/objects_browser/frame.py:22
 msgid " ({num_objects} objects shown)"
 msgstr ""
 
-#: app/objects_browser/frame.py:26
+#: app/objects_browser/frame.py:32
 msgid "{object}: distance {distance:.2f} meters, {rel_bearing:.2f}° relatively"
 msgstr ""
 
-#: app/objects_browser/frame.py:60
+#: app/objects_browser/frame.py:67
 msgid "Other fields - they can not be searched and are not processed in any way"
 msgstr ""
 
 #: app/objects_browser/object_actions/open_website.py:8
 msgid "Open website"
+msgstr ""
+
+#: app/objects_browser/object_actions/open_wikidata_record.py:8
+msgid "Open wikidata record"
+msgstr ""
+
+#: app/objects_browser/object_actions/open_wikipedia_article.py:8
+msgid "Open wikipedia article"
 msgstr ""
 
 #: app/search/__init__.py:12
@@ -8104,39 +8112,39 @@ msgstr ""
 msgid "Phone 1"
 msgstr ""
 
-#: shared/entities/osm_entity.py:6
+#: shared/entities/osm_entity.py:7
 msgid "OSMEntity"
 msgstr ""
 
-#: shared/entities/osm_entity.py:7
+#: shared/entities/osm_entity.py:8
 msgid "Osm id"
 msgstr ""
 
-#: shared/entities/osm_entity.py:8
+#: shared/entities/osm_entity.py:9
 msgid "Timestamp"
 msgstr ""
 
-#: shared/entities/osm_entity.py:9
+#: shared/entities/osm_entity.py:10
 msgid "Version"
 msgstr ""
 
-#: shared/entities/osm_entity.py:10
+#: shared/entities/osm_entity.py:11
 msgid "Changeset"
 msgstr ""
 
-#: shared/entities/osm_entity.py:11
+#: shared/entities/osm_entity.py:12
 msgid "Uid"
 msgstr ""
 
-#: shared/entities/osm_entity.py:12
+#: shared/entities/osm_entity.py:13
 msgid "User"
 msgstr ""
 
-#: shared/entities/osm_entity.py:13
+#: shared/entities/osm_entity.py:14
 msgid "Parent osm id"
 msgstr ""
 
-#: shared/entities/osm_entity.py:14
+#: shared/entities/osm_entity.py:15
 msgid "Db entity"
 msgstr ""
 
