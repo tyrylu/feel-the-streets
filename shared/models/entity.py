@@ -12,7 +12,7 @@ class Entity(Base):
     discriminator = Column(String(64), nullable=False)
     data = Column(UnicodeText, nullable=False)
     effective_width = Column(Float)
-    __table_args__ = (Index("entity_by_osm_id", func.json_extract(data, text("$.osm_id"))),)
+    __table_args__ = (Index("entity_by_osm_id", func.json_extract(data, "$.osm_id")),)
 
     def __str__(self):
         return self.__class__.__name__
