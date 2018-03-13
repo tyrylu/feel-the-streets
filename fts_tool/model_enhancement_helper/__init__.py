@@ -1,7 +1,7 @@
 from pathlib import Path
 import click
 from .model import Model
-from ..database_updater.generation_record import GenerationRecord
+from server.area_database_updater.generation_record import GenerationRecord
 from .enum import Enum
 from .. import cli
 from .utils import is_valid_identifier
