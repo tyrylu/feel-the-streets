@@ -1,3 +1,4 @@
+import enum
 import inspect
 import wx
 import wx.xrc as xrc
@@ -57,6 +58,8 @@ class ObjectsBrowserFrame(wx.Frame):
             val = getattr(selected, attr.name)
             if not val:
                 continue
+            if isinstance(val, enum.Enum):
+                val = underscored_to_words(val.name)
             props_list.Append("%s: %s"%(underscored_to_words(attr.name), val))
         first = True
         for name, value in selected.additional_fields.items():
