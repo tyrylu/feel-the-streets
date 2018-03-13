@@ -68,7 +68,7 @@ def _get_change_target(target, key, create_if_missing=False):
     parts = key.split(".")
     intermediary = []
     for part in parts[:-1]:
-        if part not in target:
+        if part not in target or not isinstance(target[part], dict):
             if create_if_missing:
                 target[part] = {}
             else:

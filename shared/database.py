@@ -133,5 +133,5 @@ class Database:
             if change.data_changes:
                 entity_data = json.loads(entity.data)
                 for subchange in change.data_changes:
-                    apply_dict_change(subchange, entity_data)
+                    entity_data = apply_dict_change(subchange, entity_data)
                 entity.data = json.dumps(entity_data)
