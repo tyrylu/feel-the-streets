@@ -43,12 +43,15 @@ class ChangeActionProcessor:
         db_entity = self._translator.translate_object(entity)
         if not db_entity:
             return
+        geometry = self._translator.manager.get_geometry_as_wkt(entity)
+        if len(geometry) > 1000000:
+            log.warning("Refusing to add entity with tags %s because of the excessively complex geometry of size %s.", entity.tags, len(geometry))
+            return
         change = Change(type=ChangeType.create, osm_id=entity.unique_id)
         change.property_changes.append(DictChange.creating("data", db_entity.data))
         change.property_changes.append(DictChange.creating("discriminator", db_entity.discriminator))
         width = db_entity.create_osm_entity().effective_width
         change.property_changes.append(DictChange.creating("effective_width", width))
-        geometry = self._translator.manager.get_geometry_as_wkt(entity)
         change.property_changes.append(DictChange.creating("geometry", geometry))
         return change
 
@@ -63,6 +66,9 @@ class ChangeActionProcessor:
             return None
         old_props, old_data = self._reconstruct_properties_and_data(action.old, old_entity)
         new_props, new_data = self._reconstruct_properties_and_data(action.new, new_entity)
+        if "geometry" in new_props and len(new_props["geometry"]) > 1000000:
+            log.warning("Refusing to apply geometry size change of object %s from %s to %s", action.new.unique_id, len(old_props["geometry"]), len(new_props["geometry"]))
+            return
         change = Change(osm_id=action.old.unique_id, type=ChangeType.update)
         change.property_changes = diff(old_props, new_props)
         change.data_changes = diff(old_data, new_data)
