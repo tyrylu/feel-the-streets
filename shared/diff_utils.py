@@ -20,7 +20,11 @@ class DictChange(pydantic.BaseModel):
     @classmethod
     def creating(cls, key, value):
         return cls(kind=ChangeKind.add, key=key, new_value=value)
-
+    
+    @classmethod
+    def removing(cls, key):
+            return cls(kind=ChangeKind.remove, key=key)
+    
     def __str__(self):
         if self.kind is ChangeKind.add:
             return f"Added {self.key} with value {self.new_value}"
@@ -75,7 +79,7 @@ def _get_change_target(target, key, create_if_missing=False):
 
 def apply_dict_change(change, target):
     if change.kind in {ChangeKind.add, ChangeKind.change}:
-        intermediary, temp_target = _get_change_target(target, change.key)
+        intermediary, temp_target = _get_change_target(target, change.key, True)
         temp_target[change.key.split(".")[-1]] = change.new_value
     elif change.kind is ChangeKind.remove:
         intermediary, temp_target = _get_change_target(target, change.key)
