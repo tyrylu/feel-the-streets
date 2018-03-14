@@ -6,7 +6,7 @@ from . import db, huey
 from .models import Area, AreaState
 from .area_database_updater import create_database, _configure_logging
 from .area_database_updater.change_action_processor import ChangeActionProcessor
-from shared import Database
+from .amqp_connectivity import administrative_channel
 
 log = logging.getLogger(__name__)
 @huey.task()
@@ -20,7 +20,7 @@ def create_database_task(area_name):
     log.info("Generation sequence complete.")
 
 @huey.periodic_task(crontab(hour=22, minute=39))
-def update_area_databases_task(date=None):
+def update_area_databases_task():
     _configure_logging("update")
     for area in Area.query.filter_by(state=AreaState.updated):
         log.info("Processing area %s.", area.name)

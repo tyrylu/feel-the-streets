@@ -1,4 +1,4 @@
-from flask import jsonify, request, Response, send_file, abort
+from flask import jsonify, request, send_file, abort
 from . import app, db
 from .amqp_connectivity import administrative_channel
 from .models import Area, AreaState
