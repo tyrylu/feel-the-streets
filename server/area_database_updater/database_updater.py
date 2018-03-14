@@ -45,6 +45,8 @@ class DatabaseUpdater:
         self._db.commit_entity_insertions()
 
     def _ensure_valid_geometry(self, geometry):
+        if "EMPTY" in geometry:
+            return None
         if geometry.startswith("POINT") or geometry.startswith("LINESTRING"):
             return geometry
         try:
@@ -52,8 +54,8 @@ class DatabaseUpdater:
             if not sh_geom.is_valid:
                 log.debug("Invalid geometry %s.", geometry)
                 sh_geom = sh_geom.buffer(0)
-                if not sh_geom.is_valid:
-                    log.error("Zero buffer failed to fix the entity validity.")
+                if not sh_geom.is_valid or "EMPTY" in sh_geom.wkt:
+                    log.error("Zero buffer failed to fix the entity geometry validity.")
                     return None
         except Exception as exc:
             log.error("Failed to parse geometry %s, error %s.", geometry, exc)
