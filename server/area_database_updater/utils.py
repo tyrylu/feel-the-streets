@@ -1,6 +1,10 @@
+import shapely
 import math
 import json
+import logging
 
+
+log = logging.getLogger(__name__)
 def get_srid_from_point(x, y):
     if y < 0:
         base_srid = 32700
@@ -55,3 +59,21 @@ def connect_polygon_segments(segments):
     for i, segment in enumerate(segments):
         segments[i] = ensure_closed(segment)
     return segments
+
+def ensure_valid_geometry(geometry):
+    if "EMPTY" in geometry:
+        return None
+    if geometry.startswith("POINT") or geometry.startswith("LINESTRING"):
+        return geometry
+    try:
+        sh_geom = shapely.wkt.loads(geometry)
+        if not sh_geom.is_valid:
+            log.debug("Invalid geometry %s.", geometry)
+            sh_geom = sh_geom.buffer(0)
+            if not sh_geom.is_valid or "EMPTY" in sh_geom.wkt:
+                log.error("Zero buffer failed to fix the entity geometry validity.")
+                return None
+    except Exception as exc:
+        log.error("Failed to parse geometry %s, error %s.", geometry, exc)
+        return None
+    return sh_geom.wkt

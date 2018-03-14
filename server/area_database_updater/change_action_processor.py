@@ -2,6 +2,7 @@ import json
 import logging
 from .osm_change import OSMChangeType
 from .osm_object_translator import OSMObjectTranslator
+from .utils import ensure_valid_geometry
 from shared.semantic_change import Change, ChangeType
 from shared.diff_utils import DictChange, diff
 from shared import Database
@@ -37,16 +38,20 @@ class ChangeActionProcessor:
         log.info("Processed %s osm object changes.", num)
     
     def _gen_entity_deletion_change(self, entity):
-            return Change(osm_id=entity.unique_id, type=ChangeType.delete)
+        return Change(osm_id=entity.unique_id, type=ChangeType.delete)
     
     def _gen_entity_creation_change(self, entity):
         db_entity = self._translator.translate_object(entity)
         if not db_entity:
-            return
+            return None
         geometry = self._translator.manager.get_geometry_as_wkt(entity)
+        geometry = ensure_valid_geometry(geometry)
+        if not geometry:
+            log.warning("Geometry creation for entity %s failed.", entity.unique_id)
+            return None
         if len(geometry) > 1000000:
             log.warning("Refusing to add entity with tags %s because of the excessively complex geometry of size %s.", entity.tags, len(geometry))
-            return
+            return None
         change = Change(type=ChangeType.create, osm_id=entity.unique_id)
         change.property_changes.append(DictChange.creating("data", db_entity.data))
         change.property_changes.append(DictChange.creating("discriminator", db_entity.discriminator))
@@ -66,9 +71,14 @@ class ChangeActionProcessor:
             return None
         old_props, old_data = self._reconstruct_properties_and_data(action.old, old_entity)
         new_props, new_data = self._reconstruct_properties_and_data(action.new, new_entity)
+        if "geometry" in new_props:
+            new_props["geometry"] = ensure_valid_geometry(new_props["geometry"])
+            if not new_props["geometry"]:
+                log.warning("Failed to create geometry for entity %s.", new_entity.unique_id)
+                return None
         if "geometry" in new_props and len(new_props["geometry"]) > 1000000:
             log.warning("Refusing to apply geometry size change of object %s from %s to %s", action.new.unique_id, len(old_props["geometry"]), len(new_props["geometry"]))
-            return
+            return None
         change = Change(osm_id=action.old.unique_id, type=ChangeType.update)
         change.property_changes = diff(old_props, new_props)
         change.data_changes = diff(old_data, new_data)

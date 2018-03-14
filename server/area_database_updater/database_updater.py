@@ -1,9 +1,9 @@
 import logging
 import os
 from geoalchemy import WKTSpatialElement
-import shapely.wkt
 from shared.database import Database
 from .osm_object_translator import OSMObjectTranslator
+from .utils import ensure_valid_geometry
 
 log = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ class DatabaseUpdater:
             if check_geometry_size and geom_size > 1000000:
                 log.warning("Skipping object with tags %s because of the excessively huge geometry of size %s.", object.tags, geom_size)
                 continue
-            geometry = self._ensure_valid_geometry(geometry)
+            geometry = ensure_valid_geometry(geometry)
             if not geometry:
                 log.error("Failed to generate geometry for %s.", object)
                 continue
@@ -44,20 +44,3 @@ class DatabaseUpdater:
         log.info("Committing the insertion transaction.")
         self._db.commit_entity_insertions()
 
-    def _ensure_valid_geometry(self, geometry):
-        if "EMPTY" in geometry:
-            return None
-        if geometry.startswith("POINT") or geometry.startswith("LINESTRING"):
-            return geometry
-        try:
-            sh_geom = shapely.wkt.loads(geometry)
-            if not sh_geom.is_valid:
-                log.debug("Invalid geometry %s.", geometry)
-                sh_geom = sh_geom.buffer(0)
-                if not sh_geom.is_valid or "EMPTY" in sh_geom.wkt:
-                    log.error("Zero buffer failed to fix the entity geometry validity.")
-                    return None
-        except Exception as exc:
-            log.error("Failed to parse geometry %s, error %s.", geometry, exc)
-            return None
-        return sh_geom.wkt
