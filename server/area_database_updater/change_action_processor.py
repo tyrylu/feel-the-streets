@@ -45,13 +45,13 @@ class ChangeActionProcessor:
     
     def _gen_entity_creation_change(self, entity):
         if entity.unique_id in self._blacklist:
-            log.info("Not generating creation change for blacklisted object %s.", entity.unique_id
-            return None)
+            log.info("Not generating creation change for blacklisted object %s.", entity.unique_id)
+            return None
         db_entity = self._translator.translate_object(entity)
         if not db_entity:
             return None
         geometry = self._translator.manager.get_geometry_as_wkt(entity)
-                if len(geometry) > 1000000:
+        if len(geometry) > 1000000:
             log.warning("Refusing to add entity with tags %s because of the excessively complex geometry of size %s.", entity.tags, len(geometry))
             return None
         geometry = ensure_valid_geometry(geometry)
@@ -83,7 +83,7 @@ class ChangeActionProcessor:
         if "geometry" in new_props and len(new_props["geometry"]) > 1000000:
             log.warning("Refusing to apply geometry size change of object %s from %s to %s", action.new.unique_id, len(old_props["geometry"]), len(new_props["geometry"]))
             return None
-                       if "geometry" in new_props:
+        if "geometry" in new_props:
             new_props["geometry"] = ensure_valid_geometry(new_props["geometry"])
             if not new_props["geometry"]:
                 log.warning("Failed to create geometry for entity %s.", new_entity.unique_id)
