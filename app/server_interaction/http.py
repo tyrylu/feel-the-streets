@@ -1,6 +1,7 @@
 import os
 import logging
 import requests
+from ..services import config
 from shared import Database
 
 if os.environ.get("API_DEBUG", "0") == "1":
@@ -29,7 +30,7 @@ def request_area_creation(area_name):
         return None
 
 def download_area_database(area_name, progress_callback=None):
-    resp = requests.get(url_for("areas/{0}/download".format(area_name)), stream=True)
+    resp = requests.get(url_for("areas/{0}/download".format(area_name)), stream=True, params={"client_id": config().client_id})
     if resp.status_code == 200:
         total = int(resp.headers.get("content-length", 0))
         chunk_size = 32*1024
