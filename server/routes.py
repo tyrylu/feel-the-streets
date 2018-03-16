@@ -45,7 +45,7 @@ def download_area_data(area_name):
         abort(400)
     else:
         with administrative_channel() as chan:
-            queue_name = get_client_queue_name(request.args["client_id"], area)
+            queue_name = get_client_queue_name(request.args["client_id"], area_name)
             chan.queue_declare(queue_name, durable=True)
             chan.queue_bind(queue=queue_name, exchange=area_name)
         return send_file(Database.get_database_file(area_name))
