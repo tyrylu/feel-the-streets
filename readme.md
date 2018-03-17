@@ -10,6 +10,7 @@ For the rest of the requirements see the requirement files.
 The majority of them can be installed by invoking a pip install -r requirements/app.txt for the desktop app, or pip install -r requirements/server.txt for the server component.
 Using a shared pipfile would be nice, but until pipfile supports more than the dev packages directive, it is not possible.
 In addition to the python requirements, it requires the loadable spatialite sqlite3 extension and the yajl2 library. In Debian, those are the libsqlite3-mod-spatialite and libyajl2 packages.
+Optionally, it can use the sqlite3 icu loadable extension. The resulting .so/.dll should be named icu.so or icu.dll, so the sqlite3 extension loading will find the entry point.
 
 Components
 ----------

@@ -2,6 +2,7 @@ import glob
 import os
 import logging
 import json
+import sqlite3
 import sqlalchemy
 from sqlalchemy import create_engine, event, text
 from sqlalchemy.orm import sessionmaker
@@ -55,8 +56,12 @@ class Database:
         elif os.name == "posix":
             extension = "so"
         else:
-            raise RuntimeError("Operating system %s not tested, mod_spatialite loading specifics not known."%os.name)
+            raise RuntimeError("Operating system %s not tested, sqlite3 extension loading specifics not known."%os.name)
         dbapi_connection.load_extension("mod_spatialite.%s"%extension)
+        try:
+            dbapi_connection.load_extension("icu.%s"%extension)
+        except sqlite3.OperationalError:
+            log.warning("Failed to load the icu extension, the  text searches will be case sensitive.")
         if self._creating: 
             log.debug("Initializing spatial metadata...")
             dbapi_connection.execute("SELECT InitSpatialMetadata(1)")
