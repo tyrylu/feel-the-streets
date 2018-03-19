@@ -1,5 +1,6 @@
 import os
 import json
+import pickle
 import click
 import pika
 import dotenv
@@ -29,7 +30,7 @@ def rename_entity_data_property(old, new):
                 change = Change(osm_id=data["osm_id"], type=ChangeType.update)
                 change.data_changes.append(DictChange.removing(old))
                 change.data_changes.append(DictChange.creating(new, val))
-                chan.basic_publish(info["name"], body=pickle.dumps(change, protocol=pickle.HIGHEST_PROTOCOL), properties=pika.BasicProperties(delivery_mode=2))
+                chan.basic_publish(info["name"], body=pickle.dumps(change, protocol=pickle.HIGHEST_PROTOCOL), properties=pika.BasicProperties(delivery_mode=2), routing_key="")
         db.commit()
     chan.close()
     conn.close()
