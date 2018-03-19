@@ -3,6 +3,40 @@ from .enums import LeisureType, Amenity, ManMade, SmokingType, TourismType, Spor
 from . import Addressable
 from ..validated_quantity import quantity
 
+class RUIANType(enum.Enum):
+    industrial_object = 1
+    farm_dwelling = 2
+    residential_object = 3
+    building_of_forest_management = 4
+    building_of_civic_management = 5
+    apartment_house = 6
+    family_house = 7
+    building_for_family_recreation = 8
+    building_for_gathering_of_people = 9
+    commercial_building = 10
+    building_for_accomodation = 11
+    warehouse_building = 12
+    agricultural_building = 13
+    administrative_building = 14
+    building_of_civic_infrastructure = 15
+    building_of_technical_infrastructure = 16
+    building_for_transportation = 17
+    garage = 18
+    other_building = 19
+    multipurpose_building = 20
+    greenhouse = 21
+    dam_of_the_artificial_lake = 22
+    dam_blocking_water_way_or_walley = 23
+    flood_protection_dam = 24
+    dam_surrounding_artificial_lake = 25
+    weir = 26
+    building_for_water_transportation = 27
+    water_power_plant = 28
+    sludge_lagoon = 29
+
+
+
+
 class TakeAway(enum.Enum):
     no = 0
     yes = 1
@@ -202,3 +236,5 @@ class Building(Addressable):
     meal_vouchers_payment: bool = None
     amenity_1: Amenity = None
     education: EducationType = None
+    ruian_type: RUIANType
+    ruian_building_ref: int
