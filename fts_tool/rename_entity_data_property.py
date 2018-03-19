@@ -5,7 +5,7 @@ import pika
 import dotenv
 from . import cli
 from shared.semantic_change import Change, ChangeType
-from shared.diff_utils import DiffChange
+from shared.diff_utils import DictChange
 from shared import Database
 from shared.models import Entity
 
@@ -17,7 +17,7 @@ def rename_entity_data_property(old, new):
     conn = pika.BlockingConnection(pika.URLParameters(os.environ["AMQP_BROKER_URL"]))
     chan = conn.channel()
     for info in Database.get_local_databases_info():
-        print("Processing database %s."%name)
+        print("Processing database %s."%info["name"])
         db = Database(info["name"])
         for entity in db.query(Entity):
             data = json.loads(entity.data)
@@ -26,8 +26,7 @@ def rename_entity_data_property(old, new):
                 del data[old]
                 data[new] = val
                 entity.data = json.dumps(data)
-                change = Change()
-                change.osm_id = data["osm_id"]
+                change = Change(osm_id=data["osm_id"], type=ChangeType.update)
                 change.data_changes.append(DictChange.removing(old))
                 change.data_changes.append(DictChange.creating(new, val))
                 chan.basic_publish(info["name"], body=pickle.dumps(change, protocol=pickle.HIGHEST_PROTOCOL), properties=pika.BasicProperties(delivery_mode=2))
