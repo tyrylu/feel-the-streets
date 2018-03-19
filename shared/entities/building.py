@@ -236,5 +236,5 @@ class Building(Addressable):
     meal_vouchers_payment: bool = None
     amenity_1: Amenity = None
     education: EducationType = None
-    ruian_type: RUIANType
-    ruian_building_ref: int
+    ruian_type: RUIANType = None
+    ruian_building_ref: int = None
