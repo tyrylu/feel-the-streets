@@ -79,6 +79,8 @@ class BuildingGenerator(AddressAwareGenerator):
         self.renames("payment:cryptocurrencies", "cryptocurrencies_payment")
         self.renames("access:roof", "roof_access")
         self.renames("payment:meal_vouchers", "meal_vouchers_payment")
+        self.renames("ruian:type", "ruian_type")
+        self.renames("ref:ruian:building", "ruian_building_ref")
     @staticmethod
     def accepts(props):
         return ("building" in props and "aerialway" not in props) or "shop" in props or "building:levels" in props or ("amenity" in props and props["amenity"] in {"kindergarten", "school", "college", "hospital", "restaurant", "doctors", "veterinary", "dentist", "clinic"}) or ("type" in props and props["type"] == "building")
