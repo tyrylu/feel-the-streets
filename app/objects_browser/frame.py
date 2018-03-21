@@ -81,7 +81,7 @@ class ObjectsBrowserFrame(wx.Frame):
             other = props_list.AppendItem(root, _("Other fields - they can not be searched and are not processed in any way"))
             for val in fields_by_group["additional"]:
                 props_list.AppendItem(other, val)
-        props_list.Expand(specific)
+        #props_list.Expand(specific)
         menu = self.MenuBar.Menus[0][0]
         for item in menu.MenuItems:
             menu.Delete(item)

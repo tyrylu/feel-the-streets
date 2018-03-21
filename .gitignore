@@ -2,8 +2,9 @@ __pycache__
 *.db
 *.log
 query_cache/*
-*.grd
 generation_records/*
 *.prof
 *.lprof
 .env
+build/*
+dist/*

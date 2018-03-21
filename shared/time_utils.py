@@ -1,5 +1,5 @@
 import datetime
-import dateutil
+import dateutil.tz
 
 def ts_to_utc(ts):
     return datetime.datetime.utcfromtimestamp(ts).timestamp()
