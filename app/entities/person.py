@@ -1,5 +1,4 @@
 import attr
-import faker
 from . import entity_pre_move, entity_post_move, entity_pre_enter, entity_post_enter, entity_pre_leave, entity_post_leave, entity_rotated
 from shapely.geometry.point import Point
 from ..measuring import measure
@@ -10,7 +9,6 @@ class Person:
     map = attr.ib(hash=False)
     position = attr.ib(hash=False)
     direction = attr.ib(default=0, hash=False)
-    name = attr.ib(default=attr.Factory(faker.Faker().name))
     is_inside_of = attr.ib(default=attr.Factory(set), hash=False)
     def move_to_current(self):
         self.move_to(self.position)
