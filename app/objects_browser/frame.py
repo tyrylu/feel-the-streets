@@ -8,6 +8,7 @@ from .. import services
 from ..geometry_utils import closest_point_to, distance_between, bearing_to, to_shapely_point, to_latlon
 from . import object_actions
 from .object_actions.action import ObjectAction
+from shared.entities import OSMEntity
 
 def action_execution_handler_factory(action, entity):
     def handler(evt):
@@ -51,7 +52,9 @@ class ObjectsBrowserFrame(wx.Frame):
         sel = self.FindWindowByName("objects").Selection
         selected = self._objects[sel][1]
         props_list = self.FindWindowByName("props")
-        props_list.Clear()
+        props_list.DeleteAllItems()
+        fields_by_group = {"common": [], "specific": [], "additional": []}
+        common_fields = set(OSMEntity.__fields__.keys())
         for attr in selected.__fields__.values():
             if attr.name == "db_entity":
                 continue
@@ -60,14 +63,25 @@ class ObjectsBrowserFrame(wx.Frame):
                 continue
             if isinstance(val, enum.Enum):
                 val = underscored_to_words(val.name)
-            props_list.Append("%s: %s"%(underscored_to_words(attr.name), val))
-        first = True
+            value_str = "%s: %s"%(underscored_to_words(attr.name), val)
+            if attr.name in common_fields:
+                fields_by_group["common"].append(value_str)
+            else:
+                fields_by_group["specific"].append(value_str)
         for name, value in selected.additional_fields.items():
-            if first:
-                props_list.Append(_("Other fields - they can not be searched and are not processed in any way"))
-                first = False
-            props_list.Append("%s: %s"%(underscored_to_words(name), value))
-        props_list.Selection = 0
+            fields_by_group["additional"].append("%s: %s"%(underscored_to_words(name), value))
+        root = props_list.AddRoot("Never to be seen")
+        common = props_list.AppendItem(root, _("Common properties"))
+        for val in fields_by_group["common"]:
+            props_list.AppendItem(common, val)
+        specific = props_list.AppendItem(root, _("Specific properties"))
+        for val in fields_by_group["specific"]:
+            props_list.AppendItem(specific, val)
+        if fields_by_group["additional"]:
+            other = props_list.AppendItem(root, _("Other fields - they can not be searched and are not processed in any way"))
+            for val in fields_by_group["additional"]:
+                props_list.AppendItem(other, val)
+        props_list.Expand(specific)
         menu = self.MenuBar.Menus[0][0]
         for item in menu.MenuItems:
             menu.Delete(item)
@@ -88,7 +102,7 @@ class ObjectsBrowserFrame(wx.Frame):
 
     def on_copypropvalue_selected(self, evt):
         prop_list = self.FindWindowByName("props")
-        prop = prop_list.GetString(prop_list.Selection)
+        prop = prop_list.GetItemText(prop_list.Selection)
         val = prop.split(": ", 1)[1]
         if wx.TheClipboard.Open():
             wx.TheClipboard.SetData(wx.TextDataObject(val))
@@ -96,7 +110,7 @@ class ObjectsBrowserFrame(wx.Frame):
     
     def on_copypropname_selected(self, evt):
         prop_list = self.FindWindowByName("props")
-        prop = prop_list.GetString(prop_list.Selection)
+        prop = prop_list.GetItemText(prop_list.Selection)
         name = prop.split(": ", 1)[0]
         if wx.TheClipboard.Open():
             wx.TheClipboard.SetData(wx.TextDataObject(name))
@@ -104,7 +118,7 @@ class ObjectsBrowserFrame(wx.Frame):
 
     def on_copypropline_selected(self, evt):
         prop_list = self.FindWindowByName("props")
-        prop = prop_list.GetString(prop_list.Selection)
+        prop = prop_list.GetItemText(prop_list.Selection)
         if wx.TheClipboard.Open():
             wx.TheClipboard.SetData(wx.TextDataObject(prop))
             wx.TheClipboard.Close()

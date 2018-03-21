@@ -237,4 +237,4 @@ class Building(Addressable):
     amenity_1: Amenity = None
     education: EducationType = None
     ruian_type: RUIANType = None
-    ruian_building_ref: int = None
+    ruian_building_ref: str = None

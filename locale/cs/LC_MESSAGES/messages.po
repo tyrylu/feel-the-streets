@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-03-13 18:50+0100\n"
-"PO-Revision-Date: 2018-03-13 18:53+0100\n"
+"POT-Creation-Date: 2018-03-20 17:38+0100\n"
+"PO-Revision-Date: 2018-03-20 19:00+0100\n"
 "Last-Translator: \n"
 "Language: cs\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -164,33 +164,33 @@ msgstr "Objekty"
 msgid "Object properties"
 msgstr "Vlastnosti objektu"
 
-#: app/ui.xrc:53
+#: app/ui.xrc:55
 msgid "Go to"
 msgstr "Jít na"
 
-#: app/ui.xrc:60 app/ui.xrc:84
+#: app/ui.xrc:62 app/ui.xrc:86
 msgid "Close"
 msgstr "Zavřít"
 
-#: app/ui.xrc:65
+#: app/ui.xrc:67
 msgid "Title"
 msgstr "Titulek"
 
-#: app/ui.xrc:73
+#: app/ui.xrc:75
 msgid "Road segments"
 msgstr "Úseky cesty"
 
-#: app/controllers/interactive_person_controller.py:105 app/ui.xrc:89
+#: app/controllers/interactive_person_controller.py:105 app/ui.xrc:91
 msgid "Road details"
 msgstr "Detaily cesty"
 
-#: app/ui.xrc:97
+#: app/ui.xrc:99
 msgid "Class fields"
 msgstr "Pole třídy"
 
-#: app/ui.xrc:109 shared/entities/aerial_way.py:44 shared/entities/amenity.py:23
+#: app/ui.xrc:111 shared/entities/aerial_way.py:44 shared/entities/amenity.py:23
 #: shared/entities/atm.py:4 shared/entities/bank.py:5
-#: shared/entities/barrier.py:52 shared/entities/building.py:55
+#: shared/entities/barrier.py:52 shared/entities/building.py:89
 #: shared/entities/craft.py:37 shared/entities/disused.py:18
 #: shared/entities/fuel.py:6 shared/entities/land.py:39
 #: shared/entities/leisure.py:16 shared/entities/man_made.py:28
@@ -206,51 +206,51 @@ msgstr "Pole třídy"
 msgid "Operator"
 msgstr "Operátor"
 
-#: app/ui.xrc:120
+#: app/ui.xrc:122
 msgid "&Add condition"
 msgstr "&Přidat podmínku"
 
-#: app/ui.xrc:127
+#: app/ui.xrc:129
 msgid "Current search criteria"
 msgstr "Aktuální podmínky vyhledávání"
 
-#: app/ui.xrc:139
+#: app/ui.xrc:141
 msgid "Remove"
 msgstr "Odstranit"
 
-#: app/ui.xrc:145
+#: app/ui.xrc:147
 msgid "Search objects to distance (in meters, 0 no limit)"
 msgstr "Hledat objekty do vzdálenosti (v metrech, 0 je bez limitu)"
 
-#: app/ui.xrc:156
+#: app/ui.xrc:158
 msgid "Start search"
 msgstr "Zahájit vyhledávání"
 
-#: app/ui.xrc:162
+#: app/ui.xrc:164
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: app/ui.xrc:167
+#: app/ui.xrc:169
 msgid "Search criteria"
 msgstr "Podmínky vyhledávání"
 
-#: app/ui.xrc:176
+#: app/ui.xrc:178
 msgid "Available areas"
 msgstr "Dostupné oblasti"
 
-#: app/ui.xrc:188
+#: app/ui.xrc:190
 msgid "&Select"
 msgstr "&Vybrat"
 
-#: app/ui.xrc:194
+#: app/ui.xrc:196
 msgid "&Request a new area"
 msgstr "&Vyžádat novou oblast"
 
-#: app/ui.xrc:200
+#: app/ui.xrc:202
 msgid "&Exit"
 msgstr "&Konec"
 
-#: app/ui.xrc:205
+#: app/ui.xrc:207
 msgid "Select an area"
 msgstr "Zvolte oblast"
 
@@ -483,18 +483,30 @@ msgstr "Opravdu si přejete záložku {bookmark} odstranit?"
 msgid "Question"
 msgstr "Otázka"
 
-#: app/objects_browser/frame.py:22
+#: app/objects_browser/frame.py:23
 msgid " ({num_objects} objects shown)"
 msgstr " (zobrazeno {num_objects} objektů)"
 
-#: app/objects_browser/frame.py:32
+#: app/objects_browser/frame.py:33
 msgid "{object}: distance {distance:.2f} meters, {rel_bearing:.2f}° relatively"
 msgstr "{object}: vzdálenost {distance:.2f} metrů, {rel_bearing:.2f}° relativně"
 
-#: app/objects_browser/frame.py:67
+#: app/objects_browser/frame.py:74
+msgid "Common properties"
+msgstr "Společné vlastnosti"
+
+#: app/objects_browser/frame.py:77
+msgid "Specific properties"
+msgstr "Specifické vlastnosti"
+
+#: app/objects_browser/frame.py:81
 msgid "Other fields - they can not be searched and are not processed in any way"
 msgstr ""
 "Ostatní pole - nejsou prohledávatelná ani žádným dalším způsobem zpracovávána"
+
+#: app/objects_browser/object_actions/open_ruian_details.py:8
+msgid "Open the ruian register details"
+msgstr "Otevřít detaily z registru RUIAN"
 
 #: app/objects_browser/object_actions/open_website.py:8
 msgid "Open website"
@@ -520,17 +532,9 @@ msgstr "Třída k prohledání"
 msgid "Contains"
 msgstr "Obsahuje"
 
-#: app/search/operators/contains_cs.py:6
-msgid "Contains (case sensitively)"
-msgstr "Obsahuje (včteně velikosti písmen)"
-
 #: app/search/operators/ends_with.py:6
 msgid "Ends with"
 msgstr "Končí na"
-
-#: app/search/operators/ends_with_cs.py:6
-msgid "Ends with (case sensitively)"
-msgstr "Končí na (včetně velikosti písmen)"
 
 #: app/search/operators/eq.py:6
 msgid "Equals"
@@ -568,10 +572,6 @@ msgstr "Není rovno"
 msgid "Starts with"
 msgstr "Začíná na"
 
-#: app/search/operators/starts_with_cs.py:6
-msgid "Starts with (case sensitively)"
-msgstr "Začíná na (včetně velikosti písmen)"
-
 #: app/search/widgets/check_box.py:10 app/search/widgets/choice.py:9
 #: app/search/widgets/spin_ctrl.py:6 app/search/widgets/spin_ctrl_double.py:8
 #: app/search/widgets/text_ctrl.py:7
@@ -595,7 +595,7 @@ msgstr "Pole třídy"
 msgid "Steps"
 msgstr "Schody"
 
-#: shared/entities/abandoned.py:9 shared/entities/building.py:83
+#: shared/entities/abandoned.py:9 shared/entities/building.py:117
 #: shared/entities/enums.py:889 shared/entities/enums.py:996
 #: shared/entities/enums.py:1406 shared/entities/land.py:51
 #: shared/entities/rail_way.py:265 shared/entities/road.py:265
@@ -720,7 +720,7 @@ msgstr "Jméno domu"
 
 #: shared/entities/addressable.py:5 shared/entities/amenity.py:6
 #: shared/entities/barrier.py:8 shared/entities/board.py:25
-#: shared/entities/boundary.py:8 shared/entities/building.py:7
+#: shared/entities/boundary.py:8 shared/entities/building.py:41
 #: shared/entities/disused.py:6 shared/entities/entrance.py:5
 #: shared/entities/enums.py:10 shared/entities/enums.py:72
 #: shared/entities/enums.py:227 shared/entities/enums.py:287
@@ -754,7 +754,7 @@ msgstr "Ano"
 msgid "Scuba diving"
 msgstr ""
 
-#: shared/entities/addressable.py:7 shared/entities/building.py:36
+#: shared/entities/addressable.py:7 shared/entities/building.py:70
 #: shared/entities/enums.py:322
 msgid "Music"
 msgstr "Hudba"
@@ -934,14 +934,14 @@ msgstr "Nepoužívané"
 msgid "Internet access"
 msgstr "Přístup k internetu"
 
-#: shared/entities/advertising.py:4 shared/entities/building.py:188
+#: shared/entities/advertising.py:4 shared/entities/building.py:222
 #: shared/entities/enums.py:485
 msgid "Advertising"
 msgstr "Reklama"
 
 #: shared/entities/advertising.py:6 shared/entities/aerial_way.py:51
 #: shared/entities/amenity.py:69 shared/entities/barrier.py:47
-#: shared/entities/building.py:59 shared/entities/building_part.py:8
+#: shared/entities/building.py:93 shared/entities/building_part.py:8
 #: shared/entities/bunker.py:11 shared/entities/historic.py:36
 #: shared/entities/land.py:82 shared/entities/leisure.py:32
 #: shared/entities/man_made.py:23 shared/entities/natural.py:41
@@ -1016,7 +1016,7 @@ msgid "Aerial way"
 msgstr ""
 
 #: shared/entities/aerial_way.py:26 shared/entities/amenity.py:51
-#: shared/entities/building.py:44 shared/entities/parking.py:11
+#: shared/entities/building.py:78 shared/entities/parking.py:11
 #: shared/entities/road.py:436 shared/entities/sport.py:38
 msgid "Capacity"
 msgstr "Kapacita"
@@ -1033,7 +1033,7 @@ msgstr "Informace"
 #: shared/entities/aerial_way.py:29 shared/entities/amenity.py:59
 #: shared/entities/area.py:22 shared/entities/bank.py:16
 #: shared/entities/barrier.py:84 shared/entities/boundary.py:36
-#: shared/entities/building.py:63 shared/entities/collection.py:13
+#: shared/entities/building.py:97 shared/entities/collection.py:13
 #: shared/entities/construction.py:8 shared/entities/disused.py:15
 #: shared/entities/fountain.py:12 shared/entities/graveyard.py:6
 #: shared/entities/historic.py:14 shared/entities/land.py:46
@@ -1048,7 +1048,7 @@ msgstr "Informace"
 msgid "Wikipedia"
 msgstr "Wikipedia"
 
-#: shared/entities/aerial_way.py:30 shared/entities/building.py:38
+#: shared/entities/aerial_way.py:30 shared/entities/building.py:72
 #: shared/entities/craft.py:38 shared/entities/enums.py:735
 #: shared/entities/enums.py:1139 shared/entities/enums.py:1213
 #: shared/entities/enums.py:1425 shared/entities/platform.py:23
@@ -1078,7 +1078,7 @@ msgstr "Směr"
 
 #: shared/entities/aerial_way.py:34 shared/entities/amenity.py:72
 #: shared/entities/area.py:9 shared/entities/boundary.py:54
-#: shared/entities/building.py:151 shared/entities/crossing.py:41
+#: shared/entities/building.py:185 shared/entities/crossing.py:41
 #: shared/entities/enums.py:706 shared/entities/enums.py:1369
 #: shared/entities/land.py:63 shared/entities/leisure.py:7
 #: shared/entities/natural.py:28 shared/entities/parking.py:20
@@ -1098,7 +1098,7 @@ msgid "Icao"
 msgstr "Icao"
 
 #: shared/entities/aerial_way.py:37 shared/entities/annotated.py:17
-#: shared/entities/building.py:58 shared/entities/building_part.py:5
+#: shared/entities/building.py:92 shared/entities/building_part.py:5
 #: shared/entities/fuel.py:21 shared/entities/office.py:45
 #: shared/entities/power_substation.py:16 shared/entities/tourism.py:46
 #: shared/entities/tower.py:12
@@ -1128,7 +1128,7 @@ msgid "Bridge structure"
 msgstr ""
 
 #: shared/entities/aerial_way.py:42 shared/entities/bridge.py:2
-#: shared/entities/building.py:144 shared/entities/construction.py:9
+#: shared/entities/building.py:178 shared/entities/construction.py:9
 #: shared/entities/enums.py:458 shared/entities/enums.py:1114
 #: shared/entities/man_made.py:34 shared/entities/platform.py:32
 #: shared/entities/rail_way.py:26 shared/entities/road.py:145
@@ -1150,7 +1150,7 @@ msgstr "Oblast"
 
 #: shared/entities/aerial_way.py:50 shared/entities/amenity.py:62
 #: shared/entities/bank.py:13 shared/entities/boundary.py:38
-#: shared/entities/building.py:45 shared/entities/craft.py:55
+#: shared/entities/building.py:79 shared/entities/craft.py:55
 #: shared/entities/disused.py:14 shared/entities/fountain.py:22
 #: shared/entities/fuel.py:17 shared/entities/historic.py:17
 #: shared/entities/land.py:70 shared/entities/leisure.py:39
@@ -1168,7 +1168,7 @@ msgstr ""
 #: shared/entities/aerial_way.py:52 shared/entities/amenity.py:88
 #: shared/entities/area.py:8 shared/entities/atm.py:11
 #: shared/entities/bank.py:14 shared/entities/barrier.py:65
-#: shared/entities/border.py:15 shared/entities/building.py:47
+#: shared/entities/border.py:15 shared/entities/building.py:81
 #: shared/entities/construction.py:10 shared/entities/craft.py:53
 #: shared/entities/disused.py:21 shared/entities/fountain.py:14
 #: shared/entities/land.py:52 shared/entities/leisure.py:13
@@ -1187,7 +1187,7 @@ msgstr "Místo"
 #: shared/entities/aerial_way.py:54 shared/entities/amenity.py:31
 #: shared/entities/annotated.py:10 shared/entities/area.py:19
 #: shared/entities/atm.py:15 shared/entities/barrier.py:41
-#: shared/entities/building.py:80 shared/entities/entrance.py:19
+#: shared/entities/building.py:114 shared/entities/entrance.py:19
 #: shared/entities/fuel.py:23 shared/entities/land.py:67
 #: shared/entities/leisure.py:8 shared/entities/man_made.py:40
 #: shared/entities/parking.py:15 shared/entities/power_substation.py:28
@@ -1204,7 +1204,7 @@ msgstr ""
 
 #: shared/entities/aerial_way.py:57 shared/entities/amenity.py:100
 #: shared/entities/area.py:17 shared/entities/barrier.py:59
-#: shared/entities/boundary.py:63 shared/entities/building.py:54
+#: shared/entities/boundary.py:63 shared/entities/building.py:88
 #: shared/entities/land.py:32 shared/entities/man_made.py:14
 #: shared/entities/natural.py:17 shared/entities/road.py:257
 #: shared/entities/sport.py:51 shared/entities/surveillance.py:16
@@ -1255,7 +1255,7 @@ msgstr "Ranvej"
 
 #: shared/entities/aerial_way.py:66 shared/entities/amenity.py:50
 #: shared/entities/area.py:28 shared/entities/barrier.py:35
-#: shared/entities/boundary.py:44 shared/entities/building.py:92
+#: shared/entities/boundary.py:44 shared/entities/building.py:126
 #: shared/entities/crossing.py:49 shared/entities/fountain.py:13
 #: shared/entities/graveyard.py:7 shared/entities/land.py:34
 #: shared/entities/leisure.py:24 shared/entities/natural.py:32
@@ -1268,7 +1268,7 @@ msgstr "Překážka"
 
 #: shared/entities/aerial_way.py:68 shared/entities/amenity.py:25
 #: shared/entities/annotated.py:19 shared/entities/atm.py:8
-#: shared/entities/bank.py:9 shared/entities/building.py:74
+#: shared/entities/bank.py:9 shared/entities/building.py:108
 #: shared/entities/craft.py:45 shared/entities/fuel.py:12
 #: shared/entities/land.py:94 shared/entities/leisure.py:15
 #: shared/entities/office.py:26 shared/entities/office.py:35
@@ -1283,13 +1283,13 @@ msgstr "Telefon"
 msgid "Military"
 msgstr "Vojenské"
 
-#: shared/entities/aerial_way.py:71 shared/entities/building.py:129
+#: shared/entities/aerial_way.py:71 shared/entities/building.py:163
 #: shared/entities/tourism.py:74 shared/entities/tower.py:15
 msgid "Min height"
 msgstr ""
 
 #: shared/entities/aerial_way.py:72 shared/entities/amenity.py:52
-#: shared/entities/building.py:51 shared/entities/crossing.py:9
+#: shared/entities/building.py:85 shared/entities/crossing.py:9
 #: shared/entities/enums.py:28 shared/entities/enums.py:1688
 #: shared/entities/health_care.py:13 shared/entities/road.py:412
 msgid "Emergency"
@@ -1311,7 +1311,7 @@ msgid "Iata"
 msgstr "Údaj"
 
 #: shared/entities/amenity.py:5 shared/entities/boundary.py:23
-#: shared/entities/building.py:6 shared/entities/enums.py:9
+#: shared/entities/building.py:40 shared/entities/enums.py:9
 #: shared/entities/enums.py:365 shared/entities/enums.py:447
 #: shared/entities/enums.py:652 shared/entities/enums.py:662
 #: shared/entities/enums.py:933 shared/entities/enums.py:941
@@ -1352,13 +1352,13 @@ msgid "Video editing"
 msgstr "Úprava videa"
 
 #: shared/entities/amenity.py:20 shared/entities/area.py:7
-#: shared/entities/building.py:41 shared/entities/office.py:51
+#: shared/entities/building.py:75 shared/entities/office.py:51
 #: shared/entities/road.py:386 shared/entities/surveillance.py:28
 #: shared/entities/tourism.py:39
 msgid "Amenity"
 msgstr ""
 
-#: shared/entities/amenity.py:22 shared/entities/building.py:42
+#: shared/entities/amenity.py:22 shared/entities/building.py:76
 #: shared/entities/disused.py:16 shared/entities/enums.py:1783
 #: shared/entities/graveyard.py:4 shared/entities/historic.py:13
 #: shared/entities/land.py:44 shared/entities/office.py:37
@@ -1366,12 +1366,12 @@ msgstr ""
 msgid "Religion"
 msgstr "Náboženství"
 
-#: shared/entities/amenity.py:24 shared/entities/building.py:73
+#: shared/entities/amenity.py:24 shared/entities/building.py:107
 #: shared/entities/pub.py:13 shared/entities/tourism.py:42
 msgid "Cuisine"
 msgstr ""
 
-#: shared/entities/amenity.py:26 shared/entities/building.py:43
+#: shared/entities/amenity.py:26 shared/entities/building.py:77
 #: shared/entities/collection.py:12 shared/entities/construction.py:6
 #: shared/entities/garden.py:8 shared/entities/office.py:28
 #: shared/entities/platform.py:25 shared/entities/road.py:421
@@ -1380,11 +1380,11 @@ msgstr ""
 msgid "Official name"
 msgstr "Oficiální název"
 
-#: shared/entities/amenity.py:27 shared/entities/building.py:71
+#: shared/entities/amenity.py:27 shared/entities/building.py:105
 msgid "Community centre for"
 msgstr "Komunitní centrum pro"
 
-#: shared/entities/amenity.py:28 shared/entities/building.py:48
+#: shared/entities/amenity.py:28 shared/entities/building.py:82
 #: shared/entities/pub.py:18
 msgid "Takeaway"
 msgstr ""
@@ -1393,24 +1393,24 @@ msgstr ""
 msgid "Vending"
 msgstr ""
 
-#: shared/entities/amenity.py:30 shared/entities/building.py:75
+#: shared/entities/amenity.py:30 shared/entities/building.py:109
 #: shared/entities/craft.py:39 shared/entities/enums.py:84
 #: shared/entities/pub.py:10
 msgid "Outdoor seating"
 msgstr "Venkovní sezení"
 
-#: shared/entities/amenity.py:32 shared/entities/building.py:49
+#: shared/entities/amenity.py:32 shared/entities/building.py:83
 #: shared/entities/garden.py:7 shared/entities/office.py:27
 #: shared/entities/pub.py:5 shared/entities/tourism.py:27
 msgid "Smoking"
 msgstr "Kouření"
 
-#: shared/entities/amenity.py:33 shared/entities/building.py:202
+#: shared/entities/amenity.py:33 shared/entities/building.py:236
 msgid "Amenity 1"
 msgstr ""
 
 #: shared/entities/amenity.py:34 shared/entities/atm.py:7
-#: shared/entities/bank.py:8 shared/entities/building.py:131
+#: shared/entities/bank.py:8 shared/entities/building.py:165
 #: shared/entities/post_box.py:5
 msgid "Drive through"
 msgstr "Průjezd"
@@ -1422,7 +1422,7 @@ msgid "Backrest"
 msgstr "Nejbližší"
 
 #: shared/entities/amenity.py:36 shared/entities/barrier.py:48
-#: shared/entities/building.py:98 shared/entities/building_part.py:16
+#: shared/entities/building.py:132 shared/entities/building_part.py:16
 #: shared/entities/fountain.py:20 shared/entities/historic.py:34
 #: shared/entities/man_made.py:33 shared/entities/natural.py:29
 #: shared/entities/playground.py:15 shared/entities/power.py:12
@@ -1444,7 +1444,7 @@ msgstr "Sedadla"
 msgid "Unisex"
 msgstr ""
 
-#: shared/entities/amenity.py:40 shared/entities/building.py:62
+#: shared/entities/amenity.py:40 shared/entities/building.py:96
 #: shared/entities/enums.py:945 shared/entities/leisure.py:22
 #: shared/entities/parking.py:35 shared/entities/platform.py:22
 #: shared/entities/rail_way.py:153 shared/entities/road.py:204
@@ -1456,7 +1456,7 @@ msgstr "Zastřešené"
 
 #: shared/entities/amenity.py:41 shared/entities/atm.py:9
 #: shared/entities/bank.py:7 shared/entities/barrier.py:72
-#: shared/entities/building.py:84 shared/entities/craft.py:47
+#: shared/entities/building.py:118 shared/entities/craft.py:47
 #: shared/entities/crossing.py:35 shared/entities/entrance.py:15
 #: shared/entities/enums.py:1408 shared/entities/enums.py:1523
 #: shared/entities/fuel.py:19 shared/entities/historic.py:29
@@ -1469,7 +1469,7 @@ msgstr "Zastřešené"
 msgid "Wheelchair"
 msgstr "Vozík"
 
-#: shared/entities/amenity.py:42 shared/entities/building.py:133
+#: shared/entities/amenity.py:42 shared/entities/building.py:167
 #: shared/entities/craft.py:51 shared/entities/leisure.py:34
 #: shared/entities/office.py:55 shared/entities/pub.py:6
 #: shared/entities/sport.py:41 shared/entities/tourism.py:67
@@ -1495,7 +1495,7 @@ msgstr "Most"
 msgid "Url"
 msgstr "Přírodní"
 
-#: shared/entities/amenity.py:46 shared/entities/building.py:46
+#: shared/entities/amenity.py:46 shared/entities/building.py:80
 #: shared/entities/disused.py:10 shared/entities/graveyard.py:8
 #: shared/entities/historic.py:15 shared/entities/land.py:97
 #: shared/entities/office.py:36
@@ -1503,7 +1503,7 @@ msgstr "Přírodní"
 msgid "Denomination"
 msgstr "Informace"
 
-#: shared/entities/amenity.py:47 shared/entities/building.py:77
+#: shared/entities/amenity.py:47 shared/entities/building.py:111
 msgid "Vegetarian diet"
 msgstr ""
 
@@ -1517,13 +1517,13 @@ msgstr ""
 msgid "Historic"
 msgstr "Historické"
 
-#: shared/entities/amenity.py:49 shared/entities/building.py:69
+#: shared/entities/amenity.py:49 shared/entities/building.py:103
 msgid "Dispensing"
 msgstr ""
 
 #: shared/entities/amenity.py:53 shared/entities/area.py:20
 #: shared/entities/bank.py:15 shared/entities/boundary.py:49
-#: shared/entities/building.py:64 shared/entities/fountain.py:6
+#: shared/entities/building.py:98 shared/entities/fountain.py:6
 #: shared/entities/land.py:54 shared/entities/leisure.py:23
 #: shared/entities/office.py:43 shared/entities/parking.py:51
 #: shared/entities/place.py:11 shared/entities/rail_way.py:138
@@ -1533,16 +1533,16 @@ msgstr ""
 msgid "Old name"
 msgstr "Staré jméno"
 
-#: shared/entities/amenity.py:54 shared/entities/building.py:76
+#: shared/entities/amenity.py:54 shared/entities/building.py:110
 #: shared/entities/craft.py:7 shared/entities/enums.py:238
 #: shared/entities/enums.py:1233 shared/entities/pub.py:7
 msgid "Brewery"
 msgstr ""
 
-#: shared/entities/amenity.py:55 shared/entities/building.py:50
+#: shared/entities/amenity.py:55 shared/entities/building.py:84
 #: shared/entities/enums.py:16 shared/entities/service_road.py:4
 msgid "Delivery"
-msgstr ""
+msgstr "Doručování"
 
 #: shared/entities/amenity.py:56 shared/entities/place.py:12
 msgid "Postal code"
@@ -1552,7 +1552,7 @@ msgstr "Poštovní směrovací číslo"
 msgid "Open air"
 msgstr ""
 
-#: shared/entities/amenity.py:58 shared/entities/building.py:65
+#: shared/entities/amenity.py:58 shared/entities/building.py:99
 #: shared/entities/crossing.py:51 shared/entities/leisure.py:41
 #: shared/entities/office.py:32 shared/entities/place.py:20
 #: shared/entities/platform.py:34 shared/entities/road.py:294
@@ -1562,7 +1562,7 @@ msgid "Short name"
 msgstr "Krátké jméno"
 
 #: shared/entities/amenity.py:60 shared/entities/area.py:32
-#: shared/entities/building.py:85 shared/entities/craft.py:43
+#: shared/entities/building.py:119 shared/entities/craft.py:43
 #: shared/entities/enums.py:1144 shared/entities/fountain.py:11
 #: shared/entities/garden.py:5 shared/entities/natural.py:31
 #: shared/entities/office.py:31 shared/entities/parking.py:37
@@ -1581,7 +1581,7 @@ msgid "Leisure"
 msgstr "Volnočasová aktivita"
 
 #: shared/entities/amenity.py:63 shared/entities/area.py:24
-#: shared/entities/board.py:21 shared/entities/building.py:61
+#: shared/entities/board.py:21 shared/entities/building.py:95
 #: shared/entities/enums.py:82 shared/entities/leisure.py:6
 #: shared/entities/natural.py:45 shared/entities/pub.py:16
 #: shared/entities/road.py:352 shared/entities/sport.py:15
@@ -1589,7 +1589,7 @@ msgstr "Volnočasová aktivita"
 msgid "Sport"
 msgstr "Sport"
 
-#: shared/entities/amenity.py:64 shared/entities/building.py:113
+#: shared/entities/amenity.py:64 shared/entities/building.py:147
 #: shared/entities/pub.py:15
 msgid "Wifi"
 msgstr "Wifi"
@@ -1600,7 +1600,7 @@ msgid "Bottle"
 msgstr "Sloup"
 
 #: shared/entities/amenity.py:66 shared/entities/atm.py:6
-#: shared/entities/barrier.py:76 shared/entities/building.py:101
+#: shared/entities/barrier.py:76 shared/entities/building.py:135
 #: shared/entities/fee.py:2 shared/entities/fee.py:3
 #: shared/entities/leisure.py:30 shared/entities/road.py:393
 #: shared/entities/route.py:61 shared/entities/sport.py:32
@@ -1614,7 +1614,7 @@ msgid "Lockable"
 msgstr "Hodiny"
 
 #: shared/entities/amenity.py:68 shared/entities/barrier.py:82
-#: shared/entities/building.py:70 shared/entities/land.py:95
+#: shared/entities/building.py:104 shared/entities/land.py:95
 #: shared/entities/power_line.py:28 shared/entities/rail_way.py:164
 #: shared/entities/road.py:209 shared/entities/route.py:41
 #: shared/entities/stop.py:67 shared/entities/tourism.py:81
@@ -1629,7 +1629,7 @@ msgstr "Barva"
 msgid "Parking"
 msgstr "Parkoviště"
 
-#: shared/entities/amenity.py:73 shared/entities/building.py:152
+#: shared/entities/amenity.py:73 shared/entities/building.py:186
 #: shared/entities/no_exit.py:5 shared/entities/rail_way.py:283
 #: shared/entities/service_road.py:8 shared/entities/track.py:16
 msgid "Todo"
@@ -1649,23 +1649,23 @@ msgstr "Náklad"
 msgid "Charge"
 msgstr ""
 
-#: shared/entities/amenity.py:77 shared/entities/building.py:103
+#: shared/entities/amenity.py:77 shared/entities/building.py:137
 #: shared/entities/place.py:25 shared/entities/road.py:310
 msgid "Int name"
 msgstr "Mezinárodní jméno"
 
-#: shared/entities/amenity.py:78 shared/entities/building.py:60
+#: shared/entities/amenity.py:78 shared/entities/building.py:94
 #: shared/entities/pub.py:19 shared/entities/tourism.py:44
 msgid "Internet access fee"
-msgstr ""
+msgstr "Platba za přístup k internetu"
 
-#: shared/entities/amenity.py:79 shared/entities/building.py:128
+#: shared/entities/amenity.py:79 shared/entities/building.py:162
 #: shared/entities/shelter.py:10
 msgid "Internet access ssid"
-msgstr ""
+msgstr "SSID pro přístup k internetu"
 
 #: shared/entities/amenity.py:80 shared/entities/boundary.py:65
-#: shared/entities/building.py:82 shared/entities/leisure.py:9
+#: shared/entities/building.py:116 shared/entities/leisure.py:9
 #: shared/entities/office.py:57 shared/entities/parking.py:18
 #: shared/entities/pub.py:17 shared/entities/recycling.py:54
 #: shared/entities/route.py:51 shared/entities/sport.py:29
@@ -1676,7 +1676,7 @@ msgid "Designation"
 msgstr "Omezení"
 
 #: shared/entities/amenity.py:81 shared/entities/atm.py:12
-#: shared/entities/building.py:67 shared/entities/man_made.py:21
+#: shared/entities/building.py:101 shared/entities/man_made.py:21
 #: shared/entities/power.py:8 shared/entities/power_line.py:25
 #: shared/entities/power_substation.py:9 shared/entities/rail_way.py:132
 #: shared/entities/recycling.py:43 shared/entities/road.py:214
@@ -1696,7 +1696,7 @@ msgstr ""
 
 #: shared/entities/amenity.py:84 shared/entities/enums.py:250
 msgid "Car"
-msgstr ""
+msgstr "Auto"
 
 #: shared/entities/amenity.py:85
 msgid "Car capacity"
@@ -1704,17 +1704,17 @@ msgstr ""
 
 #: shared/entities/amenity.py:87
 msgid "Nfc authentication"
-msgstr ""
+msgstr "Autentizace pomocí NFC"
 
 #: shared/entities/amenity.py:89
 msgid "Dog"
 msgstr "Pes"
 
-#: shared/entities/amenity.py:90 shared/entities/building.py:149
+#: shared/entities/amenity.py:90 shared/entities/building.py:183
 msgid "Female"
 msgstr "Žena"
 
-#: shared/entities/amenity.py:91 shared/entities/building.py:148
+#: shared/entities/amenity.py:91 shared/entities/building.py:182
 #, fuzzy
 msgid "Male"
 msgstr "Hodnota"
@@ -1726,11 +1726,11 @@ msgstr "Hodnota"
 msgid "Voltage"
 msgstr "Voltáž"
 
-#: shared/entities/amenity.py:93 shared/entities/building.py:142
+#: shared/entities/amenity.py:93 shared/entities/building.py:176
 msgid "Toilets disposal"
-msgstr ""
+msgstr "Splachování na toaletách"
 
-#: shared/entities/amenity.py:94 shared/entities/building.py:180
+#: shared/entities/amenity.py:94 shared/entities/building.py:214
 #: shared/entities/enums.py:1468
 #, fuzzy
 msgid "Country"
@@ -1753,36 +1753,36 @@ msgstr ""
 msgid "Waste"
 msgstr "Hrad"
 
-#: shared/entities/amenity.py:99 shared/entities/building.py:156
+#: shared/entities/amenity.py:99 shared/entities/building.py:190
 #: shared/entities/enums.py:109
 msgid "Fast food"
-msgstr ""
+msgstr "Rychlé občerstvení"
 
-#: shared/entities/amenity.py:101 shared/entities/building.py:112
+#: shared/entities/amenity.py:101 shared/entities/building.py:146
 #: shared/entities/rail_way.py:271 shared/entities/stop.py:79
 msgid "Wheelchair toilets"
-msgstr ""
+msgstr "Toalety pro vozíčkáře"
 
-#: shared/entities/amenity.py:102 shared/entities/building.py:104
+#: shared/entities/amenity.py:102 shared/entities/building.py:138
 #: shared/entities/craft.py:52 shared/entities/office.py:52
 #: shared/entities/tourism.py:71
 msgid "Fax"
 msgstr "Fax"
 
-#: shared/entities/amenity.py:103 shared/entities/building.py:134
+#: shared/entities/amenity.py:103 shared/entities/building.py:168
 msgid "Diplomatic"
-msgstr ""
+msgstr "Diplomatické"
 
-#: shared/entities/amenity.py:104 shared/entities/building.py:154
+#: shared/entities/amenity.py:104 shared/entities/building.py:188
 msgid "Automated"
-msgstr ""
+msgstr "Automatické"
 
-#: shared/entities/amenity.py:105 shared/entities/building.py:143
+#: shared/entities/amenity.py:105 shared/entities/building.py:177
 #: shared/entities/enums.py:106
 msgid "Toilets"
 msgstr "Toalety"
 
-#: shared/entities/amenity.py:106 shared/entities/building.py:155
+#: shared/entities/amenity.py:106 shared/entities/building.py:189
 msgid "Vegan diet"
 msgstr ""
 
@@ -1795,14 +1795,14 @@ msgid "Short name en"
 msgstr "Krátký název (anglicky)"
 
 #: shared/entities/amenity.py:109 shared/entities/barrier.py:46
-#: shared/entities/building.py:141 shared/entities/land.py:59
+#: shared/entities/building.py:175 shared/entities/land.py:59
 #: shared/entities/leisure.py:25 shared/entities/natural.py:33
 #: shared/entities/power_substation.py:27 shared/entities/recycling.py:36
 #: shared/entities/sport.py:39
 msgid "Fence type"
 msgstr "Typ plotu"
 
-#: shared/entities/amenity.py:110 shared/entities/building.py:150
+#: shared/entities/amenity.py:110 shared/entities/building.py:184
 #: shared/entities/enums.py:340
 msgid "Beer"
 msgstr "Pivo"
@@ -1825,7 +1825,7 @@ msgid "Gambling"
 msgstr "Gambling"
 
 #: shared/entities/amenity.py:115 shared/entities/barrier.py:79
-#: shared/entities/building.py:91 shared/entities/disused.py:8
+#: shared/entities/building.py:125 shared/entities/disused.py:8
 #: shared/entities/enums.py:688 shared/entities/enums.py:904
 #: shared/entities/fountain.py:25 shared/entities/land.py:50
 #: shared/entities/man_made.py:30 shared/entities/pole.py:12
@@ -1868,14 +1868,14 @@ msgstr "Víno"
 
 #: shared/entities/amenity.py:122 shared/entities/area.py:31
 #: shared/entities/barrier.py:90 shared/entities/bridge.py:4
-#: shared/entities/building.py:121 shared/entities/fountain.py:17
+#: shared/entities/building.py:155 shared/entities/fountain.py:17
 #: shared/entities/land.py:81 shared/entities/leisure.py:29
 #: shared/entities/man_made.py:52 shared/entities/place.py:19
 #: shared/entities/road.py:285
 msgid "Sorting name"
 msgstr "Jméno pro řazení"
 
-#: shared/entities/amenity.py:123 shared/entities/building.py:163
+#: shared/entities/amenity.py:123 shared/entities/building.py:197
 #: shared/entities/enums.py:1432
 msgid "Room"
 msgstr "Pokoj"
@@ -1960,7 +1960,7 @@ msgstr "Vodní tok"
 msgid "Railway"
 msgstr "Koleje"
 
-#: shared/entities/area.py:18 shared/entities/building.py:164
+#: shared/entities/area.py:18 shared/entities/building.py:198
 #: shared/entities/man_made.py:48
 #, fuzzy
 msgid "Floating"
@@ -1991,7 +1991,7 @@ msgid "Contact website"
 msgstr "Otevřít webovou stránku"
 
 #: shared/entities/atm.py:10 shared/entities/bank.py:4
-#: shared/entities/building.py:99 shared/entities/fuel.py:7
+#: shared/entities/building.py:133 shared/entities/fuel.py:7
 #: shared/entities/office.py:40
 #, fuzzy
 msgid "Brand"
@@ -2009,14 +2009,14 @@ msgstr "Bitcoin"
 msgid "Bank"
 msgstr "Banka"
 
-#: shared/entities/bank.py:10 shared/entities/building.py:40
+#: shared/entities/bank.py:10 shared/entities/building.py:74
 #: shared/entities/office.py:48 shared/entities/pub.py:8
 #: shared/entities/rail_way.py:121 shared/entities/social_facility.py:24
 #: shared/entities/theatre.py:6 shared/entities/tower.py:20
 msgid "Flats"
-msgstr ""
+msgstr "Byty"
 
-#: shared/entities/bank.py:11 shared/entities/building.py:39
+#: shared/entities/bank.py:11 shared/entities/building.py:73
 #: shared/entities/building_part.py:7 shared/entities/fuel.py:15
 #: shared/entities/office.py:29 shared/entities/pub.py:9
 #: shared/entities/rail_way.py:122 shared/entities/social_facility.py:25
@@ -2088,7 +2088,7 @@ msgstr ""
 
 #: shared/entities/barrier.py:21
 msgid "Ladder"
-msgstr ""
+msgstr "Žebřík"
 
 #: shared/entities/barrier.py:22
 msgid "Stepover"
@@ -2124,7 +2124,7 @@ msgstr "Vozidlo"
 msgid "Horse"
 msgstr "Zavřít"
 
-#: shared/entities/barrier.py:42 shared/entities/building.py:191
+#: shared/entities/barrier.py:42 shared/entities/building.py:225
 #: shared/entities/clock.py:28 shared/entities/entrance.py:10
 #: shared/entities/enums.py:623 shared/entities/enums.py:1151
 #: shared/entities/enums.py:1693 shared/entities/leisure.py:27
@@ -2221,7 +2221,7 @@ msgstr "Bunkr"
 #: shared/entities/natural.py:34 shared/entities/road.py:319
 #: shared/entities/tourism.py:77
 msgid "Leaf type"
-msgstr ""
+msgstr "Typ listu"
 
 #: shared/entities/barrier.py:85 shared/entities/enums.py:24
 #: shared/entities/road.py:139
@@ -2364,7 +2364,7 @@ msgstr "Parkování jízdních kol"
 msgid "Parking type"
 msgstr "Parkoviště"
 
-#: shared/entities/bicycle_parking.py:18 shared/entities/building.py:197
+#: shared/entities/bicycle_parking.py:18 shared/entities/building.py:231
 #: shared/entities/enums.py:469 shared/entities/man_made.py:29
 #: shared/entities/surveillance.py:12
 msgid "Surveillance"
@@ -2385,7 +2385,7 @@ msgstr "Sledování"
 msgid "Food"
 msgstr "Jídlo"
 
-#: shared/entities/bicycle_parking.py:22 shared/entities/building.py:186
+#: shared/entities/bicycle_parking.py:22 shared/entities/building.py:220
 #, fuzzy
 msgid "Real ale"
 msgstr "Péče o zdraví"
@@ -2504,14 +2504,14 @@ msgstr "Číslo cedule"
 msgid "Board ref"
 msgstr ""
 
-#: shared/entities/board.py:32 shared/entities/building.py:203
+#: shared/entities/board.py:32 shared/entities/building.py:237
 #, fuzzy
 msgid "Education"
 msgstr "Kolekce"
 
 #: shared/entities/board.py:33
 msgid "Language cs"
-msgstr ""
+msgstr "Čeština"
 
 #: shared/entities/border.py:5
 #, fuzzy
@@ -2567,7 +2567,7 @@ msgstr "Chráněná oblast"
 
 #: shared/entities/boundary.py:12
 msgid "Civil"
-msgstr ""
+msgstr "Civilní"
 
 #: shared/entities/boundary.py:13 shared/entities/enums.py:466
 #: shared/entities/enums.py:801
@@ -2620,9 +2620,9 @@ msgstr "Hranice"
 
 #: shared/entities/boundary.py:33
 msgid "Admin level"
-msgstr ""
+msgstr "Administrativní úroveň"
 
-#: shared/entities/boundary.py:34 shared/entities/building.py:72
+#: shared/entities/boundary.py:34 shared/entities/building.py:106
 #, fuzzy
 msgid "Historic type"
 msgstr "Historické"
@@ -2640,7 +2640,7 @@ msgstr "Kolekce"
 msgid "Iso3166 2"
 msgstr "Iso3166 2"
 
-#: shared/entities/boundary.py:42 shared/entities/building.py:124
+#: shared/entities/boundary.py:42 shared/entities/building.py:158
 #: shared/entities/disused.py:13 shared/entities/historic.py:32
 #: shared/entities/rail_way.py:161 shared/entities/road.py:198
 msgid "End date"
@@ -2658,11 +2658,11 @@ msgstr ""
 #: shared/entities/boundary.py:47 shared/entities/place.py:14
 #: shared/entities/road.py:355 shared/entities/stop.py:64
 msgid "Alt name de"
-msgstr ""
+msgstr "Alternativní jméno (německy)"
 
 #: shared/entities/boundary.py:48 shared/entities/stop.py:65
 msgid "Old name de"
-msgstr ""
+msgstr "Staré jméno (německy)"
 
 #: shared/entities/boundary.py:51
 msgid "Year"
@@ -2676,7 +2676,7 @@ msgstr ""
 msgid "Track type"
 msgstr "Typ stezky"
 
-#: shared/entities/boundary.py:57 shared/entities/building.py:196
+#: shared/entities/boundary.py:57 shared/entities/building.py:230
 #: shared/entities/clock.py:26 shared/entities/crossing.py:43
 #: shared/entities/historic.py:12 shared/entities/natural.py:25
 #: shared/entities/tourism.py:33
@@ -2703,189 +2703,318 @@ msgstr ""
 msgid "Trail visibility"
 msgstr "Viditelnost pěšiny"
 
-#: shared/entities/building.py:8 shared/entities/enums.py:1666
+#: shared/entities/building.py:6
+msgid "Industrial object"
+msgstr "Průmyslový objekt"
+
+#: shared/entities/building.py:7
+#, fuzzy
+msgid "Farm dwelling"
+msgstr "Vodní tok"
+
+#: shared/entities/building.py:8
+msgid "Residential object"
+msgstr "Objekt k bydlení"
+
+#: shared/entities/building.py:9
+msgid "Building of forest management"
+msgstr "Objekt lesního hospodářství"
+
+#: shared/entities/building.py:10
+msgid "Building of civic management"
+msgstr "Objekt občanské vybavenosti"
+
+#: shared/entities/building.py:11
+msgid "Apartment house"
+msgstr "Bytový dům"
+
+#: shared/entities/building.py:12
+msgid "Family house"
+msgstr "Rodinný dům"
+
+#: shared/entities/building.py:13
+msgid "Building for family recreation"
+msgstr "Stavba pro rodinnou rekreaci"
+
+#: shared/entities/building.py:14
+msgid "Building for gathering of people"
+msgstr "Stavba pro shromažďování většího počtu osob"
+
+#: shared/entities/building.py:15
+#, fuzzy
+msgid "Commercial building"
+msgstr "Komerční"
+
+#: shared/entities/building.py:16
+msgid "Building for accomodation"
+msgstr "Stavba ubytovacího zařízení"
+
+#: shared/entities/building.py:17
+#, fuzzy
+msgid "Warehouse building"
+msgstr "Zbouraná budova"
+
+#: shared/entities/building.py:18
+#, fuzzy
+msgid "Agricultural building"
+msgstr "Přírodní"
+
+#: shared/entities/building.py:19
+#, fuzzy
+msgid "Administrative building"
+msgstr "Administrativní"
+
+#: shared/entities/building.py:20
+msgid "Building of civic infrastructure"
+msgstr "Stavba občanského vybavení"
+
+#: shared/entities/building.py:21
+msgid "Building of technical infrastructure"
+msgstr "Stavba technického vybavení"
+
+#: shared/entities/building.py:22
+#, fuzzy
+msgid "Building for transportation"
+msgstr "Informace"
+
+#: shared/entities/building.py:23 shared/entities/enums.py:826
+#: shared/entities/enums.py:1079 shared/entities/enums.py:1376
+#: shared/entities/enums.py:1692
+msgid "Garage"
+msgstr "Garáž"
+
+#: shared/entities/building.py:24
+#, fuzzy
+msgid "Other building"
+msgstr "Zbouraná budova"
+
+#: shared/entities/building.py:25
+#, fuzzy
+msgid "Multipurpose building"
+msgstr "Zbouraná budova"
+
+#: shared/entities/building.py:26 shared/entities/enums.py:1078
+msgid "Greenhouse"
+msgstr "Skleník"
+
+#: shared/entities/building.py:27
+msgid "Dam of the artificial lake"
+msgstr "Přehrada"
+
+#: shared/entities/building.py:28
+msgid "Dam blocking water way or walley"
+msgstr "Hráz přehrazující wodní tok nebo údolí"
+
+#: shared/entities/building.py:29
+msgid "Flood protection dam"
+msgstr "Hráz k ochraně nemovitostí před zaplavením při povodni "
+
+#: shared/entities/building.py:30
+msgid "Dam surrounding artificial lake"
+msgstr "Hráz ohrazující umělou vodní nádrž "
+
+#: shared/entities/building.py:31 shared/entities/enums.py:771
+#: shared/entities/enums.py:1605
+#, fuzzy
+msgid "Weir"
+msgstr "Věž"
+
+#: shared/entities/building.py:32
+msgid "Building for water transportation"
+msgstr "Stavba k plavebním účelům v korytech nebo na březích vodních toků "
+
+#: shared/entities/building.py:33
+#, fuzzy
+msgid "Water power plant"
+msgstr "Elektrárna"
+
+#: shared/entities/building.py:34
+msgid "Sludge lagoon"
+msgstr "Stavba odkaliště"
+
+#: shared/entities/building.py:42 shared/entities/enums.py:1666
 #: shared/entities/shop.py:6
 msgid "Only"
 msgstr "Pouze"
 
-#: shared/entities/building.py:11 shared/entities/building.py:168
+#: shared/entities/building.py:45 shared/entities/building.py:202
 #: shared/entities/enums.py:232 shared/entities/enums.py:821
 #: shared/entities/enums.py:962 shared/entities/enums.py:1020
 #: shared/entities/enums.py:1068 shared/entities/enums.py:1211
 #: shared/entities/enums.py:1450 shared/entities/enums.py:1504
 #: shared/entities/land.py:62 shared/entities/road.py:88
 msgid "Residential"
-msgstr ""
+msgstr "K bydlení"
 
-#: shared/entities/building.py:12 shared/entities/enums.py:830
+#: shared/entities/building.py:46 shared/entities/enums.py:830
 #: shared/entities/enums.py:1022 shared/entities/enums.py:1077
 #: shared/entities/enums.py:1217
 msgid "Commercial"
 msgstr "Komerční"
 
-#: shared/entities/building.py:13 shared/entities/enums.py:212
+#: shared/entities/building.py:47 shared/entities/enums.py:212
 #: shared/entities/fuel.py:11 shared/entities/pub.py:26
 #: shared/entities/shop.py:28
 msgid "Shop"
 msgstr "Obchod"
 
-#: shared/entities/building.py:14 shared/entities/enums.py:738
+#: shared/entities/building.py:48 shared/entities/enums.py:738
 #: shared/entities/enums.py:835 shared/entities/enums.py:1031
 #: shared/entities/enums.py:1067 shared/entities/enums.py:1214
 msgid "Garages"
 msgstr "Garáže"
 
-#: shared/entities/building.py:17 shared/entities/enums.py:368
+#: shared/entities/building.py:51 shared/entities/enums.py:368
 #: shared/entities/enums.py:649 shared/entities/enums.py:1329
 #: shared/entities/enums.py:1554 shared/entities/recycling.py:15
 msgid "Glass"
 msgstr "Sklo"
 
-#: shared/entities/building.py:20 shared/entities/enums.py:464
+#: shared/entities/building.py:54 shared/entities/enums.py:464
 msgid "Pier"
 msgstr "Pilíř"
 
-#: shared/entities/building.py:23
+#: shared/entities/building.py:57
 #, fuzzy
 msgid "Czech"
 msgstr "Lavička"
 
-#: shared/entities/building.py:26
+#: shared/entities/building.py:60
 msgid "Anchor berth"
 msgstr ""
 
-#: shared/entities/building.py:29
+#: shared/entities/building.py:63
 msgid "Romanesque"
 msgstr ""
 
-#: shared/entities/building.py:30
+#: shared/entities/building.py:64
 #, fuzzy
 msgid "Modern"
 msgstr "Státní hranice"
 
-#: shared/entities/building.py:33 shared/entities/enums.py:1195
+#: shared/entities/building.py:67 shared/entities/enums.py:1195
 #: shared/entities/enums.py:1804
 #, fuzzy
 msgid "Reception"
 msgstr "Kolekce"
 
-#: shared/entities/building.py:52
+#: shared/entities/building.py:86
 #, fuzzy
 msgid "Leisure type"
 msgstr "Volnočasová aktivita"
 
-#: shared/entities/building.py:53 shared/entities/natural.py:26
+#: shared/entities/building.py:87 shared/entities/natural.py:26
 #, fuzzy
 msgid "Tourism type"
 msgstr "Turismus"
 
-#: shared/entities/building.py:56
+#: shared/entities/building.py:90
 msgid "Industrial type"
-msgstr ""
+msgstr "Typ průmyslu"
 
-#: shared/entities/building.py:57 shared/entities/building_part.py:10
+#: shared/entities/building.py:91 shared/entities/building_part.py:10
 #: shared/entities/office.py:46 shared/entities/tourism.py:45
 msgid "Roof height"
-msgstr ""
+msgstr "Výška střechy"
 
-#: shared/entities/building.py:66 shared/entities/tourism.py:16
+#: shared/entities/building.py:100 shared/entities/tourism.py:16
 #, fuzzy
 msgid "Information type"
 msgstr "Informace"
 
-#: shared/entities/building.py:68
+#: shared/entities/building.py:102
 msgid "Product"
 msgstr "Produkt"
 
-#: shared/entities/building.py:78 shared/entities/enums.py:739
+#: shared/entities/building.py:112 shared/entities/enums.py:739
 #: shared/entities/historic.py:20 shared/entities/tourism.py:47
 msgid "Heritage"
 msgstr ""
 
-#: shared/entities/building.py:79 shared/entities/historic.py:21
+#: shared/entities/building.py:113 shared/entities/historic.py:21
 #: shared/entities/tourism.py:48
 #, fuzzy
 msgid "Heritage operator"
 msgstr "Elektrický generátor"
 
-#: shared/entities/building.py:81 shared/entities/enums.py:1785
+#: shared/entities/building.py:115 shared/entities/enums.py:1785
 #: shared/entities/fountain.py:9 shared/entities/shelter.py:13
 #: shared/entities/tourism.py:58
 msgid "Architect"
 msgstr "Architekt"
 
-#: shared/entities/building.py:86 shared/entities/power_substation.py:25
+#: shared/entities/building.py:120 shared/entities/power_substation.py:25
 msgid "Roof levels"
-msgstr ""
+msgstr "Úrovně střechy"
 
-#: shared/entities/building.py:87 shared/entities/building_part.py:11
+#: shared/entities/building.py:121 shared/entities/building_part.py:11
 #: shared/entities/office.py:44
 msgid "Roof material"
-msgstr ""
+msgstr "Materiál střechy"
 
-#: shared/entities/building.py:88 shared/entities/enums.py:1143
+#: shared/entities/building.py:122 shared/entities/enums.py:1143
 #, fuzzy
 msgid "Part"
 msgstr "Sport"
 
-#: shared/entities/building.py:89
+#: shared/entities/building.py:123
 msgid "Service times"
-msgstr ""
+msgstr "Časy obsluhy"
 
-#: shared/entities/building.py:90 shared/entities/historic.py:23
+#: shared/entities/building.py:124 shared/entities/historic.py:23
 #: shared/entities/man_made.py:17 shared/entities/rail_way.py:141
 #: shared/entities/stop.py:51 shared/entities/tourism.py:53
 msgid "Image"
 msgstr "Obrázek"
 
-#: shared/entities/building.py:93
+#: shared/entities/building.py:127
 msgid "Underground levels"
 msgstr "Podzemní podlaží"
 
-#: shared/entities/building.py:94
+#: shared/entities/building.py:128
 msgid "Roof angle"
-msgstr ""
+msgstr "Úhel střechy"
 
-#: shared/entities/building.py:95 shared/entities/building_part.py:6
+#: shared/entities/building.py:129 shared/entities/building_part.py:6
 msgid "Roof orientation"
-msgstr ""
+msgstr "Orientace střechy"
 
-#: shared/entities/building.py:96
+#: shared/entities/building.py:130
 msgid "Min level"
-msgstr ""
+msgstr "Nejnižší úroveň"
 
-#: shared/entities/building.py:97
+#: shared/entities/building.py:131
 #, fuzzy
 msgid "Cladding"
 msgstr "Budova"
 
-#: shared/entities/building.py:100 shared/entities/tourism.py:19
+#: shared/entities/building.py:134 shared/entities/tourism.py:19
 msgid "Stars"
 msgstr "Hvězdičky"
 
-#: shared/entities/building.py:102 shared/entities/clock.py:22
+#: shared/entities/building.py:136 shared/entities/clock.py:22
 #: shared/entities/historic.py:35
 #, fuzzy
 msgid "Date"
 msgstr "Hrad"
 
-#: shared/entities/building.py:105
+#: shared/entities/building.py:139
 #, fuzzy
 msgid "Use"
 msgstr "Nepoužívané"
 
-#: shared/entities/building.py:106 shared/entities/building_part.py:12
+#: shared/entities/building.py:140 shared/entities/building_part.py:12
 #: shared/entities/fuel.py:22 shared/entities/office.py:47
 #: shared/entities/power_substation.py:20 shared/entities/tower.py:16
 #, fuzzy
 msgid "Roof colour"
 msgstr "Golfový kurz"
 
-#: shared/entities/building.py:107
+#: shared/entities/building.py:141
 msgid "Wheelchair description"
-msgstr ""
+msgstr "Popis pro vozíčkáře"
 
-#: shared/entities/building.py:108 shared/entities/construction.py:4
+#: shared/entities/building.py:142 shared/entities/construction.py:4
 #: shared/entities/enums.py:214 shared/entities/enums.py:839
 #: shared/entities/enums.py:914 shared/entities/enums.py:979
 #: shared/entities/enums.py:1041 shared/entities/enums.py:1452
@@ -2895,267 +3024,277 @@ msgstr ""
 msgid "Construction"
 msgstr "Konstrukce"
 
-#: shared/entities/building.py:109
+#: shared/entities/building.py:143
 msgid "Self service"
-msgstr ""
+msgstr "Samoobslužné"
 
-#: shared/entities/building.py:110 shared/entities/craft.py:41
+#: shared/entities/building.py:144 shared/entities/craft.py:41
 msgid "Microbrewery"
 msgstr ""
 
-#: shared/entities/building.py:111 shared/entities/enums.py:721
+#: shared/entities/building.py:145 shared/entities/enums.py:721
 #: shared/entities/enums.py:838 shared/entities/historic.py:18
 msgid "Ruins"
 msgstr "Ruiny"
 
-#: shared/entities/building.py:114 shared/entities/sport.py:36
+#: shared/entities/building.py:148 shared/entities/sport.py:36
 msgid "Opening hours url"
-msgstr ""
+msgstr "URL otvírací doby"
 
-#: shared/entities/building.py:115 shared/entities/sport.py:37
+#: shared/entities/building.py:149 shared/entities/sport.py:37
 #, fuzzy
 msgid "Reservation"
 msgstr "Omezení"
 
-#: shared/entities/building.py:116 shared/entities/pub.py:35
+#: shared/entities/building.py:150 shared/entities/pub.py:35
 msgid "Visa payment"
-msgstr ""
+msgstr "Platba kartami Visa"
 
-#: shared/entities/building.py:117
+#: shared/entities/building.py:151
 msgid "Visa debit payment"
-msgstr ""
+msgstr "Platba debetními kartami Visa"
 
-#: shared/entities/building.py:118
+#: shared/entities/building.py:152
 msgid "Visa electron payment"
-msgstr ""
+msgstr "Platba kartami Visa electron"
 
-#: shared/entities/building.py:119
+#: shared/entities/building.py:153
 msgid "Healthcare speciality"
 msgstr ""
 
-#: shared/entities/building.py:122 shared/entities/leisure.py:38
+#: shared/entities/building.py:156 shared/entities/leisure.py:38
 #: shared/entities/sport.py:50
 msgid "Alt name 1"
 msgstr ""
 
-#: shared/entities/building.py:123 shared/entities/leisure.py:40
+#: shared/entities/building.py:157 shared/entities/leisure.py:40
 msgid "Alt name 2"
 msgstr ""
 
-#: shared/entities/building.py:126
+#: shared/entities/building.py:160
 msgid "Cvut id"
-msgstr ""
+msgstr "Identifikace čvut"
 
-#: shared/entities/building.py:127 shared/entities/office.py:58
+#: shared/entities/building.py:161 shared/entities/office.py:58
 #, fuzzy
 msgid "Description en"
 msgstr "Omezení"
 
-#: shared/entities/building.py:130
+#: shared/entities/building.py:164
 msgid "Max level"
-msgstr ""
+msgstr "Nejvyšší úroveň"
 
-#: shared/entities/building.py:132 shared/entities/pub.py:24
+#: shared/entities/building.py:166 shared/entities/pub.py:24
 msgid "Cash payment"
-msgstr ""
+msgstr "Platba mincemi"
 
-#: shared/entities/building.py:135 shared/entities/man_made.py:55
+#: shared/entities/building.py:169 shared/entities/man_made.py:55
 msgid "Note en"
-msgstr ""
+msgstr "Poznámka (anglicky)"
 
-#: shared/entities/building.py:136 shared/entities/craft.py:56
+#: shared/entities/building.py:170 shared/entities/craft.py:56
 #: shared/entities/office.py:41 shared/entities/tourism.py:60
 msgid "Bitcoin payment"
 msgstr "Platba bitcoiny"
 
-#: shared/entities/building.py:137 shared/entities/clock.py:27
+#: shared/entities/building.py:171 shared/entities/clock.py:27
 #: shared/entities/fountain.py:15 shared/entities/historic.py:28
 #: shared/entities/tourism.py:24
 msgid "Artist name"
 msgstr "Jméno umělce"
 
-#: shared/entities/building.py:138 shared/entities/tourism.py:52
+#: shared/entities/building.py:172 shared/entities/tourism.py:52
 msgid "Rooms"
 msgstr "Pokoje"
 
-#: shared/entities/building.py:139 shared/entities/leisure.py:36
+#: shared/entities/building.py:173 shared/entities/leisure.py:36
 msgid "Google plus"
 msgstr "Google plus"
 
-#: shared/entities/building.py:140
+#: shared/entities/building.py:174
 msgid "Twitter"
 msgstr "Twitter"
 
-#: shared/entities/building.py:145
+#: shared/entities/building.py:179
 msgid "Maestro payment"
-msgstr ""
+msgstr "Platba kartami Maestro"
 
-#: shared/entities/building.py:146
+#: shared/entities/building.py:180
 msgid "Mastercard payment"
-msgstr ""
+msgstr "Platba kartami Mastercard"
 
-#: shared/entities/building.py:147
+#: shared/entities/building.py:181
 msgid "Notes payment"
-msgstr ""
+msgstr "Platba bankovkami"
 
-#: shared/entities/building.py:153 shared/entities/enums.py:1109
+#: shared/entities/building.py:187 shared/entities/enums.py:1109
 #: shared/entities/enums.py:1349 shared/entities/leisure.py:37
 #: shared/entities/level.py:5 shared/entities/office.py:50
 #: shared/entities/road.py:333 shared/entities/tourism.py:91
 msgid "Indoor"
 msgstr "Vnitřní"
 
-#: shared/entities/building.py:158
+#: shared/entities/building.py:192
 msgid "Credit cards payment"
-msgstr ""
+msgstr "Platba kreditnímy kartamy"
 
-#: shared/entities/building.py:159
+#: shared/entities/building.py:193
 msgid "Debit cards payment"
-msgstr ""
+msgstr "Platba debetnímy kartamy"
 
-#: shared/entities/building.py:160 shared/entities/building_part.py:13
+#: shared/entities/building.py:194 shared/entities/building_part.py:13
 #, fuzzy
 msgid "Roof slope direction"
 msgstr "Aktuální směr"
 
-#: shared/entities/building.py:161 shared/entities/building_part.py:9
+#: shared/entities/building.py:195 shared/entities/building_part.py:9
 #, fuzzy
 msgid "Roof direction"
 msgstr "Aktuální směr"
 
-#: shared/entities/building.py:162
+#: shared/entities/building.py:196
 msgid "Bridge support"
-msgstr ""
+msgstr "Podpora mostu"
 
-#: shared/entities/building.py:165 shared/entities/enums.py:719
+#: shared/entities/building.py:199 shared/entities/enums.py:719
 #: shared/entities/enums.py:1500 shared/entities/memorial.py:3
 #: shared/entities/tourism.py:86
 msgid "Memorial"
 msgstr "Pomník"
 
-#: shared/entities/building.py:166
+#: shared/entities/building.py:200
 msgid "Gluten free diet"
 msgstr ""
 
-#: shared/entities/building.py:167
+#: shared/entities/building.py:201
 msgid "Ethnicity"
-msgstr ""
+msgstr "Etnicita"
 
-#: shared/entities/building.py:169 shared/entities/land.py:78
+#: shared/entities/building.py:203 shared/entities/land.py:78
 #: shared/entities/leisure.py:31 shared/entities/parking.py:41
 #: shared/entities/sport.py:52
 msgid "Fenced"
 msgstr "Oploceno"
 
-#: shared/entities/building.py:170
+#: shared/entities/building.py:204
 msgid "Disused man made"
 msgstr ""
 
-#: shared/entities/building.py:171
+#: shared/entities/building.py:205
 msgid "Vertical part"
 msgstr ""
 
-#: shared/entities/building.py:172
+#: shared/entities/building.py:206
 msgid "Mooring"
 msgstr ""
 
-#: shared/entities/building.py:173 shared/entities/water_way.py:40
+#: shared/entities/building.py:207 shared/entities/water_way.py:40
 msgid "Seamark type"
 msgstr ""
 
-#: shared/entities/building.py:174 shared/entities/enums.py:1084
+#: shared/entities/building.py:208 shared/entities/enums.py:1084
 #: shared/entities/steps.py:17
 msgid "Flat"
 msgstr ""
 
-#: shared/entities/building.py:175
+#: shared/entities/building.py:209
 msgid "Raw diet"
 msgstr ""
 
-#: shared/entities/building.py:176
+#: shared/entities/building.py:210
 msgid "En wheelchair description"
 msgstr ""
 
-#: shared/entities/building.py:177
+#: shared/entities/building.py:211
 msgid "Electronic purses payment"
 msgstr ""
 
-#: shared/entities/building.py:178
+#: shared/entities/building.py:212
 msgid "Kids area"
-msgstr ""
+msgstr "Oblast pro děti"
 
-#: shared/entities/building.py:179
+#: shared/entities/building.py:213
 msgid "Beer 1"
 msgstr ""
 
-#: shared/entities/building.py:181 shared/entities/garden.py:4
+#: shared/entities/building.py:215 shared/entities/garden.py:4
 #: shared/entities/natural.py:43 shared/entities/parking.py:45
 msgid "Garden type"
 msgstr "Typ zahrady"
 
-#: shared/entities/building.py:182
+#: shared/entities/building.py:216
 msgid "Meal voucher payment"
 msgstr ""
 
-#: shared/entities/building.py:183 shared/entities/fountain.py:23
+#: shared/entities/building.py:217 shared/entities/fountain.py:23
 #: shared/entities/historic.py:40 shared/entities/tourism.py:25
 msgid "Artwork type"
 msgstr ""
 
-#: shared/entities/building.py:184 shared/entities/enums.py:1574
+#: shared/entities/building.py:218 shared/entities/enums.py:1574
 msgid "Architecture"
-msgstr ""
+msgstr "Architektura"
 
-#: shared/entities/building.py:185
+#: shared/entities/building.py:219
 msgid "Currency czk"
 msgstr ""
 
-#: shared/entities/building.py:187 shared/entities/enums.py:671
+#: shared/entities/building.py:221 shared/entities/enums.py:671
 msgid "Camp site"
-msgstr ""
+msgstr "Místo pro kempování"
 
-#: shared/entities/building.py:189
+#: shared/entities/building.py:223
 msgid "American express payment"
 msgstr ""
 
-#: shared/entities/building.py:190 shared/entities/pub.py:36
+#: shared/entities/building.py:224 shared/entities/pub.py:36
 msgid "Cryptocurrencies payment"
-msgstr ""
+msgstr "Platba kryptoměnamy"
 
-#: shared/entities/building.py:192 shared/entities/road.py:213
+#: shared/entities/building.py:226 shared/entities/road.py:213
 msgid "Name 1"
-msgstr ""
+msgstr "Jméno 1"
 
-#: shared/entities/building.py:193 shared/entities/rail_way.py:256
+#: shared/entities/building.py:227 shared/entities/rail_way.py:256
 #: shared/entities/road.py:395
 msgid "Reg name"
-msgstr ""
+msgstr "Registrované jméno"
 
-#: shared/entities/building.py:194
+#: shared/entities/building.py:228
 msgid "Secondary use"
-msgstr ""
+msgstr "Sekundární použití"
 
-#: shared/entities/building.py:195
+#: shared/entities/building.py:229
 #, fuzzy
 msgid "Building 1"
 msgstr "Budova"
 
-#: shared/entities/building.py:198
+#: shared/entities/building.py:232
 msgid "Roof access"
-msgstr ""
+msgstr "Přístup na střechu"
 
-#: shared/entities/building.py:199
+#: shared/entities/building.py:233
 msgid "Hei"
 msgstr ""
 
-#: shared/entities/building.py:200 shared/entities/rf.py:22
+#: shared/entities/building.py:234 shared/entities/rf.py:22
 #, fuzzy
 msgid "Owner"
 msgstr "Věž"
 
-#: shared/entities/building.py:201 shared/entities/pub.py:32
+#: shared/entities/building.py:235 shared/entities/pub.py:32
 msgid "Meal vouchers payment"
-msgstr ""
+msgstr "Platba stravenkamy"
+
+#: shared/entities/building.py:238
+#, fuzzy
+msgid "Ruian type"
+msgstr "Typ stezky"
+
+#: shared/entities/building.py:239
+#, fuzzy
+msgid "Ruian building ref"
+msgstr "Zbouraná budova"
 
 #: shared/entities/building_part.py:14 shared/entities/man_made.py:51
 #, fuzzy
@@ -3194,7 +3333,7 @@ msgstr "Hrad"
 
 #: shared/entities/castle.py:4
 msgid "Alt name 3"
-msgstr ""
+msgstr "Další jméno 3"
 
 #: shared/entities/checkpoint.py:4 shared/entities/enums.py:1395
 #: shared/entities/pole.py:9 shared/entities/tourism.py:17
@@ -3226,11 +3365,11 @@ msgstr ""
 
 #: shared/entities/clock.py:7
 msgid "Analog"
-msgstr ""
+msgstr "Analogové"
 
 #: shared/entities/clock.py:8
 msgid "Digital"
-msgstr ""
+msgstr "Digitální"
 
 #: shared/entities/clock.py:9
 msgid "Unorthodox"
@@ -3248,7 +3387,7 @@ msgstr "Hodiny"
 
 #: shared/entities/clock.py:17
 msgid "Display"
-msgstr ""
+msgstr "Displej"
 
 #: shared/entities/clock.py:18 shared/entities/road.py:418
 #: shared/entities/surveillance.py:29 shared/entities/tourism.py:87
@@ -3263,11 +3402,11 @@ msgstr "Místo"
 
 #: shared/entities/clock.py:20
 msgid "Visibility"
-msgstr ""
+msgstr "Viditelnost"
 
 #: shared/entities/clock.py:21
 msgid "Barometer"
-msgstr ""
+msgstr "Barometr"
 
 #: shared/entities/clock.py:23
 msgid "Hygrometer"
@@ -3275,7 +3414,7 @@ msgstr ""
 
 #: shared/entities/clock.py:24
 msgid "Thermometer"
-msgstr ""
+msgstr "Teploměr"
 
 #: shared/entities/collection.py:4 shared/entities/collection.py:6
 msgid "Collection"
@@ -3292,11 +3431,11 @@ msgstr "Opuštěné"
 
 #: shared/entities/construction.py:13
 msgid "Official en name"
-msgstr ""
+msgstr "Oficiální jméno (anglicky)"
 
 #: shared/entities/construction.py:15
 msgid "Official name 1"
-msgstr ""
+msgstr "Oficiální jméno 1"
 
 #: shared/entities/craft.py:5
 msgid "Carpenter"
@@ -3304,19 +3443,19 @@ msgstr ""
 
 #: shared/entities/craft.py:6
 msgid "Photographer"
-msgstr ""
+msgstr "Fotograf"
 
 #: shared/entities/craft.py:8
 msgid "Roofer"
-msgstr ""
+msgstr "Pokrývač"
 
 #: shared/entities/craft.py:9 shared/entities/enums.py:405
 msgid "Shoemaker"
-msgstr ""
+msgstr "Obuvník"
 
 #: shared/entities/craft.py:10
 msgid "Watchmaker"
-msgstr ""
+msgstr "Hodinář"
 
 #: shared/entities/craft.py:11
 msgid "Upholsterer"
@@ -3352,7 +3491,7 @@ msgstr "Konstrukce"
 
 #: shared/entities/craft.py:18 shared/entities/enums.py:415
 msgid "Plumber"
-msgstr ""
+msgstr "Instalatér"
 
 #: shared/entities/craft.py:19 shared/entities/enums.py:303
 #, fuzzy
@@ -3361,11 +3500,11 @@ msgstr "Selhání"
 
 #: shared/entities/craft.py:20
 msgid "Jeweller"
-msgstr ""
+msgstr "Klenotník"
 
 #: shared/entities/craft.py:21
 msgid "Basket maker"
-msgstr ""
+msgstr "Košíkář"
 
 #: shared/entities/craft.py:22 shared/entities/enums.py:375
 msgid "Glaziery"
@@ -3373,15 +3512,15 @@ msgstr ""
 
 #: shared/entities/craft.py:23
 msgid "Photographic laboratory"
-msgstr ""
+msgstr "Fotografická laboratoř"
 
 #: shared/entities/craft.py:24
 msgid "Bookbinder"
-msgstr ""
+msgstr "Vazač knih"
 
 #: shared/entities/craft.py:25 shared/entities/enums.py:320
 msgid "Locksmith"
-msgstr ""
+msgstr "Zámečník"
 
 #: shared/entities/craft.py:26
 msgid "Stonemason"
@@ -3398,7 +3537,7 @@ msgstr "Dopravní značka"
 
 #: shared/entities/craft.py:29
 msgid "Designer"
-msgstr ""
+msgstr "Designér"
 
 #: shared/entities/craft.py:30 shared/entities/enums.py:194
 msgid "Winery"
@@ -3419,15 +3558,15 @@ msgstr ""
 
 #: shared/entities/craft.py:54
 msgid "Databox"
-msgstr ""
+msgstr "Datová schránka"
 
 #: shared/entities/crossing.py:5
 msgid "Signals"
-msgstr ""
+msgstr "Signály"
 
 #: shared/entities/crossing.py:6 shared/entities/enums.py:911
 msgid "Signal"
-msgstr ""
+msgstr "Signál"
 
 #: shared/entities/crossing.py:7
 #, fuzzy
@@ -3463,12 +3602,12 @@ msgstr "Křižovatka"
 
 #: shared/entities/crossing.py:21
 msgid "Button operated"
-msgstr ""
+msgstr "Ovládán tlačítkem"
 
 #: shared/entities/crossing.py:29 shared/entities/road.py:35
 #: shared/entities/road.py:157
 msgid "Segregated"
-msgstr ""
+msgstr "Oddělené"
 
 #: shared/entities/crossing.py:30 shared/entities/enums.py:701
 #: shared/entities/enums.py:972 shared/entities/road.py:106
@@ -3492,7 +3631,7 @@ msgstr ""
 #: shared/entities/traffic_calming.py:7 shared/entities/traffic_sign.py:6
 #: shared/entities/water_way.py:45
 msgid "Maxspeed"
-msgstr ""
+msgstr "Nejvyšší rychlost"
 
 #: shared/entities/crossing.py:37
 msgid "Traffic signals direction"
@@ -3506,12 +3645,12 @@ msgstr "Dopravní značka"
 #: shared/entities/crossing.py:40 shared/entities/parking.py:40
 #: shared/entities/road.py:163
 msgid "Smoothness"
-msgstr ""
+msgstr "Hladkost"
 
 #: shared/entities/crossing.py:44 shared/entities/enums.py:967
 #: shared/entities/road.py:164
 msgid "Cycleway"
-msgstr ""
+msgstr "Cyklostezka"
 
 #: shared/entities/crossing.py:45
 #, fuzzy
@@ -3576,7 +3715,7 @@ msgstr "Nic."
 
 #: shared/entities/enums.py:11
 msgid "Customers"
-msgstr ""
+msgstr "Zákazníci"
 
 #: shared/entities/enums.py:14
 msgid "Permissive"
@@ -3594,11 +3733,11 @@ msgstr "Souřadnice"
 
 #: shared/entities/enums.py:18 shared/entities/enums.py:1347
 msgid "Public"
-msgstr ""
+msgstr "Veřeiný"
 
 #: shared/entities/enums.py:19 shared/entities/enums.py:1671
 msgid "Dismount"
-msgstr ""
+msgstr "Sesednout"
 
 #: shared/entities/enums.py:20
 msgid "Openhour"
@@ -3616,7 +3755,7 @@ msgstr ""
 
 #: shared/entities/enums.py:26
 msgid "Official"
-msgstr ""
+msgstr "Oficiální"
 
 #: shared/entities/enums.py:27
 #, fuzzy
@@ -3633,7 +3772,7 @@ msgstr ""
 
 #: shared/entities/enums.py:31
 msgid "Permission"
-msgstr ""
+msgstr "Oprávnění"
 
 #: shared/entities/enums.py:32 shared/entities/enums.py:1409
 msgid "Mtb"
@@ -3663,24 +3802,24 @@ msgstr ""
 
 #: shared/entities/enums.py:43 shared/entities/enums.py:156
 msgid "Swimming pool"
-msgstr ""
+msgstr "Plavecký bazén"
 
 #: shared/entities/enums.py:44 shared/entities/enums.py:221
 #: shared/entities/enums.py:1056
 msgid "Park"
-msgstr ""
+msgstr "Park"
 
 #: shared/entities/enums.py:45 shared/entities/road.py:85
 msgid "Stadium"
-msgstr ""
+msgstr "Stadion"
 
 #: shared/entities/enums.py:46
 msgid "Sports centre"
-msgstr ""
+msgstr "Sportovní centrum"
 
 #: shared/entities/enums.py:47 shared/entities/enums.py:101
 msgid "Cinema"
-msgstr ""
+msgstr "Kino"
 
 #: shared/entities/enums.py:48
 msgid "Pitch"
@@ -3708,7 +3847,7 @@ msgstr "Vodní oblast"
 
 #: shared/entities/enums.py:53
 msgid "Picnic table"
-msgstr ""
+msgstr "Piknikový stůl"
 
 #: shared/entities/enums.py:54 shared/entities/enums.py:1036
 msgid "Recreation ground"
@@ -3720,7 +3859,7 @@ msgstr ""
 
 #: shared/entities/enums.py:56
 msgid "Firepit"
-msgstr ""
+msgstr "Ohniště"
 
 #: shared/entities/enums.py:57
 msgid "Dog park"
@@ -3728,7 +3867,7 @@ msgstr ""
 
 #: shared/entities/enums.py:58 shared/entities/protected_area.py:6
 msgid "Nature reserve"
-msgstr ""
+msgstr "Přírodní rezervace"
 
 #: shared/entities/enums.py:59 shared/entities/golf_course.py:8
 msgid "Golf course"
@@ -3741,7 +3880,7 @@ msgstr "Golfový kurz"
 
 #: shared/entities/enums.py:61
 msgid "Ice rink"
-msgstr ""
+msgstr "Kluziště"
 
 #: shared/entities/enums.py:62 shared/entities/enums.py:1049
 #: shared/entities/garden.py:3
@@ -3758,19 +3897,19 @@ msgstr ""
 
 #: shared/entities/enums.py:65
 msgid "Hackerspace"
-msgstr ""
+msgstr "Hackerspace"
 
 #: shared/entities/enums.py:66
 msgid "Horse riding"
-msgstr ""
+msgstr "Jízda na koni"
 
 #: shared/entities/enums.py:67
 msgid "Table tennis table"
-msgstr ""
+msgstr "Stůl pro stolní tenis"
 
 #: shared/entities/enums.py:68 shared/entities/enums.py:210
 msgid "Sauna"
-msgstr ""
+msgstr "Sauna"
 
 #: shared/entities/enums.py:69
 msgid "Fitness station"
@@ -3778,7 +3917,7 @@ msgstr ""
 
 #: shared/entities/enums.py:70
 msgid "Tanning salon"
-msgstr ""
+msgstr "Tetovací salon"
 
 #: shared/entities/enums.py:71 shared/entities/enums.py:552
 #, fuzzy
@@ -3787,7 +3926,7 @@ msgstr "Zrušit"
 
 #: shared/entities/enums.py:73 shared/entities/enums.py:586
 msgid "Miniature golf"
-msgstr ""
+msgstr "Minigolf"
 
 #: shared/entities/enums.py:74
 #, fuzzy
@@ -3796,7 +3935,7 @@ msgstr "Parkoviště"
 
 #: shared/entities/enums.py:75
 msgid "Maze"
-msgstr ""
+msgstr "Bludiště"
 
 #: shared/entities/enums.py:76
 msgid "Slipway"
@@ -3804,7 +3943,7 @@ msgstr ""
 
 #: shared/entities/enums.py:77 shared/entities/enums.py:524
 msgid "Badminton"
-msgstr ""
+msgstr "Badminton"
 
 #: shared/entities/enums.py:78
 msgid "Social club"
@@ -3820,7 +3959,7 @@ msgstr ""
 
 #: shared/entities/enums.py:81 shared/entities/enums.py:1026
 msgid "Meadow"
-msgstr ""
+msgstr "Louka"
 
 #: shared/entities/enums.py:83
 #, fuzzy
@@ -3834,11 +3973,11 @@ msgstr ""
 
 #: shared/entities/enums.py:86
 msgid "Racetrack"
-msgstr ""
+msgstr "Závodní trať"
 
 #: shared/entities/enums.py:87
 msgid "Swimming area"
-msgstr ""
+msgstr "Oblast pro plavání"
 
 #: shared/entities/enums.py:88
 msgid "Me"
@@ -3850,24 +3989,24 @@ msgstr ""
 
 #: shared/entities/enums.py:90 shared/entities/enums.py:1367
 msgid "Multipolygon"
-msgstr ""
+msgstr "Víceúhelník"
 
 #: shared/entities/enums.py:96 shared/entities/enums.py:733
 #: shared/entities/enums.py:1209
 msgid "Restaurant"
-msgstr ""
+msgstr "Restaurace"
 
 #: shared/entities/enums.py:97 shared/entities/enums.py:1200
 msgid "Place of worship"
-msgstr ""
+msgstr "Místo uctívání"
 
 #: shared/entities/enums.py:98
 msgid "School"
-msgstr ""
+msgstr "Škola"
 
 #: shared/entities/enums.py:99
 msgid "Kindergarten"
-msgstr ""
+msgstr "Školka"
 
 #: shared/entities/enums.py:100 shared/entities/stop.py:13
 #, fuzzy
@@ -3881,19 +4020,19 @@ msgstr ""
 #: shared/entities/enums.py:103 shared/entities/health_care.py:4
 #: shared/entities/road.py:74
 msgid "Hospital"
-msgstr ""
+msgstr "Nemocnice"
 
 #: shared/entities/enums.py:104
 msgid "Pharmacy"
-msgstr ""
+msgstr "Lékárna"
 
 #: shared/entities/enums.py:105
 msgid "Library"
-msgstr ""
+msgstr "Knihovna"
 
 #: shared/entities/enums.py:107
 msgid "Townhall"
-msgstr ""
+msgstr "Radnice"
 
 #: shared/entities/enums.py:108
 #, fuzzy
@@ -3902,7 +4041,7 @@ msgstr "Oznámení"
 
 #: shared/entities/enums.py:110
 msgid "Post office"
-msgstr ""
+msgstr "Pošta"
 
 #: shared/entities/enums.py:111
 #, fuzzy
@@ -3911,11 +4050,11 @@ msgstr "transformovna"
 
 #: shared/entities/enums.py:113
 msgid "Waste basket"
-msgstr ""
+msgstr "Odpadkový koš"
 
 #: shared/entities/enums.py:114 shared/entities/man_made.py:27
 msgid "Telephone"
-msgstr ""
+msgstr "Telefon"
 
 #: shared/entities/enums.py:115
 msgid "Community centre"
@@ -3923,7 +4062,7 @@ msgstr ""
 
 #: shared/entities/enums.py:116
 msgid "Car wash"
-msgstr ""
+msgstr "Myčka aut"
 
 #: shared/entities/enums.py:118
 msgid "Vending machine"
@@ -3931,15 +4070,15 @@ msgstr ""
 
 #: shared/entities/enums.py:119
 msgid "Bar"
-msgstr ""
+msgstr "Bar"
 
 #: shared/entities/enums.py:120
 msgid "Doctors"
-msgstr ""
+msgstr "Doktoři"
 
 #: shared/entities/enums.py:121
 msgid "Childcare"
-msgstr ""
+msgstr "Péče o děti"
 
 #: shared/entities/enums.py:122
 #, fuzzy
@@ -3948,11 +4087,11 @@ msgstr "Fontána"
 
 #: shared/entities/enums.py:123
 msgid "Exhibition hall"
-msgstr ""
+msgstr "Výstavní hala"
 
 #: shared/entities/enums.py:124
 msgid "Parking entrance"
-msgstr ""
+msgstr "Vstup na parkoviště"
 
 #: shared/entities/enums.py:125
 msgid "Biergarten"
@@ -3960,19 +4099,19 @@ msgstr ""
 
 #: shared/entities/enums.py:126
 msgid "Hunting stand"
-msgstr ""
+msgstr "Posed"
 
 #: shared/entities/enums.py:127 shared/entities/enums.py:1487
 msgid "University"
-msgstr ""
+msgstr "Univerzita"
 
 #: shared/entities/enums.py:129
 msgid "Veterinary"
-msgstr ""
+msgstr "Veterina"
 
 #: shared/entities/enums.py:131
 msgid "Bbq"
-msgstr ""
+msgstr "Barbeque"
 
 #: shared/entities/enums.py:133
 msgid "Marketplace"
@@ -3980,15 +4119,15 @@ msgstr ""
 
 #: shared/entities/enums.py:134
 msgid "Taxi"
-msgstr ""
+msgstr "Taxi"
 
 #: shared/entities/enums.py:136
 msgid "Brothel"
-msgstr ""
+msgstr "Brothel"
 
 #: shared/entities/enums.py:137
 msgid "Driving school"
-msgstr ""
+msgstr "Autoškola"
 
 #: shared/entities/enums.py:138
 msgid "Music venue"
@@ -3996,11 +4135,11 @@ msgstr ""
 
 #: shared/entities/enums.py:139
 msgid "Nightclub"
-msgstr ""
+msgstr "Noční klub"
 
 #: shared/entities/enums.py:140
 msgid "Crematorium"
-msgstr ""
+msgstr "Krematorium"
 
 #: shared/entities/enums.py:141
 #, fuzzy
@@ -4009,11 +4148,11 @@ msgstr "Parkoviště"
 
 #: shared/entities/enums.py:142
 msgid "Courthouse"
-msgstr ""
+msgstr "Budova soudu"
 
 #: shared/entities/enums.py:143 shared/entities/health_care.py:9
 msgid "Dentist"
-msgstr ""
+msgstr "Zubař"
 
 #: shared/entities/enums.py:145 shared/entities/enums.py:728
 #: shared/entities/enums.py:1506
@@ -4031,7 +4170,7 @@ msgstr "Zbouraná budova"
 
 #: shared/entities/enums.py:148
 msgid "Prison"
-msgstr ""
+msgstr "Vězení"
 
 #: shared/entities/enums.py:149 shared/entities/fuel.py:4
 #: shared/entities/road.py:76
@@ -4061,19 +4200,19 @@ msgstr ""
 
 #: shared/entities/enums.py:155
 msgid "Clinic"
-msgstr ""
+msgstr "Klinika"
 
 #: shared/entities/enums.py:157 shared/entities/enums.py:353
 msgid "Ice cream"
-msgstr ""
+msgstr "Zmrzlina"
 
 #: shared/entities/enums.py:158
 msgid "Bycicle rental"
-msgstr ""
+msgstr "Půjčovna jízdních kol"
 
 #: shared/entities/enums.py:159 shared/entities/enums.py:1660
 msgid "Embassy"
-msgstr ""
+msgstr "Ambasáda"
 
 #: shared/entities/enums.py:160
 msgid "Grit bin"
@@ -4106,7 +4245,7 @@ msgstr ""
 
 #: shared/entities/enums.py:167
 msgid "Charging station"
-msgstr ""
+msgstr "Nabíjecí stanice"
 
 #: shared/entities/enums.py:168
 msgid "Feeding rack"
@@ -4114,7 +4253,7 @@ msgstr ""
 
 #: shared/entities/enums.py:169
 msgid "Ticket validator"
-msgstr ""
+msgstr "Turniket"
 
 #: shared/entities/enums.py:170
 msgid "Baby hatch"
@@ -4122,19 +4261,19 @@ msgstr ""
 
 #: shared/entities/enums.py:171
 msgid "Bycicle repair station"
-msgstr ""
+msgstr "Stanice pro opravu jízdních kol"
 
 #: shared/entities/enums.py:172
 msgid "Public bookcase"
-msgstr ""
+msgstr "Veřejná knihovnička"
 
 #: shared/entities/enums.py:173
 msgid "Vehicle inspection"
-msgstr ""
+msgstr "Inspekce vozidel"
 
 #: shared/entities/enums.py:174
 msgid "Casino"
-msgstr ""
+msgstr "Kasino"
 
 #: shared/entities/enums.py:175
 #, fuzzy
@@ -4143,7 +4282,7 @@ msgstr "Vodní oblast"
 
 #: shared/entities/enums.py:176
 msgid "First aid"
-msgstr ""
+msgstr "První pomoc"
 
 #: shared/entities/enums.py:177
 #, fuzzy
@@ -4156,19 +4295,19 @@ msgstr ""
 
 #: shared/entities/enums.py:179
 msgid "Animal shelter"
-msgstr ""
+msgstr "Přístřešek pro zvířata"
 
 #: shared/entities/enums.py:180
 msgid "Music school"
-msgstr ""
+msgstr "Hudební škola"
 
 #: shared/entities/enums.py:181 shared/entities/enums.py:595
 msgid "Dog training"
-msgstr ""
+msgstr "Cvičiště psů"
 
 #: shared/entities/enums.py:182
 msgid "Exhibition center"
-msgstr ""
+msgstr "Výstavní centrum"
 
 #: shared/entities/enums.py:184 shared/entities/enums.py:1795
 msgid "Coworking space"
@@ -4176,28 +4315,28 @@ msgstr ""
 
 #: shared/entities/enums.py:185
 msgid "Canteen"
-msgstr ""
+msgstr "Kantýna"
 
 #: shared/entities/enums.py:186
 msgid "Wine bar"
-msgstr ""
+msgstr "Vinný bar"
 
 #: shared/entities/enums.py:187
 msgid "Dog asylum"
-msgstr ""
+msgstr "Psí azil"
 
 #: shared/entities/enums.py:188 shared/entities/office.py:42
 #: shared/entities/surveillance.py:22
 msgid "Authority"
-msgstr ""
+msgstr "Autorita"
 
 #: shared/entities/enums.py:189
 msgid "Charity"
-msgstr ""
+msgstr "Charita"
 
 #: shared/entities/enums.py:190
 msgid "Bicycle rental"
-msgstr ""
+msgstr "Půjčovna jízdních kol"
 
 #: shared/entities/enums.py:191
 #, fuzzy
@@ -4211,11 +4350,11 @@ msgstr "Oznámení"
 
 #: shared/entities/enums.py:195
 msgid "Board games club"
-msgstr ""
+msgstr "Klub deskových her"
 
 #: shared/entities/enums.py:196
 msgid "Menza"
-msgstr ""
+msgstr "Menza"
 
 #: shared/entities/enums.py:197
 msgid "Stripclub"
@@ -4223,15 +4362,15 @@ msgstr ""
 
 #: shared/entities/enums.py:198
 msgid "Conference centre"
-msgstr ""
+msgstr "Konferenční centrum"
 
 #: shared/entities/enums.py:199
 msgid "Animal training"
-msgstr ""
+msgstr "Cvičiště zvířat"
 
 #: shared/entities/enums.py:200
 msgid "Dormitory"
-msgstr ""
+msgstr "Studentská kolej"
 
 #: shared/entities/enums.py:201
 msgid "Dojo"
@@ -4264,7 +4403,7 @@ msgstr ""
 
 #: shared/entities/enums.py:209
 msgid "Concert hall"
-msgstr ""
+msgstr "Koncertní hala"
 
 #: shared/entities/enums.py:211 shared/entities/enums.py:759
 #, fuzzy
@@ -4285,7 +4424,7 @@ msgstr ""
 
 #: shared/entities/enums.py:217
 msgid "Planetarium"
-msgstr ""
+msgstr "Planetáium"
 
 #: shared/entities/enums.py:218
 #, fuzzy
@@ -4294,7 +4433,7 @@ msgstr "Zahájit vyhledávání"
 
 #: shared/entities/enums.py:219
 msgid "Science"
-msgstr ""
+msgstr "Věda"
 
 #: shared/entities/enums.py:220 shared/entities/enums.py:866
 #: shared/entities/enums.py:895 shared/entities/enums.py:1154
@@ -4306,7 +4445,7 @@ msgstr "Omezení"
 
 #: shared/entities/enums.py:222
 msgid "Social centre"
-msgstr ""
+msgstr "Sociální centrum"
 
 #: shared/entities/enums.py:223
 msgid "Bag wrap"
@@ -4314,7 +4453,7 @@ msgstr ""
 
 #: shared/entities/enums.py:224
 msgid "Seating"
-msgstr ""
+msgstr "Sezení"
 
 #: shared/entities/enums.py:225
 #, fuzzy
@@ -4323,7 +4462,7 @@ msgstr "Kontrolní bod"
 
 #: shared/entities/enums.py:226
 msgid "Reception desk"
-msgstr ""
+msgstr "Recepční pult"
 
 #: shared/entities/enums.py:228
 msgid "Luggage locker"
@@ -4342,7 +4481,7 @@ msgstr "Nástupiště"
 
 #: shared/entities/enums.py:231
 msgid "Academy"
-msgstr ""
+msgstr "Akademie"
 
 #: shared/entities/enums.py:233
 msgid "Trolley bay"
@@ -4350,15 +4489,15 @@ msgstr ""
 
 #: shared/entities/enums.py:234
 msgid "Architect office"
-msgstr ""
+msgstr "Kancelář architekta"
 
 #: shared/entities/enums.py:235
 msgid "Customs"
-msgstr ""
+msgstr "Celnice"
 
 #: shared/entities/enums.py:236
 msgid "Stairs"
-msgstr ""
+msgstr "Schody"
 
 #: shared/entities/enums.py:239
 msgid "Love hotel"
@@ -4366,7 +4505,7 @@ msgstr ""
 
 #: shared/entities/enums.py:247
 msgid "Supermarket"
-msgstr ""
+msgstr "Supermarket"
 
 #: shared/entities/enums.py:248
 msgid "Doityourself"
@@ -4375,7 +4514,7 @@ msgstr ""
 #: shared/entities/enums.py:249 shared/entities/enums.py:1111
 #: shared/entities/power_substation.py:5
 msgid "Kiosk"
-msgstr ""
+msgstr "Kiose"
 
 #: shared/entities/enums.py:251
 msgid "Funeral directors"
@@ -4383,11 +4522,11 @@ msgstr ""
 
 #: shared/entities/enums.py:253
 msgid "Alcohol"
-msgstr ""
+msgstr "Alkohol"
 
 #: shared/entities/enums.py:254
 msgid "Garden centre"
-msgstr ""
+msgstr "Zahradní centrum"
 
 #: shared/entities/enums.py:255
 msgid "Convenience"
@@ -4395,15 +4534,15 @@ msgstr ""
 
 #: shared/entities/enums.py:256
 msgid "Optician"
-msgstr ""
+msgstr "Optik"
 
 #: shared/entities/enums.py:258
 msgid "Chemist"
-msgstr ""
+msgstr "Chemik"
 
 #: shared/entities/enums.py:259 shared/entities/recycling.py:19
 msgid "Clothes"
-msgstr ""
+msgstr "Oblečení"
 
 #: shared/entities/enums.py:260
 #, fuzzy
@@ -4412,11 +4551,11 @@ msgstr "Vodní oblast"
 
 #: shared/entities/enums.py:261 shared/entities/recycling.py:53
 msgid "Electronics"
-msgstr ""
+msgstr "Elektronika"
 
 #: shared/entities/enums.py:262
 msgid "Bakery"
-msgstr ""
+msgstr "Pekařství"
 
 #: shared/entities/enums.py:263
 #, fuzzy
@@ -4425,7 +4564,7 @@ msgstr "Sport"
 
 #: shared/entities/enums.py:264
 msgid "Hairdresser"
-msgstr ""
+msgstr "Kadeřník"
 
 #: shared/entities/enums.py:265
 #, fuzzy
@@ -4434,15 +4573,15 @@ msgstr "Trasa"
 
 #: shared/entities/enums.py:266
 msgid "Toys"
-msgstr ""
+msgstr "Hračky"
 
 #: shared/entities/enums.py:267
 msgid "Florist"
-msgstr ""
+msgstr "Květinář"
 
 #: shared/entities/enums.py:269 shared/entities/recycling.py:30
 msgid "Furniture"
-msgstr ""
+msgstr "Nábytek"
 
 #: shared/entities/enums.py:271 shared/entities/recycling.py:32
 #, fuzzy
@@ -4451,20 +4590,20 @@ msgstr "Schody"
 
 #: shared/entities/enums.py:272 shared/entities/recycling.py:44
 msgid "Books"
-msgstr ""
+msgstr "Knihy"
 
 #: shared/entities/enums.py:273 shared/entities/enums.py:1112
 #: shared/entities/enums.py:1348
 msgid "Outdoor"
-msgstr ""
+msgstr "Venkovní"
 
 #: shared/entities/enums.py:274
 msgid "Coffee"
-msgstr ""
+msgstr "Kafe"
 
 #: shared/entities/enums.py:275 shared/entities/health_care.py:17
 msgid "General"
-msgstr ""
+msgstr "Všeobecné"
 
 #: shared/entities/enums.py:276
 msgid "Greengrocer"
@@ -4472,19 +4611,19 @@ msgstr ""
 
 #: shared/entities/enums.py:277
 msgid "Gift"
-msgstr ""
+msgstr "Dárek"
 
 #: shared/entities/enums.py:278
 msgid "Newsagent"
-msgstr ""
+msgstr "Novinový stánek"
 
 #: shared/entities/enums.py:279
 msgid "Mobile phone"
-msgstr ""
+msgstr "Mobilní telefon"
 
 #: shared/entities/enums.py:280 shared/entities/recycling.py:49
 msgid "Shoes"
-msgstr ""
+msgstr "Boty"
 
 #: shared/entities/enums.py:281
 msgid "Stationery"
@@ -4509,7 +4648,7 @@ msgstr "Hranice"
 
 #: shared/entities/enums.py:286
 msgid "Car parts"
-msgstr ""
+msgstr "Autodíly"
 
 #: shared/entities/enums.py:288
 msgid "Paint"
@@ -4517,7 +4656,7 @@ msgstr ""
 
 #: shared/entities/enums.py:289
 msgid "Hardware"
-msgstr ""
+msgstr "Hardware"
 
 #: shared/entities/enums.py:290
 msgid "Pastry"
@@ -4525,19 +4664,19 @@ msgstr ""
 
 #: shared/entities/enums.py:292
 msgid "Jewelry"
-msgstr ""
+msgstr "Klenotnictví"
 
 #: shared/entities/enums.py:293
 msgid "Butcher"
-msgstr ""
+msgstr "Řezník"
 
 #: shared/entities/enums.py:294
 msgid "Interior decoration"
-msgstr ""
+msgstr "Dekorace interiéru"
 
 #: shared/entities/enums.py:295
 msgid "Fashion"
-msgstr ""
+msgstr "Móda"
 
 #: shared/entities/enums.py:296
 msgid "Copyshop"
@@ -4549,7 +4688,7 @@ msgstr ""
 
 #: shared/entities/enums.py:298
 msgid "Vacant"
-msgstr ""
+msgstr "Opuštěné"
 
 #: shared/entities/enums.py:299
 msgid "Chemistry"
@@ -4561,7 +4700,7 @@ msgstr ""
 
 #: shared/entities/enums.py:301
 msgid "Musical instrument"
-msgstr ""
+msgstr "Hudební nástroj"
 
 #: shared/entities/enums.py:302 shared/entities/recycling.py:33
 #: shared/entities/shop.py:32
@@ -4570,7 +4709,7 @@ msgstr ""
 
 #: shared/entities/enums.py:304
 msgid "Fabric"
-msgstr ""
+msgstr "Látka"
 
 #: shared/entities/enums.py:305
 #, fuzzy
@@ -4579,7 +4718,7 @@ msgstr "Pojmenované"
 
 #: shared/entities/enums.py:306
 msgid "Hifi"
-msgstr ""
+msgstr "Hifi"
 
 #: shared/entities/enums.py:307
 #, fuzzy
@@ -4596,7 +4735,7 @@ msgstr ""
 
 #: shared/entities/enums.py:310 shared/entities/shop.py:42
 msgid "Hobby"
-msgstr ""
+msgstr "Koníček"
 
 #: shared/entities/enums.py:311
 #, fuzzy
@@ -4610,11 +4749,11 @@ msgstr "Trasa"
 
 #: shared/entities/enums.py:313 shared/entities/enums.py:547
 msgid "Fishing"
-msgstr ""
+msgstr "Rybaření"
 
 #: shared/entities/enums.py:314
 msgid "Bathroom"
-msgstr ""
+msgstr "Koupelna"
 
 #: shared/entities/enums.py:315
 msgid "Beverages"
@@ -4622,7 +4761,7 @@ msgstr ""
 
 #: shared/entities/enums.py:316
 msgid "Herbalist"
-msgstr ""
+msgstr "Bylinkář"
 
 #: shared/entities/enums.py:317
 #, fuzzy
@@ -4639,7 +4778,7 @@ msgstr ""
 
 #: shared/entities/enums.py:321
 msgid "Travel agency"
-msgstr ""
+msgstr "Cestovní kancelář"
 
 #: shared/entities/enums.py:323
 msgid "Fishmonger"
@@ -4651,7 +4790,7 @@ msgstr ""
 
 #: shared/entities/enums.py:325
 msgid "Massage"
-msgstr ""
+msgstr "Masáž"
 
 #: shared/entities/enums.py:326
 msgid "Deli"
@@ -4663,19 +4802,19 @@ msgstr ""
 
 #: shared/entities/enums.py:328
 msgid "Bag"
-msgstr ""
+msgstr "Batoh"
 
 #: shared/entities/enums.py:329
 msgid "Isp"
-msgstr ""
+msgstr "Isp"
 
 #: shared/entities/enums.py:330 shared/entities/shop.py:41
 msgid "Beauty"
-msgstr ""
+msgstr "Krása"
 
 #: shared/entities/enums.py:331
 msgid "Cosmetics"
-msgstr ""
+msgstr "Kosmetika"
 
 #: shared/entities/enums.py:332
 #, fuzzy
@@ -4684,15 +4823,15 @@ msgstr "Obsahuje"
 
 #: shared/entities/enums.py:334
 msgid "Weapons"
-msgstr ""
+msgstr "Zbraně"
 
 #: shared/entities/enums.py:335
 msgid "Medical supply"
-msgstr ""
+msgstr "Lékařské potřeby"
 
 #: shared/entities/enums.py:336
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #: shared/entities/enums.py:337
 msgid "Nutrition supplements"
@@ -4719,7 +4858,7 @@ msgstr "Oznámení"
 
 #: shared/entities/enums.py:343
 msgid "Cheese"
-msgstr ""
+msgstr "Sýr"
 
 #: shared/entities/enums.py:344
 msgid "Baby goods"
@@ -4736,7 +4875,7 @@ msgstr "Nejbližší"
 
 #: shared/entities/enums.py:347
 msgid "Kitchen"
-msgstr ""
+msgstr "Kuchyň"
 
 #: shared/entities/enums.py:348 shared/entities/shop.py:40
 #, fuzzy
@@ -4750,11 +4889,11 @@ msgstr "Pojmenované"
 
 #: shared/entities/enums.py:350
 msgid "Tea"
-msgstr ""
+msgstr "Čaj"
 
 #: shared/entities/enums.py:351
 msgid "Bed"
-msgstr ""
+msgstr "Postel"
 
 #: shared/entities/enums.py:352 shared/entities/road.py:7
 #, fuzzy
@@ -4763,7 +4902,7 @@ msgstr "Oznámení"
 
 #: shared/entities/enums.py:354
 msgid "Souvenir"
-msgstr ""
+msgstr "Suvenýr"
 
 #: shared/entities/enums.py:356
 #, fuzzy
@@ -4776,7 +4915,7 @@ msgstr ""
 
 #: shared/entities/enums.py:358
 msgid "Tobacco"
-msgstr ""
+msgstr "Tabák"
 
 #: shared/entities/enums.py:359
 msgid "Sewing"
@@ -4794,23 +4933,23 @@ msgstr "Titulek"
 
 #: shared/entities/enums.py:362
 msgid "Electrical"
-msgstr ""
+msgstr "Elektrické"
 
 #: shared/entities/enums.py:363
 msgid "Wood floor"
-msgstr ""
+msgstr "Dřevěná podlaha"
 
 #: shared/entities/enums.py:364
 msgid "Radiotechnics"
-msgstr ""
+msgstr "Radiotechnika"
 
 #: shared/entities/enums.py:367
 msgid "Grocery"
-msgstr ""
+msgstr "Potraviny"
 
 #: shared/entities/enums.py:370 shared/entities/enums.py:1743
 msgid "Lighting"
-msgstr ""
+msgstr "Osvětlení"
 
 #: shared/entities/enums.py:371
 msgid "Appliances"
@@ -4818,17 +4957,17 @@ msgstr ""
 
 #: shared/entities/enums.py:372
 msgid "Locks and keys"
-msgstr ""
+msgstr "Zámky a klíče"
 
 #: shared/entities/enums.py:373 shared/entities/enums.py:1402
 #: shared/entities/enums.py:1521 shared/entities/road.py:387
 #: shared/entities/tourism.py:22
 msgid "Ski"
-msgstr ""
+msgstr "Lyžování"
 
 #: shared/entities/enums.py:374
 msgid "Painter"
-msgstr ""
+msgstr "Malíř"
 
 #: shared/entities/enums.py:376
 msgid "Stonework"
@@ -4841,11 +4980,11 @@ msgstr "Aktuální směr"
 
 #: shared/entities/enums.py:378
 msgid "Photoshop"
-msgstr ""
+msgstr "Photoshop"
 
 #: shared/entities/enums.py:379
 msgid "Shoe repair"
-msgstr ""
+msgstr "Oprava obuvy"
 
 #: shared/entities/enums.py:380
 msgid "Stationery chemist"
@@ -4853,43 +4992,43 @@ msgstr ""
 
 #: shared/entities/enums.py:381
 msgid "Drogist"
-msgstr ""
+msgstr "Drogista"
 
 #: shared/entities/enums.py:382
 msgid "Watches"
-msgstr ""
+msgstr "Hodinky"
 
 #: shared/entities/enums.py:383 shared/entities/shop.py:26
 msgid "Models"
-msgstr ""
+msgstr "Modely"
 
 #: shared/entities/enums.py:384
 msgid "Fireworks"
-msgstr ""
+msgstr "Ohňostroje"
 
 #: shared/entities/enums.py:385
 msgid "Children"
-msgstr ""
+msgstr "Děti"
 
 #: shared/entities/enums.py:386
 msgid "Fairtrade"
-msgstr ""
+msgstr "Fairtrade"
 
 #: shared/entities/enums.py:387
 msgid "Lost and found"
-msgstr ""
+msgstr "Ztráty a nálezy"
 
 #: shared/entities/enums.py:388
 msgid "Empty"
-msgstr ""
+msgstr "Prázdné"
 
 #: shared/entities/enums.py:389
 msgid "Medical equipment"
-msgstr ""
+msgstr "Lékařské vybavení"
 
 #: shared/entities/enums.py:390 shared/entities/shop.py:34
 msgid "Second hand"
-msgstr ""
+msgstr "Second hand"
 
 #: shared/entities/enums.py:392
 #, fuzzy
@@ -4898,11 +5037,11 @@ msgstr "Fontána"
 
 #: shared/entities/enums.py:393
 msgid "Energy"
-msgstr ""
+msgstr "Energie"
 
 #: shared/entities/enums.py:394
 msgid "Crystal"
-msgstr ""
+msgstr "Krystal"
 
 #: shared/entities/enums.py:395
 #, fuzzy
@@ -4911,15 +5050,15 @@ msgstr "Označené údajem o nadmořské výšce"
 
 #: shared/entities/enums.py:396
 msgid "Army"
-msgstr ""
+msgstr "Armáda"
 
 #: shared/entities/enums.py:397
 msgid "Betting"
-msgstr ""
+msgstr "Sázky"
 
 #: shared/entities/enums.py:398
 msgid "Spiritual"
-msgstr ""
+msgstr "Spirituální"
 
 #: shared/entities/enums.py:399
 msgid "Electronics stationery"
@@ -4927,11 +5066,11 @@ msgstr ""
 
 #: shared/entities/enums.py:400 shared/entities/enums.py:1466
 msgid "Farm"
-msgstr ""
+msgstr "Farma"
 
 #: shared/entities/enums.py:402 shared/entities/enums.py:1798
 msgid "Money lender"
-msgstr ""
+msgstr "Pučování peněz"
 
 #: shared/entities/enums.py:403 shared/entities/enums.py:1776
 #, fuzzy
@@ -4944,11 +5083,11 @@ msgstr ""
 
 #: shared/entities/enums.py:406
 msgid "Software"
-msgstr ""
+msgstr "Software"
 
 #: shared/entities/enums.py:407
 msgid "Lottery"
-msgstr ""
+msgstr "Loterie"
 
 #: shared/entities/enums.py:408
 msgid "Copyshop toys"
@@ -4956,15 +5095,15 @@ msgstr ""
 
 #: shared/entities/enums.py:411 shared/entities/shop.py:25
 msgid "Rc models"
-msgstr ""
+msgstr "Rc modely"
 
 #: shared/entities/enums.py:412
 msgid "Video games"
-msgstr ""
+msgstr "Video hry"
 
 #: shared/entities/enums.py:414
 msgid "Tattoo"
-msgstr ""
+msgstr "Tetování"
 
 #: shared/entities/enums.py:416
 msgid "Duty free"
@@ -4981,11 +5120,11 @@ msgstr ""
 #: shared/entities/enums.py:419 shared/entities/protected_area.py:19
 #: shared/entities/shelter.py:14 shared/entities/tourism.py:23
 msgid "Fireplace"
-msgstr ""
+msgstr "Ohniště"
 
 #: shared/entities/enums.py:420
 msgid "Hearing aids"
-msgstr ""
+msgstr "Naslouchátka"
 
 #: shared/entities/enums.py:421
 msgid "Haberdashery"
@@ -4993,11 +5132,11 @@ msgstr ""
 
 #: shared/entities/enums.py:422
 msgid "Window blind"
-msgstr ""
+msgstr "Žaluzie"
 
 #: shared/entities/enums.py:423
 msgid "Lamps"
-msgstr ""
+msgstr "Lampy"
 
 #: shared/entities/enums.py:425
 msgid "Glassware"
@@ -5005,15 +5144,15 @@ msgstr ""
 
 #: shared/entities/enums.py:426
 msgid "Bathroom furniture"
-msgstr ""
+msgstr "Nábytek do koupelny"
 
 #: shared/entities/enums.py:427
 msgid "Mushrooms"
-msgstr ""
+msgstr "Houby"
 
 #: shared/entities/enums.py:428
 msgid "Italian food"
-msgstr ""
+msgstr "Italské jídlo"
 
 #: shared/entities/enums.py:429
 #, fuzzy
@@ -5022,7 +5161,7 @@ msgstr "Strom"
 
 #: shared/entities/enums.py:430
 msgid "Chocolate"
-msgstr ""
+msgstr "Čokoláda"
 
 #: shared/entities/enums.py:431
 #, fuzzy
@@ -5031,7 +5170,7 @@ msgstr "Státní hranice"
 
 #: shared/entities/enums.py:432
 msgid "Design"
-msgstr ""
+msgstr "Design"
 
 #: shared/entities/enums.py:433
 msgid "Sewing machines"
@@ -5048,21 +5187,21 @@ msgstr ""
 
 #: shared/entities/enums.py:436
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 #: shared/entities/enums.py:442 shared/entities/rail_way.py:69
 #: shared/entities/road.py:98 shared/entities/steps.py:6
 msgid "Up"
-msgstr ""
+msgstr "Nahoru"
 
 #: shared/entities/enums.py:443 shared/entities/rail_way.py:68
 #: shared/entities/steps.py:7
 msgid "Down"
-msgstr ""
+msgstr "Dolů"
 
 #: shared/entities/enums.py:448
 msgid "Anticlockwise"
-msgstr ""
+msgstr "Proti směru hodinových ručiček"
 
 #: shared/entities/enums.py:454
 #, fuzzy
@@ -5071,7 +5210,7 @@ msgstr "Vodní tok"
 
 #: shared/entities/enums.py:455
 msgid "Reservoir covered"
-msgstr ""
+msgstr "Přikrytý rezervoár"
 
 #: shared/entities/enums.py:456 shared/entities/enums.py:1075
 msgid "Chimney"
@@ -5138,7 +5277,7 @@ msgstr "Hrad"
 #: shared/entities/enums.py:474 shared/entities/enums.py:1019
 #: shared/entities/water_area.py:7
 msgid "Reservoir"
-msgstr ""
+msgstr "Rezervoár"
 
 #: shared/entities/enums.py:475
 msgid "Watermill"
@@ -5193,23 +5332,23 @@ msgstr ""
 
 #: shared/entities/enums.py:490
 msgid "Cooling tower"
-msgstr ""
+msgstr "Chladící věž"
 
 #: shared/entities/enums.py:491 shared/entities/fire_hydrant.py:5
 msgid "Pillar"
-msgstr ""
+msgstr "Pilíř"
 
 #: shared/entities/enums.py:492
 msgid "Communications tower"
-msgstr ""
+msgstr "Komunikační věž"
 
 #: shared/entities/enums.py:493
 msgid "Antenna"
-msgstr ""
+msgstr "Anténa"
 
 #: shared/entities/enums.py:494
 msgid "Storage tank"
-msgstr ""
+msgstr "Úložný tank"
 
 #: shared/entities/enums.py:495 shared/entities/enums.py:864
 msgid "Windsock"
@@ -5217,11 +5356,11 @@ msgstr ""
 
 #: shared/entities/enums.py:496
 msgid "Telescope"
-msgstr ""
+msgstr "Teleskop"
 
 #: shared/entities/enums.py:497
 msgid "Lighthouse"
-msgstr ""
+msgstr "Maják"
 
 #: shared/entities/enums.py:498
 #, fuzzy
@@ -5239,7 +5378,7 @@ msgstr "Transformátor"
 
 #: shared/entities/enums.py:501
 msgid "Silo"
-msgstr ""
+msgstr "Silo"
 
 #: shared/entities/enums.py:502
 msgid "Clearcut"
@@ -5259,11 +5398,11 @@ msgstr ""
 
 #: shared/entities/enums.py:506
 msgid "Mineshaft"
-msgstr ""
+msgstr "Důlní štola"
 
 #: shared/entities/enums.py:514
 msgid "Tennis"
-msgstr ""
+msgstr "Tenis"
 
 #: shared/entities/enums.py:515
 msgid "Soccer"
@@ -5288,7 +5427,7 @@ msgstr ""
 
 #: shared/entities/enums.py:520
 msgid "Skateboard"
-msgstr ""
+msgstr "Skateboard"
 
 #: shared/entities/enums.py:521
 #, fuzzy
@@ -5297,7 +5436,7 @@ msgstr "Recyklace"
 
 #: shared/entities/enums.py:522
 msgid "Beachvolleyball"
-msgstr ""
+msgstr "Plážový volleyball"
 
 #: shared/entities/enums.py:523
 #, fuzzy
@@ -5311,7 +5450,7 @@ msgstr ""
 #: shared/entities/enums.py:526 shared/entities/land.py:90
 #: shared/entities/natural.py:36 shared/entities/sport.py:31
 msgid "Golf"
-msgstr ""
+msgstr "Golf"
 
 #: shared/entities/enums.py:527
 msgid "Ten pin"
@@ -5319,11 +5458,11 @@ msgstr ""
 
 #: shared/entities/enums.py:528 shared/entities/enums.py:1740
 msgid "Climbing"
-msgstr ""
+msgstr "Lezení"
 
 #: shared/entities/enums.py:529 shared/entities/sport.py:17
 msgid "Swimming"
-msgstr ""
+msgstr "Plavání"
 
 #: shared/entities/enums.py:530 shared/entities/shop.py:36
 #, fuzzy
@@ -5337,15 +5476,15 @@ msgstr "Parkoviště"
 
 #: shared/entities/enums.py:532
 msgid "Athletics"
-msgstr ""
+msgstr "Atletika"
 
 #: shared/entities/enums.py:533
 msgid "Baseball"
-msgstr ""
+msgstr "Baseball"
 
 #: shared/entities/enums.py:534
 msgid "Ice hockey"
-msgstr ""
+msgstr "Lední hokej"
 
 #: shared/entities/enums.py:535
 #, fuzzy
@@ -5354,11 +5493,11 @@ msgstr "Je rovno"
 
 #: shared/entities/enums.py:536
 msgid "Volleyball"
-msgstr ""
+msgstr "Volleyball"
 
 #: shared/entities/enums.py:537
 msgid "Basketball"
-msgstr ""
+msgstr "Basketball"
 
 #: shared/entities/enums.py:538
 #, fuzzy
@@ -5376,7 +5515,7 @@ msgstr ""
 
 #: shared/entities/enums.py:541
 msgid "Shooting range"
-msgstr ""
+msgstr "Střelnice"
 
 #: shared/entities/enums.py:542
 #, fuzzy
@@ -5389,31 +5528,31 @@ msgstr ""
 
 #: shared/entities/enums.py:544
 msgid "Gymnastics"
-msgstr ""
+msgstr "Gymnastika"
 
 #: shared/entities/enums.py:545
 msgid "Fitness"
-msgstr ""
+msgstr "Fitness"
 
 #: shared/entities/enums.py:546
 msgid "Table tennis"
-msgstr ""
+msgstr "Stolní tenis"
 
 #: shared/entities/enums.py:548
 msgid "Archery"
-msgstr ""
+msgstr "Lukostřelba"
 
 #: shared/entities/enums.py:549
 msgid "Box"
-msgstr ""
+msgstr "Box"
 
 #: shared/entities/enums.py:550
 msgid "Bowling"
-msgstr ""
+msgstr "Bowling"
 
 #: shared/entities/enums.py:551
 msgid "Trampoline"
-msgstr ""
+msgstr "Trampolína"
 
 #: shared/entities/enums.py:553
 #, fuzzy
@@ -5422,19 +5561,19 @@ msgstr "Úspěch"
 
 #: shared/entities/enums.py:554 shared/entities/sport.py:13
 msgid "Paintball"
-msgstr ""
+msgstr "Paintball"
 
 #: shared/entities/enums.py:555
 msgid "Petanque"
-msgstr ""
+msgstr "Petank"
 
 #: shared/entities/enums.py:556
 msgid "Exercise"
-msgstr ""
+msgstr "Cvičení"
 
 #: shared/entities/enums.py:557
 msgid "Toboggan"
-msgstr ""
+msgstr "Tobogan"
 
 #: shared/entities/enums.py:558
 #, fuzzy
@@ -5451,15 +5590,15 @@ msgstr ""
 
 #: shared/entities/enums.py:561
 msgid "Floorball"
-msgstr ""
+msgstr "Floorball"
 
 #: shared/entities/enums.py:562
 msgid "Hockey"
-msgstr ""
+msgstr "Hokej"
 
 #: shared/entities/enums.py:563
 msgid "Rugby"
-msgstr ""
+msgstr "Rugby"
 
 #: shared/entities/enums.py:564
 msgid "Hockeyball"
@@ -5467,11 +5606,11 @@ msgstr ""
 
 #: shared/entities/enums.py:565
 msgid "Rugby league"
-msgstr ""
+msgstr "Rugbyová liga"
 
 #: shared/entities/enums.py:566
 msgid "Horse racing"
-msgstr ""
+msgstr "Závody koní"
 
 #: shared/entities/enums.py:567
 msgid "Skating"
@@ -5491,7 +5630,7 @@ msgstr ""
 
 #: shared/entities/enums.py:571
 msgid "American football"
-msgstr ""
+msgstr "Americký fotbal"
 
 #: shared/entities/enums.py:572
 #, fuzzy
@@ -5500,7 +5639,7 @@ msgstr "Jít na"
 
 #: shared/entities/enums.py:573
 msgid "Parkour"
-msgstr ""
+msgstr "Parkur"
 
 #: shared/entities/enums.py:574
 #, fuzzy
@@ -5509,7 +5648,7 @@ msgstr "Recyklace"
 
 #: shared/entities/enums.py:575
 msgid "Sokol"
-msgstr ""
+msgstr "Sokol"
 
 #: shared/entities/enums.py:576
 msgid "Rugby union"
@@ -5517,7 +5656,7 @@ msgstr ""
 
 #: shared/entities/enums.py:577
 msgid "Boxing"
-msgstr ""
+msgstr "Boxování"
 
 #: shared/entities/enums.py:578
 #, fuzzy
@@ -5530,7 +5669,7 @@ msgstr ""
 
 #: shared/entities/enums.py:581
 msgid "Billiards"
-msgstr ""
+msgstr "Billiards"
 
 #: shared/entities/enums.py:582
 msgid "Bowls"
@@ -5538,7 +5677,7 @@ msgstr ""
 
 #: shared/entities/enums.py:583
 msgid "Yoga"
-msgstr ""
+msgstr "Yoga"
 
 #: shared/entities/enums.py:584
 msgid "Kettlebell"
@@ -5570,11 +5709,11 @@ msgstr ""
 
 #: shared/entities/enums.py:592
 msgid "Minigolf"
-msgstr ""
+msgstr "Minigolf"
 
 #: shared/entities/enums.py:593
 msgid "Motocross"
-msgstr ""
+msgstr "Motocross"
 
 #: shared/entities/enums.py:594
 msgid "Workout"
@@ -5591,7 +5730,7 @@ msgstr "Budova"
 
 #: shared/entities/enums.py:598
 msgid "Kanoistika"
-msgstr ""
+msgstr "Kanoistika"
 
 #: shared/entities/enums.py:599
 #, fuzzy
@@ -5620,7 +5759,7 @@ msgstr ""
 
 #: shared/entities/enums.py:606
 msgid "Aikido"
-msgstr ""
+msgstr "Aikido"
 
 #: shared/entities/enums.py:607
 msgid "Jumping"
@@ -5683,7 +5822,7 @@ msgstr ""
 #: shared/entities/enums.py:631 shared/entities/man_made.py:24
 #: shared/entities/road.py:197 shared/entities/steps.py:42
 msgid "Handrail"
-msgstr ""
+msgstr "Zábradlí"
 
 #: shared/entities/enums.py:633
 msgid "Toll booth"
@@ -5699,11 +5838,11 @@ msgstr ""
 
 #: shared/entities/enums.py:638 shared/entities/enums.py:1356
 msgid "Chain"
-msgstr ""
+msgstr "Řetěz"
 
 #: shared/entities/enums.py:639 shared/entities/enums.py:1357
 msgid "Wire"
-msgstr ""
+msgstr "Drát"
 
 #: shared/entities/enums.py:640
 msgid "Log"
@@ -5715,11 +5854,11 @@ msgstr ""
 
 #: shared/entities/enums.py:643
 msgid "City wall"
-msgstr ""
+msgstr "Městská zeď"
 
 #: shared/entities/enums.py:644
 msgid "Wire fence"
-msgstr ""
+msgstr "Drátěný plot"
 
 #: shared/entities/enums.py:645 shared/entities/enums.py:1362
 #, fuzzy
@@ -5732,7 +5871,7 @@ msgstr ""
 
 #: shared/entities/enums.py:647 shared/entities/enums.py:1569
 msgid "Rope"
-msgstr ""
+msgstr "Lano"
 
 #: shared/entities/enums.py:648
 #, fuzzy
@@ -5741,7 +5880,7 @@ msgstr "Sjezdovka"
 
 #: shared/entities/enums.py:650 shared/entities/enums.py:740
 msgid "Border control"
-msgstr ""
+msgstr "Hraniční kontrola"
 
 #: shared/entities/enums.py:651 shared/entities/enums.py:1289
 #: shared/entities/route.py:5
@@ -5752,7 +5891,7 @@ msgstr "Okomentované"
 #: shared/entities/enums.py:653 shared/entities/enums.py:1070
 #: shared/entities/road.py:329 shared/entities/steps.py:45
 msgid "Ramp"
-msgstr ""
+msgstr "Rampa"
 
 #: shared/entities/enums.py:660
 #, fuzzy
@@ -5779,7 +5918,7 @@ msgstr ""
 
 #: shared/entities/enums.py:675
 msgid "Museum"
-msgstr ""
+msgstr "Muzeum"
 
 #: shared/entities/enums.py:676 shared/entities/enums.py:1220
 #, fuzzy
@@ -5797,7 +5936,7 @@ msgstr ""
 
 #: shared/entities/enums.py:679 shared/entities/enums.py:1196
 msgid "Hostel"
-msgstr ""
+msgstr "Hostel"
 
 #: shared/entities/enums.py:680
 msgid "Theme park"
@@ -5814,11 +5953,11 @@ msgstr "Trasa"
 
 #: shared/entities/enums.py:683
 msgid "Gallery"
-msgstr ""
+msgstr "Galerie"
 
 #: shared/entities/enums.py:684 shared/entities/tourism.py:35
 msgid "Zoo"
-msgstr ""
+msgstr "Zoo"
 
 #: shared/entities/enums.py:686
 msgid "Chalet"
@@ -5826,7 +5965,7 @@ msgstr ""
 
 #: shared/entities/enums.py:687
 msgid "Caravan site"
-msgstr ""
+msgstr "Místo pro karavany"
 
 #: shared/entities/enums.py:689
 msgid "Apartment"
@@ -5834,7 +5973,7 @@ msgstr ""
 
 #: shared/entities/enums.py:690
 msgid "Wine cellar"
-msgstr ""
+msgstr "Vinný sklípek"
 
 #: shared/entities/enums.py:698 shared/entities/enums.py:761
 #: shared/entities/enums.py:1464
@@ -5844,23 +5983,23 @@ msgstr "Pozemek"
 
 #: shared/entities/enums.py:699
 msgid "Uncontrolled"
-msgstr ""
+msgstr "Nekontrolovaný"
 
 #: shared/entities/enums.py:700
 msgid "Zebra"
-msgstr ""
+msgstr "Zebra"
 
 #: shared/entities/enums.py:702
 msgid "Unmarked"
-msgstr ""
+msgstr "Neoznačený"
 
 #: shared/entities/enums.py:704
 msgid "Island ucontrolled"
-msgstr ""
+msgstr "Nekontrolovaný ostrůvek"
 
 #: shared/entities/enums.py:705 shared/entities/enums.py:1814
 msgid "Marked"
-msgstr ""
+msgstr "Označený"
 
 #: shared/entities/enums.py:709
 msgid "Cycle"
@@ -5868,7 +6007,7 @@ msgstr ""
 
 #: shared/entities/enums.py:710
 msgid "Controlled"
-msgstr ""
+msgstr "Kontrolovaný"
 
 #: shared/entities/enums.py:720
 msgid "Wayside cross"
@@ -5886,19 +6025,19 @@ msgstr "Hranice"
 
 #: shared/entities/enums.py:725
 msgid "Archaeological site"
-msgstr ""
+msgstr "Archeologické naleziště"
 
 #: shared/entities/enums.py:726 shared/entities/historic.py:31
 msgid "Tomb"
-msgstr ""
+msgstr "Hrobka"
 
 #: shared/entities/enums.py:730
 msgid "City gate"
-msgstr ""
+msgstr "|Městská brána"
 
 #: shared/entities/enums.py:732
 msgid "Battlefield"
-msgstr ""
+msgstr "Bitevní pole"
 
 #: shared/entities/enums.py:734
 msgid "Aircraft"
@@ -5949,7 +6088,7 @@ msgstr "Otázka"
 
 #: shared/entities/enums.py:767
 msgid "Canal"
-msgstr ""
+msgstr "Kanál"
 
 #: shared/entities/enums.py:768
 #, fuzzy
@@ -5964,12 +6103,7 @@ msgstr "Překážka"
 
 #: shared/entities/enums.py:770
 msgid "Riverbank"
-msgstr ""
-
-#: shared/entities/enums.py:771 shared/entities/enums.py:1605
-#, fuzzy
-msgid "Weir"
-msgstr "Věž"
+msgstr "Břeh řeky"
 
 #: shared/entities/enums.py:772
 msgid "Dam"
@@ -6024,11 +6158,11 @@ msgstr "Strom"
 
 #: shared/entities/enums.py:792 shared/entities/enums.py:1517
 msgid "Peak"
-msgstr ""
+msgstr "Vrchol"
 
 #: shared/entities/enums.py:794
 msgid "Saddle"
-msgstr ""
+msgstr "Sedlo"
 
 #: shared/entities/enums.py:797
 #, fuzzy
@@ -6058,7 +6192,7 @@ msgstr "Most"
 #: shared/entities/enums.py:1245 shared/entities/enums.py:1337
 #: shared/entities/enums.py:1594
 msgid "Grass"
-msgstr ""
+msgstr "Tráva"
 
 #: shared/entities/enums.py:804
 #, fuzzy
@@ -6097,11 +6231,11 @@ msgstr ""
 
 #: shared/entities/enums.py:812
 msgid "Valley"
-msgstr ""
+msgstr "Údolí"
 
 #: shared/entities/enums.py:813
 msgid "Hill"
-msgstr ""
+msgstr "Kopec"
 
 #: shared/entities/enums.py:822 shared/entities/enums.py:1222
 #: shared/entities/office.py:16
@@ -6111,36 +6245,30 @@ msgstr "Informace"
 
 #: shared/entities/enums.py:823 shared/entities/enums.py:1064
 msgid "Civic"
-msgstr ""
+msgstr "Civilní"
 
 #: shared/entities/enums.py:824
-#, fuzzy
 msgid "Train station"
-msgstr "transformovna"
-
-#: shared/entities/enums.py:826 shared/entities/enums.py:1079
-#: shared/entities/enums.py:1376 shared/entities/enums.py:1692
-msgid "Garage"
-msgstr ""
+msgstr "Vlaková stanice"
 
 #: shared/entities/enums.py:827 shared/entities/enums.py:1073
 msgid "Roof"
-msgstr ""
+msgstr "Střecha"
 
 #: shared/entities/enums.py:828
 msgid "Warehouse"
-msgstr ""
+msgstr "Skladiště"
 
 #: shared/entities/enums.py:829 shared/entities/enums.py:1021
 #: shared/entities/enums.py:1065 shared/entities/enums.py:1700
 #: shared/entities/land.py:55 shared/entities/rail_way.py:11
 #: shared/entities/road.py:72
 msgid "Industrial"
-msgstr ""
+msgstr "Průmyslový"
 
 #: shared/entities/enums.py:832
 msgid "Railway station"
-msgstr ""
+msgstr "Vlaková stanice"
 
 #: shared/entities/enums.py:833 shared/entities/enums.py:1218
 msgid "Apartments"
@@ -6148,7 +6276,7 @@ msgstr ""
 
 #: shared/entities/enums.py:834
 msgid "Cabin"
-msgstr ""
+msgstr "Kabina"
 
 #: shared/entities/enums.py:837
 #, fuzzy
@@ -6175,11 +6303,11 @@ msgstr ""
 
 #: shared/entities/enums.py:862
 msgid "Helipad"
-msgstr ""
+msgstr "Helipad"
 
 #: shared/entities/enums.py:863
 msgid "Pylon"
-msgstr ""
+msgstr "Pylon"
 
 #: shared/entities/enums.py:865
 msgid "Cable car"
@@ -6204,7 +6332,7 @@ msgstr ""
 
 #: shared/entities/enums.py:872
 msgid "Lift"
-msgstr ""
+msgstr "Výtah"
 
 #: shared/entities/enums.py:873
 msgid "Apron"
@@ -6212,7 +6340,7 @@ msgstr ""
 
 #: shared/entities/enums.py:875
 msgid "Hangar"
-msgstr ""
+msgstr "Hangár"
 
 #: shared/entities/enums.py:876
 #, fuzzy
@@ -6230,7 +6358,7 @@ msgstr "Aktuální pozice"
 
 #: shared/entities/enums.py:888 shared/entities/stop.py:75
 msgid "Rail"
-msgstr ""
+msgstr "Kolej"
 
 #: shared/entities/enums.py:890
 #, fuzzy
@@ -6262,7 +6390,7 @@ msgstr "Končí na"
 #: shared/entities/rail_way.py:263 shared/entities/road.py:464
 #: shared/entities/stop.py:28
 msgid "Tram"
-msgstr ""
+msgstr "Tramvaj"
 
 #: shared/entities/enums.py:898
 msgid "Preserved"
@@ -6276,7 +6404,7 @@ msgstr "Nástupiště"
 
 #: shared/entities/enums.py:900
 msgid "Railway crossing"
-msgstr ""
+msgstr "Křížení kolejí"
 
 #: shared/entities/enums.py:901
 msgid "Narrow gauge"
@@ -6299,11 +6427,11 @@ msgstr "Pojmenované"
 
 #: shared/entities/enums.py:907
 msgid "Dismantled"
-msgstr ""
+msgstr "Rozebraná"
 
 #: shared/entities/enums.py:908
 msgid "Miniature"
-msgstr ""
+msgstr "Miniaturní"
 
 #: shared/entities/enums.py:910
 #, fuzzy
@@ -6319,7 +6447,7 @@ msgstr ""
 #: shared/entities/stop.py:5 shared/entities/stop.py:8
 #: shared/entities/stop.py:70
 msgid "Subway"
-msgstr ""
+msgstr "Metro"
 
 #: shared/entities/enums.py:915 shared/entities/enums.py:1416
 msgid "Funicular"
@@ -6357,7 +6485,7 @@ msgstr ""
 
 #: shared/entities/enums.py:925
 msgid "Staton"
-msgstr ""
+msgstr "Stanice"
 
 #: shared/entities/enums.py:926 shared/entities/enums.py:1616
 #: shared/entities/site.py:3 shared/entities/street.py:4
@@ -6366,7 +6494,7 @@ msgstr "Areál"
 
 #: shared/entities/enums.py:927
 msgid "Workshop"
-msgstr ""
+msgstr "Dílna"
 
 #: shared/entities/enums.py:935 shared/entities/enums.py:944
 msgid "Culvert"
@@ -6383,7 +6511,7 @@ msgstr ""
 
 #: shared/entities/enums.py:943
 msgid "Viaduct"
-msgstr ""
+msgstr "Viadukt"
 
 #: shared/entities/enums.py:946
 msgid "Boardwalk"
@@ -6425,7 +6553,7 @@ msgstr ""
 
 #: shared/entities/enums.py:964 shared/entities/enums.py:1447
 msgid "Footway"
-msgstr ""
+msgstr "Chodník"
 
 #: shared/entities/enums.py:968 shared/entities/enums.py:1449
 msgid "Living street"
@@ -6450,7 +6578,7 @@ msgstr "Dopravní značka"
 
 #: shared/entities/enums.py:976
 msgid "Street lamp"
-msgstr ""
+msgstr "Pouliční lampa"
 
 #: shared/entities/enums.py:977
 msgid "Passing place"
@@ -6458,7 +6586,7 @@ msgstr ""
 
 #: shared/entities/enums.py:978
 msgid "Mini roundabout"
-msgstr ""
+msgstr "Mini kruhový objezd"
 
 #: shared/entities/enums.py:980
 msgid "Tertiary link"
@@ -6475,7 +6603,7 @@ msgstr "Silnice"
 
 #: shared/entities/enums.py:984
 msgid "Speed camera"
-msgstr ""
+msgstr "Rychlostní kamera"
 
 #: shared/entities/enums.py:986 shared/entities/road.py:383
 msgid "Incline steep"
@@ -6483,20 +6611,20 @@ msgstr ""
 
 #: shared/entities/enums.py:987
 msgid "Trolleybus stop"
-msgstr ""
+msgstr "Trolejbusová zastávka"
 
 #: shared/entities/enums.py:989
 msgid "Speed radar"
-msgstr ""
+msgstr "Rychlostní radar"
 
 #: shared/entities/enums.py:990 shared/entities/enums.py:1207
 #: shared/entities/road.py:75
 msgid "Motorway"
-msgstr ""
+msgstr "Dálnice"
 
 #: shared/entities/enums.py:991 shared/entities/enums.py:1208
 msgid "Motorway link"
-msgstr ""
+msgstr "Dálniční spojka"
 
 #: shared/entities/enums.py:992
 #, fuzzy
@@ -6505,7 +6633,7 @@ msgstr "Vodní tok"
 
 #: shared/entities/enums.py:994 shared/entities/enums.py:1437
 msgid "Corridor"
-msgstr ""
+msgstr "Koridor"
 
 #: shared/entities/enums.py:997
 #, fuzzy
@@ -6519,7 +6647,7 @@ msgstr "Koleje"
 
 #: shared/entities/enums.py:1000
 msgid "Emergency access point"
-msgstr ""
+msgstr "Nouzový přístupový bod"
 
 #: shared/entities/enums.py:1001
 msgid "Turning loop"
@@ -6541,7 +6669,7 @@ msgstr ""
 
 #: shared/entities/enums.py:1005
 msgid "Virtual"
-msgstr ""
+msgstr "Virtuální"
 
 #: shared/entities/enums.py:1006
 #, fuzzy
@@ -6554,12 +6682,12 @@ msgstr ""
 
 #: shared/entities/enums.py:1008
 msgid "Speed display"
-msgstr ""
+msgstr "Displej s rychlostí"
 
 #: shared/entities/enums.py:1009 shared/entities/enums.py:1163
 #: shared/entities/enums.py:1224 shared/entities/stop.py:12
 msgid "Bus stop"
-msgstr ""
+msgstr "Autobusová zastávka"
 
 #: shared/entities/enums.py:1010
 #, fuzzy
@@ -6568,7 +6696,7 @@ msgstr "Konstrukce"
 
 #: shared/entities/enums.py:1012 shared/entities/enums.py:1422
 msgid "Camera"
-msgstr ""
+msgstr "Kamera"
 
 #: shared/entities/enums.py:1018
 #, fuzzy
@@ -6666,15 +6794,11 @@ msgstr ""
 
 #: shared/entities/enums.py:1074
 msgid "Column"
-msgstr ""
-
-#: shared/entities/enums.py:1078
-msgid "Greenhouse"
-msgstr ""
+msgstr "Sloup"
 
 #: shared/entities/enums.py:1085
 msgid "Pyramidal"
-msgstr ""
+msgstr "Pyramidální"
 
 #: shared/entities/enums.py:1086
 msgid "Hipped"
@@ -6757,7 +6881,7 @@ msgstr ""
 #: shared/entities/fire_hydrant.py:7 shared/entities/recycling.py:8
 #: shared/entities/recycling.py:56
 msgid "Underground"
-msgstr ""
+msgstr "Podzemní"
 
 #: shared/entities/enums.py:1113
 #, fuzzy
@@ -6807,11 +6931,11 @@ msgstr "Trasa"
 
 #: shared/entities/enums.py:1132
 msgid "Admin centre"
-msgstr ""
+msgstr "Administrativní centrum"
 
 #: shared/entities/enums.py:1133
 msgid "Subarea"
-msgstr ""
+msgstr "Podoblast"
 
 #: shared/entities/enums.py:1134
 #, fuzzy
@@ -6829,7 +6953,7 @@ msgstr ""
 
 #: shared/entities/enums.py:1140
 msgid "Main stream"
-msgstr ""
+msgstr "Hlavní proud"
 
 #: shared/entities/enums.py:1141 shared/entities/enums.py:1720
 #: shared/entities/transformer.py:7
@@ -6839,7 +6963,7 @@ msgstr "transformovna"
 
 #: shared/entities/enums.py:1142 shared/entities/route.py:31
 msgid "From "
-msgstr ""
+msgstr "Z"
 
 #: shared/entities/enums.py:1145
 #, fuzzy
@@ -6848,11 +6972,11 @@ msgstr "Elektrický generátor"
 
 #: shared/entities/enums.py:1146
 msgid "Link"
-msgstr ""
+msgstr "Spojka"
 
 #: shared/entities/enums.py:1147 shared/entities/route.py:43
 msgid "Via"
-msgstr ""
+msgstr "Přez"
 
 #: shared/entities/enums.py:1150
 msgid "Platform exit only"
@@ -6871,7 +6995,7 @@ msgstr "Servisní silnice"
 #: shared/entities/enums.py:1157 shared/entities/platform.py:7
 #: shared/entities/stop.py:14
 msgid "Tram stop"
-msgstr ""
+msgstr "Tramvajová zastávka"
 
 #: shared/entities/enums.py:1159
 #, fuzzy
@@ -6880,7 +7004,7 @@ msgstr "Krok vzad"
 
 #: shared/entities/enums.py:1160
 msgid "Platform on demand"
-msgstr ""
+msgstr "Nástupiště na znamení"
 
 #: shared/entities/enums.py:1161 shared/entities/route.py:7
 msgid "Alternate"
@@ -6892,7 +7016,7 @@ msgstr ""
 
 #: shared/entities/enums.py:1164
 msgid "Stop on demand"
-msgstr ""
+msgstr "Zastávka na znamení"
 
 #: shared/entities/enums.py:1165 shared/entities/enums.py:1237
 msgid "Across"
@@ -6917,11 +7041,11 @@ msgstr ""
 
 #: shared/entities/enums.py:1173
 msgid "Through"
-msgstr ""
+msgstr "Skrz"
 
 #: shared/entities/enums.py:1175
 msgid "Device"
-msgstr ""
+msgstr "Zařízení"
 
 #: shared/entities/enums.py:1176
 #, fuzzy
@@ -6930,7 +7054,7 @@ msgstr "Část budovy"
 
 #: shared/entities/enums.py:1177
 msgid "Side stream"
-msgstr ""
+msgstr "Vedlejší proud"
 
 #: shared/entities/enums.py:1178 shared/entities/enums.py:1731
 #, fuzzy
@@ -6939,7 +7063,7 @@ msgstr "transformovna"
 
 #: shared/entities/enums.py:1179
 msgid "Excursion"
-msgstr ""
+msgstr "Exkurze"
 
 #: shared/entities/enums.py:1180
 #, fuzzy
@@ -6948,7 +7072,7 @@ msgstr "Vchod"
 
 #: shared/entities/enums.py:1181 shared/entities/road.py:63
 msgid "End"
-msgstr ""
+msgstr "Konec"
 
 #: shared/entities/enums.py:1182
 msgid "Alternation"
@@ -6976,11 +7100,11 @@ msgstr "Vodní oblast"
 
 #: shared/entities/enums.py:1188
 msgid "Perimeter"
-msgstr ""
+msgstr "Perimetr"
 
 #: shared/entities/enums.py:1189
 msgid "Begin"
-msgstr ""
+msgstr "Začátek"
 
 #: shared/entities/enums.py:1191
 #, fuzzy
@@ -7026,11 +7150,11 @@ msgstr "Oblast"
 
 #: shared/entities/enums.py:1229
 msgid "Factory"
-msgstr ""
+msgstr "Továrna"
 
 #: shared/entities/enums.py:1230
 msgid "Distributor"
-msgstr ""
+msgstr "Distributor"
 
 #: shared/entities/enums.py:1231 shared/entities/enums.py:1400
 #: shared/entities/man_made.py:9 shared/entities/power.py:3
@@ -7054,11 +7178,11 @@ msgstr ""
 #: shared/entities/enums.py:1243 shared/entities/enums.py:1333
 #: shared/entities/enums.py:1557
 msgid "Concrete"
-msgstr ""
+msgstr "Beton"
 
 #: shared/entities/enums.py:1244 shared/entities/enums.py:1373
 msgid "Asphalt"
-msgstr ""
+msgstr "Asfalt"
 
 #: shared/entities/enums.py:1246
 msgid "Clay"
@@ -7066,15 +7190,15 @@ msgstr ""
 
 #: shared/entities/enums.py:1248
 msgid "Artificial grass"
-msgstr ""
+msgstr "Umělý tráva"
 
 #: shared/entities/enums.py:1249
 msgid "Tartan"
-msgstr ""
+msgstr "Tartan"
 
 #: shared/entities/enums.py:1250 shared/entities/enums.py:1336
 msgid "Gravel"
-msgstr ""
+msgstr "Štěrk"
 
 #: shared/entities/enums.py:1251
 msgid "Unpaved"
@@ -7083,7 +7207,7 @@ msgstr ""
 #: shared/entities/enums.py:1252 shared/entities/enums.py:1341
 #: shared/entities/enums.py:1566 shared/entities/recycling.py:21
 msgid "Plastic"
-msgstr ""
+msgstr "Plastik"
 
 #: shared/entities/enums.py:1253 shared/entities/enums.py:1570
 #: shared/entities/enums.py:1767
@@ -7119,16 +7243,16 @@ msgstr "Sjezdovka"
 
 #: shared/entities/enums.py:1261
 msgid "Fine gravel"
-msgstr ""
+msgstr "Jemný štěrk"
 
 #: shared/entities/enums.py:1263
 msgid "Concrete slabs"
-msgstr ""
+msgstr "Betonové desky"
 
 #: shared/entities/enums.py:1265 shared/entities/enums.py:1332
 #: shared/entities/enums.py:1358 shared/entities/enums.py:1567
 msgid "Metal"
-msgstr ""
+msgstr "Kov"
 
 #: shared/entities/enums.py:1266
 msgid "Grass paver"
@@ -7160,11 +7284,11 @@ msgstr "Zrušit"
 
 #: shared/entities/enums.py:1273
 msgid "Artificial turf"
-msgstr ""
+msgstr "Umělý trávník"
 
 #: shared/entities/enums.py:1274
 msgid "Concrete plates"
-msgstr ""
+msgstr "Betonové pláty"
 
 #: shared/entities/enums.py:1275
 msgid "Brash"
@@ -7185,11 +7309,11 @@ msgstr "Pozemek"
 
 #: shared/entities/enums.py:1279
 msgid "Metal grid"
-msgstr ""
+msgstr "Kovová mříž"
 
 #: shared/entities/enums.py:1280
 msgid "Rubber"
-msgstr ""
+msgstr "Guma"
 
 #: shared/entities/enums.py:1281
 msgid "Sd"
@@ -7197,7 +7321,7 @@ msgstr ""
 
 #: shared/entities/enums.py:1282
 msgid "Soil"
-msgstr ""
+msgstr "Hlína"
 
 #: shared/entities/enums.py:1283
 #, fuzzy
@@ -7206,7 +7330,7 @@ msgstr "Titulek"
 
 #: shared/entities/enums.py:1284
 msgid "Synthetic turf"
-msgstr ""
+msgstr "Syntetický trávník"
 
 #: shared/entities/enums.py:1295 shared/entities/road.py:8
 #, fuzzy
@@ -7237,14 +7361,14 @@ msgstr "Nepoužívané"
 #: shared/entities/rail_way.py:77 shared/entities/road.py:56
 #: shared/entities/road.py:94 shared/entities/steps.py:26
 msgid "Left"
-msgstr ""
+msgstr "Vlevo"
 
 #: shared/entities/enums.py:1317 shared/entities/rail_way.py:24
 #: shared/entities/rail_way.py:78 shared/entities/road.py:55
 #: shared/entities/road.py:93 shared/entities/road.py:102
 #: shared/entities/steps.py:27
 msgid "Right"
-msgstr ""
+msgstr "Vpravo"
 
 #: shared/entities/enums.py:1318 shared/entities/enums.py:1625
 #: shared/entities/enums.py:1818 shared/entities/rail_way.py:95
@@ -7297,7 +7421,7 @@ msgstr ""
 
 #: shared/entities/enums.py:1350
 msgid "Webcam"
-msgstr ""
+msgstr "Webkamera"
 
 #: shared/entities/enums.py:1354
 msgid "Chain link"
@@ -7314,7 +7438,7 @@ msgstr ""
 
 #: shared/entities/enums.py:1361
 msgid "Balustrade"
-msgstr ""
+msgstr "Balustráda"
 
 #: shared/entities/enums.py:1363
 msgid "Bars"
@@ -8635,9 +8759,8 @@ msgid "Climbingframe"
 msgstr ""
 
 #: shared/entities/playground.py:10 shared/entities/road.py:12
-#, fuzzy
 msgid "Roundabout"
-msgstr "Otočit se o..."
+msgstr "Kruhový objezd"
 
 #: shared/entities/playground.py:11
 msgid "Balancebeam"
@@ -11218,6 +11341,3 @@ msgstr ""
 #: shared/entities/water_way.py:44
 msgid "Seamark notice category"
 msgstr ""
-
-#~ msgid "Select the map"
-#~ msgstr "Vyberte mapu"
