@@ -75,14 +75,18 @@ class ObjectsBrowserFrame(wx.Frame):
         common = props_list.AppendItem(root, _("Common properties"))
         for val in fields_by_group["common"]:
             props_list.AppendItem(common, val)
-        specific = props_list.AppendItem(root, _("Specific properties"))
-        for val in fields_by_group["specific"]:
-            props_list.AppendItem(specific, val)
+        specific = None
+        if fields_by_group["specific"]:
+            specific = props_list.AppendItem(root, _("Specific properties"))
+            for val in fields_by_group["specific"]:
+                props_list.AppendItem(specific, val)
         if fields_by_group["additional"]:
             other = props_list.AppendItem(root, _("Other fields - they can not be searched and are not processed in any way"))
             for val in fields_by_group["additional"]:
                 props_list.AppendItem(other, val)
-        props_list.Expand(specific)
+        if specific:
+            props_list.Expand(specific)
+            props_list.SelectItem(specific)
         menu = self.MenuBar.Menus[0][0]
         for item in menu.MenuItems:
             menu.Delete(item)
