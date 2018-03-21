@@ -37,6 +37,7 @@ def update_area_databases_task():
             msg_bin = pickle.dumps(change, protocol=pickle.HIGHEST_PROTOCOL)
             huey.storage.channel.basic_publish(area.name, body=msg_bin, properties=pika.BasicProperties(delivery_mode=2), routing_key="")
         processor._db.commit()
+        processor._db.close()
         area.state = AreaState.updated
         if not processor.newest_timestamp.startswith("1970"):
             area.newest_osm_object_timestamp = processor.newest_timestamp

@@ -3,7 +3,6 @@ import os
 import logging
 import json
 import sqlite3
-import sqlalchemy
 from sqlalchemy import create_engine, event, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import func
@@ -140,3 +139,6 @@ class Database:
                 for subchange in change.data_changes:
                     entity_data = apply_dict_change(subchange, entity_data)
                 entity.data = json.dumps(entity_data)
+
+    def close(self):
+        self._session.close()

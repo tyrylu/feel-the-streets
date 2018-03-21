@@ -50,3 +50,5 @@ class DatabaseUpdater:
             self._db.insert_entity(entity)
         log.info("Committing the insertion transaction.")
         self._db.commit_entity_insertions()
+
+self._db.close()

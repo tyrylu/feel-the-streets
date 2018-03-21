@@ -83,6 +83,8 @@ def apply_dict_change(change, target):
         temp_target[change.key.split(".")[-1]] = change.new_value
     elif change.kind is ChangeKind.remove:
         intermediary, temp_target = _get_change_target(target, change.key)
+        if change.key.split(".")[-1] not in temp_target:
+            return target
         del temp_target[change.key.split(".")[-1]]
         for key, container in intermediary:
             if key in container and not container[key]:
