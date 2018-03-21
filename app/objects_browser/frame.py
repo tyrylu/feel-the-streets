@@ -38,6 +38,7 @@ class ObjectsBrowserFrame(wx.Frame):
             if inspect.isclass(member) and issubclass(member, ObjectAction):
                 self._all_actions.append(member)
         objects_list.Selection = 0
+        self._root_item = self.FindWindowByName("props").AddRoot("Never to be seen")
         self.on_objects_listbox(None)
 
 
@@ -52,7 +53,7 @@ class ObjectsBrowserFrame(wx.Frame):
         sel = self.FindWindowByName("objects").Selection
         selected = self._objects[sel][1]
         props_list = self.FindWindowByName("props")
-        props_list.DeleteAllItems()
+        props_list.DeleteChildren(self._root_item)
         fields_by_group = {"common": [], "specific": [], "additional": []}
         common_fields = set(OSMEntity.__fields__.keys())
         for attr in selected.__fields__.values():
@@ -70,7 +71,7 @@ class ObjectsBrowserFrame(wx.Frame):
                 fields_by_group["specific"].append(value_str)
         for name, value in selected.additional_fields.items():
             fields_by_group["additional"].append("%s: %s"%(underscored_to_words(name), value))
-        root = props_list.AddRoot("Never to be seen")
+        root = self._root_item
         common = props_list.AppendItem(root, _("Common properties"))
         for val in fields_by_group["common"]:
             props_list.AppendItem(common, val)
@@ -81,7 +82,7 @@ class ObjectsBrowserFrame(wx.Frame):
             other = props_list.AppendItem(root, _("Other fields - they can not be searched and are not processed in any way"))
             for val in fields_by_group["additional"]:
                 props_list.AppendItem(other, val)
-        #props_list.Expand(specific)
+        props_list.Expand(specific)
         menu = self.MenuBar.Menus[0][0]
         for item in menu.MenuItems:
             menu.Delete(item)
