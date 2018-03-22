@@ -28,8 +28,8 @@ class Database:
         return root
     
     @classmethod
-    def get_database_file(cls, area_name, server_side=True):
-        return os.path.join(cls.get_database_storage_root(server_side), "%s.db"%area_name)
+    def get_database_file(cls, area_name, server_side=True, name_suffix=""):
+        return os.path.join(cls.get_database_storage_root(server_side), "%s%s.db"%(area_name, name_suffix))
     
     @classmethod
     def get_local_databases_info(cls, server_side=True):
@@ -39,9 +39,9 @@ class Database:
             entries.append(dict(name=os.path.basename(fname).replace(".db", ""), state="local", created_at=ts_to_utc(info.st_ctime), updated_at=ts_to_utc(info.st_mtime)))
         return entries
 
-    def __init__(self, area_name, server_side=True):
+    def __init__(self, area_name, server_side=True, name_suffix=""):
         self._area_name = area_name
-        db_path = self.get_database_file(area_name, server_side)
+        db_path = self.get_database_file(area_name, server_side, name_suffix)
         self._creating = False
         self._engine = create_engine("sqlite:///%s"%db_path)
         event.listen(self._engine, "connect", self._post_connect)

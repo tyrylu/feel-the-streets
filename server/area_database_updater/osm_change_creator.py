@@ -1,4 +1,4 @@
-from .osm_change import OSMChangeType, OSMObjectChange
+from .osm_change import OSMObjectChange
 from .osm_object import OSMObject, OSMRelationMember
 
 class OSMObjectChangeCreator:
@@ -8,6 +8,7 @@ class OSMObjectChangeCreator:
         self._object_kwargs = None
         self._object_kind = None
         self._actions = []
+        self.remark_received = False
 
     def start(self, tag, attrib):
         if tag == "action":
@@ -26,12 +27,13 @@ class OSMObjectChangeCreator:
             self._object_kwargs["members"] = []
         elif tag == "nd":
             self._object_kwargs["nodes"].append(attrib["ref"])
-
         elif tag == "member":
             self._object_kwargs["members"].append(OSMRelationMember.parse_obj(attrib))
         elif tag == "tag":
             self._object_kwargs["tags"][attrib["k"]] = attrib["v"]
-
+        elif tag == "remark":
+            self.remark_received = True
+    
     def end(self, tag):
         if tag == "action":
             action = self._action

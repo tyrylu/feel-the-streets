@@ -285,23 +285,27 @@ class OSMObjectManager:
         return self.cached_nodes + self.cached_relations + self.cached_ways
     
     def lookup_differences_in(self, area, after, timeout=900):
-        retrieve_data = self._retrieve_data_template.format(area=area)
-        query = self._diff_template.format(after=after, timeout=timeout, query=retrieve_data)
-        log.info("Retrieving augmented diff for area %s starting from %s.", area, after)
-        response = self._run_query_raw(query, timeout=timeout, is_lookup=False)
-        creator = OSMObjectChangeCreator()
-        parser = et.XMLParser(target=creator)
-        while True:
-            chunk = response.read(16*1024)
-            if not chunk:
-                break
-            parser.feed(chunk)
-            for action in creator.new_actions():
-                yield action
-        try:
-            parser.close()
-        except Exception as exc:
-            log.warning("Error during parser tear down: %s", exc)
+        retrieval_template = '((area["name"="{area}"];{object_kind}(area);>>);>>)'
+        for kind in ["node", "way", "rel"]:
+            retrieve_data = retrieval_template.format(area=area, object_kind=kind)
+            query = self._diff_template.format(after=after, timeout=timeout, query=retrieve_data)
+            log.info("Retrieving augmented diff for area %s starting from %s (%ss only).", area, after, kind)
+            response = self._run_query_raw(query, timeout=timeout, is_lookup=False)
+            creator = OSMObjectChangeCreator()
+            parser = et.XMLParser(target=creator)
+            while True:
+                chunk = response.read(16*1024)
+                if not chunk:
+                    break
+                parser.feed(chunk)
+                for action in creator.new_actions():
+                    yield action
+            if creator.remark_received:
+                log.warning("Query execution generated a runtime warning.")
+            try:
+                parser.close()
+            except Exception as exc:
+                log.warning("Error during parser tear down: %s", exc)
     
     def remove_temp_data(self):
         if self._removed:

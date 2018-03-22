@@ -9,10 +9,10 @@ from .osm_object_blacklist import OSMObjectBlacklist
 log = logging.getLogger(__name__)
 
 class DatabaseUpdater:
-    def __init__(self, location, use_cache, cache_responses):
+    def __init__(self, location, use_cache, cache_responses, db_name_suffix=""):
         self._location = location
         self.translator = OSMObjectTranslator(use_cache, cache_responses)
-        self._db = Database(location)
+        self._db = Database(location, db_name_suffix)
         self._assigned_id = 1
         self._blacklist = OSMObjectBlacklist()
         self._db.create_if_needed()
