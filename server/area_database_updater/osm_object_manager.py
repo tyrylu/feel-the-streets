@@ -286,6 +286,7 @@ class OSMObjectManager:
     
     def lookup_differences_in(self, area, after, timeout=900):
         retrieval_template = '((area["name"="{area}"];{object_kind}(area);>>);>>)'
+        seen_ids = set()
         for kind in ["node", "way", "rel"]:
             retrieve_data = retrieval_template.format(area=area, object_kind=kind)
             query = self._diff_template.format(after=after, timeout=timeout, query=retrieve_data)
@@ -299,7 +300,13 @@ class OSMObjectManager:
                     break
                 parser.feed(chunk)
                 for action in creator.new_actions():
-                    yield action
+                    if action.old:
+                        ism_id = action.old.unique_id
+                    else:
+                        osm_id = action.new.unique_id
+                    if osm_id not in seen_ids:
+                        seen_ids.add(osm_id)
+                        yield action
             if creator.remark_received:
                 log.warning("Query execution generated a runtime warning.")
             try:
