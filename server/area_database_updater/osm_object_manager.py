@@ -301,7 +301,7 @@ class OSMObjectManager:
                 parser.feed(chunk)
                 for action in creator.new_actions():
                     if action.old:
-                        ism_id = action.old.unique_id
+                        osm_id = action.old.unique_id
                     else:
                         osm_id = action.new.unique_id
                     if osm_id not in seen_ids:
