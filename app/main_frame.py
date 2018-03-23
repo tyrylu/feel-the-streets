@@ -34,7 +34,7 @@ class MainFrame(wx.Frame):
             else:
                 self._update_database(dlg.selected_map)
             self.SetFocus()
-            map.set_call_args(dlg.selected_map, server_side=False)
+            map.set_call_args(dlg.selected_map)
         self._app_controller = ApplicationController(self)
         entity = map()._db.query(Entity).filter(func.json_extract(Entity.data, "$.osm_id").startswith("n")).first()
         lon = map()._db.scalar(entity.geometry.x)

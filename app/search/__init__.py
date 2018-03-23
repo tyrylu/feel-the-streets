@@ -1,9 +1,12 @@
 import wx
 from shared.services import entity_registry
 from shared.humanization_utils import get_class_display_name
+from shared.models import Entity, IdxEntitiesGeometry
+from shared.geometry_utils import xy_ranges_bounding_square
 from ..uimanager import get
 from .search_conditions import SpecifySearchConditionsDialog
 from ..geometry_utils import distance_filter
+from ..services import map
 
 
 def perform_search(position):
@@ -15,10 +18,14 @@ def perform_search(position):
         if conditions_dialog.ShowModal() != wx.ID_OK:
             conditions_dialog.Destroy()
             return
-        query = conditions_dialog.create_query()
+        conditions = conditions_dialog.create_conditions()
         distance = float("inf")
         if conditions_dialog.distance:
             distance = conditions_dialog.distance
+            min_x, min_y, max_x, max_y = xy_ranges_bounding_square(position, distance*2)
+            conditions = (Entity.id == IdxEntitiesGeometry.pkid) & (IdxEntitiesGeometry.xmin <= max_x) & (IdxEntitiesGeometry.xmax >= min_x) & (IdxEntitiesGeometry.ymin <= max_y) & (IdxEntitiesGeometry.ymax >= min_y) & conditions
+       
+        query = map()._db.query(Entity).filter(conditions)
         filtered_objects = distance_filter(query, position, distance)
         conditions_dialog.Destroy()
         return [filtered.create_osm_entity() for filtered in filtered_objects]

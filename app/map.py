@@ -3,15 +3,13 @@ from sqlalchemy import func
 
 import geoalchemy
 from shared.database import Database
-from shared.geometry_utils import to_shapely_point, xy_ranges_bounding_square
+from shared.geometry_utils import xy_ranges_bounding_square
 from shared.models import Bookmark, Entity, IdxEntitiesGeometry
-
 from .geometry_utils import distance_filter, effective_width_filter
 from .measuring import measure
 
-
 class Map:
-    def __init__(self, map_name, server_side):
+    def __init__(self, map_name):
         self._db = Database(map_name, server_side=False)
     
     def intersections_at_position(self, position, fast=True):
@@ -32,7 +30,6 @@ class Map:
             return list(intersecting) + effectively_inside
     
     def within_distance(self, position, distance, exclude_routes=True):
-        point = geoalchemy.WKTSpatialElement("POINT(%s %s)"%(position.lon, position.lat))
         min_x, min_y, max_x, max_y = xy_ranges_bounding_square(position, distance*2)
         query = (Entity.id == IdxEntitiesGeometry.pkid) & (IdxEntitiesGeometry.xmin <= max_x) & (IdxEntitiesGeometry.xmax >= min_x) & (IdxEntitiesGeometry.ymin <= max_y) & (IdxEntitiesGeometry.ymax >= min_y)
         if exclude_routes:

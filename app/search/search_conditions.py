@@ -5,7 +5,6 @@ from shared.humanization_utils import underscored_to_words, get_class_display_na
 from shared.models import Entity
 from shared.services import entity_registry
 from .operators import operators_for_column_class
-from ..services import map
 
 class SpecifySearchConditionsDialog(wx.Dialog):
     xrc_name = "specify_search_conditions"
@@ -90,17 +89,15 @@ class SpecifySearchConditionsDialog(wx.Dialog):
     def distance(self):
         return self.FindWindowByName("distance").Value
 
-    def create_query(self):
+    def create_conditions(self):
         relevant_discriminators = entity_registry().all_discriminators_for_subclasses_of(self._entity)
         conditions = Entity.discriminator.in_(relevant_discriminators)
         if self._search_expression_parts:
             for part in self._search_expression_parts:
                 conditions = conditions & part
-        query = map()._db.query(Entity).filter(conditions)
-        print(f"Result count: {query.count()}")
-        return query
-
-
+        return conditions
+        
+       
     def on_remove_clicked(self, evt):   
         selection = self._conditions.Selection
         if selection < 0:
