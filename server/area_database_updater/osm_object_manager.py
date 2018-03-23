@@ -142,7 +142,10 @@ class OSMObjectManager:
         return id in self._get_container_for_objects_of_type(type)
 
     def _lookup_objects(self, type, *ids):
-        objects = self._cache_results_of("%s(id:%s)"%(type.name, ",".join(str(id) for id in ids)))
+        max_simultaneously_queried = 1000000
+        objects = []
+        for start_idx in range(0, len(ids), max_simultaneously_queried):
+            objects.extend(self._cache_results_of("%s(id:%s)"%(type.name, ",".join(str(id) for id in ids[start_idx:(start_idx + max_simultaneously_queried)]))))
         self._ensure_has_cached_dependencies_for(objects)
 
     def get_object(self, type, id):
@@ -287,7 +290,7 @@ class OSMObjectManager:
     def lookup_differences_in(self, area, after, timeout=900):
         retrieval_template = '((area["name"="{area}"];{object_kind}(area);>>);>>)'
         seen_ids = set()
-        for kind in ["node", "way", "rel"]:
+        for kind in ["rel"]:
             retrieve_data = retrieval_template.format(area=area, object_kind=kind)
             query = self._diff_template.format(after=after, timeout=timeout, query=retrieve_data)
             log.info("Retrieving augmented diff for area %s starting from %s (%ss only).", area, after, kind)
