@@ -290,7 +290,7 @@ class OSMObjectManager:
     def lookup_differences_in(self, area, after, timeout=900):
         retrieval_template = '((area["name"="{area}"];{object_kind}(area);>>);>>)'
         seen_ids = set()
-        for kind in ["rel"]:
+        for kind in ["node", "way", "rel"]:
             retrieve_data = retrieval_template.format(area=area, object_kind=kind)
             query = self._diff_template.format(after=after, timeout=timeout, query=retrieve_data)
             log.info("Retrieving augmented diff for area %s starting from %s (%ss only).", area, after, kind)
