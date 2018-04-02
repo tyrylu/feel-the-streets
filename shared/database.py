@@ -6,6 +6,7 @@ import sqlite3
 from sqlalchemy import create_engine, event, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import func
+from shapely import wkt
 from geoalchemy import GeometryDDL, WKTSpatialElement
 import appdirs
 from .models import Entity, IdxEntitiesGeometry, Bookmark
@@ -130,10 +131,20 @@ class Database:
         if change.type is ChangeType.delete:
             self._session.delete(entity)
         else:
+            old_geom = entity.geometry
             for subchange in change.property_changes:
                 apply_dict_change(subchange, entity.__dict__)
             if isinstance(entity.geometry, str):
-                entity.geometry = WKTSpatialElement(entity.geometry)
+                geom_valid = False
+                try:
+                    geom_valid = wkt.loads(entity.geometry).is_valid
+                except Exception:
+                    pass
+                if not geom_valid:
+                    log.warning("Refusing to set geometry of object %s to %s.", entity.data, entity.geometry)
+                    entity.geometry = old_geom
+                else:
+                    entity.geometry = WKTSpatialElement(entity.geometry)
             if change.data_changes:
                 entity_data = json.loads(entity.data)
                 for subchange in change.data_changes:
