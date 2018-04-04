@@ -128,6 +128,9 @@ class Database:
             self.add(entity)
         elif change.type in {ChangeType.update, ChangeType.delete}:
             entity = self.get_entity_by_osm_id(change.osm_id)
+            if not entity:
+                log.warning("Entity with osm id %s not found in the local database.", change.osm_id)
+                return
         if change.type is ChangeType.delete:
             self._session.delete(entity)
         else:
