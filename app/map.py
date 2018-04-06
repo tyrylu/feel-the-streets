@@ -1,15 +1,17 @@
 import shapely.wkb as wkb
 from sqlalchemy import func
-
 import geoalchemy
 from shared.database import Database
 from shared.geometry_utils import xy_ranges_bounding_square
-from shared.models import Bookmark, Entity, IdxEntitiesGeometry
+from shared.models import Entity, IdxEntitiesGeometry
 from .geometry_utils import distance_filter, effective_width_filter
 from .measuring import measure
+from .models import Bookmark
+from .import services
 
 class Map:
     def __init__(self, map_name):
+        self._name = map_name
         self._db = Database(map_name, server_side=False)
     
     def intersections_at_position(self, position, fast=True):
@@ -44,14 +46,14 @@ class Map:
 
 
     def add_bookmark(self, name, lat, lon):
-        bookmark = Bookmark(name=name, longitude=lon, latitude=lat)
-        self._db.add(bookmark)
-        self._db.commit()
+        bookmark = Bookmark(name=name, longitude=lon, latitude=lat, area=self._name)
+        services.app_db_session().add(bookmark)
+        services.app_db_session().commit()
 
     @property
     def bookmarks(self):
-        return self._db.query(Bookmark)
+        return services.app_db_session().query(Bookmark).filter(Bookmark.area == self._name)
 
     def remove_bookmark(self, mark):
-        self._db._session.delete(mark)
-        self._db.commit()
+        services.app_db_session().delete(mark)
+        services.app_db_session().commit()

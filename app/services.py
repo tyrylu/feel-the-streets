@@ -1,10 +1,21 @@
 import sys
 import os
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+import appdirs
 from shared.di import Singleton
 from accessible_output2.outputs import auto
 from .sound_manager import SoundManager, SoundProperties
 from .map import Map
 from .config import Config
+from .models import Base
+
+def create_app_db():
+    db_path = os.path.join(appdirs.user_data_dir("fts", appauthor=False, roaming=True), "app.db")
+    engine = create_engine("sqlite:///{0}".format(db_path))
+    Base.metadata.create_all(engine)
+    session = sessionmaker(bind=engine)()
+    return session
 
 def create_sound():
     if getattr(sys, "frozen", False):
@@ -18,3 +29,4 @@ speech = Singleton(auto.Auto)
 sound = Singleton(factory=create_sound)
 map = Singleton(Map)
 config = Singleton(Config)
+app_db_session = Singleton(factory=create_app_db)

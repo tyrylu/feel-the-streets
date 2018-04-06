@@ -9,7 +9,7 @@ from sqlalchemy import func
 from shapely import wkt
 from geoalchemy import GeometryDDL, WKTSpatialElement
 import appdirs
-from .models import Entity, IdxEntitiesGeometry, Bookmark
+from .models import Entity, IdxEntitiesGeometry
 from .time_utils import ts_to_utc
 from .diff_utils import apply_dict_change
 from .semantic_change import ChangeType
@@ -73,7 +73,6 @@ class Database:
             GeometryDDL(Entity.__table__)
             log.debug("Creating database tables...")
             Entity.__table__.create(self._engine)
-            Bookmark.__table__.create(self._engine)
             self._creating = False
 
     def add(self, instance):
