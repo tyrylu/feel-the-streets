@@ -23,6 +23,8 @@ class SoundController:
         x, y, z = (cartesian.x, cartesian.y, cartesian.z)
         if self._point_of_view is sender:
             sound().fmodex_system.listener().position = [x, y, z]
+        if not sender.use_step_sounds:
+            return
         group_stack = self._groups_map[sender]
         if len(group_stack):
             group = group_stack[list(group_stack.keys())[-1]]
@@ -32,6 +34,8 @@ class SoundController:
             sound().play_random_from_group(group, x=x, y=y, z=z)
 
     def post_enter(self, sender, enters):
+        if not sender.use_step_sounds:
+            return
         base_group = None
         if isinstance(enters, Road):
             if enters.type is RoadType.path:
@@ -44,6 +48,8 @@ class SoundController:
             self._groups_map[sender][enters] = group
     
     def post_leave(self, sender, leaves):
+        if not sender.use_step_sounds:
+            return
         if isinstance(leaves, Road):
             if sender not in self._groups_map:
                 print("Already left %s."%sender)
