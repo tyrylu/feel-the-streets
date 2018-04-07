@@ -55,6 +55,7 @@ class MainFrame(wx.Frame):
         if not res:
             wx.MessageBox(_("Download of the selected area had failed."), _("Download failure"), style=wx.ICON_ERROR)
             self.Close()
+            os.remove(Database.get_database_file(area, server_side=False))
             return
 
 
