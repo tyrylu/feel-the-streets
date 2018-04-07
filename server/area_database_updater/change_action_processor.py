@@ -30,7 +30,10 @@ class ChangeActionProcessor:
             if action.type is OSMChangeType.delete and self._db.has_entity(action.old.unique_id):
                 yield self._gen_entity_deletion_change(action.old)
             elif action.type is OSMChangeType.create:
-                change = self._gen_entity_creation_change(action.new)
+                if not self._db.has_entity(action.new.unique_id): # In case they lied to us and we infact have the entity we should not add it twice, it can break things when it changes.
+                    change = self._gen_entity_creation_change(action.new)
+                else:
+                    change = self._gen_entity_modification_change(action)
                 if change:
                     yield change
             elif action.type is OSMChangeType.modify:
