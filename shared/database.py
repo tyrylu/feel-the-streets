@@ -118,7 +118,11 @@ class Database:
 
     def get_entity_by_osm_id(self, osm_id):
         # The text construct is necessary, because sqlite will not use a functional index if one of the function's arguments is supplied through a placeholder.
-        return self.query(Entity).filter(func.json_extract(Entity.data, text('"$.osm_id"')) == osm_id).one_or_none()
+        query = self.query(Entity).filter(func.json_extract(Entity.data, text('"$.osm_id"')) == osm_id)
+        try:
+            return query[-1]
+        except IndexError:
+            return None
 
     def apply_change(self, change):
         entity = None
