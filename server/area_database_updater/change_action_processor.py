@@ -73,7 +73,7 @@ class ChangeActionProcessor:
         if action.new.unique_id in self._blacklist:
             log.info("Not generating modification change %s because of its inclusion on the blacklist.", action.new.unique_id)
             return None
-        old_entity = self._db.get_entity_by_osm_id(action.old.unique_id)
+        old_entity = self._db.get_entity_by_osm_id(action.new.unique_id)
         new_entity = self._translator.translate_object(action.new)
         if not old_entity and new_entity:
             return self._gen_entity_creation_change(action.new)

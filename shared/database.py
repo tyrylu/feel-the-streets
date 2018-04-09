@@ -114,7 +114,7 @@ class Database:
 
    
     def has_entity(self, osm_id):
-        return self.query(Entity).filter(func.json_extract(Entity.data, "$.osm_id") == osm_id).count() == 1
+        return self.query(Entity).filter(func.json_extract(Entity.data, text('"$.osm_id"')) == osm_id).count() > 0
 
     def get_entity_by_osm_id(self, osm_id):
         # The text construct is necessary, because sqlite will not use a functional index if one of the function's arguments is supplied through a placeholder.
