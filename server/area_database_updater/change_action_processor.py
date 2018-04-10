@@ -91,7 +91,7 @@ class ChangeActionProcessor:
             if not new_props["geometry"]:
                 log.warning("Failed to create geometry for entity %s.", new_entity.unique_id)
                 return None
-        change = Change(osm_id=action.old.unique_id, type=ChangeType.update)
+        change = Change(osm_id=action.new.unique_id, type=ChangeType.update)
         change.property_changes = diff(old_props, new_props)
         change.data_changes = diff(old_data, new_data)
         return change
