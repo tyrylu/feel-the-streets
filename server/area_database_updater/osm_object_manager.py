@@ -306,10 +306,17 @@ class OSMObjectManager:
             query = self._diff_template.format(after=after, timeout=timeout, query=retrieve_data)
             log.info("Retrieving augmented diff for area %s starting from %s (%ss only).", area, after, kind)
             response = self._run_query_raw(query, timeout=timeout, is_lookup=False)
+            fp = open("response", "w+b")
+            while True:
+                chunk = response.read(16*1024)
+                if not chunk:
+                    break   
+                fp.write(chunk)
+            fp.seek(0)
             creator = OSMObjectChangeCreator()
             parser = et.XMLParser(target=creator)
             while True:
-                chunk = response.read(16*1024)
+                chunk = fp.read(16*1024)
                 if not chunk:
                     break
                 parser.feed(chunk)
@@ -323,6 +330,8 @@ class OSMObjectManager:
                         yield action
             if creator.remark_received:
                 log.warning("Query execution generated a runtime warning.")
+            fp.close()
+            os.remove("response")
             try:
                 parser.close()
             except Exception as exc:
