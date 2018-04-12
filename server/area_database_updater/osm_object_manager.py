@@ -17,8 +17,12 @@ from .osm_object import OSMObject
 from .osm_change_creator import OSMObjectChangeCreator
 from .utils import object_should_have_closed_geometry, ensure_closed, coords_to_text, connect_polygon_segments
 
+class TooManyRetriesError(RuntimeError):
+    pass
+
 log = logging.getLogger(__name__)
 class OSMObjectManager:
+    MAX_RETRIES = 3
     _query_template = "[out:json][timeout:{timeout}];{query};out meta;"
     _diff_template = "[out:xml][timeout:{timeout}][adiff:\"{after}\"];{query};out meta;"
     _retrieve_data_template = '((area["name"="{area}"];node(area);area["name"="{area}"];way(area);area["name"="{area}"];rel(area);>>);>>)'
@@ -54,7 +58,7 @@ class OSMObjectManager:
     def _run_query(self, query, timeout, is_lookup=True):
         return json.load(self._run_query_raw(query, timeout, is_lookup))
 
-    def _run_query_raw(self, query, timeout, is_lookup=True):
+    def _run_query_raw(self, query, timeout, is_lookup=True, retry=0):
         if self._use_cache:
             query_hash = hashlib.new("sha3_256", query.encode("UTF-8")).hexdigest()
             cache_path = os.path.join("query_cache", query_hash)
@@ -75,7 +79,14 @@ class OSMObjectManager:
             if exc.code == 429:
                 log.warning("Multiple requests, killing them despite not knowing what they are.")
                 urlopen("{0}/kill_my_queries".format(api_url))
-                return self._run_query_raw(query, timeout, is_lookup=is_lookup)
+                return self._run_query_raw(query, timeout, is_lookup=is_lookup, retry=retry)
+            else:
+                log.warning("Unexpected response status %s, body %s", exc.code, exc.read())
+                if retry == self.MAX_RETRIES:
+                    raise TooManyRetriesError()
+                else:
+                    return self._run_query_raw(query, timeout, is_lookup=is_lookup, retry=retry + 1)
+
         fp = resp
         log.info("Query successful, duration %s seconds.", time.time() - start)
         if self._cache_responses:
