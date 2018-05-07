@@ -1,10 +1,9 @@
 import enum
-from . import OSMEntity
+from . import Named
 from .enums import AdvertisingType
 
-class Advertising(OSMEntity):
+class Advertising(Named):
     type: AdvertisingType
     height: int = None
     lit: bool = None
     direction: int = None
-    name: str = None

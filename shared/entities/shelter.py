@@ -1,12 +1,11 @@
-from . import OSMEntity
+from . import Named
 from .enums import BuildingType, TourismType, InternetAccess, ShelterType
 
-class Shelter(OSMEntity):
+class Shelter(Named):
     type: ShelterType = None
     building: BuildingType = None
     tourism: TourismType = None
     bench: str = None
-    name: str = None
     internet_access: InternetAccess = None
     internet_access_ssid: str = None
     height: int = None

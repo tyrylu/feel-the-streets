@@ -1,10 +1,9 @@
 import enum
 from .enums import Amenity, TourismType, AerialWayType, RailWayType, ManMade, AccessType, LeisureType, SportType, BarrierType, AreaType, AttractionType, LandType, HistoricType
-from . import OSMEntity, Address
+from . import Named, Address
 
-class Area(OSMEntity):
+class Area(Named):
     type: AreaType
-    name: str = None
     amenity: Amenity = None
     layer: int = None
     surface: str = None

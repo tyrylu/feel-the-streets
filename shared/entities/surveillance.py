@@ -1,5 +1,5 @@
 import enum
-from . import OSMEntity
+from . import Named
 from .enums import OSMObjectType, SurveillanceType, SurveillanceKind, SurveillanceZone, ManMade, LandType, Amenity, SupportType
 
 class CameraMount(enum.Enum):
@@ -10,7 +10,7 @@ class CameraMount(enum.Enum):
 class Authority(enum.Enum):
     defence = 0
 
-class Surveillance(OSMEntity):
+class Surveillance(Named):
     type: SurveillanceType = None
     kind: SurveillanceKind = None
     zone: SurveillanceZone = None
@@ -24,7 +24,6 @@ class Surveillance(OSMEntity):
     landuse: LandType = None
     level: int = None
     website: str = None
-    name: str = None
     surveillance_zone: SurveillanceZone = None
     amenity: Amenity = None
     support: SupportType = None

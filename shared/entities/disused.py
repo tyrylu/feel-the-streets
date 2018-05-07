@@ -1,12 +1,12 @@
 import enum
-from . import OSMEntity
+from . import Named
 from .enums import Amenity, RoadType
 
 class DisusedType(enum.Enum):
     quarry = 0
     yes = 1
 
-class Disused(OSMEntity):
+class Disused(Named):
     type: DisusedType
     denomination: str = None
     destroyed_amenity: Amenity = None
@@ -18,7 +18,6 @@ class Disused(OSMEntity):
     highway: RoadType = None
     operator: str = None
     foot: bool = None
-    name: str = None
     layer: int = None
     wikidata: str = None
     note: str = None

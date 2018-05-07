@@ -1,9 +1,8 @@
-from . import OSMEntity
+from . import Named
 
-class PostBox(OSMEntity):
+class PostBox(Named):
     collection_times: str = None
     operator: str = None
     drive_through: bool = None
-    name: str = None
     level: int = None
     note: str = None

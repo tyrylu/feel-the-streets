@@ -1,9 +1,8 @@
 from .enums import BuildingType, ShopType, WheelchairAccess, RoofShape, AccessType
-from . import OSMEntity
+from . import Named
 from . import Address
 
-class Fuel(OSMEntity):
-    name: str = None
+class Fuel(Named):
     operator: str = None
     brand: str = None
     opening_hours: str = None

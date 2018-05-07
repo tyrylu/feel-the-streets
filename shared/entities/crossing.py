@@ -1,6 +1,6 @@
 import enum
 from .enums import CrossingType, TrafficCalmingType, RailWayType, KerbType, CurbType, BicycleType, RoadType, BarrierType, ParkingLaneType
-from . import OSMEntity
+from . import Named
 
 class TrafficSignalsType(enum.Enum):
     signals = 1
@@ -16,9 +16,8 @@ class TrafficSignalsDirection(enum.Enum):
 class CicleWayKind(enum.Enum):
     asl = 1
 
-class Crossing(OSMEntity):
+class Crossing(Named):
     type: CrossingType
-    name: str = None
     button_operated: bool = None
     bicycle: BicycleType = None
     traffic_calming: TrafficCalmingType = None
