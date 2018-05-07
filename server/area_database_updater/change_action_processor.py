@@ -21,7 +21,7 @@ class ChangeActionProcessor:
     def new_semantic_changes(self, date=None):
         self._newest_timestamp = "1970-01-01"
         if not date:
-            date = self._db.last_timestamp
+            date = self._db.last_timestamp.replace("+00:00", "Z")
         num = 0
         for action in self._translator.manager.lookup_differences_in(self._location, date):
             if action.new and action.new.timestamp > self._newest_timestamp:

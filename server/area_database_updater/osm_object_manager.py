@@ -25,7 +25,7 @@ class OSMObjectManager:
     MAX_RETRIES = 3
     _query_template = "[out:json][timeout:{timeout}];{query};out meta;"
     _diff_template = "[out:xml][timeout:{timeout}][adiff:\"{after}\"];{query};out meta;"
-    _retrieve_data_template = '((area["name"="{area}"];node(area);area["name"="{area}"];way(area);area["name"="{area}"];rel(area);>>);>>)'
+    _retrieve_data_template = '((area["name"="{area}"];node(area);area["name"="{area}"];way(area);area["name"="{area}"];rel(area);>>;);>>;)'
     _api_urls = itertools.cycle(["https://z.overpass-api.de/api", "https://lz4.overpass-api.de/api"])
 
     def __init__(self, use_cache, cache_responses):
@@ -299,7 +299,7 @@ class OSMObjectManager:
         return self.cached_nodes + self.cached_relations + self.cached_ways
     
     def lookup_differences_in(self, area, after, timeout=900):
-        retrieval_template = '((area["name"="{area}"];{object_kind}(area);>>);>>)'
+        retrieval_template = '((area["name"="{area}"];{object_kind}(area);>>;);>>;)'
         seen_ids = set()
         for kind in ["node", "way", "rel"]:
             retrieve_data = retrieval_template.format(area=area, object_kind=kind)
