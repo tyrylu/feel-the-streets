@@ -24,7 +24,6 @@ def perform_search(position):
             distance = conditions_dialog.distance
             min_x, min_y, max_x, max_y = xy_ranges_bounding_square(position, distance*2)
             conditions = (Entity.id == IdxEntitiesGeometry.pkid) & (IdxEntitiesGeometry.xmin <= max_x) & (IdxEntitiesGeometry.xmax >= min_x) & (IdxEntitiesGeometry.ymin <= max_y) & (IdxEntitiesGeometry.ymax >= min_y) & conditions
-       
         query = map()._db.query(Entity).filter(conditions)
         filtered_objects = distance_filter(query, position, distance)
         conditions_dialog.Destroy()

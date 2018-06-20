@@ -150,7 +150,9 @@
         </object>
         <object class="sizeritem">
           <cellpos>6,1</cellpos>
-          <object class="wxSpinCtrl" name="distance"></object>
+          <object class="wxSpinCtrl" name="distance">
+            <max>1000000000</max>
+          </object>
         </object>
         <object class="sizeritem">
           <cellpos>7,0</cellpos>
