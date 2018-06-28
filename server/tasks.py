@@ -33,10 +33,21 @@ def update_area_databases_task():
                 area.state = AreaState.applying_changes
                 db.session.commit()
                 first = False
-            processor._db.apply_change(change)
-            msg_bin = pickle.dumps(change, protocol=pickle.HIGHEST_PROTOCOL)
-            huey.storage.channel.basic_publish(area.name, body=msg_bin, properties=pika.BasicProperties(delivery_mode=2), routing_key="")
-        processor._db.commit()
+            entity = processor._db.apply_change(change)
+            valid = True
+            if entity:
+                try:
+                    entity.create_osm_entity()
+                except Exception as ex:
+                    log.warning("Application of change %s resulted in creation of an invalid entity.", change)
+                    log.exception(ex)
+                    valid = False
+            if not valid:
+                processor._db.rollback()
+            else:
+                msg_bin = pickle.dumps(change, protocol=pickle.HIGHEST_PROTOCOL)
+                huey.storage.channel.basic_publish(area.name, body=msg_bin, properties=pika.BasicProperties(delivery_mode=2), routing_key="")
+                processor._db.commit()
         processor._db.close()
         area.state = AreaState.updated
         if not processor.newest_timestamp.startswith("1970"):

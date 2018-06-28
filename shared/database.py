@@ -156,6 +156,9 @@ class Database:
                 for subchange in change.data_changes:
                     entity_data = apply_dict_change(subchange, entity_data)
                 entity.data = json.dumps(entity_data)
+        return entity
 
     def close(self):
         self._session.close()
+    def rollback(self):
+        self._session.rollback()
