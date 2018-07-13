@@ -1,12 +1,12 @@
 [Unit]
 Description=Huey consumer of the fts application
-Requires=rabbitmq-server.service
-After=rabbitmq-server.service
+Requires=rabbitmq.service
+After=rabbitmq.service
 [Service]
-ExecStart=/usr/local/bin/huey_consumer  server.huey
+ExecStart=/usr/bin/huey_consumer  server.huey
 WorkingDirectory=/srv/feel-the-streets
-User=www-data
-Group=www-data
+User=http
+Group=http
 Environment="CONSUME=True"
 [Install]
 WantedBy=multi-user.target
