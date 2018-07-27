@@ -195,7 +195,7 @@
         </object>
         <object class="sizeritem">
           <cellpos>2,1</cellpos>
-          <object class="wxButton" name="request">
+          <object class="wxButton" name="request_area">
             <label>&amp;Request a new area</label>
           </object>
         </object>
