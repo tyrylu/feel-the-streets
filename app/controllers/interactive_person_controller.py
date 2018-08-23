@@ -1,12 +1,12 @@
 import wx
 from pygeodesy.ellipsoidalVincenty import LatLon
 from shared.entities import Road
-from ..uimanager import get, menu_command
 from ..services import speech, map
 from ..objects_browser import ObjectsBrowserFrame
 from ..road_segments_browser import RoadSegmentsBrowserDialog
 from ..geometry_utils import get_road_section_angle, distance_filter
 from ..search import perform_search
+from uimanager import get, menu_command
 
 class InteractivePersonController: 
     def __init__(self, person):

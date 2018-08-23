@@ -3,11 +3,11 @@ from shared.services import entity_registry
 from shared.humanization_utils import get_class_display_name
 from shared.models import Entity, IdxEntitiesGeometry
 from shared.geometry_utils import xy_ranges_bounding_square
-from ..uimanager import get
 from .search_conditions import SpecifySearchConditionsDialog
 from ..geometry_utils import distance_filter
 from ..services import map
 
+from uimanager import get
 
 def perform_search(position):
     entities = list(entity_registry().known_entity_classes)

@@ -2,7 +2,7 @@ import sys
 import os
 import logging
 import wx
-from . import uimanager
+import uimanager
 from . import locale_setup
 
 def main():

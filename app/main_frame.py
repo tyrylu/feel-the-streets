@@ -7,13 +7,13 @@ from pygeodesy.ellipsoidalVincenty import LatLon
 import bitmath
 from .entities import Person
 from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController
-from .uimanager import get
 from .area_selection import AreaSelectionDialog
 from .services import map
 from .server_interaction import download_area_database, SemanticChangeRetriever, has_api_connectivity
 from .semantic_changelog_generator import get_change_description
 from shared import Database
 from shared.models import Entity
+from uimanager import get
 
 def format_size(num_bytes):
     size = bitmath.Byte(num_bytes)

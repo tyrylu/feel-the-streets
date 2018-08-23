@@ -1,4 +1,4 @@
-from ..uimanager import get, menu_command
+from uimanager import get, menu_command
 
 
 class ApplicationController:

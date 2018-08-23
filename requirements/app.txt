@@ -2,7 +2,7 @@
 https://hg.q-continuum.net/libloader/archive/tip.tar.gz # Dependencz of accessible_output2, declared in the setup, but not on pipy...
 https://hg.q-continuum.net/platform_utils/archive/tip.tar.gz # Requirement of accessible output 2, but not specified...
 https://hg.q-continuum.net/accessible_output2/archive/tip.tar.gz
-faker
+https://github.com/tyrylu/uimanager/archive/master.zip
 blinker
 wxpython
 anglr
