@@ -10,11 +10,13 @@ else:
     API_ENDPOINT = "https://fts.trycht.cz/api"
 log = logging.getLogger(__name__)
 
+session = requests.Session()
+
 def url_for(path):
     return "{0}/{1}".format(API_ENDPOINT, path)
 
 def get_areas():
-    resp = requests.get(url_for("areas"))
+    resp = session.get(url_for("areas"))
     if resp.status_code == 200:
         return resp.json()
     else:
@@ -22,7 +24,7 @@ def get_areas():
         return None
 
 def request_area_creation(area_name):
-    resp = requests.post(url_for("areas"), json={"name": area_name})
+    resp = session.post(url_for("areas"), json={"name": area_name})
     if resp.status_code in {200, 201}:
         return resp.json()
     else:
@@ -30,7 +32,7 @@ def request_area_creation(area_name):
         return None
 
 def download_area_database(area_name, progress_callback=None):
-    resp = requests.get(url_for("areas/{0}/download".format(area_name)), stream=True, params={"client_id": config().client_id})
+    resp = session.get(url_for("areas/{0}/download".format(area_name)), stream=True, params={"client_id": config().client_id})
     if resp.status_code == 200:
         total = int(resp.headers.get("content-length", 0))
         chunk_size = 32*1024
@@ -49,7 +51,8 @@ def download_area_database(area_name, progress_callback=None):
 
 def has_api_connectivity():
     try:
-        resp = requests.get(url_for("ping"))
+        resp = session.get(url_for("ping"))
+        resp.content
         if not resp.status_code == 200:
             return False
         else:
