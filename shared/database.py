@@ -44,6 +44,7 @@ class Database:
         self._area_name = area_name
         db_path = self.get_database_file(area_name, server_side, name_suffix)
         self._creating = False
+        self._extensions_warning_logged = False
         self._engine = create_engine("sqlite:///%s"%db_path)
         event.listen(self._engine, "connect", self._post_connect)
         self._session = sessionmaker(bind=self._engine)()
@@ -61,7 +62,9 @@ class Database:
         try:
             dbapi_connection.load_extension("icu.%s"%extension)
         except sqlite3.OperationalError:
-            log.warning("Failed to load the icu extension, the  text searches will be case sensitive.")
+            if not self._extensions_warning_logged:
+                log.warning("Failed to load the icu extension, the  text searches will be case sensitive.")
+                self._extensions_warning_logged = True
         if self._creating: 
             log.debug("Initializing spatial metadata...")
             dbapi_connection.execute("SELECT InitSpatialMetadata(1)")
