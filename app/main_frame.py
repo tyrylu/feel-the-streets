@@ -10,7 +10,7 @@ from .controllers import InteractivePersonController, ApplicationController, Sou
 from .uimanager import get
 from .area_selection import AreaSelectionDialog
 from .services import map
-from .server_interaction import download_area_database, SemanticChangeRetriever
+from .server_interaction import download_area_database, SemanticChangeRetriever, has_api_connectivity
 from .semantic_changelog_generator import get_change_description
 from shared import Database
 from shared.models import Entity
@@ -60,6 +60,8 @@ class MainFrame(wx.Frame):
 
 
     def _update_database(self, area):
+        if not has_api_connectivity():
+            return
         retriever = SemanticChangeRetriever()
         pending_count = retriever.new_change_count_in(area)
         if not pending_count:
@@ -81,3 +83,4 @@ class MainFrame(wx.Frame):
         if resp == wx.YES:
             # Somewhat hacky, but os.startfile is not cross platform and the webbrowser way appears to be.
             webbrowser.open(changelog_path)
+

@@ -8,8 +8,11 @@ from shared.amqp_queue_naming import get_client_queue_name
 class SemanticChangeRetriever:
 
     def __init__(self):
-        self._conn = pika.BlockingConnection(pika.URLParameters(config().amqp_broker_url))
-        self._chan = self._conn.channel()
+        try:
+            self._conn = pika.BlockingConnection(pika.URLParameters(config().amqp_broker_url))
+            self._chan = self._conn.channel()
+        except Exception:
+            pass
         self._max_delivery_tags = defaultdict(lambda: 0)
 
     def new_changes_in(self, area):
