@@ -691,8 +691,7 @@ class TourismType(enum.Enum):
     wine_cellar = 21
     
     
-    
-    
+   
 class CrossingType(enum.Enum):
     no = -1
     unknown = 0
@@ -1472,6 +1471,7 @@ class AttractionType(enum.Enum):
     animal = 0
     water_slide = 1
     fossils = 2
+    zoo_part = 3
 
 class TransformerType(enum.Enum):
     distribution = 0
