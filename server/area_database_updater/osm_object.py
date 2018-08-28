@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 from typing import Dict, List
-from xml.etree.ElementTree import Element
 from shared.entities.enums import OSMObjectType
 
 class OSMRelationMember(BaseModel):
@@ -8,6 +7,9 @@ class OSMRelationMember(BaseModel):
     ref: int
     role: str
 
+    @property
+    def unique_ref(self):
+        return "{0}{1}".format(self.type.name[0], self.ref)
 class OSMObject(BaseModel):
     id: int
     type: OSMObjectType

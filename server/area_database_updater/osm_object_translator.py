@@ -30,7 +30,7 @@ class OSMObjectTranslator:
     def translated_objects_in(self, area):
         log.info("Looking up all objects in area %s.", area)
         self.manager.lookup_objects_in(area)
-        self.record.total_entities = self.manager.cached_relations + self.manager.cached_ways + self.manager.cached_nodes
+        self.record.total_entities = self.manager.cached_total
         log.info("Translating relations.")
         for rel in self.manager.relations:
             entity = self.translate_object(rel)

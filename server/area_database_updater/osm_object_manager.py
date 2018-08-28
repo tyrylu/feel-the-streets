@@ -17,6 +17,7 @@ from .osm_object import OSMObject
 from .osm_change_creator import OSMObjectChangeCreator
 from .utils import object_should_have_closed_geometry, ensure_closed, coords_to_text, connect_polygon_segments
 
+
 class TooManyRetriesError(RuntimeError):
     pass
 
@@ -27,14 +28,13 @@ class OSMObjectManager:
     _diff_template = "[out:xml][timeout:{timeout}][adiff:\"{after}\"];{query};out meta;"
     _retrieve_data_template = '((area["name"="{area}"];node(area);area["name"="{area}"];way(area);area["name"="{area}"];rel(area);>>;);>>;)'
     _api_urls = itertools.cycle(["https://z.overpass-api.de/api", "https://lz4.overpass-api.de/api"])
+    _id_prefix_to_type = {"n": "node", "w": "way", "r": "relation"}
 
     def __init__(self, use_cache, cache_responses):
         dict_storage = "generation_temp"
         self._dict_storage = dict_storage
         os.makedirs(dict_storage, exist_ok=True)
-        self._nodes = filedict.FileDict(os.path.join(dict_storage, "nodes"))
-        self._ways = filedict.FileDict(os.path.join(dict_storage, "ways"))
-        self._rels = filedict.FileDict(os.path.join(dict_storage, "rels"))
+        self._entity_cache = filedict.FileDict(os.path.join(dict_storage, "entity_cache"))
         self._cache_responses = cache_responses
         self._use_cache = use_cache
         self._removed = False
@@ -47,14 +47,14 @@ class OSMObjectManager:
             if elem["type"] == "area":
                 continue
             obj = OSMObject.from_dict(elem)
-            self._get_container_for_objects_of_type(obj.type)[obj.id] = obj
+            self._entity_cache[obj.unique_id] = obj
     
     def _cache_objects_of(self, response):
         log.info("Converting and caching results.")
         for osm_object in response["elements"]:
-            dest = self._get_container_for_objects_of_type(osm_object.type)
-            dest[osm_object.id] = osm_object
-    
+            self._entity_cache[osm_object.unique_id] = osm_object
+
+   
     def _run_query(self, query, timeout, is_lookup=True):
         return json.load(self._run_query_raw(query, timeout, is_lookup))
 
@@ -111,58 +111,55 @@ class OSMObjectManager:
         self._cache_objects_of(resp)
         return resp["elements"]
 
-    def _get_container_for_objects_of_type(self, type):
-        if type is OSMObjectType.node:
-            return self._nodes
-        elif type is OSMObjectType.way:
-            return self._ways
-        elif type is OSMObjectType.relation:
-            return self._rels
-        else:
-            raise ValueError("Unknown OSM object type %s."%type)
-
     def _ensure_has_cached_dependencies_for(self, objects):
-        missing = {OSMObjectType.node: [], OSMObjectType.way: [], OSMObjectType.relation: []}
+        missing = []
         totals = {OSMObjectType.node: 0, OSMObjectType.way: 0, OSMObjectType.relation: 0}
+        missing_counts = {"n": 0, "w": 0, "r": 0}
         for object in objects:
             if object.type is OSMObjectType.node:
                 continue # Nodes have no dependencies
             elif object.type is OSMObjectType.way:
                 for node in object.nodes:
                     totals[OSMObjectType.node] += 1
-                    if not self.has_object(OSMObjectType.node, node):
+                    node_id = f"n{node}"
+                    if not self.has_object(node_id):
                         log.debug("Node %s missing.", node)
-                        missing[OSMObjectType.node].append(node)
+                        missing.append(node_id)
+                        missing_counts["n"] += 1
                     else:
                         log.debug("Node %s is not missing.", node)
             elif object.type is OSMObjectType.relation:
                 for member in object.members:
                     totals[member.type] += 1
-                    if not self.has_object(member.type, member.ref):
+                    if not self.has_object(member.unique_ref):
                         log.debug("%s %s missing.", member.type.name.upper(), member.ref)
-                        missing[member.type].append(member.ref)
+                        missing.append(member.unique_ref)
+                        missing_counts[member.type.name[0]] += 1
                     else:
                         log.debug("%s %s is not missing.", member.type.name.upper(), member.ref)
-        for type, ids in missing.items():
-            if totals[type] and ids:
-                log.info("Out of %s dependent %ss %s was missing.", totals[type], type.name, len(ids))
-            if ids:
-                self._lookup_objects(type, *ids)
+        for type, total in totals.items():
+            missed = missing_counts[type.name[0]]
+            if total and missed:
+                log.info("Out of %s dependent %ss %s was missing.", total, type.name, missed)
+        self._lookup_objects(*missing)
 
-    def has_object(self, type, id):
-        return id in self._get_container_for_objects_of_type(type)
+    def has_object(self, id):
+        return id in self._entity_cache
 
-    def _lookup_objects(self, type, *ids):
+    def _lookup_objects(self, *ids):
         max_simultaneously_queried = 1000000
         objects = []
-        for start_idx in range(0, len(ids), max_simultaneously_queried):
-            objects.extend(self._cache_results_of("%s(id:%s)"%(type.name, ",".join(str(id) for id in ids[start_idx:(start_idx + max_simultaneously_queried)]))))
+        key_fn = lambda oid: oid[0]
+        for key, idset in itertools.groupby(sorted(ids, key=key_fn), key_fn):
+            entity_type = self._id_prefix_to_type[key]
+            for start_idx in range(0, len(idset), max_simultaneously_queried):
+                objects.extend(self._cache_results_of("%s(id:%s)"%(entity_type, ",".join(str(id) for id in idset[start_idx:(start_idx + max_simultaneously_queried)]))))
         self._ensure_has_cached_dependencies_for(objects)
 
-    def get_object(self, type, id):
-        if not self.has_object(type, id):
-            self._lookup_objects(type, id)
-        return self._get_container_for_objects_of_type(type)[id]
+    def get_object(self, id):
+        if not self.has_object(id):
+            self._lookup_objects(id)
+        return self._entity_cache[id]
 
     def _enrich_tags(self, object, parent):
         object.tags["parent_osm_id"] = "{0}{1}".format(parent.type.name[0], parent.id)
@@ -173,13 +170,13 @@ class OSMObjectManager:
         elif object.type is OSMObjectType.way:
             self._ensure_has_cached_dependencies_for([object])
             for child_id in object.nodes:
-                child = self.get_object(OSMObjectType.node, child_id)
+                child = self.get_object(f"n{child_id}")
                 self._enrich_tags(child, object)
                 yield child
         elif object.type is OSMObjectType.relation:
             self._ensure_has_cached_dependencies_for([object])
             for member in object.members:
-                member_obj = self.get_object(member.type, member.ref)
+                member_obj = self.get_object(member.unique_ref)
                 self._enrich_tags(member_obj, object)
                 if member.role:
                     member_obj.tags["role"] = member.role
@@ -261,6 +258,7 @@ class OSMObjectManager:
             return "POLYGON%s"%polys[0]
         else:
             return "MULTIPOLYGON(%s)"%", ".join(polys)
+    
     def _construct_multipolygon_from_polygons(self, object):
         parts = []
         for related in self.related_objects_of(object):
@@ -270,33 +268,10 @@ class OSMObjectManager:
                 continue
             parts.append(rel_geom.replace("POLYGON", ""))
             return "MULTIPOLYGON(%s)"%", ".join(parts)
-    @property
-    def relations(self):
-        return self._rels.values()
 
-    @property
-    def ways(self):
-        return self._ways.values()
-
-    @property
-    def nodes(self):
-        return self._nodes.values()
-
-    @property
-    def cached_relations(self):
-        return len(self._rels)
-
-    @property
-    def cached_ways(self):
-        return len(self._ways)
-
-    @property
-    def cached_nodes(self):
-        return len(self._nodes)
-    
     @property
     def cached_total(self):
-        return self.cached_nodes + self.cached_relations + self.cached_ways
+        return len(self._entity_cache)
     
     def lookup_differences_in(self, area, after, timeout=900):
         retrieval_template = '((area["name"="{area}"];{object_kind}(area);>>;);>>;)'
@@ -340,13 +315,9 @@ class OSMObjectManager:
     def remove_temp_data(self):
         if self._removed:
             return
-        self._nodes.close()
-        self._ways.close()
-        self._rels.close()
+        self._entity_cache.close()
         shutil.rmtree(self._dict_storage, ignore_errors=True)
         self._removed = True
 
     def __del__(self):
         self.remove_temp_data()
-
-    
