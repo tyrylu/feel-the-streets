@@ -42,22 +42,20 @@ class OSMObjectManager:
     def lookup_objects_in(self, area):
         query = self._retrieve_data_template.format(area=area)
         fp = self._run_query_raw(query, 900, True)
+        self._cache_objects_from_readable(fp)
+
+    def _cache_objects_from_readable(self, readable, return_objects=False):
         log.info("Retrieving and converting results.")
-        for elem in ijson.items(fp, "elements.item"):
+        objects = []
+        for elem in ijson.items(readable, "elements.item"):
             if elem["type"] == "area":
                 continue
             obj = OSMObject.from_dict(elem)
             self._entity_cache[obj.unique_id] = obj
+            if return_objects:
+                objects.append(obj)
+    return objects
     
-    def _cache_objects_of(self, response):
-        log.info("Converting and caching results.")
-        for osm_object in response["elements"]:
-            self._entity_cache[osm_object.unique_id] = osm_object
-
-   
-    def _run_query(self, query, timeout, is_lookup=True):
-        return json.load(self._run_query_raw(query, timeout, is_lookup))
-
     def _run_query_raw(self, query, timeout, is_lookup=True, retry=0):
         if self._use_cache:
             query_hash = hashlib.new("sha3_256", query.encode("UTF-8")).hexdigest()
@@ -100,17 +98,6 @@ class OSMObjectManager:
         log.debug("Returning live result from overpass-api.de.")
         return fp
         
-    def _run_query_and_convert(self, query, timeout=900):
-        resp = self._run_query(query, timeout)
-        resp["elements"] = [OSMObject.from_dict(e) for e in resp["elements"] if e["type"] != "area"]
-        return resp
-
-    def _cache_results_of(self, query):
-        log.debug("Caching results of query %s.", query)
-        resp = self._run_query_and_convert(query)
-        self._cache_objects_of(resp)
-        return resp["elements"]
-
     def _ensure_has_cached_dependencies_for(self, objects):
         missing = []
         totals = {OSMObjectType.node: 0, OSMObjectType.way: 0, OSMObjectType.relation: 0}
@@ -153,7 +140,8 @@ class OSMObjectManager:
         for key, idset in itertools.groupby(sorted(ids, key=key_fn), key_fn):
             entity_type = self._id_prefix_to_type[key]
             for start_idx in range(0, len(idset), max_simultaneously_queried):
-                objects.extend(self._cache_results_of("%s(id:%s)"%(entity_type, ",".join(str(id) for id in idset[start_idx:(start_idx + max_simultaneously_queried)]))))
+                fd = self._run_query_raw("%s(id:%s)"%(entity_type, ",".join(str(id) for id in idset[start_idx:(start_idx + max_simultaneously_queried)])))
+                objects.extend(self._cache_objects_from_readable(fd, True))
         self._ensure_has_cached_dependencies_for(objects)
 
     def get_object(self, id):
