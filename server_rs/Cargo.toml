@@ -1,0 +1,15 @@
+[package]
+name = "server_rs"
+version = "0.1.0"
+authors = ["Lukáš Tyrychtr <lukastyrychtr@gmail.com>"]
+
+[dependencies]
+serde = "*"
+serde_derive = "*"
+serde_json = "*"
+error-chain = "*"
+reqwest = "*"
+rusqlite = {"version" = "0.13", "features" = ["bundled"]}
+sqlitemap = "*"
+log = "*"
+itertools = "*"

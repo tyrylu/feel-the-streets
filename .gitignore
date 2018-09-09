@@ -8,3 +8,4 @@ generation_records/*
 .env
 build/*
 dist/*
+target/
