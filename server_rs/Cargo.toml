@@ -13,3 +13,4 @@ rusqlite = {"version" = "0.13", "features" = ["bundled"]}
 sqlitemap = "*"
 log = "*"
 itertools = "*"
+lazy_static = "*"

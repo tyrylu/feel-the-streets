@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, PartialEq)]
 pub enum OSMObjectType {
     #[serde(rename = "node")]
     Node,
@@ -15,7 +15,7 @@ pub struct OSMRelationMember {
     referenced_type: OSMObjectType,
     #[serde(rename = "ref")]
     reference: u64,
-    role: String,
+    pub role: String,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -40,22 +40,30 @@ pub struct OSMObject {
     #[serde(default)]
     pub tags: HashMap<String, String>,
     #[serde(flatten)]
-    pub specifics: OSMObjectSpecifics
+    pub specifics: OSMObjectSpecifics,
 }
 
 impl OSMObject {
-    
     pub fn object_type(&self) -> OSMObjectType {
         use self::OSMObjectSpecifics::*;
         match self {
-            OSMObject{specifics: Node{..}, ..} => OSMObjectType::Node,
-            OSMObject{specifics: Way{..}, ..} => OSMObjectType::Way,
-            OSMObject{specifics: Relation{..}, ..} => OSMObjectType::Relation
+            OSMObject {
+                specifics: Node { .. },
+                ..
+            } => OSMObjectType::Node,
+            OSMObject {
+                specifics: Way { .. },
+                ..
+            } => OSMObjectType::Way,
+            OSMObject {
+                specifics: Relation { .. },
+                ..
+            } => OSMObjectType::Relation,
         }
     }
 
     pub fn unique_id(&self) -> String {
-                match self.object_type() {
+        match self.object_type() {
             OSMObjectType::Node => format!("n{}", self.id),
             OSMObjectType::Way => format!("w{}", self.id),
             OSMObjectType::Relation => format!("r{}", self.id),
