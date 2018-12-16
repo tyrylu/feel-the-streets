@@ -49,6 +49,7 @@ def _find_connectable_segments(segments):
         if end in starts:
             return ends[end], starts[end]
     return None, None
+
 def connect_polygon_segments(segments):
     while True:
         first, second = _find_connectable_segments(segments)

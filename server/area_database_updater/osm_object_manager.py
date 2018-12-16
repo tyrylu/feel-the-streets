@@ -31,10 +31,7 @@ class OSMObjectManager:
     _id_prefix_to_type = {"n": "node", "w": "way", "r": "relation"}
 
     def __init__(self, use_cache, cache_responses):
-        dict_storage = "generation_temp"
-        self._dict_storage = dict_storage
-        os.makedirs(dict_storage, exist_ok=True)
-        self._entity_cache = filedict.FileDict(os.path.join(dict_storage, "entity_cache"))
+        self._entity_cache = filedict.FileDict("entity_cache")
         self._cache_responses = cache_responses
         self._use_cache = use_cache
         self._removed = False
@@ -54,7 +51,7 @@ class OSMObjectManager:
             self._entity_cache[obj.unique_id] = obj
             if return_objects:
                 objects.append(obj)
-    return objects
+        return objects
     
     def _run_query_raw(self, query, timeout, is_lookup=True, retry=0):
         if self._use_cache:
@@ -304,7 +301,7 @@ class OSMObjectManager:
         if self._removed:
             return
         self._entity_cache.close()
-        shutil.rmtree(self._dict_storage, ignore_errors=True)
+        os.remove("entity_cache")
         self._removed = True
 
     def __del__(self):
