@@ -45,13 +45,13 @@ def diff(old, new, excluded_keys=None, none_in_new_means_removal=True, key_prefi
     stayed = old_keys.intersection(new_keys)
     changes = []
     for added_key in added:
-        top_level_key = added_key if not key_prefix else "{0}.{1}".format(key_prefix, added_key)
+        top_level_key = added_key if not key_prefix else "{0}/{1}".format(key_prefix, added_key)
         changes.append(DictChange(kind=ChangeKind.add, key=top_level_key, new_value=new[added_key]))
     for key in removed:
-        top_level_key = key if not key_prefix else "{0}.{1}".format(key_prefix, key)
+        top_level_key = key if not key_prefix else "{0}/{1}".format(key_prefix, key)
         changes.append(DictChange(kind=ChangeKind.remove, key=top_level_key))
     for key in stayed:
-        top_level_key = key if not key_prefix else "{0}.{1}".format(key_prefix, key)
+        top_level_key = key if not key_prefix else "{0}/{1}".format(key_prefix, key)
         if old[key] and new[key] is None and none_in_new_means_removal:
             changes.append(DictChange(kind=ChangeKind.remove, key=top_level_key))
         elif isinstance(new[key], dict):
@@ -65,7 +65,7 @@ def diff(old, new, excluded_keys=None, none_in_new_means_removal=True, key_prefi
     return changes
 
 def _get_change_target(target, key, create_if_missing=False):
-    parts = key.split(".")
+    parts = key.split("/")
     intermediary = []
     for part in parts[:-1]:
         if part not in target or not isinstance(target[part], dict):
@@ -80,12 +80,12 @@ def _get_change_target(target, key, create_if_missing=False):
 def apply_dict_change(change, target):
     if change.kind in {ChangeKind.add, ChangeKind.change}:
         intermediary, temp_target = _get_change_target(target, change.key, True)
-        temp_target[change.key.split(".")[-1]] = change.new_value
+        temp_target[change.key.split("/")[-1]] = change.new_value
     elif change.kind is ChangeKind.remove:
         intermediary, temp_target = _get_change_target(target, change.key)
-        if change.key.split(".")[-1] not in temp_target:
+        if change.key.split("/")[-1] not in temp_target:
             return target
-        del temp_target[change.key.split(".")[-1]]
+        del temp_target[change.key.split("/")[-1]]
         for key, container in intermediary:
             if key in container and not container[key]:
                 del container[key]
