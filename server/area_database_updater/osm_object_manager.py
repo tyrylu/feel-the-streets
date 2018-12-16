@@ -138,7 +138,7 @@ class OSMObjectManager:
             entity_type = self._id_prefix_to_type[key]
             idset_list = list(idset)
             for start_idx in range(0, len(idset_list), max_simultaneously_queried):
-                fd = self._run_query_raw("%s(id:%s)"%(entity_type, ",".join(str(id) for id in idset_list[start_idx:(start_idx + max_simultaneously_queried)])), timeout=900)
+                fd = self._run_query_raw("%s(id:%s)"%(entity_type, ",".join(id[1:] for id in idset_list[start_idx:(start_idx + max_simultaneously_queried)])), timeout=900)
                 objects.extend(self._cache_objects_from_readable(fd, True))
         self._ensure_has_cached_dependencies_for(objects)
 
