@@ -1,23 +1,15 @@
-#[macro_use]
-extern crate lazy_static;
-#[macro_use]
-extern crate error_chain;
-#[macro_use]
-extern crate serde_derive;
-#[macro_use]
-extern crate log;
-extern crate itertools;
-extern crate reqwest;
-extern crate rusqlite;
-extern crate serde;
-extern crate serde_json;
-extern crate sqlitemap;
-
-mod osm;
-fn main() -> osm::error::Result<()> {
-    let mut mgr = osm::object_manager::OSMObjectManager::new();
-    mgr.lookup_objects_in("Praha")?;
-    let o = mgr.get_object("n13475344")?;
-    
-    Ok(())
+use osm_api::object_manager::OSMObjectManager;
+use std::env;
+fn main() {
+    env_logger::init();
+    let area = env::args()
+        .nth(1)
+        .expect("Provide the area, please.")
+        .clone();
+    let manager = OSMObjectManager::new();
+    manager.lookup_objects_in(&area).expect("Lookup fail");
+    for obj in manager.cached_objects() {
+        let _translated = osm_db::translation::translator::translate(&obj, &manager)
+            .expect("Failed to translate");
+    }
 }

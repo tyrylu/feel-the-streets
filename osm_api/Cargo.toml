@@ -1,0 +1,17 @@
+[package]
+name = "osm_api"
+version = "0.1.0"
+authors = ["Lukáš Tyrychtr <lukastyrychtr@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+serde = "*"
+serde_derive = "*"
+serde_json = "*"
+error-chain = "*"
+reqwest = "*"
+rusqlite = {"version" = "0.14", "features" = ["bundled"]}
+sqlitemap = "*"
+log = "*"
+itertools = "*"
+lazy_static = "*"

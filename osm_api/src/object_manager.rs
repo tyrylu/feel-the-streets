@@ -1,8 +1,7 @@
+use crate::error::Result;
 use itertools::Itertools;
-use osm::error::Result;
-use osm::object::{OSMObject, OSMObjectSpecifics, OSMObjectType};
-use osm::utils;
-use reqwest::{self, StatusCode};
+use crate::object::{OSMObject, OSMObjectSpecifics, OSMObjectType};
+use reqwest;
 use rusqlite::Connection;
 use serde::Deserialize;
 use serde_json::{self, Deserializer};
@@ -10,8 +9,10 @@ use sqlitemap::SqliteMap;
 use std::cell::RefCell;
 use std::io::{BufReader, Read};
 use std::iter;
+use std::time::Instant;
+use crate::utils;
 
-fn translate_type_shortcut(shortcut: &char) -> &'static str {
+fn translate_type_shortcut(shortcut: char) -> &'static str {
     match shortcut {
         'n' => "node",
         'w' => "way",
@@ -41,6 +42,9 @@ pub struct OSMObjectManager {
 
 impl OSMObjectManager {
     pub fn new() -> Self {
+        let conn = Connection::open("entity_cache.db").expect("Could not create connection.");
+        conn.execute("PRAGMA SYNCHRONOUS=off", &[]).unwrap();
+        conn.execute("BEGIN", &[]).unwrap();
         let client = reqwest::Client::builder()
             .timeout(None)
             .build()
@@ -51,22 +55,21 @@ impl OSMObjectManager {
                 "https://lz4.overpass-api.de/api",
             ],
             current_api_url_idx: RefCell::new(0 as usize),
-            cache_conn: Connection::open("entity_cache.db").unwrap(),
+            cache_conn: conn,
             http_client: client,
         }
     }
 
-    fn get_cache(&self) -> SqliteMap {
+    fn get_cache(&self) -> SqliteMap<'_> {
         SqliteMap::new(&self.cache_conn, "raw_entities", "text", "text").unwrap()
     }
 
-    fn cache_object(&self, object: &OSMObject) {
-        let mut cache = self.get_cache();
+    fn cache_object_into(&self, cache: &mut SqliteMap<'_>, object: &OSMObject) {
+        let serialized =
+            serde_json::to_string(&object).expect("Could not serialize object for caching.");
         cache
-            .insert::<String>(
-                &object.unique_id(),
-                &serde_json::to_string(&object).expect("Could not serialize object for caching."),
-            ).expect("Could not cache object.");
+            .insert::<String>(&object.unique_id(), &serialized)
+            .expect("Could not cache object.");
     }
 
     fn has_object(&self, id: &str) -> bool {
@@ -89,19 +92,24 @@ impl OSMObjectManager {
         self.api_urls[*self.current_api_url_idx.borrow()]
     }
 
-    fn run_query(&self, query: &str) -> Result<Box<Read>> {
+    fn run_query(&self, query: &str) -> Result<Box<dyn Read>> {
+        let start = Instant::now();
         let url = self.next_api_url();
         let final_url = format!("{}/interpreter?data={}", url, query);
+        debug!("Requesting resource {}", final_url);
         let resp = self.http_client.get(&final_url).send()?;
-        match resp.status() {
-            StatusCode::TooManyRequests => {
+        match resp.status().as_u16() {
+            409 => {
                 warn!("Multiple requests, killing them and going to a different api host.");
                 self.http_client
                     .get(&format!("{0}/kill_my_queries", &url))
                     .send()?;
                 self.run_query(&query)
             }
-            StatusCode::Ok => Ok(Box::new(resp)),
+            200 => {
+                debug!("Request successfully finished after {:?}.", start.elapsed());
+                Ok(Box::new(resp))
+            }
             _ => {
                 warn!("Unexpected status code {} from the server.", resp.status());
                 self.run_query(&query)
@@ -111,9 +119,11 @@ impl OSMObjectManager {
 
     fn cache_objects_from(
         &self,
-        readable: Box<Read>,
+        readable: Box<dyn Read>,
         return_objects: bool,
     ) -> Result<Vec<OSMObject>> {
+        let start = Instant::now();
+        let mut cache = self.get_cache();
         let mut objects = Vec::new();
         let mut cached_readable = BufReader::with_capacity(65536, readable);
         let mut buf = [0; 1];
@@ -129,7 +139,7 @@ impl OSMObjectManager {
                 let mut de = Deserializer::from_reader(&mut cached_readable);
                 match OSMObject::deserialize(&mut de) {
                     Ok(obj) => {
-                        self.cache_object(&obj);
+                        self.cache_object_into(&mut cache, &obj);
                         if return_objects {
                             objects.push(obj);
                         }
@@ -137,12 +147,15 @@ impl OSMObjectManager {
                     Err(_e) => break,
                 }
             }
-            cached_readable.read(&mut buf)?; // Skip a comma
+            cached_readable.read_exact(&mut buf)?; // Skip a comma
         }
+        debug!("Caching finished after {:?}", start.elapsed());
+        self.commit_cache();
         Ok(objects)
     }
 
     pub fn lookup_objects_in(&self, area: &str) -> Result<()> {
+        info!("Looking up all objects in area {}.", area);
         let query = format_query(900, &format_data_retrieval(area));
         let readable = self.run_query(&query)?;
         self.cache_objects_from(readable, false)?;
@@ -156,11 +169,11 @@ impl OSMObjectManager {
         for (entity_type, entity_ids) in
             &ids.into_iter().group_by(|oid| oid.chars().nth(0).unwrap())
         {
-            for mut chunk in entity_ids.chunks(MAX_SIMULTANEOUSLY_QUERYED).into_iter() {
+            for mut chunk in &entity_ids.chunks(MAX_SIMULTANEOUSLY_QUERYED) {
                 let ids_str = chunk.join(",");
                 let query = format_query(
                     900,
-                    &format!("{}(id:{})", translate_type_shortcut(&entity_type), ids_str),
+                    &format!("{}(id:{})", translate_type_shortcut(entity_type), ids_str),
                 );
                 let readable = self.run_query(&query)?;
                 objects.extend(self.cache_objects_from(readable, true)?);
@@ -195,7 +208,7 @@ impl OSMObjectManager {
                 }
             }
         }
-        if missing.len() > 0 {
+        if !missing.is_empty() {
             info!(
                 "Out of {} objects {} was missing.",
                 objects.len(),
@@ -209,7 +222,7 @@ impl OSMObjectManager {
     fn related_ids_of<'a>(
         &'a self,
         object: &'a OSMObject,
-    ) -> Result<Box<Iterator<Item = (String, Option<String>)>>> {
+    ) -> Result<Box<dyn Iterator<Item = (String, Option<String>)>>> {
         use self::OSMObjectSpecifics::*;
         match object.specifics {
             Node { .. } => Ok(Box::new(iter::empty())),
@@ -275,7 +288,7 @@ impl OSMObjectManager {
         use self::OSMObjectSpecifics::*;
         match object.specifics {
             Node { lon, lat } => Ok(Some(format!("POINT({},{})", lon, lat))),
-            Way { ref nodes } => {
+            Way { .. } => {
                 let mut coords = self.get_way_coords(&object)?;
                 if coords.len() <= 1 {
                     warn!("One or zero nodes for object {}", object.unique_id());
@@ -289,15 +302,18 @@ impl OSMObjectManager {
                     Ok(Some(format!("LINESTRING({})", coords_text)))
                 }
             }
-            Relation { ref members } => {
+            Relation { .. } => {
                 let empty = "".to_string();
-                let geom_type = object
-                    .tags
-                    .get(&"type".to_string()).unwrap_or(&empty);
+                let geom_type = object.tags.get(&"type".to_string()).unwrap_or(&empty);
                 if geom_type == &"multipolygon".to_string() {
                     let first_related = self.related_objects_of(&object)?.next().unwrap();
-                    let mut multi = None;
-                    match first_related.tags.get("role").unwrap_or(&"".to_string()).as_ref() {
+                    let multi;
+                    match first_related
+                        .tags
+                        .get("role")
+                        .unwrap_or(&"".to_string())
+                        .as_ref()
+                    {
                         "inner" | "outer" => {
                             multi = self.construct_multipolygon_from_complex_polygons(&object)?;
                         }
@@ -316,7 +332,7 @@ impl OSMObjectManager {
             }
         }
     }
-    
+
     fn create_geometry_collection(&self, object: &OSMObject) -> Result<Option<String>> {
         Ok(Some(format!(
             "GEOMETRYCOLLECTION({})",
@@ -327,13 +343,16 @@ impl OSMObjectManager {
                 .join(", ")
         )))
     }
-    
+
     fn construct_multipolygon_from_polygons(&self, object: &OSMObject) -> Result<Option<String>> {
         let mut parts = vec![];
         for related in self.related_objects_of(&object)? {
             let rel_geom = self.get_geometry_as_wkt(&related)?.unwrap();
             if !rel_geom.starts_with("POLYGON") {
-                warn!("Multipolygon promise broken for object with id {}", related.unique_id());
+                warn!(
+                    "Multipolygon promise broken for object with id {}",
+                    related.unique_id()
+                );
                 return Ok(None);
             }
             parts.push(rel_geom.replace("POLYGON", ""));
@@ -341,19 +360,29 @@ impl OSMObjectManager {
         Ok(Some(format!("MULTIPOLYGON({})", parts.join(", "))))
     }
 
-    fn construct_multipolygon_from_complex_polygons(&self, object: &OSMObject) -> Result<Option<String>> {
+    fn construct_multipolygon_from_complex_polygons(
+        &self,
+        object: &OSMObject,
+    ) -> Result<Option<String>> {
         let mut inners = vec![];
         let mut outers = vec![];
         for related in self.related_objects_of(&object)? {
             if !related.tags.contains_key(&"role".to_string()) {
-                warn!("Missing role specifier for object {} as part of geometry of object {}", related.unique_id(), object.unique_id());
+                warn!(
+                    "Missing role specifier for object {} as part of geometry of object {}",
+                    related.unique_id(),
+                    object.unique_id()
+                );
                 return Ok(None);
             }
             if !(related.object_type() == OSMObjectType::Way) {
-                warn!("Creation of a point sequence for object {} not supported/impossible.", related.unique_id());
+                warn!(
+                    "Creation of a point sequence for object {} not supported/impossible.",
+                    related.unique_id()
+                );
                 return Ok(None);
             }
-            let points = self.get_way_coords(&related);
+            let points = self.get_way_coords(&related)?;
             match related.tags["role"].as_ref() {
                 "inner" => inners.push(points),
                 "outer" => outers.push(points),
@@ -363,6 +392,55 @@ impl OSMObjectManager {
                 }
             }
         }
-        Ok(None)
+        utils::connect_polygon_segments(&mut inners);
+        utils::connect_polygon_segments(&mut outers);
+        if outers.len() != 1 && !inners.is_empty() {
+            warn!("multiple outer ring(s) and some inner ring(s), geometry for object {} is ambiguous.", object.unique_id());
+            return Ok(None);
+        }
+        let mut polys = vec![];
+        // Because i could not manage to convince the loop that references are enough, the check must be done there
+        let inners_is_empty = inners.is_empty();
+        for inner in inners {
+            if inner.len() < 4 {
+                warn!("One of the inner polygons for object {} did not have enough points, falling back to a geometry collection.", object.unique_id());
+                return Ok(None);
+            }
+            polys.push(format!(
+                "(({}),({}))",
+                utils::coords_to_text(&outers[0]),
+                utils::coords_to_text(&inner)
+            ));
+        }
+        if inners_is_empty {
+            for outer in outers {
+                if outer.len() < 4 {
+                    warn!("One of the outer rings of object {} did not have enough points, falling back to a geometry collection.", object.unique_id());
+                    return Ok(None);
+                }
+                polys.push(format!("(({}))", utils::coords_to_text(&outer)));
+            }
+        }
+        if polys.len() == 1 {
+            Ok(Some(format!("POLYGON{}", polys[0])))
+        } else {
+            Ok(Some(format!("MULTIPOLYGON({})", polys.join(", "))))
+        }
+    }
+
+    pub fn cached_objects(&self) -> Vec<OSMObject> {
+        let mut cache = self.get_cache();
+        let res = cache
+            .iter::<String, String>()
+            .unwrap()
+            .filter_map(|pair| pair.ok())
+            .map(|(_k, v)| serde_json::from_str(&v).unwrap())
+            .collect();
+        res
+    }
+    fn commit_cache(&self) {
+        self.cache_conn
+            .execute("COMMIT", &[])
+            .expect("Commit failed.");
     }
 }

@@ -2,15 +2,10 @@
 name = "server_rs"
 version = "0.1.0"
 authors = ["Lukáš Tyrychtr <lukastyrychtr@gmail.com>"]
+edition = "2018"
 
 [dependencies]
-serde = "*"
-serde_derive = "*"
-serde_json = "*"
-error-chain = "*"
-reqwest = "*"
-rusqlite = {"version" = "0.13", "features" = ["bundled"]}
-sqlitemap = "*"
 log = "*"
-itertools = "*"
-lazy_static = "*"
+env_logger = "*"
+osm_api = {path="../osm_api"}
+osm_db = {path="../osm_db"}

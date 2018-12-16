@@ -1,0 +1,1234 @@
+Steps:
+  renames:
+    bycicles: bycicles_allowed
+    incline: direction
+    mtb:scale: mtb_scale
+    mtb:scale:uphill: mtb_scale_uphill
+    handrail:left: left_handrail
+    handrail:right: right_handrail
+    handrail:center: center_handrail
+    step:condition: step_condition
+    step.condition: step_condition
+    step:height: step_height
+    step.height: step_height
+    step:length: step_length
+    step.length: step_length
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {highway: [steps]}}, {has_property: [step_count, step.condition]}]
+Crossing:
+  renames:
+    highway: type
+    crossing: type
+    traffic_signals:direction: traffic_signals_direction
+    traffic_signals:sound: traffic_signals_sound
+    parking:lane:both: both_parking_lane
+  unprefixes: []
+  replaces_property_value:
+    type:
+    - '; '
+    - _
+  accepts_when: [{property_equals: {highway: [crossing, traffic_signals]}}]
+ProtectedArea:
+  renames:
+    leisure: type
+    description:cz: description_cz
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [protection_title]}, {property_equals: {boundary: [protected_area]}}]
+Platform:
+  renames:
+    route:ref: route_ref
+    indoor:level: indoor_level
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {public_transport: [platform]}}]
+Stop:
+  renames:
+    highway: type
+    amenity: type
+    railway: type
+    shelter: has_shelter
+    route:ref: route_ref
+    alt_name:de: alt_name_de
+    old_name:de: old_name_de
+    network:en: network_en
+    network:cs: network_cs
+    zona: zone
+    toilets:wheelchair: wheelchair_toilets
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {public_transport: [stop_position, station, stop_area], highway: [bus_stop], amenity: [bus_station], railway: [tram_stop]}}]
+Border: 
+  renames:
+    left:country: left_country
+    right:country: right_country
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [border_type]}]
+Boundary:
+  renames:
+    boundary: type
+    historic: historic_type
+    marker: marker_type
+    iso3166-2: iso3166_2
+    alt_name:de: alt_name_de
+    old_name:de: odl_name_de
+    tracktype: track_type
+    old_name:cs: old_name_cs
+    vehicle:conditional: vehicle_conitional
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [boundary]}]
+WaterWay:
+  renames:
+    waterway: type
+    boat: boats_allowed
+    motorboat: motor_boats_allowed
+    mtb:scale: mtb_scale
+    whitewater:section_grade: whitewater_section_grade
+    whitewater:section_name: whitewater_section_name
+    whitewater:rapid_name: whitewater_rapid_name
+    life_cycle:start_date: start_date
+    whitewater:rapid_grade: whitewater_rapid_grade
+    seamark:notice:function: seamark_notice_function
+    seamark:type: seamark_type
+    seamark:notice:impact: seamark_notice_impact
+    seamark:notice:category: seamark_notice_category
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [waterway]}]
+Track:
+  renames:
+    motorcar: motorcar_allowed
+    mtb:scale:uphill: mtb_scale_uphill
+    leisure: type
+    bicycle:class: bicycle_class
+    ticks:description: ticks_description
+    motor_vehicle:note: motor_vehicle_note
+    survey:date: survey_date
+    proposed:segregated: proposed_segregated
+    incline:steep: steep_incline
+    lanes:sprint: sprint_lanes
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {highway: [track], leisure: [track]}}, {has_property: [tracktype]}]
+AerialWay:
+  renames:
+    aerialway: type
+    aeroway: type
+    area:aeroway: type
+    disused:aeroway: disused_aeroway
+    roof:shape: roof_shape
+    bridge:structure: bridge_structure
+    aerodrome:type: aerodrome_type
+    note:cs: note_cs
+    beacon:type: beacon_type
+    building:levels: building_levels
+  unprefixes:
+  - aerialway
+  replaces_property_value: {}
+  accepts_when: [{has_property: [aerialway, aeroway, aea:aeroway, disused:aeroway]}]
+ServiceRoad:
+  renames:
+    vehicle:backward: vehicle_backward
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {highway: [service]}}]
+Road:
+  renames:
+    highway: type
+    junction: junction_type
+    bicycle: bicycle_allowed
+    horse: horse_allowed
+    motor_vehicle: motor_vehicle_allowed
+    lanes:forward: forward_lanes
+    lanes:backward: backward_lanes
+    destination:lanes: lane_destinations
+    footway: footway_type
+    inline_skates: inline_skates_allowed
+    cycleway:left: left_cycleway
+    cycleway:right: right_cycleway
+    maxspeed:hgv: maxspeed_hgv
+    maxspeed:forward: maxspeed_forward
+    proposed:bridge: proposed_bridge
+    maxspeed:backward: maxspeed_backward
+    oneway:bicycle: bicycle_oneway
+    vehicle: vehicle_allowed
+    dog: dogs_allowed
+    motorcycle: motorcycle_allowed
+    bridge:structure: bridge_structure
+    oneway:tram: tram_oneway
+    direction: incline
+    FIXME: fixme
+    destination:symbol: destination_symbol
+    railway:lanes:backward: railway_lanes_backward
+    railway:lanes:forward: railway_lanes_forward
+    change:lanes:backward: change_lanes_backward
+    change:lanes:forward: change_lanes_forward
+    psv:lanes:backward: psv_lanes_backward
+    psv:lanes:forward: psv_lanes_forward
+    parking:lane:left: parking_lane_left
+    parking:lane:right: parking_lane_right
+    parking:lane:both: parking_lane_both
+    change:lanes: change_lanes
+    class:bicycle:mtb: mtb_bicycle_class
+    zone:traffic: traffic_zone
+    traffic:zone: traffic_zone
+    destination:backward: backward_destination
+    class:bicycle:mtb:technical: technical_mtb_bicycle_class
+    note:ref_name: ref_name_note
+    maxwidth:lanes: lanes_maxwidth
+    highway:category:pl: pl_highway_category
+    highway:class:pl: pl_highway_class
+    maxspeed:bus: bus_maxspeed
+    maxspeed:trailer: trailer_maxspeed
+    width:carriageway: carriageway_width
+    maxspeed:wet: wet_maxspeed
+    bridge:name: bridge_name
+    maxspeed:variable: varialbe_maxspeed
+    overtaking:bus: bus_overtaking
+    overtaking:hgv: hgv_overtaking
+    overtaking:trailer: trailer_overtaking
+    bus:lanes:backward: bus_lanes_backward
+    bus:lanes:forward: bus_lanes_forward
+    railway:lanes: railway_lanes
+    vehicle:lanes:backward: vehicle_lanes_backward
+    vehicle:lanes:forward: vehicle_lanes_forward
+    busway:right: busway_right
+    destination:colour:lanes: destination_lanes_colours
+    destination:forward: forward_destination
+    hgv:6.5t: hgv_6_5t
+    destination:int_ref:lanes: destination_int_ref_lanes
+    destination:ref:lanes: destination_ref_lanes
+    destination:symbol:lanes: destination_symbol_lanes
+    parking:condition:left: left_parking_condition
+    parking:condition:right: right_parking_condition
+    parking:lane:both:parallel: parking_lane_both_parallel
+    destination:int_ref: destination_int_ref
+    destination:ref: destination_ref
+    maxspeed:type: maxspeed_type
+    motor_vehicle:conditional: motor_vehicle_conditional
+    motor_vehicle:forward:conditional: motor_vehicle_forward_conditional
+    maxspeed:conditional: maxspeed_conditional
+    motor_vehicle:backward: motor_vehicle_backward
+    vehicle:forward: vehicle_forward
+    sidewalk:both:kerb: both_sidewalk_kerb
+    parking:lane:left:parallel: parking_lane_left_parallel
+    vehicle:forward:conditional: vehicle_forward_conditional
+    transit:lanes: transit_lanes
+    bicycle:lanes:forward: bicycle_forward_lanes
+    hour_off:hgv: hgv_hour_off
+    hour_on:hgv: hgv_hour_on
+    parking:lane:left:diagonal: parking_lane_left_diagonal
+    hgv:6.5: hgv_6_5t
+    ramp:wheelchair: wheelchair_ramp
+    maxheight:forward: forward_maxheight
+    bicycle:class:technical: technical_bicycle_class
+    survey:date: survey_date
+    abandoned:highway: abandoned_highway
+    hgv:6t: hgv_6t
+    bridge:ref: bridge_ref
+    hgv:maxspeed:conditional: hgv_conditional_maxspeed
+    destination:country: destination_country
+    note:access: access_note
+    footway:left.width: left_footway_width
+    maxspeed:forward:conditional: forward_maxspeed_conditional
+    hazmat:water: hazmat_water
+    hgv:12t: hgv_12t
+    hgv:3.5: hgv_3_5t
+    note:maxweight: maxweight_note
+    alt_name:de: alt_name_de
+    alt_name:en: alt_name_en
+    area:highway: highway_area
+    hazmat:e: hazmat_e
+    destination:name: destination_name
+    psv:lanes: psv_lanes
+    lanes:psv: psv_lanes
+    note:name: name_note
+    taxi:lanes: taxi_lanes
+    vehicle:lanes: vehicle_lanes
+    lanes:both_ways: both_ways_lanes
+    maxspeed:source: maxspeed_source
+    hgv:6: hgv_6t
+    maxspeed:advisory: advisory_maxspeed
+    cycleway:both: both_cycleway
+    parking:condition:both: both_parking_condition
+    parking:condition:both:default: both_default_parking_condition
+    parking:condition:both:residents: both_residents_parking_condition
+    parking:condition:both:time_interval: both_parking_condition_time_interval
+    zone:maxspeed: zone_maxspeed
+    oneway:psv: psv_oneway
+    psv:oneway: psv_oneway
+    removed:cycleway: removed_cycleway
+    bicycle:lanes: bicycle_lanes
+    hgv:maxweight: hgv_maxweight
+    hgv:lanes: hgv_lanes
+    note:reg_name: reg_name_note
+    note:cs: cs_note
+    lanes:bus: bus_lanes
+    his:1991-:name: his_1991_name
+    overtaking:conditional: conditional_overtaking
+    maxspeed:hgv:backward:conditional: hgv_backward_conditional_maxspeed
+    hgv:backward: hgv_backward
+    overtaking:forward: forward_overtaking
+    maxspeed:hgv:backward: hgv_backward_maxspeed
+    parking:condition:right:time_interval: right_parking_condition_time_interval
+    parking:lane: parking_lane
+    his:1945-:name: his_1945_name
+    parking:condition:both:residents:time_interval: both_residents_parking_condition_time_interval
+    placement:forward: forward_placement
+    overtaking:backward: backward_overtaking
+    his:1896-:name: his_1896_name
+    parking:both: both_parking
+    his:1400-1840:name: his_1400_1800_name
+    his:1870-1940:name: his_1870_1940_name
+    bus:backward: backward_bus
+    indoor:level: indoor_level
+    change:backward: backward_change
+    junction:ref: junction_ref
+    parking:condition:right:maxstay: right_parking_condition_maxstay
+    destination:note: destination_note
+    parking:condition:right:residents: right_residents_parking_condition
+    destination:street: destination_street
+    arcade:left: left_arcade
+    maxwidth:conditional: conditional_maxwidth
+    his:1930-:name: his_1930_name
+    tmc:cid_58:tabcd_1:class: tmc_cid_58_tabcd_1_class
+    tmc:cid_58:tabcd_1:lclversion: tmc_cid_58_tabcd_1_lclversion
+    tmc:cid_58:tabcd_1:nextlocationcode: tmc_cid_58_tabcd_1_nextlocationcode
+    overtaking:hgv:conditional: hgv_conditional_overtaking
+    lanes:psv:times: psv_lanes_times
+    his:1990-:name: his_1990_name
+    his:1962-:name: his_1962_name
+    ramp:stroller: stroller_ramp
+    hazard:forward: forward_hazard
+    sidewalk:both:surface: both_sidewalk_surface
+    his:1940-1945:name: his_1940_1945_name
+    parking:condition:right:default: right_parking_default_condition
+    hgv:12: hgv_12
+    alt_name:cs: alt_name_cs
+    abandoned:railway: abandoned_railway
+    his:1840-1870:name: his_1840_1870_name
+    his:1951-1990:name: his_1951_1990_name
+    bridge:height: bridge_height
+    oneway:railway: oneway_railway
+    proposed:highway: proposed_highway
+    taxi:lanes:forward: taxi_lanes_forward
+    destination:colour_tx:lanes: destination_colour_tx_lanes
+    sidewalk:right:bicycle: right_bicycle_sidewalk
+    sidewalk:left:bicycle: left_bicycle_sidewalk
+    maxspeed:backward:conditional: backward_conditional_maxspeed
+    description:ref: description_ref
+    tolltype:hgv: hgv_tolltype
+    note:maxheight: maxheight_note
+  unprefixes: []
+  replaces_property_value:
+    maxspeed:
+    - CZ:urban
+    - '50'
+    maxheight:
+    - default
+    - '4.5'
+  accepts_when: [{has_property: [highway]}]
+RailWay:
+  address_aware: true
+  renames:
+    railway: type
+    bridge: is_bridge
+    crossing:light: crossing_light
+    crossing:bell: crossing_bell
+    crossing:barrier: crossing_barrier
+    crossing: crossing_type
+    building: building_type
+    oneway:tram: tram_oneway
+    maxspeed:tilting: tilting_maxspeed
+    abandoned:railway: abandoned_railway
+    bridge:name: bridge_name
+    bridge:structure: bridge_structure
+    disused:railway: disused_railway
+    tunnel:name: tunnel_name
+    indoor:level: indoor_level
+    maxspeed:forward: forward_maxspeed
+    maxspeed:backward: backward_maxspeed
+    railway:position:exact: exact_position
+    railway:signal:direction: signal_direction
+    railway:signal:position: signal_position
+    railway:signal:shunting: shunting_signal
+    railway:signal:shunting:form: shunting_signal_form
+    railway:signal:shunting:height: shunting_signal_height
+    railway:signal:main_repeated: main_repeated_signal
+    railway:signal:main_repeated:form: main_repeated_signal_form
+    railway:signal:main_repeated:states: main_repeated_signal_states
+    railway:signal:distant: distant_signal
+    railway:signal:distant:form: distant_signal_form
+    railway:signal:distant:height: distant_signal_height
+    railway:signal:distant:states: distant_signal_states
+    railway:signal:main: main_signal
+    railway:signal:main:form: main_signal_form
+    railway:signal:main:function: main_signal_function
+    railway:signal:main:height: main_signal_height
+    railway:signal:main:states: main_signal_states
+    railway:signal:main:substitute_signal: main_signal_substitute_signal
+    railway:signal:speed_limit_distant: distant_speed_limit_signal
+    railway:signal:speed_limit_distant:form: distant_speed_limit_signal_form
+    railway:signal:speed_limit_distant:height: distant_speed_limit_signal_height
+    railway:signal:speed_limit_distant:speed: distant_speed_limit_signal_speed
+    railway:signal:electricity: electricity_signal
+    railway:signal:electricity:form: electricity_signal_form
+    railway:signal:electricity:height: electricity_signal_height
+    railway:signal:electricity:type: electricity_signal_type
+    railway:signal:shunting:states: shunting_signal_states
+    railway:signal:speed_limit: speed_limit_signal
+    railway:signal:speed_limit:form: speed_limit_signal_form
+    railway:signal:speed_limit:height: speed_limit_signal_height
+    railway:signal:speed_limit:speed: speed_limit_signal_speed
+    crossing:activation: crossing_activation
+    crossing:saltire: crossing_saltire
+    railway:signal:distant:deactivated: distant_signal_deactivated
+    railway:signal:main:deactivated: main_signal_deactivated
+    railway:signal:shunting:deactivated: shunting_signal_deactivated
+    railway:signal:main_repeated:deactivated: main_repeated_signal_deactivated
+    railway:signal:station_distant: distant_station_signal
+    railway:signal:station_distant:form: distant_station_signal_form
+    railway:signal:snowplow: snowplow_signal
+    railway:signal:snowplow:form: snowplow_signal_form
+    railway:signal:snowplow:type: snowplow_signal_type
+    railway:maxspeed:diverging: diverging_maxspeed
+    railway:maxspeed:straight: straight_maxspeed
+    railway:radius: gauge
+    railway:signal:crossing_distant: distant_crossing_signal
+    railway:signal:crossing_distant:form: distant_crossing_signal_form
+    railway:signal:main_repeated:substitute_signal: main_repeated_signal_substitute_signal
+    railway:signal:crossing_distant:deactivated: distant_crossing_signal_deactivated
+    railway:signal:crossing_distant:caption: distant_crossing_signal_caption
+    railway:signal:snowplow:deactivated: snowplow_signal_deactivated
+    railway:signal:minor: minor_signal
+    railway:signal:minor:deactivated: minor_signal_deactivated
+    railway:signal:minor:form: minor_signal_form
+    railway:signal:minor:height: minor_signal_height
+    railway:switch:electric: electric_switch
+    railway:signal:minor:substitute_signal: minor_signal_substitute_signal
+    railway:signal:speed_limit:deactivated: speed_limit_signal_deactivatedd
+    railway:signal:electricity:deactivated: electricity_signal_deactivated
+    railway:signal:station_distant:deactivated: distant_station_signal_deactivated
+    railway:signal:minor:states: minor_signal_states
+    avalanche_protector:left: left_avalanche_protector
+    railway:milestone:catenary_mast: catenary_mast_milestone
+    railway:milestone:emergency_brake_override: emergency_brake_override_milestone
+    defect_detector:hot_box: hot_box_defect_detector
+    network:en: network_en
+    switch:configuration: switch_configuration
+    crossing:on_demand: crossing_on_demand
+    signal:distant:repeated: distant_signal_repeated
+    switch:resetting: switch_resetting
+    toilets:wheelchair: wheelchair_toilets
+    signal:combined: combined_signal
+    signal:combined:function: combined_signal_function
+    signal:wrong_road: wrong_road_signal
+    signal:electricity:turn_direction: electricity_signal_turn_direction
+    signal:combined:states: combined_signal_states
+    signal:route: route_signal
+    signal:route:states: route_signal_states
+  unprefixes:
+  - building
+  - railway
+  replaces_property_value: {}
+  accepts_when: [{has_property: [railway]}]
+Parking:
+  address_aware: true
+  renames:
+    building: building_type
+    capacity:disabled: capacity_for_disabled
+    building:levels: building_levels
+    capacity:parent: capacity_for_parents
+    capacity:women: capacity_for_women
+    url: website
+    fee: paid
+    parking: type
+    garden:type: garden_type
+    demolished:building: demolished_building
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {amenity: [parking]}}, {has_property: [parking]}]
+Graveyard:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {amenity: [grave_yard]}}]
+Shelter:
+  renames:
+    shelter_type: type
+    internet_access:ssid: internet_access_ssid
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {amenity: [shelter]}}]
+Recycling:
+  renames:
+    recycling_type: type
+    telephone: phone
+  unprefixes:
+  - recycling
+  - contact
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {amenity: [recycling]}}, {has_property: [recycling_type]}]
+Fuel:
+  address_aware: true
+  renames:
+    internet_access:fee: internet_access_paid
+    building: building_type
+    roof:shape: roof_shape
+    roof:colour: roof_colour
+  unprefixes:
+  - building
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {amenity: [fuel]}}]
+PostBox:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {amenity: [post_box]}}]
+  renames:
+    internet_access:fee: internet_access_fee
+Pub:
+  address_aware: true
+  renames:
+    payment:other: other_payment
+    payment:cash: cash_payment
+    payment:debit_cards: debitcards_payment
+    payment:litecoin: litecoin_payment
+    payment:ethereum: ethereum_payment
+    payment:meal_vouchers: meal_vouchers_payment
+    payment:jcb: jcb_payment
+    payment:visa: visa_payment
+    payment:cryptocurrencies: cryptocurrencies_payment
+  unprefixes:
+  - contact
+  - building
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {amenity: [pub]}}]
+Fountain:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {amenity: [foutain]}}]
+ATM:
+  address_aware: true
+  renames:
+    contact:website: contact_website
+    atm:bitcoin: bitcoin
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {amenity: [atm]}}]
+Bank:
+  address_aware: true
+  renames:
+    building: building_type
+    payment:contactless: contactless_payment
+  unprefixes:
+  - building
+  - contact
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {amenity: [bank]}}]
+SocialFacility:
+  address_aware: true
+  renames:
+    social_facility: facility_type
+    social_facility:for: expected_users
+    building: building_type
+    contact:phone: phone
+  unprefixes:
+  - building
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {amenity: [social_facility]}}]
+Clock:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {amenity: [clock]}}]
+BicycleParking:
+  renames:
+    bicycle_parking: parking_type
+    surveillance:type: surveillance_type
+    surveillance:zone: surveillance_zone
+    service:bicycle:chain_tool: service_chain_tool
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [bicycle_parking]}]
+Board:
+  renames:
+    language:cs: language_cs
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {information: [board]}}]
+Shop:
+  renames:
+    shop: type
+    vehicle:parts: vehicle_parts
+    vehicle:repair: vehicle_repair
+    payment:coins: coins_payment
+    payment:notes: notes_payment
+    payment:maestro: maestro_payment
+    payment:mastercard: mastercard_payment
+    payment:visa: visa_payment
+    payment:bitcoin: bitcoin_payment
+    secondhand: second_hand
+    payment:jcb: jcb_payment
+  unprefixes:
+  - drink
+  replaces_property_value: {}
+  accepts_when: [{has_property: [shop]}]
+Craft:
+  address_aware: true
+  renames:
+    craft: type
+    payment:bitcoin: bitcoin_payment
+  unprefixes:
+  - contact
+  replaces_property_value: {}
+  accepts_when: [{has_property: [craft]}]
+Office:
+  address_aware: true
+  renames:
+    office: type
+    payment:bitcoin: bitcoin_payment
+    building:roof:material: roof_material
+    building:roof:shape: roof_shape
+    building:roof:height: roof_height
+    building:roof:colour: roof_colour
+    roof:material: roof_material
+    roof:shape: roof_shape
+    roof:height: roof_height
+    roof:colour: roof_colour
+    description:en: description_en
+  unprefixes:
+  - building
+  - contact
+  replaces_property_value: {}
+  accepts_when: [{has_property: [office]}]
+Castle:
+  renames:
+    castle_type: type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {historic: [castle]}}]
+Transformer:
+  renames:
+    transformer: transformer_type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [transformer]}]
+PowerLine:
+  renames:
+    line: type
+    line:colour: line_colour
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {power: [line, minor_line, cable], route: [power]}}]
+PowerSubstation:
+  renames:
+    substation: type
+    building:levels: building_levels
+    roof:shape: roof_shape
+    building:colour: building_colour
+    roof:colour: roof_colour
+    roof:levels: roof_levels
+    voltage-low: low_voltage
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {power: [substation]}}]
+Power:
+  renames:
+    power: type
+    voltage-high: high_voltage
+    voltage-low: low_voltage
+    location:transition: transition_location
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_does_not_equal: {power: [plant]}}]
+Pole:
+  renames:
+    transformer: transformer_type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {power: [pole]}}]
+Area:
+  address_aware: true
+  renames:
+    area: type
+    highway: type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {area: [yes]}}]
+Tower:
+  renames:
+    tower:type: tower_type
+    building:part: building_part
+    communication:mobile_phone: mobile_phone_communication
+    tower:construction: tower_construction
+    building:colour: colour
+    roof:shape: roof_shape
+    building:material: material
+    building:levels: levels
+    roof:colour: roof_colour
+    building:flats: flats
+    communication:microwave: microwave_communication
+    communication:television: television_communication
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {man_made: [tower], razed:man_made: [tower]}}, {has_property: [tower:type]}]
+PowerPlant:
+  renames:
+    plant:output:electricity: electricity_output
+    plant:source: plant_source
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {power: [plant]}}]
+HealthCare:
+  renames:
+    healthcare: type
+  unprefixes:
+  - healthcare
+  replaces_property_value: {}
+  accepts_when: [{has_property: [healthcare]}]
+Building:
+  address_aware: true
+  renames:
+    roof:height: roof_height
+    roof:shape: roof_shape
+    building:roof:shape: roof_shape
+    roof:type: roof_shape
+    building:roof:angle: roof_angle
+    roof:slope:angle: roof_angle
+    roof:orientation: roof_orientation
+    building:roof:orientation: roof_orientation
+    internet_access:fee: internet_access_fee
+    information: information_type
+    webpage: website
+    url: website
+    diet:vegetarian: vegetarian_diet
+    heritage:operator: heritage_operator
+    payment:visa: visa_payment
+    payment:visa_debit: visa_debit_payment
+    payment:visa_electron: visa_electron_payment
+    roof:levels: roof_levels
+    building:roof:levels: roof_levels
+    roof:material: roof_material
+    roof: roof_shape
+    building:roof: roof_shape
+    wheelchair:description: wheelchair_description
+    community_centre:for: community_centre_for
+    leisure: leisure_type
+    tourism: tourism_type
+    industrial: industrial_type
+    building:levels:underground: underground_levels
+    roof:angle: roof_angle
+    roof:colour: roof_colour
+    toilets:wheelchair: wheelchair_toilets
+    healthcare:speciality: healthcare_speciality
+    wheelchair:toilets: wheelchair_toilets
+    ph: phone
+    opening_hours:url: opening_hours_url
+    historic: historic_type
+    "id:\u010Dvut": cvut_id
+    description:en: description_en
+    internet_access:ssid: internet_access_ssid
+    payment:cash: cash_payment
+    note:en: note_en
+    payment:bitcoin: bitcoin_payment
+    toilets:disposal: toilets_disposal
+    payment:coins: cash_payment
+    payment:maestro: maestro_payment
+    payment:mastercard: mastercard_payment
+    payment:notes: notes_payment
+    diet:vegan: vegan_diet
+    payment:credit_cards: credit_cards_payment
+    payment:debit_cards: debit_cards_payment
+    roof:slope:direction: roof_slope_direction
+    roof:direction: roof_direction
+    bridge:support: bridge_support
+    diet:gluten_free: gluten_free_diet
+    man_made:disused: disused_man_made
+    part:vertical: vertical_part
+    seamark:type: seamark_type
+    diet:raw: raw_diet
+    wheelchair:description:en: en_wheelchair_description
+    payment:electronic_purses: electronic_purses_payment
+    garden:type: garden_type
+    payment:meal_voucher: meal_voucher_payment
+    currency:czk: currency_czk
+    payment:american_express: american_express_payment
+    payment:cryptocurrencies: cryptocurrencies_payment
+    access:roof: roof_access
+    payment:meal_vouchers: meal_vouchers_payment
+    ruian:type: ruian_type
+    ref:ruian:building: ruian_building_ref
+  unprefixes:
+  - building
+  - contact
+  replaces_property_value: {}
+  accepts_when: [{has_property: [building, shop, building:levels]}, {property_equals: {amenity: [kindergarten, school, college, hospital, restaurant, doctors, veterinary, dentist, clinic], type: [building]}}]
+Tourism:
+  address_aware: true
+  renames:
+    tourism: type
+    information: information_type
+    url: website
+    barrier: barrier_type
+    building:part: building_part
+    internet_access:fee: internet_access_fee
+    roof:height: roof_height
+    roof:shape: roof_shape
+    heritage:operator: heritage_operator
+    artwork:type: artwork_type
+    payment:bitcoin: bitcoin_payment
+    description:en: en_description
+    taxon:cs: taxon_cs
+    artist:wikidata: artist_wikidata
+    note:en: en_note
+    payment:litecoin: litecoin_payment
+    high_water:height: high_water_height
+    alt_name:cs: alt_name_cs
+  unprefixes:
+  - contact
+  replaces_property_value: {}
+  accepts_when: [{has_property: [tourism]}]
+Surveillance:
+  renames:
+    surveillance: type
+    camera:mount: camera_mount
+    camera:direction: camera_direction
+    surveillance:zone: surveillance_zone
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [surveillance]}]
+Cafe:
+  renames:
+    cafe: cafe_type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [cafe]}]
+Amenity:
+  address_aware: true
+  renames:
+    amenity: type
+    community_centre:for: community_centre_for
+    place: place_type
+    diet:vegetarian: vegetarian_diet
+    internet_access:fee: internet_access_fee
+    internet_access:ssid: internet_access_ssid
+    capacity:car: car_capacity
+    authentication:nfc: nfc_authentication
+    toilets:disposal: toilets_disposal
+    socket:schuko: schuko_socket
+    socket:schuko:voltage: schuko_socket_voltage
+    socket:type2:voltage: type2_socket_voltage
+    toilets:wheelchair: wheelchair_toilets
+    diet:vegan: vegan_diet
+    short_name:en: short_name_en
+    socket:chademo: chademo_socket
+    socket:chademo:power: chademo_socket_power
+    socket:type2: type2_socket
+    socket:schuko:current: schuko_socket_current
+  unprefixes:
+  - contact
+  replaces_property_value: {}
+  accepts_when: [{has_property: [amenity]}]
+Checkpoint:
+  renames:
+    checkpoint: type
+    checkpoint:name: checkpoint_name
+    checkpoint:type: checkpoint_type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [checkpoint]}]
+Tree:
+  renames:
+    taxon:cs: taxon_cs
+    genus:cz: genus_cs
+    species:cs: species_cs
+    genus:en: genus_en
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {natural: [tree, tree_row]}}]
+WaterArea:
+  renames:
+    water: type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {type: [water]}}, {has_property: [water]}]
+Natural:
+  renames:
+    natural: type
+    tourism: tourism_type
+    uhul:area: uhul_area
+    uhul:slt: uhul_slt
+    garden:type: garden_type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [natural]}]
+Sport:
+  address_aware: true
+  renames:
+    sport: type
+    opening_hours:url: opening_hours_url
+    climbing:length: climbing_length
+    climbing:sport: climbing_sport
+    athletics:high_jump: highjump
+  unprefixes:
+  - contact
+  replaces_property_value: {}
+  accepts_when: [{has_property: [sport]}]
+Bunker:
+  renames:
+    bunker_type: type
+    tower:type: tower_type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {military: [bunker]}}]
+Place:
+  renames:
+    place: type
+    alt_name:de: alt_name_de
+    wikipedia:cs: wikipedia_cs
+    alt_name:cs: alt_name_cs
+  unprefixes:
+  - contact
+  replaces_property_value: {}
+  accepts_when: [{has_property: [place]}]
+Garden:
+  renames:
+    garden:type: garden_type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {leisure: [garden], landuse: [garden]}}, {has_property: [garden:type]}]
+Land:
+  address_aware: true
+  renames:
+    landuse: type
+    shop: shop_type
+    meadow: meadow_type
+    natural: natural_type
+    military: military_type
+    uhul:slt: uhul_slt
+    uhul:area: uhul_area
+    uhul:id: uhul_id
+    url: website
+    bridge:structure: bridge_structure
+    barrier:height: barrier_height
+    clc:code: clc_code
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [landuse]}]
+GolfCourse:
+  renames:
+    golf:course: golf_course_type
+    golf:par: par
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [golf:course]}]
+Playground:
+  renames:
+    playground: playground_type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [playground]}]
+Leisure:
+  address_aware: true
+  renames:
+    leisure: type
+    dog: dogs_allowed
+    athletics:shot-put: shot_put
+    boats:small: small_boats
+  unprefixes:
+  - contact
+  - athletics
+  replaces_property_value: {}
+  accepts_when: [{has_property: [leisure]}]
+Barrier:
+  renames:
+    barrier: type
+    toll:hgv: toll_hgv
+    lift_gate:type: liftgate_type
+    building:colour: building_colour
+    abandoned:highway: abandoned_highway
+    bridge:structure: bridge_structure
+    disused:railway: disused_railway
+    swing_gate:type: swing_gate_type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [barrier]}]
+Memorial:
+  renames:
+    memorial:type: memorial_type
+    memorial: memorial_kind
+    heritage:operator: heritage_operator
+    person:date_of_birth: person_date_of_birth
+    person:date_of_death: person_date_of_death
+    wikipedia:en: wikipedia_en
+    inscription:cs: inscription_cs
+  unprefixes:
+  - memorial
+  replaces_property_value: {}
+  accepts_when: [{has_property: [memorial]}]
+Historic:
+  renames:
+    historic: type
+    heritage:operator: heritage_operator
+    memorial:type: memorial_type
+    memorial:name: memorial_name
+    memorial:addr: addr
+    person:date_of_birth: person_date_of_birth
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_does_not_equal: {historic: [yes]}}]
+TrafficSign:
+  renames:
+    traffic_sign: type
+    traffic_sign:backward: backward
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [traffic_sign]}]
+Addressable:
+  address_aware: true
+  renames:
+    disused:name: disused_name
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [addr:house_number]}]
+NoExit:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [noexit]}]
+FireHydrant:
+  renames: {}
+  unprefixes:
+  - fire_hydrant
+  replaces_property_value: {}
+  accepts_when: [{has_property: [fire_hydrant:type]}, {property_equals: {emergency: [fire_hydrant]}}]
+Entrance:
+  renames:
+    entrance: type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [entrance]}, {property_equals: {type: [entrance]}}]
+Bench:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [bench]}]
+TrafficCalming:
+  renames:
+    traffic_calming: type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [traffic_calming]}]
+Ford:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [ford]}]
+SchoolThing:
+  renames:
+    school: type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [school]}]
+Notice:
+  renames:
+    seamark:type: type
+  unprefixes:
+  - seamark:notice
+  - notice
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {seamark:type: [notice]}}]
+Route:
+  renames:
+    route: type
+    from: from_
+    lcn:description: lcn_description
+    public_transport:version: public_transport_version
+    note1: note_1
+    text_color: text_colour
+    osmonitor:road_components: road_components
+    note:cz: note_cz
+  unprefixes:
+  - osmc
+  replaces_property_value: {}
+  accepts_when: [{has_property: [route]}, {property_equals: {type: [route]}}]
+Restriction:
+  renames:
+    restriction: type
+    except: except_
+    restriction:hgv: hgv_restriction
+    restriction:conditional: conditional
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {type: [restriction]}}]
+Site:
+  renames:
+    site: type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {type: [site]}}]
+Collection:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {type: [collection]}}]
+ManMade:
+  renames:
+    razed:man_made: type
+    man_made: type
+    wifi:ssid: wifi_ssid
+    building:material: building_material
+    note:en: note_en
+    monitoring:air_quality: air_quality_monitoring
+  unprefixes:
+  - contact
+  replaces_property_value: {}
+  accepts_when: [{has_property: [man_made, razed:man_made]}]
+Advertising:
+  renames:
+    advertising: type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [advertising]}]
+Disused:
+  renames:
+    disused: type
+    destroyed:amenity: destroyed_amenity
+    destroyed:name: destroyed_name
+    disused:highway: highway
+    disused:name: name
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [disused, disused:amenity]}]
+DemolishedBuilding:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [demolished:building]}]
+Construction:
+  renames:
+    construction: type
+    abandoned:highway: abandoned_highway
+    abandoned:ref: abandoned_ref
+    official_name:en: official_en_name
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [construction]}]
+Abandoned:
+  renames:
+    abandoned:highway: type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [abandoned:highway]}]
+Fee:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [fee]}]
+Piste:
+  renames: {}
+  unprefixes:
+  - piste
+  replaces_property_value: {}
+  accepts_when: [{has_property: [piste:type]}]
+Annotated:
+  renames:
+    removed:name: removed_name
+    building:part: building_part
+    historic:building: historic_building
+    building:colour: building_colour
+    roof:shape: roof_shape
+    disused:railway: disused_railway
+    removed:phone: removed_phone
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [note]}]
+AssociatedStreet:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {type: [associated_street]}}]
+RF:
+  renames:
+    rf:category: category
+    rf:modulation: modulation
+    ant:power: power
+    rf:content: content
+    fm:stereo: stereo
+    rds:pi: pi
+    dvbt:parameters: dvbt_parameters
+    rf:owner: owner
+    rf:callsign: callsign
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {type: [rf]}}]
+Enforcement:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {type: [enforcement]}}]
+Bridge:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {type: [bridge]}}]
+Level:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {type: [level]}}]
+PublicTransport:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {type: [public_transport]}}]
+Street:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {type: [street]}}]
+Named:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [name]}]
+Commented:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [comment]}]
+Elevated:
+  renames: {}
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [ele]}]
+Accessible:
+  renames:
+    access: type
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [access]}]
+BuildingPart:
+  renames:
+    building:part: type
+    roof:shape: roof_shape
+    roof:direction: roof_direction
+    roof:height: roof_height
+    roof:material: roof_material
+    roof:orientation: roof_orientation
+    roof:colour: roof_colour
+    roof:slope:direction: roof_slope_direction
+    building:material: building_material
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{has_property: [building:part]}]
+Theatre:
+  address_aware: true
+  renames: {}
+  unprefixes: [building]
+  accepts_when: [{property_equals: {amenity: [theatre]}}]

@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-#[derive(Serialize, Deserialize, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
 pub enum OSMObjectType {
     #[serde(rename = "node")]
     Node,
@@ -9,7 +9,7 @@ pub enum OSMObjectType {
     Relation,
 }
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct OSMRelationMember {
     #[serde(rename = "type")]
     referenced_type: OSMObjectType,
@@ -18,7 +18,7 @@ pub struct OSMRelationMember {
     pub role: String,
 }
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(tag = "type")]
 pub enum OSMObjectSpecifics {
     #[serde(rename = "node")]
@@ -29,7 +29,7 @@ pub enum OSMObjectSpecifics {
     Relation { members: Vec<OSMRelationMember> },
 }
 
-#[derive(Deserialize, Serialize, Clone)]
+#[derive(Deserialize, Serialize, Clone, Debug)]
 pub struct OSMObject {
     pub id: u64,
     pub timestamp: String,
