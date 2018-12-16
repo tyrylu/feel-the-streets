@@ -136,8 +136,9 @@ class OSMObjectManager:
         key_fn = lambda oid: oid[0]
         for key, idset in itertools.groupby(sorted(ids, key=key_fn), key_fn):
             entity_type = self._id_prefix_to_type[key]
-            for start_idx in range(0, len(idset), max_simultaneously_queried):
-                fd = self._run_query_raw("%s(id:%s)"%(entity_type, ",".join(str(id) for id in idset[start_idx:(start_idx + max_simultaneously_queried)])))
+            idset_list = list(idset)
+            for start_idx in range(0, len(idset_list), max_simultaneously_queried):
+                fd = self._run_query_raw("%s(id:%s)"%(entity_type, ",".join(str(id) for id in idset_list[start_idx:(start_idx + max_simultaneously_queried)])))
                 objects.extend(self._cache_objects_from_readable(fd, True))
         self._ensure_has_cached_dependencies_for(objects)
 
