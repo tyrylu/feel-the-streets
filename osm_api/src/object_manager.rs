@@ -1,6 +1,7 @@
 use crate::error::Result;
-use itertools::Itertools;
 use crate::object::{OSMObject, OSMObjectSpecifics, OSMObjectType};
+use crate::utils;
+use itertools::Itertools;
 use reqwest;
 use rusqlite::Connection;
 use serde::Deserialize;
@@ -10,7 +11,6 @@ use std::cell::RefCell;
 use std::io::{BufReader, Read};
 use std::iter;
 use std::time::Instant;
-use crate::utils;
 
 fn translate_type_shortcut(shortcut: char) -> &'static str {
     match shortcut {

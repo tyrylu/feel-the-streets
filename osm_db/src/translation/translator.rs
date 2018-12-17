@@ -16,7 +16,11 @@ pub fn translate(
         None => Ok(None),
         Some((discriminator, spec)) => {
             let mut entity_data = HashMap::new();
-            trace!("Translating object {} to {}.", object.unique_id(), discriminator);
+            trace!(
+                "Translating object {} to {}.",
+                object.unique_id(),
+                discriminator
+            );
             for (key, value) in &object.tags {
                 let mut new_key = key.clone();
                 let mut new_value = value.clone();

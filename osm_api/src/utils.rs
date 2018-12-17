@@ -1,5 +1,5 @@
-use itertools::Itertools;
 use crate::object::OSMObject;
+use itertools::Itertools;
 use serde_json;
 use std::collections::HashMap;
 

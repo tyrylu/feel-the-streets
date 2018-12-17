@@ -9,9 +9,7 @@ extern crate log;
 
 use reqwest;
 
-
 use serde_json;
-
 
 pub mod error;
 pub mod object;

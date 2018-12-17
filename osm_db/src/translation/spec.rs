@@ -94,8 +94,8 @@ impl TranslationSpec {
 
     pub fn for_object(object: &OSMObject) -> Option<(String, Self)> {
         for (generates, spec) in TRANSLATION_SPECS.iter() {
-                        if spec.is_applycable_for(&object) {
-                println!("Trying {}.", generates);
+            if spec.is_applycable_for(&object) {
+                trace!("Trying {}.", generates);
                 let metadata = EntityMetadata::for_discriminator(&generates)
                     .expect("Entity and translation spec identifier mismatch.");
                 if let Some(parent) = metadata.parent_metadata() {

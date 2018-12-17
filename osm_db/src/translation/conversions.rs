@@ -2,9 +2,9 @@ use crate::entity_metadata::EntityMetadata;
 use crate::entity_metadata::Enum;
 use serde_json::{Number, Value};
 use std::collections::HashMap;
-use uom::si::mass::ton;
-use uom::si::length::meter;
 use uom::si::f64::{Length, Mass};
+use uom::si::length::meter;
+use uom::si::mass::ton;
 
 pub fn convert_entity_data(
     discriminator: &str,
@@ -24,7 +24,7 @@ pub fn convert_entity_data(
             "float" => convert_float(&value),
             "tons" => convert_to_tons(&value),
             "meters" => convert_to_meters(&value),
-                        _ => {
+            _ => {
                 if let Some(enum_spec) = Enum::with_name(&type_name) {
                     convert_value_of_enum(&value, &enum_spec)
                 } else {
@@ -78,7 +78,9 @@ fn convert_bool(value: &str) -> Option<Value> {
 }
 
 fn construct_json_f64(value: f64) -> Option<Value> {
-Some(Value::Number(Number::from_f64(value).expect("Json number construction failure.")))
+    Some(Value::Number(
+        Number::from_f64(value).expect("Json number construction failure."),
+    ))
 }
 
 fn convert_float(value: &str) -> Option<Value> {
@@ -96,47 +98,42 @@ fn split_unit_spec(spec: &str) -> Option<(f64, Option<&str>)> {
     if parts.len() > 2 {
         warn!("Unit specification {} is not valid.", spec);
         return None;
-    }
-    else {
+    } else {
         if let Ok(num) = parts[0].parse::<f64>() {
             Some((num, parts.get(1).map(|v| *v)))
-        }
-        else {
-warn!("The magnitude of the unit specification {} could not be parsed as a f64.", spec);
-None
-        
+        } else {
+            warn!(
+                "The magnitude of the unit specification {} could not be parsed as a f64.",
+                spec
+            );
+            None
         }
     }
-
 }
 
 fn convert_to_tons(value: &str) -> Option<Value> {
-let (magnitude, unit_str) = split_unit_spec(&value)?;
+    let (magnitude, unit_str) = split_unit_spec(&value)?;
     match unit_str {
-None => construct_json_f64(magnitude),
-Some(unit) => {
-    match unit {
-"t" => construct_json_f64(Mass::new::<ton>(magnitude).get::<ton>()),
-_ => {
-    warn!("Unsupported unit specifier {}.", unit);
-    None
-}
+        None => construct_json_f64(magnitude),
+        Some(unit) => match unit {
+            "t" => construct_json_f64(Mass::new::<ton>(magnitude).get::<ton>()),
+            _ => {
+                warn!("Unsupported unit specifier {}.", unit);
+                None
+            }
+        },
     }
-}
-}
 }
 fn convert_to_meters(value: &str) -> Option<Value> {
-let (magnitude, unit_str) = split_unit_spec(&value)?;
+    let (magnitude, unit_str) = split_unit_spec(&value)?;
     match unit_str {
-None => construct_json_f64(magnitude),
-Some(unit) => {
-match unit {
-"m" => construct_json_f64(Length::new::<meter>(magnitude).get::<meter>()),
-_ => {
-    warn!("Unsupported unit specifier {}.", unit);
-    None
-}
-    }
-}
+        None => construct_json_f64(magnitude),
+        Some(unit) => match unit {
+            "m" => construct_json_f64(Length::new::<meter>(magnitude).get::<meter>()),
+            _ => {
+                warn!("Unsupported unit specifier {}.", unit);
+                None
+            }
+        },
     }
 }
