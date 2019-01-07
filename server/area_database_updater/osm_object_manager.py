@@ -31,10 +31,7 @@ class OSMObjectManager:
     _id_prefix_to_type = {"n": "node", "w": "way", "r": "relation"}
 
     def __init__(self, use_cache, cache_responses):
-        dict_storage = "generation_temp"
-        self._dict_storage = dict_storage
-        os.makedirs(dict_storage, exist_ok=True)
-        self._entity_cache = filedict.FileDict(os.path.join(dict_storage, "entity_cache"))
+        self._entity_cache = filedict.FileDict("entity_cache")
         self._cache_responses = cache_responses
         self._use_cache = use_cache
         self._removed = False
@@ -54,7 +51,7 @@ class OSMObjectManager:
             self._entity_cache[obj.unique_id] = obj
             if return_objects:
                 objects.append(obj)
-    return objects
+        return objects
     
     def _run_query_raw(self, query, timeout, is_lookup=True, retry=0):
         if self._use_cache:
@@ -139,8 +136,9 @@ class OSMObjectManager:
         key_fn = lambda oid: oid[0]
         for key, idset in itertools.groupby(sorted(ids, key=key_fn), key_fn):
             entity_type = self._id_prefix_to_type[key]
-            for start_idx in range(0, len(idset), max_simultaneously_queried):
-                fd = self._run_query_raw("%s(id:%s)"%(entity_type, ",".join(str(id) for id in idset[start_idx:(start_idx + max_simultaneously_queried)])))
+            idset_list = list(idset)
+            for start_idx in range(0, len(idset_list), max_simultaneously_queried):
+                fd = self._run_query_raw("%s(id:%s)"%(entity_type, ",".join(id[1:] for id in idset_list[start_idx:(start_idx + max_simultaneously_queried)])), timeout=900)
                 objects.extend(self._cache_objects_from_readable(fd, True))
         self._ensure_has_cached_dependencies_for(objects)
 
@@ -304,7 +302,10 @@ class OSMObjectManager:
         if self._removed:
             return
         self._entity_cache.close()
-        shutil.rmtree(self._dict_storage, ignore_errors=True)
+        try:
+            os.remove("entity_cache")
+        except FileNotFoundError:
+            pass
         self._removed = True
 
     def __del__(self):
