@@ -1,17 +1,16 @@
 #[macro_use]
 extern crate lazy_static;
 #[macro_use]
-extern crate error_chain;
+extern crate failure;
 #[macro_use]
 extern crate serde_derive;
 #[macro_use]
 extern crate log;
 
-use reqwest;
+pub type Result<T> = core::result::Result<T, failure::Error>;
 
-use serde_json;
-
-pub mod error;
+pub mod change;
+mod change_iterator;
 pub mod object;
 pub mod object_manager;
 mod utils;

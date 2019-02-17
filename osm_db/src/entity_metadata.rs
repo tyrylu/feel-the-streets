@@ -79,7 +79,7 @@ impl Enum {
         let members = ENUM_MAP.get(name)?;
         Some(Self {
             name: name.to_string(),
-            members: members,
+            members,
         })
     }
 

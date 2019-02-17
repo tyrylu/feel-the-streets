@@ -1,0 +1,2 @@
+[global.databases.serverdb]
+url = "server.db"

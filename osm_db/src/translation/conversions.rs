@@ -94,20 +94,18 @@ fn convert_float(value: &str) -> Option<Value> {
 }
 
 fn split_unit_spec(spec: &str) -> Option<(f64, Option<&str>)> {
-    let parts: Vec<&str> = spec.split(" ").collect();
+    let parts: Vec<&str> = spec.split(' ').collect();
     if parts.len() > 2 {
         warn!("Unit specification {} is not valid.", spec);
-        return None;
+        None
+    } else if let Ok(num) = parts[0].parse::<f64>() {
+        Some((num, parts.get(1).cloned()))
     } else {
-        if let Ok(num) = parts[0].parse::<f64>() {
-            Some((num, parts.get(1).map(|v| *v)))
-        } else {
-            warn!(
-                "The magnitude of the unit specification {} could not be parsed as a f64.",
-                spec
-            );
-            None
-        }
+        warn!(
+            "The magnitude of the unit specification {} could not be parsed as a f64.",
+            spec
+        );
+        None
     }
 }
 

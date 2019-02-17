@@ -43,12 +43,12 @@ pub fn ensure_closed(coords: &mut Vec<(f64, f64)>) {
 pub fn coords_to_text(coords: &[(f64, f64)]) -> String {
     coords
         .iter()
-        .map(|coord| format!("{}, {}", coord.0, coord.1))
+        .map(|coord| format!("{} {}", coord.0, coord.1))
         .join(", ")
 }
 
 fn find_connectable_segments<'a>(
-    segments: &'a Vec<Segment>,
+    segments: &'a [Segment],
 ) -> (Option<&'a Segment>, Option<&'a Segment>) {
     if segments.len() == 1 {
         return (None, None);
@@ -70,7 +70,7 @@ fn find_connectable_segments<'a>(
             return (Some(ends[end]), Some(starts[end]));
         }
     }
-    return (None, None);
+    (None, None)
 }
 
 pub fn connect_polygon_segments(segments: &mut Vec<Segment>) {

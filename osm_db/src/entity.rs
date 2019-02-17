@@ -1,5 +1,5 @@
 pub struct Entity {
-    pub id: u64,
+    pub id: i32,
     pub geometry: String,
     pub discriminator: String,
     pub data: String,

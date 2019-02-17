@@ -31,7 +31,10 @@ fn check_entity_data_consistency_against_metadata(
     }
     for (name, value) in data.iter() {
         if !_known_field_names.contains(name) {
-            info!("The data contain an unknown field {} with value {}.", name, value);
+            info!(
+                "The data contain an unknown field {} with value {}.",
+                name, value
+            );
         }
     }
     true

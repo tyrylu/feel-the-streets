@@ -7,5 +7,20 @@ edition = "2018"
 [dependencies]
 log = "*"
 env_logger = "*"
-osm_api = {path="../osm_api"}
 osm_db = {path="../osm_db"}
+osm_api = {path="../osm_api"}
+rocket = "*"
+rocket_contrib = {version="*", features = ["diesel_sqlite_pool"]}
+diesel = {version = "*", features = ["sqlite", "chrono"]}
+diesel_migrations = "*"
+diesel-derive-enum = {version = "*", features = ["sqlite"]}
+serde = {version="*", features=["derive"]}
+serde_json = "*"
+chrono = {version = "*", features = ["serde"]}
+failure = "*"
+lapin-futures = "*"
+tokio = {version="*", features=["async-await-preview"]}
+futures = "*"
+dotenv = "*"
+sha3 = "*"
+hex = "*"

@@ -9,6 +9,17 @@ pub enum OSMObjectType {
     Relation,
 }
 
+impl OSMObjectType {
+    pub fn from_str(value: &str) -> Option<Self> {
+        match value {
+            "node" => Some(OSMObjectType::Node),
+            "way" => Some(OSMObjectType::Way),
+            "relation" => Some(OSMObjectType::Relation),
+            _ => None,
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct OSMRelationMember {
     #[serde(rename = "type")]
@@ -16,6 +27,16 @@ pub struct OSMRelationMember {
     #[serde(rename = "ref")]
     reference: u64,
     pub role: String,
+}
+
+impl OSMRelationMember {
+    pub fn new(reference: u64, referenced_type: OSMObjectType, role: String) -> Self {
+        OSMRelationMember {
+            reference,
+            referenced_type,
+            role,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -44,6 +65,73 @@ pub struct OSMObject {
 }
 
 impl OSMObject {
+    pub fn new_node(
+        id: u64,
+        timestamp: String,
+        version: u32,
+        changeset: u64,
+        user: String,
+        uid: u32,
+        tags: HashMap<String, String>,
+        lat: f64,
+        lon: f64,
+    ) -> OSMObject {
+        OSMObject {
+            id,
+            timestamp,
+            version,
+            changeset,
+            user,
+            uid,
+            tags,
+            specifics: OSMObjectSpecifics::Node { lat, lon },
+        }
+    }
+
+    pub fn new_way(
+        id: u64,
+        timestamp: String,
+        version: u32,
+        changeset: u64,
+        user: String,
+        uid: u32,
+        tags: HashMap<String, String>,
+        nodes: Vec<u64>,
+    ) -> OSMObject {
+        OSMObject {
+            id,
+            timestamp,
+            version,
+            changeset,
+            user,
+            uid,
+            tags,
+            specifics: OSMObjectSpecifics::Way { nodes },
+        }
+    }
+
+    pub fn new_rel(
+        id: u64,
+        timestamp: String,
+        version: u32,
+        changeset: u64,
+        user: String,
+        uid: u32,
+        tags: HashMap<String, String>,
+        members: Vec<OSMRelationMember>,
+    ) -> OSMObject {
+        OSMObject {
+            id,
+            timestamp,
+            version,
+            changeset,
+            user,
+            uid,
+            tags,
+            specifics: OSMObjectSpecifics::Relation { members },
+        }
+    }
+
     pub fn object_type(&self) -> OSMObjectType {
         use self::OSMObjectSpecifics::*;
         match self {

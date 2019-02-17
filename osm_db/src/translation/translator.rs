@@ -2,7 +2,6 @@ use super::checks;
 use super::conversions;
 use super::spec::TranslationSpec;
 use crate::entity::NotStoredEntity;
-use osm_api::error::*;
 use osm_api::object::OSMObject;
 use osm_api::object_manager::OSMObjectManager;
 use std::collections::HashMap;
@@ -10,10 +9,16 @@ use std::collections::HashMap;
 pub fn translate(
     object: &OSMObject,
     manager: &OSMObjectManager,
-) -> Result<Option<NotStoredEntity>> {
+) -> Result<Option<NotStoredEntity>, failure::Error> {
     let lookup_res = TranslationSpec::for_object(&object);
     match lookup_res {
-        None => Ok(None),
+        None => {
+            trace!(
+                "Did not find a translation spec for object {}.",
+                object.unique_id()
+            );
+            Ok(None)
+        }
         Some((discriminator, spec)) => {
             let mut entity_data = HashMap::new();
             trace!(
@@ -27,9 +32,11 @@ pub fn translate(
                 if spec.renames.contains_key(key) {
                     new_key = spec.renames[key].clone();
                 }
-                let prefix = format!("{}:", key);
-                if spec.unprefixes.contains(key) {
-                    new_key = new_key.replace(&prefix, "");
+                for unprefixes in &spec.unprefixes {
+                    if new_key.starts_with(unprefixes) {
+                        trace!("Unprefixing {}.", new_key);
+                        new_key = new_key.replace(&format!("{}:", unprefixes), "");
+                    }
                 }
                 if spec.replaces_property_value.contains_key(key) {
                     let replacements = &spec.replaces_property_value[key];

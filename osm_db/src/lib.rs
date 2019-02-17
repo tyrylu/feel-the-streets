@@ -4,10 +4,12 @@ extern crate log;
 #[macro_use]
 extern crate serde_derive;
 
-use serde_yaml;
 #[macro_use]
 extern crate lazy_static;
 
-mod entity;
+pub mod area_db;
+pub mod entity;
 mod entity_metadata;
+pub mod semantic_change;
 pub mod translation;
+pub use crate::area_db::AreaDatabase;

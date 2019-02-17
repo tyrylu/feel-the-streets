@@ -1,6 +1,9 @@
-use crate::error::Result;
+use crate::change::OSMObjectChange;
+use crate::change_iterator::OSMObjectChangeIterator;
 use crate::object::{OSMObject, OSMObjectSpecifics, OSMObjectType};
 use crate::utils;
+use crate::Result;
+use chrono::{DateTime, Utc};
 use itertools::Itertools;
 use reqwest;
 use rusqlite::Connection;
@@ -8,6 +11,7 @@ use serde::Deserialize;
 use serde_json::{self, Deserializer};
 use sqlitemap::SqliteMap;
 use std::cell::RefCell;
+use std::fs;
 use std::io::{BufReader, Read};
 use std::iter;
 use std::time::Instant;
@@ -36,7 +40,7 @@ fn format_data_retrieval(area: &str) -> String {
 pub struct OSMObjectManager {
     current_api_url_idx: RefCell<usize>,
     api_urls: Vec<&'static str>,
-    cache_conn: Connection,
+    cache_conn: Option<Connection>,
     http_client: reqwest::Client,
 }
 
@@ -55,13 +59,19 @@ impl OSMObjectManager {
                 "https://lz4.overpass-api.de/api",
             ],
             current_api_url_idx: RefCell::new(0 as usize),
-            cache_conn: conn,
+            cache_conn: Some(conn),
             http_client: client,
         }
     }
 
-    fn get_cache(&self) -> SqliteMap<'_> {
-        SqliteMap::new(&self.cache_conn, "raw_entities", "text", "text").unwrap()
+    pub fn get_cache(&self) -> SqliteMap<'_> {
+        SqliteMap::new(
+            &self.cache_conn.as_ref().unwrap(),
+            "raw_entities",
+            "text",
+            "text",
+        )
+        .unwrap()
     }
 
     fn cache_object_into(&self, cache: &mut SqliteMap<'_>, object: &OSMObject) {
@@ -166,9 +176,7 @@ impl OSMObjectManager {
         const MAX_SIMULTANEOUSLY_QUERYED: usize = 1000000;
         let mut objects: Vec<OSMObject> = vec![];
         ids.sort_unstable_by_key(|oid| oid.chars().nth(0));
-        for (entity_type, entity_ids) in
-            &ids.into_iter().group_by(|oid| oid.chars().nth(0).unwrap())
-        {
+        for (entity_type, entity_ids) in &ids.iter().group_by(|oid| oid.chars().nth(0).unwrap()) {
             for mut chunk in &entity_ids.chunks(MAX_SIMULTANEOUSLY_QUERYED) {
                 let ids_str = chunk.join(",");
                 let query = format_query(
@@ -287,18 +295,19 @@ impl OSMObjectManager {
     pub fn get_geometry_as_wkt(&self, object: &OSMObject) -> Result<Option<String>> {
         use self::OSMObjectSpecifics::*;
         match object.specifics {
-            Node { lon, lat } => Ok(Some(format!("POINT({},{})", lon, lat))),
+            Node { lon, lat } => Ok(Some(format!("POINT({} {})", lon, lat))),
             Way { .. } => {
                 let mut coords = self.get_way_coords(&object)?;
                 if coords.len() <= 1 {
                     warn!("One or zero nodes for object {}", object.unique_id());
                     return Ok(None);
                 }
-                let coords_text = utils::coords_to_text(&coords);
                 if utils::object_should_have_closed_geometry(&object) && coords.len() > 2 {
                     utils::ensure_closed(&mut coords);
+                    let coords_text = utils::coords_to_text(&coords);
                     Ok(Some(format!("POLYGON(({}))", coords_text)))
                 } else {
+                    let coords_text = utils::coords_to_text(&coords);
                     Ok(Some(format!("LINESTRING({})", coords_text)))
                 }
             }
@@ -428,19 +437,54 @@ impl OSMObjectManager {
         }
     }
 
-    pub fn cached_objects(&self) -> Vec<OSMObject> {
-        let mut cache = self.get_cache();
-        let res = cache
-            .iter::<String, String>()
-            .unwrap()
-            .filter_map(|pair| pair.ok())
-            .map(|(_k, v)| serde_json::from_str(&v).unwrap())
-            .collect();
-        res
-    }
     fn commit_cache(&self) {
         self.cache_conn
+            .as_ref()
+            .unwrap()
             .execute("COMMIT", &[])
             .expect("Commit failed.");
     }
+    pub fn lookup_differences_in(
+        &self,
+        area: &str,
+        after: &DateTime<Utc>,
+    ) -> Result<Box<Iterator<Item = Result<OSMObjectChange>>>> {
+        let mut iterators = Vec::with_capacity(3);
+        for kind in &["node", "way", "rel"] {
+            let query = format!(
+                "((area[\"name\"=\"{area}\"];{object_kind}(area);>>;);>>;)",
+                area = area,
+                object_kind = kind
+            );
+            let final_query = format!(
+                "[out:xml][timeout:900][adiff:\"{after}\"];{query};out meta;",
+                after = after.to_rfc3339(),
+                query = query
+            );
+            info!("Looking up differences in area {}, {}s only.", area, kind);
+            let readable = self.run_query(&final_query)?;
+            iterators.push(OSMObjectChangeIterator::new(readable));
+        }
+        Ok(Box::new(iterators.into_iter().flat_map(|it| it)))
+    }
+}
+
+impl Drop for OSMObjectManager {
+    fn drop(&mut self) {
+        let conn = self.cache_conn.take().unwrap();
+        conn.close().expect("Failed to close cache connection.");
+        fs::remove_file("entity_cache.db").expect("Could not remove cache.");
+    }
+}
+
+pub fn cached_objects_in<'a>(
+    cache: &'a mut SqliteMap<'_>,
+) -> Box<(Iterator<Item = OSMObject>) + 'a> {
+    Box::new(
+        cache
+            .iter::<String, String>()
+            .unwrap()
+            .filter_map(|pair| pair.ok())
+            .map(|(_k, v)| serde_json::from_str(&v).unwrap()),
+    )
 }

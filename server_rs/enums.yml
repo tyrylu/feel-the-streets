@@ -105,6 +105,7 @@ BoundaryType:
   country_border: 9
   religious_administration: 10
   stone: 11
+  boundary: 12
 MarkerType:
   none: 0
   stone: 1
@@ -934,6 +935,7 @@ HistoricType:
   palace: 24
   gate: 25
   stone: 26
+  multipolygon: 27
 TrafficCalmingType:
   none: 0
   'yes': 1
@@ -961,6 +963,7 @@ WaterWayType:
   boatyard: 12
   lock: 13
   dock: 14
+  waterway: 15
 NaturalType:
   none: -1
   wetland: 0
@@ -1165,6 +1168,7 @@ RoadType:
   contruction: 56
   steps: 57
   camera: 58
+  multipolygon: 59
 LandType:
   forest: 0
   reservoir: 1
@@ -1261,6 +1265,7 @@ BridgeStructure:
   humpback: 4
   suspension: 5
   simple_suspension: 6
+  cable-stayed: 7
 Role:
   outer: 0
   inner: 1
@@ -1794,6 +1799,8 @@ PowerType:
   sub_station: 12
   switchgear: 13
   pole: 14
+  generator: 15
+  line: 16
 TowerType:
   communication: 1
   observation: 2
@@ -1822,6 +1829,7 @@ SupportType:
   billboard: 4
   tower: 5
   wall: 6
+  pedestal: 7
 OfficeType:
   'yes': -1
   employment_agency: 0
@@ -1933,6 +1941,7 @@ LeafCycle:
   deciduous: 0
   evergreen: 1
   mixed: 2
+  semi_evergreen: 3
 Function:
   retail: 0
   headquarters: 1
