@@ -6,6 +6,7 @@ use osm_db::area_db::AreaDatabase;
 use osm_db::translation::translator;
 
 pub fn create_area_database(area: &str) -> Result<()> {
+    info!("Starting to create area {}.", area);
     let manager = OSMObjectManager::new();
     manager.lookup_objects_in(&area)?;
     let mut cache = manager.get_cache();
@@ -16,5 +17,6 @@ pub fn create_area_database(area: &str) -> Result<()> {
     )?;
     let area_db_conn = SqliteConnection::establish("server.db")?;
     area::finalize_area_creation(&area, &area_db_conn)?;
+    info!("Area created successfully.");
     Ok(())
 }

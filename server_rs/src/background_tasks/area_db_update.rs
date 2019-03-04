@@ -1,6 +1,8 @@
 use crate::area::{Area, AreaState};
 use crate::Result;
-use crate::diff_utils;
+use crate::{area_messaging, diff_utils};
+use crate::background_task_constants::*;
+use crate::background_task::BackgroundTask;
 use chrono::{DateTime, Utc};
 use diesel::{Connection, SqliteConnection};
 use osm_api::change::OSMObjectChangeType;
@@ -10,6 +12,7 @@ use osm_db::semantic_change::SemanticChange;
 use osm_db::translation::translator;
 
 fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
+    info!("Updating area {}.", area.name);
     area.state = AreaState::GettingChanges;
     area.save(&conn)?;
     let after = if let Some(timestamp) = &area.newest_osm_object_timestamp {
@@ -28,6 +31,13 @@ fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
             first = false;
         }
         let change = change?;
+        if change.new.is_some()
+            && (area.newest_osm_object_timestamp.is_none()
+                || change.new.as_ref().unwrap().timestamp
+                    > *area.newest_osm_object_timestamp.as_ref().unwrap())
+        {
+            area.newest_osm_object_timestamp = Some(change.new.as_ref().unwrap().timestamp.clone());
+        }
         let semantic_change = match change.change_type {
             Create => translator::translate(
                 &change.new.expect("No new object for a create change"),
@@ -65,20 +75,38 @@ fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
                         new.effective_width,
                     )),
                     (Some(old), Some(new)) => {
-                        let (property_changes, data_changes) = diff_utils::diff_entities(&old, &new)?;
-                        Some(SemanticChange::updating(&osm_id, property_changes, data_changes))
+                        let (property_changes, data_changes) =
+                            diff_utils::diff_entities(&old, &new)?;
+                        Some(SemanticChange::updating(
+                            &osm_id,
+                            property_changes,
+                            data_changes,
+                        ))
                     }
                 }
             }
         };
+        if let Some(semantic_change) = semantic_change {
+            area_db.apply_change(&semantic_change)?;
+            tokio::run_async(area_messaging::publish_change(
+                semantic_change,
+                area.name.clone(),
+            ));
+        }
     }
+    area.state = AreaState::Updated;
+    area.save(*&conn)?;
+    info!("Area updated successfully.");
     Ok(())
 }
 
 pub fn update_area_databases() -> Result<()> {
+    info!("Going to perform the database update for all up-to date databases.");
     let area_db_conn = SqliteConnection::establish("server.db")?;
     for mut area in Area::all_updated(&area_db_conn)? {
         update_area(&mut area, &area_db_conn)?;
     }
+    info!("Updates finished successfully.");
+    BackgroundTask::UpdateAreaDatabases.deliver_at_time(DATABASES_UPDATE_HOUR, DATABASES_UPDATE_MINUTE, DATABASES_UPDATE_SECOND);
     Ok(())
 }
