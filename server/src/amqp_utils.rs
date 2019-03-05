@@ -2,7 +2,7 @@ use crate::background_task_constants;
 use crate::Result;
 use futures::future::Future;
 use lapin_futures::channel::QueueDeclareOptions;
-use lapin_futures::client::{Client, ConnectionOptions};
+use lapin_futures::client::{Client, ConnectionOptions, ConnectionProperties};
 use lapin_futures::types::{AMQPValue, FieldTable};
 use lapin_futures::uri::AMQPUri;
 use std::env;
@@ -16,7 +16,7 @@ pub async fn connect_to_broker() -> Result<Client<TcpStream>> {
     let uri = AMQPUri::from_str(&env::var("AMQP_BROKER_URL")?).map_err(|e| failure::err_msg(e))?;
     let host_addr: SocketAddr = format!("{}:{}", uri.authority.host, uri.authority.port).parse()?;
     let stream = await!(TcpStream::connect(&host_addr))?;
-    let (client, heardbeat) = await!(Client::connect(stream, ConnectionOptions::from_uri(uri)))?;
+    let (client, heardbeat) = await!(Client::connect(stream, ConnectionOptions::from_uri(uri, ConnectionProperties::default())))?;
     // A newly spawned future can not return an error, so logging it is the best we can hope for.
     tokio::spawn(heardbeat.map_err(|e| error!("Error in heardbeat: {}", e)));
     Ok(client)
