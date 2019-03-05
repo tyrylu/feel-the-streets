@@ -3,3 +3,4 @@ members = ["osm_api", "osm_db", "server"]
 
 [profile.release]
 debug = true
+lto = true
