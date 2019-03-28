@@ -7,10 +7,10 @@ script:
 - cargo build --verbose --release --all
 before_install:
 - eval "$(ssh-agent -s)"
-- chmod 600 ./travis
 - echo -e "Host $DEPLOY_TO\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - openssl aes-256-cbc -K $encrypted_a259768ffedb_key -iv $encrypted_a259768ffedb_iv
   -in travis.enc -out travis -d
+- chmod 600 ./travis
 - ssh-add travis
 deploy:
   skip_cleanup: true
