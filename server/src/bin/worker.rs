@@ -1,6 +1,6 @@
 #![feature(await_macro, async_await, futures_api)]
-extern crate server_rs;
-use server_rs::{amqp_utils, background_task::BackgroundTask, background_task_constants, Result};
+extern crate server;
+use server::{amqp_utils, background_task::BackgroundTask, background_task_constants, Result};
 use tokio::await;
 use tokio::prelude::*;
 

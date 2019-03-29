@@ -1,12 +1,12 @@
 // Rocket related stuff
 #![feature(proc_macro_hygiene, decl_macro)]
 
-extern crate server_rs;
+extern crate server;
 use log::error;
 use rocket::fairing::AdHoc;
 use rocket::routes;
-use server_rs::routes;
-use server_rs::{DbConn, Result};
+use server::routes;
+use server::{DbConn, Result};
 
 fn main() -> Result<()> {
     env_logger::init();
