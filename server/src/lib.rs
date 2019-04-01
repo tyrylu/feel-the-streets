@@ -20,7 +20,7 @@ mod area_messaging;
 pub mod background_task;
 pub mod background_task_constants;
 mod background_task_delivery;
-mod background_tasks;
+pub mod background_tasks;
 mod datetime_utils;
 mod diff_utils;
 pub mod routes;
@@ -38,4 +38,10 @@ pub fn run_migrations(
     conn: &SqliteConnection,
 ) -> std::result::Result<(), diesel_migrations::RunMigrationsError> {
     embedded_migrations::run(conn)
+}
+
+pub fn init_logging() {
+    env_logger::Builder::from_env("FTS_LOG")
+    .default_format_timestamp(false)
+    .init();
 }

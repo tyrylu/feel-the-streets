@@ -96,8 +96,11 @@ impl OSMObjectManager {
     }
 
     fn next_api_url(&self) -> &'static str {
-        if *self.current_api_url_idx.borrow() == self.api_urls.len() {
+        if *self.current_api_url_idx.borrow() == self.api_urls.len() - 1{
             *self.current_api_url_idx.borrow_mut() = 0 as usize;
+        }
+        else {
+            *self.current_api_url_idx.borrow_mut() += 1 as usize;
         }
         self.api_urls[*self.current_api_url_idx.borrow()]
     }
@@ -109,7 +112,7 @@ impl OSMObjectManager {
         debug!("Requesting resource {}", final_url);
         let resp = self.http_client.get(&final_url).send()?;
         match resp.status().as_u16() {
-            409 => {
+            429 => {
                 warn!("Multiple requests, killing them and going to a different api host.");
                 self.http_client
                     .get(&format!("{0}/kill_my_queries", &url))

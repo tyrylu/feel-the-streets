@@ -8,7 +8,7 @@ use server::routes;
 use server::{DbConn, Result};
 
 fn main() -> Result<()> {
-    env_logger::init();
+    server::init_logging();
     let _dotenv_path = dotenv::dotenv()?;
     rocket::ignite()
         .attach(DbConn::fairing())

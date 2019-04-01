@@ -17,6 +17,9 @@ pub struct OSMObjectChangeIterator<T: Read> {
     reader: EventReader<T>,
     finished: bool,
     current_change: Option<OSMObjectChange>,
+    current_change_type: Option<OSMObjectChangeType>,
+    old: Option<OSMObject>,
+    new: Option<OSMObject>,
 }
 
 impl<T: Read> OSMObjectChangeIterator<T> {
@@ -25,10 +28,14 @@ impl<T: Read> OSMObjectChangeIterator<T> {
             reader: EventReader::new(readable),
             finished: false,
             current_change: None,
+            current_change_type: None,
+            old: None,
+            new: None,
         }
     }
 
     fn parse_object(&mut self) -> Result<OSMObject> {
+        trace!("Parse object.");
         let mut tags: HashMap<String, String> = HashMap::new();
         let mut members = Vec::new();
         let mut nodes = Vec::new();
@@ -56,12 +63,13 @@ impl<T: Read> OSMObjectChangeIterator<T> {
             let event = self.reader.next();
             let event = event?;
             match event {
+                XmlEvent::Whitespace(..) => {}
                 XmlEvent::StartElement {
                     name, attributes, ..
                 } => {
                     let mut attrs = convert_to_map(attributes);
                     match name.local_name.as_ref() {
-                        "node" | "way" | "rel" => {
+                        "node" | "way" | "relation" => {
                             id = attrs["id"].parse().expect("Could not parse id as an u64.");
                             version = attrs["version"]
                                 .parse()
@@ -112,11 +120,12 @@ impl<T: Read> OSMObjectChangeIterator<T> {
                             id, timestamp, version, changeset, user, uid, tags, nodes,
                         ));
                     }
-                    "rel" => {
+                    "relation" => {
                         return Ok(OSMObject::new_rel(
                             id, timestamp, version, changeset, user, uid, tags, members,
                         ));
                     }
+                    "tag" | "nd" | "member" => {},
                     _ => panic!("Unexpected end of element {}.", name.local_name),
                 },
                 _ => panic!("Unexpected event during xml parsing."),
@@ -125,43 +134,55 @@ impl<T: Read> OSMObjectChangeIterator<T> {
     }
 
     fn parse_change_step(&mut self) -> Result<()> {
-        let mut new = None;
-        let mut old = None;
-        let mut change_type = None;
+        trace!("Doing a parse change step.");
         match self.reader.next() {
+            Ok(XmlEvent::StartDocument{..}) => { trace!("Start document.")},
+            Ok(XmlEvent::Whitespace(..)) => {trace!("whitespace.")},
+            Ok(XmlEvent::Characters(..)) => {trace!("Characters.")},
+            Ok(XmlEvent::EndDocument) => {
+                trace!("End document.");
+                self.finished = true;
+                },
             Ok(XmlEvent::StartElement {
                 name, attributes, ..
             }) => match name.local_name.as_ref() {
                 "action" => {
                     self.current_change = None;
                     let attrs = convert_to_map(attributes);
-                    change_type = match attrs["type"].as_ref() {
+                    self.old = None;
+                    self.new = None;
+                    self.current_change_type = match attrs["type"].as_ref() {
                         "create" => Some(OSMObjectChangeType::Create),
                         "modify" => Some(OSMObjectChangeType::Modify),
                         "delete" => Some(OSMObjectChangeType::Delete),
                         _ => panic!("Unknown change type {}.", attrs["type"]),
+                    };
+                    if let Some(OSMObjectChangeType::Create) = self.current_change_type{
+                        self.new = Some(self.parse_object()?);
                     }
                 }
-                "new" => new = Some(self.parse_object()?),
-                "old" => old = Some(self.parse_object()?),
+                "new" => self.new = Some(self.parse_object()?),
+                "old" => self.old = Some(self.parse_object()?),
+                "osm" | "note" | "meta" => {},
                 _ => panic!("Start of unexpected tag {}.", name.local_name),
             },
             Ok(XmlEvent::EndElement { name, .. }) => match name.local_name.as_ref() {
                 "action" => {
                     self.current_change = Some(OSMObjectChange {
-                        change_type: change_type.expect("Did not set change type?"),
-                        old,
-                        new,
+                        change_type: self.current_change_type.take().expect("Did not set change type?"),
+                        old: self.old.take(),
+                        new: self.new.take(),
                     })
                 }
                 "osm3response" => self.finished = true,
+                "note" | "osm" | "meta" | "old" | "new" => {},
                 _ => panic!("Unexpected end of {}.", name.local_name),
             },
             Err(e) => {
                 self.finished = true;
                 return Err(failure::Error::from(e));
             }
-            _ => panic!("Unexpected event during parsing."),
+            event @ _ => panic!(format!("Unexpected event during parsing: {:?}", event)),
         }
         Ok(())
     }
@@ -171,17 +192,18 @@ impl<T: Read> Iterator for OSMObjectChangeIterator<T> {
     type Item = Result<OSMObjectChange>;
 
     fn next(&mut self) -> Option<Self::Item> {
+        trace!("Next change requested.");
         loop {
             match self.parse_change_step() {
                 Err(e) => return Some(Err(e)),
                 Ok(()) => {
                     if self.finished {
+                        trace!("Finished.");
                         return None;
                     }
                     if self.current_change.is_some() {
                         return Some(Ok(self.current_change.take()?));
                     }
-                    unreachable!();
                 }
             }
         }

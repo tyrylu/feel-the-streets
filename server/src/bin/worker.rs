@@ -41,7 +41,7 @@ async fn consume_tasks() {
 }
 
 fn main() -> Result<()> {
-    env_logger::init();
+    server::init_logging();
     let _dotenv_path = dotenv::dotenv()?;
     tokio::run_async(consume_tasks());
     Ok(())
