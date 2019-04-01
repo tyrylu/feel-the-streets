@@ -163,7 +163,7 @@ impl<T: Read> OSMObjectChangeIterator<T> {
                 }
                 "new" => self.new = Some(self.parse_object()?),
                 "old" => self.old = Some(self.parse_object()?),
-                "osm" | "note" | "meta" => {},
+                "osm" | "note" | "meta" | "remark" => {},
                 _ => panic!("Start of unexpected tag {}.", name.local_name),
             },
             Ok(XmlEvent::EndElement { name, .. }) => match name.local_name.as_ref() {
@@ -175,7 +175,7 @@ impl<T: Read> OSMObjectChangeIterator<T> {
                     })
                 }
                 "osm3response" => self.finished = true,
-                "note" | "osm" | "meta" | "old" | "new" => {},
+                "note" | "osm" | "meta" | "old" | "new" | "remark" => {},
                 _ => panic!("Unexpected end of {}.", name.local_name),
             },
             Err(e) => {

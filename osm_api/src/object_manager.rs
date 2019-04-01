@@ -12,9 +12,10 @@ use serde_json::{self, Deserializer};
 use sqlitemap::SqliteMap;
 use std::cell::RefCell;
 use std::fs;
-use std::io::{BufReader, Read};
+use std::io::{self, BufReader, Read, Seek, SeekFrom};
 use std::iter;
 use std::time::Instant;
+use tempfile::tempfile;
 
 fn translate_type_shortcut(shortcut: char) -> &'static str {
     match shortcut {
@@ -105,27 +106,35 @@ impl OSMObjectManager {
         self.api_urls[*self.current_api_url_idx.borrow()]
     }
 
-    fn run_query(&self, query: &str) -> Result<Box<dyn Read>> {
+    fn run_query(&self, query: &str, result_to_tempfile: bool) -> Result<Box<dyn Read>> {
         let start = Instant::now();
         let url = self.next_api_url();
         let final_url = format!("{}/interpreter?data={}", url, query);
         debug!("Requesting resource {}", final_url);
-        let resp = self.http_client.get(&final_url).send()?;
+        let mut resp = self.http_client.get(&final_url).send()?;
         match resp.status().as_u16() {
             429 => {
                 warn!("Multiple requests, killing them and going to a different api host.");
                 self.http_client
                     .get(&format!("{0}/kill_my_queries", &url))
                     .send()?;
-                self.run_query(&query)
+                self.run_query(&query, result_to_tempfile)
             }
             200 => {
                 debug!("Request successfully finished after {:?}.", start.elapsed());
+                if !result_to_tempfile {
                 Ok(Box::new(resp))
+                }else {
+                    let mut file = tempfile()?;
+                    io::copy(&mut resp, &mut file)?;
+                    file.seek(SeekFrom::Start(0))?;
+                    Ok(Box::new(file))
+
+                }
             }
             _ => {
                 warn!("Unexpected status code {} from the server.", resp.status());
-                self.run_query(&query)
+                self.run_query(&query, result_to_tempfile)
             }
         }
     }
@@ -170,7 +179,7 @@ impl OSMObjectManager {
     pub fn lookup_objects_in(&self, area: &str) -> Result<()> {
         info!("Looking up all objects in area {}.", area);
         let query = format_query(900, &format_data_retrieval(area));
-        let readable = self.run_query(&query)?;
+        let readable = self.run_query(&query, false)?;
         self.cache_objects_from(readable, false)?;
         Ok(())
     }
@@ -186,7 +195,7 @@ impl OSMObjectManager {
                     900,
                     &format!("{}(id:{})", translate_type_shortcut(entity_type), ids_str),
                 );
-                let readable = self.run_query(&query)?;
+                let readable = self.run_query(&query, false)?;
                 objects.extend(self.cache_objects_from(readable, true)?);
             }
         }
@@ -465,7 +474,7 @@ impl OSMObjectManager {
                 query = query
             );
             info!("Looking up differences in area {}, {}s only.", area, kind);
-            let readable = self.run_query(&final_query)?;
+            let readable = self.run_query(&final_query, true)?;
             iterators.push(OSMObjectChangeIterator::new(readable));
         }
         Ok(Box::new(iterators.into_iter().flat_map(|it| it)))
