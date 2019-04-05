@@ -1,0 +1,9 @@
+extern crate server;
+use server::{background_tasks::area_db_creation, Result};
+use std::env;
+
+fn main() -> Result<()> {
+    server::init_logging();
+    area_db_creation::create_area_database(&env::args().nth(1).unwrap())?;
+    Ok(())
+}
