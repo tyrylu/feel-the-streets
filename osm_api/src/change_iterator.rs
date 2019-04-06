@@ -135,10 +135,16 @@ impl<T: Read> OSMObjectChangeIterator<T> {
 
     fn parse_change_step(&mut self) -> Result<()> {
         trace!("Doing a parse change step.");
+        let mut in_remark = false;
         match self.reader.next() {
             Ok(XmlEvent::StartDocument{..}) => { trace!("Start document.")},
             Ok(XmlEvent::Whitespace(..)) => {trace!("whitespace.")},
-            Ok(XmlEvent::Characters(..)) => {trace!("Characters.")},
+            Ok(XmlEvent::Characters(chars)) => {
+                trace!("Characters: {}", chars);
+                if in_remark {
+                    warn!("Received a remark from the server: {}", chars);
+                }
+                },
             Ok(XmlEvent::EndDocument) => {
                 trace!("End document.");
                 self.finished = true;
@@ -163,7 +169,8 @@ impl<T: Read> OSMObjectChangeIterator<T> {
                 }
                 "new" => self.new = Some(self.parse_object()?),
                 "old" => self.old = Some(self.parse_object()?),
-                "osm" | "note" | "meta" | "remark" => {},
+                "remark" => in_remark = true,
+                "osm" | "note" | "meta" => {},
                 _ => panic!("Start of unexpected tag {}.", name.local_name),
             },
             Ok(XmlEvent::EndElement { name, .. }) => match name.local_name.as_ref() {
@@ -175,7 +182,8 @@ impl<T: Read> OSMObjectChangeIterator<T> {
                     })
                 }
                 "osm3response" => self.finished = true,
-                "note" | "osm" | "meta" | "old" | "new" | "remark" => {},
+                "remark" => in_remark = false,
+                "note" | "osm" | "meta" | "old" | "new" => {},
                 _ => panic!("Unexpected end of {}.", name.local_name),
             },
             Err(e) => {
