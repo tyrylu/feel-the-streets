@@ -1,0 +1,12 @@
+[Unit]
+Description=FTS server
+Requires=rabbitmq.service
+After=rabbitmq.service
+[Service]
+ExecStart=/srv/feel-the-streets/server
+WorkingDirectory=/srv/feel-the-streets
+User=http
+Group=http
+Environment="FTS_LOG=info"
+[Install]
+WantedBy=multi-user.target
