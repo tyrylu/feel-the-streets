@@ -8,13 +8,18 @@ use osm_db::AreaDatabase;
 use rocket::http::Status;
 use rocket::response::status;
 use rocket_contrib::json::Json;
-use serde::Deserialize;
+use serde::{Serialize, Deserialize};
 use std::fs::File;
 use tokio;
 
 #[derive(Deserialize)]
 pub struct MaybeCreateAreaRequest {
     name: String,
+}
+
+#[derive(Serialize)]
+pub struct PingResponse {
+    response: String
 }
 
 #[get("/areas")]
@@ -39,7 +44,7 @@ pub fn maybe_create_area(
 }
 
 #[get("/areas/<area_name>/download?<client_id>")]
-fn download_area(area_name: String, client_id: String, conn: DbConn) -> Result<File> {
+pub fn download_area(area_name: String, client_id: String, conn: DbConn) -> Result<File> {
     let area = Area::find_by_name(&area_name, &*conn)?;
     if area.state != AreaState::Updated {
         bail!("Can not guarantee area data integrity.")
@@ -47,4 +52,9 @@ fn download_area(area_name: String, client_id: String, conn: DbConn) -> Result<F
         tokio::run_async(area_messaging::init_queue(client_id, area_name.clone()));
         Ok(File::open(AreaDatabase::path_for(&area_name))?)
     }
+}
+
+#[get("/ping")]
+pub fn ping() -> Json<PingResponse> {
+    Json(PingResponse{response: "pong".to_string()})
 }

@@ -1,2 +1,4 @@
+[production]
+address = "localhost"
 [global.databases.serverdb]
 url = "server.db"
