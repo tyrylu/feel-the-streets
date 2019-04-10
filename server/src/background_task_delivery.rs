@@ -22,6 +22,7 @@ async fn deliver_real(task: &BackgroundTask, ttl: Option<u32>) -> Result<()> {
         BasicPublishOptions::default(),
         props
     ))?;
+    await!(channel.close(0, "Normal shutdown"))?;
     Ok(())
 }
 

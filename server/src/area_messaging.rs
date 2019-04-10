@@ -31,6 +31,7 @@ async fn init_queue_real(client_id: String, area_name: String) -> Result<()> {
         QueueBindOptions::default(),
         FieldTable::new()
     ))?;
+    await!(channel.close(0, "Normal shutdown"))?;
     Ok(())
 }
 
@@ -52,6 +53,7 @@ async fn publish_change_internal(change: SemanticChange, area_name: String) -> R
         BasicPublishOptions::default(),
         props
     ))?;
+    await!(channel.close(0, "Normal shutdown"))?;
     Ok(())
 }
 pub async fn publish_change(change: SemanticChange, area_name: String) {

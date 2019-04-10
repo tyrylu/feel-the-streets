@@ -16,7 +16,9 @@ pub async fn connect_to_broker() -> Result<Client<TcpStream>> {
     let uri = AMQPUri::from_str(&env::var("AMQP_BROKER_URL")?).map_err(|e| failure::err_msg(e))?;
     let host_addr: SocketAddr = format!("{}:{}", uri.authority.host, uri.authority.port).parse()?;
     let stream = await!(TcpStream::connect(&host_addr))?;
+    info!("TCP connection to host {} established.", &host_addr);
     let (client, heardbeat) = await!(Client::connect(stream, ConnectionOptions::from_uri(uri, ConnectionProperties::default())))?;
+    info!("Broker connection established.");
     // A newly spawned future can not return an error, so logging it is the best we can hope for.
     tokio::spawn(heardbeat.map_err(|e| error!("Error in heardbeat: {}", e)));
     Ok(client)
@@ -50,5 +52,7 @@ where
         ..Default::default()
     };
     await!(channel.queue_declare(background_task_constants::FUTURE_TASKS_QUEUE, opts2, args))?;
+    await!(channel.close(0, "Normal shutdown"))?;
+    info!("Queues initialized.");
     Ok(())
 }
