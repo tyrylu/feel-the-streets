@@ -1,7 +1,7 @@
 import wx
 from .server_interaction import has_api_connectivity, get_areas, request_area_creation
 from shared import Database
-from shared.time_utils import utc_timestamp_to_local_string
+from shared.time_utils import rfc_3339_to_local_string
 
 class AreaSelectionDialog(wx.Dialog):
     xrc_name = "area_selection"
@@ -19,8 +19,8 @@ class AreaSelectionDialog(wx.Dialog):
 
     def _fill_areas(self, areas):
         for area in areas:
-            area["created_at"] = utc_timestamp_to_local_string(area["created_at"])
-            area["updated_at"] = utc_timestamp_to_local_string(area["updated_at"])
+            area["created_at"] = rfc_3339_to_local_string(area["created_at"])
+            area["updated_at"] = rfc_3339_to_local_string(area["updated_at"])
             self._areas.Append(_("{name}: {state}, last updated {updated_at}, created {created_at}").format(**area))
     
     @property

@@ -29,6 +29,7 @@ async fn consume_tasks_real() -> Result<()> {
     ))?;
     info!("Starting tasks consumption...");
     while let Some(msg) = await!(consumer.next()) {
+        info!("Got a message.");
         let msg = msg?;
         let task: BackgroundTask = serde_json::from_slice(&msg.data)?;
         task.execute()?;

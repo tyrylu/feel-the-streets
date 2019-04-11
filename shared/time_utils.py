@@ -1,11 +1,9 @@
-import datetime
-import dateutil.tz
+import pendulum
 
 def ts_to_utc(ts):
-    return datetime.datetime.utcfromtimestamp(ts).timestamp()
+    return ts
 
-def utc_timestamp_to_local_string(ts):
-    dt = datetime.datetime.fromtimestamp(ts)
-    dt = dt.replace(tzinfo=dateutil.tz.tzutc())
-    local = dt.astimezone(dateutil.tz.tzlocal())
+def rfc_3339_to_local_string(string):
+    dt = pendulum.parse(string)
+    local = dt.in_timezone("local")
     return local.strftime("%c")

@@ -1,4 +1,4 @@
-python-dateutil
+pendulum
 pint
 attrs
 pygeodesy
