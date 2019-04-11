@@ -28,6 +28,9 @@ async fn consume_tasks_real() -> Result<()> {
         FieldTable::new()
     ))?;
     info!("Starting tasks consumption...");
+    info!("Getting first item...");
+    let res = await!(consumer.next());
+    info!("Got result: {:?}", res);
     while let Some(msg) = await!(consumer.next()) {
         info!("Got a message.");
         let msg = msg?;
