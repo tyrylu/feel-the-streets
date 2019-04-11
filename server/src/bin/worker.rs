@@ -1,5 +1,5 @@
 #![feature(await_macro, async_await, futures_api)]
-use server::{amqp_utils, background_task::BackgroundTask, background_task_constants, Result};
+use server::{amqp_utils, background_task::BackgroundTask, background_task_constants, background_task_delivery, datetime_utils, Result};
 use tokio::await;
 use tokio::prelude::*;
 
@@ -17,7 +17,8 @@ async fn consume_tasks_real() -> Result<()> {
     let count = await!(channel.queue_declare(&background_task_constants::FUTURE_TASKS_QUEUE, opts, FieldTable::new()))?.message_count();
     if count == 0 {
         info!("Initially scheduling the databases update task...");
-        BackgroundTask::UpdateAreaDatabases.deliver_at_time(DATABASES_UPDATE_HOUR, DATABASES_UPDATE_MINUTE, DATABASES_UPDATE_SECOND);
+        let ttl = datetime_utils::compute_ttl_for_time(DATABASES_UPDATE_HOUR, DATABASES_UPDATE_MINUTE, DATABASES_UPDATE_SECOND);
+        await!(background_task_delivery::perform_delivery_on(&channel, BackgroundTask::UpdateAreaDatabases, Some(ttl), false))?;
     }
     let queue = Queue::new(background_task_constants::TASKS_QUEUE.to_string(), 0, 0);
     let mut consumer = await!(channel.basic_consume(

@@ -22,13 +22,8 @@ impl BackgroundTask {
         tokio::run_async(background_task_delivery::deliver(self.clone(), Some(msecs)));
     }
 
-fn deliver_at(&self, when: DateTime<Utc>) {
-let diff = when - Utc::now();
-self.deliver_after(diff.num_milliseconds() as u32);
-}
-
 pub fn deliver_at_time(&self, hour: u32, minute: u32, second: u32) {
-    self.deliver_at(datetime_utils::next_occurrence_of_time(hour, minute, second));
+    self.deliver_after(datetime_utils::compute_ttl_for_time(hour, minute, second));
 }
 
     pub fn execute(&self) -> Result<()> {

@@ -1,11 +1,10 @@
 use crate::{amqp_utils, background_task::BackgroundTask, background_task_constants, Result};
-use lapin_futures::channel::{BasicProperties, BasicPublishOptions};
+use lapin_futures::channel::{BasicProperties, BasicPublishOptions, Channel};
 use tokio::await;
+use tokio::io::{AsyncRead, AsyncWrite};
 
-async fn deliver_real(task: &BackgroundTask, ttl: Option<u32>) -> Result<()> {
-    let client = await!(amqp_utils::connect_to_broker())?;
-    await!(amqp_utils::init_background_job_queues(&client))?;
-    let channel = await!(client.create_channel())?;
+pub async fn perform_delivery_on<T>(channel: &Channel<T>, task: BackgroundTask, ttl: Option<u32>, close_channel: bool) -> Result<()> 
+where T: AsyncRead+AsyncWrite+Send+Sync+'static {
     let msg = serde_json::to_string(&task)?;
     let mut props = BasicProperties::default().with_delivery_mode(2);
     let queue_name = if let Some(ttl) = ttl {
@@ -22,12 +21,21 @@ async fn deliver_real(task: &BackgroundTask, ttl: Option<u32>) -> Result<()> {
         BasicPublishOptions::default(),
         props
     ))?;
+    if close_channel {
     await!(channel.close(0, "Normal shutdown"))?;
+    }
     Ok(())
 }
 
+async fn deliver_real(task: BackgroundTask, ttl: Option<u32>) -> Result<()> {
+    let client = await!(amqp_utils::connect_to_broker())?;
+    await!(amqp_utils::init_background_job_queues(&client))?;
+    let channel = await!(client.create_channel())?;
+    await!(perform_delivery_on(&channel, task, ttl, true))
+}
+
 pub async fn deliver(task: BackgroundTask, ttl: Option<u32>) {
-    let res = await!(deliver_real(&task, ttl));
+    let res = await!(deliver_real(task, ttl));
     if let Err(e) = res {
         error!("Error during message delivery: {}", e);
     }
