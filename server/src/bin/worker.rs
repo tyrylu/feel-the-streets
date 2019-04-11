@@ -33,6 +33,10 @@ async fn consume_tasks_real() -> Result<()> {
         let task: BackgroundTask = serde_json::from_slice(&msg.data)?;
         task.execute()?;
         await!(channel.basic_ack(msg.delivery_tag, false))?;
+        if let Some((hour, minute, second)) = task.get_next_schedule_time() {
+let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);
+        await!(background_task_delivery::perform_delivery_on(&channel, task, Some(ttl), false))?;
+    }            
     }
     await!(channel.close(0, "Normal shutdown"))?;
     Ok(())

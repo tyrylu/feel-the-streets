@@ -1,8 +1,6 @@
 use crate::area::{Area, AreaState};
 use crate::Result;
 use crate::{area_messaging, diff_utils};
-use crate::background_task_constants::*;
-use crate::background_task::BackgroundTask;
 use chrono::{DateTime, Utc};
 use diesel::{Connection, SqliteConnection};
 use osm_api::change::OSMObjectChangeType;
@@ -88,7 +86,7 @@ fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
         };
         if let Some(semantic_change) = semantic_change {
             area_db.apply_change(&semantic_change)?;
-            tokio::run_async(area_messaging::publish_change(
+            tokio::spawn_async(area_messaging::publish_change(
                 semantic_change,
                 area.name.clone(),
             ));
@@ -107,6 +105,5 @@ pub fn update_area_databases() -> Result<()> {
         update_area(&mut area, &area_db_conn)?;
     }
     info!("Updates finished successfully.");
-    BackgroundTask::UpdateAreaDatabases.deliver_at_time(DATABASES_UPDATE_HOUR, DATABASES_UPDATE_MINUTE, DATABASES_UPDATE_SECOND);
     Ok(())
 }
