@@ -21,6 +21,7 @@ where T: AsyncRead+AsyncWrite+Send+Sync+'static {
         BasicPublishOptions::default(),
         props
     ))?;
+    info!("Task delivered.");
     if close_channel {
     await!(channel.close(0, "Normal shutdown"))?;
     }
@@ -28,10 +29,12 @@ where T: AsyncRead+AsyncWrite+Send+Sync+'static {
 }
 
 async fn deliver_real(task: BackgroundTask, ttl: Option<u32>) -> Result<()> {
-    let client = await!(amqp_utils::connect_to_broker())?;
+    let (client, handle) = await!(amqp_utils::connect_to_broker())?;
     await!(amqp_utils::init_background_job_queues(&client))?;
     let channel = await!(client.create_channel())?;
-    await!(perform_delivery_on(&channel, task, ttl, true))
+    let res = await!(perform_delivery_on(&channel, task, ttl, true));
+    handle.stop();
+    res
 }
 
 pub async fn deliver(task: BackgroundTask, ttl: Option<u32>) {

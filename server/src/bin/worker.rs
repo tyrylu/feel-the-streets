@@ -10,7 +10,7 @@ use log::{info, error};
 
 async fn consume_tasks_real() -> Result<()> {
     use background_task_constants::*;
-    let client = await!(amqp_utils::connect_to_broker())?;
+    let (client, handle) = await!(amqp_utils::connect_to_broker())?;
     await!(amqp_utils::init_background_job_queues(&client))?;
     let channel = await!(client.create_channel())?;
     let opts = QueueDeclareOptions{passive: true, ..Default::default()};
@@ -38,6 +38,7 @@ let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);
         await!(background_task_delivery::perform_delivery_on(&channel, task, Some(ttl), false))?;
     }            
     }
+    handle.stop();
     await!(channel.close(0, "Normal shutdown"))?;
     Ok(())
 }

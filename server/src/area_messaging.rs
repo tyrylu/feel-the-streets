@@ -16,7 +16,7 @@ fn queue_name_for(client_id: &str, area_name: &str) -> String {
 }
 
 async fn init_queue_real(client_id: String, area_name: String) -> Result<()> {
-    let client = await!(amqp_utils::connect_to_broker())?;
+    let (client, handle) = await!(amqp_utils::connect_to_broker())?;
     let channel = await!(client.create_channel())?;
     let opts = QueueDeclareOptions {
         durable: true,
@@ -31,6 +31,7 @@ async fn init_queue_real(client_id: String, area_name: String) -> Result<()> {
         QueueBindOptions::default(),
         FieldTable::new()
     ))?;
+    handle.stop();
     await!(channel.close(0, "Normal shutdown"))?;
     Ok(())
 }
@@ -44,7 +45,7 @@ pub async fn init_queue(client_id: String, area_name: String) {
 async fn publish_change_internal(change: SemanticChange, area_name: String) -> Result<()> {
     let serialized = serde_json::to_string(&change)?;
     let props = BasicProperties::default().with_delivery_mode(2);
-    let amqp_conn = await!(amqp_utils::connect_to_broker())?;
+    let (amqp_conn, handle) = await!(amqp_utils::connect_to_broker())?;
     let channel = await!(amqp_conn.create_channel())?;
     await!(channel.basic_publish(
         &area_name,
@@ -54,6 +55,7 @@ async fn publish_change_internal(change: SemanticChange, area_name: String) -> R
         props
     ))?;
     await!(channel.close(0, "Normal shutdown"))?;
+    handle.stop();
     Ok(())
 }
 pub async fn publish_change(change: SemanticChange, area_name: String) {
