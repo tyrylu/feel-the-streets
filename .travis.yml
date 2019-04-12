@@ -3,8 +3,6 @@ language: rust
 rust:
 - nightly-2019-04-07
 script:
-- cargo build --verbose --all
-- cargo test --verbose --all
 - cargo build --verbose --release --all
 before_install:
 - openssl aes-256-cbc -K $encrypted_68d9c3eaf1da_key -iv $encrypted_68d9c3eaf1da_iv
