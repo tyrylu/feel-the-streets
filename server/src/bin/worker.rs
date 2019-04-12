@@ -19,6 +19,7 @@ async fn consume_tasks_real() -> Result<()> {
         let ttl = datetime_utils::compute_ttl_for_time(DATABASES_UPDATE_HOUR, DATABASES_UPDATE_MINUTE, DATABASES_UPDATE_SECOND);
         await!(background_task_delivery::perform_delivery_on(&channel, BackgroundTask::UpdateAreaDatabases, Some(ttl), false))?;
     }
+    await!(channel.close(0, "Normal shutdown"))?;
     let consumer_chan = await!(client.create_channel())?;
     let mut consumer = await!(consumer_chan.basic_consume(
         &tasks_queue,
@@ -38,7 +39,7 @@ let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);
     }            
     }
     handle.stop();
-    await!(channel.close(0, "Normal shutdown"))?;
+    await!(consume_chan.close(0, "Normal shutdown"))?;
     Ok(())
 }
 
