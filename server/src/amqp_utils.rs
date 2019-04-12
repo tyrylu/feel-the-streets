@@ -5,6 +5,7 @@ use lapin_futures::channel::QueueDeclareOptions;
 use lapin_futures::client::{Client, ConnectionOptions, ConnectionProperties, HeartbeatHandle};
 use lapin_futures::types::{AMQPValue, FieldTable};
 use lapin_futures::uri::AMQPUri;
+use lapin_futures::queue::Queue;
 use std::env;
 use std::net::SocketAddr;
 use std::str::FromStr;
@@ -25,7 +26,7 @@ pub async fn connect_to_broker() -> Result<(Client<TcpStream>, HeartbeatHandle)>
         Ok((client, handle))
 }
 
-pub async fn init_background_job_queues<T>(client: &Client<T>) -> Result<()>
+pub async fn init_background_job_queues<T>(client: &Client<T>) -> Result<(Queue, Queue)>
 where
     T: AsyncRead + AsyncWrite + Send + Sync + 'static,
 {
@@ -34,7 +35,7 @@ where
         durable: true,
         ..Default::default()
     };
-    await!(channel.queue_declare(
+    let tasks_queue = await!(channel.queue_declare(
         background_task_constants::TASKS_QUEUE,
         opts,
         FieldTable::new()
@@ -52,8 +53,8 @@ where
         durable: true,
         ..Default::default()
     };
-    await!(channel.queue_declare(background_task_constants::FUTURE_TASKS_QUEUE, opts2, args))?;
+    let future_tasks_queue = await!(channel.queue_declare(background_task_constants::FUTURE_TASKS_QUEUE, opts2, args))?;
     await!(channel.close(0, "Normal shutdown"))?;
     info!("Queues initialized.");
-    Ok(())
+    Ok((tasks_queue, future_tasks_queue))
 }
