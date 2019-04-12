@@ -39,7 +39,7 @@ let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);
     }            
     }
     handle.stop();
-    await!(consume_chan.close(0, "Normal shutdown"))?;
+    await!(consumer_chan.close(0, "Normal shutdown"))?;
     Ok(())
 }
 
