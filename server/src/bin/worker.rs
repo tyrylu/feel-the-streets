@@ -28,11 +28,10 @@ async fn consume_tasks_real() -> Result<()> {
         FieldTable::new()
     ))?;
     info!("Starting tasks consumption...");
-    info!("Getting first item...");
-    let res = await!(consumer.next());
-    info!("Got result: {:?}", res);
-    while let Some(msg) = await!(consumer.next()) {
-        info!("Got a message.");
+    loop {
+    info!("Polled, got: {:?}", consumer.poll());
+    }
+        while let Some(msg) = await!(consumer.next()) {
         let msg = msg?;
         let task: BackgroundTask = serde_json::from_slice(&msg.data)?;
         task.execute()?;
