@@ -18,8 +18,9 @@ async fn consume_tasks_real() -> Result<()> {
         await!(background_task_delivery::perform_delivery_on(&channel, BackgroundTask::UpdateAreaDatabases, Some(ttl), false))?;
     }
     info!("Starting tasks consumption...");
+    let chan2 = await!(client.create_channel())?;
     loop {
-        let res = await!(channel.basic_get(background_task_constants::TASKS_QUEUE, BasicGetOptions::default()))?;
+        let res = await!(chan2.basic_get(background_task_constants::TASKS_QUEUE, BasicGetOptions::default()))?;
         debug!("Got result: {:?}", res);
         let msg = res.delivery;
         let task: BackgroundTask = serde_json::from_slice(&msg.data)?;
