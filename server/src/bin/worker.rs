@@ -18,7 +18,8 @@ async fn consume_tasks_real() -> Result<()> {
         await!(background_task_delivery::perform_delivery_on(&channel, BackgroundTask::UpdateAreaDatabases, Some(ttl), false))?;
     }
     info!("Starting tasks consumption...");
-    let chan2 = await!(client.create_channel())?;
+    let (client2, _handle2) = await!(amqp_utils::connect_to_broker())?;
+    let chan2 = await!(client2.create_channel())?;
     loop {
         let res = await!(chan2.basic_get(background_task_constants::TASKS_QUEUE, BasicGetOptions::default()))?;
         debug!("Got result: {:?}", res);
