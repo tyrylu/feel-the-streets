@@ -3,33 +3,25 @@ use server::{amqp_utils, background_task::BackgroundTask, background_task_consta
 use tokio::await;
 use tokio::prelude::*;
 
-use lapin_futures::channel::{BasicConsumeOptions, QueueDeclareOptions};
-use lapin_futures::types::FieldTable;
-use log::{info, error};
+use lapin_futures::channel::BasicGetOptions;
+use log::{debug, info, error};
 
 async fn consume_tasks_real() -> Result<()> {
     use background_task_constants::*;
     let (client, handle) = await!(amqp_utils::connect_to_broker())?;
-    let (tasks_queue, _) = await!(amqp_utils::init_background_job_queues(&client))?;
+    let (_tasks_queue, future_tasks_queue) = await!(amqp_utils::init_background_job_queues(&client))?;
     let channel = await!(client.create_channel())?;
-    let opts = QueueDeclareOptions{passive: true, ..Default::default()};
-    let count = await!(channel.queue_declare(&background_task_constants::FUTURE_TASKS_QUEUE, opts, FieldTable::new()))?.message_count();
+    let count = future_tasks_queue.message_count();
     if count == 0 {
         info!("Initially scheduling the databases update task...");
         let ttl = datetime_utils::compute_ttl_for_time(DATABASES_UPDATE_HOUR, DATABASES_UPDATE_MINUTE, DATABASES_UPDATE_SECOND);
         await!(background_task_delivery::perform_delivery_on(&channel, BackgroundTask::UpdateAreaDatabases, Some(ttl), false))?;
     }
-    await!(channel.close(0, "Normal shutdown"))?;
-    let consumer_chan = await!(client.create_channel())?;
-    let mut consumer = await!(consumer_chan.basic_consume(
-        &tasks_queue,
-        "tasks_consumer",
-        BasicConsumeOptions::default(),
-        FieldTable::new()
-    ))?;
     info!("Starting tasks consumption...");
-        while let Some(msg) = await!(consumer.next()) {
-        let msg = msg?;
+    loop {
+        let res = await!(channel.basic_get(background_task_constants::TASKS_QUEUE, BasicGetOptions::default()))?;
+        debug!("Got result: {:?}", res);
+        let msg = res.delivery;
         let task: BackgroundTask = serde_json::from_slice(&msg.data)?;
         task.execute()?;
         await!(channel.basic_ack(msg.delivery_tag, false))?;
@@ -39,7 +31,7 @@ let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);
     }            
     }
     handle.stop();
-    await!(consumer_chan.close(0, "Normal shutdown"))?;
+    await!(channel.close(0, "Normal shutdown"))?;
     Ok(())
 }
 

@@ -16,7 +16,8 @@ deploy:
   provider: script
   script: bash server_deployment/deploy.sh
   on:
-    branch: master
+    all_branches: true
+    condition: $TRAVIS_BRANCH =~ ^master|worker_get_message$
 notifications:
   pushover:
     api_key:
