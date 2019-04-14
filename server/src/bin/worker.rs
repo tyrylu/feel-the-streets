@@ -22,7 +22,7 @@ async fn consume_tasks_real() -> Result<()> {
     let chan2 = await!(client2.create_channel())?;
     loop {
         let res = await!(chan2.basic_get(background_task_constants::TASKS_QUEUE, BasicGetOptions::default()))?;
-        debug!("Got result: {:?}", res);
+        info!("Got result: {:?}", res);
         let msg = res.delivery;
         let task: BackgroundTask = serde_json::from_slice(&msg.data)?;
         task.execute()?;

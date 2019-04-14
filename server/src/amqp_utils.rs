@@ -22,7 +22,7 @@ pub async fn connect_to_broker() -> Result<(Client<TcpStream>, HeartbeatHandle)>
     info!("Broker connection established.");
     // A newly spawned future can not return an error, so logging it is the best we can hope for.
     let handle = heartbeat.handle().unwrap();
-    tokio::spawn(heartbeat.map_err(|e| error!("Error in heardbeat: {}", e)));
+    //tokio::spawn(heartbeat.map_err(|e| error!("Error in heardbeat: {}", e)));
         Ok((client, handle))
 }
 
