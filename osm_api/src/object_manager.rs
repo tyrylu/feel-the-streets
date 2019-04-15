@@ -97,10 +97,9 @@ impl OSMObjectManager {
     }
 
     fn next_api_url(&self) -> &'static str {
-        if *self.current_api_url_idx.borrow() == self.api_urls.len() - 1{
+        if *self.current_api_url_idx.borrow() == self.api_urls.len() - 1 {
             *self.current_api_url_idx.borrow_mut() = 0 as usize;
-        }
-        else {
+        } else {
             *self.current_api_url_idx.borrow_mut() += 1 as usize;
         }
         self.api_urls[*self.current_api_url_idx.borrow()]
@@ -123,13 +122,12 @@ impl OSMObjectManager {
             200 => {
                 debug!("Request successfully finished after {:?}.", start.elapsed());
                 if !result_to_tempfile {
-                Ok(Box::new(resp))
-                }else {
+                    Ok(Box::new(resp))
+                } else {
                     let mut file = tempfile()?;
                     io::copy(&mut resp, &mut file)?;
                     file.seek(SeekFrom::Start(0))?;
                     Ok(Box::new(file))
-
                 }
             }
             _ => {

@@ -8,7 +8,7 @@ use osm_db::AreaDatabase;
 use rocket::http::Status;
 use rocket::response::status;
 use rocket_contrib::json::Json;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use std::fs::File;
 use tokio;
 
@@ -19,7 +19,7 @@ pub struct MaybeCreateAreaRequest {
 
 #[derive(Serialize)]
 pub struct PingResponse {
-    response: String
+    response: String,
 }
 
 #[get("/areas")]
@@ -56,5 +56,7 @@ pub fn download_area(area_name: String, client_id: String, conn: DbConn) -> Resu
 
 #[get("/ping")]
 pub fn ping() -> Json<PingResponse> {
-    Json(PingResponse{response: "pong".to_string()})
+    Json(PingResponse {
+        response: "pong".to_string(),
+    })
 }

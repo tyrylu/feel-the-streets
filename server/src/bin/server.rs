@@ -22,7 +22,15 @@ fn main() -> Result<()> {
                 }
             }
         }))
-        .mount("/api", routes![routes::areas, routes::maybe_create_area, routes::download_area, routes::ping])
+        .mount(
+            "/api",
+            routes![
+                routes::areas,
+                routes::maybe_create_area,
+                routes::download_area,
+                routes::ping
+            ],
+        )
         .launch();
     Ok(())
 }

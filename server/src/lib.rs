@@ -42,6 +42,6 @@ pub fn run_migrations(
 
 pub fn init_logging() {
     env_logger::Builder::from_env("FTS_LOG")
-    .default_format_timestamp(false)
-    .init();
+        .default_format_timestamp(false)
+        .init();
 }

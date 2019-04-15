@@ -1,23 +1,34 @@
 #![feature(await_macro, async_await, futures_api)]
-use server::{amqp_utils, background_task::BackgroundTask, background_task_constants, background_task_delivery, datetime_utils, Result};
+use server::{
+    amqp_utils, background_task::BackgroundTask, background_task_constants,
+    background_task_delivery, datetime_utils, Result,
+};
 use tokio::await;
 use tokio::prelude::*;
 
-use lapin_futures::channel::{BasicConsumeOptions, QueueDeclareOptions};
+use lapin_futures::channel::BasicConsumeOptions;
 use lapin_futures::types::FieldTable;
-use log::{info, error};
+use log::{error, info};
 
 async fn consume_tasks_real() -> Result<()> {
     use background_task_constants::*;
     let (client, handle) = await!(amqp_utils::connect_to_broker())?;
-    let (tasks_queue, future_tasks_queue) = await!(amqp_utils::init_background_job_queues(&client))?;
     let channel = await!(client.create_channel())?;
-
-    let count = future_tasks_queue.message_count;
+    let (tasks_queue, future_tasks_queue) =
+        await!(amqp_utils::init_background_job_queues(&channel))?;
+    let count = future_tasks_queue.message_count();
     if count == 0 {
         info!("Initially scheduling the databases update task...");
-        let ttl = datetime_utils::compute_ttl_for_time(DATABASES_UPDATE_HOUR, DATABASES_UPDATE_MINUTE, DATABASES_UPDATE_SECOND);
-        await!(background_task_delivery::perform_delivery_on(&channel, BackgroundTask::UpdateAreaDatabases, Some(ttl), false))?;
+        let ttl = datetime_utils::compute_ttl_for_time(
+            DATABASES_UPDATE_HOUR,
+            DATABASES_UPDATE_MINUTE,
+            DATABASES_UPDATE_SECOND,
+        );
+        await!(background_task_delivery::perform_delivery_on(
+            &channel,
+            BackgroundTask::UpdateAreaDatabases,
+            Some(ttl)
+        ))?;
     }
     let mut consumer = await!(channel.basic_consume(
         &tasks_queue,
@@ -26,15 +37,19 @@ async fn consume_tasks_real() -> Result<()> {
         FieldTable::new()
     ))?;
     info!("Starting tasks consumption...");
-        while let Some(msg) = await!(consumer.next()) {
+    while let Some(msg) = await!(consumer.next()) {
         let msg = msg?;
         let task: BackgroundTask = serde_json::from_slice(&msg.data)?;
         task.execute()?;
         await!(channel.basic_ack(msg.delivery_tag, false))?;
         if let Some((hour, minute, second)) = task.get_next_schedule_time() {
-let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);
-        await!(background_task_delivery::perform_delivery_on(&channel, task, Some(ttl), false))?;
-    }            
+            let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);
+            await!(background_task_delivery::perform_delivery_on(
+                &channel,
+                task,
+                Some(ttl)
+            ))?;
+        }
     }
     handle.stop();
     await!(channel.close(0, "Normal shutdown"))?;

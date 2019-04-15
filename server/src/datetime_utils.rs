@@ -6,8 +6,7 @@ pub fn next_occurrence_of_time(hour: u32, minute: u32, second: u32) -> DateTime<
     let today = Utc::today().and_hms(hour, minute, second);
     if today > now {
         today
-    }
-    else {
+    } else {
         (now.date() + Duration::days(1)).and_hms(hour, minute, second)
     }
 }
