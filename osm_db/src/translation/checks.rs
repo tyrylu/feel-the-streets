@@ -19,8 +19,9 @@ fn check_entity_data_consistency_against_metadata(
     data: &HashMap<String, Value>,
     metadata: &EntityMetadata,
 ) -> bool {
-    let _known_field_names: HashSet<&String> = metadata.fields.iter().map(|(n, _)| n).collect();
-    for (name, field) in metadata.fields.iter() {
+    let all_fields = metadata.all_fields();
+    let _known_field_names: HashSet<&String> = all_fields.iter().map(|(n, _)| n).collect();
+    for (name, field) in all_fields.iter() {
         if field.required && !data.contains_key(name) {
             warn!(
                 "Entity data {:?} are missing the required field {}.",
@@ -32,8 +33,8 @@ fn check_entity_data_consistency_against_metadata(
     for (name, value) in data.iter() {
         if !_known_field_names.contains(name) {
             info!(
-                "The data contain an unknown field {} with value {}.",
-                name, value
+                "The data for entity {} contain an unknown field {} with value {}.",
+                metadata.discriminator, name, value
             );
         }
     }

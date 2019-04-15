@@ -29,6 +29,7 @@ impl RawEntityMetadata {
     }
 }
 
+#[derive(Clone)]
 pub struct Field {
     pub type_name: String,
     pub required: bool,
@@ -66,6 +67,13 @@ impl EntityMetadata {
 
     pub fn parent_metadata(&self) -> Option<Self> {
         EntityMetadata::for_discriminator(&self.inherits.clone()?)
+    }
+    pub fn all_fields(&self) -> HashMap<String, Field> {
+        let mut ret = self.fields.clone();
+        if let Some(parent) = self.parent_metadata() {
+            ret.extend(parent.all_fields());
+        }
+ret
     }
 }
 

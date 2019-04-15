@@ -49,7 +49,6 @@ impl OSMObjectManager {
     pub fn new() -> Self {
         let conn = Connection::open("entity_cache.db").expect("Could not create connection.");
         conn.execute("PRAGMA SYNCHRONOUS=off", &[]).unwrap();
-        conn.execute("BEGIN", &[]).unwrap();
         let client = reqwest::Client::builder()
             .timeout(None)
             .build()
@@ -142,6 +141,7 @@ impl OSMObjectManager {
         readable: Box<dyn Read>,
         return_objects: bool,
     ) -> Result<Vec<OSMObject>> {
+        self.cache_conn.as_ref().unwrap().execute("BEGIN", &[])?;
         let start = Instant::now();
         let mut cache = self.get_cache();
         let mut objects = Vec::new();
