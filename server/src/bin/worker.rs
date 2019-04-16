@@ -6,7 +6,7 @@ use server::{
 use tokio::await;
 use tokio::prelude::*;
 
-use lapin_futures::channel::BasicConsumeOptions;
+use lapin_futures::channel::{BasicConsumeOptions, BasicQosOptions};
 use lapin_futures::types::FieldTable;
 use log::{error, info};
 
@@ -30,6 +30,8 @@ async fn consume_tasks_real() -> Result<()> {
             Some(ttl)
         ))?;
     }
+    let opts = BasicQosOptions{prefetch_count: 1, ..Default::default()};
+    await!(channel.basic_qos(opts))?;
     let mut consumer = await!(channel.basic_consume(
         &tasks_queue,
         "tasks_consumer",
