@@ -8,7 +8,7 @@ use tokio::prelude::*;
 
 use lapin_futures::channel::{BasicConsumeOptions, BasicQosOptions};
 use lapin_futures::types::FieldTable;
-use log::{error, info};
+use log::{error, info, trace};
 
 async fn consume_tasks_real() -> Result<()> {
     use background_task_constants::*;
@@ -41,6 +41,7 @@ async fn consume_tasks_real() -> Result<()> {
     info!("Starting tasks consumption...");
     while let Some(msg) = await!(consumer.next()) {
         let msg = msg?;
+        trace!("Received message: {:?}", msg);
         let task: BackgroundTask = serde_json::from_slice(&msg.data)?;
         task.execute()?;
         await!(channel.basic_ack(msg.delivery_tag, false))?;
