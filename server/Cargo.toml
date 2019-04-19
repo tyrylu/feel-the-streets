@@ -20,6 +20,7 @@ chrono = {version = "*", features = ["serde"]}
 failure = "*"
 lapin-futures = "*"
 tokio = {version="*", features=["async-await-preview"]}
+tokio-async-await = "*"
 futures = "*"
 dotenv = "*"
 sha3 = "*"
