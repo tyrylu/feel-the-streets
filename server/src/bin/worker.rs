@@ -67,7 +67,7 @@ async fn consume_tasks_real() -> Result<()> {
 
 async fn consume_tasks() {
     if let Err(e) = await!(consume_tasks_real()) {
-        error!("Error during task consumption: {}", e);
+        error!("Error during task consumption: {:?}", e);
     }
 }
 
