@@ -16,6 +16,7 @@ pub enum AreaState {
 }
 
 #[derive(Serialize, Queryable, AsChangeset)]
+#[primary_key(id, name)]
 pub struct Area {
     pub id: i32,
     pub name: String,
