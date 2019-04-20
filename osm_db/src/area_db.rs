@@ -84,7 +84,7 @@ impl AreaDatabase {
     }
 
     pub fn get_entity(&self, osm_id: &str) -> DbResult<Option<Entity>> {
-        let mut stmt = self.conn.prepare_cached("select id, GeomToText(geometry) as geometry, discriminator, data, effective_width from entities where json_extract(data, '$.osm_id') = ?")?;
+        let mut stmt = self.conn.prepare_cached("select id, AsText(geometry) as geometry, discriminator, data, effective_width from entities where json_extract(data, '$.osm_id') = ?")?;
         match stmt.query_row(&[&osm_id], |row| Entity {
             id: row.get(0),
             geometry: row.get(1),
