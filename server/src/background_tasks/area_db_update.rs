@@ -14,14 +14,19 @@ fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
     area.state = AreaState::GettingChanges;
     area.save(&conn)?;
     let after = if let Some(timestamp) = &area.newest_osm_object_timestamp {
+        info!("Looking differences after the latest known OSM object timestamp {}", timestamp);
         DateTime::parse_from_rfc3339(&timestamp)?.with_timezone(&Utc)
     } else {
+        info!("Looking differences after the area update time of {}", area.updated_at);
         DateTime::from_utc(area.updated_at, Utc)
     };
     let manager = OSMObjectManager::new();
     let area_db = AreaDatabase::open_existing(&area.name)?;
     let mut first = true;
+    let mut osm_change_count = 0;
+    let mut semantic_change_count = 0;
     for change in manager.lookup_differences_in(&area.name, &after)? {
+        osm_change_count += 1;
         use OSMObjectChangeType::*;
         if first {
             area.state = AreaState::ApplyingChanges;
@@ -85,6 +90,7 @@ fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
             }
         };
         if let Some(semantic_change) = semantic_change {
+            semantic_change_count += 1;
             area_db.apply_change(&semantic_change)?;
             tokio::spawn_async(area_messaging::publish_change(
                 semantic_change,
@@ -94,16 +100,16 @@ fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
     }
     area.state = AreaState::Updated;
     area.save(*&conn)?;
-    info!("Area updated successfully.");
+    info!("Area updated successfully, applyed {} semantic changes resulting from {} OSM changes.", semantic_change_count, osm_change_count);
     Ok(())
 }
 
 pub fn update_area_databases() -> Result<()> {
-    info!("Going to perform the database update for all up-to date databases.");
+    info!("Going to perform the area database update for all up-to date areas.");
     let area_db_conn = SqliteConnection::establish("server.db")?;
     for mut area in Area::all_updated(&area_db_conn)? {
         update_area(&mut area, &area_db_conn)?;
     }
-    info!("Updates finished successfully.");
+    info!("Area updates finished successfully.");
     Ok(())
 }
