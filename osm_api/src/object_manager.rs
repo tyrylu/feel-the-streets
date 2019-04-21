@@ -187,8 +187,8 @@ impl OSMObjectManager {
         let mut objects: Vec<OSMObject> = vec![];
         ids.sort_unstable_by_key(|oid| oid.chars().nth(0));
         for (entity_type, entity_ids) in &ids.iter().group_by(|oid| oid.chars().nth(0).unwrap()) {
-            for mut chunk in &entity_ids.chunks(MAX_SIMULTANEOUSLY_QUERYED) {
-                let ids_str = chunk.join(",");
+            for chunk in &entity_ids.chunks(MAX_SIMULTANEOUSLY_QUERYED) {
+                let ids_str = chunk.map(|c| c[1..].to_string()).join(",");
                 let query = format_query(
                     900,
                     &format!("{}(id:{})", translate_type_shortcut(entity_type), ids_str),
