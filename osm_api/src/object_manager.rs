@@ -107,9 +107,9 @@ impl OSMObjectManager {
     fn run_query(&self, query: &str, result_to_tempfile: bool) -> Result<Box<dyn Read>> {
         let start = Instant::now();
         let url = self.next_api_url();
-        let final_url = format!("{}/interpreter?data={}", url, query);
+        let final_url = format!("{}/interpreter", url);
         debug!("Requesting resource {}", final_url);
-        let mut resp = self.http_client.get(&final_url).send()?;
+        let mut resp = self.http_client.post(&final_url).form(&[("data", query)]).send()?;
         match resp.status().as_u16() {
             429 => {
                 warn!("Multiple requests, killing them and going to a different api host.");
@@ -204,11 +204,13 @@ impl OSMObjectManager {
     fn ensure_has_cached_dependencies_for(&self, objects: &[OSMObject]) -> Result<()> {
         use self::OSMObjectSpecifics::*;
         let mut missing = vec![];
+        let mut total_examined = 0;
         for object in objects {
             match object.specifics {
                 Node { .. } => continue, // Nodes have no dependencies
                 Way { ref nodes, .. } => {
                     for node in nodes {
+                        total_examined += 1;
                         let node_id = format!("n{}", node);
                         if !self.has_object(&node_id) {
                             debug!("Node with id {} missing.", node_id);
@@ -218,6 +220,7 @@ impl OSMObjectManager {
                 }
                 Relation { ref members, .. } => {
                     for member in members {
+                        total_examined += 1;
                         if !self.has_object(&member.unique_reference()) {
                             debug!("Object {} is missing.", member.unique_reference());
                             missing.push(member.unique_reference());
@@ -229,7 +232,7 @@ impl OSMObjectManager {
         if !missing.is_empty() {
             info!(
                 "Out of {} objects {} was missing.",
-                objects.len(),
+                total_examined,
                 missing.len()
             );
             self.lookup_objects(&mut missing[..])?;
