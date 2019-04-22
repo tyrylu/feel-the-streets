@@ -115,6 +115,7 @@ async fn update_area(mut area: Area) -> Result<()> {
     }
     handle.stop();
     info!("Area updated successfully, applyed {} semantic changes resulting from {} OSM changes.", semantic_change_count, osm_change_count);
+    await!(channel.close(0, "Normal shutdown"))?;
     Ok(())
 }
 
