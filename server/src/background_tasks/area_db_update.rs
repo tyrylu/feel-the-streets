@@ -1,6 +1,7 @@
 use crate::area::{Area, AreaState};
 use crate::Result;
 use crate::{area_messaging, diff_utils};
+use crate::amqp_utils;
 use chrono::{DateTime, Utc};
 use diesel::{Connection, SqliteConnection};
 use osm_api::change::OSMObjectChangeType;
@@ -8,11 +9,15 @@ use osm_api::object_manager::OSMObjectManager;
 use osm_db::area_db::AreaDatabase;
 use osm_db::semantic_change::SemanticChange;
 use osm_db::translation::translator;
+use tokio::await;
 
-fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
+async fn update_area(mut area: Area) -> Result<()> {
     info!("Updating area {}.", area.name);
+    {
     area.state = AreaState::GettingChanges;
+    let conn = SqliteConnection::establish("server.db")?;
     area.save(&conn)?;
+    }
     let after = if let Some(timestamp) = &area.newest_osm_object_timestamp {
         info!("Looking differences after the latest known OSM object timestamp {}", timestamp);
         DateTime::parse_from_rfc3339(&timestamp)?.with_timezone(&Utc)
@@ -24,11 +29,14 @@ fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
     let area_db = AreaDatabase::open_existing(&area.name)?;
     let mut first = true;
     let mut osm_change_count = 0;
-    let mut semantic_change_count = 0;
+    let mut semantic_changes = vec![];
+    let (client, handle) = await!(amqp_utils::connect_to_broker())?;
+    let channel = await!(client.create_channel())?;
     for change in manager.lookup_differences_in(&area.name, &after)? {
         osm_change_count += 1;
         use OSMObjectChangeType::*;
         if first {
+            let conn = SqliteConnection::establish("server.db")?;
             area.state = AreaState::ApplyingChanges;
             area.save(&conn)?;
             first = false;
@@ -90,25 +98,34 @@ fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
             }
         };
         if let Some(semantic_change) = semantic_change {
-            semantic_change_count += 1;
             area_db.apply_change(&semantic_change)?;
-            tokio::spawn_async(area_messaging::publish_change(
-                semantic_change,
-                area.name.clone(),
-            ));
+            semantic_changes.push(semantic_change);
         }
     }
     area.state = AreaState::Updated;
-    area.save(*&conn)?;
+    let conn = SqliteConnection::establish("server.db")?;
+    area.save(&conn)?;
+    let semantic_change_count = semantic_changes.len();
+    for change in semantic_changes {
+                    await!(area_messaging::publish_change_on(
+                &channel,
+                change,
+                area.name.clone(),
+            ))?;
+    }
+    handle.stop();
     info!("Area updated successfully, applyed {} semantic changes resulting from {} OSM changes.", semantic_change_count, osm_change_count);
     Ok(())
 }
 
-pub fn update_area_databases() -> Result<()> {
+pub async fn update_area_databases() -> Result<()> {
     info!("Going to perform the area database update for all up-to date areas.");
+    let areas = {
     let area_db_conn = SqliteConnection::establish("server.db")?;
-    for mut area in Area::all_updated(&area_db_conn)? {
-        update_area(&mut area, &area_db_conn)?;
+Area::all_updated(&area_db_conn)?
+};
+    for area in areas {
+        await!(update_area(area))?;
     }
     info!("Area updates finished successfully.");
     Ok(())

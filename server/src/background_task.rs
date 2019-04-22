@@ -26,11 +26,11 @@ impl BackgroundTask {
         self.deliver_after(datetime_utils::compute_ttl_for_time(hour, minute, second));
     }
 
-    pub fn execute(&self) -> Result<()> {
+    pub async fn execute(&self) -> Result<()> {
         use BackgroundTask::*;
         match self {
             CreateAreaDatabase(area_name) => area_db_creation::create_area_database(&area_name),
-            UpdateAreaDatabases => area_db_update::update_area_databases(),
+            UpdateAreaDatabases => await!(area_db_update::update_area_databases()),
         }
     }
 

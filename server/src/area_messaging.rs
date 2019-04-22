@@ -1,13 +1,13 @@
 use crate::{amqp_utils, Result};
 use lapin_futures::channel::{
-    BasicProperties, BasicPublishOptions, QueueBindOptions, QueueDeclareOptions,
-};
+    BasicProperties, BasicPublishOptions, QueueBindOptions, QueueDeclareOptions, Channel};
 use lapin_futures::types::FieldTable;
 use log::error;
 use osm_db::semantic_change::SemanticChange;
 use serde_json;
 use sha3::{Digest, Sha3_256};
 use tokio::await;
+use tokio::io::{AsyncRead, AsyncWrite};
 
 fn queue_name_for(client_id: &str, area_name: &str) -> String {
     let to_hash = format!("{}{}", client_id, area_name);
@@ -42,11 +42,10 @@ pub async fn init_queue(client_id: String, area_name: String) {
     }
 }
 
-async fn publish_change_internal(change: SemanticChange, area_name: String) -> Result<()> {
+pub async fn publish_change_on<T>(channel: &Channel<T>, change: SemanticChange, area_name: String) -> Result<()> 
+where T: AsyncRead+AsyncWrite+Send+Sync+'static{
     let serialized = serde_json::to_string(&change)?;
     let props = BasicProperties::default().with_delivery_mode(2);
-    let (amqp_conn, handle) = await!(amqp_utils::connect_to_broker())?;
-    let channel = await!(amqp_conn.create_channel())?;
     await!(channel.basic_publish(
         &area_name,
         "",
@@ -54,6 +53,13 @@ async fn publish_change_internal(change: SemanticChange, area_name: String) -> R
         BasicPublishOptions::default(),
         props
     ))?;
+    Ok(())
+}
+
+async fn publish_change_internal(change: SemanticChange, area_name: String) -> Result<()> {
+    let (amqp_conn, handle) = await!(amqp_utils::connect_to_broker())?;
+    let channel = await!(amqp_conn.create_channel())?;
+await!(publish_change_on(&channel, change, area_name))?;
     await!(channel.close(0, "Normal shutdown"))?;
     handle.stop();
     Ok(())
@@ -61,5 +67,5 @@ async fn publish_change_internal(change: SemanticChange, area_name: String) -> R
 pub async fn publish_change(change: SemanticChange, area_name: String) {
     if let Err(e) = await!(publish_change_internal(change, area_name)) {
         error!("Error during change publishing: {}", e);
-    }
+    };
 }

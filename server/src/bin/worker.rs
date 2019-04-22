@@ -1,3 +1,4 @@
+#![recursion_limit = "1024"]
 #![feature(await_macro, async_await, futures_api)]
 use server::{
     amqp_utils, background_task::BackgroundTask, background_task_constants,
@@ -49,7 +50,7 @@ async fn consume_tasks_real() -> Result<()> {
         let msg = msg?;
         trace!("Received message: {:?}", msg);
         let task: BackgroundTask = serde_json::from_slice(&msg.data)?;
-        task.execute()?;
+        await!(task.execute())?;
         await!(channel.basic_ack(msg.delivery_tag, false))?;
         if let Some((hour, minute, second)) = task.get_next_schedule_time() {
             let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);
