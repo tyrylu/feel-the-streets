@@ -106,6 +106,7 @@ async fn update_area(mut area: Area) -> Result<()> {
     let conn = SqliteConnection::establish("server.db")?;
     area.save(&conn)?;
     let semantic_change_count = semantic_changes.len();
+    info!("Publishing {} semantic changes...", semantic_change_count);
     for change in semantic_changes {
                     await!(area_messaging::publish_change_on(
                 &channel,
