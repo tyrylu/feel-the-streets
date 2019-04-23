@@ -1,6 +1,7 @@
 use crate::{amqp_utils, Result};
 use lapin_futures::channel::{
-    BasicProperties, BasicPublishOptions, QueueBindOptions, QueueDeclareOptions, Channel};
+    BasicProperties, BasicPublishOptions, Channel, QueueBindOptions, QueueDeclareOptions,
+};
 use lapin_futures::types::FieldTable;
 use log::error;
 use osm_db::semantic_change::SemanticChange;
@@ -42,8 +43,14 @@ pub async fn init_queue(client_id: String, area_name: String) {
     }
 }
 
-pub async fn publish_change_on<T>(channel: &Channel<T>, change: SemanticChange, area_name: String) -> Result<()> 
-where T: AsyncRead+AsyncWrite+Send+Sync+'static{
+pub async fn publish_change_on<T>(
+    channel: &Channel<T>,
+    change: SemanticChange,
+    area_name: String,
+) -> Result<()>
+where
+    T: AsyncRead + AsyncWrite + Send + Sync + 'static,
+{
     let serialized = serde_json::to_string(&change)?;
     let props = BasicProperties::default().with_delivery_mode(2);
     await!(channel.basic_publish(
@@ -59,7 +66,7 @@ where T: AsyncRead+AsyncWrite+Send+Sync+'static{
 async fn publish_change_internal(change: SemanticChange, area_name: String) -> Result<()> {
     let (amqp_conn, handle) = await!(amqp_utils::connect_to_broker())?;
     let channel = await!(amqp_conn.create_channel())?;
-await!(publish_change_on(&channel, change, area_name))?;
+    await!(publish_change_on(&channel, change, area_name))?;
     await!(channel.close(0, "Normal shutdown"))?;
     handle.stop();
     Ok(())

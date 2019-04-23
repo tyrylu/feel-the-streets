@@ -406,6 +406,7 @@ Boundary:
   inherits: Named
   fields:
     type: BoundaryType
+    name_cs: str
     admin_level: int
     historic_type: HistoricType
     marker_type: MarkerType
@@ -440,6 +441,7 @@ Boundary:
     tourism: TourismType
     designation: str
     highway: RoadType
+    ref: str
 Bridge:
   inherits: Named
   fields:
@@ -2137,6 +2139,7 @@ Route:
     official_name: str
     opening_date: str
     roundtrip: bool
+    ref: str
     nat_ref: str
     kct_white: RouteImportance
     note_cz: str

@@ -31,14 +31,17 @@ async fn consume_tasks_real() -> Result<()> {
             Some(ttl)
         ))?;
     }
-    let opts = BasicQosOptions{prefetch_count: 1, ..Default::default()};
+    let opts = BasicQosOptions {
+        prefetch_count: 1,
+        ..Default::default()
+    };
     await!(channel.basic_qos(opts))?;
     // This ugly internals hack fixes consuming of messages on a channel with multiple queues declared.
     {
-    let low_level_conn = &mut channel.transport.lock().conn;
-    let low_level_channel = low_level_conn.channels.get_mut(&channel.id).unwrap();
-    low_level_channel.queues.remove(FUTURE_TASKS_QUEUE);
-}
+        let low_level_conn = &mut channel.transport.lock().conn;
+        let low_level_channel = low_level_conn.channels.get_mut(&channel.id).unwrap();
+        low_level_channel.queues.remove(FUTURE_TASKS_QUEUE);
+    }
     let mut consumer = await!(channel.basic_consume(
         &tasks_queue,
         "tasks_consumer",
@@ -75,6 +78,6 @@ async fn consume_tasks() {
 fn main() -> Result<()> {
     server::init_logging();
     let _dotenv_path = dotenv::dotenv()?;
-tokio::run_async(consume_tasks());
+    tokio::run_async(consume_tasks());
     Ok(())
 }

@@ -73,7 +73,7 @@ impl EntityMetadata {
         if let Some(parent) = self.parent_metadata() {
             ret.extend(parent.all_fields());
         }
-ret
+        ret
     }
 }
 

@@ -51,20 +51,19 @@ impl AreaDatabase {
             let mut insert_stmt = insert_tx.prepare(INSERT_ENTITY_SQL)?;
             for entity in entities {
                 if entity.geometry.len() < 1000000 {
-                    trace!(
-                        "Inserting {} with geometry {}, effective width {:?} and data {}",
-                        entity.discriminator,
-                        entity.geometry,
-                        entity.effective_width,
-                        entity.data
-                    );
-                    insert_stmt.execute(&[
+                    trace!("Inserting {:?}", entity);
+
+                    match insert_stmt.execute(&[
                         &entity.discriminator,
                         &entity.geometry,
                         &entity.effective_width,
                         &entity.data,
-                    ])?;
-                    count += 1;
+                    ]) {
+                        Ok(_) => count += 1,
+                        Err(e) => {
+                            error!("Failed to insert entity {:?}, error: {}", entity, e);
+                        }
+                    }
                 } else {
                     warn!(
                         "Not inserting entity with data {} with geometry size {}.",

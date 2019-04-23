@@ -4,8 +4,8 @@ use diesel::dsl::now;
 use diesel::prelude::*;
 use diesel::SqliteConnection;
 use diesel_derive_enum::DbEnum;
-use serde::Serialize;
 use log::debug;
+use serde::Serialize;
 
 #[derive(PartialEq, Serialize, DbEnum, Debug)]
 pub enum AreaState {
@@ -61,7 +61,7 @@ impl Area {
     }
     pub fn save(&self, conn: &SqliteConnection) -> QueryResult<usize> {
         let query = diesel::update(areas::table).set(self);
-                let query_debug = diesel::debug_query::<diesel::sqlite::Sqlite, _>(&query);
+        let query_debug = diesel::debug_query::<diesel::sqlite::Sqlite, _>(&query);
         debug!("Executing query: {}", query_debug);
         query.execute(*&conn)
     }
@@ -74,5 +74,5 @@ pub fn finalize_area_creation(area: &str, conn: &SqliteConnection) -> QueryResul
             areas::state.eq(AreaState::Updated),
             areas::updated_at.eq(now),
         ));
-        query.execute(*&conn)
+    query.execute(*&conn)
 }

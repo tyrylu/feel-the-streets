@@ -109,7 +109,11 @@ impl OSMObjectManager {
         let url = self.next_api_url();
         let final_url = format!("{}/interpreter", url);
         debug!("Requesting resource {}", final_url);
-        let mut resp = self.http_client.post(&final_url).form(&[("data", query)]).send()?;
+        let mut resp = self
+            .http_client
+            .post(&final_url)
+            .form(&[("data", query)])
+            .send()?;
         match resp.status().as_u16() {
             429 => {
                 warn!("Multiple requests, killing them and going to a different api host.");

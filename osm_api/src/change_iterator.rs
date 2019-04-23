@@ -20,7 +20,7 @@ pub struct OSMObjectChangeIterator<T: Read> {
     current_change_type: Option<OSMObjectChangeType>,
     old: Option<OSMObject>,
     new: Option<OSMObject>,
-    in_remark: bool
+    in_remark: bool,
 }
 
 impl<T: Read> OSMObjectChangeIterator<T> {
@@ -32,7 +32,7 @@ impl<T: Read> OSMObjectChangeIterator<T> {
             current_change_type: None,
             old: None,
             new: None,
-            in_remark: false
+            in_remark: false,
         }
     }
 

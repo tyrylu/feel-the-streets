@@ -17,11 +17,13 @@ class SemanticChangeRetriever:
 
     def new_changes_in(self, area):
         queue_name = get_client_queue_name(config().client_id, area)
+        print("Using queue %s."%queue_name)
         while True:
             method, props, body = self._chan.basic_get(queue_name)
             if not method:
                 break
             self._max_delivery_tags[area] = method.delivery_tag
+            print(body)
             yield pickle.loads(body)
 
     def acknowledge_changes_for(self, area):

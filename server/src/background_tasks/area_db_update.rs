@@ -1,7 +1,7 @@
+use crate::amqp_utils;
 use crate::area::{Area, AreaState};
 use crate::Result;
 use crate::{area_messaging, diff_utils};
-use crate::amqp_utils;
 use chrono::{DateTime, Utc};
 use diesel::{Connection, SqliteConnection};
 use osm_api::change::OSMObjectChangeType;
@@ -14,15 +14,21 @@ use tokio::await;
 async fn update_area(mut area: Area) -> Result<()> {
     info!("Updating area {}.", area.name);
     {
-    area.state = AreaState::GettingChanges;
-    let conn = SqliteConnection::establish("server.db")?;
-    area.save(&conn)?;
+        area.state = AreaState::GettingChanges;
+        let conn = SqliteConnection::establish("server.db")?;
+        area.save(&conn)?;
     }
     let after = if let Some(timestamp) = &area.newest_osm_object_timestamp {
-        info!("Looking differences after the latest known OSM object timestamp {}", timestamp);
+        info!(
+            "Looking differences after the latest known OSM object timestamp {}",
+            timestamp
+        );
         DateTime::parse_from_rfc3339(&timestamp)?.with_timezone(&Utc)
     } else {
-        info!("Looking differences after the area update time of {}", area.updated_at);
+        info!(
+            "Looking differences after the area update time of {}",
+            area.updated_at
+        );
         DateTime::from_utc(area.updated_at, Utc)
     };
     let manager = OSMObjectManager::new();
@@ -108,14 +114,17 @@ async fn update_area(mut area: Area) -> Result<()> {
     let semantic_change_count = semantic_changes.len();
     info!("Publishing {} semantic changes...", semantic_change_count);
     for change in semantic_changes {
-                    await!(area_messaging::publish_change_on(
-                &channel,
-                change,
-                area.name.clone(),
-            ))?;
+        await!(area_messaging::publish_change_on(
+            &channel,
+            change,
+            area.name.clone(),
+        ))?;
     }
     handle.stop();
-    info!("Area updated successfully, applyed {} semantic changes resulting from {} OSM changes.", semantic_change_count, osm_change_count);
+    info!(
+        "Area updated successfully, applyed {} semantic changes resulting from {} OSM changes.",
+        semantic_change_count, osm_change_count
+    );
     await!(channel.close(0, "Normal shutdown"))?;
     Ok(())
 }
@@ -123,9 +132,9 @@ async fn update_area(mut area: Area) -> Result<()> {
 pub async fn update_area_databases() -> Result<()> {
     info!("Going to perform the area database update for all up-to date areas.");
     let areas = {
-    let area_db_conn = SqliteConnection::establish("server.db")?;
-Area::all_updated(&area_db_conn)?
-};
+        let area_db_conn = SqliteConnection::establish("server.db")?;
+        Area::all_updated(&area_db_conn)?
+    };
     for area in areas {
         await!(update_area(area))?;
     }

@@ -74,71 +74,64 @@ pub fn translate(
 fn calculate_effective_width(discriminator: &str, tags: &HashMap<String, String>) -> Option<f64> {
     match discriminator {
         "PowerLine" => Some(f64::from(0)),
-        "WaterWay" =>  match tags.get("width")
-                .unwrap_or(&"0".to_string())
-                .parse() {
-                    Ok(val) => Some(val),
-                    Err(e) => {
-                        warn!("Could not parse with during an effective width calculation: {}", e);
-                        None
-                    }
-                },
-                
-        
+        "WaterWay" => match tags.get("width").unwrap_or(&"0".to_string()).parse() {
+            Ok(val) => Some(val),
+            Err(e) => {
+                warn!(
+                    "Could not parse with during an effective width calculation: {}",
+                    e
+                );
+                None
+            }
+        },
+
         "Road" => {
             if tags.contains_key("width") {
-                
-                    match tags["width"]
-                        .parse() {
-                            Ok(val) => Some(val),
-Err(e) => {
-    warn!("Could not parse width for the effective width calcullation, error: {}", e);
-    None
-}
-                        }
-                     
-               
+                match tags["width"].parse() {
+                    Ok(val) => Some(val),
+                    Err(e) => {
+                        warn!(
+                            "Could not parse width for the effective width calcullation, error: {}",
+                            e
+                        );
+                        None
+                    }
+                }
             } else if tags.contains_key("est_width") {
-                                    match tags["est_width"]
-                        .parse() {
-                            Ok(val) => Some(val),
-                            Err(e) => {
-                                warn!("Could not parse est_width during effective width calculation, error: {}", e);
-                                None
-                            }
-                        }
-                        
-                            } else if tags.contains_key("carriageway_width") {
-                                    match tags["carriageway_width"]
-                        .parse() {
-                            Ok(val) => Some(val),
-                            Err(e) => {
-                                warn!("Could not parse carriageway_width during effective width calculation, error: {}", e);
-                                None
-                            }
-                        }
-                      
+                match tags["est_width"].parse() {
+                    Ok(val) => Some(val),
+                    Err(e) => {
+                        warn!("Could not parse est_width during effective width calculation, error: {}", e);
+                        None
+                    }
+                }
+            } else if tags.contains_key("carriageway_width") {
+                match tags["carriageway_width"].parse() {
+                    Ok(val) => Some(val),
+                    Err(e) => {
+                        warn!("Could not parse carriageway_width during effective width calculation, error: {}", e);
+                        None
+                    }
+                }
             } else {
-                let lanes: u32 = match tags
-                    .get("lanes")
-                    .unwrap_or(&"2".to_string())
-                    .parse() {
-                        Ok(val) => val,
-                        Err(e) => {
-                            warn!("Failed to parse lane count, error: {}", e);
-                            2
-                        }
-                    };
-                                    let width: u32 = match tags
+                let lanes: u32 = match tags.get("lanes").unwrap_or(&"2".to_string()).parse() {
+                    Ok(val) => val,
+                    Err(e) => {
+                        warn!("Failed to parse lane count, error: {}", e);
+                        2
+                    }
+                };
+                let width: u32 = match tags
                     .get("lanes_maxwidth")
                     .unwrap_or(&"2".to_string())
-                    .parse() {
-                        Ok(val) => val,
-                        Err(e) => {
-                            warn!("Failed to parse lanes_maxwidth, error {}", e);
-                            2
-                        }
-                    };
+                    .parse()
+                {
+                    Ok(val) => val,
+                    Err(e) => {
+                        warn!("Failed to parse lanes_maxwidth, error {}", e);
+                        2
+                    }
+                };
                 Some(f64::from(lanes * width))
             }
         }
