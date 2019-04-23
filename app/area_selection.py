@@ -32,7 +32,7 @@ class AreaSelectionDialog(wx.Dialog):
         if not name:
             return
         reply = request_area_creation(name)
-        if reply and isinstance(reply, dict) and "state" in reply and reply["state"] == "creating":
+        if reply and isinstance(reply, dict) and "state" in reply and reply["state"] == "Creating":
             wx.MessageBox(_("The area creation request has been sent successfully. The area will become updated in a few minutes."), _("Success"), style=wx.ICON_INFORMATION)
         else:
             wx.MessageBox(_("The area creation request failed. Response from server: {reply}").format(reply=reply), _("Failure"), style=wx.ICON_ERROR)
