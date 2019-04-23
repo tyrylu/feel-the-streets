@@ -1,0 +1,5 @@
+[Path]
+PathModified=/srv/feel-the-streets/fts_server
+
+[Install]
+WantedBy=multi-user.target

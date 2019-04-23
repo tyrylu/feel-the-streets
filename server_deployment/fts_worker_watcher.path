@@ -1,0 +1,6 @@
+[Path]
+PathModified=/srv/feel-the-streets/worker
+PathModified=/srv/feel-the-streets/*.yml
+
+[Install]
+WantedBy=multi-user.target
