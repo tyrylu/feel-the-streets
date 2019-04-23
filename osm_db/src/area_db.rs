@@ -45,6 +45,7 @@ impl AreaDatabase {
     where
         T: Iterator<Item = NotStoredEntity>,
     {
+        let mut count = 0;
         let insert_tx = self.conn.transaction()?;
         {
             let mut insert_stmt = insert_tx.prepare(INSERT_ENTITY_SQL)?;
@@ -63,6 +64,7 @@ impl AreaDatabase {
                         &entity.effective_width,
                         &entity.data,
                     ])?;
+                    count += 1;
                 } else {
                     warn!(
                         "Not inserting entity with data {} with geometry size {}.",
@@ -73,6 +75,7 @@ impl AreaDatabase {
             }
         }
         insert_tx.commit()?;
+        info!("Successfully inserted {} entities.", count);
         Ok(())
     }
 
