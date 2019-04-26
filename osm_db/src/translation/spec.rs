@@ -24,6 +24,7 @@ fn compare_values<F: Fn(&str, &str) -> bool>(
         }
         for val in values {
             if values_comparer(&tags[prop], &val) {
+                trace!("Value comparison succeeded for value of key {} with value {}.", prop, val);
                 return true;
             }
         }
@@ -31,7 +32,7 @@ fn compare_values<F: Fn(&str, &str) -> bool>(
     false
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, Debug)]
 #[serde(untagged)]
 pub enum AcceptanceCondition {
     HasProperty {
@@ -52,6 +53,7 @@ impl AcceptanceCondition {
             HasProperty { has_property } => {
                 for prop in has_property {
                     if object.tags.contains_key(prop) {
+                        trace!("Matched, object has property {}.", prop);
                         return true;
                     }
                 }
@@ -81,6 +83,7 @@ pub struct TranslationSpec {
 impl TranslationSpec {
     fn is_applycable_for(&self, object: &OSMObject) -> bool {
         for condition in &self.accepts_when {
+            trace!("Trying condition {:?} on object {:?}", condition, object);
             if condition.evaluate_on(&object) {
                 return true;
             }
@@ -103,6 +106,7 @@ impl TranslationSpec {
                         let parent_spec = TranslationSpec::for_discriminator(&parent.discriminator)
                             .expect("Parent has no translation specification.");
                         if !parent_spec.is_applycable_for(&object) {
+                            trace!("Parent spec not applicable.");
                             continue;
                         }
                     }
