@@ -1,7 +1,7 @@
 // Rocket related stuff
 #![feature(proc_macro_hygiene, decl_macro)]
 // We want to use the await syntax
-#![feature(await_macro, async_await, futures_api)]
+#![feature(await_macro, async_await)]
 
 #[macro_use]
 extern crate rocket;

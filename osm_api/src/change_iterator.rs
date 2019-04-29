@@ -1,7 +1,7 @@
 use crate::change::{OSMObjectChange, OSMObjectChangeType};
 use crate::object::*;
 use crate::Result;
-use std::collections::HashMap;
+use hashbrown::HashMap;
 use std::io::Read;
 use xml::{attribute::OwnedAttribute, reader::XmlEvent, EventReader};
 

@@ -1,5 +1,5 @@
 #![recursion_limit = "1024"]
-#![feature(await_macro, async_await, futures_api)]
+#![feature(await_macro, async_await)]
 use server::{
     amqp_utils, background_task::BackgroundTask, background_task_constants,
     background_task_delivery, datetime_utils, Result,

@@ -1,6 +1,7 @@
+use std::cmp;
 use crate::change::OSMObjectChange;
 use crate::change_iterator::OSMObjectChangeIterator;
-use crate::object::{OSMObject, OSMObjectSpecifics, OSMObjectType};
+use crate::object::{OSMObject, OSMObjectSpecifics, OSMObjectType, OSMObjectFromNetwork};
 use crate::utils;
 use crate::Result;
 use chrono::{DateTime, Utc};
@@ -15,6 +16,7 @@ use std::fs;
 use std::io::{self, BufReader, Read, Seek, SeekFrom};
 use std::iter;
 use std::time::Instant;
+use hashbrown::HashMap;
 use tempfile::tempfile;
 
 fn translate_type_shortcut(shortcut: char) -> &'static str {
@@ -40,6 +42,7 @@ fn format_data_retrieval(area: &str) -> String {
 
 pub struct OSMObjectManager {
     current_api_url_idx: RefCell<usize>,
+    geometries_cache: RefCell<HashMap<String, Option<String>>>,
     api_urls: Vec<&'static str>,
     cache_conn: Option<Connection>,
     http_client: reqwest::Client,
@@ -61,6 +64,7 @@ impl OSMObjectManager {
             current_api_url_idx: RefCell::new(0 as usize),
             cache_conn: Some(conn),
             http_client: client,
+            geometries_cache: RefCell::new(HashMap::new())
         }
     }
 
@@ -69,16 +73,16 @@ impl OSMObjectManager {
             &self.cache_conn.as_ref().unwrap(),
             "raw_entities",
             "text",
-            "text",
+            "blob",
         )
         .unwrap()
     }
 
     fn cache_object_into(&self, cache: &mut SqliteMap<'_>, object: &OSMObject) {
         let serialized =
-            serde_json::to_string(&object).expect("Could not serialize object for caching.");
+            bincode::serialize(&object).expect("Could not serialize object for caching.");
         cache
-            .insert::<String>(&object.unique_id(), &serialized)
+            .insert::<Vec<u8>>(&object.unique_id(), &serialized)
             .expect("Could not cache object.");
     }
 
@@ -90,9 +94,9 @@ impl OSMObjectManager {
     fn get_cached_object(&self, id: &str) -> Option<OSMObject> {
         let mut cache = self.get_cache();
         cache
-            .get::<String>(&id)
+            .get::<Vec<u8>>(&id)
             .expect("Cache retrieval failed.")
-            .map(|o| serde_json::from_str(&o).expect("Failed to deserialize cached object."))
+            .map(|o| bincode::deserialize(&o).expect("Failed to deserialize cached object."))
     }
 
     fn next_api_url(&self) -> &'static str {
@@ -161,11 +165,12 @@ impl OSMObjectManager {
         loop {
             {
                 let mut de = Deserializer::from_reader(&mut cached_readable);
-                match OSMObject::deserialize(&mut de) {
+                match OSMObjectFromNetwork::deserialize(&mut de) {
                     Ok(obj) => {
-                        self.cache_object_into(&mut cache, &obj);
+                        let internal_object = obj.to_osm_object();
+                        self.cache_object_into(&mut cache, &internal_object);
                         if return_objects {
-                            objects.push(obj);
+                            objects.push(internal_object);
                         }
                     }
                     Err(_e) => break,
@@ -188,7 +193,7 @@ impl OSMObjectManager {
 
     fn lookup_objects(&self, ids: &mut [String]) -> Result<()> {
         const MAX_SIMULTANEOUSLY_QUERYED: usize = 1000000;
-        let mut objects: Vec<OSMObject> = vec![];
+        let mut objects: Vec<OSMObject> = Vec::with_capacity(ids.len());
         ids.sort_unstable_by_key(|oid| oid.chars().nth(0));
         for (entity_type, entity_ids) in &ids.iter().group_by(|oid| oid.chars().nth(0).unwrap()) {
             for chunk in &entity_ids.chunks(MAX_SIMULTANEOUSLY_QUERYED) {
@@ -296,8 +301,12 @@ impl OSMObjectManager {
     }
 
     fn get_way_coords(&self, way: &OSMObject) -> Result<Vec<(f64, f64)>> {
-        use self::OSMObjectSpecifics::Node;
-        let mut coords = vec![];
+        use self::OSMObjectSpecifics::{Node, Way};
+        let node_count = match &way.specifics {
+            Way{nodes} => nodes.len(),
+            _ => unreachable!()
+        };
+        let mut coords = Vec::with_capacity(node_count);
         for obj in self.related_objects_of(&way)? {
             match obj.specifics {
                 Node { lon, lat } => {
@@ -309,7 +318,19 @@ impl OSMObjectManager {
         Ok(coords)
     }
 
-    pub fn get_geometry_as_wkt(&self, object: &OSMObject) -> Result<Option<String>> {
+pub fn get_geometry_as_wkt(&self, object: &OSMObject) -> Result<Option<String>> {
+    let exists = self.geometries_cache.borrow().contains_key(&object.unique_id());
+    if exists {
+        Ok(self.geometries_cache.borrow()[&object.unique_id()].clone())
+    }
+    else {
+        let res = self.get_geometry_as_wkt_internal(&object)?;
+        self.geometries_cache.borrow_mut().insert(object.unique_id(), res.clone());
+        Ok(res)
+    }
+}
+    
+    fn get_geometry_as_wkt_internal(&self, object: &OSMObject) -> Result<Option<String>> {
         use self::OSMObjectSpecifics::*;
         match object.specifics {
             Node { lon, lat } => Ok(Some(format!("POINT({} {})", lon, lat))),
@@ -424,7 +445,7 @@ impl OSMObjectManager {
             warn!("multiple outer ring(s) and some inner ring(s), geometry for object {} is ambiguous.", object.unique_id());
             return Ok(None);
         }
-        let mut polys = vec![];
+        let mut polys = Vec::with_capacity(cmp::max(inners.len(), outers.len()));
         // Because i could not manage to convince the loop that references are enough, the check must be done there
         let inners_is_empty = inners.is_empty();
         for inner in inners {
@@ -499,9 +520,9 @@ pub fn cached_objects_in<'a>(
 ) -> Box<(Iterator<Item = OSMObject>) + 'a> {
     Box::new(
         cache
-            .iter::<String, String>()
+            .iter::<String, Vec<u8>>()
             .unwrap()
             .filter_map(|pair| pair.ok())
-            .map(|(_k, v)| serde_json::from_str(&v).unwrap()),
+            .map(|(_k, v)| bincode::deserialize(&v).unwrap()),
     )
 }

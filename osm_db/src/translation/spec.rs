@@ -1,8 +1,8 @@
 use crate::entity_metadata::EntityMetadata;
 use linked_hash_map::LinkedHashMap;
+use hashbrown::HashMap;
 use osm_api::object::OSMObject;
 use serde_yaml;
-use std::collections::HashMap;
 use std::fs::File;
 
 lazy_static! {

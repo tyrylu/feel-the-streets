@@ -16,3 +16,4 @@ log = "*"
 uom = "*"
 rusqlite = {"version" = "0.14", "features" = ["bundled", "load_extension"]}
 failure = "*"
+hashbrown = {version="*", features=["serde"]}

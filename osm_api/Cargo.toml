@@ -11,10 +11,12 @@ serde_json = "*"
 failure = "*"
 reqwest = "*"
 rusqlite = {"version" = "0.14", "features" = ["bundled"]}
-sqlitemap = "*"
+sqlitemap = {path="../sqlitemap"}
 log = "*"
 itertools = "*"
 lazy_static = "*"
 chrono = "*"
 xml-rs = "*"
 tempfile = "*"
+bincode = "*"
+hashbrown = {version="*", features=["serde"]}

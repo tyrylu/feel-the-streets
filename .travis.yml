@@ -1,7 +1,7 @@
 dist: xenial
 language: rust
 rust:
-- nightly-2019-04-07
+- nightly
 script:
 - cargo build --verbose --release --all
 before_install:
