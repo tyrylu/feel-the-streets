@@ -46,6 +46,7 @@ pub struct OSMObjectManager {
     api_urls: Vec<&'static str>,
     cache_conn: Option<Connection>,
     http_client: reqwest::Client,
+    seen_cache: RefCell<bool>
 }
 
 impl OSMObjectManager {
@@ -64,18 +65,22 @@ impl OSMObjectManager {
             current_api_url_idx: RefCell::new(0 as usize),
             cache_conn: Some(conn),
             http_client: client,
-            geometries_cache: RefCell::new(HashMap::new())
+            geometries_cache: RefCell::new(HashMap::new()),
+            seen_cache: RefCell::new(false)
         }
     }
 
     pub fn get_cache(&self) -> SqliteMap<'_> {
-        SqliteMap::new(
+        let res = SqliteMap::new(
             &self.cache_conn.as_ref().unwrap(),
             "raw_entities",
             "text",
             "blob",
+            !*self.seen_cache.borrow()
         )
-        .unwrap()
+        .unwrap();
+        *self.seen_cache.borrow_mut() = true;
+        res
     }
 
     fn cache_object_into(&self, cache: &mut SqliteMap<'_>, object: &OSMObject) {

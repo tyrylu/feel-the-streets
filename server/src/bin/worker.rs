@@ -14,9 +14,9 @@ use log::{error, info, trace};
 async fn consume_tasks_real() -> Result<()> {
     use background_task_constants::*;
     let (client, handle) = await!(amqp_utils::connect_to_broker())?;
-    let channel = await!(client.create_channel())?;
+    let mut channel = await!(client.create_channel())?;
     let (tasks_queue, future_tasks_queue) =
-        await!(amqp_utils::init_background_job_queues(&channel))?;
+        await!(amqp_utils::init_background_job_queues(&mut channel))?;
     let count = future_tasks_queue.message_count();
     if count == 0 {
         info!("Initially scheduling the databases update task...");
@@ -26,22 +26,15 @@ async fn consume_tasks_real() -> Result<()> {
             DATABASES_UPDATE_SECOND,
         );
         await!(background_task_delivery::perform_delivery_on(
-            &channel,
+            &mut channel,
             BackgroundTask::UpdateAreaDatabases,
             Some(ttl)
         ))?;
     }
     let opts = BasicQosOptions {
-        prefetch_count: 1,
         ..Default::default()
     };
-    await!(channel.basic_qos(opts))?;
-    // This ugly internals hack fixes consuming of messages on a channel with multiple queues declared.
-    {
-        let low_level_conn = &mut channel.transport.lock().conn;
-        let low_level_channel = low_level_conn.channels.get_mut(&channel.id).unwrap();
-        low_level_channel.queues.remove(FUTURE_TASKS_QUEUE);
-    }
+    await!(channel.basic_qos(1, opts))?;
     let mut consumer = await!(channel.basic_consume(
         &tasks_queue,
         "tasks_consumer",
@@ -58,7 +51,7 @@ async fn consume_tasks_real() -> Result<()> {
         if let Some((hour, minute, second)) = task.get_next_schedule_time() {
             let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);
             await!(background_task_delivery::perform_delivery_on(
-                &channel,
+                &mut channel,
                 task,
                 Some(ttl)
             ))?;

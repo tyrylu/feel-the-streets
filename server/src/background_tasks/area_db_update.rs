@@ -37,7 +37,7 @@ async fn update_area(mut area: Area) -> Result<()> {
     let mut osm_change_count = 0;
     let mut semantic_changes = vec![];
     let (client, handle) = await!(amqp_utils::connect_to_broker())?;
-    let channel = await!(client.create_channel())?;
+    let mut channel = await!(client.create_channel())?;
     for change in manager.lookup_differences_in(&area.name, &after)? {
         osm_change_count += 1;
         use OSMObjectChangeType::*;
@@ -115,7 +115,7 @@ async fn update_area(mut area: Area) -> Result<()> {
     info!("Publishing {} semantic changes...", semantic_change_count);
     for change in semantic_changes {
         await!(area_messaging::publish_change_on(
-            &channel,
+            &mut channel,
             change,
             area.name.clone(),
         ))?;

@@ -4,7 +4,7 @@ use tokio::await;
 use tokio::io::{AsyncRead, AsyncWrite};
 
 pub async fn perform_delivery_on<T>(
-    channel: &Channel<T>,
+    channel: &mut Channel<T>,
     task: BackgroundTask,
     ttl: Option<u32>,
 ) -> Result<()>
@@ -32,9 +32,9 @@ where
 
 async fn deliver_real(task: BackgroundTask, ttl: Option<u32>) -> Result<()> {
     let (client, handle) = await!(amqp_utils::connect_to_broker())?;
-    let channel = await!(client.create_channel())?;
-    await!(amqp_utils::init_background_job_queues(&channel))?;
-    await!(perform_delivery_on(&channel, task, ttl))?;
+    let mut channel = await!(client.create_channel())?;
+    await!(amqp_utils::init_background_job_queues(&mut channel))?;
+    await!(perform_delivery_on(&mut channel, task, ttl))?;
     await!(channel.close(0, "Normal shutdown"))?;
     handle.stop();
     Ok(())

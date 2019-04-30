@@ -18,7 +18,7 @@ fn queue_name_for(client_id: &str, area_name: &str) -> String {
 
 async fn init_queue_real(client_id: String, area_name: String) -> Result<()> {
     let (client, handle) = await!(amqp_utils::connect_to_broker())?;
-    let channel = await!(client.create_channel())?;
+    let mut channel = await!(client.create_channel())?;
     let opts = QueueDeclareOptions {
         durable: true,
         ..Default::default()
@@ -44,7 +44,7 @@ pub async fn init_queue(client_id: String, area_name: String) {
 }
 
 pub async fn publish_change_on<T>(
-    channel: &Channel<T>,
+    channel: &mut Channel<T>,
     change: SemanticChange,
     area_name: String,
 ) -> Result<()>
@@ -65,8 +65,8 @@ where
 
 async fn publish_change_internal(change: SemanticChange, area_name: String) -> Result<()> {
     let (amqp_conn, handle) = await!(amqp_utils::connect_to_broker())?;
-    let channel = await!(amqp_conn.create_channel())?;
-    await!(publish_change_on(&channel, change, area_name))?;
+    let mut channel = await!(amqp_conn.create_channel())?;
+    await!(publish_change_on(&mut channel, change, area_name))?;
     await!(channel.close(0, "Normal shutdown"))?;
     handle.stop();
     Ok(())

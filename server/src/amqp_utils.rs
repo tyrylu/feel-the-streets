@@ -29,7 +29,7 @@ pub async fn connect_to_broker() -> Result<(Client<TcpStream>, HeartbeatHandle)>
     Ok((client, handle))
 }
 
-pub async fn init_background_job_queues<T>(channel: &Channel<T>) -> Result<(Queue, Queue)>
+pub async fn init_background_job_queues<T>(channel: &mut Channel<T>) -> Result<(Queue, Queue)>
 where
     T: AsyncRead + AsyncWrite + Send + Sync + 'static,
 {
