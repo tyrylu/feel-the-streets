@@ -37,6 +37,7 @@ pub fn maybe_create_area(
         Ok(a) => Ok(status::Custom(Status::Ok, Json(a))),
         Err(_e) => {
             let area = Area::create(&area_name, &*conn)?;
+            tokio::run_async(area_messaging::init_exchange(area_name.clone()));
             BackgroundTask::CreateAreaDatabase(area_name).deliver();
             Ok(status::Custom(Status::Created, Json(area)))
         }

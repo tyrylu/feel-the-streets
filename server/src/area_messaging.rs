@@ -1,6 +1,6 @@
 use crate::{amqp_utils, Result};
 use lapin_futures::channel::{
-    BasicProperties, BasicPublishOptions, Channel, QueueBindOptions, QueueDeclareOptions,
+    BasicProperties, BasicPublishOptions, Channel, QueueBindOptions, QueueDeclareOptions, ExchangeDeclareOptions,
 };
 use lapin_futures::types::FieldTable;
 use log::error;
@@ -75,4 +75,24 @@ pub async fn publish_change(change: SemanticChange, area_name: String) {
     if let Err(e) = await!(publish_change_internal(change, area_name)) {
         error!("Error during change publishing: {}", e);
     };
+}
+
+
+async fn init_exchange_real(area_name: String) -> Result<()> {
+    let (client, handle) = await!(amqp_utils::connect_to_broker())?;
+    let mut channel = await!(client.create_channel())?;
+    let opts = ExchangeDeclareOptions {
+        durable: true,
+        ..Default::default()
+    };
+   await!(channel.exchange_declare(&area_name, "fanout", opts, FieldTable::new()))?;
+        handle.stop();
+    await!(channel.close(0, "Normal shutdown"))?;
+    Ok(())
+}
+
+pub async fn init_exchange(area_name: String) {
+    if let Err(e) = await!(init_exchange_real(area_name)) {
+        error!("Error during exchange creation: {}", e);
+    }
 }
