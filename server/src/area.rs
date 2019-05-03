@@ -16,7 +16,6 @@ pub enum AreaState {
 }
 
 #[derive(Serialize, Queryable, AsChangeset)]
-#[primary_key(id, name)]
 pub struct Area {
     pub id: i32,
     pub name: String,
@@ -60,7 +59,14 @@ impl Area {
             .load(conn)
     }
     pub fn save(&self, conn: &SqliteConnection) -> QueryResult<usize> {
-        let query = diesel::update(areas::table).set(self);
+            let query = diesel::update(areas::table)
+        .filter(areas::id.eq(&self.id))
+        .set((
+            areas::state.eq(&self.state),
+            areas::updated_at.eq(now),
+            areas::newest_osm_object_timestamp.eq(&self.newest_osm_object_timestamp),
+        ));
+
         let query_debug = diesel::debug_query::<diesel::sqlite::Sqlite, _>(&query);
         debug!("Executing query: {}", query_debug);
         query.execute(*&conn)
