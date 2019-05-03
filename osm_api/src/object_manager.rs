@@ -18,6 +18,8 @@ use std::iter;
 use std::time::Instant;
 use hashbrown::HashMap;
 use tempfile::tempfile;
+const QUERY_RETRY_COUNT: u8 = 3;
+
 
 fn translate_type_shortcut(shortcut: char) -> &'static str {
     match shortcut {
@@ -113,7 +115,26 @@ impl OSMObjectManager {
         self.api_urls[*self.current_api_url_idx.borrow()]
     }
 
-    fn run_query(&self, query: &str, result_to_tempfile: bool) -> Result<Box<dyn Read>> {
+fn run_query(&self, query: &str, result_to_tempfile: bool) -> Result<Box<dyn Read>> {
+    let mut res = None;
+    for retry in 0..QUERY_RETRY_COUNT {
+                res = match self.run_query_internal(query, result_to_tempfile) {
+            Ok(r) => Some(Ok(r)),
+            Err(e) => {
+                warn!("Query failed during retry {}, error: {:?}", retry, e);
+                  Some(Err(e))
+                        }
+        };
+    match res {
+        Some(Ok(_)) => break,
+        Some(Err(_)) => {},
+        None => panic!("What? That should not have happened..."),
+    }
+    }
+    res.unwrap()
+}
+
+    fn run_query_internal(&self, query: &str, result_to_tempfile: bool) -> Result<Box<dyn Read>> {
         let start = Instant::now();
         let url = self.next_api_url();
         let final_url = format!("{}/interpreter", url);
