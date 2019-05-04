@@ -1195,7 +1195,15 @@ Office:
     description_en: str
 OSMEntity:
   display_template: '{class_name_display}'
-  fields: {}
+  fields:
+    osm_id: !str
+    timestamp: '!str'
+    version: '!int'
+    changeset: '!int'
+    user: '!str'
+    uid: '!int'
+    
+
 Parking:
   fields:
     paid: str

@@ -46,6 +46,14 @@ pub fn translate(
                 }
                 entity_data.insert(new_key, new_value);
             }
+            // Common fields
+            entity_data.insert("osm_id".to_string(), object.unique_id());
+            entity_data.insert("timestamp".to_string(), object.timestamp.clone());
+            entity_data.insert("version".to_string(), object.version.to_string());
+            entity_data.insert("changeset".to_string(), object.changeset.to_string());
+            entity_data.insert("user".to_string(), object.user.clone());
+            entity_data.insert("uid".to_string(), object.uid.to_string());
+
             let converted_data = conversions::convert_entity_data(&discriminator, &entity_data);
             if !checks::check_entity_data_consistency(&discriminator, &converted_data) {
                 return Ok(None);
