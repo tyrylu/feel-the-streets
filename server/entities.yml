@@ -10,13 +10,13 @@ Accessible:
     level: str
     door: AccessType
 Address:
-  display_template: '{house_name}, {street} {house_number}, {post_code}, {city}'
+  display_template: '{house_name}, {street} {housenumber}, {postcode}, {city}'
   fields:
     place: str
     city: str
-    post_code: int
+    postcode: int
     conscription_number: int
-    house_number: str
+    housenumber: str
     street_number: str
     street: str
     provisional_number: int

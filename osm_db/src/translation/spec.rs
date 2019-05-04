@@ -1,4 +1,3 @@
-use crate::entity_metadata::EntityMetadata;
 use linked_hash_map::LinkedHashMap;
 use hashbrown::HashMap;
 use osm_api::object::OSMObject;
@@ -91,29 +90,19 @@ impl TranslationSpec {
         false
     }
 
-    fn for_discriminator(discriminator: &str) -> Option<&Self> {
+    /*fn for_discriminator(discriminator: &str) -> Option<&Self> {
         TRANSLATION_SPECS.get(discriminator)
-    }
+    }*/
 
     pub fn for_object(object: &OSMObject) -> Option<(String, Self)> {
+        trace!("Looking translation spec for object {:?}", object);
         for (generates, spec) in TRANSLATION_SPECS.iter() {
             if spec.is_applycable_for(&object) {
-                trace!("Trying {}.", generates);
-                let metadata = EntityMetadata::for_discriminator(&generates)
-                    .expect("Entity and translation spec identifier mismatch.");
-                if let Some(parent) = metadata.parent_metadata() {
-                    if parent.discriminator != "OSMEntity" {
-                        let parent_spec = TranslationSpec::for_discriminator(&parent.discriminator)
-                            .expect("Parent has no translation specification.");
-                        if !parent_spec.is_applycable_for(&object) {
-                            trace!("Parent spec not applicable.");
-                            continue;
-                        }
-                    }
-                }
+                trace!("{} matched.", generates);
                 return Some((generates.clone(), spec.clone()));
             }
         }
         None
     }
 }
+            

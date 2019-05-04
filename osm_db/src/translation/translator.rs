@@ -4,19 +4,27 @@ use super::spec::TranslationSpec;
 use crate::entity::NotStoredEntity;
 use osm_api::object::OSMObject;
 use osm_api::object_manager::OSMObjectManager;
-use std::collections::HashMap;
+use hashbrown::HashMap;
 
 pub fn translate(
     object: &OSMObject,
     manager: &OSMObjectManager,
 ) -> Result<Option<NotStoredEntity>, failure::Error> {
-    let lookup_res = TranslationSpec::for_object(&object);
+                            let lookup_res = TranslationSpec::for_object(&object);
     match lookup_res {
         None => {
-            trace!(
+            if object.tags.len() > 1 {
+            warn!(
+                "Did not find a translation spec for potentially interesting object {:?}.",
+                object
+            );
+            }
+            else {
+                trace!(
                 "Did not find a translation spec for object {}.",
                 object.unique_id()
             );
+                        }
             Ok(None)
         }
         Some((discriminator, spec)) => {
@@ -45,6 +53,14 @@ pub fn translate(
                     }
                 }
                 entity_data.insert(new_key, new_value);
+            }
+            if let Some(aware) = spec.address_aware {
+                if aware {
+                let address_data = conversions::convert_address(&object.tags);
+                if address_data.len() > 2 {
+                entity_data.insert("address".to_string(), address_data);
+                }
+                }
             }
             // Common fields
             entity_data.insert("osm_id".to_string(), object.unique_id());

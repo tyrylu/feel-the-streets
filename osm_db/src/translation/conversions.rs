@@ -1,10 +1,20 @@
 use crate::entity_metadata::EntityMetadata;
 use crate::entity_metadata::Enum;
 use serde_json::{Number, Value};
-use std::collections::HashMap;
+use hashbrown::HashMap;
 use uom::si::f64::{Length, Mass};
 use uom::si::length::meter;
 use uom::si::mass::ton;
+
+pub fn convert_address(tags: &HashMap<String, String>) -> String {
+    let mut address_fields = HashMap::new();
+    for (key, val) in tags.iter() {
+        if key.starts_with("addr:") {
+            address_fields.insert(key[5..].to_string(), val.clone());
+        }
+    }
+    serde_json::to_string(&address_fields).expect("Could not serialize address.")
+}
 
 pub fn convert_entity_data(
     discriminator: &str,
@@ -18,7 +28,7 @@ pub fn convert_entity_data(
             None => "str",
         };
         let converted_value = match type_name {
-            "str" => Some(Value::String(value.clone())),
+            "str" | "Address" => Some(Value::String(value.clone())),
             "int" => convert_int(&value),
             "bool" => convert_bool(&value),
             "float" => convert_float(&value),
