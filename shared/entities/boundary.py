@@ -15,6 +15,7 @@ class BoundaryType(enum.Enum):
     country_border = 9
     religious_administration = 10
     stone = 11
+    boundary = 12
 
 class MarkerType(enum.Enum):
     none = 0

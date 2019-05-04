@@ -10,10 +10,10 @@ pub fn convert_entity_data(
     discriminator: &str,
     entity_data: &HashMap<String, String>,
 ) -> HashMap<String, Value> {
-    let metadata = EntityMetadata::for_discriminator(discriminator).expect("Metadata not found?");
+    let all_fields = EntityMetadata::for_discriminator(discriminator).expect("Metadata not found?").all_fields();
     let mut converted_data = HashMap::new();
     for (key, value) in entity_data.iter() {
-        let type_name = match metadata.fields.get(key) {
+        let type_name = match all_fields.get(key) {
             Some(field) => field.type_name.as_str(),
             None => "str",
         };
