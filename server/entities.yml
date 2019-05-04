@@ -1196,7 +1196,7 @@ Office:
 OSMEntity:
   display_template: '{class_name_display}'
   fields:
-    osm_id: !str
+    osm_id: '!str'
     timestamp: '!str'
     version: '!int'
     changeset: '!int'
