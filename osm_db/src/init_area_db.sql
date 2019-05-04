@@ -5,4 +5,5 @@ CREATE TABLE entities (
 	data TEXT NOT NULL,
 	effective_width FLOAT);
 SELECT AddGeometryColumn("entities", "geometry", 4326, "GEOMETRY", 2, 1);
+SELECT CreateSpatialIndex('entities', 'geometry');
 CREATE INDEX entity_by_osm_id on entities(json_extract(data, "$.osm_id"));
