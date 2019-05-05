@@ -6,14 +6,14 @@ use uom::si::f64::{Length, Mass};
 use uom::si::length::meter;
 use uom::si::mass::ton;
 
-pub fn convert_address(tags: &HashMap<String, String>) -> String {
+pub fn convert_address(tags: &HashMap<String, String>) -> HashMap<String, String> {
     let mut address_fields = HashMap::new();
     for (key, val) in tags.iter() {
         if key.starts_with("addr:") {
             address_fields.insert(key[5..].to_string(), val.clone());
         }
     }
-    serde_json::to_string(&address_fields).expect("Could not serialize address.")
+    address_fields
 }
 
 pub fn convert_entity_data(

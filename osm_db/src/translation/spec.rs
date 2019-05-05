@@ -1,3 +1,4 @@
+use crate::entity_metadata::EntityMetadata;
 use linked_hash_map::LinkedHashMap;
 use hashbrown::HashMap;
 use osm_api::object::OSMObject;
@@ -90,16 +91,35 @@ impl TranslationSpec {
         false
     }
 
-    /*fn for_discriminator(discriminator: &str) -> Option<&Self> {
+    fn for_discriminator(discriminator: &str) -> Option<&Self> {
         TRANSLATION_SPECS.get(discriminator)
-    }*/
+    }
 
-    pub fn for_object(object: &OSMObject) -> Option<(String, Self)> {
+pub fn all_relevant_for(discriminator: &str) -> Vec<Self> {
+    let mut specs = vec![];
+    let mut current_metadata = EntityMetadata::for_discriminator(&discriminator).expect("No metadata of an entity.");
+    loop {
+        let discriminator = &current_metadata.discriminator;
+        if discriminator == "OSMEntity" {
+            break; // It has no parent and no translation spec
+        }
+        specs.push(TranslationSpec::for_discriminator(&discriminator).expect(&format!("No translation spec for {} found.", current_metadata.discriminator)).clone());
+        if let Some(parent) = current_metadata.parent_metadata() {
+            current_metadata = parent;
+        }
+        else {
+            break;
+        }
+    }
+    specs
+}
+
+    pub fn primary_discriminator_for_object(object: &OSMObject) -> Option<String> {
         trace!("Looking translation spec for object {:?}", object);
         for (generates, spec) in TRANSLATION_SPECS.iter() {
             if spec.is_applycable_for(&object) {
                 trace!("{} matched.", generates);
-                return Some((generates.clone(), spec.clone()));
+                return Some(generates.clone());
             }
         }
         None

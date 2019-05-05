@@ -5,12 +5,13 @@ use crate::entity::NotStoredEntity;
 use osm_api::object::OSMObject;
 use osm_api::object_manager::OSMObjectManager;
 use hashbrown::HashMap;
+use serde_json::Value;
 
 pub fn translate(
     object: &OSMObject,
     manager: &OSMObjectManager,
 ) -> Result<Option<NotStoredEntity>, failure::Error> {
-                            let lookup_res = TranslationSpec::for_object(&object);
+                            let lookup_res = TranslationSpec::primary_discriminator_for_object(&object);
     match lookup_res {
         None => {
             if object.tags.len() > 1 {
@@ -27,17 +28,19 @@ pub fn translate(
                         }
             Ok(None)
         }
-        Some((discriminator, spec)) => {
+        Some(discriminator) => {
             let mut entity_data = HashMap::new();
             trace!(
                 "Translating object {} to {}.",
                 object.unique_id(),
                 discriminator
             );
+            let specs = TranslationSpec::all_relevant_for(&discriminator);
             for (key, value) in &object.tags {
+                for spec in &specs {
                 let mut new_key = key.clone();
                 let mut new_value = value.clone();
-                if spec.renames.contains_key(key) {
+                                if spec.renames.contains_key(key) {
                     new_key = spec.renames[key].clone();
                 }
                 for unprefixes in &spec.unprefixes {
@@ -54,13 +57,6 @@ pub fn translate(
                 }
                 entity_data.insert(new_key, new_value);
             }
-            if let Some(aware) = spec.address_aware {
-                if aware {
-                let address_data = conversions::convert_address(&object.tags);
-                if address_data.len() > 2 {
-                entity_data.insert("address".to_string(), address_data);
-                }
-                }
             }
             // Common fields
             entity_data.insert("osm_id".to_string(), object.unique_id());
@@ -69,8 +65,24 @@ pub fn translate(
             entity_data.insert("changeset".to_string(), object.changeset.to_string());
             entity_data.insert("user".to_string(), object.user.clone());
             entity_data.insert("uid".to_string(), object.uid.to_string());
+            let mut converted_data = conversions::convert_entity_data(&discriminator, &entity_data);
+            // Address, must be done there, because we need to nest the object.
+                        let mut aware = false;
+                        for spec in &specs {
+                            aware |= spec.address_aware.unwrap_or(false);
+                        }
+                if aware {
+                let address_data = conversions::convert_address(&object.tags);
+                if !address_data.is_empty() {
+                let mut new_data = serde_json::Map::new();
+                for (k, v) in address_data.iter() {
+                    new_data.insert(k.clone(), Value::from(v.clone()));
+                }
+                converted_data.insert("address".to_string(), Value::from(new_data));
+                }
+                }
+            
 
-            let converted_data = conversions::convert_entity_data(&discriminator, &entity_data);
             if !checks::check_entity_data_consistency(&discriminator, &converted_data) {
                 return Ok(None);
             }
