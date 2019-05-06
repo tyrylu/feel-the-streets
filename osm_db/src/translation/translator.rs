@@ -37,14 +37,20 @@ pub fn translate(
             );
             let specs = TranslationSpec::all_relevant_for(&discriminator);
             for (key, value) in &object.tags {
+                let mut renamed = false;
                 for spec in &specs {
+                if renamed {
+                    continue; // The key has been renamed by one of the children specs, applying this one would result in insertion of the original key again.
+                                    }
                 let mut new_key = key.clone();
                 let mut new_value = value.clone();
                                 if spec.renames.contains_key(key) {
                     new_key = spec.renames[key].clone();
+                    renamed = true;
                 }
                 for unprefixes in &spec.unprefixes {
                     if new_key.starts_with(unprefixes) {
+                        renamed = true;
                         trace!("Unprefixing {}.", new_key);
                         new_key = new_key.replace(&format!("{}:", unprefixes), "");
                     }

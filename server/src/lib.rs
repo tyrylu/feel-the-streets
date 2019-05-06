@@ -15,7 +15,7 @@ extern crate diesel;
 extern crate diesel_migrations;
 
 pub mod amqp_utils;
-mod area;
+pub mod area;
 mod area_messaging;
 pub mod background_task;
 pub mod background_task_constants;
