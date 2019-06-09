@@ -92,7 +92,7 @@ async fn update_area(mut area: Area) -> Result<()> {
                         new.effective_width,
                     )),
                     (Some(old), Some(new)) => {
-                        let (property_changes, data_changes) =
+                        let (data_changes, property_changes) =
                             diff_utils::diff_entities(&old, &new)?;
                         Some(SemanticChange::updating(
                             &osm_id,
