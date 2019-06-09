@@ -13,11 +13,11 @@ use log::{error, info, trace};
 
 async fn consume_tasks_real() -> Result<()> {
     use background_task_constants::*;
-    let (client, handle) = await!(amqp_utils::connect_to_broker())?;
+    let client = await!(amqp_utils::connect_to_broker())?;
     let mut channel = await!(client.create_channel())?;
     let (tasks_queue, future_tasks_queue) =
         await!(amqp_utils::init_background_job_queues(&mut channel))?;
-    let count = future_tasks_queue.message_count();
+    let count = future_tasks_queue.message_count;
     if count == 0 {
         info!("Initially scheduling the databases update task...");
         let ttl = datetime_utils::compute_ttl_for_time(
@@ -39,7 +39,7 @@ async fn consume_tasks_real() -> Result<()> {
         &tasks_queue,
         "tasks_consumer",
         BasicConsumeOptions::default(),
-        FieldTable::new()
+        FieldTable::default()
     ))?;
     info!("Starting tasks consumption...");
     while let Some(msg) = await!(consumer.next()) {
@@ -57,7 +57,6 @@ async fn consume_tasks_real() -> Result<()> {
             ))?;
         }
     }
-    handle.stop();
     await!(channel.close(0, "Normal shutdown"))?;
     Ok(())
 }

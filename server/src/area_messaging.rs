@@ -8,7 +8,6 @@ use osm_db::semantic_change::SemanticChange;
 use serde_json;
 use sha3::{Digest, Sha3_256};
 use tokio::await;
-use tokio::io::{AsyncRead, AsyncWrite};
 
 fn queue_name_for(client_id: &str, area_name: &str) -> String {
     let to_hash = format!("{}{}", client_id, area_name);
@@ -17,22 +16,21 @@ fn queue_name_for(client_id: &str, area_name: &str) -> String {
 }
 
 async fn init_queue_real(client_id: String, area_name: String) -> Result<()> {
-    let (client, handle) = await!(amqp_utils::connect_to_broker())?;
-    let mut channel = await!(client.create_channel())?;
+    let client = await!(amqp_utils::connect_to_broker())?;
+    let channel = await!(client.create_channel())?;
     let opts = QueueDeclareOptions {
         durable: true,
         ..Default::default()
     };
     let queue_name = queue_name_for(&client_id, &area_name);
-    await!(channel.queue_declare(&queue_name, opts, FieldTable::new()))?;
+    await!(channel.queue_declare(&queue_name, opts, FieldTable::default()))?;
     await!(channel.queue_bind(
         &queue_name,
         &area_name,
         "",
         QueueBindOptions::default(),
-        FieldTable::new()
+        FieldTable::default()
     ))?;
-    handle.stop();
     await!(channel.close(0, "Normal shutdown"))?;
     Ok(())
 }
@@ -43,13 +41,11 @@ pub async fn init_queue(client_id: String, area_name: String) {
     }
 }
 
-pub async fn publish_change_on<T>(
-    channel: &mut Channel<T>,
+pub async fn publish_change_on(
+    channel: &mut Channel,
     change: SemanticChange,
     area_name: String,
 ) -> Result<()>
-where
-    T: AsyncRead + AsyncWrite + Send + Sync + 'static,
 {
     let serialized = serde_json::to_string(&change)?;
     let props = BasicProperties::default().with_delivery_mode(2);
@@ -64,11 +60,10 @@ where
 }
 
 async fn publish_change_internal(change: SemanticChange, area_name: String) -> Result<()> {
-    let (amqp_conn, handle) = await!(amqp_utils::connect_to_broker())?;
+    let amqp_conn = await!(amqp_utils::connect_to_broker())?;
     let mut channel = await!(amqp_conn.create_channel())?;
     await!(publish_change_on(&mut channel, change, area_name))?;
     await!(channel.close(0, "Normal shutdown"))?;
-    handle.stop();
     Ok(())
 }
 pub async fn publish_change(change: SemanticChange, area_name: String) {
@@ -79,15 +74,13 @@ pub async fn publish_change(change: SemanticChange, area_name: String) {
 
 
 async fn init_exchange_real(area_name: String) -> Result<()> {
-    let (client, handle) = await!(amqp_utils::connect_to_broker())?;
-    let mut channel = await!(client.create_channel())?;
+    let client = await!(amqp_utils::connect_to_broker())?;
+    let channel = await!(client.create_channel())?;
     let opts = ExchangeDeclareOptions {
         durable: true,
         ..Default::default()
     };
-   await!(channel.exchange_declare(&area_name, "fanout", opts, FieldTable::new()))?;
-        handle.stop();
-    await!(channel.close(0, "Normal shutdown"))?;
+   await!(channel.exchange_declare(&area_name, "fanout", opts, FieldTable::default()))?;
     Ok(())
 }
 

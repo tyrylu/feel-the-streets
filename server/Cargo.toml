@@ -19,6 +19,7 @@ serde_json = "*"
 chrono = {version = "*", features = ["serde"]}
 failure = "*"
 lapin-futures = "0.19.0-alpha1"
+lapin-async = "0.19.0-alpha1"
 tokio = {version="*", features=["async-await-preview"]}
 tokio-async-await = "*"
 futures = "*"

@@ -1862,6 +1862,7 @@ dependencies = [
  "failure 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures 0.1.27 (registry+https://github.com/rust-lang/crates.io-index)",
  "hex 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "lapin-async 0.19.0-beta3 (registry+https://github.com/rust-lang/crates.io-index)",
  "lapin-futures 0.19.0-beta3 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "osm_api 0.1.0",
