@@ -87,7 +87,7 @@ pub fn translate(
                 converted_data.insert("address".to_string(), Value::from(new_data));
                 // Now, remove the original addr parts
                 for field_name in address_field_names {
-                    converted_data.remove(&field_name);
+                    converted_data.remove(field_name);
                 }
                 }
                 }
