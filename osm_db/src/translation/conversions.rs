@@ -6,14 +6,15 @@ use uom::si::f64::{Length, Mass};
 use uom::si::length::meter;
 use uom::si::mass::ton;
 
-pub fn convert_address(tags: &HashMap<String, String>) -> HashMap<String, String> {
+pub fn convert_address(tags: &HashMap<String, String>) -> (HashMap<String, String>, Vec<String>) {
+    let address_field_names = vec![];
     let mut address_fields = HashMap::new();
     for (key, val) in tags.iter() {
         if key.starts_with("addr:") {
             address_fields.insert(key[5..].to_string(), val.clone());
         }
     }
-    address_fields
+    (address_fields, address_field_names)
 }
 
 pub fn convert_entity_data(

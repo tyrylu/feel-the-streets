@@ -78,17 +78,20 @@ pub fn translate(
                             aware |= spec.address_aware.unwrap_or(false);
                         }
                 if aware {
-                let address_data = conversions::convert_address(&object.tags);
+                let (address_data, address_field_names) = conversions::convert_address(&object.tags);
                 if !address_data.is_empty() {
                 let mut new_data = serde_json::Map::new();
                 for (k, v) in address_data.iter() {
                     new_data.insert(k.clone(), Value::from(v.clone()));
                 }
                 converted_data.insert("address".to_string(), Value::from(new_data));
+                // Now, remove the original addr parts
+                for field_name in address_field_names {
+                    converted_data.remove(&field_name);
                 }
                 }
-            
-
+                }
+          
             if !checks::check_entity_data_consistency(&discriminator, &converted_data) {
                 return Ok(None);
             }
