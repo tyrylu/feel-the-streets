@@ -6,7 +6,8 @@ use server::{
 };
 use tokio::await;
 use tokio::prelude::*;
-
+use tokio::runtime::current_thread::Runtime;
+use tokio_async_await::compat::backward;
 use lapin_futures::options::{BasicConsumeOptions, BasicQosOptions};
 use lapin_futures::types::FieldTable;
 use log::{error, info, trace};
@@ -72,6 +73,9 @@ async fn consume_tasks() {
 fn main() -> Result<()> {
     server::init_logging();
     let _dotenv_path = dotenv::dotenv()?;
-    tokio::run_async(consume_tasks());
+    let mut rt = Runtime::new().unwrap();
+    let fut = backward::Compat::new(consume_tasks_real());
+    rt.block_on(fut).unwrap();
+    //tokio::run_async(consume_tasks());
     Ok(())
 }
