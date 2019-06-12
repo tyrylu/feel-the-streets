@@ -7,7 +7,7 @@ use server::{
 use tokio::await;
 use tokio::prelude::*;
 
-use lapin_futures::channel::{BasicConsumeOptions, BasicQosOptions};
+use lapin_futures::options::{BasicConsumeOptions, BasicQosOptions};
 use lapin_futures::types::FieldTable;
 use log::{error, info, trace};
 
@@ -17,7 +17,7 @@ async fn consume_tasks_real() -> Result<()> {
     let mut channel = await!(client.create_channel())?;
     let (tasks_queue, future_tasks_queue) =
         await!(amqp_utils::init_background_job_queues(&mut channel))?;
-    let count = future_tasks_queue.message_count;
+    let count = future_tasks_queue.message_count();
     if count == 0 {
         info!("Initially scheduling the databases update task...");
         let ttl = datetime_utils::compute_ttl_for_time(

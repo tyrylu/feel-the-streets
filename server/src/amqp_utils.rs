@@ -1,11 +1,10 @@
 use crate::background_task_constants;
 use crate::Result;
-use lapin_futures::channel::{Channel, QueueDeclareOptions};
-use lapin_futures::client::{Client, ConnectionProperties};
-use lapin_async::queue::Queue;
+use lapin_futures::{Channel, Client, ConnectionProperties};
+use lapin_futures::options::QueueDeclareOptions;
+use lapin_async::{Queue, Credentials};
 use lapin_futures::types::{AMQPValue, FieldTable};
 use lapin_futures::uri::AMQPUri;
-use lapin_async::credentials::Credentials;
 use std::env;
 use std::str::FromStr;
 use tokio::await;

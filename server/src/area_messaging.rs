@@ -1,7 +1,6 @@
 use crate::{amqp_utils, Result};
-use lapin_futures::channel::{
-    BasicProperties, BasicPublishOptions, Channel, QueueBindOptions, QueueDeclareOptions, ExchangeDeclareOptions,
-};
+use lapin_futures::{BasicProperties, Channel};
+use lapin_futures::options::{BasicPublishOptions, QueueDeclareOptions, ExchangeDeclareOptions, QueueBindOptions};
 use lapin_futures::types::FieldTable;
 use log::error;
 use osm_db::semantic_change::SemanticChange;

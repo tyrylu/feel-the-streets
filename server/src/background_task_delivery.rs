@@ -1,5 +1,6 @@
 use crate::{amqp_utils, background_task::BackgroundTask, background_task_constants, Result};
-use lapin_futures::channel::{BasicProperties, BasicPublishOptions, Channel};
+use lapin_futures::{BasicProperties, Channel};
+use lapin_futures::options::BasicPublishOptions;
 use tokio::await;
 
 pub async fn perform_delivery_on(
