@@ -25,11 +25,13 @@ async fn consume_tasks_real() -> Result<()> {
             DATABASES_UPDATE_MINUTE,
             DATABASES_UPDATE_SECOND,
         );
+        let mut channel2 = await!(client.create_channel())?;
         await!(background_task_delivery::perform_delivery_on(
-            &mut channel,
+            &mut channel2,
             BackgroundTask::UpdateAreaDatabases,
             Some(ttl)
         ))?;
+    await!(channel2.close(0, "Normal shutdown"))?;
     }
     let opts = BasicQosOptions {
         ..Default::default()
