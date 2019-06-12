@@ -31,7 +31,7 @@ async fn consume_tasks_real() -> Result<()> {
             BackgroundTask::UpdateAreaDatabases,
             Some(ttl)
         ))?;
-    await!(channel2.close(0, "Normal shutdown"))?;
+    //await!(channel2.close(0, "Normal shutdown"))?;
     }
     let opts = BasicQosOptions {
         ..Default::default()
