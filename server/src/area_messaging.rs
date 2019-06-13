@@ -7,6 +7,7 @@ use osm_db::semantic_change::SemanticChange;
 use serde_json;
 use sha3::{Digest, Sha3_256};
 use tokio::await;
+use std::time::{Duration, Instant};
 
 fn queue_name_for(client_id: &str, area_name: &str) -> String {
     let to_hash = format!("{}{}", client_id, area_name);
@@ -30,6 +31,7 @@ async fn init_queue_real(client_id: String, area_name: String) -> Result<()> {
         QueueBindOptions::default(),
         FieldTable::default()
     ))?;
+    await!(tokio::timer::Delay::new(Instant::now() + Duration::from_millis(100)))?;
     await!(channel.close(0, "Normal shutdown"))?;
     Ok(())
 }
