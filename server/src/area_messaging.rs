@@ -31,8 +31,7 @@ async fn init_queue_real(client_id: String, area_name: String) -> Result<()> {
         QueueBindOptions::default(),
         FieldTable::default()
     ))?;
-    await!(tokio::timer::Delay::new(Instant::now() + Duration::from_millis(100)))?;
-    await!(channel.close(0, "Normal shutdown"))?;
+        await!(channel.close(0, "Normal shutdown"))?;
     Ok(())
 }
 
