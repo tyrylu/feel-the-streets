@@ -14,7 +14,14 @@ pub fn translate(
                             let lookup_res = TranslationSpec::primary_discriminator_for_object(&object);
     match lookup_res {
         None => {
-            if object.tags.len() > 1 {
+            let mut interesting_len = object.tags.len();
+            if object.tags.contains_key("created_by") {
+                interesting_len -= 1;
+            }
+            if object.tags.contains_key("source") {
+                interesting_len -= 1;
+            }
+            if interesting_len > 0 {
             warn!(
                 "Did not find a translation spec for potentially interesting object {:?}.",
                 object
