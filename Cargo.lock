@@ -15,23 +15,23 @@ dependencies = [
 
 [[package]]
 name = "amq-protocol"
-version = "2.0.0-rc16"
+version = "2.0.0-rc17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "amq-protocol-codegen 2.0.0-rc16 (registry+https://github.com/rust-lang/crates.io-index)",
- "amq-protocol-tcp 2.0.0-rc16 (registry+https://github.com/rust-lang/crates.io-index)",
- "amq-protocol-types 2.0.0-rc16 (registry+https://github.com/rust-lang/crates.io-index)",
- "amq-protocol-uri 2.0.0-rc16 (registry+https://github.com/rust-lang/crates.io-index)",
+ "amq-protocol-codegen 2.0.0-rc17 (registry+https://github.com/rust-lang/crates.io-index)",
+ "amq-protocol-tcp 2.0.0-rc17 (registry+https://github.com/rust-lang/crates.io-index)",
+ "amq-protocol-types 2.0.0-rc17 (registry+https://github.com/rust-lang/crates.io-index)",
+ "amq-protocol-uri 2.0.0-rc17 (registry+https://github.com/rust-lang/crates.io-index)",
  "cookie-factory 0.3.0-beta2 (registry+https://github.com/rust-lang/crates.io-index)",
  "nom 5.0.0-beta2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "amq-protocol-codegen"
-version = "2.0.0-rc16"
+version = "2.0.0-rc17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "amq-protocol-types 2.0.0-rc16 (registry+https://github.com/rust-lang/crates.io-index)",
+ "amq-protocol-types 2.0.0-rc17 (registry+https://github.com/rust-lang/crates.io-index)",
  "handlebars 2.0.0-beta.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.92 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_json 1.0.39 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -39,16 +39,16 @@ dependencies = [
 
 [[package]]
 name = "amq-protocol-tcp"
-version = "2.0.0-rc16"
+version = "2.0.0-rc17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "amq-protocol-uri 2.0.0-rc16 (registry+https://github.com/rust-lang/crates.io-index)",
- "tcp-stream 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "amq-protocol-uri 2.0.0-rc17 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tcp-stream 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "amq-protocol-types"
-version = "2.0.0-rc16"
+version = "2.0.0-rc17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "cookie-factory 0.3.0-beta2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -59,7 +59,7 @@ dependencies = [
 
 [[package]]
 name = "amq-protocol-uri"
-version = "2.0.0-rc16"
+version = "2.0.0-rc17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "url 1.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -351,7 +351,7 @@ dependencies = [
  "bitflags 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "proc-macro2 0.4.30 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote 0.6.12 (registry+https://github.com/rust-lang/crates.io-index)",
- "syn 0.15.35 (registry+https://github.com/rust-lang/crates.io-index)",
+ "syn 0.15.36 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -383,7 +383,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "proc-macro2 0.4.30 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote 0.6.12 (registry+https://github.com/rust-lang/crates.io-index)",
- "syn 0.15.35 (registry+https://github.com/rust-lang/crates.io-index)",
+ "syn 0.15.36 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -468,7 +468,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "proc-macro2 0.4.30 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote 0.6.12 (registry+https://github.com/rust-lang/crates.io-index)",
- "syn 0.15.35 (registry+https://github.com/rust-lang/crates.io-index)",
+ "syn 0.15.36 (registry+https://github.com/rust-lang/crates.io-index)",
  "synstructure 0.10.2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -806,11 +806,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "lapin-async"
-version = "0.19.0-rc1"
+version = "0.19.0-rc2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "amq-protocol 2.0.0-rc16 (registry+https://github.com/rust-lang/crates.io-index)",
- "amq-protocol-codegen 2.0.0-rc16 (registry+https://github.com/rust-lang/crates.io-index)",
+ "amq-protocol 2.0.0-rc17 (registry+https://github.com/rust-lang/crates.io-index)",
+ "amq-protocol-codegen 2.0.0-rc17 (registry+https://github.com/rust-lang/crates.io-index)",
  "failure 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "mio 0.6.19 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -820,11 +820,11 @@ dependencies = [
 
 [[package]]
 name = "lapin-futures"
-version = "0.19.0-rc1"
+version = "0.19.0-rc2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "futures 0.1.27 (registry+https://github.com/rust-lang/crates.io-index)",
- "lapin-async 0.19.0-rc1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "lapin-async 0.19.0-rc2 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "parking_lot 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -1290,7 +1290,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "proc-macro2 0.4.30 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote 0.6.12 (registry+https://github.com/rust-lang/crates.io-index)",
- "syn 0.15.35 (registry+https://github.com/rust-lang/crates.io-index)",
+ "syn 0.15.36 (registry+https://github.com/rust-lang/crates.io-index)",
  "version_check 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "yansi 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -1326,7 +1326,7 @@ dependencies = [
  "pest_meta 2.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "proc-macro2 0.4.30 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote 0.6.12 (registry+https://github.com/rust-lang/crates.io-index)",
- "syn 0.15.35 (registry+https://github.com/rust-lang/crates.io-index)",
+ "syn 0.15.36 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1806,7 +1806,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "proc-macro2 0.4.30 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote 0.6.12 (registry+https://github.com/rust-lang/crates.io-index)",
- "syn 0.15.35 (registry+https://github.com/rust-lang/crates.io-index)",
+ "syn 0.15.36 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1862,8 +1862,8 @@ dependencies = [
  "failure 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures 0.1.27 (registry+https://github.com/rust-lang/crates.io-index)",
  "hex 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "lapin-async 0.19.0-rc1 (registry+https://github.com/rust-lang/crates.io-index)",
- "lapin-futures 0.19.0-rc1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "lapin-async 0.19.0-rc2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "lapin-futures 0.19.0-rc2 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "osm_api 0.1.0",
  "osm_db 0.1.0",
@@ -1874,7 +1874,6 @@ dependencies = [
  "sha3 0.8.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "tokio 0.1.19 (registry+https://github.com/rust-lang/crates.io-index)",
  "tokio-async-await 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)",
- "tokio-timer 0.2.11 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1969,7 +1968,7 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "0.15.35"
+version = "0.15.36"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "proc-macro2 0.4.30 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1992,13 +1991,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "proc-macro2 0.4.30 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote 0.6.12 (registry+https://github.com/rust-lang/crates.io-index)",
- "syn 0.15.35 (registry+https://github.com/rust-lang/crates.io-index)",
+ "syn 0.15.36 (registry+https://github.com/rust-lang/crates.io-index)",
  "unicode-xid 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "tcp-stream"
-version = "0.2.1"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "cfg-if 0.1.9 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -2508,11 +2507,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [metadata]
 "checksum adler32 1.0.3 (registry+https://github.com/rust-lang/crates.io-index)" = "7e522997b529f05601e05166c07ed17789691f562762c7f3b987263d2dedee5c"
 "checksum aho-corasick 0.7.3 (registry+https://github.com/rust-lang/crates.io-index)" = "e6f484ae0c99fec2e858eb6134949117399f222608d84cadb3f58c1f97c2364c"
-"checksum amq-protocol 2.0.0-rc16 (registry+https://github.com/rust-lang/crates.io-index)" = "1b44efa0892dacf4640164e2b1ce65a547a6c071f4158f5b7094a375c137b53f"
-"checksum amq-protocol-codegen 2.0.0-rc16 (registry+https://github.com/rust-lang/crates.io-index)" = "8d0c8a8978b3e29cbe65108b6fbd56ed1ba463014c8cbb625aeab5897e968b1c"
-"checksum amq-protocol-tcp 2.0.0-rc16 (registry+https://github.com/rust-lang/crates.io-index)" = "cc3720d3a05428e18fe9aa895a71c745fb80ecd20454e76eadd2fb6bf59d1040"
-"checksum amq-protocol-types 2.0.0-rc16 (registry+https://github.com/rust-lang/crates.io-index)" = "c390f091f7c3569195e7ddfba524c7ef31f476b08ae74f425447a5a3acb55a4b"
-"checksum amq-protocol-uri 2.0.0-rc16 (registry+https://github.com/rust-lang/crates.io-index)" = "ccf199a6bcbd56f2c991b253297463e902a5a5b955d4f6130c609698d8e8cb6d"
+"checksum amq-protocol 2.0.0-rc17 (registry+https://github.com/rust-lang/crates.io-index)" = "9e0b781269cb28c891f44727f6d7f35a864ca25933202c687123189232d05475"
+"checksum amq-protocol-codegen 2.0.0-rc17 (registry+https://github.com/rust-lang/crates.io-index)" = "e9e91deefb0830c24e7f97dbc27916d94266a2f493c17a087d2701d7f0a1715d"
+"checksum amq-protocol-tcp 2.0.0-rc17 (registry+https://github.com/rust-lang/crates.io-index)" = "0a86fa88430fea6f89043889f9cfbd3857d0b8a17fc2885e73156dd2211a8f86"
+"checksum amq-protocol-types 2.0.0-rc17 (registry+https://github.com/rust-lang/crates.io-index)" = "c2811a14a6ef558eb46f349f717bcb1ff31cb0c9513656102b0c55b8e7f54b58"
+"checksum amq-protocol-uri 2.0.0-rc17 (registry+https://github.com/rust-lang/crates.io-index)" = "4be446871fc1b06cce74989e2d35de47a6046f999fb426548f44bcb195f71e1b"
 "checksum arrayvec 0.4.10 (registry+https://github.com/rust-lang/crates.io-index)" = "92c7fb76bc8826a8b33b4ee5bb07a247a81e76764ab4d55e8f73e3a4d8808c71"
 "checksum atty 0.2.11 (registry+https://github.com/rust-lang/crates.io-index)" = "9a7d5b8723950951411ee34d271d99dddcc2035a16ab25310ea2c8cfd4369652"
 "checksum autocfg 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)" = "0e49efa51329a5fd37e7c79db4621af617cd4e3e5bc224939808d076077077bf"
@@ -2597,8 +2596,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum keccak 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "67c21572b4949434e4fc1e1978b99c5f77064153c59d998bf13ecd96fb5ecba7"
 "checksum kernel32-sys 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)" = "7507624b29483431c0ba2d82aece8ca6cdba9382bff4ddd0f7490560c056098d"
 "checksum language-tags 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)" = "a91d884b6667cd606bb5a69aa0c99ba811a115fc68915e7056ec08a46e93199a"
-"checksum lapin-async 0.19.0-rc1 (registry+https://github.com/rust-lang/crates.io-index)" = "b617d9515826d8f7389b9380a10dc75588fc06602227a522c79713238f35f4b3"
-"checksum lapin-futures 0.19.0-rc1 (registry+https://github.com/rust-lang/crates.io-index)" = "916b881b3af20204598a541cd541ea54a9b81c9f211967802ab82c85628d8131"
+"checksum lapin-async 0.19.0-rc2 (registry+https://github.com/rust-lang/crates.io-index)" = "cac67e7f7748c758bec1250d4a0e6ce1325a599f8f602b9d4c88c1cca457d761"
+"checksum lapin-futures 0.19.0-rc2 (registry+https://github.com/rust-lang/crates.io-index)" = "fd3b034606cc03072d8efd1c1532a370a02b989d08c37e0574f3c0b360e54ebb"
 "checksum lazy_static 1.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "bc5729f27f159ddd61f4df6228e827e86643d4d3e7c32183cb30a1c08f604a14"
 "checksum lazycell 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "b294d6fa9ee409a054354afc4352b0b9ef7ca222c69b8812cbea9e7d2bf3783f"
 "checksum lexical-core 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "3e82e023e062f1d25f807ad182008fba1b46538e999f908a08cc0c29e084462e"
@@ -2716,10 +2715,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum static_assertions 0.2.5 (registry+https://github.com/rust-lang/crates.io-index)" = "c19be23126415861cb3a23e501d34a708f7f9b2183c5252d690941c2e69199d5"
 "checksum string 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "d0bbfb8937e38e34c3444ff00afb28b0811d9554f15c5ad64d12b0308d1d1995"
 "checksum syn 0.11.11 (registry+https://github.com/rust-lang/crates.io-index)" = "d3b891b9015c88c576343b9b3e41c2c11a51c219ef067b264bd9c8aa9b441dad"
-"checksum syn 0.15.35 (registry+https://github.com/rust-lang/crates.io-index)" = "641e117d55514d6d918490e47102f7e08d096fdde360247e4a10f7a91a8478d3"
+"checksum syn 0.15.36 (registry+https://github.com/rust-lang/crates.io-index)" = "8b4f551a91e2e3848aeef8751d0d4eec9489b6474c720fd4c55958d8d31a430c"
 "checksum synom 0.11.3 (registry+https://github.com/rust-lang/crates.io-index)" = "a393066ed9010ebaed60b9eafa373d4b1baac186dd7e008555b0f702b51945b6"
 "checksum synstructure 0.10.2 (registry+https://github.com/rust-lang/crates.io-index)" = "02353edf96d6e4dc81aea2d8490a7e9db177bf8acb0e951c24940bf866cb313f"
-"checksum tcp-stream 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "3d07abbd939fb1b0860f35049c116a5937bd749844b7bb911861af0918b86dcc"
+"checksum tcp-stream 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "ae9433eb82def0af0f1cb986023ecac9cd577852e485943659fdd1c7625687d5"
 "checksum tempfile 3.0.8 (registry+https://github.com/rust-lang/crates.io-index)" = "7dc4738f2e68ed2855de5ac9cdbe05c9216773ecde4739b2f095002ab03a13ef"
 "checksum termcolor 1.0.5 (registry+https://github.com/rust-lang/crates.io-index)" = "96d6098003bde162e4277c70665bd87c326f5a0c3f3fbfb285787fa482d54e6e"
 "checksum termion 1.5.3 (registry+https://github.com/rust-lang/crates.io-index)" = "6a8fb22f7cde82c8220e5aeacb3258ed7ce996142c77cba193f203515e26c330"

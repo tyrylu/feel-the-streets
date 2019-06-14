@@ -2,7 +2,6 @@ use crate::{amqp_utils, background_task::BackgroundTask, background_task_constan
 use lapin_futures::{BasicProperties, Channel};
 use lapin_futures::options::BasicPublishOptions;
 use tokio::await;
-use std::time::{Duration, Instant};
 
 pub async fn perform_delivery_on(
     channel: &mut Channel,
@@ -34,7 +33,6 @@ async fn deliver_real(task: BackgroundTask, ttl: Option<u32>) -> Result<()> {
     let mut channel = await!(client.create_channel())?;
     await!(amqp_utils::init_background_job_queues(&mut channel))?;
     await!(perform_delivery_on(&mut channel, task, ttl))?;
-    await!(tokio::timer::Delay::new(Instant::now() + Duration::from_millis(100)))?;
     await!(channel.close(0, "Normal shutdown"))?;
     Ok(())
 }

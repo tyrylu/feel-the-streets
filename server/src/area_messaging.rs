@@ -7,7 +7,6 @@ use osm_db::semantic_change::SemanticChange;
 use serde_json;
 use sha3::{Digest, Sha3_256};
 use tokio::await;
-use std::time::{Duration, Instant};
 
 fn queue_name_for(client_id: &str, area_name: &str) -> String {
     let to_hash = format!("{}{}", client_id, area_name);
