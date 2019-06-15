@@ -127,9 +127,13 @@ async fn update_area(mut area: Area) -> Result<()> {
     let mut channel = await!(client.create_channel())?;
         let mut semantic_changes = vec![];
         loop {
-        match receiver.recv().unwrap() {
-            UpdateMessage::ApplyChange(change) => semantic_changes.push(change),
-        UpdateMessage::Done => break
+        match receiver.recv() {
+            Ok(UpdateMessage::ApplyChange(change)) => semantic_changes.push(change),
+        Ok(UpdateMessage::Done) => break,
+        Err(e) => {
+            warn!("Received error during recv call: {}", e);
+            break;
+        }
         }
     }
         info!("Publishing the changes...");
