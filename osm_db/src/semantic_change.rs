@@ -28,7 +28,7 @@ impl EntryChange {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub enum SemanticChange {
     Create {
         geometry: String,

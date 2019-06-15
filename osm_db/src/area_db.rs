@@ -123,7 +123,7 @@ impl AreaDatabase {
     }
 
     fn save_updated_entity(&self, entity: &Entity) -> DbResult<()> {
-        let mut stmt = self.conn.prepare_cached("update entities set discriminator = ?, geometry = GeomFromText(?, 4326), effective_width = ?, data = ?, where id = ?")?;
+        let mut stmt = self.conn.prepare_cached("update entities set discriminator = ?, geometry = GeomFromText(?, 4326), effective_width = ?, data = ? where id = ?;")?;
         stmt.execute(&[
             &entity.discriminator,
             &entity.geometry,

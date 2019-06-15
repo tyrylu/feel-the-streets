@@ -75,6 +75,7 @@ async fn update_area(mut area: Area) -> Result<()> {
                 } else {
                     None
                 }
+                
             }
             Modify => {
                 let osm_id = change
@@ -82,6 +83,7 @@ async fn update_area(mut area: Area) -> Result<()> {
                     .as_ref()
                     .unwrap_or(change.new.as_ref().expect("No old or new"))
                     .unique_id();
+
                 let old = area_db.get_entity(&osm_id)?;
                 let new = translator::translate(
                     &change.new.expect("No new entity during a modify"),
