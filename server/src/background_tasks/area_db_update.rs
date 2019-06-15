@@ -10,14 +10,22 @@ use osm_db::area_db::AreaDatabase;
 use osm_db::semantic_change::SemanticChange;
 use osm_db::translation::translator;
 use tokio::await;
+use std::thread;
+use std::sync::mpsc;
+
+enum UpdateMessage {
+    ApplyChange(SemanticChange),
+    Done
+}
 
 async fn update_area(mut area: Area) -> Result<()> {
+    let area_name = area.name.clone();
+    let (sender, receiver) = mpsc::channel();
+    thread::spawn(move || -> Result<()> {
     info!("Updating area {}.", area.name);
-    {
-        area.state = AreaState::GettingChanges;
-        let conn = SqliteConnection::establish("server.db")?;
-        area.save(&conn)?;
-    }
+    let conn = SqliteConnection::establish("server.db")?;
+    area.state = AreaState::GettingChanges;
+    area.save(&conn)?;
     let after = if let Some(timestamp) = &area.newest_osm_object_timestamp {
         info!(
             "Looking differences after the latest known OSM object timestamp {}",
@@ -35,14 +43,11 @@ async fn update_area(mut area: Area) -> Result<()> {
     let area_db = AreaDatabase::open_existing(&area.name)?;
     let mut first = true;
     let mut osm_change_count = 0;
-    let mut semantic_changes = vec![];
-    let client = await!(amqp_utils::connect_to_broker())?;
-    let mut channel = await!(client.create_channel())?;
+    let mut semantic_change_count = 0;
     for change in manager.lookup_differences_in(&area.name, &after)? {
         osm_change_count += 1;
         use OSMObjectChangeType::*;
         if first {
-            let conn = SqliteConnection::establish("server.db")?;
             area.state = AreaState::ApplyingChanges;
             area.save(&conn)?;
             first = false;
@@ -105,25 +110,33 @@ async fn update_area(mut area: Area) -> Result<()> {
         };
         if let Some(semantic_change) = semantic_change {
             area_db.apply_change(&semantic_change)?;
-            semantic_changes.push(semantic_change);
+            semantic_change_count += 1;
+            sender.send(UpdateMessage::ApplyChange(semantic_change)).unwrap();
         }
     }
     area.state = AreaState::Updated;
-    let conn = SqliteConnection::establish("server.db")?;
     area.save(&conn)?;
-    let semantic_change_count = semantic_changes.len();
-    info!("Publishing {} semantic changes...", semantic_change_count);
-    for change in semantic_changes {
-        await!(area_messaging::publish_change_on(
-            &mut channel,
-            change,
-            area.name.clone(),
-        ))?;
-    }
     info!(
         "Area updated successfully, applyed {} semantic changes resulting from {} OSM changes.",
         semantic_change_count, osm_change_count
     );
+        sender.send(UpdateMessage::Done).unwrap();
+        Ok(())
+    });
+    let client = await!(amqp_utils::connect_to_broker())?;
+    let mut channel = await!(client.create_channel())?;
+        let mut semantic_changes = vec![];
+        loop {
+        match receiver.recv().unwrap() {
+            UpdateMessage::ApplyChange(change) => semantic_changes.push(change),
+        UpdateMessage::Done => break
+        }
+    }
+        info!("Publishing the changes...");
+    for change in semantic_changes {
+        await!(area_messaging::publish_change_on(&mut channel, change, area_name.clone()))?;
+    }
+    info!("Changes successfully published.");
     await!(channel.close(0, "Normal shutdown"))?;
     Ok(())
 }
