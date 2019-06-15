@@ -21,7 +21,7 @@ enum UpdateMessage {
 async fn update_area(mut area: Area) -> Result<()> {
     let area_name = area.name.clone();
     let (sender, receiver) = mpsc::channel();
-    thread::spawn(move || -> Result<()> {
+    let handle = thread::spawn(move || -> Result<()> {
     info!("Updating area {}.", area.name);
     let conn = SqliteConnection::establish("server.db")?;
     area.state = AreaState::GettingChanges;
@@ -131,8 +131,9 @@ async fn update_area(mut area: Area) -> Result<()> {
             Ok(UpdateMessage::ApplyChange(change)) => semantic_changes.push(change),
         Ok(UpdateMessage::Done) => break,
         Err(e) => {
+            let ret = handle.join().unwrap();
             warn!("Received error during recv call: {}", e);
-            break;
+            return ret;
         }
         }
     }
