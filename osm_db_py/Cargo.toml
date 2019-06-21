@@ -1,0 +1,17 @@
+[package]
+name = "osm_db_py"
+version = "0.1.0"
+authors = ["Lukáš Tyrychtr <lukastyrychtr@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+osm_db = {"path" = "../osm_db"}
+pyo3 = "*"
+serde_json = "*"
+
+[lib]
+name = "osm_db"
+crate-type = ["cdylib"]
+
+[features]
+default = ["pyo3/extension-module"]
