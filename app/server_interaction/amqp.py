@@ -1,4 +1,4 @@
-import pickle
+from osm_db import SemanticChange
 from collections import defaultdict
 import pika
 from ..services import config
@@ -24,7 +24,7 @@ class SemanticChangeRetriever:
                 break
             self._max_delivery_tags[area] = method.delivery_tag
             print(body)
-            yield pickle.loads(body)
+            yield SemanticChange.from_json(body.decode("utf-8"))
 
     def acknowledge_changes_for(self, area):
         if area not in self._max_delivery_tags:
