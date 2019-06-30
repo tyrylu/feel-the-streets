@@ -6,7 +6,7 @@ def get_dictchange_description(dictchange):
     if dictchange.kind is osm_db.CHANGE_CREATE:
         return _("{property}: addition with value {value}").format(property=underscored_to_words(dictchange.key), value=dictchange.new_value)
     elif dictchange.kind is osm_db.CHANGE_UPDATE:
-        return _("{property}: change to {new}").format(property=underscored_to_words(dictchange.key), new=dictchange.new_value)
+        return _("{property}: change from {old} to {new}").format(property=underscored_to_words(dictchange.key), old=dictchange.old_value, new=dictchange.new_value)
     elif dictchange.kind is osm_db.CHANGE_REMOVE:
         return _("{property}: removal").format(property=underscored_to_words(dictchange.key))
     else:

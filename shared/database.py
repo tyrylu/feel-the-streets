@@ -7,7 +7,7 @@ from sqlalchemy import create_engine, event, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import func
 from shapely import wkt
-from geoalchemy import GeometryDDL, WKTSpatialElement
+from geoalchemy import WKTSpatialElement
 import appdirs
 from .models import Entity, IdxEntitiesGeometry
 from .time_utils import ts_to_utc
@@ -43,7 +43,7 @@ class Database:
     def __init__(self, area_name, server_side=True, name_suffix=""):
         self._area_name = area_name
         db_path = self.get_database_file(area_name, server_side, name_suffix)
-        self._creating = False
+
         self._extensions_warning_logged = False
         self._engine = create_engine("sqlite:///%s"%db_path)
         event.listen(self._engine, "connect", self._post_connect)
@@ -65,27 +65,12 @@ class Database:
             if not self._extensions_warning_logged:
                 log.warning("Failed to load the icu extension, the  text searches will be case sensitive.")
                 self._extensions_warning_logged = True
-        if self._creating: 
-            log.debug("Initializing spatial metadata...")
-            dbapi_connection.execute("SELECT InitSpatialMetadata(1)")
-
-    def create_if_needed(self):
-        self._creating = not self._engine.dialect.has_table(self._engine, "entities")
-        if self._creating:
-            log.debug("Running geometry DDL...")
-            GeometryDDL(Entity.__table__)
-            log.debug("Creating database tables...")
-            Entity.__table__.create(self._engine)
-            self._creating = False
-
+    
     def add(self, instance):
         self._session.add(instance)
 
     def commit(self):
         self._session.commit()
-    
-    def merge(self, entity):
-        self._session.merge(entity)
     
     def query(self, *entities, **kwargs):
         return self._session.query(*entities, **kwargs)
@@ -105,17 +90,6 @@ class Database:
         json_extract = func.json_extract
         return self.scalar(max(json_extract(Entity.data, "$.timestamp")))
     
-    def prepare_entity_insertions(self):
-        self._session.execute("pragma synchronous=off")
-        self._entity_insert_statement = Entity.__table__.insert().values(dict(id=":id", data=":data", discriminator=":discriminator", effective_width=":effective_width", geometry=text("GeomFromText(:geometry, 4326)")))
-
-    def insert_entity(self, entity):
-        self._session.execute(self._entity_insert_statement, dict(id=entity.id, discriminator=entity.discriminator, data=entity.data, effective_width=entity.effective_width, geometry=entity.geometry.desc))
-
-    def commit_entity_insertions(self):
-        self._session.commit()
-
-   
     def has_entity(self, osm_id):
         return self.query(Entity).filter(func.json_extract(Entity.data, text('"$.osm_id"')) == osm_id).count() > 0
 
@@ -159,9 +133,11 @@ class Database:
                 for subchange in change.data_changes:
                     entity_data = apply_dict_change(subchange, entity_data)
                 entity.data = json.dumps(entity_data)
+        if entity.geometry is None:
+            log.warn("Entity %s missing geometry, not adding.", entity)
+            self._session.expunge(entity)
         return entity
 
     def close(self):
         self._session.close()
-    def rollback(self):
-        self._session.rollback()
+    

@@ -35,8 +35,18 @@ fn new_value(&self) -> Option<PyObject> {
             EntryChange::Update{new_value, ..} => Some(crate::conversions::convert_value(new_value, &py)),
             EntryChange::Remove{..} => None
         }
+    }
+#[getter]
+fn old_value(&self) -> Option<PyObject> {
+        let gil = Python::acquire_gil();
+        let py = gil.python();
+        match &self.inner {
+            EntryChange::Update{old_value, ..} => Some(crate::conversions::convert_value(old_value, &py)),
+            EntryChange::Create{..} | EntryChange::Remove{..} => None
+        }
 }
 }
+
 
 impl DictChange {
     pub fn new(change: EntryChange) -> Self {

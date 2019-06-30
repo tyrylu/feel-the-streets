@@ -20,7 +20,7 @@ pub struct Entity {
 impl Entity {
     pub fn apply_property_changes(&mut self, property_changes: &[EntryChange]) {
         for change in property_changes {
-            if let EntryChange::Update { key, new_value } = change {
+            if let EntryChange::Update { key, new_value, .. } = change {
                 match key.as_ref() {
                     "geometry" => {
                         self.geometry = new_value
@@ -82,7 +82,7 @@ impl Entity {
                             warn!("Deletion of value at key {} not possible, one of the intermediary maps was not found.", key);
                         }
                     }
-                    Update { key, new_value } => {
+                    Update { key, new_value, .. } => {
                         if let Some((target, final_key_part)) =
                             get_target_of_key(&key, &mut data_map, false)
                         {

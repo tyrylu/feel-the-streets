@@ -9,19 +9,24 @@ fn diff_properties(old: &Entity, new: &NotStoredEntity) -> Vec<EntryChange> {
     if old.geometry != new.geometry {
         changes.push(EntryChange::updating(
             "geometry",
+            Value::from(old.geometry.clone()),
             Value::from(new.geometry.clone()),
         ));
     }
     if old.discriminator != new.discriminator {
         changes.push(EntryChange::updating(
             "discriminator",
+            Value::from(old.discriminator.clone()),
             Value::from(new.discriminator.clone()),
         ));
     }
     if old.effective_width != new.effective_width {
         changes.push(EntryChange::updating(
             "effective_width",
-            new.effective_width
+            old.effective_width
+                .map(|w| Value::from(w))
+                .unwrap_or(Value::Null),
+                    new.effective_width
                 .map(|w| Value::from(w))
                 .unwrap_or(Value::Null),
         ));
@@ -71,6 +76,7 @@ fn diff_json_maps_internal(
             } else {
                 changes.push(EntryChange::updating(
                     &to_composite_key(&key_prefix, &stayed_key),
+                    old_val.clone(),
                     new_val.clone(),
                 ));
             }
