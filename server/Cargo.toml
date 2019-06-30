@@ -19,7 +19,7 @@ serde_json = "*"
 chrono = {version = "*", features = ["serde"]}
 failure = "*"
 lapin-futures = "*"
-lapin-async = "*"
+lapin = "*"
 tokio = {version="*", features=["async-await-preview"]}
 tokio-async-await = "*"
 futures = "*"

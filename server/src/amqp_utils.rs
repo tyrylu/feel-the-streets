@@ -2,19 +2,14 @@ use crate::background_task_constants;
 use crate::Result;
 use lapin_futures::{Channel, Client, ConnectionProperties};
 use lapin_futures::options::QueueDeclareOptions;
-use lapin_futures::auth::Credentials;
-use lapin_async::Queue;
+use lapin::Queue;
 use lapin_futures::types::{AMQPValue, FieldTable};
-use lapin_futures::uri::AMQPUri;
 use std::env;
-use std::str::FromStr;
 use tokio::await;
 
 pub async fn connect_to_broker() -> Result<Client> {
-    let uri = AMQPUri::from_str(&env::var("AMQP_BROKER_URL")?).map_err(|e| failure::err_msg(e))?;
-    let credentials = Credentials::new(uri.authority.userinfo.username.clone(), uri.authority.userinfo.password.clone());
-    let client = await!(Client::connect_uri(
-        uri, credentials, ConnectionProperties::default()
+    let client = await!(Client::connect(
+       &env::var("AMQP_BROKER_URL")?, ConnectionProperties::default()
     ))?;
     info!("Broker connection established.");
     Ok(client)

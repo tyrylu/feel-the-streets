@@ -12,7 +12,7 @@ import appdirs
 from .models import Entity, IdxEntitiesGeometry
 from .time_utils import ts_to_utc
 from .diff_utils import apply_dict_change
-from .semantic_change import ChangeType
+import osm_db
 
 log = logging.getLogger(__name__)
 
@@ -129,15 +129,15 @@ class Database:
 
     def apply_change(self, change):
         entity = None
-        if change.type is ChangeType.create:
+        if change.type is osm_db.CHANGE_CREATE:
             entity = Entity()
             self.add(entity)
-        elif change.type in {ChangeType.update, ChangeType.delete}:
+        elif change.type in {osm_db.CHANGE_UPDATE, osm_db.CHANGE_REMOVE}:
             entity = self.get_entity_by_osm_id(change.osm_id)
             if not entity:
                 log.warning("Entity with osm id %s not found in the local database.", change.osm_id)
                 return
-        if change.type is ChangeType.delete:
+        if change.type is osm_db.CHANGE_REMOVE:
             self._session.delete(entity)
         else:
             old_geom = entity.geometry

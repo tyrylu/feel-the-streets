@@ -69,7 +69,7 @@ fn diff_json_maps_internal(
                     Some(to_composite_key(&key_prefix, &stayed_key)),
                 ));
             } else {
-                changes.push(EntryChange::creating(
+                changes.push(EntryChange::updating(
                     &to_composite_key(&key_prefix, &stayed_key),
                     new_val.clone(),
                 ));

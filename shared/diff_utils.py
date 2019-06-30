@@ -1,6 +1,7 @@
 import enum
 import pydantic
 from typing import Union, Optional
+import osm_db
 
 class ChangeKind(enum.Enum):
     add = 0
@@ -78,10 +79,10 @@ def _get_change_target(target, key, create_if_missing=False):
     return intermediary, target
 
 def apply_dict_change(change, target):
-    if change.kind in {ChangeKind.add, ChangeKind.change}:
+    if change.kind in {osm_db.CHANGE_CREATE, osm_db.CHANGE_UPDATE}:
         intermediary, temp_target = _get_change_target(target, change.key, True)
         temp_target[change.key.split("/")[-1]] = change.new_value
-    elif change.kind is ChangeKind.remove:
+    elif change.kind is osm_db.CHANGE_REMOVE:
         intermediary, temp_target = _get_change_target(target, change.key)
         if change.key.split("/")[-1] not in temp_target:
             return target

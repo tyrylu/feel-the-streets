@@ -1,9 +1,9 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum EntryChange {
-    Create { key: String, value: Value },
+        Create { key: String, value: Value },
     Update { key: String, new_value: Value },
     Remove { key: String },
 }
@@ -28,7 +28,7 @@ impl EntryChange {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum SemanticChange {
     Create {
         geometry: String,
