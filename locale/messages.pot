@@ -1,21 +1,21 @@
-# Translations template for Feel the streets.
-# Copyright (C) 2018 ORGANIZATION
-# This file is distributed under the same license as the Feel the streets project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+# Translations template for PROJECT.
+# Copyright (C) 2019 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Feel the streets 0.0.0\n"
+"Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-03-20 17:38+0100\n"
+"POT-Creation-Date: 2019-07-02 14:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.5.3\n"
+"Generated-By: Babel 2.7.0\n"
 
 #: app/area_selection.py:24
 msgid "{name}: {state}, last updated {updated_at}, created {created_at}"
@@ -30,10 +30,12 @@ msgid "Area name requested"
 msgstr ""
 
 #: app/area_selection.py:36
-msgid "The area creation request has been sent successfully. The area will become updated in a few minutes."
+msgid ""
+"The area creation request has been sent successfully. The area will "
+"become updated in a few minutes."
 msgstr ""
 
-#: app/area_selection.py:36 app/main_frame.py:79
+#: app/area_selection.py:36 app/main_frame.py:82
 msgid "Success"
 msgstr ""
 
@@ -65,20 +67,22 @@ msgstr ""
 msgid "Download failure"
 msgstr ""
 
-#: app/main_frame.py:67
+#: app/main_frame.py:70
 msgid "Change application"
 msgstr ""
 
-#: app/main_frame.py:67
+#: app/main_frame.py:70
 msgid "Applying changes for the selected database."
 msgstr ""
 
-#: app/main_frame.py:72
+#: app/main_frame.py:75
 msgid "Applying changes for the selected database, change {nth} of {total}"
 msgstr ""
 
-#: app/main_frame.py:79
-msgid "Successfully applied {total} changes. A changelog of size {size} was generated, do you want to view it now?"
+#: app/main_frame.py:82
+msgid ""
+"Successfully applied {total} changes. A changelog of size {size} was "
+"generated, do you want to view it now?"
 msgstr ""
 
 #: app/road_segments_browser.py:20
@@ -86,23 +90,25 @@ msgid "{distance:.2f} meters in angle {angle:.2f}°"
 msgstr ""
 
 #: app/road_segments_browser.py:26
-msgid "{start_distance:.2f} meters of {distance:.2f} meters in angle {angle:.2f}° distant from road center by {middle_distance:.2f}"
+msgid ""
+"{start_distance:.2f} meters of {distance:.2f} meters in angle "
+"{angle:.2f}° distant from road center by {middle_distance:.2f}"
 msgstr ""
 
-#: app/semantic_changelog_generator.py:8
+#: app/semantic_changelog_generator.py:7
 msgid "{property}: addition with value {value}"
 msgstr ""
 
-#: app/semantic_changelog_generator.py:10
+#: app/semantic_changelog_generator.py:9
 msgid "{property}: change from {old} to {new}"
 msgstr ""
 
-#: app/semantic_changelog_generator.py:12
+#: app/semantic_changelog_generator.py:11
 msgid "{property}: removal"
 msgstr ""
 
 #: app/semantic_changelog_generator.py:18
-msgid "Object {osm_id} was deleted"
+msgid "Object {osm_id} ({object}) was deleted"
 msgstr ""
 
 #: app/semantic_changelog_generator.py:20
@@ -110,74 +116,75 @@ msgid "New object created"
 msgstr ""
 
 #: app/semantic_changelog_generator.py:32
-msgid "Object {osm_id} was changed"
+msgid "Object {osm_id} ({object}) was changed"
 msgstr ""
 
 #: app/semantic_changelog_generator.py:35
 msgid "Geometry was changed."
 msgstr ""
 
-#: app/ui.xrc:5
+#: app/ui.xrc:5 dist/fts/ui.xrc:5
 msgid "Feel the streets"
 msgstr ""
 
-#: app/ui.xrc:10
+#: app/ui.xrc:10 dist/fts/ui.xrc:10
 msgid "Object actions"
 msgstr ""
 
-#: app/ui.xrc:13
+#: app/ui.xrc:13 dist/fts/ui.xrc:13
 msgid "Property actions"
 msgstr ""
 
-#: app/ui.xrc:15
+#: app/ui.xrc:15 dist/fts/ui.xrc:15
 msgid "Copy property value"
 msgstr ""
 
-#: app/ui.xrc:19
+#: app/ui.xrc:19 dist/fts/ui.xrc:19
 msgid "Copy property name"
 msgstr ""
 
-#: app/ui.xrc:23
+#: app/ui.xrc:23 dist/fts/ui.xrc:23
 msgid "Copy property name and value"
 msgstr ""
 
-#: app/ui.xrc:33
+#: app/ui.xrc:33 dist/fts/ui.xrc:33
 msgid "Objects"
 msgstr ""
 
-#: app/ui.xrc:43
+#: app/ui.xrc:43 dist/fts/ui.xrc:43
 msgid "Object properties"
 msgstr ""
 
-#: app/ui.xrc:55
+#: app/ui.xrc:55 dist/fts/ui.xrc:55
 msgid "Go to"
 msgstr ""
 
-#: app/ui.xrc:62 app/ui.xrc:86
+#: app/ui.xrc:62 app/ui.xrc:86 dist/fts/ui.xrc:62 dist/fts/ui.xrc:86
 msgid "Close"
 msgstr ""
 
-#: app/ui.xrc:67
+#: app/ui.xrc:67 dist/fts/ui.xrc:67
 msgid "Title"
 msgstr ""
 
-#: app/ui.xrc:75
+#: app/ui.xrc:75 dist/fts/ui.xrc:75
 msgid "Road segments"
 msgstr ""
 
 #: app/controllers/interactive_person_controller.py:105 app/ui.xrc:91
+#: dist/fts/ui.xrc:91
 msgid "Road details"
 msgstr ""
 
-#: app/ui.xrc:99
+#: app/ui.xrc:99 dist/fts/ui.xrc:99
 msgid "Class fields"
 msgstr ""
 
-#: app/ui.xrc:111 shared/entities/aerial_way.py:44
+#: app/ui.xrc:111 dist/fts/ui.xrc:111 shared/entities/aerial_way.py:44
 #: shared/entities/amenity.py:23 shared/entities/atm.py:4
 #: shared/entities/bank.py:5 shared/entities/barrier.py:52
 #: shared/entities/building.py:89 shared/entities/craft.py:37
-#: shared/entities/disused.py:18 shared/entities/fuel.py:6
+#: shared/entities/disused.py:18 shared/entities/fuel.py:5
 #: shared/entities/land.py:39 shared/entities/leisure.py:16
 #: shared/entities/man_made.py:28 shared/entities/no_exit.py:6
 #: shared/entities/office.py:39 shared/entities/parking.py:14
@@ -192,51 +199,51 @@ msgstr ""
 msgid "Operator"
 msgstr ""
 
-#: app/ui.xrc:122
+#: app/ui.xrc:122 dist/fts/ui.xrc:122
 msgid "&Add condition"
 msgstr ""
 
-#: app/ui.xrc:129
+#: app/ui.xrc:129 dist/fts/ui.xrc:129
 msgid "Current search criteria"
 msgstr ""
 
-#: app/ui.xrc:141
+#: app/ui.xrc:141 dist/fts/ui.xrc:141
 msgid "Remove"
 msgstr ""
 
-#: app/ui.xrc:147
+#: app/ui.xrc:147 dist/fts/ui.xrc:147
 msgid "Search objects to distance (in meters, 0 no limit)"
 msgstr ""
 
-#: app/ui.xrc:158
+#: app/ui.xrc:160 dist/fts/ui.xrc:158
 msgid "Start search"
 msgstr ""
 
-#: app/ui.xrc:164
+#: app/ui.xrc:166 dist/fts/ui.xrc:164
 msgid "Cancel"
 msgstr ""
 
-#: app/ui.xrc:169
+#: app/ui.xrc:171 dist/fts/ui.xrc:169
 msgid "Search criteria"
 msgstr ""
 
-#: app/ui.xrc:178
+#: app/ui.xrc:180 dist/fts/ui.xrc:178
 msgid "Available areas"
 msgstr ""
 
-#: app/ui.xrc:190
+#: app/ui.xrc:192 dist/fts/ui.xrc:190
 msgid "&Select"
 msgstr ""
 
-#: app/ui.xrc:196
+#: app/ui.xrc:198 dist/fts/ui.xrc:196
 msgid "&Request a new area"
 msgstr ""
 
-#: app/ui.xrc:202
+#: app/ui.xrc:204 dist/fts/ui.xrc:202
 msgid "&Exit"
 msgstr ""
 
-#: app/ui.xrc:207
+#: app/ui.xrc:209 dist/fts/ui.xrc:207
 msgid "Select an area"
 msgstr ""
 
@@ -268,8 +275,8 @@ msgstr ""
 #: app/controllers/interactive_person_controller.py:105
 #: app/controllers/interactive_person_controller.py:141
 #: app/controllers/interactive_person_controller.py:148
-#: shared/entities/enums.py:672 shared/entities/enums.py:1152
-#: shared/entities/enums.py:1210 shared/entities/enums.py:1538
+#: shared/entities/enums.py:672 shared/entities/enums.py:1151
+#: shared/entities/enums.py:1209 shared/entities/enums.py:1538
 #: shared/entities/pole.py:14
 msgid "Information"
 msgstr ""
@@ -477,15 +484,15 @@ msgstr ""
 msgid "{object}: distance {distance:.2f} meters, {rel_bearing:.2f}° relatively"
 msgstr ""
 
-#: app/objects_browser/frame.py:74
+#: app/objects_browser/frame.py:75
 msgid "Common properties"
 msgstr ""
 
-#: app/objects_browser/frame.py:77
+#: app/objects_browser/frame.py:80
 msgid "Specific properties"
 msgstr ""
 
-#: app/objects_browser/frame.py:81
+#: app/objects_browser/frame.py:84
 msgid "Other fields - they can not be searched and are not processed in any way"
 msgstr ""
 
@@ -505,11 +512,11 @@ msgstr ""
 msgid "Open wikipedia article"
 msgstr ""
 
-#: app/search/__init__.py:12
+#: app/search/__init__.py:15
 msgid "Select the class to search"
 msgstr ""
 
-#: app/search/__init__.py:12
+#: app/search/__init__.py:15
 msgid "Search class"
 msgstr ""
 
@@ -563,25 +570,25 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: shared/entities/abandoned.py:5 shared/entities/enums.py:966
-#: shared/entities/enums.py:1446
+#: shared/entities/abandoned.py:5 shared/entities/enums.py:965
+#: shared/entities/enums.py:1445
 msgid "Path"
 msgstr ""
 
-#: shared/entities/abandoned.py:6 shared/entities/enums.py:955
-#: shared/entities/enums.py:1441 shared/entities/route.py:15
+#: shared/entities/abandoned.py:6 shared/entities/enums.py:954
+#: shared/entities/enums.py:1440 shared/entities/route.py:15
 msgid "Unclassified"
 msgstr ""
 
-#: shared/entities/abandoned.py:7 shared/entities/enums.py:1011
-#: shared/entities/enums.py:1072 shared/entities/road.py:486
+#: shared/entities/abandoned.py:7 shared/entities/enums.py:1010
+#: shared/entities/enums.py:1071 shared/entities/road.py:486
 #: shared/entities/steps.py:30
 msgid "Steps"
 msgstr ""
 
 #: shared/entities/abandoned.py:9 shared/entities/building.py:117
-#: shared/entities/enums.py:889 shared/entities/enums.py:996
-#: shared/entities/enums.py:1406 shared/entities/land.py:51
+#: shared/entities/enums.py:888 shared/entities/enums.py:995
+#: shared/entities/enums.py:1405 shared/entities/land.py:51
 #: shared/entities/rail_way.py:265 shared/entities/road.py:265
 #: shared/entities/sport.py:28
 msgid "Abandoned"
@@ -590,7 +597,7 @@ msgstr ""
 #: shared/entities/abandoned.py:10 shared/entities/accessible.py:4
 #: shared/entities/advertising.py:5 shared/entities/aerial_way.py:25
 #: shared/entities/amenity.py:21 shared/entities/area.py:5
-#: shared/entities/barrier.py:36 shared/entities/boundary.py:32
+#: shared/entities/barrier.py:36 shared/entities/boundary.py:33
 #: shared/entities/building_part.py:4 shared/entities/bunker.py:9
 #: shared/entities/castle.py:3 shared/entities/checkpoint.py:10
 #: shared/entities/collection.py:7 shared/entities/construction.py:5
@@ -616,11 +623,11 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: shared/entities/abandoned.py:11 shared/entities/area.py:10
-#: shared/entities/barrier.py:38 shared/entities/boundary.py:55
-#: shared/entities/crossing.py:22 shared/entities/entrance.py:13
-#: shared/entities/enums.py:252 shared/entities/enums.py:708
-#: shared/entities/enums.py:1396 shared/entities/enums.py:1522
+#: shared/entities/abandoned.py:11 shared/entities/area.py:9
+#: shared/entities/barrier.py:38 shared/entities/boundary.py:56
+#: shared/entities/crossing.py:21 shared/entities/entrance.py:13
+#: shared/entities/enums.py:252 shared/entities/enums.py:707
+#: shared/entities/enums.py:1395 shared/entities/enums.py:1522
 #: shared/entities/garden.py:6 shared/entities/parking.py:49
 #: shared/entities/platform.py:40 shared/entities/rail_way.py:134
 #: shared/entities/restriction.py:6 shared/entities/route.py:56
@@ -636,11 +643,11 @@ msgstr ""
 #: shared/entities/accessible.py:5 shared/entities/addressable.py:20
 #: shared/entities/annotated.py:7 shared/entities/barrier.py:71
 #: shared/entities/building_part.py:15 shared/entities/craft.py:46
-#: shared/entities/crossing.py:47 shared/entities/entrance.py:12
-#: shared/entities/enums.py:1433 shared/entities/land.py:88
+#: shared/entities/crossing.py:46 shared/entities/entrance.py:12
+#: shared/entities/enums.py:1432 shared/entities/land.py:88
 #: shared/entities/level.py:3 shared/entities/level.py:4
 #: shared/entities/memorial.py:11 shared/entities/parking.py:42
-#: shared/entities/platform.py:39 shared/entities/post_box.py:7
+#: shared/entities/platform.py:39 shared/entities/post_box.py:6
 #: shared/entities/rail_way.py:167 shared/entities/road.py:264
 #: shared/entities/steps.py:55 shared/entities/stop.py:76
 #: shared/entities/surveillance.py:24 shared/entities/traffic_calming.py:8
@@ -652,8 +659,8 @@ msgid "Door"
 msgstr ""
 
 #: shared/entities/address.py:2 shared/entities/addressable.py:12
-#: shared/entities/area.py:13 shared/entities/craft.py:36
-#: shared/entities/enums.py:1149 shared/entities/fuel.py:13
+#: shared/entities/area.py:12 shared/entities/craft.py:36
+#: shared/entities/enums.py:1148 shared/entities/fuel.py:12
 #: shared/entities/land.py:42 shared/entities/parking.py:21
 #: shared/entities/rail_way.py:125 shared/entities/theatre.py:3
 msgid "Address"
@@ -664,12 +671,12 @@ msgstr ""
 msgid "Place"
 msgstr ""
 
-#: shared/entities/address.py:4 shared/entities/enums.py:1461
+#: shared/entities/address.py:4 shared/entities/enums.py:1460
 msgid "City"
 msgstr ""
 
 #: shared/entities/address.py:5
-msgid "Post code"
+msgid "Postcode"
 msgstr ""
 
 #: shared/entities/address.py:6
@@ -677,29 +684,29 @@ msgid "Conscription number"
 msgstr ""
 
 #: shared/entities/address.py:7
-msgid "House number"
+msgid "Housenumber"
 msgstr ""
 
 #: shared/entities/address.py:8
-msgid "Street number"
+msgid "Streetnumber"
 msgstr ""
 
 #: shared/entities/address.py:9 shared/entities/clock.py:13
-#: shared/entities/enums.py:1185 shared/entities/fire_hydrant.py:12
+#: shared/entities/enums.py:1184 shared/entities/fire_hydrant.py:12
 #: shared/entities/street.py:3
 msgid "Street"
 msgstr ""
 
 #: shared/entities/address.py:10
-msgid "Provisional number"
+msgid "Provisionalnumber"
 msgstr ""
 
-#: shared/entities/address.py:11 shared/entities/enums.py:1458
+#: shared/entities/address.py:11 shared/entities/enums.py:1457
 msgid "Suburb"
 msgstr ""
 
 #: shared/entities/address.py:12
-msgid "House name"
+msgid "Housename"
 msgstr ""
 
 #: shared/entities/addressable.py:5 shared/entities/amenity.py:6
@@ -710,16 +717,16 @@ msgstr ""
 #: shared/entities/enums.py:227 shared/entities/enums.py:287
 #: shared/entities/enums.py:444 shared/entities/enums.py:484
 #: shared/entities/enums.py:641 shared/entities/enums.py:661
-#: shared/entities/enums.py:685 shared/entities/enums.py:707
-#: shared/entities/enums.py:727 shared/entities/enums.py:753
-#: shared/entities/enums.py:820 shared/entities/enums.py:917
-#: shared/entities/enums.py:934 shared/entities/enums.py:942
-#: shared/entities/enums.py:995 shared/entities/enums.py:1052
-#: shared/entities/enums.py:1063 shared/entities/enums.py:1101
-#: shared/entities/enums.py:1216 shared/entities/enums.py:1264
-#: shared/entities/enums.py:1288 shared/entities/enums.py:1294
-#: shared/entities/enums.py:1309 shared/entities/enums.py:1379
-#: shared/entities/enums.py:1436 shared/entities/enums.py:1445
+#: shared/entities/enums.py:685 shared/entities/enums.py:706
+#: shared/entities/enums.py:726 shared/entities/enums.py:752
+#: shared/entities/enums.py:819 shared/entities/enums.py:916
+#: shared/entities/enums.py:933 shared/entities/enums.py:941
+#: shared/entities/enums.py:994 shared/entities/enums.py:1051
+#: shared/entities/enums.py:1062 shared/entities/enums.py:1100
+#: shared/entities/enums.py:1215 shared/entities/enums.py:1263
+#: shared/entities/enums.py:1287 shared/entities/enums.py:1293
+#: shared/entities/enums.py:1308 shared/entities/enums.py:1378
+#: shared/entities/enums.py:1435 shared/entities/enums.py:1444
 #: shared/entities/enums.py:1527 shared/entities/enums.py:1612
 #: shared/entities/enums.py:1624 shared/entities/enums.py:1655
 #: shared/entities/enums.py:1665 shared/entities/enums.py:1670
@@ -752,17 +759,17 @@ msgid "Addressable"
 msgstr ""
 
 #: shared/entities/addressable.py:13 shared/entities/aerial_way.py:53
-#: shared/entities/annotated.py:4 shared/entities/area.py:25
-#: shared/entities/barrier.py:44 shared/entities/boundary.py:37
+#: shared/entities/annotated.py:4 shared/entities/area.py:24
+#: shared/entities/barrier.py:44 shared/entities/boundary.py:38
 #: shared/entities/checkpoint.py:12 shared/entities/collection.py:8
 #: shared/entities/construction.py:14 shared/entities/craft.py:48
-#: shared/entities/crossing.py:32 shared/entities/disused.py:23
+#: shared/entities/crossing.py:31 shared/entities/disused.py:22
 #: shared/entities/entrance.py:21 shared/entities/fountain.py:8
-#: shared/entities/fuel.py:16 shared/entities/historic.py:27
+#: shared/entities/fuel.py:15 shared/entities/historic.py:27
 #: shared/entities/land.py:35 shared/entities/man_made.py:49
 #: shared/entities/natural.py:20 shared/entities/no_exit.py:4
 #: shared/entities/place.py:18 shared/entities/platform.py:37
-#: shared/entities/pole.py:7 shared/entities/post_box.py:8
+#: shared/entities/pole.py:7 shared/entities/post_box.py:7
 #: shared/entities/power_generator.py:23 shared/entities/power_line.py:22
 #: shared/entities/power_substation.py:23 shared/entities/rail_way.py:151
 #: shared/entities/restriction.py:12 shared/entities/road.py:149
@@ -782,7 +789,7 @@ msgstr ""
 
 #: shared/entities/addressable.py:15 shared/entities/annotated.py:5
 #: shared/entities/barrier.py:61 shared/entities/building_part.py:17
-#: shared/entities/collection.py:15 shared/entities/crossing.py:42
+#: shared/entities/collection.py:15 shared/entities/crossing.py:41
 #: shared/entities/demolished_building.py:3 shared/entities/entrance.py:24
 #: shared/entities/fountain.py:26 shared/entities/land.py:60
 #: shared/entities/man_made.py:32 shared/entities/memorial.py:13
@@ -798,10 +805,10 @@ msgid "Fixme"
 msgstr ""
 
 #: shared/entities/addressable.py:16 shared/entities/annotated.py:6
-#: shared/entities/area.py:27 shared/entities/barrier.py:86
-#: shared/entities/boundary.py:43 shared/entities/bunker.py:8
+#: shared/entities/area.py:26 shared/entities/barrier.py:86
+#: shared/entities/boundary.py:44 shared/entities/bunker.py:8
 #: shared/entities/collection.py:9 shared/entities/craft.py:42
-#: shared/entities/fountain.py:21 shared/entities/fuel.py:18
+#: shared/entities/fountain.py:21 shared/entities/fuel.py:17
 #: shared/entities/historic.py:16 shared/entities/land.py:30
 #: shared/entities/man_made.py:26 shared/entities/natural.py:23
 #: shared/entities/parking.py:24 shared/entities/place.py:15
@@ -814,7 +821,7 @@ msgid "Website"
 msgstr ""
 
 #: shared/entities/addressable.py:17 shared/entities/aerial_way.py:49
-#: shared/entities/boundary.py:62 shared/entities/elevated.py:3
+#: shared/entities/boundary.py:63 shared/entities/elevated.py:3
 #: shared/entities/historic.py:11 shared/entities/land.py:76
 #: shared/entities/natural.py:19 shared/entities/place.py:9
 #: shared/entities/pole.py:13 shared/entities/rail_way.py:113
@@ -827,31 +834,31 @@ msgid "Club"
 msgstr ""
 
 #: shared/entities/addressable.py:19 shared/entities/aerial_way.py:47
-#: shared/entities/barrier.py:60 shared/entities/boundary.py:50
+#: shared/entities/barrier.py:60 shared/entities/boundary.py:51
 #: shared/entities/collection.py:11 shared/entities/entrance.py:22
 #: shared/entities/historic.py:24 shared/entities/land.py:48
 #: shared/entities/man_made.py:57 shared/entities/natural.py:38
 #: shared/entities/parking.py:33 shared/entities/platform.py:38
 #: shared/entities/power_line.py:29 shared/entities/power_substation.py:31
 #: shared/entities/rail_way.py:154 shared/entities/road.py:245
-#: shared/entities/route.py:30 shared/entities/shelter.py:12
+#: shared/entities/route.py:30 shared/entities/shelter.py:11
 #: shared/entities/stop.py:74
 msgid "Description"
 msgstr ""
 
 #: shared/entities/addressable.py:21 shared/entities/aerial_way.py:67
-#: shared/entities/area.py:35 shared/entities/craft.py:44
-#: shared/entities/fuel.py:20 shared/entities/land.py:93
+#: shared/entities/area.py:34 shared/entities/craft.py:44
+#: shared/entities/fuel.py:19 shared/entities/land.py:93
 #: shared/entities/man_made.py:25 shared/entities/parking.py:43
 #: shared/entities/place.py:16 shared/entities/recycling.py:55
 msgid "Email"
 msgstr ""
 
 #: shared/entities/addressable.py:22 shared/entities/aerial_way.py:43
-#: shared/entities/area.py:21 shared/entities/barrier.py:75
-#: shared/entities/boundary.py:39 shared/entities/bridge.py:3
+#: shared/entities/area.py:20 shared/entities/barrier.py:75
+#: shared/entities/boundary.py:40 shared/entities/bridge.py:3
 #: shared/entities/collection.py:10 shared/entities/construction.py:7
-#: shared/entities/craft.py:50 shared/entities/disused.py:22
+#: shared/entities/craft.py:50 shared/entities/disused.py:21
 #: shared/entities/fountain.py:18 shared/entities/graveyard.py:5
 #: shared/entities/historic.py:19 shared/entities/land.py:45
 #: shared/entities/man_made.py:38 shared/entities/natural.py:30
@@ -863,7 +870,7 @@ msgstr ""
 msgid "Wikidata"
 msgstr ""
 
-#: shared/entities/addressable.py:23 shared/entities/area.py:26
+#: shared/entities/addressable.py:23 shared/entities/area.py:25
 #: shared/entities/barrier.py:77 shared/entities/fountain.py:16
 #: shared/entities/land.py:58 shared/entities/natural.py:22
 #: shared/entities/place.py:13 shared/entities/platform.py:35
@@ -891,7 +898,7 @@ msgid "Comment"
 msgstr ""
 
 #: shared/entities/addressable.py:26 shared/entities/barrier.py:54
-#: shared/entities/craft.py:40 shared/entities/fuel.py:8
+#: shared/entities/craft.py:40 shared/entities/fuel.py:7
 #: shared/entities/graveyard.py:9 shared/entities/land.py:49
 #: shared/entities/natural.py:27 shared/entities/parking.py:26
 #: shared/entities/recycling.py:14 shared/entities/road.py:256
@@ -905,7 +912,7 @@ msgid "Disused name"
 msgstr ""
 
 #: shared/entities/addressable.py:28 shared/entities/craft.py:49
-#: shared/entities/fuel.py:9 shared/entities/shelter.py:9
+#: shared/entities/fuel.py:8 shared/entities/shelter.py:8
 msgid "Internet access"
 msgstr ""
 
@@ -922,14 +929,14 @@ msgstr ""
 #: shared/entities/man_made.py:23 shared/entities/natural.py:41
 #: shared/entities/parking.py:47 shared/entities/power_substation.py:18
 #: shared/entities/rail_way.py:180 shared/entities/road.py:397
-#: shared/entities/shelter.py:11 shared/entities/sport.py:40
+#: shared/entities/shelter.py:10 shared/entities/sport.py:40
 #: shared/entities/surveillance.py:21 shared/entities/tourism.py:36
 msgid "Height"
 msgstr ""
 
 #: shared/entities/advertising.py:7 shared/entities/aerial_way.py:55
-#: shared/entities/amenity.py:70 shared/entities/area.py:12
-#: shared/entities/crossing.py:33 shared/entities/fountain.py:10
+#: shared/entities/amenity.py:70 shared/entities/area.py:11
+#: shared/entities/crossing.py:32 shared/entities/fountain.py:10
 #: shared/entities/leisure.py:33 shared/entities/parking.py:32
 #: shared/entities/platform.py:20 shared/entities/road.py:173
 #: shared/entities/sport.py:26 shared/entities/steps.py:36
@@ -938,18 +945,10 @@ msgid "Lit"
 msgstr ""
 
 #: shared/entities/advertising.py:8 shared/entities/amenity.py:86
-#: shared/entities/crossing.py:46 shared/entities/historic.py:30
+#: shared/entities/crossing.py:45 shared/entities/historic.py:30
 #: shared/entities/steps.py:31 shared/entities/stop.py:63
 #: shared/entities/tourism.py:31
 msgid "Direction"
-msgstr ""
-
-#: shared/entities/advertising.py:9 shared/entities/area.py:6
-#: shared/entities/crossing.py:20 shared/entities/disused.py:20
-#: shared/entities/fuel.py:5 shared/entities/named.py:3
-#: shared/entities/post_box.py:6 shared/entities/shelter.py:8
-#: shared/entities/surveillance.py:26
-msgid "Name"
 msgstr ""
 
 #: shared/entities/aerial_way.py:5 shared/entities/enums.py:13
@@ -1000,8 +999,8 @@ msgid "Duration"
 msgstr ""
 
 #: shared/entities/aerial_way.py:29 shared/entities/amenity.py:59
-#: shared/entities/area.py:22 shared/entities/bank.py:16
-#: shared/entities/barrier.py:84 shared/entities/boundary.py:36
+#: shared/entities/area.py:21 shared/entities/bank.py:16
+#: shared/entities/barrier.py:84 shared/entities/boundary.py:37
 #: shared/entities/building.py:97 shared/entities/collection.py:13
 #: shared/entities/construction.py:8 shared/entities/disused.py:15
 #: shared/entities/fountain.py:12 shared/entities/graveyard.py:6
@@ -1018,9 +1017,9 @@ msgid "Wikipedia"
 msgstr ""
 
 #: shared/entities/aerial_way.py:30 shared/entities/building.py:72
-#: shared/entities/craft.py:38 shared/entities/enums.py:735
-#: shared/entities/enums.py:1139 shared/entities/enums.py:1213
-#: shared/entities/enums.py:1425 shared/entities/platform.py:23
+#: shared/entities/craft.py:38 shared/entities/enums.py:734
+#: shared/entities/enums.py:1138 shared/entities/enums.py:1212
+#: shared/entities/enums.py:1424 shared/entities/platform.py:23
 #: shared/entities/power.py:5 shared/entities/power_generator.py:15
 #: shared/entities/power_substation.py:13 shared/entities/road.py:472
 #: shared/entities/shelter.py:5 shared/entities/stop.py:39
@@ -1034,7 +1033,7 @@ msgid "Length"
 msgstr ""
 
 #: shared/entities/aerial_way.py:32 shared/entities/barrier.py:80
-#: shared/entities/boundary.py:56 shared/entities/fountain.py:24
+#: shared/entities/boundary.py:57 shared/entities/fountain.py:24
 #: shared/entities/platform.py:42 shared/entities/road.py:162
 #: shared/entities/road.py:510 shared/entities/steps.py:34
 #: shared/entities/water_way.py:18
@@ -1046,9 +1045,9 @@ msgid "Heading"
 msgstr ""
 
 #: shared/entities/aerial_way.py:34 shared/entities/amenity.py:72
-#: shared/entities/area.py:9 shared/entities/boundary.py:54
-#: shared/entities/building.py:185 shared/entities/crossing.py:41
-#: shared/entities/enums.py:706 shared/entities/enums.py:1369
+#: shared/entities/area.py:8 shared/entities/boundary.py:55
+#: shared/entities/building.py:185 shared/entities/crossing.py:40
+#: shared/entities/enums.py:705 shared/entities/enums.py:1368
 #: shared/entities/land.py:63 shared/entities/leisure.py:7
 #: shared/entities/natural.py:28 shared/entities/parking.py:20
 #: shared/entities/platform.py:19 shared/entities/rail_way.py:119
@@ -1068,7 +1067,7 @@ msgstr ""
 
 #: shared/entities/aerial_way.py:37 shared/entities/annotated.py:17
 #: shared/entities/building.py:92 shared/entities/building_part.py:5
-#: shared/entities/fuel.py:21 shared/entities/office.py:45
+#: shared/entities/fuel.py:20 shared/entities/office.py:45
 #: shared/entities/power_substation.py:16 shared/entities/tourism.py:46
 #: shared/entities/tower.py:12
 msgid "Roof shape"
@@ -1079,13 +1078,13 @@ msgid "Heating"
 msgstr ""
 
 #: shared/entities/aerial_way.py:39 shared/entities/crossing.py:8
-#: shared/entities/enums.py:969 shared/entities/enums.py:1442
+#: shared/entities/enums.py:968 shared/entities/enums.py:1441
 #: shared/entities/road.py:189
 msgid "Pedestrian"
 msgstr ""
 
-#: shared/entities/aerial_way.py:40 shared/entities/boundary.py:66
-#: shared/entities/disused.py:17 shared/entities/enums.py:1045
+#: shared/entities/aerial_way.py:40 shared/entities/boundary.py:67
+#: shared/entities/disused.py:17 shared/entities/enums.py:1044
 #: shared/entities/water_way.py:25
 msgid "Highway"
 msgstr ""
@@ -1098,7 +1097,7 @@ msgstr ""
 
 #: shared/entities/aerial_way.py:42 shared/entities/bridge.py:2
 #: shared/entities/building.py:178 shared/entities/construction.py:9
-#: shared/entities/enums.py:458 shared/entities/enums.py:1114
+#: shared/entities/enums.py:458 shared/entities/enums.py:1113
 #: shared/entities/man_made.py:34 shared/entities/platform.py:32
 #: shared/entities/rail_way.py:26 shared/entities/road.py:145
 #: shared/entities/steps.py:58 shared/entities/water_way.py:27
@@ -1110,7 +1109,7 @@ msgid "Maxweight"
 msgstr ""
 
 #: shared/entities/aerial_way.py:48 shared/entities/area.py:4
-#: shared/entities/clock.py:12 shared/entities/enums.py:1434
+#: shared/entities/clock.py:12 shared/entities/enums.py:1433
 #: shared/entities/platform.py:26 shared/entities/power.py:16
 #: shared/entities/rail_way.py:257 shared/entities/road.py:293
 #: shared/entities/stop.py:40 shared/entities/water_way.py:31
@@ -1118,10 +1117,10 @@ msgid "Area"
 msgstr ""
 
 #: shared/entities/aerial_way.py:50 shared/entities/amenity.py:62
-#: shared/entities/bank.py:13 shared/entities/boundary.py:38
+#: shared/entities/bank.py:13 shared/entities/boundary.py:39
 #: shared/entities/building.py:79 shared/entities/craft.py:55
 #: shared/entities/disused.py:14 shared/entities/fountain.py:22
-#: shared/entities/fuel.py:17 shared/entities/historic.py:17
+#: shared/entities/fuel.py:16 shared/entities/historic.py:17
 #: shared/entities/land.py:70 shared/entities/leisure.py:39
 #: shared/entities/man_made.py:31 shared/entities/office.py:56
 #: shared/entities/parking.py:27 shared/entities/place.py:24
@@ -1135,11 +1134,11 @@ msgid "Start date"
 msgstr ""
 
 #: shared/entities/aerial_way.py:52 shared/entities/amenity.py:88
-#: shared/entities/area.py:8 shared/entities/atm.py:11
+#: shared/entities/area.py:7 shared/entities/atm.py:11
 #: shared/entities/bank.py:14 shared/entities/barrier.py:65
 #: shared/entities/border.py:15 shared/entities/building.py:81
 #: shared/entities/construction.py:10 shared/entities/craft.py:53
-#: shared/entities/disused.py:21 shared/entities/fountain.py:14
+#: shared/entities/disused.py:20 shared/entities/fountain.py:14
 #: shared/entities/land.py:52 shared/entities/leisure.py:13
 #: shared/entities/man_made.py:20 shared/entities/natural.py:39
 #: shared/entities/parking.py:23 shared/entities/platform.py:28
@@ -1153,10 +1152,10 @@ msgid "Layer"
 msgstr ""
 
 #: shared/entities/aerial_way.py:54 shared/entities/amenity.py:31
-#: shared/entities/annotated.py:10 shared/entities/area.py:19
+#: shared/entities/annotated.py:10 shared/entities/area.py:18
 #: shared/entities/atm.py:15 shared/entities/barrier.py:41
 #: shared/entities/building.py:114 shared/entities/entrance.py:19
-#: shared/entities/fuel.py:23 shared/entities/land.py:67
+#: shared/entities/fuel.py:22 shared/entities/land.py:67
 #: shared/entities/leisure.py:8 shared/entities/man_made.py:40
 #: shared/entities/parking.py:15 shared/entities/power_substation.py:28
 #: shared/entities/rail_way.py:157 shared/entities/road.py:160
@@ -1165,13 +1164,13 @@ msgstr ""
 msgid "Access"
 msgstr ""
 
-#: shared/entities/aerial_way.py:56 shared/entities/enums.py:877
+#: shared/entities/aerial_way.py:56 shared/entities/enums.py:876
 msgid "Navigationaid"
 msgstr ""
 
 #: shared/entities/aerial_way.py:57 shared/entities/amenity.py:100
-#: shared/entities/area.py:17 shared/entities/barrier.py:59
-#: shared/entities/boundary.py:63 shared/entities/building.py:88
+#: shared/entities/area.py:16 shared/entities/barrier.py:59
+#: shared/entities/boundary.py:64 shared/entities/building.py:88
 #: shared/entities/land.py:32 shared/entities/man_made.py:14
 #: shared/entities/natural.py:17 shared/entities/road.py:257
 #: shared/entities/sport.py:51 shared/entities/surveillance.py:16
@@ -1204,9 +1203,9 @@ msgid "Oneway"
 msgstr ""
 
 #: shared/entities/aerial_way.py:63 shared/entities/annotated.py:15
-#: shared/entities/enums.py:183 shared/entities/enums.py:881
-#: shared/entities/enums.py:906 shared/entities/enums.py:983
-#: shared/entities/enums.py:1044 shared/entities/enums.py:1170
+#: shared/entities/enums.py:183 shared/entities/enums.py:880
+#: shared/entities/enums.py:905 shared/entities/enums.py:982
+#: shared/entities/enums.py:1043 shared/entities/enums.py:1169
 #: shared/entities/rail_way.py:156 shared/entities/road.py:191
 #: shared/entities/route.py:6
 msgid "Proposed"
@@ -1216,14 +1215,14 @@ msgstr ""
 msgid "Beacon type"
 msgstr ""
 
-#: shared/entities/aerial_way.py:65 shared/entities/enums.py:870
+#: shared/entities/aerial_way.py:65 shared/entities/enums.py:869
 msgid "Runway"
 msgstr ""
 
 #: shared/entities/aerial_way.py:66 shared/entities/amenity.py:50
-#: shared/entities/area.py:28 shared/entities/barrier.py:35
-#: shared/entities/boundary.py:44 shared/entities/building.py:126
-#: shared/entities/crossing.py:49 shared/entities/fountain.py:13
+#: shared/entities/area.py:27 shared/entities/barrier.py:35
+#: shared/entities/boundary.py:45 shared/entities/building.py:126
+#: shared/entities/crossing.py:48 shared/entities/fountain.py:13
 #: shared/entities/graveyard.py:7 shared/entities/land.py:34
 #: shared/entities/leisure.py:24 shared/entities/natural.py:32
 #: shared/entities/office.py:34 shared/entities/parking.py:29
@@ -1236,7 +1235,7 @@ msgstr ""
 #: shared/entities/aerial_way.py:68 shared/entities/amenity.py:25
 #: shared/entities/annotated.py:19 shared/entities/atm.py:8
 #: shared/entities/bank.py:9 shared/entities/building.py:108
-#: shared/entities/craft.py:45 shared/entities/fuel.py:12
+#: shared/entities/craft.py:45 shared/entities/fuel.py:11
 #: shared/entities/land.py:94 shared/entities/leisure.py:15
 #: shared/entities/office.py:26 shared/entities/office.py:35
 #: shared/entities/place.py:17 shared/entities/pub.py:4
@@ -1246,7 +1245,7 @@ msgid "Phone"
 msgstr ""
 
 #: shared/entities/aerial_way.py:69 shared/entities/entrance.py:23
-#: shared/entities/enums.py:369 shared/entities/enums.py:1033
+#: shared/entities/enums.py:369 shared/entities/enums.py:1032
 msgid "Military"
 msgstr ""
 
@@ -1275,14 +1274,14 @@ msgstr ""
 msgid "Iata"
 msgstr ""
 
-#: shared/entities/amenity.py:5 shared/entities/boundary.py:23
+#: shared/entities/amenity.py:5 shared/entities/boundary.py:24
 #: shared/entities/building.py:40 shared/entities/enums.py:9
 #: shared/entities/enums.py:365 shared/entities/enums.py:447
 #: shared/entities/enums.py:652 shared/entities/enums.py:662
-#: shared/entities/enums.py:933 shared/entities/enums.py:941
-#: shared/entities/enums.py:1290 shared/entities/enums.py:1293
-#: shared/entities/enums.py:1308 shared/entities/enums.py:1319
-#: shared/entities/enums.py:1435 shared/entities/enums.py:1526
+#: shared/entities/enums.py:932 shared/entities/enums.py:940
+#: shared/entities/enums.py:1289 shared/entities/enums.py:1292
+#: shared/entities/enums.py:1307 shared/entities/enums.py:1318
+#: shared/entities/enums.py:1434 shared/entities/enums.py:1526
 #: shared/entities/enums.py:1623 shared/entities/enums.py:1664
 #: shared/entities/enums.py:1669 shared/entities/rail_way.py:89
 #: shared/entities/road.py:19 shared/entities/road.py:29
@@ -1316,9 +1315,9 @@ msgstr ""
 msgid "Video editing"
 msgstr ""
 
-#: shared/entities/amenity.py:20 shared/entities/area.py:7
+#: shared/entities/amenity.py:20 shared/entities/area.py:6
 #: shared/entities/building.py:75 shared/entities/office.py:51
-#: shared/entities/road.py:386 shared/entities/surveillance.py:28
+#: shared/entities/road.py:386 shared/entities/surveillance.py:27
 #: shared/entities/tourism.py:39
 msgid "Amenity"
 msgstr ""
@@ -1408,11 +1407,11 @@ msgid "Unisex"
 msgstr ""
 
 #: shared/entities/amenity.py:40 shared/entities/building.py:96
-#: shared/entities/enums.py:945 shared/entities/leisure.py:22
+#: shared/entities/enums.py:944 shared/entities/leisure.py:22
 #: shared/entities/parking.py:35 shared/entities/platform.py:22
 #: shared/entities/rail_way.py:153 shared/entities/road.py:204
 #: shared/entities/sport.py:54 shared/entities/steps.py:66
-#: shared/entities/stop.py:32 shared/entities/surveillance.py:30
+#: shared/entities/stop.py:32 shared/entities/surveillance.py:29
 #: shared/entities/tourism.py:93
 msgid "Covered"
 msgstr ""
@@ -1420,9 +1419,9 @@ msgstr ""
 #: shared/entities/amenity.py:41 shared/entities/atm.py:9
 #: shared/entities/bank.py:7 shared/entities/barrier.py:72
 #: shared/entities/building.py:118 shared/entities/craft.py:47
-#: shared/entities/crossing.py:35 shared/entities/entrance.py:15
-#: shared/entities/enums.py:1408 shared/entities/enums.py:1523
-#: shared/entities/fuel.py:19 shared/entities/historic.py:29
+#: shared/entities/crossing.py:34 shared/entities/entrance.py:15
+#: shared/entities/enums.py:1407 shared/entities/enums.py:1523
+#: shared/entities/fuel.py:18 shared/entities/historic.py:29
 #: shared/entities/leisure.py:26 shared/entities/office.py:38
 #: shared/entities/parking.py:28 shared/entities/platform.py:21
 #: shared/entities/pub.py:12 shared/entities/rail_way.py:131
@@ -1439,8 +1438,8 @@ msgstr ""
 msgid "Facebook"
 msgstr ""
 
-#: shared/entities/amenity.py:43 shared/entities/enums.py:831
-#: shared/entities/enums.py:1174 shared/entities/platform.py:15
+#: shared/entities/amenity.py:43 shared/entities/enums.py:830
+#: shared/entities/enums.py:1173 shared/entities/platform.py:15
 #: shared/entities/rail_way.py:175 shared/entities/road.py:432
 #: shared/entities/shelter.py:3 shared/entities/social_facility.py:7
 msgid "Shelter"
@@ -1450,7 +1449,7 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
-#: shared/entities/amenity.py:45 shared/entities/area.py:34
+#: shared/entities/amenity.py:45 shared/entities/area.py:33
 #: shared/entities/memorial.py:5 shared/entities/natural.py:51
 #: shared/entities/pub.py:21 shared/entities/sport.py:45
 msgid "Url"
@@ -1467,7 +1466,7 @@ msgstr ""
 msgid "Vegetarian diet"
 msgstr ""
 
-#: shared/entities/amenity.py:48 shared/entities/area.py:33
+#: shared/entities/amenity.py:48 shared/entities/area.py:32
 #: shared/entities/barrier.py:63 shared/entities/board.py:22
 #: shared/entities/boundary.py:11 shared/entities/bunker.py:10
 #: shared/entities/fountain.py:5 shared/entities/historic.py:9
@@ -1481,8 +1480,8 @@ msgstr ""
 msgid "Dispensing"
 msgstr ""
 
-#: shared/entities/amenity.py:53 shared/entities/area.py:20
-#: shared/entities/bank.py:15 shared/entities/boundary.py:49
+#: shared/entities/amenity.py:53 shared/entities/area.py:19
+#: shared/entities/bank.py:15 shared/entities/boundary.py:50
 #: shared/entities/building.py:98 shared/entities/fountain.py:6
 #: shared/entities/land.py:54 shared/entities/leisure.py:23
 #: shared/entities/office.py:43 shared/entities/parking.py:51
@@ -1495,7 +1494,7 @@ msgstr ""
 
 #: shared/entities/amenity.py:54 shared/entities/building.py:110
 #: shared/entities/craft.py:7 shared/entities/enums.py:238
-#: shared/entities/enums.py:1233 shared/entities/pub.py:7
+#: shared/entities/enums.py:1232 shared/entities/pub.py:7
 msgid "Brewery"
 msgstr ""
 
@@ -1513,7 +1512,7 @@ msgid "Open air"
 msgstr ""
 
 #: shared/entities/amenity.py:58 shared/entities/building.py:99
-#: shared/entities/crossing.py:51 shared/entities/leisure.py:41
+#: shared/entities/crossing.py:50 shared/entities/leisure.py:41
 #: shared/entities/office.py:32 shared/entities/place.py:20
 #: shared/entities/platform.py:34 shared/entities/road.py:294
 #: shared/entities/route.py:52 shared/entities/sport.py:44
@@ -1521,9 +1520,9 @@ msgstr ""
 msgid "Short name"
 msgstr ""
 
-#: shared/entities/amenity.py:60 shared/entities/area.py:32
+#: shared/entities/amenity.py:60 shared/entities/area.py:31
 #: shared/entities/building.py:119 shared/entities/craft.py:43
-#: shared/entities/enums.py:1144 shared/entities/fountain.py:11
+#: shared/entities/enums.py:1143 shared/entities/fountain.py:11
 #: shared/entities/garden.py:5 shared/entities/natural.py:31
 #: shared/entities/office.py:31 shared/entities/parking.py:37
 #: shared/entities/place.py:23 shared/entities/protected_area.py:18
@@ -1532,7 +1531,7 @@ msgstr ""
 msgid "Landuse"
 msgstr ""
 
-#: shared/entities/amenity.py:61 shared/entities/area.py:23
+#: shared/entities/amenity.py:61 shared/entities/area.py:22
 #: shared/entities/land.py:41 shared/entities/leisure.py:4
 #: shared/entities/place.py:22 shared/entities/pub.py:29
 #: shared/entities/sport.py:18 shared/entities/tourism.py:59
@@ -1540,7 +1539,7 @@ msgstr ""
 msgid "Leisure"
 msgstr ""
 
-#: shared/entities/amenity.py:63 shared/entities/area.py:24
+#: shared/entities/amenity.py:63 shared/entities/area.py:23
 #: shared/entities/board.py:21 shared/entities/building.py:95
 #: shared/entities/enums.py:82 shared/entities/leisure.py:6
 #: shared/entities/natural.py:45 shared/entities/pub.py:16
@@ -1581,8 +1580,8 @@ msgid "Colour"
 msgstr ""
 
 #: shared/entities/amenity.py:71 shared/entities/enums.py:144
-#: shared/entities/enums.py:1190 shared/entities/enums.py:1223
-#: shared/entities/enums.py:1428 shared/entities/parking.py:9
+#: shared/entities/enums.py:1189 shared/entities/enums.py:1222
+#: shared/entities/enums.py:1427 shared/entities/parking.py:9
 #: shared/entities/service_road.py:7
 msgid "Parking"
 msgstr ""
@@ -1618,11 +1617,11 @@ msgid "Internet access fee"
 msgstr ""
 
 #: shared/entities/amenity.py:79 shared/entities/building.py:162
-#: shared/entities/shelter.py:10
+#: shared/entities/shelter.py:9
 msgid "Internet access ssid"
 msgstr ""
 
-#: shared/entities/amenity.py:80 shared/entities/boundary.py:65
+#: shared/entities/amenity.py:80 shared/entities/boundary.py:66
 #: shared/entities/building.py:116 shared/entities/leisure.py:9
 #: shared/entities/office.py:57 shared/entities/parking.py:18
 #: shared/entities/pub.py:17 shared/entities/recycling.py:54
@@ -1645,7 +1644,7 @@ msgstr ""
 msgid "Valves"
 msgstr ""
 
-#: shared/entities/amenity.py:83 shared/entities/crossing.py:39
+#: shared/entities/amenity.py:83 shared/entities/crossing.py:38
 #: shared/entities/parking.py:17 shared/entities/rail_way.py:118
 msgid "Supervised"
 msgstr ""
@@ -1686,7 +1685,7 @@ msgid "Toilets disposal"
 msgstr ""
 
 #: shared/entities/amenity.py:94 shared/entities/building.py:214
-#: shared/entities/enums.py:1468
+#: shared/entities/enums.py:1467
 msgid "Country"
 msgstr ""
 
@@ -1779,7 +1778,7 @@ msgstr ""
 
 #: shared/entities/amenity.py:115 shared/entities/barrier.py:79
 #: shared/entities/building.py:125 shared/entities/disused.py:8
-#: shared/entities/enums.py:688 shared/entities/enums.py:904
+#: shared/entities/enums.py:688 shared/entities/enums.py:903
 #: shared/entities/fountain.py:25 shared/entities/land.py:50
 #: shared/entities/man_made.py:30 shared/entities/pole.py:12
 #: shared/entities/rail_way.py:159 shared/entities/road.py:369
@@ -1788,10 +1787,10 @@ msgstr ""
 msgid "Disused"
 msgstr ""
 
-#: shared/entities/amenity.py:116 shared/entities/area.py:11
-#: shared/entities/barrier.py:37 shared/entities/crossing.py:26
+#: shared/entities/amenity.py:116 shared/entities/area.py:10
+#: shared/entities/barrier.py:37 shared/entities/crossing.py:25
 #: shared/entities/disused.py:19 shared/entities/entrance.py:14
-#: shared/entities/enums.py:1401 shared/entities/parking.py:46
+#: shared/entities/enums.py:1400 shared/entities/parking.py:46
 #: shared/entities/platform.py:27 shared/entities/rail_way.py:169
 #: shared/entities/road.py:150 shared/entities/route.py:57
 #: shared/entities/steps.py:38 shared/entities/tourism.py:34
@@ -1819,7 +1818,7 @@ msgstr ""
 msgid "Wine"
 msgstr ""
 
-#: shared/entities/amenity.py:122 shared/entities/area.py:31
+#: shared/entities/amenity.py:122 shared/entities/area.py:30
 #: shared/entities/barrier.py:90 shared/entities/bridge.py:4
 #: shared/entities/building.py:155 shared/entities/fountain.py:17
 #: shared/entities/land.py:81 shared/entities/leisure.py:29
@@ -1829,7 +1828,7 @@ msgid "Sorting name"
 msgstr ""
 
 #: shared/entities/amenity.py:123 shared/entities/building.py:197
-#: shared/entities/enums.py:1432
+#: shared/entities/enums.py:1431
 msgid "Room"
 msgstr ""
 
@@ -1865,7 +1864,7 @@ msgstr ""
 msgid "Route master"
 msgstr ""
 
-#: shared/entities/annotated.py:13 shared/entities/enums.py:779
+#: shared/entities/annotated.py:13 shared/entities/enums.py:778
 #: shared/entities/water_area.py:10
 msgid "Lock"
 msgstr ""
@@ -1888,7 +1887,7 @@ msgstr ""
 msgid "Removed phone"
 msgstr ""
 
-#: shared/entities/area.py:14 shared/entities/boundary.py:64
+#: shared/entities/area.py:13 shared/entities/boundary.py:65
 #: shared/entities/clock.py:25 shared/entities/fountain.py:27
 #: shared/entities/pole.py:10 shared/entities/rail_way.py:12
 #: shared/entities/road.py:361 shared/entities/shelter.py:6
@@ -1896,29 +1895,29 @@ msgstr ""
 msgid "Tourism"
 msgstr ""
 
-#: shared/entities/area.py:15
+#: shared/entities/area.py:14
 msgid "Aeroway"
 msgstr ""
 
-#: shared/entities/area.py:16 shared/entities/crossing.py:24
-#: shared/entities/enums.py:741 shared/entities/enums.py:909
-#: shared/entities/enums.py:1028 shared/entities/enums.py:1206
-#: shared/entities/enums.py:1407 shared/entities/platform.py:14
+#: shared/entities/area.py:15 shared/entities/crossing.py:23
+#: shared/entities/enums.py:740 shared/entities/enums.py:908
+#: shared/entities/enums.py:1027 shared/entities/enums.py:1205
+#: shared/entities/enums.py:1406 shared/entities/platform.py:14
 #: shared/entities/road.py:133
 msgid "Railway"
 msgstr ""
 
-#: shared/entities/area.py:18 shared/entities/building.py:198
+#: shared/entities/area.py:17 shared/entities/building.py:198
 #: shared/entities/man_made.py:48
 msgid "Floating"
 msgstr ""
 
-#: shared/entities/area.py:29 shared/entities/enums.py:1471
+#: shared/entities/area.py:28 shared/entities/enums.py:1470
 msgid "Animal"
 msgstr ""
 
-#: shared/entities/area.py:30 shared/entities/enums.py:670
-#: shared/entities/enums.py:731 shared/entities/place.py:21
+#: shared/entities/area.py:29 shared/entities/enums.py:670
+#: shared/entities/enums.py:730 shared/entities/place.py:21
 #: shared/entities/road.py:467 shared/entities/tourism.py:62
 msgid "Attraction"
 msgstr ""
@@ -1936,7 +1935,7 @@ msgid "Contact website"
 msgstr ""
 
 #: shared/entities/atm.py:10 shared/entities/bank.py:4
-#: shared/entities/building.py:133 shared/entities/fuel.py:7
+#: shared/entities/building.py:133 shared/entities/fuel.py:6
 #: shared/entities/office.py:40
 msgid "Brand"
 msgstr ""
@@ -1961,14 +1960,14 @@ msgid "Flats"
 msgstr ""
 
 #: shared/entities/bank.py:11 shared/entities/building.py:73
-#: shared/entities/building_part.py:7 shared/entities/fuel.py:15
+#: shared/entities/building_part.py:7 shared/entities/fuel.py:14
 #: shared/entities/office.py:29 shared/entities/pub.py:9
 #: shared/entities/rail_way.py:122 shared/entities/social_facility.py:25
 #: shared/entities/theatre.py:5 shared/entities/tower.py:13
 msgid "Levels"
 msgstr ""
 
-#: shared/entities/bank.py:12 shared/entities/fuel.py:14
+#: shared/entities/bank.py:12 shared/entities/fuel.py:13
 #: shared/entities/parking.py:19 shared/entities/rail_way.py:120
 #: shared/entities/social_facility.py:23
 msgid "Building type"
@@ -1979,7 +1978,7 @@ msgid "Contactless payment"
 msgstr ""
 
 #: shared/entities/bank.py:18 shared/entities/enums.py:237
-#: shared/entities/enums.py:846 shared/entities/enums.py:1219
+#: shared/entities/enums.py:845 shared/entities/enums.py:1218
 #: shared/entities/office.py:24
 msgid "Office"
 msgstr ""
@@ -2053,7 +2052,7 @@ msgstr ""
 msgid "Vehicle"
 msgstr ""
 
-#: shared/entities/barrier.py:40 shared/entities/crossing.py:27
+#: shared/entities/barrier.py:40 shared/entities/crossing.py:26
 #: shared/entities/entrance.py:16 shared/entities/enums.py:1520
 #: shared/entities/rail_way.py:135 shared/entities/steps.py:46
 #: shared/entities/tourism.py:95
@@ -2062,7 +2061,7 @@ msgstr ""
 
 #: shared/entities/barrier.py:42 shared/entities/building.py:225
 #: shared/entities/clock.py:28 shared/entities/entrance.py:10
-#: shared/entities/enums.py:623 shared/entities/enums.py:1151
+#: shared/entities/enums.py:623 shared/entities/enums.py:1150
 #: shared/entities/enums.py:1693 shared/entities/leisure.py:27
 #: shared/entities/rail_way.py:264 shared/entities/school_thing.py:4
 msgid "Entrance"
@@ -2119,7 +2118,7 @@ msgid "Two sided"
 msgstr ""
 
 #: shared/entities/barrier.py:66 shared/entities/enums.py:614
-#: shared/entities/enums.py:1076 shared/entities/enums.py:1771
+#: shared/entities/enums.py:1075 shared/entities/enums.py:1771
 #: shared/entities/fire_hydrant.py:6 shared/entities/surveillance.py:7
 msgid "Wall"
 msgstr ""
@@ -2128,7 +2127,7 @@ msgstr ""
 msgid "Stile"
 msgstr ""
 
-#: shared/entities/barrier.py:70 shared/entities/crossing.py:23
+#: shared/entities/barrier.py:70 shared/entities/crossing.py:22
 #: shared/entities/road.py:206 shared/entities/traffic_calming.py:3
 msgid "Traffic calming"
 msgstr ""
@@ -2137,13 +2136,13 @@ msgstr ""
 msgid "Liftgate type"
 msgstr ""
 
-#: shared/entities/barrier.py:74 shared/entities/crossing.py:25
+#: shared/entities/barrier.py:74 shared/entities/crossing.py:24
 #: shared/entities/parking.py:39 shared/entities/rail_way.py:158
 #: shared/entities/road.py:156
 msgid "Maxheight"
 msgstr ""
 
-#: shared/entities/barrier.py:78 shared/entities/crossing.py:28
+#: shared/entities/barrier.py:78 shared/entities/crossing.py:27
 #: shared/entities/enums.py:634 shared/entities/road.py:259
 msgid "Kerb"
 msgstr ""
@@ -2193,13 +2192,13 @@ msgstr ""
 msgid "Mofa"
 msgstr ""
 
-#: shared/entities/barrier.py:96 shared/entities/enums.py:975
+#: shared/entities/barrier.py:96 shared/entities/enums.py:974
 #: shared/entities/road.py:205
 msgid "Ford"
 msgstr ""
 
-#: shared/entities/barrier.py:98 shared/entities/enums.py:836
-#: shared/entities/enums.py:963 shared/entities/enums.py:1444
+#: shared/entities/barrier.py:98 shared/entities/enums.py:835
+#: shared/entities/enums.py:962 shared/entities/enums.py:1443
 #: shared/entities/enums.py:1687 shared/entities/rail_way.py:108
 #: shared/entities/road.py:188 shared/entities/route.py:42
 #: shared/entities/shop.py:35 shared/entities/steps.py:69
@@ -2228,8 +2227,8 @@ msgstr ""
 
 #: shared/entities/bicycle_parking.py:5 shared/entities/enums.py:25
 #: shared/entities/enums.py:246 shared/entities/enums.py:441
-#: shared/entities/enums.py:697 shared/entities/enums.py:819
-#: shared/entities/enums.py:1311 shared/entities/enums.py:1315
+#: shared/entities/enums.py:696 shared/entities/enums.py:818
+#: shared/entities/enums.py:1310 shared/entities/enums.py:1314
 #: shared/entities/enums.py:1490 shared/entities/enums.py:1546
 #: shared/entities/enums.py:1707 shared/entities/enums.py:1755
 #: shared/entities/fire_hydrant.py:4 shared/entities/power_generator.py:5
@@ -2294,7 +2293,7 @@ msgstr ""
 msgid "Surveillance type"
 msgstr ""
 
-#: shared/entities/bicycle_parking.py:20 shared/entities/surveillance.py:27
+#: shared/entities/bicycle_parking.py:20 shared/entities/surveillance.py:26
 msgid "Surveillance zone"
 msgstr ""
 
@@ -2311,14 +2310,14 @@ msgstr ""
 msgid "Service chain tool"
 msgstr ""
 
-#: shared/entities/board.py:4 shared/entities/boundary.py:19
+#: shared/entities/board.py:4 shared/entities/boundary.py:20
 #: shared/entities/clock.py:5 shared/entities/enums.py:42
 #: shared/entities/enums.py:95 shared/entities/enums.py:245
 #: shared/entities/enums.py:453 shared/entities/enums.py:513
 #: shared/entities/enums.py:613 shared/entities/enums.py:659
-#: shared/entities/enums.py:669 shared/entities/enums.py:752
-#: shared/entities/enums.py:766 shared/entities/enums.py:844
-#: shared/entities/enums.py:1321 shared/entities/enums.py:1346
+#: shared/entities/enums.py:669 shared/entities/enums.py:751
+#: shared/entities/enums.py:765 shared/entities/enums.py:843
+#: shared/entities/enums.py:1320 shared/entities/enums.py:1345
 #: shared/entities/enums.py:1714 shared/entities/enums.py:1765
 #: shared/entities/land.py:9 shared/entities/platform.py:5
 #: shared/entities/road.py:11 shared/entities/road.py:24
@@ -2326,7 +2325,7 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: shared/entities/board.py:5 shared/entities/enums.py:849
+#: shared/entities/board.py:5 shared/entities/enums.py:848
 msgid "History"
 msgstr ""
 
@@ -2334,7 +2333,7 @@ msgstr ""
 msgid "History technology"
 msgstr ""
 
-#: shared/entities/board.py:7 shared/entities/enums.py:854
+#: shared/entities/board.py:7 shared/entities/enums.py:853
 msgid "Nature"
 msgstr ""
 
@@ -2356,7 +2355,7 @@ msgid "Notice"
 msgstr ""
 
 #: shared/entities/board.py:13 shared/entities/board.py:28
-#: shared/entities/enums.py:848 shared/entities/enums.py:1167
+#: shared/entities/enums.py:847 shared/entities/enums.py:1166
 msgid "Board"
 msgstr ""
 
@@ -2364,12 +2363,12 @@ msgstr ""
 msgid "History nature"
 msgstr ""
 
-#: shared/entities/board.py:15 shared/entities/enums.py:850
+#: shared/entities/board.py:15 shared/entities/enums.py:849
 msgid "Plants"
 msgstr ""
 
-#: shared/entities/board.py:16 shared/entities/enums.py:847
-#: shared/entities/enums.py:1158
+#: shared/entities/board.py:16 shared/entities/enums.py:846
+#: shared/entities/enums.py:1157
 msgid "Map"
 msgstr ""
 
@@ -2385,8 +2384,8 @@ msgstr ""
 msgid "Quiz"
 msgstr ""
 
-#: shared/entities/board.py:20 shared/entities/enums.py:793
-#: shared/entities/enums.py:852 shared/entities/land.py:20
+#: shared/entities/board.py:20 shared/entities/enums.py:792
+#: shared/entities/enums.py:851 shared/entities/land.py:20
 #: shared/entities/tree.py:2
 msgid "Tree"
 msgstr ""
@@ -2428,7 +2427,7 @@ msgstr ""
 msgid "Nation"
 msgstr ""
 
-#: shared/entities/border.py:7 shared/entities/enums.py:921
+#: shared/entities/border.py:7 shared/entities/enums.py:920
 msgid "Border"
 msgstr ""
 
@@ -2477,7 +2476,7 @@ msgid "Civil"
 msgstr ""
 
 #: shared/entities/boundary.py:13 shared/entities/enums.py:466
-#: shared/entities/enums.py:801
+#: shared/entities/enums.py:800
 msgid "Cliff"
 msgstr ""
 
@@ -2489,115 +2488,116 @@ msgstr ""
 msgid "Religious administration"
 msgstr ""
 
-#: shared/entities/boundary.py:16 shared/entities/boundary.py:20
-#: shared/entities/enums.py:744 shared/entities/enums.py:795
-#: shared/entities/enums.py:1269 shared/entities/enums.py:1334
+#: shared/entities/boundary.py:16 shared/entities/boundary.py:21
+#: shared/entities/enums.py:743 shared/entities/enums.py:794
+#: shared/entities/enums.py:1268 shared/entities/enums.py:1333
 #: shared/entities/enums.py:1497 shared/entities/enums.py:1556
 msgid "Stone"
 msgstr ""
 
-#: shared/entities/boundary.py:21 shared/entities/enums.py:796
+#: shared/entities/boundary.py:17 shared/entities/boundary.py:32
+#: shared/entities/protected_area.py:7
+msgid "Boundary"
+msgstr ""
+
+#: shared/entities/boundary.py:22 shared/entities/enums.py:795
 msgid "Rock"
 msgstr ""
 
-#: shared/entities/boundary.py:22 shared/entities/enums.py:1550
+#: shared/entities/boundary.py:23 shared/entities/enums.py:1550
 msgid "Plate"
 msgstr ""
 
-#: shared/entities/boundary.py:24
+#: shared/entities/boundary.py:25
 msgid "Engraving"
 msgstr ""
 
-#: shared/entities/boundary.py:26 shared/entities/enums.py:791
+#: shared/entities/boundary.py:27 shared/entities/enums.py:790
 #: shared/entities/enums.py:1518
 msgid "Spring"
 msgstr ""
 
-#: shared/entities/boundary.py:29
+#: shared/entities/boundary.py:30
 msgid "Grade3"
 msgstr ""
 
-#: shared/entities/boundary.py:31 shared/entities/protected_area.py:7
-msgid "Boundary"
-msgstr ""
-
-#: shared/entities/boundary.py:33
+#: shared/entities/boundary.py:34
 msgid "Admin level"
 msgstr ""
 
-#: shared/entities/boundary.py:34 shared/entities/building.py:106
+#: shared/entities/boundary.py:35 shared/entities/building.py:106
 msgid "Historic type"
 msgstr ""
 
-#: shared/entities/boundary.py:35
+#: shared/entities/boundary.py:36
 msgid "Marker type"
 msgstr ""
 
-#: shared/entities/boundary.py:40 shared/entities/place.py:5
+#: shared/entities/boundary.py:41 shared/entities/place.py:5
 msgid "Population"
 msgstr ""
 
-#: shared/entities/boundary.py:41
+#: shared/entities/boundary.py:42
 msgid "Iso3166 2"
 msgstr ""
 
-#: shared/entities/boundary.py:42 shared/entities/building.py:158
+#: shared/entities/boundary.py:43 shared/entities/building.py:158
 #: shared/entities/disused.py:13 shared/entities/historic.py:32
 #: shared/entities/rail_way.py:161 shared/entities/road.py:198
 msgid "End date"
 msgstr ""
 
-#: shared/entities/boundary.py:45 shared/entities/protected_area.py:10
+#: shared/entities/boundary.py:46 shared/entities/protected_area.py:10
 msgid "Protect class"
 msgstr ""
 
-#: shared/entities/boundary.py:46
+#: shared/entities/boundary.py:47
 msgid "Fixname"
 msgstr ""
 
-#: shared/entities/boundary.py:47 shared/entities/place.py:14
+#: shared/entities/boundary.py:48 shared/entities/place.py:14
 #: shared/entities/road.py:355 shared/entities/stop.py:64
 msgid "Alt name de"
 msgstr ""
 
-#: shared/entities/boundary.py:48 shared/entities/stop.py:65
+#: shared/entities/boundary.py:49 shared/entities/stop.py:65
 msgid "Old name de"
 msgstr ""
 
-#: shared/entities/boundary.py:51
+#: shared/entities/boundary.py:52
 msgid "Year"
 msgstr ""
 
-#: shared/entities/boundary.py:52
+#: shared/entities/boundary.py:53
 msgid "Odl name de"
 msgstr ""
 
-#: shared/entities/boundary.py:53
+#: shared/entities/boundary.py:54
 msgid "Track type"
 msgstr ""
 
-#: shared/entities/boundary.py:57 shared/entities/building.py:230
-#: shared/entities/clock.py:26 shared/entities/crossing.py:43
+#: shared/entities/boundary.py:58 shared/entities/building.py:230
+#: shared/entities/clock.py:26 shared/entities/crossing.py:42
 #: shared/entities/historic.py:12 shared/entities/natural.py:25
 #: shared/entities/tourism.py:33
 msgid "Inscription"
 msgstr ""
 
-#: shared/entities/boundary.py:58
+#: shared/entities/boundary.py:59
 msgid "Old name cs"
 msgstr ""
 
-#: shared/entities/boundary.py:59 shared/entities/fountain.py:19
+#: shared/entities/boundary.py:60 shared/entities/fountain.py:19
 #: shared/entities/natural.py:14 shared/entities/road.py:187
 #: shared/entities/sport.py:7 shared/entities/tourism.py:41
 msgid "Natural"
 msgstr ""
 
-#: shared/entities/boundary.py:60
+#: shared/entities/boundary.py:61
 msgid "Vehicle conitional"
 msgstr ""
 
-#: shared/entities/boundary.py:61 shared/entities/road.py:203
+#: shared/entities/boundary.py:62 shared/entities/road.py:203
 #: shared/entities/steps.py:64
 msgid "Trail visibility"
 msgstr ""
@@ -2670,8 +2670,8 @@ msgstr ""
 msgid "Building for transportation"
 msgstr ""
 
-#: shared/entities/building.py:23 shared/entities/enums.py:826
-#: shared/entities/enums.py:1079 shared/entities/enums.py:1376
+#: shared/entities/building.py:23 shared/entities/enums.py:825
+#: shared/entities/enums.py:1078 shared/entities/enums.py:1375
 #: shared/entities/enums.py:1692
 msgid "Garage"
 msgstr ""
@@ -2684,7 +2684,7 @@ msgstr ""
 msgid "Multipurpose building"
 msgstr ""
 
-#: shared/entities/building.py:26 shared/entities/enums.py:1078
+#: shared/entities/building.py:26 shared/entities/enums.py:1077
 msgid "Greenhouse"
 msgstr ""
 
@@ -2704,7 +2704,7 @@ msgstr ""
 msgid "Dam surrounding artificial lake"
 msgstr ""
 
-#: shared/entities/building.py:31 shared/entities/enums.py:771
+#: shared/entities/building.py:31 shared/entities/enums.py:770
 #: shared/entities/enums.py:1605
 msgid "Weir"
 msgstr ""
@@ -2727,34 +2727,34 @@ msgid "Only"
 msgstr ""
 
 #: shared/entities/building.py:45 shared/entities/building.py:202
-#: shared/entities/enums.py:232 shared/entities/enums.py:821
-#: shared/entities/enums.py:962 shared/entities/enums.py:1020
-#: shared/entities/enums.py:1068 shared/entities/enums.py:1211
-#: shared/entities/enums.py:1450 shared/entities/enums.py:1504
+#: shared/entities/enums.py:232 shared/entities/enums.py:820
+#: shared/entities/enums.py:961 shared/entities/enums.py:1019
+#: shared/entities/enums.py:1067 shared/entities/enums.py:1210
+#: shared/entities/enums.py:1449 shared/entities/enums.py:1504
 #: shared/entities/land.py:62 shared/entities/road.py:88
 msgid "Residential"
 msgstr ""
 
-#: shared/entities/building.py:46 shared/entities/enums.py:830
-#: shared/entities/enums.py:1022 shared/entities/enums.py:1077
-#: shared/entities/enums.py:1217
+#: shared/entities/building.py:46 shared/entities/enums.py:829
+#: shared/entities/enums.py:1021 shared/entities/enums.py:1076
+#: shared/entities/enums.py:1216
 msgid "Commercial"
 msgstr ""
 
 #: shared/entities/building.py:47 shared/entities/enums.py:212
-#: shared/entities/fuel.py:11 shared/entities/pub.py:26
+#: shared/entities/fuel.py:10 shared/entities/pub.py:26
 #: shared/entities/shop.py:28
 msgid "Shop"
 msgstr ""
 
-#: shared/entities/building.py:48 shared/entities/enums.py:738
-#: shared/entities/enums.py:835 shared/entities/enums.py:1031
-#: shared/entities/enums.py:1067 shared/entities/enums.py:1214
+#: shared/entities/building.py:48 shared/entities/enums.py:737
+#: shared/entities/enums.py:834 shared/entities/enums.py:1030
+#: shared/entities/enums.py:1066 shared/entities/enums.py:1213
 msgid "Garages"
 msgstr ""
 
 #: shared/entities/building.py:51 shared/entities/enums.py:368
-#: shared/entities/enums.py:649 shared/entities/enums.py:1329
+#: shared/entities/enums.py:649 shared/entities/enums.py:1328
 #: shared/entities/enums.py:1554 shared/entities/recycling.py:15
 msgid "Glass"
 msgstr ""
@@ -2779,7 +2779,7 @@ msgstr ""
 msgid "Modern"
 msgstr ""
 
-#: shared/entities/building.py:67 shared/entities/enums.py:1195
+#: shared/entities/building.py:67 shared/entities/enums.py:1194
 #: shared/entities/enums.py:1804
 msgid "Reception"
 msgstr ""
@@ -2809,7 +2809,7 @@ msgstr ""
 msgid "Product"
 msgstr ""
 
-#: shared/entities/building.py:112 shared/entities/enums.py:739
+#: shared/entities/building.py:112 shared/entities/enums.py:738
 #: shared/entities/historic.py:20 shared/entities/tourism.py:47
 msgid "Heritage"
 msgstr ""
@@ -2820,7 +2820,7 @@ msgid "Heritage operator"
 msgstr ""
 
 #: shared/entities/building.py:115 shared/entities/enums.py:1785
-#: shared/entities/fountain.py:9 shared/entities/shelter.py:13
+#: shared/entities/fountain.py:9 shared/entities/shelter.py:12
 #: shared/entities/tourism.py:58
 msgid "Architect"
 msgstr ""
@@ -2834,7 +2834,7 @@ msgstr ""
 msgid "Roof material"
 msgstr ""
 
-#: shared/entities/building.py:122 shared/entities/enums.py:1143
+#: shared/entities/building.py:122 shared/entities/enums.py:1142
 msgid "Part"
 msgstr ""
 
@@ -2882,7 +2882,7 @@ msgid "Use"
 msgstr ""
 
 #: shared/entities/building.py:140 shared/entities/building_part.py:12
-#: shared/entities/fuel.py:22 shared/entities/office.py:47
+#: shared/entities/fuel.py:21 shared/entities/office.py:47
 #: shared/entities/power_substation.py:20 shared/entities/tower.py:16
 msgid "Roof colour"
 msgstr ""
@@ -2892,9 +2892,9 @@ msgid "Wheelchair description"
 msgstr ""
 
 #: shared/entities/building.py:142 shared/entities/construction.py:4
-#: shared/entities/enums.py:214 shared/entities/enums.py:839
-#: shared/entities/enums.py:914 shared/entities/enums.py:979
-#: shared/entities/enums.py:1041 shared/entities/enums.py:1452
+#: shared/entities/enums.py:214 shared/entities/enums.py:838
+#: shared/entities/enums.py:913 shared/entities/enums.py:978
+#: shared/entities/enums.py:1040 shared/entities/enums.py:1451
 #: shared/entities/land.py:53 shared/entities/parking.py:36
 #: shared/entities/rail_way.py:168 shared/entities/stop.py:19
 #: shared/entities/stop.py:77
@@ -2909,8 +2909,8 @@ msgstr ""
 msgid "Microbrewery"
 msgstr ""
 
-#: shared/entities/building.py:145 shared/entities/enums.py:721
-#: shared/entities/enums.py:838 shared/entities/historic.py:18
+#: shared/entities/building.py:145 shared/entities/enums.py:720
+#: shared/entities/enums.py:837 shared/entities/historic.py:18
 msgid "Ruins"
 msgstr ""
 
@@ -3002,8 +3002,8 @@ msgstr ""
 msgid "Notes payment"
 msgstr ""
 
-#: shared/entities/building.py:187 shared/entities/enums.py:1109
-#: shared/entities/enums.py:1349 shared/entities/leisure.py:37
+#: shared/entities/building.py:187 shared/entities/enums.py:1108
+#: shared/entities/enums.py:1348 shared/entities/leisure.py:37
 #: shared/entities/level.py:5 shared/entities/office.py:50
 #: shared/entities/road.py:333 shared/entities/tourism.py:91
 msgid "Indoor"
@@ -3029,7 +3029,7 @@ msgstr ""
 msgid "Bridge support"
 msgstr ""
 
-#: shared/entities/building.py:199 shared/entities/enums.py:719
+#: shared/entities/building.py:199 shared/entities/enums.py:718
 #: shared/entities/enums.py:1500 shared/entities/memorial.py:3
 #: shared/entities/tourism.py:86
 msgid "Memorial"
@@ -3065,7 +3065,7 @@ msgstr ""
 msgid "Seamark type"
 msgstr ""
 
-#: shared/entities/building.py:208 shared/entities/enums.py:1084
+#: shared/entities/building.py:208 shared/entities/enums.py:1083
 #: shared/entities/steps.py:17
 msgid "Flat"
 msgstr ""
@@ -3173,7 +3173,7 @@ msgstr ""
 msgid "Pillbox"
 msgstr ""
 
-#: shared/entities/bunker.py:7 shared/entities/enums.py:1299
+#: shared/entities/bunker.py:7 shared/entities/enums.py:1298
 msgid "Bunker"
 msgstr ""
 
@@ -3193,7 +3193,7 @@ msgstr ""
 msgid "Cafe type"
 msgstr ""
 
-#: shared/entities/castle.py:2 shared/entities/enums.py:724
+#: shared/entities/castle.py:2 shared/entities/enums.py:723
 #: shared/entities/enums.py:1507
 msgid "Castle"
 msgstr ""
@@ -3202,7 +3202,7 @@ msgstr ""
 msgid "Alt name 3"
 msgstr ""
 
-#: shared/entities/checkpoint.py:4 shared/entities/enums.py:1395
+#: shared/entities/checkpoint.py:4 shared/entities/enums.py:1394
 #: shared/entities/pole.py:9 shared/entities/tourism.py:17
 msgid "Hiking"
 msgstr ""
@@ -3239,8 +3239,8 @@ msgstr ""
 msgid "Unorthodox"
 msgstr ""
 
-#: shared/entities/clock.py:14 shared/entities/enums.py:825
-#: shared/entities/enums.py:1171 shared/entities/enums.py:1221
+#: shared/entities/clock.py:14 shared/entities/enums.py:824
+#: shared/entities/enums.py:1170 shared/entities/enums.py:1220
 msgid "House"
 msgstr ""
 
@@ -3253,7 +3253,7 @@ msgid "Display"
 msgstr ""
 
 #: shared/entities/clock.py:18 shared/entities/road.py:418
-#: shared/entities/surveillance.py:29 shared/entities/tourism.py:87
+#: shared/entities/surveillance.py:28 shared/entities/tourism.py:87
 msgid "Support"
 msgstr ""
 
@@ -3417,7 +3417,7 @@ msgstr ""
 msgid "Signals"
 msgstr ""
 
-#: shared/entities/crossing.py:6 shared/entities/enums.py:911
+#: shared/entities/crossing.py:6 shared/entities/enums.py:910
 msgid "Signal"
 msgstr ""
 
@@ -3426,14 +3426,14 @@ msgid "Blinker"
 msgstr ""
 
 #: shared/entities/crossing.py:12 shared/entities/enums.py:445
-#: shared/entities/enums.py:1135 shared/entities/enums.py:1635
+#: shared/entities/enums.py:1134 shared/entities/enums.py:1635
 #: shared/entities/rail_way.py:37 shared/entities/road.py:62
 #: shared/entities/road.py:123
 msgid "Forward"
 msgstr ""
 
 #: shared/entities/crossing.py:13 shared/entities/enums.py:446
-#: shared/entities/enums.py:1136 shared/entities/enums.py:1634
+#: shared/entities/enums.py:1135 shared/entities/enums.py:1634
 #: shared/entities/rail_way.py:36 shared/entities/road.py:61
 #: shared/entities/road.py:124 shared/entities/traffic_sign.py:7
 msgid "Backward"
@@ -3443,37 +3443,37 @@ msgstr ""
 msgid "Asl"
 msgstr ""
 
-#: shared/entities/crossing.py:18 shared/entities/enums.py:703
-#: shared/entities/enums.py:894 shared/entities/road.py:30
+#: shared/entities/crossing.py:18 shared/entities/enums.py:702
+#: shared/entities/enums.py:893 shared/entities/road.py:30
 #: shared/entities/road.py:52 shared/entities/road.py:201
 msgid "Crossing"
 msgstr ""
 
-#: shared/entities/crossing.py:21
+#: shared/entities/crossing.py:20
 msgid "Button operated"
 msgstr ""
 
-#: shared/entities/crossing.py:29 shared/entities/road.py:35
+#: shared/entities/crossing.py:28 shared/entities/road.py:35
 #: shared/entities/road.py:157
 msgid "Segregated"
 msgstr ""
 
-#: shared/entities/crossing.py:30 shared/entities/enums.py:701
-#: shared/entities/enums.py:972 shared/entities/road.py:106
+#: shared/entities/crossing.py:29 shared/entities/enums.py:700
+#: shared/entities/enums.py:971 shared/entities/road.py:106
 msgid "Traffic signals"
 msgstr ""
 
-#: shared/entities/crossing.py:31 shared/entities/platform.py:33
+#: shared/entities/crossing.py:30 shared/entities/platform.py:33
 #: shared/entities/road.py:260 shared/entities/steps.py:63
 #: shared/entities/stop.py:35
 msgid "Tactile paving"
 msgstr ""
 
-#: shared/entities/crossing.py:34 shared/entities/road.py:469
+#: shared/entities/crossing.py:33 shared/entities/road.py:469
 msgid "Sloped curb"
 msgstr ""
 
-#: shared/entities/crossing.py:36 shared/entities/enforcement.py:5
+#: shared/entities/crossing.py:35 shared/entities/enforcement.py:5
 #: shared/entities/enums.py:1682 shared/entities/rail_way.py:106
 #: shared/entities/road.py:135 shared/entities/road.py:181
 #: shared/entities/traffic_calming.py:7 shared/entities/traffic_sign.py:6
@@ -3481,38 +3481,38 @@ msgstr ""
 msgid "Maxspeed"
 msgstr ""
 
-#: shared/entities/crossing.py:37
+#: shared/entities/crossing.py:36
 msgid "Traffic signals direction"
 msgstr ""
 
-#: shared/entities/crossing.py:38
+#: shared/entities/crossing.py:37
 msgid "Traffic signals sound"
 msgstr ""
 
-#: shared/entities/crossing.py:40 shared/entities/parking.py:40
+#: shared/entities/crossing.py:39 shared/entities/parking.py:40
 #: shared/entities/road.py:163
 msgid "Smoothness"
 msgstr ""
 
-#: shared/entities/crossing.py:44 shared/entities/enums.py:967
+#: shared/entities/crossing.py:43 shared/entities/enums.py:966
 #: shared/entities/road.py:164
 msgid "Cycleway"
 msgstr ""
 
-#: shared/entities/crossing.py:45
+#: shared/entities/crossing.py:44
 msgid "Sound"
 msgstr ""
 
-#: shared/entities/crossing.py:48 shared/entities/road.py:482
+#: shared/entities/crossing.py:47 shared/entities/road.py:482
 #: shared/entities/traffic_sign.py:3
 msgid "Traffic sign"
 msgstr ""
 
-#: shared/entities/crossing.py:50
+#: shared/entities/crossing.py:49
 msgid "Both parking lane"
 msgstr ""
 
-#: shared/entities/crossing.py:52
+#: shared/entities/crossing.py:51
 msgid "Highway 2"
 msgstr ""
 
@@ -3520,8 +3520,8 @@ msgstr ""
 msgid "Demolished building"
 msgstr ""
 
-#: shared/entities/disused.py:5 shared/entities/enums.py:729
-#: shared/entities/enums.py:1032
+#: shared/entities/disused.py:5 shared/entities/enums.py:728
+#: shared/entities/enums.py:1031
 msgid "Quarry"
 msgstr ""
 
@@ -3574,7 +3574,7 @@ msgstr ""
 msgid "Designated"
 msgstr ""
 
-#: shared/entities/enums.py:18 shared/entities/enums.py:1347
+#: shared/entities/enums.py:18 shared/entities/enums.py:1346
 msgid "Public"
 msgstr ""
 
@@ -3615,7 +3615,7 @@ msgstr ""
 msgid "Permission"
 msgstr ""
 
-#: shared/entities/enums.py:32 shared/entities/enums.py:1409
+#: shared/entities/enums.py:32 shared/entities/enums.py:1408
 msgid "Mtb"
 msgstr ""
 
@@ -3635,7 +3635,7 @@ msgstr ""
 msgid "Destinaton"
 msgstr ""
 
-#: shared/entities/enums.py:37 shared/entities/enums.py:1310
+#: shared/entities/enums.py:37 shared/entities/enums.py:1309
 msgid "Limited"
 msgstr ""
 
@@ -3644,7 +3644,7 @@ msgid "Swimming pool"
 msgstr ""
 
 #: shared/entities/enums.py:44 shared/entities/enums.py:221
-#: shared/entities/enums.py:1056
+#: shared/entities/enums.py:1055
 msgid "Park"
 msgstr ""
 
@@ -3668,13 +3668,13 @@ msgstr ""
 msgid "Common"
 msgstr ""
 
-#: shared/entities/enums.py:50 shared/entities/enums.py:965
-#: shared/entities/enums.py:1451 shared/entities/road.py:28
+#: shared/entities/enums.py:50 shared/entities/enums.py:964
+#: shared/entities/enums.py:1450 shared/entities/road.py:28
 #: shared/entities/track.py:3
 msgid "Track"
 msgstr ""
 
-#: shared/entities/enums.py:51 shared/entities/enums.py:1054
+#: shared/entities/enums.py:51 shared/entities/enums.py:1053
 #: shared/entities/playground.py:13
 msgid "Playground"
 msgstr ""
@@ -3687,7 +3687,7 @@ msgstr ""
 msgid "Picnic table"
 msgstr ""
 
-#: shared/entities/enums.py:54 shared/entities/enums.py:1036
+#: shared/entities/enums.py:54 shared/entities/enums.py:1035
 msgid "Recreation ground"
 msgstr ""
 
@@ -3719,7 +3719,7 @@ msgstr ""
 msgid "Ice rink"
 msgstr ""
 
-#: shared/entities/enums.py:62 shared/entities/enums.py:1049
+#: shared/entities/enums.py:62 shared/entities/enums.py:1048
 #: shared/entities/garden.py:3
 msgid "Garden"
 msgstr ""
@@ -3792,7 +3792,7 @@ msgstr ""
 msgid "Amusement arcade"
 msgstr ""
 
-#: shared/entities/enums.py:81 shared/entities/enums.py:1026
+#: shared/entities/enums.py:81 shared/entities/enums.py:1025
 msgid "Meadow"
 msgstr ""
 
@@ -3821,16 +3821,16 @@ msgstr ""
 msgid "Bowling alley"
 msgstr ""
 
-#: shared/entities/enums.py:90 shared/entities/enums.py:1367
+#: shared/entities/enums.py:90 shared/entities/enums.py:1366
 msgid "Multipolygon"
 msgstr ""
 
-#: shared/entities/enums.py:96 shared/entities/enums.py:733
-#: shared/entities/enums.py:1209
+#: shared/entities/enums.py:96 shared/entities/enums.py:732
+#: shared/entities/enums.py:1208
 msgid "Restaurant"
 msgstr ""
 
-#: shared/entities/enums.py:97 shared/entities/enums.py:1200
+#: shared/entities/enums.py:97 shared/entities/enums.py:1199
 msgid "Place of worship"
 msgstr ""
 
@@ -3983,7 +3983,7 @@ msgstr ""
 msgid "Dentist"
 msgstr ""
 
-#: shared/entities/enums.py:145 shared/entities/enums.py:728
+#: shared/entities/enums.py:145 shared/entities/enums.py:727
 #: shared/entities/enums.py:1506
 msgid "Monastery"
 msgstr ""
@@ -4227,7 +4227,7 @@ msgstr ""
 msgid "Concert hall"
 msgstr ""
 
-#: shared/entities/enums.py:211 shared/entities/enums.py:759
+#: shared/entities/enums.py:211 shared/entities/enums.py:758
 msgid "Table"
 msgstr ""
 
@@ -4255,8 +4255,8 @@ msgstr ""
 msgid "Science"
 msgstr ""
 
-#: shared/entities/enums.py:220 shared/entities/enums.py:866
-#: shared/entities/enums.py:895 shared/entities/enums.py:1154
+#: shared/entities/enums.py:220 shared/entities/enums.py:865
+#: shared/entities/enums.py:894 shared/entities/enums.py:1153
 #: shared/entities/enums.py:1722 shared/entities/rail_way.py:165
 #: shared/entities/stop.py:16 shared/entities/stop.py:69
 msgid "Station"
@@ -4290,8 +4290,8 @@ msgstr ""
 msgid "Bts"
 msgstr ""
 
-#: shared/entities/enums.py:230 shared/entities/enums.py:988
-#: shared/entities/enums.py:1071 shared/entities/enums.py:1453
+#: shared/entities/enums.py:230 shared/entities/enums.py:987
+#: shared/entities/enums.py:1070 shared/entities/enums.py:1452
 msgid "Elevator"
 msgstr ""
 
@@ -4327,7 +4327,7 @@ msgstr ""
 msgid "Doityourself"
 msgstr ""
 
-#: shared/entities/enums.py:249 shared/entities/enums.py:1111
+#: shared/entities/enums.py:249 shared/entities/enums.py:1110
 #: shared/entities/power_substation.py:5
 msgid "Kiosk"
 msgstr ""
@@ -4404,8 +4404,8 @@ msgstr ""
 msgid "Books"
 msgstr ""
 
-#: shared/entities/enums.py:273 shared/entities/enums.py:1112
-#: shared/entities/enums.py:1348
+#: shared/entities/enums.py:273 shared/entities/enums.py:1111
+#: shared/entities/enums.py:1347
 msgid "Outdoor"
 msgstr ""
 
@@ -4754,7 +4754,7 @@ msgstr ""
 msgid "Locks and keys"
 msgstr ""
 
-#: shared/entities/enums.py:373 shared/entities/enums.py:1402
+#: shared/entities/enums.py:373 shared/entities/enums.py:1401
 #: shared/entities/enums.py:1521 shared/entities/road.py:387
 #: shared/entities/tourism.py:22
 msgid "Ski"
@@ -4856,7 +4856,7 @@ msgstr ""
 msgid "Electronics stationery"
 msgstr ""
 
-#: shared/entities/enums.py:400 shared/entities/enums.py:1466
+#: shared/entities/enums.py:400 shared/entities/enums.py:1465
 msgid "Farm"
 msgstr ""
 
@@ -4909,7 +4909,7 @@ msgid "Beekeeping"
 msgstr ""
 
 #: shared/entities/enums.py:419 shared/entities/protected_area.py:19
-#: shared/entities/shelter.py:14 shared/entities/tourism.py:23
+#: shared/entities/shelter.py:13 shared/entities/tourism.py:23
 msgid "Fireplace"
 msgstr ""
 
@@ -4999,7 +4999,7 @@ msgstr ""
 msgid "Reservoir covered"
 msgstr ""
 
-#: shared/entities/enums.py:456 shared/entities/enums.py:1075
+#: shared/entities/enums.py:456 shared/entities/enums.py:1074
 msgid "Chimney"
 msgstr ""
 
@@ -5019,7 +5019,7 @@ msgstr ""
 msgid "Survey point"
 msgstr ""
 
-#: shared/entities/enums.py:462 shared/entities/enums.py:1069
+#: shared/entities/enums.py:462 shared/entities/enums.py:1068
 #: shared/entities/enums.py:1578 shared/entities/enums.py:1719
 #: shared/entities/enums.py:1770 shared/entities/power.py:14
 #: shared/entities/tower.py:3
@@ -5055,7 +5055,7 @@ msgstr ""
 msgid "Mast"
 msgstr ""
 
-#: shared/entities/enums.py:474 shared/entities/enums.py:1019
+#: shared/entities/enums.py:474 shared/entities/enums.py:1018
 #: shared/entities/water_area.py:7
 msgid "Reservoir"
 msgstr ""
@@ -5129,7 +5129,7 @@ msgstr ""
 msgid "Storage tank"
 msgstr ""
 
-#: shared/entities/enums.py:495 shared/entities/enums.py:864
+#: shared/entities/enums.py:495 shared/entities/enums.py:863
 msgid "Windsock"
 msgstr ""
 
@@ -5169,7 +5169,7 @@ msgstr ""
 msgid "Windmill"
 msgstr ""
 
-#: shared/entities/enums.py:505 shared/entities/enums.py:718
+#: shared/entities/enums.py:505 shared/entities/enums.py:717
 msgid "Wayside shrine"
 msgstr ""
 
@@ -5197,7 +5197,7 @@ msgstr ""
 msgid "Ice skating"
 msgstr ""
 
-#: shared/entities/enums.py:519 shared/entities/enums.py:1415
+#: shared/entities/enums.py:519 shared/entities/enums.py:1414
 msgid "Running"
 msgstr ""
 
@@ -5526,8 +5526,8 @@ msgstr ""
 msgid "Jumping"
 msgstr ""
 
-#: shared/entities/enums.py:615 shared/entities/enums.py:743
-#: shared/entities/enums.py:878 shared/entities/enums.py:1429
+#: shared/entities/enums.py:615 shared/entities/enums.py:742
+#: shared/entities/enums.py:877 shared/entities/enums.py:1428
 #: shared/entities/enums.py:1694
 msgid "Gate"
 msgstr ""
@@ -5593,11 +5593,11 @@ msgstr ""
 msgid "Hampshire gate"
 msgstr ""
 
-#: shared/entities/enums.py:638 shared/entities/enums.py:1356
+#: shared/entities/enums.py:638 shared/entities/enums.py:1355
 msgid "Chain"
 msgstr ""
 
-#: shared/entities/enums.py:639 shared/entities/enums.py:1357
+#: shared/entities/enums.py:639 shared/entities/enums.py:1356
 msgid "Wire"
 msgstr ""
 
@@ -5617,7 +5617,7 @@ msgstr ""
 msgid "Wire fence"
 msgstr ""
 
-#: shared/entities/enums.py:645 shared/entities/enums.py:1362
+#: shared/entities/enums.py:645 shared/entities/enums.py:1361
 msgid "Railing"
 msgstr ""
 
@@ -5633,16 +5633,16 @@ msgstr ""
 msgid "Banister"
 msgstr ""
 
-#: shared/entities/enums.py:650 shared/entities/enums.py:740
+#: shared/entities/enums.py:650 shared/entities/enums.py:739
 msgid "Border control"
 msgstr ""
 
-#: shared/entities/enums.py:651 shared/entities/enums.py:1289
+#: shared/entities/enums.py:651 shared/entities/enums.py:1288
 #: shared/entities/route.py:5
 msgid "Recommended"
 msgstr ""
 
-#: shared/entities/enums.py:653 shared/entities/enums.py:1070
+#: shared/entities/enums.py:653 shared/entities/enums.py:1069
 #: shared/entities/road.py:329 shared/entities/steps.py:45
 msgid "Ramp"
 msgstr ""
@@ -5671,7 +5671,7 @@ msgstr ""
 msgid "Museum"
 msgstr ""
 
-#: shared/entities/enums.py:676 shared/entities/enums.py:1220
+#: shared/entities/enums.py:676 shared/entities/enums.py:1219
 msgid "Hotel"
 msgstr ""
 
@@ -5683,7 +5683,7 @@ msgstr ""
 msgid "Artwork"
 msgstr ""
 
-#: shared/entities/enums.py:679 shared/entities/enums.py:1196
+#: shared/entities/enums.py:679 shared/entities/enums.py:1195
 msgid "Hostel"
 msgstr ""
 
@@ -5723,1523 +5723,1527 @@ msgstr ""
 msgid "Wine cellar"
 msgstr ""
 
-#: shared/entities/enums.py:698 shared/entities/enums.py:761
-#: shared/entities/enums.py:1464
+#: shared/entities/enums.py:697 shared/entities/enums.py:760
+#: shared/entities/enums.py:1463
 msgid "Island"
 msgstr ""
 
-#: shared/entities/enums.py:699
+#: shared/entities/enums.py:698
 msgid "Uncontrolled"
 msgstr ""
 
-#: shared/entities/enums.py:700
+#: shared/entities/enums.py:699
 msgid "Zebra"
 msgstr ""
 
-#: shared/entities/enums.py:702
+#: shared/entities/enums.py:701
 msgid "Unmarked"
 msgstr ""
 
-#: shared/entities/enums.py:704
+#: shared/entities/enums.py:703
 msgid "Island ucontrolled"
 msgstr ""
 
-#: shared/entities/enums.py:705 shared/entities/enums.py:1814
+#: shared/entities/enums.py:704 shared/entities/enums.py:1814
 msgid "Marked"
 msgstr ""
 
-#: shared/entities/enums.py:709
+#: shared/entities/enums.py:708
 msgid "Cycle"
 msgstr ""
 
-#: shared/entities/enums.py:710
+#: shared/entities/enums.py:709
 msgid "Controlled"
 msgstr ""
 
-#: shared/entities/enums.py:720
+#: shared/entities/enums.py:719
 msgid "Wayside cross"
 msgstr ""
 
-#: shared/entities/enums.py:722 shared/entities/historic.py:37
+#: shared/entities/enums.py:721 shared/entities/historic.py:37
 msgid "Monument"
 msgstr ""
 
-#: shared/entities/enums.py:723
+#: shared/entities/enums.py:722
 msgid "Boundary stone"
 msgstr ""
 
-#: shared/entities/enums.py:725
+#: shared/entities/enums.py:724
 msgid "Archaeological site"
 msgstr ""
 
-#: shared/entities/enums.py:726 shared/entities/historic.py:31
+#: shared/entities/enums.py:725 shared/entities/historic.py:31
 msgid "Tomb"
 msgstr ""
 
-#: shared/entities/enums.py:730
+#: shared/entities/enums.py:729
 msgid "City gate"
 msgstr ""
 
-#: shared/entities/enums.py:732
+#: shared/entities/enums.py:731
 msgid "Battlefield"
 msgstr ""
 
-#: shared/entities/enums.py:734
+#: shared/entities/enums.py:733
 msgid "Aircraft"
 msgstr ""
 
-#: shared/entities/enums.py:736
+#: shared/entities/enums.py:735
 msgid "Tank"
 msgstr ""
 
-#: shared/entities/enums.py:737
+#: shared/entities/enums.py:736
 msgid "Highwater mark"
 msgstr ""
 
-#: shared/entities/enums.py:742
+#: shared/entities/enums.py:741
 msgid "Palace"
 msgstr ""
 
-#: shared/entities/enums.py:754
+#: shared/entities/enums.py:753
 msgid "Bump"
 msgstr ""
 
-#: shared/entities/enums.py:755 shared/entities/enums.py:773
+#: shared/entities/enums.py:754 shared/entities/enums.py:772
 msgid "Ditch"
 msgstr ""
 
-#: shared/entities/enums.py:756
+#: shared/entities/enums.py:755
 msgid "Hump"
 msgstr ""
 
-#: shared/entities/enums.py:757
+#: shared/entities/enums.py:756
 msgid "Dip"
 msgstr ""
 
-#: shared/entities/enums.py:758
+#: shared/entities/enums.py:757
 msgid "Rumble strip"
 msgstr ""
 
-#: shared/entities/enums.py:760
+#: shared/entities/enums.py:759
 msgid "Chicane"
 msgstr ""
 
-#: shared/entities/enums.py:762
+#: shared/entities/enums.py:761
 msgid "Cushion"
 msgstr ""
 
-#: shared/entities/enums.py:767
+#: shared/entities/enums.py:766
 msgid "Canal"
 msgstr ""
 
-#: shared/entities/enums.py:768
+#: shared/entities/enums.py:767
 msgid "Stream"
 msgstr ""
 
-#: shared/entities/enums.py:769 shared/entities/enums.py:1053
+#: shared/entities/enums.py:768 shared/entities/enums.py:1052
 #: shared/entities/water_area.py:8
 msgid "River"
 msgstr ""
 
-#: shared/entities/enums.py:770
+#: shared/entities/enums.py:769
 msgid "Riverbank"
 msgstr ""
 
-#: shared/entities/enums.py:772
+#: shared/entities/enums.py:771
 msgid "Dam"
 msgstr ""
 
-#: shared/entities/enums.py:774
+#: shared/entities/enums.py:773
 msgid "Drain"
 msgstr ""
 
-#: shared/entities/enums.py:775
+#: shared/entities/enums.py:774
 msgid "Waterfall"
 msgstr ""
 
-#: shared/entities/enums.py:776
+#: shared/entities/enums.py:775
 msgid "Wadi"
 msgstr ""
 
-#: shared/entities/enums.py:777
+#: shared/entities/enums.py:776
 msgid "Lock gate"
 msgstr ""
 
-#: shared/entities/enums.py:778
+#: shared/entities/enums.py:777
 msgid "Boatyard"
 msgstr ""
 
-#: shared/entities/enums.py:780
+#: shared/entities/enums.py:779
 msgid "Dock"
 msgstr ""
 
-#: shared/entities/enums.py:787 shared/entities/natural.py:49
+#: shared/entities/enums.py:786 shared/entities/natural.py:49
 msgid "Wetland"
 msgstr ""
 
-#: shared/entities/enums.py:788
+#: shared/entities/enums.py:787
 msgid "Scrub"
 msgstr ""
 
-#: shared/entities/enums.py:789 shared/entities/enums.py:1259
-#: shared/entities/enums.py:1340 shared/entities/enums.py:1359
+#: shared/entities/enums.py:788 shared/entities/enums.py:1258
+#: shared/entities/enums.py:1339 shared/entities/enums.py:1358
 #: shared/entities/enums.py:1559 shared/entities/land.py:73
 #: shared/entities/natural.py:53 shared/entities/recycling.py:46
 msgid "Wood"
 msgstr ""
 
-#: shared/entities/enums.py:790
+#: shared/entities/enums.py:789
 msgid "Scree"
 msgstr ""
 
-#: shared/entities/enums.py:792 shared/entities/enums.py:1517
+#: shared/entities/enums.py:791 shared/entities/enums.py:1517
 msgid "Peak"
 msgstr ""
 
-#: shared/entities/enums.py:794
+#: shared/entities/enums.py:793
 msgid "Saddle"
 msgstr ""
 
-#: shared/entities/enums.py:797
+#: shared/entities/enums.py:796
 msgid "Cave entrance"
 msgstr ""
 
-#: shared/entities/enums.py:798 shared/entities/enums.py:1595
+#: shared/entities/enums.py:797 shared/entities/enums.py:1595
 #: shared/entities/man_made.py:12 shared/entities/water_area.py:16
 msgid "Water"
 msgstr ""
 
-#: shared/entities/enums.py:799
+#: shared/entities/enums.py:798
 msgid "Tree row"
 msgstr ""
 
-#: shared/entities/enums.py:800
+#: shared/entities/enums.py:799
 msgid "Bare rock"
 msgstr ""
 
-#: shared/entities/enums.py:802
+#: shared/entities/enums.py:801
 msgid "Ridge"
 msgstr ""
 
-#: shared/entities/enums.py:803 shared/entities/enums.py:1023
-#: shared/entities/enums.py:1245 shared/entities/enums.py:1337
+#: shared/entities/enums.py:802 shared/entities/enums.py:1022
+#: shared/entities/enums.py:1244 shared/entities/enums.py:1336
 #: shared/entities/enums.py:1594
 msgid "Grass"
 msgstr ""
 
-#: shared/entities/enums.py:804
+#: shared/entities/enums.py:803
 msgid "Beach"
 msgstr ""
 
-#: shared/entities/enums.py:805
+#: shared/entities/enums.py:804
 msgid "Grassland"
 msgstr ""
 
-#: shared/entities/enums.py:806 shared/entities/enums.py:1038
+#: shared/entities/enums.py:805 shared/entities/enums.py:1037
 msgid "Shingle"
 msgstr ""
 
-#: shared/entities/enums.py:807
+#: shared/entities/enums.py:806
 msgid "Heath"
 msgstr ""
 
-#: shared/entities/enums.py:808 shared/entities/enums.py:1247
+#: shared/entities/enums.py:807 shared/entities/enums.py:1246
 msgid "Sand"
 msgstr ""
 
-#: shared/entities/enums.py:809
+#: shared/entities/enums.py:808
 msgid "Bedrock"
 msgstr ""
 
-#: shared/entities/enums.py:810
+#: shared/entities/enums.py:809
 msgid "Sinkhole"
 msgstr ""
 
-#: shared/entities/enums.py:811 shared/entities/enums.py:1262
+#: shared/entities/enums.py:810 shared/entities/enums.py:1261
 msgid "Mud"
 msgstr ""
 
-#: shared/entities/enums.py:812
+#: shared/entities/enums.py:811
 msgid "Valley"
 msgstr ""
 
-#: shared/entities/enums.py:813
+#: shared/entities/enums.py:812
 msgid "Hill"
 msgstr ""
 
-#: shared/entities/enums.py:822 shared/entities/enums.py:1222
+#: shared/entities/enums.py:821 shared/entities/enums.py:1221
 #: shared/entities/office.py:16
 msgid "Transportation"
 msgstr ""
 
-#: shared/entities/enums.py:823 shared/entities/enums.py:1064
+#: shared/entities/enums.py:822 shared/entities/enums.py:1063
 msgid "Civic"
 msgstr ""
 
-#: shared/entities/enums.py:824
+#: shared/entities/enums.py:823
 msgid "Train station"
 msgstr ""
 
-#: shared/entities/enums.py:827 shared/entities/enums.py:1073
+#: shared/entities/enums.py:826 shared/entities/enums.py:1072
 msgid "Roof"
 msgstr ""
 
-#: shared/entities/enums.py:828
+#: shared/entities/enums.py:827
 msgid "Warehouse"
 msgstr ""
 
-#: shared/entities/enums.py:829 shared/entities/enums.py:1021
-#: shared/entities/enums.py:1065 shared/entities/enums.py:1700
+#: shared/entities/enums.py:828 shared/entities/enums.py:1020
+#: shared/entities/enums.py:1064 shared/entities/enums.py:1700
 #: shared/entities/land.py:55 shared/entities/rail_way.py:11
 #: shared/entities/road.py:72
 msgid "Industrial"
 msgstr ""
 
-#: shared/entities/enums.py:832
+#: shared/entities/enums.py:831
 msgid "Railway station"
 msgstr ""
 
-#: shared/entities/enums.py:833 shared/entities/enums.py:1218
+#: shared/entities/enums.py:832 shared/entities/enums.py:1217
 msgid "Apartments"
 msgstr ""
 
-#: shared/entities/enums.py:834
+#: shared/entities/enums.py:833
 msgid "Cabin"
 msgstr ""
 
-#: shared/entities/enums.py:837
+#: shared/entities/enums.py:836
 msgid "Transformer tower"
 msgstr ""
 
-#: shared/entities/enums.py:845 shared/entities/enums.py:1128
+#: shared/entities/enums.py:844 shared/entities/enums.py:1127
 msgid "Guidepost"
 msgstr ""
 
-#: shared/entities/enums.py:851 shared/entities/enums.py:874
+#: shared/entities/enums.py:850 shared/entities/enums.py:873
 #: shared/entities/enums.py:1728
 msgid "Terminal"
 msgstr ""
 
-#: shared/entities/enums.py:853
+#: shared/entities/enums.py:852
 msgid "Bicyclemap"
 msgstr ""
 
-#: shared/entities/enums.py:861
+#: shared/entities/enums.py:860
 msgid "Platter"
 msgstr ""
 
-#: shared/entities/enums.py:862
+#: shared/entities/enums.py:861
 msgid "Helipad"
 msgstr ""
 
-#: shared/entities/enums.py:863
+#: shared/entities/enums.py:862
 msgid "Pylon"
 msgstr ""
 
-#: shared/entities/enums.py:865
+#: shared/entities/enums.py:864
 msgid "Cable car"
 msgstr ""
 
-#: shared/entities/enums.py:867
+#: shared/entities/enums.py:866
 msgid "Aerodrome"
 msgstr ""
 
-#: shared/entities/enums.py:868
+#: shared/entities/enums.py:867
 msgid "Taxiway"
 msgstr ""
 
-#: shared/entities/enums.py:869
+#: shared/entities/enums.py:868
 msgid "Chair lift"
 msgstr ""
 
-#: shared/entities/enums.py:871
+#: shared/entities/enums.py:870
 msgid "Drag lift"
 msgstr ""
 
-#: shared/entities/enums.py:872
+#: shared/entities/enums.py:871
 msgid "Lift"
 msgstr ""
 
-#: shared/entities/enums.py:873
+#: shared/entities/enums.py:872
 msgid "Apron"
 msgstr ""
 
-#: shared/entities/enums.py:875
+#: shared/entities/enums.py:874
 msgid "Hangar"
 msgstr ""
 
-#: shared/entities/enums.py:876
+#: shared/entities/enums.py:875
 msgid "Holding position"
 msgstr ""
 
-#: shared/entities/enums.py:879
+#: shared/entities/enums.py:878
 msgid "Papi"
 msgstr ""
 
-#: shared/entities/enums.py:880
+#: shared/entities/enums.py:879
 msgid "Parking position"
 msgstr ""
 
-#: shared/entities/enums.py:888 shared/entities/stop.py:75
+#: shared/entities/enums.py:887 shared/entities/stop.py:75
 msgid "Rail"
 msgstr ""
 
-#: shared/entities/enums.py:890
+#: shared/entities/enums.py:889
 msgid "Turntable"
 msgstr ""
 
-#: shared/entities/enums.py:891
+#: shared/entities/enums.py:890
 msgid "Level crossing"
 msgstr ""
 
-#: shared/entities/enums.py:892
+#: shared/entities/enums.py:891
 msgid "Buffer stop"
 msgstr ""
 
-#: shared/entities/enums.py:893 shared/entities/enums.py:1155
+#: shared/entities/enums.py:892 shared/entities/enums.py:1154
 #: shared/entities/stop.py:23
 msgid "Halt"
 msgstr ""
 
-#: shared/entities/enums.py:896 shared/entities/enums.py:1729
+#: shared/entities/enums.py:895 shared/entities/enums.py:1729
 #: shared/entities/rail_way.py:171
 msgid "Switch"
 msgstr ""
 
-#: shared/entities/enums.py:897 shared/entities/enums.py:1405
+#: shared/entities/enums.py:896 shared/entities/enums.py:1404
 #: shared/entities/land.py:24 shared/entities/platform.py:13
 #: shared/entities/rail_way.py:263 shared/entities/road.py:464
 #: shared/entities/stop.py:28
 msgid "Tram"
 msgstr ""
 
-#: shared/entities/enums.py:898
+#: shared/entities/enums.py:897
 msgid "Preserved"
 msgstr ""
 
-#: shared/entities/enums.py:899 shared/entities/enums.py:993
-#: shared/entities/enums.py:1130 shared/entities/enums.py:1443
+#: shared/entities/enums.py:898 shared/entities/enums.py:992
+#: shared/entities/enums.py:1129 shared/entities/enums.py:1442
 #: shared/entities/platform.py:6 shared/entities/platform.py:10
 msgid "Platform"
 msgstr ""
 
-#: shared/entities/enums.py:900
+#: shared/entities/enums.py:899
 msgid "Railway crossing"
 msgstr ""
 
-#: shared/entities/enums.py:901
+#: shared/entities/enums.py:900
 msgid "Narrow gauge"
 msgstr ""
 
-#: shared/entities/enums.py:902 shared/entities/enums.py:1148
+#: shared/entities/enums.py:901 shared/entities/enums.py:1147
 msgid "Service station"
 msgstr ""
 
-#: shared/entities/enums.py:903
+#: shared/entities/enums.py:902
 msgid "Junction"
 msgstr ""
 
-#: shared/entities/enums.py:905
+#: shared/entities/enums.py:904
 msgid "Razed"
 msgstr ""
 
-#: shared/entities/enums.py:907
+#: shared/entities/enums.py:906
 msgid "Dismantled"
 msgstr ""
 
-#: shared/entities/enums.py:908
+#: shared/entities/enums.py:907
 msgid "Miniature"
 msgstr ""
 
-#: shared/entities/enums.py:910
+#: shared/entities/enums.py:909
 msgid "Subway entrance"
 msgstr ""
 
-#: shared/entities/enums.py:912
+#: shared/entities/enums.py:911
 msgid "Crossover"
 msgstr ""
 
-#: shared/entities/enums.py:913 shared/entities/enums.py:1412
+#: shared/entities/enums.py:912 shared/entities/enums.py:1411
 #: shared/entities/land.py:25 shared/entities/platform.py:41
 #: shared/entities/stop.py:5 shared/entities/stop.py:8
 #: shared/entities/stop.py:70
 msgid "Subway"
 msgstr ""
 
-#: shared/entities/enums.py:915 shared/entities/enums.py:1416
+#: shared/entities/enums.py:914 shared/entities/enums.py:1415
 msgid "Funicular"
 msgstr ""
 
-#: shared/entities/enums.py:916
+#: shared/entities/enums.py:915
 msgid "Roundhouse"
 msgstr ""
 
-#: shared/entities/enums.py:918
+#: shared/entities/enums.py:917
 msgid "Signal box"
 msgstr ""
 
-#: shared/entities/enums.py:919 shared/entities/enums.py:985
-#: shared/entities/enums.py:1131 shared/entities/stop.py:15
+#: shared/entities/enums.py:918 shared/entities/enums.py:984
+#: shared/entities/enums.py:1130 shared/entities/stop.py:15
 #: shared/entities/stop.py:25
 msgid "Stop"
 msgstr ""
 
-#: shared/entities/enums.py:920 shared/entities/enums.py:999
+#: shared/entities/enums.py:919 shared/entities/enums.py:998
 msgid "Milestone"
 msgstr ""
 
-#: shared/entities/enums.py:922
+#: shared/entities/enums.py:921
 msgid "Defect detector"
 msgstr ""
 
-#: shared/entities/enums.py:923
+#: shared/entities/enums.py:922
 msgid "Isolated track section"
 msgstr ""
 
-#: shared/entities/enums.py:924
+#: shared/entities/enums.py:923
 msgid "Traverser"
 msgstr ""
 
-#: shared/entities/enums.py:925
+#: shared/entities/enums.py:924
 msgid "Staton"
 msgstr ""
 
-#: shared/entities/enums.py:926 shared/entities/enums.py:1616
+#: shared/entities/enums.py:925 shared/entities/enums.py:1616
 #: shared/entities/site.py:3 shared/entities/street.py:4
 msgid "Site"
 msgstr ""
 
-#: shared/entities/enums.py:927
+#: shared/entities/enums.py:926
 msgid "Workshop"
 msgstr ""
 
-#: shared/entities/enums.py:935 shared/entities/enums.py:944
+#: shared/entities/enums.py:934 shared/entities/enums.py:943
 msgid "Culvert"
 msgstr ""
 
-#: shared/entities/enums.py:936
+#: shared/entities/enums.py:935
 msgid "Building passage"
 msgstr ""
 
-#: shared/entities/enums.py:937
+#: shared/entities/enums.py:936
 msgid "Avalanche protector"
 msgstr ""
 
-#: shared/entities/enums.py:943
+#: shared/entities/enums.py:942
 msgid "Viaduct"
 msgstr ""
 
-#: shared/entities/enums.py:946
+#: shared/entities/enums.py:945
 msgid "Boardwalk"
 msgstr ""
 
-#: shared/entities/enums.py:947
+#: shared/entities/enums.py:946
 msgid "Trestle"
 msgstr ""
 
-#: shared/entities/enums.py:948
+#: shared/entities/enums.py:947
 msgid "Cantilever"
 msgstr ""
 
-#: shared/entities/enums.py:956
+#: shared/entities/enums.py:955
 msgid "Trunk"
 msgstr ""
 
-#: shared/entities/enums.py:957
+#: shared/entities/enums.py:956
 msgid "Primary"
 msgstr ""
 
-#: shared/entities/enums.py:958
+#: shared/entities/enums.py:957
 msgid "Secondary"
 msgstr ""
 
-#: shared/entities/enums.py:959
+#: shared/entities/enums.py:958
 msgid "Tertiary"
 msgstr ""
 
-#: shared/entities/enums.py:960
+#: shared/entities/enums.py:959
 msgid "Trunk link"
 msgstr ""
 
-#: shared/entities/enums.py:961
+#: shared/entities/enums.py:960
 msgid "Primary link"
 msgstr ""
 
-#: shared/entities/enums.py:964 shared/entities/enums.py:1447
+#: shared/entities/enums.py:963 shared/entities/enums.py:1446
 msgid "Footway"
 msgstr ""
 
-#: shared/entities/enums.py:968 shared/entities/enums.py:1449
+#: shared/entities/enums.py:967 shared/entities/enums.py:1448
 msgid "Living street"
 msgstr ""
 
-#: shared/entities/enums.py:970
+#: shared/entities/enums.py:969
 msgid "Secondary link"
 msgstr ""
 
-#: shared/entities/enums.py:971
+#: shared/entities/enums.py:970
 msgid "Turning circle"
 msgstr ""
 
-#: shared/entities/enums.py:973
+#: shared/entities/enums.py:972
 msgid "Motorway junction"
 msgstr ""
 
-#: shared/entities/enums.py:974
+#: shared/entities/enums.py:973
 msgid "Traffic mirror"
 msgstr ""
 
-#: shared/entities/enums.py:976
+#: shared/entities/enums.py:975
 msgid "Street lamp"
 msgstr ""
 
-#: shared/entities/enums.py:977
+#: shared/entities/enums.py:976
 msgid "Passing place"
 msgstr ""
 
-#: shared/entities/enums.py:978
+#: shared/entities/enums.py:977
 msgid "Mini roundabout"
 msgstr ""
 
-#: shared/entities/enums.py:980
+#: shared/entities/enums.py:979
 msgid "Tertiary link"
 msgstr ""
 
-#: shared/entities/enums.py:981
+#: shared/entities/enums.py:980
 msgid "Bridleway"
 msgstr ""
 
-#: shared/entities/enums.py:982 shared/entities/enums.py:1399
+#: shared/entities/enums.py:981 shared/entities/enums.py:1398
 #: shared/entities/road.py:131
 msgid "Road"
 msgstr ""
 
-#: shared/entities/enums.py:984
+#: shared/entities/enums.py:983
 msgid "Speed camera"
 msgstr ""
 
-#: shared/entities/enums.py:986 shared/entities/road.py:383
+#: shared/entities/enums.py:985 shared/entities/road.py:383
 msgid "Incline steep"
 msgstr ""
 
-#: shared/entities/enums.py:987
+#: shared/entities/enums.py:986
 msgid "Trolleybus stop"
 msgstr ""
 
-#: shared/entities/enums.py:989
+#: shared/entities/enums.py:988
 msgid "Speed radar"
 msgstr ""
 
-#: shared/entities/enums.py:990 shared/entities/enums.py:1207
+#: shared/entities/enums.py:989 shared/entities/enums.py:1206
 #: shared/entities/road.py:75
 msgid "Motorway"
 msgstr ""
 
-#: shared/entities/enums.py:991 shared/entities/enums.py:1208
+#: shared/entities/enums.py:990 shared/entities/enums.py:1207
 msgid "Motorway link"
 msgstr ""
 
-#: shared/entities/enums.py:992
+#: shared/entities/enums.py:991
 msgid "Raceway"
 msgstr ""
 
-#: shared/entities/enums.py:994 shared/entities/enums.py:1437
+#: shared/entities/enums.py:993 shared/entities/enums.py:1436
 msgid "Corridor"
 msgstr ""
 
-#: shared/entities/enums.py:997
+#: shared/entities/enums.py:996
 msgid "Traffic island"
 msgstr ""
 
-#: shared/entities/enums.py:998
+#: shared/entities/enums.py:997
 msgid "Give way"
 msgstr ""
 
-#: shared/entities/enums.py:1000
+#: shared/entities/enums.py:999
 msgid "Emergency access point"
 msgstr ""
 
-#: shared/entities/enums.py:1001
+#: shared/entities/enums.py:1000
 msgid "Turning loop"
 msgstr ""
 
-#: shared/entities/enums.py:1002
+#: shared/entities/enums.py:1001
 msgid "Services"
 msgstr ""
 
-#: shared/entities/enums.py:1003 shared/entities/enums.py:1448
+#: shared/entities/enums.py:1002 shared/entities/enums.py:1447
 msgid "Rest area"
 msgstr ""
 
-#: shared/entities/enums.py:1004
+#: shared/entities/enums.py:1003
 msgid "Emergency bay"
 msgstr ""
 
-#: shared/entities/enums.py:1005
+#: shared/entities/enums.py:1004
 msgid "Virtual"
 msgstr ""
 
-#: shared/entities/enums.py:1006
+#: shared/entities/enums.py:1005
 msgid "Stop line"
 msgstr ""
 
-#: shared/entities/enums.py:1007
+#: shared/entities/enums.py:1006
 msgid "Toll bridge"
 msgstr ""
 
-#: shared/entities/enums.py:1008
+#: shared/entities/enums.py:1007
 msgid "Speed display"
 msgstr ""
 
-#: shared/entities/enums.py:1009 shared/entities/enums.py:1163
-#: shared/entities/enums.py:1224 shared/entities/stop.py:12
+#: shared/entities/enums.py:1008 shared/entities/enums.py:1162
+#: shared/entities/enums.py:1223 shared/entities/stop.py:12
 msgid "Bus stop"
 msgstr ""
 
-#: shared/entities/enums.py:1010
+#: shared/entities/enums.py:1009
 msgid "Contruction"
 msgstr ""
 
-#: shared/entities/enums.py:1012 shared/entities/enums.py:1422
+#: shared/entities/enums.py:1011 shared/entities/enums.py:1421
 msgid "Camera"
 msgstr ""
 
-#: shared/entities/enums.py:1018
+#: shared/entities/enums.py:1017
 msgid "Forest"
 msgstr ""
 
-#: shared/entities/enums.py:1024
+#: shared/entities/enums.py:1023
 msgid "Cemetery"
 msgstr ""
 
-#: shared/entities/enums.py:1025
+#: shared/entities/enums.py:1024
 msgid "Farmland"
 msgstr ""
 
-#: shared/entities/enums.py:1027
+#: shared/entities/enums.py:1026
 msgid "Orchard"
 msgstr ""
 
-#: shared/entities/enums.py:1029
+#: shared/entities/enums.py:1028
 msgid "Allotments"
 msgstr ""
 
-#: shared/entities/enums.py:1030
+#: shared/entities/enums.py:1029
 msgid "Village green"
 msgstr ""
 
-#: shared/entities/enums.py:1034
+#: shared/entities/enums.py:1033
 msgid "Brownfield"
 msgstr ""
 
-#: shared/entities/enums.py:1035
+#: shared/entities/enums.py:1034
 msgid "Landfill"
 msgstr ""
 
-#: shared/entities/enums.py:1037
+#: shared/entities/enums.py:1036
 msgid "Plant nursery"
 msgstr ""
 
-#: shared/entities/enums.py:1039 shared/entities/enums.py:1212
+#: shared/entities/enums.py:1038 shared/entities/enums.py:1211
 #: shared/entities/office.py:5
 msgid "Retail"
 msgstr ""
 
-#: shared/entities/enums.py:1040 shared/entities/land.py:56
+#: shared/entities/enums.py:1039 shared/entities/land.py:56
 #: shared/entities/water_area.py:13
 msgid "Basin"
 msgstr ""
 
-#: shared/entities/enums.py:1042
+#: shared/entities/enums.py:1041
 msgid "Farmyard"
 msgstr ""
 
-#: shared/entities/enums.py:1043
+#: shared/entities/enums.py:1042
 msgid "Greenfield"
 msgstr ""
 
-#: shared/entities/enums.py:1046
+#: shared/entities/enums.py:1045
 msgid "Vineyard"
 msgstr ""
 
-#: shared/entities/enums.py:1047
+#: shared/entities/enums.py:1046
 msgid "Greenhouse horticulture"
 msgstr ""
 
-#: shared/entities/enums.py:1048
+#: shared/entities/enums.py:1047
 msgid "Animal keeping"
 msgstr ""
 
-#: shared/entities/enums.py:1050
+#: shared/entities/enums.py:1049
 msgid "Paddock"
 msgstr ""
 
-#: shared/entities/enums.py:1051
+#: shared/entities/enums.py:1050
 msgid "Churchyard"
 msgstr ""
 
-#: shared/entities/enums.py:1055
+#: shared/entities/enums.py:1054
 msgid "Flowerbed"
 msgstr ""
 
-#: shared/entities/enums.py:1057
+#: shared/entities/enums.py:1056
 msgid "Community food growing"
 msgstr ""
 
-#: shared/entities/enums.py:1058
+#: shared/entities/enums.py:1057
 msgid "Vliage grenn"
 msgstr ""
 
-#: shared/entities/enums.py:1066
+#: shared/entities/enums.py:1065
 msgid "Balcony"
 msgstr ""
 
-#: shared/entities/enums.py:1074
+#: shared/entities/enums.py:1073
 msgid "Column"
 msgstr ""
 
-#: shared/entities/enums.py:1085
+#: shared/entities/enums.py:1084
 msgid "Pyramidal"
 msgstr ""
 
-#: shared/entities/enums.py:1086
+#: shared/entities/enums.py:1085
 msgid "Hipped"
 msgstr ""
 
-#: shared/entities/enums.py:1087
+#: shared/entities/enums.py:1086
 msgid "Gabled"
 msgstr ""
 
-#: shared/entities/enums.py:1088
+#: shared/entities/enums.py:1087
 msgid "Skillion"
 msgstr ""
 
-#: shared/entities/enums.py:1089
+#: shared/entities/enums.py:1088
 msgid "Sawtooth"
 msgstr ""
 
-#: shared/entities/enums.py:1090
+#: shared/entities/enums.py:1089
 msgid "Dome"
 msgstr ""
 
-#: shared/entities/enums.py:1091
+#: shared/entities/enums.py:1090
 msgid "Round"
 msgstr ""
 
-#: shared/entities/enums.py:1092
+#: shared/entities/enums.py:1091
 msgid "Gambrel"
 msgstr ""
 
-#: shared/entities/enums.py:1093
+#: shared/entities/enums.py:1092
 msgid "Mansard"
 msgstr ""
 
-#: shared/entities/enums.py:1094
+#: shared/entities/enums.py:1093
 msgid "Onion"
 msgstr ""
 
-#: shared/entities/enums.py:1095
+#: shared/entities/enums.py:1094
 msgid "Side hipped"
 msgstr ""
 
-#: shared/entities/enums.py:1096
+#: shared/entities/enums.py:1095
 msgid "Saltbox"
 msgstr ""
 
-#: shared/entities/enums.py:1097
+#: shared/entities/enums.py:1096
 msgid "Tripple skillion"
 msgstr ""
 
-#: shared/entities/enums.py:1098
+#: shared/entities/enums.py:1097
 msgid "Pitched"
 msgstr ""
 
-#: shared/entities/enums.py:1099
+#: shared/entities/enums.py:1098
 msgid "Triple skillion"
 msgstr ""
 
-#: shared/entities/enums.py:1100
+#: shared/entities/enums.py:1099
 msgid "Ga"
 msgstr ""
 
-#: shared/entities/enums.py:1102
+#: shared/entities/enums.py:1101
 msgid "Pyrmidal"
 msgstr ""
 
-#: shared/entities/enums.py:1103 shared/entities/enums.py:1328
+#: shared/entities/enums.py:1102 shared/entities/enums.py:1327
 msgid "Tile"
 msgstr ""
 
-#: shared/entities/enums.py:1104
+#: shared/entities/enums.py:1103
 msgid "Many"
 msgstr ""
 
-#: shared/entities/enums.py:1110 shared/entities/enums.py:1371
+#: shared/entities/enums.py:1109 shared/entities/enums.py:1370
 #: shared/entities/fire_hydrant.py:7 shared/entities/recycling.py:8
 #: shared/entities/recycling.py:56
 msgid "Underground"
 msgstr ""
 
-#: shared/entities/enums.py:1113
+#: shared/entities/enums.py:1112
 msgid "Overground"
 msgstr ""
 
-#: shared/entities/enums.py:1117
+#: shared/entities/enums.py:1116
 msgid "Beam"
 msgstr ""
 
-#: shared/entities/enums.py:1118
+#: shared/entities/enums.py:1117
 msgid "Arch"
 msgstr ""
 
-#: shared/entities/enums.py:1119
+#: shared/entities/enums.py:1118
 msgid "Truss"
 msgstr ""
 
-#: shared/entities/enums.py:1120
+#: shared/entities/enums.py:1119
 msgid "Humpback"
 msgstr ""
 
-#: shared/entities/enums.py:1121
+#: shared/entities/enums.py:1120
 msgid "Suspension"
 msgstr ""
 
-#: shared/entities/enums.py:1122
+#: shared/entities/enums.py:1121
 msgid "Simple suspension"
 msgstr ""
 
-#: shared/entities/enums.py:1126
+#: shared/entities/enums.py:1125
 msgid "Outer"
 msgstr ""
 
-#: shared/entities/enums.py:1127
+#: shared/entities/enums.py:1126
 msgid "Inner"
 msgstr ""
 
-#: shared/entities/enums.py:1129 shared/entities/enums.py:1411
+#: shared/entities/enums.py:1128 shared/entities/enums.py:1410
 #: shared/entities/power_line.py:13 shared/entities/power_line.py:23
 #: shared/entities/road.py:179 shared/entities/route.py:17
 msgid "Route"
 msgstr ""
 
-#: shared/entities/enums.py:1132
+#: shared/entities/enums.py:1131
 msgid "Admin centre"
 msgstr ""
 
-#: shared/entities/enums.py:1133
+#: shared/entities/enums.py:1132
 msgid "Subarea"
 msgstr ""
 
-#: shared/entities/enums.py:1134
+#: shared/entities/enums.py:1133
 msgid "Outline"
 msgstr ""
 
-#: shared/entities/enums.py:1137 shared/entities/route.py:35
+#: shared/entities/enums.py:1136 shared/entities/route.py:35
 msgid "To"
 msgstr ""
 
-#: shared/entities/enums.py:1138 shared/entities/road.py:111
+#: shared/entities/enums.py:1137 shared/entities/road.py:111
 msgid "Line"
 msgstr ""
 
-#: shared/entities/enums.py:1140
+#: shared/entities/enums.py:1139
 msgid "Main stream"
 msgstr ""
 
-#: shared/entities/enums.py:1141 shared/entities/enums.py:1720
+#: shared/entities/enums.py:1140 shared/entities/enums.py:1720
 #: shared/entities/transformer.py:7
 msgid "Substation"
 msgstr ""
 
-#: shared/entities/enums.py:1142 shared/entities/route.py:31
+#: shared/entities/enums.py:1141 shared/entities/route.py:31
 msgid "From "
 msgstr ""
 
-#: shared/entities/enums.py:1145
+#: shared/entities/enums.py:1144
 msgid "Generator"
 msgstr ""
 
-#: shared/entities/enums.py:1146
+#: shared/entities/enums.py:1145
 msgid "Link"
 msgstr ""
 
-#: shared/entities/enums.py:1147 shared/entities/route.py:43
+#: shared/entities/enums.py:1146 shared/entities/route.py:43
 msgid "Via"
 msgstr ""
 
-#: shared/entities/enums.py:1150
+#: shared/entities/enums.py:1149
 msgid "Platform exit only"
 msgstr ""
 
-#: shared/entities/enums.py:1153
+#: shared/entities/enums.py:1152
 msgid "Yard"
 msgstr ""
 
-#: shared/entities/enums.py:1156
+#: shared/entities/enums.py:1155
 msgid "Service yard"
 msgstr ""
 
-#: shared/entities/enums.py:1157 shared/entities/platform.py:7
+#: shared/entities/enums.py:1156 shared/entities/platform.py:7
 #: shared/entities/stop.py:14
 msgid "Tram stop"
 msgstr ""
 
-#: shared/entities/enums.py:1159
+#: shared/entities/enums.py:1158
 msgid "Backward stop"
 msgstr ""
 
-#: shared/entities/enums.py:1160
+#: shared/entities/enums.py:1159
 msgid "Platform on demand"
 msgstr ""
 
-#: shared/entities/enums.py:1161 shared/entities/route.py:7
+#: shared/entities/enums.py:1160 shared/entities/route.py:7
 msgid "Alternate"
 msgstr ""
 
-#: shared/entities/enums.py:1162
+#: shared/entities/enums.py:1161
 msgid "Forward stop"
 msgstr ""
 
-#: shared/entities/enums.py:1164
+#: shared/entities/enums.py:1163
 msgid "Stop on demand"
 msgstr ""
 
-#: shared/entities/enums.py:1165 shared/entities/enums.py:1237
+#: shared/entities/enums.py:1164 shared/entities/enums.py:1236
 msgid "Across"
 msgstr ""
 
-#: shared/entities/enums.py:1166
+#: shared/entities/enums.py:1165
 msgid "Under"
 msgstr ""
 
-#: shared/entities/enums.py:1168
+#: shared/entities/enums.py:1167
 msgid "Stop entry only"
 msgstr ""
 
-#: shared/entities/enums.py:1169
+#: shared/entities/enums.py:1168
 msgid "Stop exit only"
 msgstr ""
 
-#: shared/entities/enums.py:1172
+#: shared/entities/enums.py:1171
 msgid "Platform entry only"
 msgstr ""
 
-#: shared/entities/enums.py:1173
+#: shared/entities/enums.py:1172
 msgid "Through"
 msgstr ""
 
-#: shared/entities/enums.py:1175
+#: shared/entities/enums.py:1174
 msgid "Device"
 msgstr ""
 
-#: shared/entities/enums.py:1176
+#: shared/entities/enums.py:1175
 msgid "Buildingpart"
 msgstr ""
 
-#: shared/entities/enums.py:1177
+#: shared/entities/enums.py:1176
 msgid "Side stream"
 msgstr ""
 
-#: shared/entities/enums.py:1178 shared/entities/enums.py:1731
+#: shared/entities/enums.py:1177 shared/entities/enums.py:1731
 msgid "Sub station"
 msgstr ""
 
-#: shared/entities/enums.py:1179
+#: shared/entities/enums.py:1178
 msgid "Excursion"
 msgstr ""
 
-#: shared/entities/enums.py:1180
+#: shared/entities/enums.py:1179
 msgid "Entrance exit"
 msgstr ""
 
-#: shared/entities/enums.py:1181 shared/entities/road.py:63
+#: shared/entities/enums.py:1180 shared/entities/road.py:63
 msgid "End"
 msgstr ""
 
-#: shared/entities/enums.py:1182
+#: shared/entities/enums.py:1181
 msgid "Alternation"
 msgstr ""
 
-#: shared/entities/enums.py:1183
+#: shared/entities/enums.py:1182
 msgid "Stop position"
 msgstr ""
 
-#: shared/entities/enums.py:1184
+#: shared/entities/enums.py:1183
 msgid "Level 1"
 msgstr ""
 
-#: shared/entities/enums.py:1186
+#: shared/entities/enums.py:1185
 msgid "Shell"
 msgstr ""
 
-#: shared/entities/enums.py:1187 shared/entities/enums.py:1617
+#: shared/entities/enums.py:1186 shared/entities/enums.py:1617
 #: shared/entities/stop.py:20
 msgid "Stop area"
 msgstr ""
 
-#: shared/entities/enums.py:1188
+#: shared/entities/enums.py:1187
 msgid "Perimeter"
 msgstr ""
 
-#: shared/entities/enums.py:1189
+#: shared/entities/enums.py:1188
 msgid "Begin"
 msgstr ""
 
-#: shared/entities/enums.py:1191
+#: shared/entities/enums.py:1190
 msgid "Stop 2"
 msgstr ""
 
-#: shared/entities/enums.py:1192
+#: shared/entities/enums.py:1191
 msgid "Stop 10"
 msgstr ""
 
-#: shared/entities/enums.py:1193
+#: shared/entities/enums.py:1192
 msgid "Stop 14"
 msgstr ""
 
-#: shared/entities/enums.py:1197
+#: shared/entities/enums.py:1196
 msgid "Stop 1"
 msgstr ""
 
-#: shared/entities/enums.py:1198
+#: shared/entities/enums.py:1197
 msgid "Stop 0 backward"
 msgstr ""
 
-#: shared/entities/enums.py:1199
+#: shared/entities/enums.py:1198
 msgid "Label"
 msgstr ""
 
-#: shared/entities/enums.py:1201
+#: shared/entities/enums.py:1200
 msgid "Stop 32"
 msgstr ""
 
-#: shared/entities/enums.py:1215
+#: shared/entities/enums.py:1214
 msgid "Terrace"
 msgstr ""
 
-#: shared/entities/enums.py:1225
+#: shared/entities/enums.py:1224
 msgid "Reatil"
 msgstr ""
 
-#: shared/entities/enums.py:1229
+#: shared/entities/enums.py:1228
 msgid "Factory"
 msgstr ""
 
-#: shared/entities/enums.py:1230
+#: shared/entities/enums.py:1229
 msgid "Distributor"
 msgstr ""
 
-#: shared/entities/enums.py:1231 shared/entities/enums.py:1400
+#: shared/entities/enums.py:1230 shared/entities/enums.py:1399
 #: shared/entities/man_made.py:9 shared/entities/power.py:3
 #: shared/entities/rf.py:17
 msgid "Power"
 msgstr ""
 
-#: shared/entities/enums.py:1232 shared/entities/land.py:79
+#: shared/entities/enums.py:1231 shared/entities/land.py:79
 msgid "Depot"
 msgstr ""
 
-#: shared/entities/enums.py:1238
+#: shared/entities/enums.py:1237
 msgid "Along"
 msgstr ""
 
-#: shared/entities/enums.py:1242
+#: shared/entities/enums.py:1241
 msgid "Dirt"
 msgstr ""
 
-#: shared/entities/enums.py:1243 shared/entities/enums.py:1333
+#: shared/entities/enums.py:1242 shared/entities/enums.py:1332
 #: shared/entities/enums.py:1557
 msgid "Concrete"
 msgstr ""
 
-#: shared/entities/enums.py:1244 shared/entities/enums.py:1373
+#: shared/entities/enums.py:1243 shared/entities/enums.py:1372
 msgid "Asphalt"
 msgstr ""
 
-#: shared/entities/enums.py:1246
+#: shared/entities/enums.py:1245
 msgid "Clay"
 msgstr ""
 
-#: shared/entities/enums.py:1248
+#: shared/entities/enums.py:1247
 msgid "Artificial grass"
 msgstr ""
 
-#: shared/entities/enums.py:1249
+#: shared/entities/enums.py:1248
 msgid "Tartan"
 msgstr ""
 
-#: shared/entities/enums.py:1250 shared/entities/enums.py:1336
+#: shared/entities/enums.py:1249 shared/entities/enums.py:1335
 msgid "Gravel"
 msgstr ""
 
-#: shared/entities/enums.py:1251
+#: shared/entities/enums.py:1250
 msgid "Unpaved"
 msgstr ""
 
-#: shared/entities/enums.py:1252 shared/entities/enums.py:1341
+#: shared/entities/enums.py:1251 shared/entities/enums.py:1340
 #: shared/entities/enums.py:1566 shared/entities/recycling.py:21
 msgid "Plastic"
 msgstr ""
 
-#: shared/entities/enums.py:1253 shared/entities/enums.py:1570
+#: shared/entities/enums.py:1252 shared/entities/enums.py:1570
 #: shared/entities/enums.py:1767
 msgid "Ground"
 msgstr ""
 
-#: shared/entities/enums.py:1254
+#: shared/entities/enums.py:1253
 msgid "Paved"
 msgstr ""
 
-#: shared/entities/enums.py:1255
+#: shared/entities/enums.py:1254
 msgid "Paving stones"
 msgstr ""
 
-#: shared/entities/enums.py:1256
+#: shared/entities/enums.py:1255
 msgid "Cobblestone"
 msgstr ""
 
-#: shared/entities/enums.py:1257
+#: shared/entities/enums.py:1256
 msgid "Sett"
 msgstr ""
 
-#: shared/entities/enums.py:1258
+#: shared/entities/enums.py:1257
 msgid "Compacted"
 msgstr ""
 
-#: shared/entities/enums.py:1260 shared/entities/enums.py:1555
+#: shared/entities/enums.py:1259 shared/entities/enums.py:1555
 msgid "Steel"
 msgstr ""
 
-#: shared/entities/enums.py:1261
+#: shared/entities/enums.py:1260
 msgid "Fine gravel"
 msgstr ""
 
-#: shared/entities/enums.py:1263
+#: shared/entities/enums.py:1262
 msgid "Concrete slabs"
 msgstr ""
 
-#: shared/entities/enums.py:1265 shared/entities/enums.py:1332
-#: shared/entities/enums.py:1358 shared/entities/enums.py:1567
+#: shared/entities/enums.py:1264 shared/entities/enums.py:1331
+#: shared/entities/enums.py:1357 shared/entities/enums.py:1567
 msgid "Metal"
 msgstr ""
 
-#: shared/entities/enums.py:1266
+#: shared/entities/enums.py:1265
 msgid "Grass paver"
 msgstr ""
 
-#: shared/entities/enums.py:1267
+#: shared/entities/enums.py:1266
 msgid "Earth"
 msgstr ""
 
-#: shared/entities/enums.py:1268
+#: shared/entities/enums.py:1267
 msgid "Rocks"
 msgstr ""
 
-#: shared/entities/enums.py:1270
+#: shared/entities/enums.py:1269
 msgid "Pebblestone"
 msgstr ""
 
-#: shared/entities/enums.py:1271
+#: shared/entities/enums.py:1270
 msgid "Panel"
 msgstr ""
 
-#: shared/entities/enums.py:1272
+#: shared/entities/enums.py:1271
 msgid "Pannel"
 msgstr ""
 
-#: shared/entities/enums.py:1273
+#: shared/entities/enums.py:1272
 msgid "Artificial turf"
 msgstr ""
 
-#: shared/entities/enums.py:1274
+#: shared/entities/enums.py:1273
 msgid "Concrete plates"
 msgstr ""
 
-#: shared/entities/enums.py:1275
+#: shared/entities/enums.py:1274
 msgid "Brash"
 msgstr ""
 
-#: shared/entities/enums.py:1276
+#: shared/entities/enums.py:1275
 msgid "Asp"
 msgstr ""
 
-#: shared/entities/enums.py:1277
+#: shared/entities/enums.py:1276
 msgid "Set"
 msgstr ""
 
-#: shared/entities/enums.py:1278
+#: shared/entities/enums.py:1277
 msgid "Ettand"
 msgstr ""
 
-#: shared/entities/enums.py:1279
+#: shared/entities/enums.py:1278
 msgid "Metal grid"
 msgstr ""
 
-#: shared/entities/enums.py:1280
+#: shared/entities/enums.py:1279
 msgid "Rubber"
 msgstr ""
 
-#: shared/entities/enums.py:1281
+#: shared/entities/enums.py:1280
 msgid "Sd"
 msgstr ""
 
-#: shared/entities/enums.py:1282
+#: shared/entities/enums.py:1281
 msgid "Soil"
 msgstr ""
 
-#: shared/entities/enums.py:1283
+#: shared/entities/enums.py:1282
 msgid "Tiled"
 msgstr ""
 
-#: shared/entities/enums.py:1284
+#: shared/entities/enums.py:1283
 msgid "Synthetic turf"
 msgstr ""
 
-#: shared/entities/enums.py:1295 shared/entities/road.py:8
+#: shared/entities/enums.py:1294 shared/entities/road.py:8
 msgid "Free"
 msgstr ""
 
-#: shared/entities/enums.py:1300 shared/entities/fire_hydrant.py:11
+#: shared/entities/enums.py:1299 shared/entities/fire_hydrant.py:11
 #: shared/entities/rail_way.py:40
 msgid "Green"
 msgstr ""
 
-#: shared/entities/enums.py:1301 shared/entities/golf_course.py:5
+#: shared/entities/enums.py:1300 shared/entities/golf_course.py:5
 msgid "Driving range"
 msgstr ""
 
-#: shared/entities/enums.py:1304
+#: shared/entities/enums.py:1303
 msgid "Lowered"
 msgstr ""
 
-#: shared/entities/enums.py:1305
+#: shared/entities/enums.py:1304
 msgid "Raised"
 msgstr ""
 
-#: shared/entities/enums.py:1316 shared/entities/rail_way.py:23
+#: shared/entities/enums.py:1315 shared/entities/rail_way.py:23
 #: shared/entities/rail_way.py:77 shared/entities/road.py:56
 #: shared/entities/road.py:94 shared/entities/steps.py:26
 msgid "Left"
 msgstr ""
 
-#: shared/entities/enums.py:1317 shared/entities/rail_way.py:24
+#: shared/entities/enums.py:1316 shared/entities/rail_way.py:24
 #: shared/entities/rail_way.py:78 shared/entities/road.py:55
 #: shared/entities/road.py:93 shared/entities/road.py:102
 #: shared/entities/steps.py:27
 msgid "Right"
 msgstr ""
 
-#: shared/entities/enums.py:1318 shared/entities/enums.py:1625
+#: shared/entities/enums.py:1317 shared/entities/enums.py:1625
 #: shared/entities/enums.py:1818 shared/entities/rail_way.py:95
 #: shared/entities/steps.py:28
 msgid "Both"
 msgstr ""
 
-#: shared/entities/enums.py:1320 shared/entities/road.py:53
+#: shared/entities/enums.py:1319 shared/entities/road.py:53
 msgid "Separate"
 msgstr ""
 
-#: shared/entities/enums.py:1326
+#: shared/entities/enums.py:1325
 msgid "Roof tiles"
 msgstr ""
 
-#: shared/entities/enums.py:1327
+#: shared/entities/enums.py:1326
 msgid "Tin"
 msgstr ""
 
-#: shared/entities/enums.py:1330
+#: shared/entities/enums.py:1329
 msgid "Tar paper"
 msgstr ""
 
-#: shared/entities/enums.py:1331
+#: shared/entities/enums.py:1330
 msgid "Copper"
 msgstr ""
 
-#: shared/entities/enums.py:1335
+#: shared/entities/enums.py:1334
 msgid "Slate"
 msgstr ""
 
-#: shared/entities/enums.py:1338 shared/entities/enums.py:1560
+#: shared/entities/enums.py:1337 shared/entities/enums.py:1560
 msgid "Limestone"
 msgstr ""
 
-#: shared/entities/enums.py:1339
+#: shared/entities/enums.py:1338
 msgid "Plaster"
 msgstr ""
 
-#: shared/entities/enums.py:1342 shared/entities/enums.py:1562
+#: shared/entities/enums.py:1341 shared/entities/enums.py:1562
 msgid "Sandstone"
 msgstr ""
 
-#: shared/entities/enums.py:1343
+#: shared/entities/enums.py:1342
 msgid "Linestone"
 msgstr ""
 
-#: shared/entities/enums.py:1350
+#: shared/entities/enums.py:1349
 msgid "Webcam"
 msgstr ""
 
-#: shared/entities/enums.py:1354
+#: shared/entities/enums.py:1353
 msgid "Chain link"
 msgstr ""
 
-#: shared/entities/enums.py:1355
+#: shared/entities/enums.py:1354
 msgid "Electric"
 msgstr ""
 
-#: shared/entities/enums.py:1360
+#: shared/entities/enums.py:1359
 msgid "Corrugated metal"
 msgstr ""
 
-#: shared/entities/enums.py:1361
+#: shared/entities/enums.py:1360
 msgid "Balustrade"
 msgstr ""
 
-#: shared/entities/enums.py:1363
+#: shared/entities/enums.py:1362
 msgid "Bars"
 msgstr ""
 
-#: shared/entities/enums.py:1370
+#: shared/entities/enums.py:1369
 msgid "Multi storey"
 msgstr ""
 
-#: shared/entities/enums.py:1372
+#: shared/entities/enums.py:1371
 msgid "Rooftop"
 msgstr ""
 
-#: shared/entities/enums.py:1374 shared/entities/road.py:26
+#: shared/entities/enums.py:1373 shared/entities/road.py:26
 #: shared/entities/road.py:47 shared/entities/road.py:82
 msgid "Lane"
 msgstr ""
 
-#: shared/entities/enums.py:1375
+#: shared/entities/enums.py:1374
 msgid "Kiss and ride"
 msgstr ""
 
-#: shared/entities/enums.py:1377
+#: shared/entities/enums.py:1376
 msgid "Carports"
 msgstr ""
 
-#: shared/entities/enums.py:1378
+#: shared/entities/enums.py:1377
 msgid "Sheds"
 msgstr ""
 
-#: shared/entities/enums.py:1382
+#: shared/entities/enums.py:1381
 msgid "No right turn"
 msgstr ""
 
-#: shared/entities/enums.py:1383
+#: shared/entities/enums.py:1382
 msgid "Only right turn"
 msgstr ""
 
-#: shared/entities/enums.py:1384
+#: shared/entities/enums.py:1383
 msgid "Only straight on"
 msgstr ""
 
-#: shared/entities/enums.py:1385
+#: shared/entities/enums.py:1384
 msgid "No left turn"
 msgstr ""
 
-#: shared/entities/enums.py:1386
+#: shared/entities/enums.py:1385
 msgid "No u turn"
 msgstr ""
 
-#: shared/entities/enums.py:1387 shared/entities/enums.py:1539
+#: shared/entities/enums.py:1386 shared/entities/enums.py:1539
 #: shared/entities/restriction.py:8 shared/entities/road.py:324
 msgid "Restriction"
 msgstr ""
 
-#: shared/entities/enums.py:1388
+#: shared/entities/enums.py:1387
 msgid "No straight on"
 msgstr ""
 
-#: shared/entities/enums.py:1389
+#: shared/entities/enums.py:1388
 msgid "Only left turn"
 msgstr ""
 
-#: shared/entities/enums.py:1390 shared/entities/no_exit.py:2
+#: shared/entities/enums.py:1389 shared/entities/no_exit.py:2
 msgid "No exit"
 msgstr ""
 
-#: shared/entities/enums.py:1397 shared/entities/rail_way.py:105
+#: shared/entities/enums.py:1396 shared/entities/rail_way.py:105
 #: shared/entities/road.py:194
 msgid "Tracks"
 msgstr ""
 
-#: shared/entities/enums.py:1398 shared/entities/platform.py:11
+#: shared/entities/enums.py:1397 shared/entities/platform.py:11
 #: shared/entities/rail_way.py:170 shared/entities/stop.py:29
 msgid "Train"
 msgstr ""
 
-#: shared/entities/enums.py:1403 shared/entities/land.py:23
+#: shared/entities/enums.py:1402 shared/entities/land.py:23
 #: shared/entities/parking.py:44 shared/entities/platform.py:12
 #: shared/entities/road.py:276 shared/entities/stop.py:27
 msgid "Bus"
 msgstr ""
 
-#: shared/entities/enums.py:1404 shared/entities/platform.py:29
+#: shared/entities/enums.py:1403 shared/entities/platform.py:29
 #: shared/entities/stop.py:44
 msgid "Trolleybus"
 msgstr ""
 
-#: shared/entities/enums.py:1410 shared/entities/route.py:63
+#: shared/entities/enums.py:1409 shared/entities/route.py:63
 msgid "Ferry"
 msgstr ""
 
-#: shared/entities/enums.py:1413
+#: shared/entities/enums.py:1412
 msgid "Tourist train"
 msgstr ""
 
-#: shared/entities/enums.py:1414
+#: shared/entities/enums.py:1413
 msgid "Light rail"
 msgstr ""
 
-#: shared/entities/enums.py:1421
+#: shared/entities/enums.py:1420
 msgid "Guard"
 msgstr ""
 
-#: shared/entities/enums.py:1426 shared/entities/enums.py:1459
+#: shared/entities/enums.py:1425 shared/entities/enums.py:1458
 msgid "Town"
 msgstr ""
 
-#: shared/entities/enums.py:1427
+#: shared/entities/enums.py:1426
 msgid "Traffic"
 msgstr ""
 
-#: shared/entities/enums.py:1456
+#: shared/entities/enums.py:1455
 msgid "Village"
 msgstr ""
 
-#: shared/entities/enums.py:1457
+#: shared/entities/enums.py:1456
 msgid "Hamlet"
 msgstr ""
 
-#: shared/entities/enums.py:1460
+#: shared/entities/enums.py:1459
 msgid "Locality"
 msgstr ""
 
-#: shared/entities/enums.py:1462
+#: shared/entities/enums.py:1461
 msgid "Neighbourhood"
 msgstr ""
 
-#: shared/entities/enums.py:1463
+#: shared/entities/enums.py:1462
 msgid "Islet"
 msgstr ""
 
-#: shared/entities/enums.py:1465
+#: shared/entities/enums.py:1464
 msgid "Square"
 msgstr ""
 
-#: shared/entities/enums.py:1467
+#: shared/entities/enums.py:1466
 msgid "Isolated dwelling"
 msgstr ""
 
-#: shared/entities/enums.py:1472 shared/entities/tourism.py:98
+#: shared/entities/enums.py:1471 shared/entities/tourism.py:98
 msgid "Water slide"
 msgstr ""
 
-#: shared/entities/enums.py:1473
+#: shared/entities/enums.py:1472
 msgid "Fossils"
+msgstr ""
+
+#: shared/entities/enums.py:1473
+msgid "Zoo part"
 msgstr ""
 
 #: shared/entities/enums.py:1476 shared/entities/enums.py:1699
@@ -7811,7 +7815,7 @@ msgstr ""
 msgid "Fountain"
 msgstr ""
 
-#: shared/entities/fuel.py:10
+#: shared/entities/fuel.py:9
 msgid "Internet access paid"
 msgstr ""
 
@@ -8134,6 +8138,10 @@ msgstr ""
 msgid "Named"
 msgstr ""
 
+#: shared/entities/named.py:3
+msgid "Name"
+msgstr ""
+
 #: shared/entities/natural.py:5
 msgid "Bog"
 msgstr ""
@@ -8307,7 +8315,7 @@ msgstr ""
 msgid "Platform edge"
 msgstr ""
 
-#: shared/entities/platform.py:24 shared/entities/shelter.py:15
+#: shared/entities/platform.py:24 shared/entities/shelter.py:14
 #: shared/entities/stop.py:56
 msgid "Bin"
 msgstr ""
