@@ -10,6 +10,7 @@ from shared.entities.enums import RoadType
 @attr.s
 class SoundController:
     _point_of_view = attr.ib()
+    _load_sound_played = attr.ib(default=False)
     _groups_map = attr.ib(init=False, default=collections.defaultdict(collections.OrderedDict))
     
     def __attrs_post_init__(self):
@@ -19,6 +20,9 @@ class SoundController:
         entity_rotated.connect(self._rotated)
 
     def post_move(self, sender):
+        if not self._load_sound_played:
+            sound().play("loaded")
+            self._load_sound_played = True
         cartesian = sender.position.toCartesian()
         x, y, z = (cartesian.x, cartesian.y, cartesian.z)
         if self._point_of_view is sender:

@@ -1,12 +1,13 @@
 import shapely.wkb as wkb
 from sqlalchemy import func
 import geoalchemy
+from pygeodesy.ellipsoidalVincenty import LatLon
 from shared.database import Database
 from shared.geometry_utils import xy_ranges_bounding_square
 from shared.models import Entity, IdxEntitiesGeometry
 from .geometry_utils import distance_filter, effective_width_filter
 from .measuring import measure
-from .models import Bookmark
+from .models import Bookmark, LastLocation
 from .import services
 
 class Map:
@@ -56,4 +57,26 @@ class Map:
 
     def remove_bookmark(self, mark):
         services.app_db_session().delete(mark)
+        services.app_db_session().commit()
+
+    @property
+    def _last_location_entity(self):
+        return services.app_db_session().query(LastLocation).filter(LastLocation.area == self._name).first()
+
+    @property
+    def last_location(self):
+        loc = self._last_location_entity
+        if loc:
+            return LatLon(loc.latitude, loc.longitude)
+        else:
+            return None
+
+    @last_location.setter
+    def last_location(self, val):
+        loc = self._last_location_entity
+        if not loc:
+            loc = LastLocation(area=self._name)
+            services.app_db_session().add(loc)
+        loc.latitude = val.lat
+        loc.longitude = val.lon
         services.app_db_session().commit()

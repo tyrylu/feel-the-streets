@@ -6,7 +6,7 @@ from sqlalchemy import func
 from pygeodesy.ellipsoidalVincenty import LatLon
 import bitmath
 from .entities import Person
-from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController
+from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController, LastLocationController
 from .area_selection import AreaSelectionDialog
 from .services import map
 from .server_interaction import download_area_database, SemanticChangeRetriever, has_api_connectivity
@@ -36,15 +36,18 @@ class MainFrame(wx.Frame):
             self.SetFocus()
             map.set_call_args(dlg.selected_map)
         self._app_controller = ApplicationController(self)
-        entity = map()._db.query(Entity).filter(func.json_extract(Entity.data, "$.osm_id").startswith("n")).first()
-        lon = map()._db.scalar(entity.geometry.x)
-        lat = map()._db.scalar(entity.geometry.y)
-        person = Person(map(), LatLon(lat, lon))
+        person = Person(map(), LatLon(0, 0))
         self._person_controller = InteractivePersonController(person)
         self._sound_controller = SoundController(person)
         self._announcements_controller = AnnouncementsController(person)
-        person.move_to_current()
-    
+        self._last_location_controller = LastLocationController(person)
+        if not self._last_location_controller.restored_position:
+            entity = map()._db.query(Entity).filter(func.json_extract(Entity.data, "$.osm_id").startswith("n")).first()
+            lon = map()._db.scalar(entity.geometry.x)
+            lat = map()._db.scalar(entity.geometry.y)
+            person.move_to(LatLon(lat, lon))
+
+   
     def _download_progress_callback(self, total, so_far):
         if not self._download_progress_dialog:
             self._download_progress_dialog = wx.ProgressDialog(_("Download in progress"), _("Downloading the selected database."), parent=self, style=wx.PD_APP_MODAL|wx.PD_ESTIMATED_TIME|wx.PD_ELAPSED_TIME|wx.PD_AUTO_HIDE, maximum=total)
@@ -73,8 +76,8 @@ class MainFrame(wx.Frame):
         changelog = open(changelog_path, "w", encoding="UTF-8")
         for nth, change in enumerate(retriever.new_changes_in(area)):
             progress.Update(nth, _("Applying changes for the selected database, change {nth} of {total}").format(nth=nth, total=pending_count))
-            db.apply_change(change)
-            changelog.write(get_change_description(change))
+            entity = db.apply_change(change)
+            changelog.write(get_change_description(change, entity))
         db.commit()
         changelog.close()
         retriever.acknowledge_changes_for(area)

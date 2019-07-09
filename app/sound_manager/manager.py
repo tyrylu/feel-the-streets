@@ -8,7 +8,7 @@ mode_2d = MODE.TWOD
 mode_3d = MODE.THREED
 
 class SoundManager(object):
-    def __init__(self, sounds_dir="sounds", sound_extensions=["wav", "mp3", "ogg"], recursive_search=True, **system_init_args):
+    def __init__(self, sounds_dir="sounds", sound_extensions=["wav", "mp3", "ogg", "flac"], recursive_search=True, **system_init_args):
         global sndmgr
         self._sounds = {}
         self._sound_files = {}
