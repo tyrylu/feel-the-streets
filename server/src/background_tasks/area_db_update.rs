@@ -111,9 +111,12 @@ async fn update_area(mut area: Area) -> Result<()> {
             }
         };
         if let Some(semantic_change) = semantic_change {
-            area_db.apply_change(&semantic_change)?;
-            semantic_change_count += 1;
+            match area_db.apply_change(&semantic_change) {
+            Ok(()) => { semantic_change_count += 1;
             sender.send(UpdateMessage::ApplyChange(semantic_change)).unwrap();
+            }
+            Err(e) => error!("Failed to apply change {:?}, error: {}", semantic_change, e)
+            }
         }
     }
     area.state = AreaState::Updated;

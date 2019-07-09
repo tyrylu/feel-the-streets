@@ -5,7 +5,7 @@ use rusqlite::{Connection, Error, OpenFlags};
 type DbResult<T> = Result<T, rusqlite::Error>;
 
 const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
-const INSERT_ENTITY_SQL: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, geomFromText(?, 4326), ?, ?)";
+const INSERT_ENTITY_SQL: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, Buffer(geomFromText(?, 4326), 0), ?, ?)";
 
 fn init_extensions(conn: &Connection) -> DbResult<()> {
     conn.load_extension_enable()?;
@@ -123,7 +123,7 @@ impl AreaDatabase {
     }
 
     fn save_updated_entity(&self, entity: &Entity) -> DbResult<()> {
-        let mut stmt = self.conn.prepare_cached("update entities set discriminator = ?, geometry = GeomFromText(?, 4326), effective_width = ?, data = ? where id = ?;")?;
+        let mut stmt = self.conn.prepare_cached("update entities set discriminator = ?, geometry = Buffer(GeomFromText(?, 4326), 0), effective_width = ?, data = ? where id = ?;")?;
         stmt.execute(&[
             &entity.discriminator,
             &entity.geometry,
