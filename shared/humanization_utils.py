@@ -1,5 +1,6 @@
 import re
 import builtins
+import enum
 
 def underscored_to_words(underscored):
     _ = getattr(builtins, "_", lambda s: s)

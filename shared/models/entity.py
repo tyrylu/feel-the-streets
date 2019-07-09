@@ -23,7 +23,6 @@ class Entity(Base):
     def create_osm_entity(self):
         entity_attrs = json.loads(self.data)
         entity_attrs["db_entity"] = self
-        print(f"Creating {self.discriminator} from {entity_attrs}")
         return entity_registry().lookup_entity_class_by_discriminator(self.discriminator).parse_obj(entity_attrs)
      
     @classmethod
