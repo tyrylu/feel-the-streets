@@ -119,15 +119,21 @@ class Database:
                 apply_dict_change(subchange, entity.__dict__)
             if isinstance(entity.geometry, str):
                 geom_valid = False
+                new_geom = None
                 try:
-                    geom_valid = wkt.loads(entity.geometry).is_valid
+                    geom_obj = wkt.loads(entity.geometry)
+                    if not geom_obj.is_valid:
+                        new_geom = geom_obj.buffer(0)
+                    else:
+                        new_geom = geom_obj
+                    geom_valid = new_geom.is_valid
                 except Exception:
                     pass
                 if not geom_valid:
                     log.warning("Refusing to set geometry of object %s to %s.", entity.data, entity.geometry)
                     entity.geometry = old_geom
                 else:
-                    entity.geometry = WKTSpatialElement(entity.geometry)
+                    entity.geometry = WKTSpatialElement(new_geom.wkt)
             if change.data_changes:
                 entity_data = json.loads(entity.data)
                 for subchange in change.data_changes:

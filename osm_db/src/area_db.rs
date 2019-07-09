@@ -1,17 +1,23 @@
 use crate::entity::{Entity, NotStoredEntity};
 use crate::semantic_change::SemanticChange;
-use rusqlite::{Connection, Error, OpenFlags};
+use rusqlite::{Connection, Error, OpenFlags, Transaction};
 
 type DbResult<T> = Result<T, rusqlite::Error>;
 
 const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
-const INSERT_ENTITY_SQL: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, Buffer(geomFromText(?, 4326), 0), ?, ?)";
+const INSERT_ENTITY_SQL: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, geomFromText(?, 4326), ?, ?)";
+const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, Buffer(geomFromText(?, 4326), 0), ?, ?)";
 
 fn init_extensions(conn: &Connection) -> DbResult<()> {
     conn.load_extension_enable()?;
     conn.load_extension("mod_spatialite", None)?;
     Ok(())
 }
+
+fn geometry_is_valid_transacted(geometry: &str, tx: &Transaction) -> DbResult<bool> {
+        let mut stmt = tx.prepare_cached("select isValid(geomFromText(?, 4326))")?;
+        stmt.query_row(&[&geometry], |row| row.get(0))
+    }
 
 pub struct AreaDatabase {
     conn: Connection,
@@ -47,12 +53,10 @@ impl AreaDatabase {
     {
         let mut count = 0;
         let insert_tx = self.conn.transaction()?;
-        {
-            let mut insert_stmt = insert_tx.prepare(INSERT_ENTITY_SQL)?;
-            for entity in entities {
+                                for entity in entities {
                 if entity.geometry.len() < 1000000 {
+                    let mut insert_stmt = if geometry_is_valid_transacted(&entity.geometry, &insert_tx)? { insert_tx.prepare(INSERT_ENTITY_SQL)? } else { insert_tx.prepare(INSERT_ENTITY_SQL_BUFFERED)? };
                     trace!("Inserting {:?}", entity);
-
                     match insert_stmt.execute(&[
                         &entity.discriminator,
                         &entity.geometry,
@@ -72,8 +76,7 @@ impl AreaDatabase {
                     )
                 }
             }
-        }
-        insert_tx.commit()?;
+                insert_tx.commit()?;
         info!("Successfully inserted {} entities.", count);
         Ok(())
     }
@@ -109,7 +112,7 @@ impl AreaDatabase {
         effective_width: &Option<f64>,
         data: &str,
     ) -> DbResult<()> {
-        let mut stmt = self.conn.prepare_cached(INSERT_ENTITY_SQL)?;
+        let mut stmt = if self.geometry_is_valid(&geometry)? { self.conn.prepare_cached(INSERT_ENTITY_SQL)? } else { self.conn.prepare_cached(INSERT_ENTITY_SQL_BUFFERED)? };
         stmt.execute(&[&discriminator, &geometry, effective_width, &data])?;
         Ok(())
     }
@@ -123,7 +126,7 @@ impl AreaDatabase {
     }
 
     fn save_updated_entity(&self, entity: &Entity) -> DbResult<()> {
-        let mut stmt = self.conn.prepare_cached("update entities set discriminator = ?, geometry = Buffer(GeomFromText(?, 4326), 0), effective_width = ?, data = ? where id = ?;")?;
+        let mut stmt = if self.geometry_is_valid(&entity.geometry)? { self.conn.prepare_cached("update entities set discriminator = ?, geometry = GeomFromText(?, 4326), effective_width = ?, data = ? where id = ?;")? } else { self.conn.prepare_cached("update entities set discriminator = ?, geometry = Buffer(GeomFromText(?, 4326), 0), effective_width = ?, data = ? where id = ?;")? };
         stmt.execute(&[
             &entity.discriminator,
             &entity.geometry,
@@ -160,4 +163,10 @@ impl AreaDatabase {
             }
         }
     }
+
+    fn geometry_is_valid(&self, geometry: &str) -> DbResult<bool> {
+        let mut stmt = self.conn.prepare_cached("select isValid(geomFromText(?, 4326))")?;
+        stmt.query_row(&[&geometry], |row| row.get(0))
+    }
+
 }
