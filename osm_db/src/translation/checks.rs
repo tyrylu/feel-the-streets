@@ -1,6 +1,6 @@
 use crate::entity_metadata::EntityMetadata;
-use serde_json::Value;
 use hashbrown::{HashMap, HashSet};
+use serde_json::Value;
 
 pub fn check_entity_data_consistency(discriminator: &str, data: &HashMap<String, Value>) -> bool {
     match EntityMetadata::for_discriminator(discriminator) {
@@ -20,8 +20,8 @@ fn check_entity_data_consistency_against_metadata(
     metadata: &EntityMetadata,
 ) -> bool {
     let all_fields = metadata.all_fields();
-    let     _known_field_names: HashSet<&String> = all_fields.iter().map(|(n, _)| n).collect();
-            for (name, field) in all_fields.iter() {
+    let _known_field_names: HashSet<&String> = all_fields.iter().map(|(n, _)| n).collect();
+    for (name, field) in all_fields.iter() {
         if field.required && !data.contains_key(name) {
             warn!(
                 "Entity data {:?} are missing the required field {}.",

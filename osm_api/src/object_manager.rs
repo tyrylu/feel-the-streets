@@ -1,10 +1,10 @@
-use std::cmp;
 use crate::change::OSMObjectChange;
 use crate::change_iterator::OSMObjectChangeIterator;
-use crate::object::{OSMObject, OSMObjectSpecifics, OSMObjectType, OSMObjectFromNetwork};
+use crate::object::{OSMObject, OSMObjectFromNetwork, OSMObjectSpecifics, OSMObjectType};
 use crate::utils;
 use crate::Result;
 use chrono::{DateTime, Utc};
+use hashbrown::HashMap;
 use itertools::Itertools;
 use reqwest;
 use rusqlite::Connection;
@@ -12,14 +12,13 @@ use serde::Deserialize;
 use serde_json::{self, Deserializer};
 use sqlitemap::SqliteMap;
 use std::cell::RefCell;
+use std::cmp;
 use std::fs;
 use std::io::{self, BufReader, Read, Seek, SeekFrom};
 use std::iter;
 use std::time::Instant;
-use hashbrown::HashMap;
 use tempfile::tempfile;
 const QUERY_RETRY_COUNT: u8 = 3;
-
 
 fn translate_type_shortcut(shortcut: char) -> &'static str {
     match shortcut {
@@ -48,7 +47,7 @@ pub struct OSMObjectManager {
     api_urls: Vec<&'static str>,
     cache_conn: Option<Connection>,
     http_client: reqwest::Client,
-    seen_cache: RefCell<bool>
+    seen_cache: RefCell<bool>,
 }
 
 impl OSMObjectManager {
@@ -68,7 +67,7 @@ impl OSMObjectManager {
             cache_conn: Some(conn),
             http_client: client,
             geometries_cache: RefCell::new(HashMap::new()),
-            seen_cache: RefCell::new(false)
+            seen_cache: RefCell::new(false),
         }
     }
 
@@ -78,7 +77,7 @@ impl OSMObjectManager {
             "raw_entities",
             "text",
             "blob",
-            !*self.seen_cache.borrow()
+            !*self.seen_cache.borrow(),
         )
         .unwrap();
         *self.seen_cache.borrow_mut() = true;
@@ -115,24 +114,24 @@ impl OSMObjectManager {
         self.api_urls[*self.current_api_url_idx.borrow()]
     }
 
-fn run_query(&self, query: &str, result_to_tempfile: bool) -> Result<Box<dyn Read>> {
-    let mut res = None;
-    for retry in 0..QUERY_RETRY_COUNT {
-                res = match self.run_query_internal(query, result_to_tempfile) {
-            Ok(r) => Some(Ok(r)),
-            Err(e) => {
-                warn!("Query failed during retry {}, error: {:?}", retry, e);
-                  Some(Err(e))
-                        }
-        };
-    match res {
-        Some(Ok(_)) => break,
-        Some(Err(_)) => {},
-        None => panic!("What? That should not have happened..."),
+    fn run_query(&self, query: &str, result_to_tempfile: bool) -> Result<Box<dyn Read>> {
+        let mut res = None;
+        for retry in 0..QUERY_RETRY_COUNT {
+            res = match self.run_query_internal(query, result_to_tempfile) {
+                Ok(r) => Some(Ok(r)),
+                Err(e) => {
+                    warn!("Query failed during retry {}, error: {:?}", retry, e);
+                    Some(Err(e))
+                }
+            };
+            match res {
+                Some(Ok(_)) => break,
+                Some(Err(_)) => {}
+                None => panic!("What? That should not have happened..."),
+            }
+        }
+        res.unwrap()
     }
-    }
-    res.unwrap()
-}
 
     fn run_query_internal(&self, query: &str, result_to_tempfile: bool) -> Result<Box<dyn Read>> {
         let start = Instant::now();
@@ -329,8 +328,8 @@ fn run_query(&self, query: &str, result_to_tempfile: bool) -> Result<Box<dyn Rea
     fn get_way_coords(&self, way: &OSMObject) -> Result<Vec<(f64, f64)>> {
         use self::OSMObjectSpecifics::{Node, Way};
         let node_count = match &way.specifics {
-            Way{nodes} => nodes.len(),
-            _ => unreachable!()
+            Way { nodes } => nodes.len(),
+            _ => unreachable!(),
         };
         let mut coords = Vec::with_capacity(node_count);
         for obj in self.related_objects_of(&way)? {
@@ -344,18 +343,22 @@ fn run_query(&self, query: &str, result_to_tempfile: bool) -> Result<Box<dyn Rea
         Ok(coords)
     }
 
-pub fn get_geometry_as_wkt(&self, object: &OSMObject) -> Result<Option<String>> {
-    let exists = self.geometries_cache.borrow().contains_key(&object.unique_id());
-    if exists {
-        Ok(self.geometries_cache.borrow()[&object.unique_id()].clone())
+    pub fn get_geometry_as_wkt(&self, object: &OSMObject) -> Result<Option<String>> {
+        let exists = self
+            .geometries_cache
+            .borrow()
+            .contains_key(&object.unique_id());
+        if exists {
+            Ok(self.geometries_cache.borrow()[&object.unique_id()].clone())
+        } else {
+            let res = self.get_geometry_as_wkt_internal(&object)?;
+            self.geometries_cache
+                .borrow_mut()
+                .insert(object.unique_id(), res.clone());
+            Ok(res)
+        }
     }
-    else {
-        let res = self.get_geometry_as_wkt_internal(&object)?;
-        self.geometries_cache.borrow_mut().insert(object.unique_id(), res.clone());
-        Ok(res)
-    }
-}
-    
+
     fn get_geometry_as_wkt_internal(&self, object: &OSMObject) -> Result<Option<String>> {
         use self::OSMObjectSpecifics::*;
         match object.specifics {

@@ -3,9 +3,18 @@ use serde_json::Value;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum EntryChange {
-        Create { key: String, value: Value },
-    Update { key: String, old_value: Value, new_value: Value },
-    Remove { key: String },
+    Create {
+        key: String,
+        value: Value,
+    },
+    Update {
+        key: String,
+        old_value: Value,
+        new_value: Value,
+    },
+    Remove {
+        key: String,
+    },
 }
 
 impl EntryChange {

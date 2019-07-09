@@ -1,7 +1,7 @@
 use crate::entity_metadata::EntityMetadata;
 use crate::entity_metadata::Enum;
-use serde_json::{Number, Value};
 use hashbrown::HashMap;
+use serde_json::{Number, Value};
 use uom::si::f64::{Length, Mass};
 use uom::si::length::meter;
 use uom::si::mass::ton;
@@ -22,7 +22,9 @@ pub fn convert_entity_data(
     discriminator: &str,
     entity_data: &HashMap<String, String>,
 ) -> HashMap<String, Value> {
-    let all_fields = EntityMetadata::for_discriminator(discriminator).expect("Metadata not found?").all_fields();
+    let all_fields = EntityMetadata::for_discriminator(discriminator)
+        .expect("Metadata not found?")
+        .all_fields();
     let mut converted_data = HashMap::new();
     for (key, value) in entity_data.iter() {
         let type_name = match all_fields.get(key) {

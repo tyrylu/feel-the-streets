@@ -1,14 +1,14 @@
 #![recursion_limit = "1024"]
 #![feature(await_macro, async_await)]
+use lapin_futures::options::{BasicConsumeOptions, BasicQosOptions};
+use lapin_futures::types::FieldTable;
+use log::{error, info, trace};
 use server::{
     amqp_utils, background_task::BackgroundTask, background_task_constants,
     background_task_delivery, datetime_utils, Result,
 };
 use tokio::await;
 use tokio::prelude::*;
-use lapin_futures::options::{BasicConsumeOptions, BasicQosOptions};
-use lapin_futures::types::FieldTable;
-use log::{error, info, trace};
 
 async fn consume_tasks_real() -> Result<()> {
     use background_task_constants::*;
@@ -30,7 +30,7 @@ async fn consume_tasks_real() -> Result<()> {
             BackgroundTask::UpdateAreaDatabases,
             Some(ttl)
         ))?;
-    //await!(channel2.close(0, "Normal shutdown"))?;
+        //await!(channel2.close(0, "Normal shutdown"))?;
     }
     let opts = BasicQosOptions {
         ..Default::default()

@@ -40,7 +40,7 @@ impl OSMRelationMember {
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
-#[serde(tag="type")]
+#[serde(tag = "type")]
 pub enum OSMObjectSpecificsFromNetwork {
     #[serde(rename = "node")]
     Node { lat: f64, lon: f64 },
@@ -54,9 +54,9 @@ impl OSMObjectSpecificsFromNetwork {
     fn to_internal(self) -> OSMObjectSpecifics {
         use OSMObjectSpecificsFromNetwork::*;
         match self {
-Node{lat, lon} => OSMObjectSpecifics::Node{lat, lon},
-Way{nodes} => OSMObjectSpecifics::Way{nodes},
-Relation{members} => OSMObjectSpecifics::Relation{members},
+            Node { lat, lon } => OSMObjectSpecifics::Node { lat, lon },
+            Way { nodes } => OSMObjectSpecifics::Way { nodes },
+            Relation { members } => OSMObjectSpecifics::Relation { members },
         }
     }
 }
@@ -95,17 +95,23 @@ pub struct OSMObject {
     pub uid: u32,
     #[serde(default)]
     pub tags: HashMap<String, String>,
-        pub specifics: OSMObjectSpecifics,
+    pub specifics: OSMObjectSpecifics,
 }
 
 impl OSMObjectFromNetwork {
     pub fn to_osm_object(self) -> OSMObject {
         OSMObject {
-            id: self.id, timestamp: self.timestamp, version: self.version, changeset: self.changeset, uid: self.uid, user: self.user, tags: self.tags, specifics: self.specifics.to_internal()
+            id: self.id,
+            timestamp: self.timestamp,
+            version: self.version,
+            changeset: self.changeset,
+            uid: self.uid,
+            user: self.user,
+            tags: self.tags,
+            specifics: self.specifics.to_internal(),
         }
     }
 }
-
 
 impl OSMObject {
     pub fn new_node(

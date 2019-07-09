@@ -1,14 +1,13 @@
 use crate::{amqp_utils, background_task::BackgroundTask, background_task_constants, Result};
-use lapin_futures::{BasicProperties, Channel};
 use lapin_futures::options::BasicPublishOptions;
+use lapin_futures::{BasicProperties, Channel};
 use tokio::await;
 
 pub async fn perform_delivery_on(
     channel: &mut Channel,
     task: BackgroundTask,
     ttl: Option<u32>,
-) -> Result<()>
-{
+) -> Result<()> {
     let msg = serde_json::to_string(&task)?;
     let mut props = BasicProperties::default().with_delivery_mode(2);
     let queue_name = if let Some(ttl) = ttl {

@@ -15,9 +15,9 @@ fn init_extensions(conn: &Connection) -> DbResult<()> {
 }
 
 fn geometry_is_valid_transacted(geometry: &str, tx: &Transaction) -> DbResult<bool> {
-        let mut stmt = tx.prepare_cached("select isValid(geomFromText(?, 4326))")?;
-        stmt.query_row(&[&geometry], |row| row.get(0))
-    }
+    let mut stmt = tx.prepare_cached("select isValid(geomFromText(?, 4326))")?;
+    stmt.query_row(&[&geometry], |row| row.get(0))
+}
 
 pub struct AreaDatabase {
     conn: Connection,
@@ -53,30 +53,35 @@ impl AreaDatabase {
     {
         let mut count = 0;
         let insert_tx = self.conn.transaction()?;
-                                for entity in entities {
-                if entity.geometry.len() < 1000000 {
-                    let mut insert_stmt = if geometry_is_valid_transacted(&entity.geometry, &insert_tx)? { insert_tx.prepare(INSERT_ENTITY_SQL)? } else { insert_tx.prepare(INSERT_ENTITY_SQL_BUFFERED)? };
-                    trace!("Inserting {:?}", entity);
-                    match insert_stmt.execute(&[
-                        &entity.discriminator,
-                        &entity.geometry,
-                        &entity.effective_width,
-                        &entity.data,
-                    ]) {
-                        Ok(_) => count += 1,
-                        Err(e) => {
-                            error!("Failed to insert entity {:?}, error: {}", entity, e);
-                        }
-                    }
+        for entity in entities {
+            if entity.geometry.len() < 1000000 {
+                let mut insert_stmt = if geometry_is_valid_transacted(&entity.geometry, &insert_tx)?
+                {
+                    insert_tx.prepare(INSERT_ENTITY_SQL)?
                 } else {
-                    warn!(
-                        "Not inserting entity with data {} with geometry size {}.",
-                        entity.data,
-                        entity.geometry.len()
-                    )
+                    insert_tx.prepare(INSERT_ENTITY_SQL_BUFFERED)?
+                };
+                trace!("Inserting {:?}", entity);
+                match insert_stmt.execute(&[
+                    &entity.discriminator,
+                    &entity.geometry,
+                    &entity.effective_width,
+                    &entity.data,
+                ]) {
+                    Ok(_) => count += 1,
+                    Err(e) => {
+                        error!("Failed to insert entity {:?}, error: {}", entity, e);
+                    }
                 }
+            } else {
+                warn!(
+                    "Not inserting entity with data {} with geometry size {}.",
+                    entity.data,
+                    entity.geometry.len()
+                )
             }
-                insert_tx.commit()?;
+        }
+        insert_tx.commit()?;
         info!("Successfully inserted {} entities.", count);
         Ok(())
     }
@@ -112,7 +117,11 @@ impl AreaDatabase {
         effective_width: &Option<f64>,
         data: &str,
     ) -> DbResult<()> {
-        let mut stmt = if self.geometry_is_valid(&geometry)? { self.conn.prepare_cached(INSERT_ENTITY_SQL)? } else { self.conn.prepare_cached(INSERT_ENTITY_SQL_BUFFERED)? };
+        let mut stmt = if self.geometry_is_valid(&geometry)? {
+            self.conn.prepare_cached(INSERT_ENTITY_SQL)?
+        } else {
+            self.conn.prepare_cached(INSERT_ENTITY_SQL_BUFFERED)?
+        };
         stmt.execute(&[&discriminator, &geometry, effective_width, &data])?;
         Ok(())
     }
@@ -126,7 +135,11 @@ impl AreaDatabase {
     }
 
     fn save_updated_entity(&self, entity: &Entity) -> DbResult<()> {
-        let mut stmt = if self.geometry_is_valid(&entity.geometry)? { self.conn.prepare_cached("update entities set discriminator = ?, geometry = GeomFromText(?, 4326), effective_width = ?, data = ? where id = ?;")? } else { self.conn.prepare_cached("update entities set discriminator = ?, geometry = Buffer(GeomFromText(?, 4326), 0), effective_width = ?, data = ? where id = ?;")? };
+        let mut stmt = if self.geometry_is_valid(&entity.geometry)? {
+            self.conn.prepare_cached("update entities set discriminator = ?, geometry = GeomFromText(?, 4326), effective_width = ?, data = ? where id = ?;")?
+        } else {
+            self.conn.prepare_cached("update entities set discriminator = ?, geometry = Buffer(GeomFromText(?, 4326), 0), effective_width = ?, data = ? where id = ?;")?
+        };
         stmt.execute(&[
             &entity.discriminator,
             &entity.geometry,
@@ -165,8 +178,9 @@ impl AreaDatabase {
     }
 
     fn geometry_is_valid(&self, geometry: &str) -> DbResult<bool> {
-        let mut stmt = self.conn.prepare_cached("select isValid(geomFromText(?, 4326))")?;
+        let mut stmt = self
+            .conn
+            .prepare_cached("select isValid(geomFromText(?, 4326))")?;
         stmt.query_row(&[&geometry], |row| row.get(0))
     }
-
 }

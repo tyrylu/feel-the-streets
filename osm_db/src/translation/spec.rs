@@ -1,6 +1,6 @@
 use crate::entity_metadata::EntityMetadata;
-use linked_hash_map::LinkedHashMap;
 use hashbrown::HashMap;
+use linked_hash_map::LinkedHashMap;
 use osm_api::object::OSMObject;
 use serde_yaml;
 use std::fs::File;
@@ -24,7 +24,11 @@ fn compare_values<F: Fn(&str, &str) -> bool>(
         }
         for val in values {
             if values_comparer(&tags[prop], &val) {
-                trace!("Value comparison succeeded for value of key {} with value {}.", prop, val);
+                trace!(
+                    "Value comparison succeeded for value of key {} with value {}.",
+                    prop,
+                    val
+                );
                 return true;
             }
         }
@@ -95,24 +99,31 @@ impl TranslationSpec {
         TRANSLATION_SPECS.get(discriminator)
     }
 
-pub fn all_relevant_for(discriminator: &str) -> Vec<Self> {
-    let mut specs = vec![];
-    let mut current_metadata = EntityMetadata::for_discriminator(&discriminator).expect("No metadata of an entity.");
-    loop {
-        let discriminator = &current_metadata.discriminator;
-        if discriminator == "OSMEntity" {
-            break; // It has no parent and no translation spec
+    pub fn all_relevant_for(discriminator: &str) -> Vec<Self> {
+        let mut specs = vec![];
+        let mut current_metadata =
+            EntityMetadata::for_discriminator(&discriminator).expect("No metadata of an entity.");
+        loop {
+            let discriminator = &current_metadata.discriminator;
+            if discriminator == "OSMEntity" {
+                break; // It has no parent and no translation spec
+            }
+            specs.push(
+                TranslationSpec::for_discriminator(&discriminator)
+                    .expect(&format!(
+                        "No translation spec for {} found.",
+                        current_metadata.discriminator
+                    ))
+                    .clone(),
+            );
+            if let Some(parent) = current_metadata.parent_metadata() {
+                current_metadata = parent;
+            } else {
+                break;
+            }
         }
-        specs.push(TranslationSpec::for_discriminator(&discriminator).expect(&format!("No translation spec for {} found.", current_metadata.discriminator)).clone());
-        if let Some(parent) = current_metadata.parent_metadata() {
-            current_metadata = parent;
-        }
-        else {
-            break;
-        }
+        specs
     }
-    specs
-}
 
     pub fn primary_discriminator_for_object(object: &OSMObject) -> Option<String> {
         trace!("Looking translation spec for object {:?}", object);
@@ -125,4 +136,3 @@ pub fn all_relevant_for(discriminator: &str) -> Vec<Self> {
         None
     }
 }
-            

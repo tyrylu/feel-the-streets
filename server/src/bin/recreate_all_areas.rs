@@ -1,8 +1,8 @@
 extern crate server;
-use server::{background_tasks::area_db_creation, Result, area::Area};
-use std::time::Instant;
 use diesel::{Connection, SqliteConnection};
+use server::{area::Area, background_tasks::area_db_creation, Result};
 use std::fs;
+use std::time::Instant;
 
 fn main() -> Result<()> {
     server::init_logging();
@@ -10,9 +10,9 @@ fn main() -> Result<()> {
     for area in Area::all(&server_conn)? {
         fs::remove_file(&format!("{}.db", area.name))?;
         println!("Recreating area {}...", area.name);
-    let start = Instant::now();
-    area_db_creation::create_area_database(&area.name)?;
-    println!("Area created in {:?}", start.elapsed());
+        let start = Instant::now();
+        area_db_creation::create_area_database(&area.name)?;
+        println!("Area created in {:?}", start.elapsed());
     }
-        Ok(())
+    Ok(())
 }

@@ -1,22 +1,22 @@
 use crate::background_task_constants;
 use crate::Result;
-use lapin_futures::{Channel, Client, ConnectionProperties};
-use lapin_futures::options::QueueDeclareOptions;
 use lapin::Queue;
+use lapin_futures::options::QueueDeclareOptions;
 use lapin_futures::types::{AMQPValue, FieldTable};
+use lapin_futures::{Channel, Client, ConnectionProperties};
 use std::env;
 use tokio::await;
 
 pub async fn connect_to_broker() -> Result<Client> {
     let client = await!(Client::connect(
-       &env::var("AMQP_BROKER_URL")?, ConnectionProperties::default()
+        &env::var("AMQP_BROKER_URL")?,
+        ConnectionProperties::default()
     ))?;
     info!("Broker connection established.");
     Ok(client)
 }
 
-pub async fn init_background_job_queues(channel: &mut Channel) -> Result<(Queue, Queue)>
-{
+pub async fn init_background_job_queues(channel: &mut Channel) -> Result<(Queue, Queue)> {
     let opts = QueueDeclareOptions {
         durable: true,
         ..Default::default()

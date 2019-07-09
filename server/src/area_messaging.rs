@@ -1,7 +1,9 @@
 use crate::{amqp_utils, Result};
-use lapin_futures::{BasicProperties, Channel};
-use lapin_futures::options::{BasicPublishOptions, QueueDeclareOptions, ExchangeDeclareOptions, QueueBindOptions};
+use lapin_futures::options::{
+    BasicPublishOptions, ExchangeDeclareOptions, QueueBindOptions, QueueDeclareOptions,
+};
 use lapin_futures::types::FieldTable;
+use lapin_futures::{BasicProperties, Channel};
 use log::error;
 use osm_db::semantic_change::SemanticChange;
 use serde_json;
@@ -30,7 +32,7 @@ async fn init_queue_real(client_id: String, area_name: String) -> Result<()> {
         QueueBindOptions::default(),
         FieldTable::default()
     ))?;
-        await!(channel.close(0, "Normal shutdown"))?;
+    await!(channel.close(0, "Normal shutdown"))?;
     Ok(())
 }
 
@@ -44,8 +46,7 @@ pub async fn publish_change_on(
     channel: &mut Channel,
     change: SemanticChange,
     area_name: String,
-) -> Result<()>
-{
+) -> Result<()> {
     let serialized = serde_json::to_string(&change)?;
     let props = BasicProperties::default().with_delivery_mode(2);
     await!(channel.basic_publish(
@@ -71,7 +72,6 @@ pub async fn publish_change(change: SemanticChange, area_name: String) {
     };
 }
 
-
 async fn init_exchange_real(area_name: String) -> Result<()> {
     let client = await!(amqp_utils::connect_to_broker())?;
     let channel = await!(client.create_channel())?;
@@ -79,7 +79,7 @@ async fn init_exchange_real(area_name: String) -> Result<()> {
         durable: true,
         ..Default::default()
     };
-   await!(channel.exchange_declare(&area_name, "fanout", opts, FieldTable::default()))?;
+    await!(channel.exchange_declare(&area_name, "fanout", opts, FieldTable::default()))?;
     Ok(())
 }
 

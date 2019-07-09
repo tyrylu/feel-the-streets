@@ -2,16 +2,16 @@ use super::checks;
 use super::conversions;
 use super::spec::TranslationSpec;
 use crate::entity::NotStoredEntity;
+use hashbrown::HashMap;
 use osm_api::object::OSMObject;
 use osm_api::object_manager::OSMObjectManager;
-use hashbrown::HashMap;
 use serde_json::Value;
 
 pub fn translate(
     object: &OSMObject,
     manager: &OSMObjectManager,
 ) -> Result<Option<NotStoredEntity>, failure::Error> {
-                            let lookup_res = TranslationSpec::primary_discriminator_for_object(&object);
+    let lookup_res = TranslationSpec::primary_discriminator_for_object(&object);
     match lookup_res {
         None => {
             let mut interesting_len = object.tags.len();
@@ -22,17 +22,16 @@ pub fn translate(
                 interesting_len -= 1;
             }
             if interesting_len > 0 {
-            warn!(
-                "Did not find a translation spec for potentially interesting object {:?}.",
-                object
-            );
-            }
-            else {
+                warn!(
+                    "Did not find a translation spec for potentially interesting object {:?}.",
+                    object
+                );
+            } else {
                 trace!(
-                "Did not find a translation spec for object {}.",
-                object.unique_id()
-            );
-                        }
+                    "Did not find a translation spec for object {}.",
+                    object.unique_id()
+                );
+            }
             Ok(None)
         }
         Some(discriminator) => {
@@ -46,30 +45,30 @@ pub fn translate(
             for (key, value) in &object.tags {
                 let mut renamed = false;
                 for spec in &specs {
-                if renamed {
-                    continue; // The key has been renamed by one of the children specs, applying this one would result in insertion of the original key again.
-                                    }
-                let mut new_key = key.clone();
-                let mut new_value = value.clone();
-                                if spec.renames.contains_key(key) {
-                    new_key = spec.renames[key].clone();
-                    renamed = true;
-                }
-                for unprefixes in &spec.unprefixes {
-                    if new_key.starts_with(unprefixes) {
+                    if renamed {
+                        continue; // The key has been renamed by one of the children specs, applying this one would result in insertion of the original key again.
+                    }
+                    let mut new_key = key.clone();
+                    let mut new_value = value.clone();
+                    if spec.renames.contains_key(key) {
+                        new_key = spec.renames[key].clone();
                         renamed = true;
-                        trace!("Unprefixing {}.", new_key);
-                        new_key = new_key.replace(&format!("{}:", unprefixes), "");
                     }
-                }
-                if spec.replaces_property_value.contains_key(key) {
-                    let replacements = &spec.replaces_property_value[key];
-                    for (old, new) in replacements.iter() {
-                        new_value = new_value.replace(old, new);
+                    for unprefixes in &spec.unprefixes {
+                        if new_key.starts_with(unprefixes) {
+                            renamed = true;
+                            trace!("Unprefixing {}.", new_key);
+                            new_key = new_key.replace(&format!("{}:", unprefixes), "");
+                        }
                     }
+                    if spec.replaces_property_value.contains_key(key) {
+                        let replacements = &spec.replaces_property_value[key];
+                        for (old, new) in replacements.iter() {
+                            new_value = new_value.replace(old, new);
+                        }
+                    }
+                    entity_data.insert(new_key, new_value);
                 }
-                entity_data.insert(new_key, new_value);
-            }
             }
             // Common fields
             entity_data.insert("osm_id".to_string(), object.unique_id());
@@ -80,25 +79,26 @@ pub fn translate(
             entity_data.insert("uid".to_string(), object.uid.to_string());
             let mut converted_data = conversions::convert_entity_data(&discriminator, &entity_data);
             // Address, must be done there, because we need to nest the object.
-                        let mut aware = false;
-                        for spec in &specs {
-                            aware |= spec.address_aware.unwrap_or(false);
-                        }
-                if aware {
-                let (address_data, address_field_names) = conversions::convert_address(&object.tags);
+            let mut aware = false;
+            for spec in &specs {
+                aware |= spec.address_aware.unwrap_or(false);
+            }
+            if aware {
+                let (address_data, address_field_names) =
+                    conversions::convert_address(&object.tags);
                 if !address_data.is_empty() {
-                let mut new_data = serde_json::Map::new();
-                for (k, v) in address_data.iter() {
-                    new_data.insert(k.clone(), Value::from(v.clone()));
+                    let mut new_data = serde_json::Map::new();
+                    for (k, v) in address_data.iter() {
+                        new_data.insert(k.clone(), Value::from(v.clone()));
+                    }
+                    converted_data.insert("address".to_string(), Value::from(new_data));
+                    // Now, remove the original addr parts
+                    for field_name in address_field_names {
+                        converted_data.remove(field_name);
+                    }
                 }
-                converted_data.insert("address".to_string(), Value::from(new_data));
-                // Now, remove the original addr parts
-                for field_name in address_field_names {
-                    converted_data.remove(field_name);
-                }
-                }
-                }
-          
+            }
+
             if !checks::check_entity_data_consistency(&discriminator, &converted_data) {
                 return Ok(None);
             }
