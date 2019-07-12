@@ -12,7 +12,9 @@ def get_field_type(key, fields):
 
 def format_value(field_value, field_type):
     if issubclass(field_type, enum.Enum):
-        field_value = underscored_to_words(field_type(field_value).name)
+        try:
+            field_value = underscored_to_words(field_type(field_value).name)
+        except ValueError: pass
     return field_value
 
 def get_dictchange_description(dictchange, entity_fields):

@@ -778,6 +778,7 @@ class WaterWayType(enum.Enum):
     boatyard = 12
     lock = 13
     dock = 14
+    waterway = 15
 
 
 
@@ -1010,6 +1011,7 @@ class RoadType(enum.Enum):
     contruction = 56
     steps = 57
     camera = 58
+    multipolygon = 59
 
 
 

@@ -16,5 +16,8 @@ class Address(BaseModel):
         to_return = ""
         if self.housename:
             to_return = "%s, "%self.housename
-        to_return += "%s %s, %s %s"%(self.street, self.housenumber, self.postcode, self.city)
+        if self.street:
+            to_return += "%s %s, %s %s"%(self.street, self.housenumber, self.postcode, self.city)
+        else:
+            to_return += "%s, %s %s"%(self.housenumber, self.postcode, self.city or self.place)
         return to_return
