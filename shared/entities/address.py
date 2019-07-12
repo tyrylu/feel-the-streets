@@ -3,7 +3,7 @@ from pydantic import BaseModel
 class Address(BaseModel):
     place: str = None
     city: str = None
-    postcode: int = None
+    postcode: str = None
     conscription_number: int = None
     housenumber: str = None
     streetnumber: str = None
