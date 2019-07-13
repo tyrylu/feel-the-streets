@@ -1,6 +1,7 @@
 import enum
 from . import Addressable
 from .enums import Amenity, AccessType, SmokingType, HistoricType, BarrierType, LandType, LeisureType, SportType, WifiType, ParkingType, Surface, Location, WheelchairAccess, PlaceType, ToiletsDisposal, FastFoodType, ManMade, DiplomacyRelation, DietType, FenceType
+from shared.humanization_utils import underscored_to_words
 
 class CoverType(enum.Enum):
     no = 0
@@ -125,3 +126,9 @@ class Amenity(Addressable):
     type2_socket: int = None
     schuko_socket_current: str = None
     # Find out what they are
+
+    def __str__(self):
+        if self.type:
+            return underscored_to_words(self.type.name)
+        else:
+            return super().__str__()
