@@ -128,7 +128,7 @@ class Amenity(Addressable):
     # Find out what they are
 
     def __str__(self):
+        retval = super().__str__()
         if self.type:
-            return underscored_to_words(self.type.name)
-        else:
-            return super().__str__()
+            retval += " - {}".format(underscored_to_words(self.type.name))
+        return retval
