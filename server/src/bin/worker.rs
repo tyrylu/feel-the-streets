@@ -48,7 +48,9 @@ async fn consume_tasks_real() -> Result<()> {
         trace!("Received message: {:?}", msg);
         let task: BackgroundTask = serde_json::from_slice(&msg.data)?;
         await!(task.execute())?;
+        info!("Task executed successfully.");
         await!(channel.basic_ack(msg.delivery_tag, false))?;
+        info!("Task acknowledged.");
         if let Some((hour, minute, second)) = task.get_next_schedule_time() {
             let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);
             await!(background_task_delivery::perform_delivery_on(

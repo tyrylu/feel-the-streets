@@ -155,6 +155,7 @@ async fn update_area(mut area: Area) -> Result<()> {
     }
     info!("Changes successfully published.");
     await!(channel.close(0, "Normal shutdown"))?;
+    info!("Channel successfully closed.");
     Ok(())
 }
 
