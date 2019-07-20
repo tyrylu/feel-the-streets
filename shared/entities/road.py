@@ -1,4 +1,5 @@
 import enum
+from shared.humanization_utils import underscored_to_words
 from .enums import AccessType, WaterWayType, NaturalType, Inclination, CrossingType, TrafficCalmingType, RailWayType, BridgeType, RoadType, Location, BridgeStructure, Surface, KerbType, SidewalkType, WheelchairAccess, ManMade, HistoricType, RestrictionType, SportType, AreaType, TourismType, Amenity, PlaceType, RouteImportance, EmergencyType, Support, BarrierType, CurbType, BuildingType, TrafficSignType, ParkingLaneType, IndoorType
 from . import Named
 from ..validated_quantity import quantity
@@ -511,4 +512,8 @@ class Road(Named):
                 width = 2
             return width * lanes
 
-    
+    def __str__(self):
+        retval = super().__str__()
+        if self.type:
+            retval += " ({})".format(underscored_to_words(self.type.name))
+        return retval

@@ -1,4 +1,5 @@
 import enum
+from shared.humanization_utils import underscored_to_words
 from . import Building
 from .enums import ShopType
 
@@ -42,3 +43,9 @@ class Shop(Building):
     beauty: BeautyType = None
     hobby: HobbyType = None
     jcb_payment: bool = None
+
+    def __str__(self):
+        retval = super().__str__()
+        if self.type:
+            retval += " ({})".format(underscored_to_words(self.type.name))
+        return retval

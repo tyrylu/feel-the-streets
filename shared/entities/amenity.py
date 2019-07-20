@@ -130,5 +130,5 @@ class Amenity(Addressable):
     def __str__(self):
         retval = super().__str__()
         if self.type:
-            retval += " - {}".format(underscored_to_words(self.type.name))
+            retval += " ({})".format(underscored_to_words(self.type.name))
         return retval
