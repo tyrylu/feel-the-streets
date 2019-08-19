@@ -30,8 +30,12 @@ def get_dictchange_description(dictchange, entity_fields):
 
 def get_change_description(change, entity, include_geometry_changes=False):
     if not entity:
-        return _("Change for missing entity")
-    osm_entity = entity.create_osm_entity()
+        return _("Change for missing entity\n")
+    try:
+        osm_entity = entity.create_osm_entity()
+    except Exception as exc:
+        print(f"Failed to create osm entity from entity with data {entity.data}, error: {exc}")
+        return _("Not representable change\n")
     fields = osm_entity.__fields__
     if change.type is osm_db.CHANGE_REMOVE:
         return "* " + _("Object {osm_id} ({object}) was deleted").format(osm_id=change.osm_id, object=osm_entity) + "\n"
