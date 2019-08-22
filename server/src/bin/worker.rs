@@ -1,21 +1,52 @@
-#![recursion_limit = "1024"]
-#![feature(await_macro, async_await)]
-use lapin_futures::options::{BasicConsumeOptions, BasicQosOptions};
-use lapin_futures::types::FieldTable;
+use lapin::message::Delivery;
+use lapin::options::{BasicAckOptions, BasicConsumeOptions, BasicQosOptions};
+use lapin::types::FieldTable;
+use lapin::{Channel, ConsumerDelegate};
 use log::{error, info, trace};
 use server::{
     amqp_utils, background_task::BackgroundTask, background_task_constants,
     background_task_delivery, datetime_utils, Result,
 };
-use tokio::await;
-use tokio::prelude::*;
 
-async fn consume_tasks_real() -> Result<()> {
+struct Subscriber {
+    consume_channel: Channel,
+    publish_channel: Channel,
+}
+impl Subscriber {
+    fn on_new_delivery_real(&self, delivery: Delivery) -> Result<()> {
+        trace!("Received message: {:?}", delivery);
+        let task: BackgroundTask = serde_json::from_slice(&delivery.data)?;
+        task.execute()?;
+        info!("Task executed successfully.");
+        self.consume_channel
+            .basic_ack(delivery.delivery_tag, BasicAckOptions::default())
+            .wait()?;
+        info!("Task acknowledged.");
+        if let Some((hour, minute, second)) = task.get_next_schedule_time() {
+            let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);
+            background_task_delivery::perform_delivery_on(
+                &self.publish_channel,
+                task,
+                Some(ttl),
+            )?;
+        }
+    Ok(())
+    }
+}
+
+impl ConsumerDelegate for Subscriber {
+    fn on_new_delivery(&self, delivery: Delivery) {
+        if let Err(e) = self.on_new_delivery_real(delivery) {
+            error!("On new delivery error: {}", e);
+        }
+    }
+}
+fn consume_tasks_real() -> Result<()> {
     use background_task_constants::*;
-    let client = await!(amqp_utils::connect_to_broker())?;
-    let mut channel = await!(client.create_channel())?;
-    let (tasks_queue, future_tasks_queue) =
-        await!(amqp_utils::init_background_job_queues(&mut channel))?;
+    let client = amqp_utils::connect_to_broker()?;
+    let mut channel = client.create_channel().wait()?;
+    let mut channel2 = client.create_channel().wait()?;
+    let (tasks_queue, future_tasks_queue) = amqp_utils::init_background_job_queues(&mut channel)?;
     let count = future_tasks_queue.message_count();
     if count == 0 {
         info!("Initially scheduling the databases update task...");
@@ -24,48 +55,35 @@ async fn consume_tasks_real() -> Result<()> {
             DATABASES_UPDATE_MINUTE,
             DATABASES_UPDATE_SECOND,
         );
-        let mut channel2 = await!(client.create_channel())?;
-        await!(background_task_delivery::perform_delivery_on(
+                background_task_delivery::perform_delivery_on(
             &mut channel2,
             BackgroundTask::UpdateAreaDatabases,
-            Some(ttl)
-        ))?;
-        //await!(channel2.close(0, "Normal shutdown"))?;
+            Some(ttl),
+        )?;
     }
     let opts = BasicQosOptions {
         ..Default::default()
     };
-    await!(channel.basic_qos(1, opts))?;
-    let mut consumer = await!(channel.basic_consume(
-        &tasks_queue,
-        "tasks_consumer",
-        BasicConsumeOptions::default(),
-        FieldTable::default()
-    ))?;
+    channel.basic_qos(1, opts).wait()?;
+    let consumer = channel
+        .basic_consume(
+            &tasks_queue,
+            "tasks_consumer",
+            BasicConsumeOptions::default(),
+            FieldTable::default(),
+        )
+        .wait()?;
     info!("Starting tasks consumption...");
-    while let Some(msg) = await!(consumer.next()) {
-        let msg = msg?;
-        trace!("Received message: {:?}", msg);
-        let task: BackgroundTask = serde_json::from_slice(&msg.data)?;
-        await!(task.execute())?;
-        info!("Task executed successfully.");
-        await!(channel.basic_ack(msg.delivery_tag, false))?;
-        info!("Task acknowledged.");
-        if let Some((hour, minute, second)) = task.get_next_schedule_time() {
-            let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);
-            await!(background_task_delivery::perform_delivery_on(
-                &mut channel,
-                task,
-                Some(ttl)
-            ))?;
-        }
-    }
-    await!(channel.close(0, "Normal shutdown"))?;
+    consumer.set_delegate(Box::new(Subscriber {
+        publish_channel: channel2.clone(),
+        consume_channel: channel.clone(),
+    }));
+    client.run()?;
     Ok(())
 }
 
-async fn consume_tasks() {
-    if let Err(e) = await!(consume_tasks_real()) {
+fn consume_tasks() {
+    if let Err(e) = consume_tasks_real() {
         error!("Error during task consumption: {:?}", e);
     }
 }
@@ -73,6 +91,6 @@ async fn consume_tasks() {
 fn main() -> Result<()> {
     server::init_logging();
     let _dotenv_path = dotenv::dotenv()?;
-    tokio::run_async(consume_tasks());
+    consume_tasks();
     Ok(())
 }

@@ -14,23 +14,24 @@ pub enum BackgroundTask {
 impl BackgroundTask {
     pub fn deliver(&self) {
         // We can at best log the errors from the async world...
-        tokio::run_async(background_task_delivery::deliver(self.clone(), None));
+        background_task_delivery::deliver(self.clone(), None); // TODO: report error properly
     }
 
     fn deliver_after(&self, msecs: u32) {
+        // TODO: Report errors properly when we're finally sync
         // We can at best log the errors from the async world...
-        tokio::run_async(background_task_delivery::deliver(self.clone(), Some(msecs)));
+        background_task_delivery::deliver(self.clone(), Some(msecs));
     }
 
     pub fn deliver_at_time(&self, hour: u32, minute: u32, second: u32) {
         self.deliver_after(datetime_utils::compute_ttl_for_time(hour, minute, second));
     }
 
-    pub async fn execute(&self) -> Result<()> {
+    pub fn execute(&self) -> Result<()> {
         use BackgroundTask::*;
         match self {
             CreateAreaDatabase(area_name) => area_db_creation::create_area_database(&area_name),
-            UpdateAreaDatabases => await!(area_db_update::update_area_databases()),
+            UpdateAreaDatabases => area_db_update::update_area_databases(),
         }
     }
 

@@ -1,10 +1,9 @@
 use crate::{amqp_utils, background_task::BackgroundTask, background_task_constants, Result};
-use lapin_futures::options::BasicPublishOptions;
-use lapin_futures::{BasicProperties, Channel};
-use tokio::await;
+use lapin::options::BasicPublishOptions;
+use lapin::{BasicProperties, Channel};
 
-pub async fn perform_delivery_on(
-    channel: &mut Channel,
+pub fn perform_delivery_on(
+    channel: &Channel,
     task: BackgroundTask,
     ttl: Option<u32>,
 ) -> Result<()> {
@@ -16,28 +15,31 @@ pub async fn perform_delivery_on(
     } else {
         background_task_constants::TASKS_QUEUE
     };
-    await!(channel.basic_publish(
-        "",
-        queue_name,
-        msg.into_bytes(),
-        BasicPublishOptions::default(),
-        props
-    ))?;
+    channel
+        .basic_publish(
+            "",
+            queue_name,
+            BasicPublishOptions::default(),
+            msg.into_bytes(),
+            props,
+        )
+        .wait()?;
     info!("Task delivered.");
     Ok(())
 }
 
-async fn deliver_real(task: BackgroundTask, ttl: Option<u32>) -> Result<()> {
-    let client = await!(amqp_utils::connect_to_broker())?;
-    let mut channel = await!(client.create_channel())?;
-    await!(amqp_utils::init_background_job_queues(&mut channel))?;
-    await!(perform_delivery_on(&mut channel, task, ttl))?;
-    await!(channel.close(0, "Normal shutdown"))?;
+fn deliver_real(task: BackgroundTask, ttl: Option<u32>) -> Result<()> {
+    let client = amqp_utils::connect_to_broker()?;
+    let mut channel = client.create_channel().wait()?;
+    amqp_utils::init_background_job_queues(&mut channel)?;
+    perform_delivery_on(&mut channel, task, ttl)?;
+    channel.close(0, "Normal shutdown").wait()?;
     Ok(())
 }
 
-pub async fn deliver(task: BackgroundTask, ttl: Option<u32>) {
-    let res = await!(deliver_real(task, ttl));
+pub fn deliver(task: BackgroundTask, ttl: Option<u32>) {
+    // TODO: We can get rit of the second fn and return the rror directly
+    let res = deliver_real(task, ttl);
     if let Err(e) = res {
         error!("Error during message delivery: {}", e);
     }

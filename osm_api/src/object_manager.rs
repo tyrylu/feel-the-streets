@@ -546,7 +546,7 @@ impl Drop for OSMObjectManager {
 
 pub fn cached_objects_in<'a>(
     cache: &'a mut SqliteMap<'_>,
-) -> Box<(Iterator<Item = OSMObject>) + 'a> {
+) -> Box<dyn (Iterator<Item = OSMObject>) + 'a> {
     Box::new(
         cache
             .iter::<String, Vec<u8>>()

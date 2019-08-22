@@ -11,14 +11,13 @@ use osm_db::semantic_change::SemanticChange;
 use osm_db::translation::translator;
 use std::sync::mpsc;
 use std::thread;
-use tokio::await;
 
 enum UpdateMessage {
     ApplyChange(SemanticChange),
     Done,
 }
 
-async fn update_area(mut area: Area) -> Result<()> {
+fn update_area(mut area: Area) -> Result<()> {
     let area_name = area.name.clone();
     let (sender, receiver) = mpsc::channel();
     let handle = thread::spawn(move || -> Result<()> {
@@ -131,8 +130,8 @@ async fn update_area(mut area: Area) -> Result<()> {
         sender.send(UpdateMessage::Done).unwrap();
         Ok(())
     });
-    let client = await!(amqp_utils::connect_to_broker())?;
-    let mut channel = await!(client.create_channel())?;
+    let client = amqp_utils::connect_to_broker()?;
+    let mut channel = client.create_channel().wait()?;
     let mut semantic_changes = vec![];
     loop {
         match receiver.recv() {
@@ -147,26 +146,22 @@ async fn update_area(mut area: Area) -> Result<()> {
     }
     info!("Publishing the changes...");
     for change in semantic_changes {
-        await!(area_messaging::publish_change_on(
-            &mut channel,
-            change,
-            area_name.clone()
-        ))?;
+        area_messaging::publish_change_on(&mut channel, change, area_name.clone())?;
     }
     info!("Changes successfully published.");
-    await!(channel.close(0, "Normal shutdown"))?;
+    channel.close(0, "Normal shutdown").wait()?;
     info!("Channel successfully closed.");
     Ok(())
 }
 
-pub async fn update_area_databases() -> Result<()> {
+pub fn update_area_databases() -> Result<()> {
     info!("Going to perform the area database update for all up-to date areas.");
     let areas = {
         let area_db_conn = SqliteConnection::establish("server.db")?;
         Area::all_updated(&area_db_conn)?
     };
     for area in areas {
-        await!(update_area(area))?;
+        update_area(area)?;
     }
     info!("Area updates finished successfully.");
     Ok(())
