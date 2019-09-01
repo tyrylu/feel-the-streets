@@ -4,7 +4,7 @@ use lapin::{BasicProperties, Channel};
 
 pub fn perform_delivery_on(
     channel: &Channel,
-    task: BackgroundTask,
+    task: &BackgroundTask,
     ttl: Option<u32>,
 ) -> Result<()> {
     let msg = serde_json::to_string(&task)?;
@@ -28,19 +28,11 @@ pub fn perform_delivery_on(
     Ok(())
 }
 
-fn deliver_real(task: BackgroundTask, ttl: Option<u32>) -> Result<()> {
+pub fn deliver(task: &BackgroundTask, ttl: Option<u32>) -> Result<()> {
     let client = amqp_utils::connect_to_broker()?;
     let mut channel = client.create_channel().wait()?;
     amqp_utils::init_background_job_queues(&mut channel)?;
-    perform_delivery_on(&mut channel, task, ttl)?;
+    perform_delivery_on(&channel, task, ttl)?;
     channel.close(0, "Normal shutdown").wait()?;
     Ok(())
-}
-
-pub fn deliver(task: BackgroundTask, ttl: Option<u32>) {
-    // TODO: We can get rit of the second fn and return the rror directly
-    let res = deliver_real(task, ttl);
-    if let Err(e) = res {
-        error!("Error during message delivery: {}", e);
-    }
 }

@@ -71,7 +71,7 @@ impl<'a> SqliteMap<'a> {
         })
     }
 
-    pub fn insert<R>(&mut self, key: &ToSql, value: &ToSql) -> Result<Option<R>>
+    pub fn insert<R>(&mut self, key: &dyn ToSql, value: &dyn ToSql) -> Result<Option<R>>
     where
         R: FromSql,
     {
@@ -84,7 +84,7 @@ impl<'a> SqliteMap<'a> {
         Ok(output)
     }
 
-    pub fn get<R>(&mut self, key: &ToSql) -> Result<Option<R>>
+    pub fn get<R>(&mut self, key: &dyn ToSql) -> Result<Option<R>>
     where
         R: FromSql,
     {
@@ -119,7 +119,7 @@ impl<'a> SqliteMap<'a> {
             .query_map(&[], |row| (row.get(0), row.get(1)))
     }
 
-    pub fn contains_key(&mut self, key: &ToSql) -> Result<bool> {
+    pub fn contains_key(&mut self, key: &dyn ToSql) -> Result<bool> {
         let mut rows = self.select_key.query(&[key])?;
         Ok(match rows.next() {
             Some(Ok(_)) => true,
@@ -138,7 +138,7 @@ impl<'a> SqliteMap<'a> {
         Ok(size as usize)
     }
 
-    pub fn remove<R>(&mut self, key: &ToSql) -> Result<Option<R>>
+    pub fn remove<R>(&mut self, key: &dyn ToSql) -> Result<Option<R>>
     where
         R: FromSql,
     {

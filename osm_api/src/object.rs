@@ -1,4 +1,7 @@
 use hashbrown::HashMap;
+use std::str::FromStr;
+use failure::Error;
+
 #[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
 pub enum OSMObjectType {
     #[serde(rename = "node")]
@@ -9,13 +12,15 @@ pub enum OSMObjectType {
     Relation,
 }
 
-impl OSMObjectType {
-    pub fn from_str(value: &str) -> Option<Self> {
+impl FromStr for OSMObjectType {
+type Err = Error;
+    
+    fn from_str(value: &str) -> Result<Self, Self::Err> {
         match value {
-            "node" => Some(OSMObjectType::Node),
-            "way" => Some(OSMObjectType::Way),
-            "relation" => Some(OSMObjectType::Relation),
-            _ => None,
+            "node" => Ok(OSMObjectType::Node),
+            "way" => Ok(OSMObjectType::Way),
+            "relation" => Ok(OSMObjectType::Relation),
+            node_type => Err(failure::format_err!("Unknown node type specification: {}", node_type)),
         }
     }
 }
@@ -51,7 +56,7 @@ pub enum OSMObjectSpecificsFromNetwork {
 }
 
 impl OSMObjectSpecificsFromNetwork {
-    fn to_internal(self) -> OSMObjectSpecifics {
+    fn into_internal(self) -> OSMObjectSpecifics {
         use OSMObjectSpecificsFromNetwork::*;
         match self {
             Node { lat, lon } => OSMObjectSpecifics::Node { lat, lon },
@@ -99,7 +104,7 @@ pub struct OSMObject {
 }
 
 impl OSMObjectFromNetwork {
-    pub fn to_osm_object(self) -> OSMObject {
+    pub fn into_osm_object(self) -> OSMObject {
         OSMObject {
             id: self.id,
             timestamp: self.timestamp,
@@ -108,7 +113,7 @@ impl OSMObjectFromNetwork {
             uid: self.uid,
             user: self.user,
             tags: self.tags,
-            specifics: self.specifics.to_internal(),
+            specifics: self.specifics.into_internal(),
         }
     }
 }

@@ -12,19 +12,16 @@ pub enum BackgroundTask {
 }
 
 impl BackgroundTask {
-    pub fn deliver(&self) {
-        // We can at best log the errors from the async world...
-        background_task_delivery::deliver(self.clone(), None); // TODO: report error properly
+    pub fn deliver(&self) -> Result<()> {
+        background_task_delivery::deliver(&self, None)
     }
 
-    fn deliver_after(&self, msecs: u32) {
-        // TODO: Report errors properly when we're finally sync
-        // We can at best log the errors from the async world...
-        background_task_delivery::deliver(self.clone(), Some(msecs));
+    fn deliver_after(&self, msecs: u32) -> Result<()> {
+        background_task_delivery::deliver(&self, Some(msecs))
     }
 
-    pub fn deliver_at_time(&self, hour: u32, minute: u32, second: u32) {
-        self.deliver_after(datetime_utils::compute_ttl_for_time(hour, minute, second));
+    pub fn deliver_at_time(&self, hour: u32, minute: u32, second: u32) -> Result<()> {
+        self.deliver_after(datetime_utils::compute_ttl_for_time(hour, minute, second))
     }
 
     pub fn execute(&self) -> Result<()> {

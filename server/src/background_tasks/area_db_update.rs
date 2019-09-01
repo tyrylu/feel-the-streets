@@ -80,7 +80,7 @@ fn update_area(mut area: Area) -> Result<()> {
                     let osm_id = change
                         .old
                         .as_ref()
-                        .unwrap_or(change.new.as_ref().expect("No old or new"))
+                        .unwrap_or_else(|| change.new.as_ref().expect("No old or new"))
                         .unique_id();
 
                     let old = area_db.get_entity(&osm_id)?;
@@ -131,7 +131,7 @@ fn update_area(mut area: Area) -> Result<()> {
         Ok(())
     });
     let client = amqp_utils::connect_to_broker()?;
-    let mut channel = client.create_channel().wait()?;
+    let channel = client.create_channel().wait()?;
     let mut semantic_changes = vec![];
     loop {
         match receiver.recv() {
@@ -146,7 +146,7 @@ fn update_area(mut area: Area) -> Result<()> {
     }
     info!("Publishing the changes...");
     for change in semantic_changes {
-        area_messaging::publish_change_on(&mut channel, change, area_name.clone())?;
+        area_messaging::publish_change_on(&channel, &change, &area_name)?;
     }
     info!("Changes successfully published.");
     channel.close(0, "Normal shutdown").wait()?;

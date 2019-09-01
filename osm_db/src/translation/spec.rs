@@ -110,7 +110,7 @@ impl TranslationSpec {
             }
             specs.push(
                 TranslationSpec::for_discriminator(&discriminator)
-                    .expect(&format!(
+                    .unwrap_or_else(|| panic!(
                         "No translation spec for {} found.",
                         current_metadata.discriminator
                     ))

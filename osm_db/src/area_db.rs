@@ -54,7 +54,7 @@ impl AreaDatabase {
         let mut count = 0;
         let insert_tx = self.conn.transaction()?;
         for entity in entities {
-            if entity.geometry.len() < 1000000 {
+            if entity.geometry.len() < 1_000_000 {
                 let mut insert_stmt = if geometry_is_valid_transacted(&entity.geometry, &insert_tx)?
                 {
                     insert_tx.prepare(INSERT_ENTITY_SQL)?

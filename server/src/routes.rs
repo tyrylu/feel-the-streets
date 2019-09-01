@@ -36,8 +36,8 @@ pub fn maybe_create_area(
         Ok(a) => Ok(status::Custom(Status::Ok, Json(a))),
         Err(_e) => {
             let area = Area::create(&area_name, &*conn)?;
-            area_messaging::init_exchange(area_name.clone()); // TODO needless clone
-            BackgroundTask::CreateAreaDatabase(area_name).deliver();
+            area_messaging::init_exchange(&area_name)?;
+            BackgroundTask::CreateAreaDatabase(area_name).deliver()?;
             Ok(status::Custom(Status::Created, Json(area)))
         }
     }
@@ -49,7 +49,7 @@ pub fn download_area(area_name: String, client_id: String, conn: DbConn) -> Resu
     if area.state != AreaState::Updated {
         bail!("Can not guarantee area data integrity.")
     } else {
-        area_messaging::init_queue(client_id, area_name.clone()); // TODO: needless clone
+        area_messaging::init_queue(&client_id, &area_name)?;
         Ok(File::open(AreaDatabase::path_for(&area_name))?)
     }
 }

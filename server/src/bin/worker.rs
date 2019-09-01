@@ -26,7 +26,7 @@ impl Subscriber {
             let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);
             background_task_delivery::perform_delivery_on(
                 &self.publish_channel,
-                task,
+                &task,
                 Some(ttl),
             )?;
         }
@@ -41,11 +41,12 @@ impl ConsumerDelegate for Subscriber {
         }
     }
 }
-fn consume_tasks_real() -> Result<()> {
+
+fn consume_tasks() -> Result<()> {
     use background_task_constants::*;
     let client = amqp_utils::connect_to_broker()?;
     let mut channel = client.create_channel().wait()?;
-    let mut channel2 = client.create_channel().wait()?;
+    let channel2 = client.create_channel().wait()?;
     let (tasks_queue, future_tasks_queue) = amqp_utils::init_background_job_queues(&mut channel)?;
     let count = future_tasks_queue.message_count();
     if count == 0 {
@@ -56,8 +57,8 @@ fn consume_tasks_real() -> Result<()> {
             DATABASES_UPDATE_SECOND,
         );
                 background_task_delivery::perform_delivery_on(
-            &mut channel2,
-            BackgroundTask::UpdateAreaDatabases,
+            &channel2,
+            &BackgroundTask::UpdateAreaDatabases,
             Some(ttl),
         )?;
     }
@@ -82,15 +83,8 @@ fn consume_tasks_real() -> Result<()> {
     Ok(())
 }
 
-fn consume_tasks() {
-    if let Err(e) = consume_tasks_real() {
-        error!("Error during task consumption: {:?}", e);
-    }
-}
-
 fn main() -> Result<()> {
     server::init_logging();
     let _dotenv_path = dotenv::dotenv()?;
-    consume_tasks();
-    Ok(())
-}
+    consume_tasks()
+    }

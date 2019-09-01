@@ -192,7 +192,7 @@ impl OSMObjectManager {
                 let mut de = Deserializer::from_reader(&mut cached_readable);
                 match OSMObjectFromNetwork::deserialize(&mut de) {
                     Ok(obj) => {
-                        let internal_object = obj.to_osm_object();
+                        let internal_object = obj.into_osm_object();
                         self.cache_object_into(&mut cache, &internal_object);
                         if return_objects {
                             objects.push(internal_object);
@@ -217,7 +217,7 @@ impl OSMObjectManager {
     }
 
     fn lookup_objects(&self, ids: &mut [String]) -> Result<()> {
-        const MAX_SIMULTANEOUSLY_QUERYED: usize = 1000000;
+        const MAX_SIMULTANEOUSLY_QUERYED: usize = 1_000_000;
         let mut objects: Vec<OSMObject> = Vec::with_capacity(ids.len());
         ids.sort_unstable_by_key(|oid| oid.chars().nth(0));
         for (entity_type, entity_ids) in &ids.iter().group_by(|oid| oid.chars().nth(0).unwrap()) {
@@ -515,7 +515,7 @@ impl OSMObjectManager {
         &self,
         area: &str,
         after: &DateTime<Utc>,
-    ) -> Result<Box<Iterator<Item = Result<OSMObjectChange>>>> {
+    ) -> Result<Box<dyn Iterator<Item = Result<OSMObjectChange>>>> {
         let mut iterators = Vec::with_capacity(3);
         for kind in &["node", "way", "rel"] {
             let query = format!(
@@ -532,7 +532,7 @@ impl OSMObjectManager {
             let readable = self.run_query(&final_query, true)?;
             iterators.push(OSMObjectChangeIterator::new(readable));
         }
-        Ok(Box::new(iterators.into_iter().flat_map(|it| it)))
+        Ok(Box::new(iterators.into_iter().flatten()))
     }
 }
 

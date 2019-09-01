@@ -3,6 +3,7 @@ use crate::object::*;
 use crate::Result;
 use hashbrown::HashMap;
 use std::io::Read;
+use std::str::FromStr;
 use xml::{attribute::OwnedAttribute, reader::XmlEvent, EventReader};
 
 fn convert_to_map(attributes: Vec<OwnedAttribute>) -> HashMap<String, String> {
@@ -58,8 +59,8 @@ impl<T: Read> OSMObjectChangeIterator<T> {
             0,
             "".to_string(),
             0,
-            0 as f64,
-            0 as f64,
+            f64::from(0),
+            f64::from(0),
         );
         loop {
             let event = self.reader.next();
@@ -194,7 +195,7 @@ impl<T: Read> OSMObjectChangeIterator<T> {
                 self.finished = true;
                 return Err(failure::Error::from(e));
             }
-            event @ _ => panic!(format!("Unexpected event during parsing: {:?}", event)),
+            event => panic!(format!("Unexpected event during parsing: {:?}", event)),
         }
         Ok(())
     }

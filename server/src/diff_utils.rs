@@ -24,10 +24,10 @@ fn diff_properties(old: &Entity, new: &NotStoredEntity) -> Vec<EntryChange> {
         changes.push(EntryChange::updating(
             "effective_width",
             old.effective_width
-                .map(|w| Value::from(w))
+                .map(Value::from)
                 .unwrap_or(Value::Null),
             new.effective_width
-                .map(|w| Value::from(w))
+                .map(Value::from)
                 .unwrap_or(Value::Null),
         ));
     }

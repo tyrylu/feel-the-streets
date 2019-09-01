@@ -69,7 +69,7 @@ impl Area {
 
         let query_debug = diesel::debug_query::<diesel::sqlite::Sqlite, _>(&query);
         debug!("Executing query: {}", query_debug);
-        query.execute(*&conn)
+        query.execute(conn)
     }
 }
 
@@ -80,5 +80,5 @@ pub fn finalize_area_creation(area: &str, conn: &SqliteConnection) -> QueryResul
             areas::state.eq(AreaState::Updated),
             areas::updated_at.eq(now),
         ));
-    query.execute(*&conn)
+    query.execute(conn)
 }

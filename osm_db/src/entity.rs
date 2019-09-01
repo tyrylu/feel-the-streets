@@ -109,7 +109,7 @@ fn get_target_of_key<'a>(
     create_if_missing: bool,
 ) -> Option<(&'a mut Map<String, Value>, String)> {
     let mut current_map = map;
-    let mut subkeys_iter = key.split("/").peekable();
+    let mut subkeys_iter = key.split('/').peekable();
     let mut final_key_part = "should_not_happen";
     while let Some(subkey) = subkeys_iter.next() {
         if subkeys_iter.peek().is_some() {
@@ -125,18 +125,14 @@ fn get_target_of_key<'a>(
                     );
                     return None;
                 }
-            } else {
-                if create_if_missing {
+            } else if create_if_missing {
                     current_map.insert(subkey.to_string(), Value::Object(Map::new()));
                     current_map = current_map
                         .get_mut(subkey)
                         .unwrap()
                         .as_object_mut()
                         .unwrap();
-                } else {
-                    return None;
                 }
-            }
         } else {
             final_key_part = subkey;
         }
