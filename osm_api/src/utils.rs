@@ -47,9 +47,7 @@ pub fn coords_to_text(coords: &[(f64, f64)]) -> String {
         .join(", ")
 }
 
-fn find_connectable_segments(
-    segments: &[Segment],
-) -> (Option<&Segment>, Option<&Segment>) {
+fn find_connectable_segments(segments: &[Segment]) -> (Option<&Segment>, Option<&Segment>) {
     if segments.len() == 1 {
         return (None, None);
     }

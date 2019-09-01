@@ -79,10 +79,7 @@ impl PySemanticChange {
                 ));
                 ret.push(DictChange::creating("data", Value::from(data.clone())));
                 if let Some(val) = effective_width {
-                    ret.push(DictChange::creating(
-                        "effective_width",
-                        Value::from(*val),
-                    ))
+                    ret.push(DictChange::creating("effective_width", Value::from(*val)))
                 }
                 ret
             }

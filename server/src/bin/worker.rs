@@ -24,13 +24,9 @@ impl Subscriber {
         info!("Task acknowledged.");
         if let Some((hour, minute, second)) = task.get_next_schedule_time() {
             let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);
-            background_task_delivery::perform_delivery_on(
-                &self.publish_channel,
-                &task,
-                Some(ttl),
-            )?;
+            background_task_delivery::perform_delivery_on(&self.publish_channel, &task, Some(ttl))?;
         }
-    Ok(())
+        Ok(())
     }
 }
 
@@ -56,7 +52,7 @@ fn consume_tasks() -> Result<()> {
             DATABASES_UPDATE_MINUTE,
             DATABASES_UPDATE_SECOND,
         );
-                background_task_delivery::perform_delivery_on(
+        background_task_delivery::perform_delivery_on(
             &channel2,
             &BackgroundTask::UpdateAreaDatabases,
             Some(ttl),
@@ -87,4 +83,4 @@ fn main() -> Result<()> {
     server::init_logging();
     let _dotenv_path = dotenv::dotenv()?;
     consume_tasks()
-    }
+}

@@ -126,13 +126,13 @@ fn get_target_of_key<'a>(
                     return None;
                 }
             } else if create_if_missing {
-                    current_map.insert(subkey.to_string(), Value::Object(Map::new()));
-                    current_map = current_map
-                        .get_mut(subkey)
-                        .unwrap()
-                        .as_object_mut()
-                        .unwrap();
-                }
+                current_map.insert(subkey.to_string(), Value::Object(Map::new()));
+                current_map = current_map
+                    .get_mut(subkey)
+                    .unwrap()
+                    .as_object_mut()
+                    .unwrap();
+            }
         } else {
             final_key_part = subkey;
         }

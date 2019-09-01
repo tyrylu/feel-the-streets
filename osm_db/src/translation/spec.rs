@@ -110,10 +110,12 @@ impl TranslationSpec {
             }
             specs.push(
                 TranslationSpec::for_discriminator(&discriminator)
-                    .unwrap_or_else(|| panic!(
-                        "No translation spec for {} found.",
-                        current_metadata.discriminator
-                    ))
+                    .unwrap_or_else(|| {
+                        panic!(
+                            "No translation spec for {} found.",
+                            current_metadata.discriminator
+                        )
+                    })
                     .clone(),
             );
             if let Some(parent) = current_metadata.parent_metadata() {

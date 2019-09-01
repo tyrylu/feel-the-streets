@@ -1,6 +1,6 @@
+use failure::Error;
 use hashbrown::HashMap;
 use std::str::FromStr;
-use failure::Error;
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
 pub enum OSMObjectType {
@@ -13,14 +13,17 @@ pub enum OSMObjectType {
 }
 
 impl FromStr for OSMObjectType {
-type Err = Error;
-    
+    type Err = Error;
+
     fn from_str(value: &str) -> Result<Self, Self::Err> {
         match value {
             "node" => Ok(OSMObjectType::Node),
             "way" => Ok(OSMObjectType::Way),
             "relation" => Ok(OSMObjectType::Relation),
-            node_type => Err(failure::format_err!("Unknown node type specification: {}", node_type)),
+            node_type => Err(failure::format_err!(
+                "Unknown node type specification: {}",
+                node_type
+            )),
         }
     }
 }
