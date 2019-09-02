@@ -2,7 +2,7 @@ use lapin::message::Delivery;
 use lapin::options::{BasicAckOptions, BasicConsumeOptions, BasicQosOptions};
 use lapin::types::FieldTable;
 use lapin::{Channel, ConsumerDelegate};
-use log::{error, info, trace};
+use log::{error, info, trace, log};
 use server::{
     amqp_utils, background_task::BackgroundTask, background_task_constants,
     background_task_delivery, datetime_utils, Result,
@@ -20,7 +20,7 @@ impl Subscriber {
         info!("Task executed successfully.");
         self.consume_channel
             .basic_ack(delivery.delivery_tag, BasicAckOptions::default())
-            .wait()?;
+            .into_error()?;
         info!("Task acknowledged.");
         if let Some((hour, minute, second)) = task.get_next_schedule_time() {
             let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);

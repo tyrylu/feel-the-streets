@@ -18,7 +18,7 @@ serde = {version="*", features=["derive"]}
 serde_json = "*"
 chrono = {version = "*", features = ["serde"]}
 failure = "*"
-lapin = "*"
+lapin = "0.27.0-beta"
 dotenv = "*"
 sha3 = "*"
 hex = "*"
