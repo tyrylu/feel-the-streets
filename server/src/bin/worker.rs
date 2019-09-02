@@ -63,7 +63,7 @@ fn consume_tasks() -> Result<()> {
     };
     channel.basic_qos(1, opts).wait()?;
     let consumer = channel
-        .basic_consume(
+        .clone().basic_consume(
             &tasks_queue,
             "tasks_consumer",
             BasicConsumeOptions::default(),
@@ -73,7 +73,7 @@ fn consume_tasks() -> Result<()> {
     info!("Starting tasks consumption...");
     consumer.set_delegate(Box::new(Subscriber {
         publish_channel: channel2.clone(),
-        consume_channel: channel.clone(),
+        consume_channel: channel,
     }));
     client.run()?;
     Ok(())
