@@ -20,7 +20,7 @@ impl Subscriber {
         info!("Task executed successfully.");
         self.consume_channel
             .basic_ack(delivery.delivery_tag, BasicAckOptions::default())
-            .into_error()?;
+            .wait())?;
         info!("Task acknowledged.");
         if let Some((hour, minute, second)) = task.get_next_schedule_time() {
             let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);
