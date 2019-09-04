@@ -2,11 +2,12 @@ use lapin::message::Delivery;
 use lapin::options::{BasicAckOptions, BasicConsumeOptions, BasicQosOptions};
 use lapin::types::FieldTable;
 use lapin::{Channel, ConsumerDelegate};
-use log::{error, info, trace, log};
+use log::{error, info, trace};
 use server::{
     amqp_utils, background_task::BackgroundTask, background_task_constants,
     background_task_delivery, datetime_utils, Result,
 };
+use std::thread;
 
 struct Subscriber {
     consume_channel: Channel,
@@ -20,7 +21,7 @@ impl Subscriber {
         info!("Task executed successfully.");
         self.consume_channel
             .basic_ack(delivery.delivery_tag, BasicAckOptions::default())
-            .wait())?;
+            .wait()?;
         info!("Task acknowledged.");
         if let Some((hour, minute, second)) = task.get_next_schedule_time() {
             let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);
@@ -62,7 +63,7 @@ fn consume_tasks() -> Result<()> {
         ..Default::default()
     };
     channel.basic_qos(1, opts).wait()?;
-    let consumer = channel
+    let handle = thread::spawn(move || -> Result<()> {let consumer = channel
         .clone().basic_consume(
             &tasks_queue,
             "tasks_consumer",
@@ -75,6 +76,9 @@ fn consume_tasks() -> Result<()> {
         publish_channel: channel2.clone(),
         consume_channel: channel,
     }));
+    Ok(())
+    });
+    handle.join().expect("Consumer thread join failure")?;
     client.run()?;
     Ok(())
 }
