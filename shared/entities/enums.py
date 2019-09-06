@@ -742,6 +742,8 @@ class HistoricType(enum.Enum):
     palace = 24
     gate = 25
     stone = 26
+    multipolygon = 27
+    road = 28
 
 
 
@@ -1012,6 +1014,7 @@ class RoadType(enum.Enum):
     steps = 57
     camera = 58
     multipolygon = 59
+    toll_gantry = 60
 
 
 
@@ -1501,6 +1504,7 @@ class MemorialKind(enum.Enum):
     artwork = 8
     bas_relief = 9
     memorial = 10
+    obelisk = 11
 
 
 class GardenType(enum.Enum):
@@ -1626,6 +1630,7 @@ class CurbType(enum.Enum):
     no = 0
     yes = 1
     both = 2
+    one = 3
 
 class Service(enum.Enum):
     alley = 0
@@ -1683,6 +1688,8 @@ class Denomination(enum.Enum):
 class TrafficSignType(enum.Enum):
     city_limit = 0
     maxspeed = 1
+    destination = 2
+    route = 3
 
 class EntranceType(enum.Enum):
     main = 0
@@ -1805,6 +1812,7 @@ class OfficeType(enum.Enum):
     print_distribution = 27
     logistics = 28
     reception = 29
+    energy_supplier = 30
     
 
 class ParkingLaneType(enum.Enum):

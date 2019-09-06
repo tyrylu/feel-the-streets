@@ -226,6 +226,7 @@ TrafficSignalsType:
   blinker: 3
   pedestrian: 4
   emergency: 5
+  pedestrian_crossing: 6
 TrafficSignalsDirection:
   forward: 1
   backward: 2
@@ -936,6 +937,7 @@ HistoricType:
   gate: 25
   stone: 26
   multipolygon: 27
+  road: 28
 TrafficCalmingType:
   none: 0
   'yes': 1
@@ -1169,6 +1171,7 @@ RoadType:
   steps: 57
   camera: 58
   multipolygon: 59
+  toll_gantry: 60
 LandType:
   forest: 0
   reservoir: 1
@@ -1599,6 +1602,7 @@ MemorialKind:
   artwork: 8
   bas_relief: 9
   memorial: 10
+  obelisk: 11
 GardenType:
   residential: 0
   botanical: 1
@@ -1708,6 +1712,7 @@ CurbType:
   'no': 0
   'yes': 1
   both: 2
+  one: 3
 Service:
   alley: 0
   parking_aisle: 1
@@ -1754,6 +1759,8 @@ Denomination:
 TrafficSignType:
   city_limit: 0
   maxspeed: 1
+  destination: 2
+  route: 3
 EntranceType:
   main: 0
   'yes': 1
@@ -1862,6 +1869,7 @@ OfficeType:
   print_distribution: 27
   logistics: 28
   reception: 29
+  energy_supplier: 30
 ParkingLaneType:
   no_parking: 0
   diagonal: 1
@@ -2169,11 +2177,16 @@ RampType:
 ShoulderType:
   'no': 0
   right: 1
+  yes: 2
 Hazard:
   pedestrians: 0
   traffic_signals: 1
   wild_animals: 2
   curves: 3
+  side_winds: 4
+  rock_slide: 5
+  slippery_road: 6
+  wild_animal: 7
 Divider:
   line: 0
 ODBL:
@@ -2280,6 +2293,7 @@ StopType:
   facility: 9
   public_transport: 10
   halt: 11
+  ferry_terminal: 12
 CameraMount:
   ceiling: 0
   pole: 1

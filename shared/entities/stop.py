@@ -22,6 +22,7 @@ class StopType(enum.Enum):
     facility = 9
     public_transport = 10
     halt = 11
+    ferry_terminal = 12
     
 class Stop(Named):
     type: StopType = None

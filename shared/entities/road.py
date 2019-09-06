@@ -102,12 +102,17 @@ class RampType(enum.Enum):
 class ShoulderType(enum.Enum):
     no = 0
     right = 1
+    yes = 2
 
 class Hazard(enum.Enum):
     pedestrians = 0
     traffic_signals = 1
     wild_animals = 2
     curves = 3
+    side_winds = 4
+    rock_slide = 5
+    slippery_road = 6
+    wild_animal = 7
 
 class Divider(enum.Enum):
     line = 0
@@ -338,7 +343,7 @@ class Road(Named):
     ref_name: str = None
     hgv_6t: AccessType = None
     advisory_maxspeed: int = None
-    old_ref: int = None
+    old_ref: str = None
     bridge_ref: str = None
     hgv_conditional_maxspeed: str = None
     lane_marking: bool = None
@@ -358,7 +363,7 @@ class Road(Named):
     alt_name_en: str = None
     rcn: bool = None
     rcn_ref: int = None
-    distance: int = None
+    distance: float = None
     highway_area: AreaType = None
     tourism: TourismType = None
     loc_name: str = None

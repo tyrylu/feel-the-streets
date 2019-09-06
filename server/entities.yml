@@ -1946,7 +1946,7 @@ Road:
     informal: bool
     hgv_6t: AccessType
     advisory_maxspeed: int
-    old_ref: int
+    old_ref: str
     bridge_ref: str
     hgv_conditional_maxspeed: str
     lane_marking: bool
@@ -1966,7 +1966,7 @@ Road:
     alt_name_en: str
     rcn: bool
     rcn_ref: int
-    distance: int
+    distance: float
     highway_area: AreaType
     tourism: TourismType
     loc_name: str

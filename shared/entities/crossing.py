@@ -8,6 +8,7 @@ class TrafficSignalsType(enum.Enum):
     blinker = 3
     pedestrian = 4
     emergency = 5
+    pedestrian_crossing = 6
 
 class TrafficSignalsDirection(enum.Enum):
     forward = 1
