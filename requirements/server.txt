@@ -1,8 +1,0 @@
--r common.txt
-overpass
-flask
-flask-sqlalchemy
-flask-migrate
-python-dotenv
-huey
-ijson

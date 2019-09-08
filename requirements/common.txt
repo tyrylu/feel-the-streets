@@ -1,9 +1,0 @@
-pendulum
-pint
-attrs
-pygeodesy
-pydantic
-sqlalchemy
-pika
-appdirs
-# And not including those, it requires shapely
