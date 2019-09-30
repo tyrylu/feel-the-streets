@@ -1,7 +1,6 @@
 import wx
-from shared.services import entity_registry
+from osm_db import EntityMetadata, all_known_discriminators
 from shared.humanization_utils import get_class_display_name
-from shared.models import Entity, IdxEntitiesGeometry
 from shared.geometry_utils import xy_ranges_bounding_square
 from .search_conditions import SpecifySearchConditionsDialog
 from ..geometry_utils import distance_filter
@@ -10,11 +9,12 @@ from ..services import map
 from uimanager import get
 
 def perform_search(position):
-    entities = list(entity_registry().known_entity_classes)
+    entities = all_known_discriminators()
     entity_names = [get_class_display_name(klass) for klass in entities]
     entity = wx.GetSingleChoice(_("Select the class to search"), _("Search class"), aChoices=entity_names)
     if entity:
-        conditions_dialog = get().prepare_xrc_dialog(SpecifySearchConditionsDialog, entity=entities[entity_names.index(entity)], alternate_bind_of=["on_fields_tree_sel_changed"])
+        discriminator = entities[entity_names.index(entity)]
+        conditions_dialog = get().prepare_xrc_dialog(SpecifySearchConditionsDialog, entity=discriminator, alternate_bind_of=["on_fields_tree_sel_changed"])
         if conditions_dialog.ShowModal() != wx.ID_OK:
             conditions_dialog.Destroy()
             return
@@ -23,10 +23,20 @@ def perform_search(position):
         if conditions_dialog.distance:
             distance = conditions_dialog.distance
             min_x, min_y, max_x, max_y = xy_ranges_bounding_square(position, distance*2)
-            conditions = (Entity.id == IdxEntitiesGeometry.pkid) & (IdxEntitiesGeometry.xmin <= max_x) & (IdxEntitiesGeometry.xmax >= min_x) & (IdxEntitiesGeometry.ymin <= max_y) & (IdxEntitiesGeometry.ymax >= min_y) & conditions
-        query = map()._db.query(Entity).filter(conditions)
+            query = EntitiesQuery()
+            query.set_distance(distance)
+            query.set_rectangle_of_interest(min_x, max_x, min_y, max_y)
+            discriminators = []
+            metadata = EntityMetadata.for_discriminator(discriminator)
+            while metadata:
+                discriminators.append(metadata.discriminator)
+                metadata = metadata.parent_metadata
+            query.set_discriminators(discriminators)
+            for condition in conditions:
+                query.add_condition(condition)
+        results = map._db.get_entities(query)
         filtered_objects = distance_filter(query, position, distance)
         conditions_dialog.Destroy()
-        return [filtered.create_osm_entity() for filtered in filtered_objects]
+        return filtered_objects
     
     

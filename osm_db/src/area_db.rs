@@ -1,12 +1,26 @@
+use crate::entities_query::EntitiesQuery;
 use crate::entity::{Entity, NotStoredEntity};
 use crate::semantic_change::SemanticChange;
-use rusqlite::{Connection, Error, OpenFlags, Transaction};
+use rusqlite::{Connection, Error, OpenFlags, Row, Transaction};
+use rusqlite::types::ToSql;
+use std::path::PathBuf;
 
 type DbResult<T> = Result<T, rusqlite::Error>;
 
 const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
 const INSERT_ENTITY_SQL: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, geomFromText(?, 4326), ?, ?)";
 const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, Buffer(geomFromText(?, 4326), 0), ?, ?)";
+
+fn row_to_entity(row: &Row) -> Entity {
+    Entity {
+        id: row.get(0),
+        geometry: row.get(1),
+        discriminator: row.get(2),
+        data: row.get(3),
+        effective_width: row.get(4),
+        parsed_data: None,
+    }
+}
 
 fn init_extensions(conn: &Connection) -> DbResult<()> {
     conn.load_extension_enable()?;
@@ -28,19 +42,27 @@ impl AreaDatabase {
         Ok(Self { conn })
     }
 
-    pub fn path_for(area: &str) -> String {
-        format!("{}.db", area)
+    pub fn path_for(area: &str, server_side: bool) -> PathBuf {
+        let mut root = if server_side {
+            PathBuf::from(".")
+        } else {
+            let mut appdata_dir = dirs::data_local_dir().expect("No local app data dir");
+            appdata_dir.push("fts/areas");
+            appdata_dir
+        };
+        root.push(format!("{}.db", area));
+        root
     }
 
     pub fn create(area: &str) -> DbResult<Self> {
-        let conn = Connection::open(&AreaDatabase::path_for(&area))?;
+        let conn = Connection::open(&AreaDatabase::path_for(&area, true))?;
         init_extensions(&conn)?;
         conn.execute_batch(INIT_AREA_DB_SQL)?;
         AreaDatabase::common_construct(conn)
     }
-    pub fn open_existing(area: &str) -> DbResult<Self> {
+    pub fn open_existing(area: &str, server_side: bool) -> DbResult<Self> {
         let conn = Connection::open_with_flags(
-            &AreaDatabase::path_for(&area),
+            &AreaDatabase::path_for(&area, server_side),
             OpenFlags::SQLITE_OPEN_READ_WRITE,
         )?;
         init_extensions(&conn)?;
@@ -95,19 +117,50 @@ impl AreaDatabase {
 
     pub fn get_entity(&self, osm_id: &str) -> DbResult<Option<Entity>> {
         let mut stmt = self.conn.prepare_cached("select id, AsText(geometry) as geometry, discriminator, data, effective_width from entities where json_extract(data, '$.osm_id') = ?")?;
-        match stmt.query_row(&[&osm_id], |row| Entity {
-            id: row.get(0),
-            geometry: row.get(1),
-            discriminator: row.get(2),
-            data: row.get(3),
-            effective_width: row.get(4),
-        }) {
+        match stmt.query_row(&[&osm_id], row_to_entity) {
             Ok(e) => Ok(Some(e)),
             Err(e) => match e {
                 Error::QueryReturnedNoRows => Ok(None),
                 _ => Err(e),
             },
         }
+    }
+    pub fn get_entities(&self, query: &EntitiesQuery) -> DbResult<Vec<Entity>> {
+        debug!("About to execute query {}", query.to_query_sql());
+        let mut stmt = self.conn.prepare_cached(&query.to_query_sql())?;
+        let orig_params = query.to_query_params();
+        let mut params = vec![];
+        for (name, value) in &orig_params {
+            params.push((name.as_str(), *value));
+        }
+        let res = stmt.query_map_named(params.as_slice(), row_to_entity)?;
+        Ok(res.map(|e| e.expect("Failed to retrieve entity")).collect())
+    }
+
+    pub fn get_entities_really_intersecting(
+        &self,
+        candidate_ids: &[i32],
+        x: f64,
+        y: f64,
+        fast: bool,
+    ) -> DbResult<Vec<Entity>> {
+        let mut candidate_params = vec![];
+        for i in 0..candidate_ids.len() {
+            candidate_params.push(format!(":candidate{}", i));
+        }
+        let mut query = format!("SELECT id, discriminator, AsText(geometry)as geometry, data, effective_width FROM entities WHERE id in ({})", candidate_params.join(","));
+        if fast {
+            query += " AND length(geometry) < 100000";
+        }
+        let fragment = format!(" AND contains(geometry, GeomFromText('POINT({}, {})', 4326))", x, y);
+        query += &fragment;
+        let mut params: Vec<(&str, &dyn ToSql)> = vec![];
+        for (i, id) in candidate_ids.iter().enumerate() {
+            params.push((&candidate_params[i], id));
+        }
+        let mut stmt = self.conn.prepare_cached(&query)?;
+        let res = stmt.query_map_named(params.as_slice(), row_to_entity)?;
+        Ok(res.map(|e| e.expect("Failed to retrieve entity")).collect())
     }
 
     fn insert_entity(
@@ -182,5 +235,16 @@ impl AreaDatabase {
             .conn
             .prepare_cached("select isValid(geomFromText(?, 4326))")?;
         stmt.query_row(&[&geometry], |row| row.get(0))
+    }
+
+    pub fn begin(&self) -> DbResult<()> {
+        let mut stmt = self.conn.prepare_cached("BEGIN")?;
+        stmt.execute(&[])?;
+        Ok(())
+    }
+pub fn commit(&self) -> DbResult<()> {
+        let mut stmt = self.conn.prepare_cached("COMMIT")?;
+        stmt.execute(&[])?;
+        Ok(())
     }
 }

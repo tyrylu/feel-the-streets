@@ -1,6 +1,5 @@
 import wx
 from pygeodesy.ellipsoidalVincenty import LatLon
-from shared.entities import Road
 from ..services import speech, map
 from ..objects_browser import ObjectsBrowserFrame
 from ..road_segments_browser import RoadSegmentsBrowserDialog
@@ -98,14 +97,14 @@ class InteractivePersonController:
     @menu_command(_("Information"), _("Current road section angle"), "d")
     def current_road_section_angle(self, evt):
          for obj in self._person.is_inside_of:
-            if isinstance(obj, Road) and not obj.area:
+            if obj.discriminator == "Road" and not obj.value_of_field("area"):
                 angle = get_road_section_angle(self._person, obj)
                 speech().speak(_("{road}: {angle:.2f}°").format(road=obj, angle=angle))
 
     @menu_command(_("Information"), _("Road details"), "ctrl+d")
     def road_details(self, evt):
         road = self._maybe_select_road()
-        if not road or road.area:
+        if not road or road.value_of_field("area"):
             return
         dlg = get().prepare_xrc_dialog(RoadSegmentsBrowserDialog, person=self._person, road=road)
         dlg.ShowModal()
@@ -125,7 +124,7 @@ class InteractivePersonController:
         self._person.direction += float(amount)
     
     def _maybe_select_road(self):
-        roads = [r for r in self._person.is_inside_of if isinstance(r, Road)]
+        roads = [r for r in self._person.is_inside_of if r.discriminator == "Road"]
         if not roads:
             return None
         if len(roads) == 1:

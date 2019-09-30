@@ -28,7 +28,7 @@ fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
         DateTime::from_utc(area.updated_at, Utc)
     };
     let manager = OSMObjectManager::new();
-    let area_db = AreaDatabase::open_existing(&area.name)?;
+    let area_db = AreaDatabase::open_existing(&area.name, true)?;
     let mut first = true;
     let mut osm_change_count = 0;
     let mut semantic_changes = vec![];
@@ -110,16 +110,17 @@ fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
     let channel = client.create_channel().wait()?;
     info!(
         "Area updated successfully, applyed {} semantic changes resulting from {} OSM changes.",
-        semantic_changes.len(), osm_change_count
+        semantic_changes.len(),
+        osm_change_count
     );
-        info!("Publishing the changes...");
+    info!("Publishing the changes...");
     for change in semantic_changes {
         area_messaging::publish_change_on(&channel, &change, &area.name)?;
     }
     info!("Changes successfully published.");
     area.state = AreaState::Updated;
     area.save(&conn)?;
-        channel.close(0, "Normal shutdown").wait()?;
+    channel.close(0, "Normal shutdown").wait()?;
     info!("Channel successfully closed.");
     Ok(())
 }
@@ -127,8 +128,8 @@ fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
 pub fn update_area_databases() -> Result<()> {
     info!("Going to perform the area database update for all up-to date areas.");
     let area_db_conn = SqliteConnection::establish("server.db")?;
-    let areas =Area::all_updated(&area_db_conn)?;
-        for mut area in areas {
+    let areas = Area::all_updated(&area_db_conn)?;
+    for mut area in areas {
         update_area(&mut area, &area_db_conn)?;
     }
     info!("Area updates finished successfully.");

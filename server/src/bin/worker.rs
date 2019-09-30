@@ -63,7 +63,8 @@ fn consume_tasks() -> Result<()> {
     };
     channel.basic_qos(1, opts).wait()?;
     let consumer = channel
-        .clone().basic_consume(
+        .clone()
+        .basic_consume(
             &tasks_queue,
             "tasks_consumer",
             BasicConsumeOptions::default(),

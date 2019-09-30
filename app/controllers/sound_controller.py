@@ -2,10 +2,9 @@ import collections
 import random
 import attr
 import anglr
+from osm_db import Enum
 from ..services import sound
 from ..entities import entity_post_move, entity_post_enter, entity_post_leave, entity_rotated
-from shared.entities import Road
-from shared.entities.enums import RoadType
 
 @attr.s
 class SoundController:
@@ -41,8 +40,8 @@ class SoundController:
         if not sender.use_step_sounds:
             return
         base_group = None
-        if isinstance(enters, Road):
-            if enters.type is RoadType.path:
+        if enters.discriminator == "Road":
+            if enters.value_of_field("type") == Enum.with_name("RoadType").value_for_name("path"):
                 base_group = "steps_path"
             else:
                 base_group = "steps_road"
@@ -54,7 +53,7 @@ class SoundController:
     def post_leave(self, sender, leaves):
         if not sender.use_step_sounds:
             return
-        if isinstance(leaves, Road):
+        if leaves.discriminator == "Road":
             if sender not in self._groups_map:
                 print("Already left %s."%sender)
             else:

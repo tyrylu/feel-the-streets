@@ -14,10 +14,25 @@ pub struct Entity {
     pub geometry: String,
     pub discriminator: String,
     pub data: String,
+    pub parsed_data: Option<Value>,
     pub effective_width: Option<f64>,
 }
 
 impl Entity {
+    pub fn value_of_field(&mut self, key: &str) -> &Value {
+        if self.parsed_data.is_none() {
+            self.parsed_data =
+                Some(serde_json::from_str::<Value>(&self.data).expect("Could not parse data"));
+        }
+        let obj = self
+            .parsed_data
+            .as_ref()
+            .expect("How you could got there?")
+            .as_object()
+            .expect("Data should always be an object");
+        obj.get(key).unwrap_or(&Value::Null)
+    }
+
     pub fn apply_property_changes(&mut self, property_changes: &[EntryChange]) {
         for change in property_changes {
             if let EntryChange::Update { key, new_value, .. } = change {

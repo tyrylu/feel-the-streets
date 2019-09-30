@@ -7,4 +7,4 @@ class Equals(Operator):
 
     @classmethod
     def get_comparison_expression(cls, field, value_expr, value_widget):
-        return value_expr == cls.get_value_for_query(field, value_widget)
+        return value_expr.eq(cls.get_value_for_query(field, value_widget))

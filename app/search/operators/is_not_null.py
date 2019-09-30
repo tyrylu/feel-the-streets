@@ -7,4 +7,4 @@ class IsNotNull(WidgetlessOperator):
 
     @staticmethod
     def get_comparison_expression(field, value_expr, value_widget):
-        return value_expr != None
+        return value_expr.is_not_null()

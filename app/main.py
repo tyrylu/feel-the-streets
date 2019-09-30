@@ -3,10 +3,12 @@ import os
 import logging
 import wx
 import uimanager
+import osm_db
 from . import locale_setup
 
 def main():
     logging.basicConfig(level=logging.INFO)
+    osm_db.init_logging()
     app = wx.App()
     locale_setup.setup_locale()
     if getattr(sys, "frozen", False):

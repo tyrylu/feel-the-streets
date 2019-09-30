@@ -50,7 +50,7 @@ pub fn download_area(area_name: String, client_id: String, conn: DbConn) -> Resu
         bail!("Can not guarantee area data integrity.")
     } else {
         area_messaging::init_queue(&client_id, &area_name)?;
-        Ok(File::open(AreaDatabase::path_for(&area_name))?)
+        Ok(File::open(AreaDatabase::path_for(&area_name, true))?)
     }
 }
 

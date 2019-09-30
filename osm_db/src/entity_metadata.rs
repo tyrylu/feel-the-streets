@@ -16,6 +16,10 @@ lazy_static! {
     };
 }
 
+pub fn all_known_discriminators() -> Vec<&'static String> {
+    RAW_METADATA_MAP.keys().collect()
+}
+
 #[derive(Deserialize)]
 struct RawEntityMetadata {
     inherits: Option<String>,
@@ -80,18 +84,33 @@ impl EntityMetadata {
 pub struct Enum {
     pub name: String,
     members: &'static HashMap<String, i32>,
+    reverse_members: HashMap<&'static i32, &'static String>,
 }
 
 impl Enum {
+    
+    pub fn all_known() -> Vec<&'static String> {
+        ENUM_MAP.keys().collect()
+    }
+
     pub fn with_name(name: &str) -> Option<Self> {
         let members = ENUM_MAP.get(name)?;
+        let mut reverse = HashMap::new();
+        for (key, val) in members.iter() {
+            reverse.insert(val, key);
+        }
         Some(Self {
             name: name.to_string(),
+            reverse_members: reverse,
             members,
         })
     }
 
     pub fn value_for_name(&self, name: &str) -> Option<&i32> {
         self.members.get(name)
+    }
+
+    pub fn name_for_value(&self, value: i32) -> Option<&'static String> {
+self.reverse_members.get(&value).map(|v| *v)
     }
 }

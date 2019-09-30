@@ -1,19 +1,21 @@
 import json
 from shared.humanization_utils import underscored_to_words
 import osm_db
-import enum
+from .services import map
+
+known_enums = osm_db.Enum.all_known()
 
 def get_field_type(key, fields):
     if key in fields:
-        return fields[key].type_
+        return fields[key].type_name
     else:
-        return str
+        return "str"
     
 
 def format_value(field_value, field_type):
-    if issubclass(field_type, enum.Enum):
+    if field_type in known_enums:
         try:
-            field_value = underscored_to_words(field_type(field_value).name)
+            field_value = underscored_to_words(osm_db.Enum.with_name(field_type).name_for_value(field_value))
         except ValueError: pass
     return field_value
 
@@ -29,16 +31,9 @@ def get_dictchange_description(dictchange, entity_fields):
         raise RuntimeError("Unknown dictchange kind %s."%dictchange.kind)
 
 def get_change_description(change, entity, include_geometry_changes=False):
-    if not entity:
-        return _("Change for missing entity\n")
-    try:
-        osm_entity = entity.create_osm_entity()
-    except Exception as exc:
-        print(f"Failed to create osm entity from entity with data {entity.data}, error: {exc}")
-        return _("Not representable change\n")
-    fields = osm_entity.__fields__
+    fields = osm_db.EntityMetadata.for_discriminator(entity.discriminator).fields
     if change.type is osm_db.CHANGE_REMOVE:
-        return "* " + _("Object {osm_id} ({object}) was deleted").format(osm_id=change.osm_id, object=osm_entity) + "\n"
+        return "* " + _("Object {osm_id} ({object}) was deleted").format(osm_id=change.osm_id, object=entity) + "\n"
     elif change.type is osm_db.CHANGE_CREATE:
         msg = "* " + _("New object created") + "\n"
         for propchange in change.property_changes:
@@ -53,7 +48,7 @@ def get_change_description(change, entity, include_geometry_changes=False):
                 msg += "{0}: {1}\n".format(underscored_to_words(propchange.key), propchange.new_value)
         return msg
     elif change.type is osm_db.CHANGE_UPDATE:
-        msg = "* " + _("Object {osm_id} ({object}) was changed").format(osm_id=change.osm_id, object=osm_entity) + "\n"
+        msg = "* " + _("Object {osm_id} ({object}) was changed").format(osm_id=change.osm_id, object=entity) + "\n"
         for subchange in change.property_changes:
             if subchange.key == "geometry" and not include_geometry_changes:
                 msg += _("Geometry was changed.") + "\n"

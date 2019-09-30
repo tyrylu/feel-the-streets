@@ -2,7 +2,6 @@ import wx
 from pydantic import BaseModel
 from sqlalchemy import func
 from shared.humanization_utils import underscored_to_words, get_class_display_name
-from shared.models import Entity
 from shared.services import entity_registry
 from .operators import operators_for_column_class
 
@@ -90,11 +89,10 @@ class SpecifySearchConditionsDialog(wx.Dialog):
         return self.FindWindowByName("distance").Value
 
     def create_conditions(self):
-        relevant_discriminators = entity_registry().all_discriminators_for_subclasses_of(self._entity)
-        conditions = Entity.discriminator.in_(relevant_discriminators)
+        conditions = []
         if self._search_expression_parts:
             for part in self._search_expression_parts:
-                conditions = conditions & part
+                conditions.append(part)
         return conditions
         
        

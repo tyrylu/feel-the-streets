@@ -1,5 +1,6 @@
 import wx
 import os
+import json
 import datetime
 import webbrowser
 from sqlalchemy import func
@@ -11,8 +12,7 @@ from .area_selection import AreaSelectionDialog
 from .services import map
 from .server_interaction import download_area_database, SemanticChangeRetriever, has_api_connectivity
 from .semantic_changelog_generator import get_change_description
-from shared import Database
-from shared.models import Entity
+from osm_db import AreaDatabase, EntitiesQuery, CHANGE_REMOVE
 from uimanager import get
 
 def format_size(num_bytes):
@@ -29,7 +29,7 @@ class MainFrame(wx.Frame):
             self.Close()
             return
         elif res == wx.ID_OK:
-            if not os.path.exists(Database.get_database_file(dlg.selected_map, server_side=False)):
+            if not os.path.exists(AreaDatabase.path_for(dlg.selected_map, server_side=False)):
                 self._download_database(dlg.selected_map)
             else:
                 self._update_database(dlg.selected_map)
@@ -42,9 +42,12 @@ class MainFrame(wx.Frame):
         self._announcements_controller = AnnouncementsController(person)
         self._last_location_controller = LastLocationController(person)
         if not self._last_location_controller.restored_position:
-            entity = map()._db.query(Entity).filter(func.json_extract(Entity.data, "$.osm_id").startswith("n")).first()
-            lon = map()._db.scalar(entity.geometry.x)
-            lat = map()._db.scalar(entity.geometry.y)
+            query = EntitiesQuery()
+            query.set_limit(1)
+            entity = map()._db.get_entities(query)[0]
+            geom = wkt.loads(entity.geometry)
+            lon = geom.x
+            lat = geom.y
             person.move_to(LatLon(lat, lon))
 
    
@@ -59,7 +62,7 @@ class MainFrame(wx.Frame):
         if not res:
             wx.MessageBox(_("Download of the selected area had failed."), _("Download failure"), style=wx.ICON_ERROR)
             self.Close()
-            os.remove(Database.get_database_file(area, server_side=False))
+            os.remove(AreaDatabase.path_for(area, server_side=False))
             return
 
 
@@ -70,14 +73,25 @@ class MainFrame(wx.Frame):
         pending_count = retriever.new_change_count_in(area)
         if not pending_count:
             return
-        db = Database(area, server_side=False)
+        db = AreaDatabase.open_existing(area, server_side=False)
+        db.begin()
         progress = wx.ProgressDialog(_("Change application"), _("Applying changes for the selected database."), style=wx.PD_APP_MODAL|wx.PD_ESTIMATED_TIME|wx.PD_ELAPSED_TIME|wx.PD_AUTO_HIDE, maximum=pending_count)
-        changelog_path = os.path.join(Database.get_database_storage_root(server_side=False), "..", "changelogs", "{0}_{1}.txt".format(area, datetime.datetime.now().isoformat().replace(":", "_")))
+        changelog_path = os.path.join(os.path.dirname(AreaDatabase.path_for("someplace", server_side=False)), "..", "changelogs", "{0}_{1}.txt".format(area, datetime.datetime.now().isoformat().replace(":", "_")))
         os.makedirs(os.path.dirname(changelog_path), exist_ok=True)
         changelog = open(changelog_path, "w", encoding="UTF-8")
         for nth, change in enumerate(retriever.new_changes_in(area)):
             progress.Update(nth, _("Applying changes for the selected database, change {nth} of {total}").format(nth=nth, total=pending_count))
-            entity = db.apply_change(change)
+            entity = None
+            if change.type is CHANGE_REMOVE:
+                entity = db.get_entity(change.osm_id)
+            db.apply_change(change)
+            if not entity:
+                if change.osm_id:
+                    entity = db.get_entity(change.osm_id)
+                else:
+                    # This is somewhat ugly, but we really don't have the entity id in any other place and we need its discriminator.
+                    data = [c.new_value for c in change.property_changes if c.key == "data"][0]
+                    entity = db.get_entity(json.loads(data)["osm_id"])
             changelog.write(get_change_description(change, entity))
         db.commit()
         changelog.close()

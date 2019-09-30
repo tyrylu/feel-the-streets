@@ -1,8 +1,7 @@
 import wx
-from shared.validated_quantity import Quantity
 from . import widget_for
 
-widget_for(float, Quantity)
+widget_for("float", "Quantity")
 class SpinCtrlDouble:
 
     value_label = _("Value")

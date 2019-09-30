@@ -2,13 +2,13 @@ import enum
 import inspect
 import wx
 import wx.xrc as xrc
+from osm_db import EntityMetadata
 from shapely.geometry.point import Point
 from shared.humanization_utils import underscored_to_words
 from .. import services
 from ..geometry_utils import closest_point_to, distance_between, bearing_to, to_shapely_point, to_latlon
 from . import object_actions
 from .object_actions.action import ObjectAction
-from shared.entities import OSMEntity
 
 def action_execution_handler_factory(action, entity):
     def handler(evt):
@@ -55,7 +55,7 @@ class ObjectsBrowserFrame(wx.Frame):
         props_list = self.FindWindowByName("props")
         props_list.DeleteChildren(self._root_item)
         fields_by_group = {"common": [], "specific": [], "additional": []}
-        common_fields = set(OSMEntity.__fields__.keys())
+        common_fields = set(osm_db.EntityMetadata.for_discriminator("OSMEntity").fields.keys())
         for attr in selected.__fields__.values():
             if attr.name == "db_entity":
                 continue

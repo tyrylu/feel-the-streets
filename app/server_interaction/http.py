@@ -2,7 +2,7 @@ import os
 import logging
 import requests
 from ..services import config
-from shared import Database
+from osm_db import AreaDatabase
 
 if os.environ.get("API_DEBUG", "0") == "1":
     API_ENDPOINT = "http://localhost:5000/api"
@@ -36,7 +36,7 @@ def download_area_database(area_name, progress_callback=None):
     if resp.status_code == 200:
         total = int(resp.headers.get("content-length", 0))
         chunk_size = 32*1024
-        fp = open(Database.get_database_file(area_name, server_side=False), "wb")
+        fp = open(AreaDatabase.path_for(area_name, server_side=False), "wb")
         so_far = 0
         for chunk in resp.iter_content(chunk_size):
             so_far += len(chunk)

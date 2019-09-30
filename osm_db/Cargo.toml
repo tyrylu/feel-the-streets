@@ -6,8 +6,7 @@ edition = "2018"
 
 [dependencies]
 osm_api = {path = "../osm_api"}
-serde = "*"
-serde_derive = "*"
+serde = {version="*", features=["derive"]}
 serde_json = "*"
 serde_yaml = "*"
 lazy_static = "*"
@@ -17,3 +16,4 @@ uom = "*"
 rusqlite = {"version" = "0.14", "features" = ["bundled", "load_extension"]}
 failure = "*"
 hashbrown = {version="*", features=["serde"]}
+dirs = "*"

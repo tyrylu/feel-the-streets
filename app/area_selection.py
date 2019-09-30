@@ -1,7 +1,19 @@
 import wx
 from .server_interaction import has_api_connectivity, get_areas, request_area_creation
-from shared import Database
 from shared.time_utils import rfc_3339_to_local_string
+
+
+
+def get_local_area_infos():
+    results = []
+    # Somewhat hacky, but we need the storage root only there and the path generation logic does not care whether the area actually exists.
+    areas_storage_path = os.path.dirname(AreaDatabase.path_for("someplace"))
+    for db_file in glob.glob(os.path.join(areas_storage_path, "*.db")):
+        name = os.path.basename(db_file).replace(".db", "")
+        mtime = os.path.getmtime(db_file)
+        results.append({"name":name, "updated_at": mtime, "state": "local"})
+    return results
+
 
 class AreaSelectionDialog(wx.Dialog):
     xrc_name = "area_selection"
@@ -12,7 +24,7 @@ class AreaSelectionDialog(wx.Dialog):
         if has_api_connectivity():
             available = get_areas()
         else:
-            available = Database.get_local_databases_info(server_side=False)
+            available = get_local_area_infos()
             self.FindWindowByName("request").Disable()
         self._area_names = [a["name"] for a in available]
         self._fill_areas(available)

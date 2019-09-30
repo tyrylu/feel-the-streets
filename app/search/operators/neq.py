@@ -6,5 +6,5 @@ class NotEquals(Operator):
     label = _("Is not equal")
 
     @classmethod
-    def get_comparison_expression(cls, field, value_expr, value_widget):
-        return column != cls.get_value_for_query(column, value_widget)
+    def get_comparison_expression(cls, value_expr, field, value_widget):
+        return value_expr.neq(cls.get_value_for_query(field, value_widget))
