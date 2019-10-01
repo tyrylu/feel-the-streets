@@ -27,12 +27,20 @@ def perform_search(position):
             distance = conditions_dialog.distance
             min_x, min_y, max_x, max_y = xy_ranges_bounding_square(position, distance*2)
             query.set_rectangle_of_interest(min_x, max_x, min_y, max_y)
-        discriminators = []
-        metadata = EntityMetadata.for_discriminator(discriminator)
-        while metadata:
-            discriminators.append(metadata.discriminator)
-            metadata = metadata.parent_metadata
-        query.set_included_discriminators(discriminators)
+        # We have no easy way how to determine the children of a class, so we would have to iterate through all the classes anyway.
+        # There's an assumption that the excluded classes will not be as numerous (for example almost anything is named), so find the exceptions instead.
+        excluded_discriminators = set()
+        for candidate in entities:
+            found = False
+            metadata = EntityMetadata.for_discriminator(candidate)
+            while metadata:
+                if metadata.discriminator == discriminator:
+                    found = True
+                    break
+                metadata = metadata.parent_metadata
+            if not found:
+                excluded_discriminators.add(candidate)
+        query.set_excluded_discriminators(list(excluded_discriminators))
         for condition in conditions:
             query.add_condition(condition)
         results = map()._db.get_entities(query)

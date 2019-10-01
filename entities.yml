@@ -10,7 +10,7 @@ Accessible:
     level: str
     door: AccessType
 Address:
-  display_template: '{% if housename %}{{ housename }}, {% endif %}{{ street }} {{ housenumber }}, {{ postcode }}{% if city %}, {{ city }}{% endif %}{% if place %}, {{ place }}{% endif %}'
+  display_template: '{% if housename %}{{ housename }}, {% endif %}{{ street }} {{ housenumber }}, {{ postcode }}{% if city %} {{ city }}{% endif %}{% if place %} {{ place }}{% endif %}'
   fields:
     place: str
     city: str
@@ -108,6 +108,7 @@ AerialWay:
     iata: str
 Amenity:
   inherits: Addressable
+  display_template: '{{ parent_display }} ({{ type }})'
   fields:
     type: Amenity
     religion: str
@@ -1745,6 +1746,7 @@ RF:
     callsign: str
 Road:
   inherits: Named
+  display_template: '{{ parent_display }} ({{ type }})'
   fields:
     type: RoadType
     railway: RailWayType
