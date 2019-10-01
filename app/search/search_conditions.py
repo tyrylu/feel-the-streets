@@ -1,8 +1,6 @@
 import wx
-from pydantic import BaseModel
-from sqlalchemy import func
+from osm_db import EntityMetadata, FieldNamed
 from shared.humanization_utils import underscored_to_words, get_class_display_name
-from shared.services import entity_registry
 from .operators import operators_for_column_class
 
 class SpecifySearchConditionsDialog(wx.Dialog):
@@ -21,21 +19,27 @@ class SpecifySearchConditionsDialog(wx.Dialog):
     def _populate_fields_tree(self, entity, parent=None):
         if parent is None:
             parent = self._fields.AddRoot("Never to be seen")
-        for field in entity.__fields__.values():
-            if issubclass(field.type_, BaseModel):
-                name = get_class_display_name(field.type_)
+        metadata = EntityMetadata.for_discriminator(entity)
+        for field_name, field in sorted(metadata.all_fields.items(), key=lambda i: underscored_to_words(i[0])):
+            child_metadata = None
+            try:
+                child_metadata = EntityMetadata.for_discriminator(field.type_name)
+            except KeyError: pass
+            if child_metadata:
+                name = get_class_display_name(field.type_name)
                 subparent = self._fields.AppendItem(parent, name)
-                self._fields.SetItemData(subparent, field.name)
-                self._populate_fields_tree(field.type_, subparent)
+                self._fields.SetItemData(subparent, field_name)
+                self._populate_fields_tree(field.type_name, subparent)
             else:
-                item = self._fields.AppendItem(parent, underscored_to_words(field.name))
-                self._fields.SetItemData(item, field)
+                item = self._fields.AppendItem(parent, underscored_to_words(field_name))
+                self._fields.SetItemData(item, (field_name, field))
 
     def on_fields_tree_sel_changed(self, evt):
         data = self._fields.GetItemData(evt.Item)
         if data is not None and not isinstance(data, str):
-            self._field = data
-            self._operators = operators_for_column_class(self._field.type_)
+            self._field_name = data[0]
+            self._field = data[1]
+            self._operators = operators_for_column_class(self._field.type_name)
             self._operator.Clear()
             for operator in self._operators:
                 self._operator.Append(operator.label)
@@ -69,7 +73,7 @@ class SpecifySearchConditionsDialog(wx.Dialog):
         return label
 
     def on_add_clicked(self, evt):
-        json_path = ["$"]
+        json_path = []
         parent_data = None
         try:
             parent_data = self._fields.GetItemData(self._fields.GetItemParent(self._fields.Selection))
@@ -77,12 +81,12 @@ class SpecifySearchConditionsDialog(wx.Dialog):
             pass # Failed to retrieve the virtual root item, but that's okay, it just means that we don't need to add a relationship join.
         if isinstance(parent_data, str):
             json_path.append(parent_data)
-        json_path.append(self._field.name)
+        json_path.append(self._field_name)
         json_path = ".".join(json_path)
         operator_obj = self._operators[self._operator.Selection]
-        expression = operator_obj.get_comparison_expression(self._field, func.json_extract(Entity.data, json_path), self._value_widget)
+        expression = operator_obj.get_comparison_expression(self._field, FieldNamed(json_path), self._value_widget)
         self._search_expression_parts.append(expression)
-        self._conditions.Append(f"{underscored_to_words(self._field.name)} {operator_obj.label} {operator_obj.get_value_as_string(self._field, self._value_widget)}")
+        self._conditions.Append(f"{underscored_to_words(self._field_name)} {operator_obj.label} {operator_obj.get_value_as_string(self._field, self._value_widget)}")
 
     @property
     def distance(self):

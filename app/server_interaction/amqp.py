@@ -17,7 +17,6 @@ class SemanticChangeRetriever:
 
     def new_changes_in(self, area):
         queue_name = get_client_queue_name(config().client_id, area)
-        print("Using queue %s."%queue_name)
         while True:
             method, props, body = self._chan.basic_get(queue_name)
             if not method:

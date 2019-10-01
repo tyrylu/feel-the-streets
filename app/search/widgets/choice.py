@@ -1,9 +1,9 @@
-from enum import Enum
+
 import wx
 from . import widget_for
 from shared.humanization_utils import underscored_to_words
 
-@widget_for(Enum)
+@widget_for("enum")
 class Choice:
 
     value_label = _("Value")

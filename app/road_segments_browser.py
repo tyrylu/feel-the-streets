@@ -1,6 +1,6 @@
 import wx
 import wx.xrc as xrc
-import shapely.wkb as wkb
+import shapely.wkt as wkt
 from .geometry_utils import get_line_segments, find_closest_line_segment_of, to_shapely_point, to_latlon, distance_between
 from .services import map
 
@@ -9,7 +9,7 @@ class RoadSegmentsBrowserDialog(wx.Dialog):
     def post_init(self, person, road):
         self.EscapeId = xrc.XRCID("close")
         segments_list = self.FindWindowByName("segments")
-        line = wkb.loads(road.db_entity.geometry.desc.desc)
+        line = wkt.loads(road.geometry)
         segments = get_line_segments(line)
         closest = find_closest_line_segment_of(segments, to_shapely_point(person.position))
         current_idx = None

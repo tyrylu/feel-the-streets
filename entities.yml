@@ -10,21 +10,23 @@ Accessible:
     level: str
     door: AccessType
 Address:
-  display_template: '{house_name}, {street} {housenumber}, {postcode}, {city}'
+  display_template: '{% if housename %}{{ housename }}, {% endif %}{{ street }} {{ housenumber }}, {{ postcode }}{% if city %}, {{ city }}{% endif %}{% if place %}, {{ place }}{% endif %}'
   fields:
     place: str
     city: str
     postcode: int
-    conscription_number: int
+    conscriptionnumber: int
     housenumber: str
-    street_number: str
+    streetnumber: str
     street: str
-    provisional_number: int
+    provisionalnumber: int
     suburb: str
-    house_name: str
+    housename: str
+    country: str
+    unit: str
 Addressable:
   inherits: Named
-  display_template: '{parent_display}, {address}'
+  display_template: '{{ parent_display }}{% if address is defined %}, {{ address }}{% endif %}'
   fields:
     address: Address
     note: str
@@ -1098,7 +1100,7 @@ Memorial:
     fixme: str
 Named:
   inherits: OSMEntity
-  display_template: '{parent_display} {name}'
+  display_template: '{{ parent_display }}{% if name is defined %} {{ name }}{% endif %}'
   fields:
     name: str
 Natural:
@@ -1194,7 +1196,7 @@ Office:
     designation: str
     description_en: str
 OSMEntity:
-  display_template: '{class_name_display}'
+  display_template: '{{ class_name_display }}'
   fields:
     osm_id: '!str'
     timestamp: '!str'

@@ -9,8 +9,8 @@ class OpenWikidataRecord(ObjectAction):
 
     @classmethod
     def executable(cls, entity):
-        return hasattr(entity, "wikidata") and entity.wikidata
+        return entity.value_of_field("wikidata")
 
     @classmethod
     def execute(cls, entity):
-        return webbrowser.open("https://www.wikidata.org/wiki/{0}".format(entity.wikidata))
+        return webbrowser.open("https://www.wikidata.org/wiki/{0}".format(entity.value_of_field("wikidata")))

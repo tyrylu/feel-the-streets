@@ -33,6 +33,14 @@ impl Entity {
         obj.get(key).unwrap_or(&Value::Null)
     }
 
+pub fn defined_field_names(&mut self) -> Vec<&String> {
+    if self.parsed_data.is_none() {
+            self.parsed_data =
+                Some(serde_json::from_str::<Value>(&self.data).expect("Could not parse data"));
+        }
+        self.parsed_data.as_ref().unwrap().as_object().expect("Data should be an object").keys().collect()
+}
+
     pub fn apply_property_changes(&mut self, property_changes: &[EntryChange]) {
         for change in property_changes {
             if let EntryChange::Update { key, new_value, .. } = change {

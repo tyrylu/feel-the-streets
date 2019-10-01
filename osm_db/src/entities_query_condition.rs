@@ -25,7 +25,7 @@ impl FieldCondition {
         Self { field, condition }
     }
     pub fn to_query_fragment(&self, condition_index: usize) -> String {
-        let field_expr = format!("json_extract('$.{}', data)", self.field);
+        let field_expr = format!("json_extract(data, '$.{}')", self.field);
         let operation = match self.condition {
             Condition::IsNull => "IS NULL".to_string(),
             Condition::IsNotNull => "IS NOT NULL".to_string(),

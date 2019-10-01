@@ -1,4 +1,4 @@
-import shapely.wkb as wkb
+import shapely.wkt as wkt
 from shared.geometry_utils import *
 from . import services
 from .measuring import measure
@@ -16,7 +16,7 @@ def closest_point_from_geoms(geoms, point):
 
 def closest_point_to(point, geom, convert=True):
     if convert:
-        geom = wkb.loads(geom.desc.desc)
+        geom = wkt.loads(geom)
     if geom.geom_type == "Point":
         return geom
     elif geom.geom_type == "LineString":
@@ -30,7 +30,7 @@ def closest_point_to(point, geom, convert=True):
 
 def get_road_section_angle(pov, road):
     pov_point = to_shapely_point(pov.position)
-    road_line = wkb.loads(road.db_entity.geometry.desc.desc)
+    road_line = wkt.loads(road.geometry)
     closest_segment = get_closest_line_segment(pov_point, road_line)
     closest_segment.calculate_angle()
     return closest_segment.angle
@@ -44,8 +44,6 @@ def distance_filter(entities, position, distance):
             closest_latlon = to_latlon(closest)
             cur_distance = distance_between(closest_latlon, position)
             if cur_distance <= distance:
-                entity.distance_from_current = cur_distance
-                entity.closest_point_to_current = closest_latlon
                 res_entities.append(entity)
         return res_entities
 def effective_width_filter(entities, position):

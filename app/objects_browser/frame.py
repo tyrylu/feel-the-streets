@@ -1,10 +1,9 @@
-import enum
 import inspect
 import wx
 import wx.xrc as xrc
 from osm_db import EntityMetadata
 from shapely.geometry.point import Point
-from shared.humanization_utils import underscored_to_words
+from shared.humanization_utils import format_field_value, underscored_to_words, describe_entity
 from .. import services
 from ..geometry_utils import closest_point_to, distance_between, bearing_to, to_shapely_point, to_latlon
 from . import object_actions
@@ -24,13 +23,17 @@ class ObjectsBrowserFrame(wx.Frame):
         self._person = person
         objects_list = self.FindWindowByName("objects")
         objects = []
+        shapely_point = to_shapely_point(person.position)
         for obj in unsorted_objects:
-            objects.append((obj.db_entity.distance_from_current, obj, obj.db_entity.closest_point_to_current))
+            closest = closest_point_to(shapely_point, obj.geometry)
+            closest_latlon = to_latlon(closest)
+            cur_distance = distance_between(closest_latlon, person.position)
+            objects.append((cur_distance, obj, closest_latlon))
         objects.sort(key=lambda e: e[0])
         for dist, obj, closest in objects:
             bearing = bearing_to(person.position, closest)
             rel_bearing = (bearing - self._person.direction) % 360
-            objects_list.Append(_("{object}: distance {distance:.2f} meters, {rel_bearing:.2f}° relatively").format(object=obj, distance=dist, rel_bearing=rel_bearing))
+            objects_list.Append(_("{object}: distance {distance:.2f} meters, {rel_bearing:.2f}° relatively").format(object=describe_entity(obj), distance=dist, rel_bearing=rel_bearing))
         self._objects = objects
         self.Bind(wx.EVT_CHAR_HOOK, self._close_using_esc)
         self._all_actions = []
@@ -55,22 +58,19 @@ class ObjectsBrowserFrame(wx.Frame):
         props_list = self.FindWindowByName("props")
         props_list.DeleteChildren(self._root_item)
         fields_by_group = {"common": [], "specific": [], "additional": []}
-        common_fields = set(osm_db.EntityMetadata.for_discriminator("OSMEntity").fields.keys())
-        for attr in selected.__fields__.values():
-            if attr.name == "db_entity":
-                continue
-            val = getattr(selected, attr.name)
-            if not val:
-                continue
-            if isinstance(val, enum.Enum):
-                val = underscored_to_words(val.name)
-            value_str = "%s: %s"%(underscored_to_words(attr.name), val)
-            if attr.name in common_fields:
-                fields_by_group["common"].append(value_str)
+        common_fields = set(EntityMetadata.for_discriminator("OSMEntity").fields.keys())
+        selected_metadata = EntityMetadata.for_discriminator(selected.discriminator)
+        known_fields = selected_metadata.all_fields
+        for field_name in selected.defined_field_names:
+            raw_value = selected.value_of_field(field_name)
+            if field_name not in known_fields:
+                fields_by_group["additional"].append("%s: %s"%(underscored_to_words(field_name), raw_value))
             else:
-                fields_by_group["specific"].append(value_str)
-        for name, value in selected.additional_fields.items():
-            fields_by_group["additional"].append("%s: %s"%(underscored_to_words(name), value))
+                value_str = "%s: %s"%(underscored_to_words(field_name), format_field_value(raw_value, known_fields[field_name].type_name))
+                if field_name in common_fields:
+                    fields_by_group["common"].append(value_str)
+                else:
+                    fields_by_group["specific"].append(value_str)
         root = self._root_item
         common = props_list.AppendItem(root, _("Common properties"))
         for val in fields_by_group["common"]:

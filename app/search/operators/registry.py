@@ -15,7 +15,7 @@ def operators_for_column_class(column_class):
     for registered_class in OPERATORS.keys():
         if registered_class == "*":
             continue
-        if issubclass(column_class, registered_class):
+        if column_class == registered_class:
             candidates += OPERATORS[registered_class]
     candidates += OPERATORS["*"]
     candidates.sort(key=lambda item: item[1])

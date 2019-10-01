@@ -4,6 +4,7 @@ use crate::semantic_change::SemanticChange;
 use rusqlite::{Connection, Error, OpenFlags, Row, Transaction};
 use rusqlite::types::ToSql;
 use std::path::PathBuf;
+use std::time::Instant;
 
 type DbResult<T> = Result<T, rusqlite::Error>;
 
@@ -14,8 +15,8 @@ const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (discriminator, g
 fn row_to_entity(row: &Row) -> Entity {
     Entity {
         id: row.get(0),
-        geometry: row.get(1),
-        discriminator: row.get(2),
+        geometry: row.get(2),
+        discriminator: row.get(1),
         data: row.get(3),
         effective_width: row.get(4),
         parsed_data: None,
@@ -116,7 +117,7 @@ impl AreaDatabase {
     }
 
     pub fn get_entity(&self, osm_id: &str) -> DbResult<Option<Entity>> {
-        let mut stmt = self.conn.prepare_cached("select id, AsText(geometry) as geometry, discriminator, data, effective_width from entities where json_extract(data, '$.osm_id') = ?")?;
+        let mut stmt = self.conn.prepare_cached("select id, discriminator, AsText(geometry) as geometry, data, effective_width from entities where json_extract(data, '$.osm_id') = ?")?;
         match stmt.query_row(&[&osm_id], row_to_entity) {
             Ok(e) => Ok(Some(e)),
             Err(e) => match e {
@@ -133,8 +134,12 @@ impl AreaDatabase {
         for (name, value) in &orig_params {
             params.push((name.as_str(), *value));
         }
+        let now = Instant::now();
         let res = stmt.query_map_named(params.as_slice(), row_to_entity)?;
-        Ok(res.map(|e| e.expect("Failed to retrieve entity")).collect())
+        debug!("Query_map_named took {:?}", now.elapsed());
+        let results = res.map(|e| e.expect("Failed to retrieve entity")).collect();
+        debug!("Query results retrieval took {:?}", now.elapsed());
+        Ok(results)
     }
 
     pub fn get_entities_really_intersecting(
@@ -148,16 +153,17 @@ impl AreaDatabase {
         for i in 0..candidate_ids.len() {
             candidate_params.push(format!(":candidate{}", i));
         }
-        let mut query = format!("SELECT id, discriminator, AsText(geometry)as geometry, data, effective_width FROM entities WHERE id in ({})", candidate_params.join(","));
+        let mut query = format!("SELECT id, discriminator, AsText(geometry) as geometry, data, effective_width FROM entities WHERE id in ({})", candidate_params.join(","));
         if fast {
             query += " AND length(geometry) < 100000";
         }
-        let fragment = format!(" AND contains(geometry, GeomFromText('POINT({}, {})', 4326))", x, y);
+        let fragment = format!(" AND contains(geometry, GeomFromText('POINT({} {})', 4326))", x, y);
         query += &fragment;
         let mut params: Vec<(&str, &dyn ToSql)> = vec![];
         for (i, id) in candidate_ids.iter().enumerate() {
             params.push((&candidate_params[i], id));
         }
+        debug!("Executing inside of query: {:?} with parameters: {:?}", query, candidate_ids);
         let mut stmt = self.conn.prepare_cached(&query)?;
         let res = stmt.query_map_named(params.as_slice(), row_to_entity)?;
         Ok(res.map(|e| e.expect("Failed to retrieve entity")).collect())

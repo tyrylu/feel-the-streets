@@ -9,8 +9,8 @@ class OpenRUIANDetails(ObjectAction):
 
     @classmethod
     def executable(cls, entity):
-        return hasattr(entity, "ruian_building_ref") and entity.ruian_building_ref
+        return entity.value_of_field("ruian_building_ref") is not None
     
     @classmethod
     def execute(cls, entity):
-        return webbrowser.open("http://vdp.cuzk.cz/vdp/ruian/stavebniobjekty/{0}".format(entity.ruian_building_ref))
+        return webbrowser.open("http://vdp.cuzk.cz/vdp/ruian/stavebniobjekty/{0}".format(entity.value_of_field("ruian_building_ref")))

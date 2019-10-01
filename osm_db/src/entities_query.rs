@@ -54,7 +54,7 @@ impl EntitiesQuery {
     }
 
     pub fn to_query_sql(&self) -> String {
-        let base_query = "select id, AsText(geometry) as geometry, discriminator, data, effective_width from entities, idx_entities_geometry";
+        let base_query = "select id, discriminator, AsText(geometry) as geometry, data, effective_width from entities, idx_entities_geometry";
         let mut condition_fragments = vec![RECTANGLE_CONDITION_SQL.to_string()];
         let mut discriminator_placeholders = vec![];
         for idx in 0..self.included_discriminators.len() {

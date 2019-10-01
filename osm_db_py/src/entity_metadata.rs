@@ -32,6 +32,21 @@ impl PyEntityMetadata {
             .map(|(k, v)| (k, PyField { inner: v.clone() }))
             .collect()
     }
+
+    #[getter]
+    pub fn display_template(&self) -> Option<&String> {
+        self.inner.display_template.as_ref()
+    }
+
+    #[getter]
+    pub fn all_fields(&self) -> HashMap<String, PyField> {
+        self.inner.all_fields().into_iter().map(|(k, f)| (k, PyField{inner: f.clone()})).collect()
+    }
+
+    #[getter]
+    pub fn parent_metadata(&self) -> Option<Self> {
+        self.inner.parent_metadata().map(|m| Self{inner: m})
+    }
 }
 
 #[pyclass(name=Field)]

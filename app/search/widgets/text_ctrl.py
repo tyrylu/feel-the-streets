@@ -1,7 +1,7 @@
 import wx
 from . import widget_for
 
-@widget_for(str)
+@widget_for("str")
 class TextCtrl:
 
     value_label = _("Value")

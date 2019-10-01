@@ -1,5 +1,6 @@
 import wx
 from pygeodesy.ellipsoidalVincenty import LatLon
+from shared.humanization_utils import describe_entity
 from ..services import speech, map
 from ..objects_browser import ObjectsBrowserFrame
 from ..road_segments_browser import RoadSegmentsBrowserDialog
@@ -20,7 +21,7 @@ class InteractivePersonController:
         position_known = False
         for obj in self._person.is_inside_of:
             position_known = True
-            speech().speak(str(obj))
+            speech().speak(describe_entity(obj))
         if not position_known:
             speech().speak(_("Not known."))
     
@@ -30,10 +31,9 @@ class InteractivePersonController:
     
     @menu_command(_("Information"), _("Position - all objects, may be slow"), "ctrl+l")
     def do_position_slow(self, evt):
-        self._position_impl((res.create_osm_entity() for res in map().intersections_at_position(self._person.position, fast=False)))
+        self._position_impl(map().intersections_at_position(self._person.position, fast=False))
     
     def _position_detailed_impl(self, objects):
-        filtered_inside_of = distance_filter((entity.db_entity for entity in objects), self._person.position, float("inf"))
         dlg = get().prepare_xrc_frame(ObjectsBrowserFrame, title=_("Current position"), unsorted_objects=self._person.is_inside_of, person=self._person)
         dlg.Show()
     
@@ -43,7 +43,7 @@ class InteractivePersonController:
 
     @menu_command(_("Information"), _("Detailed current position - all objects, may be slow"), "ctrl+shift+l")
     def do_position_detailed_slow(self, evt):
-        self._position_detailed_impl((res.create_osm_entity() for res in map().intersections_at_position(self._person.position, fast=False)))
+        self._position_detailed_impl(map().intersections_at_position(self._person.position, fast=False))
     
     def _nearest_impl(self, objects):
         if not objects:
@@ -58,7 +58,7 @@ class InteractivePersonController:
 
     @menu_command(_("Information"), _("Nearest - all objects, may be slow"), "ctrl+n")
     def do_nearest_slow(self, evt):
-        self._nearest_impl(self._person.map.within_distance(self._person.position, 100, exclude_routes=False))
+        self._nearest_impl(self._person.map.within_distance(self._person.position, 100, fast=False))
     
     @menu_command(_("Movement"), _("Step forward"), "up")
     def do_forward(self, evt):
@@ -99,7 +99,7 @@ class InteractivePersonController:
          for obj in self._person.is_inside_of:
             if obj.discriminator == "Road" and not obj.value_of_field("area"):
                 angle = get_road_section_angle(self._person, obj)
-                speech().speak(_("{road}: {angle:.2f}°").format(road=obj, angle=angle))
+                speech().speak(_("{road}: {angle:.2f}°").format(road=describe_entity(obj), angle=angle))
 
     @menu_command(_("Information"), _("Road details"), "ctrl+d")
     def road_details(self, evt):
@@ -130,7 +130,7 @@ class InteractivePersonController:
         if len(roads) == 1:
             return roads[0]
         else:
-            road_reprs = [str(r) for r in roads]
+            road_reprs = [describe_entity(r) for r in roads]
             road_idx = wx.GetSingleChoice(_("Select the road which should be the target of the operation"), _("Request"), aChoices=road_reprs)
             if road_idx is not None:
                 return roads[road_reprs.index(road_idx)]

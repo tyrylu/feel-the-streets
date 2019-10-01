@@ -9,8 +9,8 @@ class OpenWikipediaArticle(ObjectAction):
 
     @classmethod
     def executable(cls, entity):
-        return hasattr(entity, "wikipedia") and entity.wikipedia
+        return entity.value_of_field("wikipedia") is not None
 
     @classmethod
     def execute(cls, entity):
-        return webbrowser.open("https://wikipedia.org/wiki/{0}".format(entity.wikipedia))
+        return webbrowser.open("https://wikipedia.org/wiki/{0}".format(entity.value_of_field("wikipedia")))

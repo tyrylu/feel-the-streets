@@ -9,8 +9,8 @@ class OpenWebsite(ObjectAction):
 
     @classmethod
     def executable(cls, entity):
-        return hasattr(entity, "website") and entity.website
+        return entity.value_of_field("website") is not None
 
     @classmethod
     def execute(cls, entity):
-        return webbrowser.open(entity.website)
+        return webbrowser.open(entity.value_of_field("website"))

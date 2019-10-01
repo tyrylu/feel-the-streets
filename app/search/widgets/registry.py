@@ -14,5 +14,5 @@ def widget_for_column_class(column_class):
         return WIDGETS[column_class]
     else:
         for candidate, widget in WIDGETS.items():
-            if issubclass(column_class, candidate):
+            if column_class == candidate:
                 return widget

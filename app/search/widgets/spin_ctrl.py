@@ -1,7 +1,7 @@
 import wx
 from . import widget_for
 
-@widget_for(int)
+@widget_for("int")
 class SpinCtrl:
     value_label = _("Value")
 
