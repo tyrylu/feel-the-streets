@@ -1,9 +1,8 @@
 import wx
 from osm_db import EntityMetadata, all_known_discriminators, EntitiesQuery
-from shared.humanization_utils import get_class_display_name
-from shared.geometry_utils import xy_ranges_bounding_square
+from ..humanization_utils import get_class_display_name
 from .search_conditions import SpecifySearchConditionsDialog
-from ..geometry_utils import distance_filter
+from ..geometry_utils import distance_filter, xy_ranges_bounding_square
 from ..services import map
 
 from uimanager import get

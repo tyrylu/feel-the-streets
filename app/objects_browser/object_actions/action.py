@@ -1,5 +1,5 @@
 import abc
-from shared.cp import classproperty
+from ...cp import classproperty
 
 class ObjectAction(abc.ABC):
 

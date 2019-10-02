@@ -1,6 +1,6 @@
 from ..services import speech
 from ..entities import entity_post_enter, entity_post_leave
-from shared.humanization_utils import describe_entity
+from ..humanization_utils import describe_entity
 
 class AnnouncementsController:
     def __init__(self, pov):

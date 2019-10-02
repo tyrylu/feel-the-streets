@@ -1,6 +1,6 @@
 import wx
 from pygeodesy.ellipsoidalVincenty import LatLon
-from shared.humanization_utils import describe_entity
+from ..humanization_utils import describe_entity
 from ..services import speech, map
 from ..objects_browser import ObjectsBrowserFrame
 from ..road_segments_browser import RoadSegmentsBrowserDialog

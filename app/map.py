@@ -1,7 +1,6 @@
 import osm_db
 from pygeodesy.ellipsoidalVincenty import LatLon
-from shared.geometry_utils import xy_ranges_bounding_square
-from .geometry_utils import distance_filter, effective_width_filter
+from .geometry_utils import distance_filter, effective_width_filter, xy_ranges_bounding_square
 from .measuring import measure
 from .models import Bookmark, LastLocation
 from .import services

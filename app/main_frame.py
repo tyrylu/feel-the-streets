@@ -5,7 +5,7 @@ import datetime
 import webbrowser
 from pygeodesy.ellipsoidalVincenty import LatLon
 import bitmath
-import shapely.wkb as wkb
+import shapely.wkt as wkt
 from .entities import Person
 from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController, LastLocationController
 from .area_selection import AreaSelectionDialog
@@ -45,7 +45,7 @@ class MainFrame(wx.Frame):
             query = EntitiesQuery()
             query.set_limit(1)
             entity = map()._db.get_entities(query)[0]
-            geom = wkb.loads(entity.geometry)
+            geom = wkt.loads(entity.geometry)
             lon = geom.x
             lat = geom.y
             person.move_to(LatLon(lat, lon))

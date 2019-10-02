@@ -1,6 +1,6 @@
 import json
-from shared.humanization_utils import underscored_to_words, format_field_value, get_field_type, describe_entity
 import osm_db
+from .humanization_utils import underscored_to_words, format_field_value, get_field_type, describe_entity
 from .services import map
 
 def get_dictchange_description(dictchange, entity_fields):

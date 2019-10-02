@@ -3,7 +3,7 @@ import wx
 import wx.xrc as xrc
 from osm_db import EntityMetadata
 from shapely.geometry.point import Point
-from shared.humanization_utils import format_field_value, underscored_to_words, describe_entity
+from ..humanization_utils import format_field_value, underscored_to_words, describe_entity
 from .. import services
 from ..geometry_utils import closest_point_to, distance_between, bearing_to, to_shapely_point, to_latlon
 from . import object_actions

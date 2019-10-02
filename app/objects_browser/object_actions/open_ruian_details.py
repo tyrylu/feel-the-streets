@@ -1,6 +1,6 @@
 import webbrowser
 from .action import ObjectAction
-from shared.cp import classproperty
+from ...cp import classproperty
 
 class OpenRUIANDetails(ObjectAction):
     @classproperty

@@ -3,8 +3,8 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import appdirs
-from shared.di import Singleton
 from accessible_output2.outputs import auto
+from .di import Singleton
 from .sound_manager import SoundManager, SoundProperties
 from .map import Map
 from .config import Config

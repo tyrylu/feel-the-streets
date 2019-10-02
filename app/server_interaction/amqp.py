@@ -2,7 +2,7 @@ from osm_db import SemanticChange
 from collections import defaultdict
 import pika
 from ..services import config
-from shared.amqp_queue_naming import get_client_queue_name
+from ..amqp_queue_naming import get_client_queue_name
 
 
 class SemanticChangeRetriever:

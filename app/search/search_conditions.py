@@ -1,6 +1,6 @@
 import wx
 from osm_db import EntityMetadata, FieldNamed
-from shared.humanization_utils import underscored_to_words, get_class_display_name
+from ..humanization_utils import underscored_to_words, get_class_display_name
 from .operators import operators_for_column_class
 
 class SpecifySearchConditionsDialog(wx.Dialog):

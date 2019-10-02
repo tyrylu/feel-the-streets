@@ -1,7 +1,7 @@
 import wx
 from osm_db import Enum
 from . import widget_for
-from shared.humanization_utils import underscored_to_words
+from ...humanization_utils import underscored_to_words
 
 @widget_for("Enum")
 class Choice:

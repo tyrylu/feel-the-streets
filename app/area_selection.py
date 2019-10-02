@@ -1,6 +1,6 @@
 import wx
 from .server_interaction import has_api_connectivity, get_areas, request_area_creation
-from shared.time_utils import rfc_3339_to_local_string
+from .time_utils import rfc_3339_to_local_string
 
 
 
