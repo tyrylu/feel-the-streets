@@ -87,7 +87,7 @@ AerialWay:
     access: AccessType
     lit: bool
     navigationaid: str
-    man_made: ManMade
+    man_made: ManMadeType
     frequency: str
     disused_aeroway: AerialWayType
     subtype: Subtype
@@ -110,7 +110,7 @@ Amenity:
   inherits: Addressable
   display_template: '{{ parent_display }} ({{ type }})'
   fields:
-    type: Amenity
+    type: AmenityType
     religion: str
     operator: str
     cuisine: str
@@ -122,7 +122,7 @@ Amenity:
     outdoor_seating: bool
     access: AccessType
     smoking: SmokingType
-    amenity_1: Amenity
+    amenity_1: AmenityType
     drive_through: bool
     backrest: bool
     material: str
@@ -189,7 +189,7 @@ Amenity:
     type2_socket_voltage: str
     waste: str
     fast_food: FastFoodType
-    man_made: ManMade
+    man_made: ManMadeType
     wheelchair_toilets: bool
     fax: str
     diplomatic: DiplomacyRelation
@@ -212,7 +212,7 @@ Amenity:
     studio: StudioType
     wine: bool
     sorting_name: str
-    room: Amenity
+    room: AmenityType
     type2_socket: int
     schuko_socket_current: str
 Annotated:
@@ -239,7 +239,7 @@ Area:
   inherits: Named
   fields:
     type: '!AreaType'
-    amenity: Amenity
+    amenity: AmenityType
     layer: int
     surface: str
     bicycle: bool
@@ -249,7 +249,7 @@ Area:
     tourism: TourismType
     aeroway: AerialWayType
     railway: RailWayType
-    man_made: ManMade
+    man_made: ManMadeType
     floating: bool
     access: AccessType
     old_name: str
@@ -330,7 +330,7 @@ Barrier:
     destination: bool
     noexit: bool
     ticks: int
-    man_made: ManMade
+    man_made: ManMadeType
     description: str
     fixme: str
     two_sided: bool
@@ -440,7 +440,7 @@ Boundary:
     vehicle_conitional: str
     trail_visibility: TrailVisibility
     ele: int
-    man_made: ManMade
+    man_made: ManMadeType
     tourism: TourismType
     designation: str
     highway: RoadType
@@ -455,7 +455,7 @@ Building:
   fields:
     levels: int
     flats: int
-    amenity: Amenity
+    amenity: AmenityType
     religion: str
     official_name: str
     capacity: int
@@ -468,7 +468,7 @@ Building:
     emergency: EmergencyType
     leisure_type: LeisureType
     tourism_type: TourismType
-    man_made: ManMade
+    man_made: ManMadeType
     operator: str
     industrial_type: IndustrialType
     roof_height: float
@@ -574,14 +574,14 @@ Building:
     roof_slope_direction: float
     roof_direction: str
     bridge_support: BridgeSupport
-    room: Amenity
+    room: AmenityType
     floating: bool
     memorial: str
     gluten_free_diet: bool
     ethnicity: Ethnicity
     residential: ResidentialType
     fenced: bool
-    disused_man_made: ManMade
+    disused_man_made: ManMadeType
     vertical_part: bool
     mooring: AccessType
     seamark_type: SeaMarkType
@@ -613,7 +613,7 @@ Building:
     hei: str
     owner: str
     meal_vouchers_payment: bool
-    amenity_1: Amenity
+    amenity_1: AmenityType
     education: EducationType
     ruian_type: RUIANType
     ruian_building_ref: str
@@ -773,7 +773,7 @@ Disused:
   fields:
     type: '!DisusedType'
     denomination: str
-    destroyed_amenity: Amenity
+    destroyed_amenity: AmenityType
     destroyed_name: str
     end_date: str
     start_date: str
@@ -938,7 +938,7 @@ Land:
     shop_type: ShopType
     website: str
     meadow_type: MeadowType
-    man_made: ManMade
+    man_made: ManMadeType
     crop: str
     barrier: BarrierType
     note: str
@@ -1048,7 +1048,7 @@ Level:
 ManMade:
   inherits: Named
   fields:
-    type: '!ManMade'
+    type: '!ManMadeType'
     classification: str
     image: str
     historic: bool
@@ -1109,7 +1109,7 @@ Natural:
   fields:
     type: '!NaturalType'
     lining: str
-    man_made: ManMade
+    man_made: ManMadeType
     depth: float
     ele: float
     note: str
@@ -1188,7 +1188,7 @@ Office:
     flats: int
     function: Function
     indoor: IndoorType
-    amenity: Amenity
+    amenity: AmenityType
     fax: str
     lawyer: LawyerType
     phone_1: str
@@ -1872,7 +1872,7 @@ Road:
     technical_mtb_bicycle_class: int
     narrow: bool
     opening_hours: str
-    man_made: ManMade
+    man_made: ManMadeType
     operator: str
     kerb: KerbType
     tactile_paving: TactilePaving
@@ -1996,7 +1996,7 @@ Road:
     incline_steep: bool
     bicycle_lanes: str
     hazmat: bool
-    amenity: Amenity
+    amenity: AmenityType
     ski: bool
     tourist_bus: bool
     pedestrians: bool
@@ -2251,7 +2251,7 @@ Sport:
     old_name: str
     disused: bool
     alt_name_1: str
-    man_made: ManMade
+    man_made: ManMadeType
     fenced: bool
     wikimedia_commons: str
     covered: bool
@@ -2374,7 +2374,7 @@ Surveillance:
     type: SurveillanceType
     kind: SurveillanceKind
     zone: SurveillanceZone
-    man_made: ManMade
+    man_made: ManMadeType
     designation: str
     camera_mount: CameraMount
     fixme: str
@@ -2385,7 +2385,7 @@ Surveillance:
     level: int
     website: str
     surveillance_zone: SurveillanceZone
-    amenity: Amenity
+    amenity: AmenityType
     support: SupportType
     covered: bool
 Theatre:
@@ -2421,9 +2421,9 @@ Tourism:
     foot: bool
     zoo: str
     height: int
-    man_made: ManMade
+    man_made: ManMadeType
     historic: HistoricType
-    amenity: Amenity
+    amenity: AmenityType
     building: BuildingType
     natural: NaturalType
     cuisine: str
@@ -2490,7 +2490,7 @@ Tourism:
     old_ref: str
     alt_name_cs: str
 Tower:
-  inherits: ManMade
+  inherits: ManMadeType
   fields:
     tower_type: TowerType
     building_part: BuildingPartType

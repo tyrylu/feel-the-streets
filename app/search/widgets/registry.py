@@ -1,3 +1,5 @@
+from osm_db import Enum
+
 WIDGETS = {}
 
 def widget_for(*classes):
@@ -10,9 +12,10 @@ def widget_for(*classes):
     return wrap
 
 def widget_for_column_class(column_class):
+    # Try a standard field
     if column_class in WIDGETS:
         return WIDGETS[column_class]
-    else:
-        for candidate, widget in WIDGETS.items():
-            if column_class == candidate:
-                return widget
+    # Try the enum wildcard (we don't want to name all the known enums in the widget registration)
+    if column_class in Enum.all_known():
+        return WIDGETS["Enum"]
+    raise RuntimeError(f"No widget to edit a field of type {column_class}")

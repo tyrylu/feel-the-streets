@@ -3,6 +3,7 @@ AbandonedType:
   unclassified: 1
   steps: 2
 ClubType:
+  some: 0
   'yes': 1
   scuba_diving: 2
   music: 3
@@ -34,6 +35,7 @@ StudioType:
   audio: 0
   video_editing: 1
 BollardType:
+  some: 0
   rising: 1
   removable: 2
   'yes': 3
@@ -94,6 +96,7 @@ BoardType:
 BorderType:
   nation: 0
 BoundaryType:
+  some: 0
   national_park: 1
   administrative: 2
   marker: 3
@@ -221,6 +224,7 @@ CraftType:
   caterer: 26
   gardener: 27
 TrafficSignalsType:
+  some: 0
   signals: 1
   signal: 2
   blinker: 3
@@ -228,9 +232,11 @@ TrafficSignalsType:
   emergency: 5
   pedestrian_crossing: 6
 TrafficSignalsDirection:
+  some: 0
   forward: 1
   backward: 2
 CicleWayKind:
+  some: 0
   asl: 1
 DisusedType:
   quarry: 0
@@ -322,7 +328,7 @@ LeisureType:
   me: 46
   bowling_alley: 47
   multipolygon: 48
-Amenity:
+AmenityType:
   none: 0
   restaurant: 1
   place_of_worship: 2
@@ -669,7 +675,7 @@ Inclination:
   backward: 5
   'no': 6
   anticlockwise: 7
-ManMade:
+ManMadeType:
   none: 0
   water_tower: 1
   reservoir_covered: 2

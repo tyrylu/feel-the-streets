@@ -1,17 +1,22 @@
-
 import wx
+from osm_db import Enum
 from . import widget_for
 from shared.humanization_utils import underscored_to_words
 
-@widget_for("enum")
+@widget_for("Enum")
 class Choice:
 
     value_label = _("Value")
     @staticmethod
     def get_value_widget(parent, column):
         choice = wx.Choice(parent)
-        for member in column.type_:
-            choice.Append(underscored_to_words(member.name))
+        enum = Enum.with_name(column.type_name)
+        name = enum.name_for_value(0)
+        index = 1
+        while name:
+            choice.Append(underscored_to_words(name))
+            index += 1
+            name = enum.name_for_value(index)
         return choice
 
     @staticmethod

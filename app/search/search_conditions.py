@@ -26,6 +26,7 @@ class SpecifySearchConditionsDialog(wx.Dialog):
                 child_metadata = EntityMetadata.for_discriminator(field.type_name)
             except KeyError: pass
             if child_metadata:
+                print(f"Create subtree for {field.type_name}")
                 name = get_class_display_name(field.type_name)
                 subparent = self._fields.AppendItem(parent, name)
                 self._fields.SetItemData(subparent, field_name)
