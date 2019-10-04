@@ -1,17 +1,22 @@
+import glob
+import os
 import wx
+import pendulum
 from .server_interaction import has_api_connectivity, get_areas, request_area_creation
 from .time_utils import rfc_3339_to_local_string
+from osm_db import AreaDatabase
 
 
 
 def get_local_area_infos():
     results = []
     # Somewhat hacky, but we need the storage root only there and the path generation logic does not care whether the area actually exists.
-    areas_storage_path = os.path.dirname(AreaDatabase.path_for("someplace"))
+    areas_storage_path = os.path.dirname(AreaDatabase.path_for("someplace", False))
     for db_file in glob.glob(os.path.join(areas_storage_path, "*.db")):
         name = os.path.basename(db_file).replace(".db", "")
-        mtime = os.path.getmtime(db_file)
-        results.append({"name":name, "updated_at": mtime, "state": "local"})
+        mtime = pendulum.from_timestamp(os.path.getmtime(db_file)).to_rfc3339_string()
+        ctime = pendulum.from_timestamp(os.path.getctime(db_file)).to_rfc3339_string()
+        results.append({"name":name, "updated_at": mtime, "state": "local", "created_at": ctime})
     return results
 
 
