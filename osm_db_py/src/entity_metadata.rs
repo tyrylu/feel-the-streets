@@ -91,7 +91,7 @@ impl PyEnum {
     }
 
     pub fn value_for_name(&self, name: &str) -> Option<i32> {
-        self.inner.value_for_name(name).map(|v| *v)
+        self.inner.value_for_name(name).copied()
     }
     pub fn name_for_value(&self, value: i32) -> Option<&'static String> {
 self.inner.name_for_value(value)

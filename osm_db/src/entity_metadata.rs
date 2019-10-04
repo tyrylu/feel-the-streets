@@ -111,6 +111,6 @@ impl Enum {
     }
 
     pub fn name_for_value(&self, value: i32) -> Option<&'static String> {
-self.reverse_members.get(&value).map(|v| *v)
+self.reverse_members.get(&value).copied()
     }
 }
