@@ -1,5 +1,6 @@
 use crate::conversions;
 use osm_db::entity::Entity;
+use pyo3::types::PyBytes;
 use pyo3::basic::CompareOp;
 use pyo3::class::basic::PyObjectProtocol;
 use pyo3::prelude::*;
@@ -22,8 +23,10 @@ impl PyEntity {
     }
 
     #[getter]
-    pub fn geometry(&self) -> Vec<u8> {
-        self.inner.geometry.clone()
+    pub fn geometry(&self) -> PyObject {
+        let gil = Python::acquire_gil();
+        let py = gil.python();
+        PyBytes::new(py, &self.inner.geometry).into()
     }
 
     #[getter]

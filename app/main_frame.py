@@ -1,3 +1,4 @@
+import logging
 import wx
 import os
 import json
@@ -5,7 +6,7 @@ import datetime
 import webbrowser
 from pygeodesy.ellipsoidalVincenty import LatLon
 import bitmath
-import shapely.wkt as wkt
+import shapely.wkb as wkb
 from .entities import Person
 from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController, LastLocationController
 from .area_selection import AreaSelectionDialog
@@ -14,6 +15,8 @@ from .server_interaction import download_area_database, SemanticChangeRetriever,
 from .semantic_changelog_generator import get_change_description
 from osm_db import AreaDatabase, EntitiesQuery, CHANGE_REMOVE
 from uimanager import get
+
+log = logging.getLogger(__name__)
 
 def format_size(num_bytes):
     size = bitmath.Byte(num_bytes)
@@ -45,7 +48,7 @@ class MainFrame(wx.Frame):
             query = EntitiesQuery()
             query.set_limit(1)
             entity = map()._db.get_entities(query)[0]
-            geom = wkt.loads(entity.geometry)
+            geom = wkb.loads(entity.geometry)
             lon = geom.x
             lat = geom.y
             person.move_to(LatLon(lat, lon))
@@ -88,10 +91,16 @@ class MainFrame(wx.Frame):
             if not entity:
                 if change.osm_id:
                     entity = db.get_entity(change.osm_id)
+                    if not entity:
+                        log.error("Local database is missing entity with osm id %s, not generating changelog description for that one.", change.osm_id)
+                        continue
                 else:
                     # This is somewhat ugly, but we really don't have the entity id in any other place and we need its discriminator.
                     data = [c.new_value for c in change.property_changes if c.key == "data"][0]
                     entity = db.get_entity(json.loads(data)["osm_id"])
+                    if not entity:
+                        log.error("No entity for osm id %s.", data["osm_id"])
+                        continue
             changelog.write(get_change_description(change, entity))
         db.commit()
         changelog.close()

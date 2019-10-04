@@ -1,5 +1,5 @@
 import logging
-import shapely.wkt as wkt
+import shapely.wkb as wkb
 import shapely.geometry as geometry
 import attr
 from pygeodesy.ellipsoidalVincenty import LatLon, VincentyError
@@ -101,7 +101,7 @@ def closest_point_from_geoms(geoms, point):
 
 def closest_point_to(point, geom, convert=True):
     if convert:
-        geom = wkt.loads(geom)
+        geom = wkb.loads(geom)
     if geom.geom_type == "Point":
         return geom
     elif geom.geom_type == "LineString":
@@ -115,7 +115,7 @@ def closest_point_to(point, geom, convert=True):
 
 def get_road_section_angle(pov, road):
     pov_point = to_shapely_point(pov.position)
-    road_line = wkt.loads(road.geometry)
+    road_line = wkb.loads(road.geometry)
     closest_segment = get_closest_line_segment(pov_point, road_line)
     closest_segment.calculate_angle()
     return closest_segment.angle
