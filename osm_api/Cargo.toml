@@ -5,8 +5,7 @@ authors = ["Lukáš Tyrychtr <lukastyrychtr@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-serde = "*"
-serde_derive = "*"
+serde = {version="*", features=["derive"]}
 serde_json = "*"
 failure = "*"
 reqwest = "*"
@@ -20,3 +19,5 @@ xml-rs = "*"
 tempfile = "*"
 bincode = "*"
 hashbrown = {version="*", features=["serde"]}
+wkb = "*"
+geo-types = "*"

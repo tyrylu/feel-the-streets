@@ -58,13 +58,13 @@ pub enum SemanticChange {
 
 impl SemanticChange {
     pub fn creating(
-        geometry: String,
+        geometry: Vec<u8>,
         discriminator: String,
         data: String,
         effective_width: Option<f64>,
     ) -> Self {
         SemanticChange::Create {
-            geometry,
+            geometry: base64::encode(&geometry),
             discriminator,
             data,
             effective_width,

@@ -88,7 +88,6 @@ pub struct Enum {
 }
 
 impl Enum {
-    
     pub fn all_known() -> Vec<&'static String> {
         ENUM_MAP.keys().collect()
     }
@@ -111,6 +110,6 @@ impl Enum {
     }
 
     pub fn name_for_value(&self, value: i32) -> Option<&'static String> {
-self.reverse_members.get(&value).copied()
+        self.reverse_members.get(&value).copied()
     }
 }

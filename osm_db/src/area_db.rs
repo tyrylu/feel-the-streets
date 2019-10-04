@@ -1,16 +1,16 @@
 use crate::entities_query::EntitiesQuery;
 use crate::entity::{Entity, NotStoredEntity};
 use crate::semantic_change::SemanticChange;
-use rusqlite::{Connection, Error, OpenFlags, Row, Transaction};
 use rusqlite::types::ToSql;
+use rusqlite::{Connection, Error, OpenFlags, Row, Transaction};
 use std::path::PathBuf;
 use std::time::Instant;
 
 type DbResult<T> = Result<T, rusqlite::Error>;
 
 const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
-const INSERT_ENTITY_SQL: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, geomFromText(?, 4326), ?, ?)";
-const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, Buffer(geomFromText(?, 4326), 0), ?, ?)";
+const INSERT_ENTITY_SQL: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, geomFromWKB(?, 4326), ?, ?)";
+const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, Buffer(geomFromWKB(?, 4326), 0), ?, ?)";
 
 fn row_to_entity(row: &Row) -> Entity {
     Entity {
@@ -29,8 +29,8 @@ fn init_extensions(conn: &Connection) -> DbResult<()> {
     Ok(())
 }
 
-fn geometry_is_valid_transacted(geometry: &str, tx: &Transaction) -> DbResult<bool> {
-    let mut stmt = tx.prepare_cached("select isValid(geomFromText(?, 4326))")?;
+fn geometry_is_valid_transacted(geometry: &[u8], tx: &Transaction) -> DbResult<bool> {
+    let mut stmt = tx.prepare_cached("select isValid(geomFromWKB(?, 4326))")?;
     stmt.query_row(&[&geometry], |row| row.get(0))
 }
 
@@ -117,7 +117,7 @@ impl AreaDatabase {
     }
 
     pub fn get_entity(&self, osm_id: &str) -> DbResult<Option<Entity>> {
-        let mut stmt = self.conn.prepare_cached("select id, discriminator, AsText(geometry) as geometry, data, effective_width from entities where json_extract(data, '$.osm_id') = ?")?;
+        let mut stmt = self.conn.prepare_cached("select id, discriminator, AsBinary(geometry) as geometry, data, effective_width from entities where json_extract(data, '$.osm_id') = ?")?;
         match stmt.query_row(&[&osm_id], row_to_entity) {
             Ok(e) => Ok(Some(e)),
             Err(e) => match e {
@@ -153,17 +153,23 @@ impl AreaDatabase {
         for i in 0..candidate_ids.len() {
             candidate_params.push(format!(":candidate{}", i));
         }
-        let mut query = format!("SELECT id, discriminator, AsText(geometry) as geometry, data, effective_width FROM entities WHERE id in ({})", candidate_params.join(","));
+        let mut query = format!("SELECT id, discriminator, AsBinary(geometry) as geometry, data, effective_width FROM entities WHERE id in ({})", candidate_params.join(","));
         if fast {
             query += " AND length(geometry) < 100000";
         }
-        let fragment = format!(" AND contains(geometry, GeomFromText('POINT({} {})', 4326))", x, y);
+        let fragment = format!(
+            " AND contains(geometry, GeomFromText('POINT({} {})', 4326))",
+            x, y
+        );
         query += &fragment;
         let mut params: Vec<(&str, &dyn ToSql)> = vec![];
         for (i, id) in candidate_ids.iter().enumerate() {
             params.push((&candidate_params[i], id));
         }
-        debug!("Executing inside of query: {:?} with parameters: {:?}", query, candidate_ids);
+        debug!(
+            "Executing inside of query: {:?} with parameters: {:?}",
+            query, candidate_ids
+        );
         let mut stmt = self.conn.prepare_cached(&query)?;
         let res = stmt.query_map_named(params.as_slice(), row_to_entity)?;
         Ok(res.map(|e| e.expect("Failed to retrieve entity")).collect())
@@ -172,7 +178,7 @@ impl AreaDatabase {
     fn insert_entity(
         &self,
         discriminator: &str,
-        geometry: &str,
+        geometry: &[u8],
         effective_width: &Option<f64>,
         data: &str,
     ) -> DbResult<()> {
@@ -195,9 +201,9 @@ impl AreaDatabase {
 
     fn save_updated_entity(&self, entity: &Entity) -> DbResult<()> {
         let mut stmt = if self.geometry_is_valid(&entity.geometry)? {
-            self.conn.prepare_cached("update entities set discriminator = ?, geometry = GeomFromText(?, 4326), effective_width = ?, data = ? where id = ?;")?
+            self.conn.prepare_cached("update entities set discriminator = ?, geometry = GeomFromWKB(?, 4326), effective_width = ?, data = ? where id = ?;")?
         } else {
-            self.conn.prepare_cached("update entities set discriminator = ?, geometry = Buffer(GeomFromText(?, 4326), 0), effective_width = ?, data = ? where id = ?;")?
+            self.conn.prepare_cached("update entities set discriminator = ?, geometry = Buffer(GeomFromWKB(?, 4326), 0), effective_width = ?, data = ? where id = ?;")?
         };
         stmt.execute(&[
             &entity.discriminator,
@@ -217,7 +223,7 @@ impl AreaDatabase {
                 geometry,
                 effective_width,
                 data,
-            } => self.insert_entity(&discriminator, &geometry, &effective_width, &data),
+            } => self.insert_entity(&discriminator, &base64::decode(&geometry).expect("Geometry should be base64 encoded"), &effective_width, &data),
             Remove { osm_id } => self.remove_entity(&osm_id),
             Update {
                 osm_id,
@@ -236,10 +242,10 @@ impl AreaDatabase {
         }
     }
 
-    fn geometry_is_valid(&self, geometry: &str) -> DbResult<bool> {
+    fn geometry_is_valid(&self, geometry: &[u8]) -> DbResult<bool> {
         let mut stmt = self
             .conn
-            .prepare_cached("select isValid(geomFromText(?, 4326))")?;
+            .prepare_cached("select isValid(geomFromWKB(?, 4326))")?;
         stmt.query_row(&[&geometry], |row| row.get(0))
     }
 
@@ -248,7 +254,7 @@ impl AreaDatabase {
         stmt.execute(&[])?;
         Ok(())
     }
-pub fn commit(&self) -> DbResult<()> {
+    pub fn commit(&self) -> DbResult<()> {
         let mut stmt = self.conn.prepare_cached("COMMIT")?;
         stmt.execute(&[])?;
         Ok(())

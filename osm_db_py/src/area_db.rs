@@ -12,10 +12,11 @@ pub struct PyAreaDatabase {
 
 #[pymethods]
 impl PyAreaDatabase {
-    
     #[staticmethod]
     pub fn path_for(name: &str, server_side: bool) -> String {
-        AreaDatabase::path_for(name, server_side).to_string_lossy().into_owned()
+        AreaDatabase::path_for(name, server_side)
+            .to_string_lossy()
+            .into_owned()
     }
 
     #[staticmethod]
@@ -45,37 +46,54 @@ impl PyAreaDatabase {
         y: f64,
         fast: bool,
     ) -> PyResult<Vec<PyEntity>> {
-        match self.inner.get_entities_really_intersecting(&candidate_ids, x, y, fast) {
+        match self
+            .inner
+            .get_entities_really_intersecting(&candidate_ids, x, y, fast)
+        {
             Ok(res) => Ok(res.into_iter().map(|e| PyEntity { inner: e }).collect()),
-            Err(e) => Err(exceptions::ValueError::py_err(format!("Failed to execute the query, error: {}", e)))
+            Err(e) => Err(exceptions::ValueError::py_err(format!(
+                "Failed to execute the query, error: {}",
+                e
+            ))),
         }
     }
 
     pub fn apply_change(&self, change: &PySemanticChange) -> PyResult<()> {
         match self.inner.apply_change(&change.inner) {
             Ok(()) => Ok(()),
-            Err(e) => Err(exceptions::ValueError::py_err(format!("Failed to apply the change, error: {}", e)))
+            Err(e) => Err(exceptions::ValueError::py_err(format!(
+                "Failed to apply the change, error: {}",
+                e
+            ))),
         }
     }
-pub fn begin(&self) -> PyResult<()> {
+    pub fn begin(&self) -> PyResult<()> {
         match self.inner.begin() {
             Ok(()) => Ok(()),
-            Err(e) => Err(exceptions::ValueError::py_err(format!("Failed to execute BEGIN, error: {}", e)))
+            Err(e) => Err(exceptions::ValueError::py_err(format!(
+                "Failed to execute BEGIN, error: {}",
+                e
+            ))),
         }
     }
 
-pub fn commit(&self) -> PyResult<()> {
+    pub fn commit(&self) -> PyResult<()> {
         match self.inner.commit() {
             Ok(()) => Ok(()),
-            Err(e) => Err(exceptions::ValueError::py_err(format!("Failed to execute COMMIT, error: {}", e)))
+            Err(e) => Err(exceptions::ValueError::py_err(format!(
+                "Failed to execute COMMIT, error: {}",
+                e
+            ))),
         }
     }
 
     pub fn get_entity(&self, osm_id: &str) -> PyResult<Option<PyEntity>> {
         match self.inner.get_entity(osm_id) {
-            Ok(res) => Ok(res.map(|e| PyEntity{inner: e})),
-            Err(e) => Err(exceptions::ValueError::py_err(format!("Failed to get entity, error: {}", e)))
+            Ok(res) => Ok(res.map(|e| PyEntity { inner: e })),
+            Err(e) => Err(exceptions::ValueError::py_err(format!(
+                "Failed to get entity, error: {}",
+                e
+            ))),
         }
     }
 }
-

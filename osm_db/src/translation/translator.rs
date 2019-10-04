@@ -104,7 +104,7 @@ pub fn translate(
             }
             let raw_data =
                 serde_json::to_string(&converted_data).expect("Could not serialize entity data.");
-            let geometry = manager.get_geometry_as_wkt(&object)?;
+            let geometry = manager.get_geometry_as_wkb(&object)?;
             match geometry {
                 Some(geom) => {
                     let effective_width = calculate_effective_width(&discriminator, &entity_data);

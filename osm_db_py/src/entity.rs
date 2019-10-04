@@ -1,8 +1,8 @@
 use crate::conversions;
 use osm_db::entity::Entity;
-use pyo3::prelude::*;
-use pyo3::class::basic::PyObjectProtocol;
 use pyo3::basic::CompareOp;
+use pyo3::class::basic::PyObjectProtocol;
+use pyo3::prelude::*;
 
 #[pyclass(name=Entity)]
 pub struct PyEntity {
@@ -22,8 +22,8 @@ impl PyEntity {
     }
 
     #[getter]
-    pub fn geometry(&self) -> &str {
-        self.inner.geometry.as_str()
+    pub fn geometry(&self) -> Vec<u8> {
+        self.inner.geometry.clone()
     }
 
     #[getter]
@@ -37,31 +37,28 @@ impl PyEntity {
         conversions::convert_value(self.inner.value_of_field(key), &py)
     }
 
-#[getter]
+    #[getter]
     pub fn defined_field_names(&mut self) -> Vec<&String> {
         self.inner.defined_field_names()
     }
 }
 
-
-
 #[pyproto]
 impl PyObjectProtocol for PyEntity {
-fn __hash__(&'p self) -> PyResult<isize>
-{
-    Ok(self.id() as isize)
-}
-
-fn __richcmp__(&self, other: &Self, op: CompareOp) -> PyResult<bool> {
-    let id1 = self.id();
-    let id2 = other.id();
-    match op {
-        CompareOp::Eq => Ok(id1 == id2),
-        CompareOp::Ne => Ok(id1 != id2),
-        CompareOp::Lt => Ok(id1 < id2),
-        CompareOp::Le => Ok(id1 <= id2),
-        CompareOp::Gt => Ok(id1 > id2),
-        CompareOp::Ge => Ok(id1 >= id2),
+    fn __hash__(&'p self) -> PyResult<isize> {
+        Ok(self.id() as isize)
     }
-}
+
+    fn __richcmp__(&self, other: &Self, op: CompareOp) -> PyResult<bool> {
+        let id1 = self.id();
+        let id2 = other.id();
+        match op {
+            CompareOp::Eq => Ok(id1 == id2),
+            CompareOp::Ne => Ok(id1 != id2),
+            CompareOp::Lt => Ok(id1 < id2),
+            CompareOp::Le => Ok(id1 <= id2),
+            CompareOp::Gt => Ok(id1 > id2),
+            CompareOp::Ge => Ok(id1 >= id2),
+        }
+    }
 }

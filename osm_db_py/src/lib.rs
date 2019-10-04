@@ -17,17 +17,16 @@ const CHANGE_REMOVE: i32 = 2;
 #[pymodule]
 fn osm_db(_py: Python, m: &PyModule) -> PyResult<()> {
     #[pyfn(m, "all_known_discriminators")]
-pub fn all_known_discriminators() -> Vec<&'static String> {
-    osm_db::entity_metadata::all_known_discriminators()
-}
+    pub fn all_known_discriminators() -> Vec<&'static String> {
+        osm_db::entity_metadata::all_known_discriminators()
+    }
 
-#[pyfn(m, "init_logging")]
-fn init_logging() {
-    env_logger::Builder::from_env("FTS_LOG")
-        .default_format_timestamp(false)
-        .init();
-}
-
+    #[pyfn(m, "init_logging")]
+    fn init_logging() {
+        env_logger::Builder::from_env("FTS_LOG")
+            .default_format_timestamp(false)
+            .init();
+    }
 
     m.add("CHANGE_CREATE", CHANGE_CREATE)?;
     m.add("CHANGE_UPDATE", CHANGE_UPDATE)?;

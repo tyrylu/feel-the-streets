@@ -1,4 +1,4 @@
-use osm_db::entity_metadata::{EntityMetadata, Field, Enum};
+use osm_db::entity_metadata::{EntityMetadata, Enum, Field};
 use pyo3::exceptions;
 use pyo3::prelude::*;
 use std::collections::HashMap;
@@ -40,12 +40,16 @@ impl PyEntityMetadata {
 
     #[getter]
     pub fn all_fields(&self) -> HashMap<String, PyField> {
-        self.inner.all_fields().into_iter().map(|(k, f)| (k, PyField{inner: f.clone()})).collect()
+        self.inner
+            .all_fields()
+            .into_iter()
+            .map(|(k, f)| (k, PyField { inner: f.clone() }))
+            .collect()
     }
 
     #[getter]
     pub fn parent_metadata(&self) -> Option<Self> {
-        self.inner.parent_metadata().map(|m| Self{inner: m})
+        self.inner.parent_metadata().map(|m| Self { inner: m })
     }
 }
 
@@ -69,12 +73,11 @@ impl PyField {
 
 #[pyclass(name=Enum)]
 pub struct PyEnum {
-    inner: Enum
+    inner: Enum,
 }
 
 #[pymethods]
 impl PyEnum {
-    
     #[staticmethod]
     pub fn all_known() -> Vec<&'static String> {
         Enum::all_known()
@@ -82,7 +85,7 @@ impl PyEnum {
 
     #[staticmethod]
     pub fn with_name(name: &str) -> Option<Self> {
-        Enum::with_name(name).map(|e| PyEnum{inner: e})
+        Enum::with_name(name).map(|e| PyEnum { inner: e })
     }
 
     #[getter]
@@ -94,6 +97,6 @@ impl PyEnum {
         self.inner.value_for_name(name).copied()
     }
     pub fn name_for_value(&self, value: i32) -> Option<&'static String> {
-self.inner.name_for_value(value)
+        self.inner.name_for_value(value)
     }
 }

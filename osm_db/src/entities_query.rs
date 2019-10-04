@@ -25,7 +25,7 @@ impl Default for EntitiesQuery {
             min_y: f64::NEG_INFINITY,
             max_y: f64::INFINITY,
             conditions: Vec::new(),
-            limit: None
+            limit: None,
         }
     }
 }
@@ -54,7 +54,7 @@ impl EntitiesQuery {
     }
 
     pub fn to_query_sql(&self) -> String {
-        let base_query = "select id, discriminator, AsText(geometry) as geometry, data, effective_width from entities, idx_entities_geometry";
+        let base_query = "select id, discriminator, AsBinary(geometry) as geometry, data, effective_width from entities, idx_entities_geometry";
         let mut condition_fragments = vec![RECTANGLE_CONDITION_SQL.to_string()];
         let mut discriminator_placeholders = vec![];
         for idx in 0..self.included_discriminators.len() {
@@ -80,12 +80,16 @@ impl EntitiesQuery {
             condition_fragments.push(condition.to_query_fragment(idx));
         }
         if let Some(limit) = self.limit {
-format!("{} WHERE {} LIMIT {}", base_query, condition_fragments.join(" AND "), limit)
+            format!(
+                "{} WHERE {} LIMIT {}",
+                base_query,
+                condition_fragments.join(" AND "),
+                limit
+            )
+        } else {
+            format!("{} WHERE {}", base_query, condition_fragments.join(" AND "))
         }
-        else {
-format!("{} WHERE {}", base_query, condition_fragments.join(" AND "))
-        }
-            }
+    }
 
     pub fn to_query_params(&self) -> Vec<(String, &dyn ToSql)> {
         let mut params: Vec<(String, &dyn ToSql)> = vec![

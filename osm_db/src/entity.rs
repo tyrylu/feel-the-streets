@@ -3,7 +3,7 @@ use serde_json::{Map, Value};
 
 #[derive(Debug)]
 pub struct NotStoredEntity {
-    pub geometry: String,
+    pub geometry: Vec<u8>,
     pub discriminator: String,
     pub data: String,
     pub effective_width: Option<f64>,
@@ -11,7 +11,7 @@ pub struct NotStoredEntity {
 
 pub struct Entity {
     pub id: i32,
-    pub geometry: String,
+    pub geometry: Vec<u8>,
     pub discriminator: String,
     pub data: String,
     pub parsed_data: Option<Value>,
@@ -33,23 +33,29 @@ impl Entity {
         obj.get(key).unwrap_or(&Value::Null)
     }
 
-pub fn defined_field_names(&mut self) -> Vec<&String> {
-    if self.parsed_data.is_none() {
+    pub fn defined_field_names(&mut self) -> Vec<&String> {
+        if self.parsed_data.is_none() {
             self.parsed_data =
                 Some(serde_json::from_str::<Value>(&self.data).expect("Could not parse data"));
         }
-        self.parsed_data.as_ref().unwrap().as_object().expect("Data should be an object").keys().collect()
-}
+        self.parsed_data
+            .as_ref()
+            .unwrap()
+            .as_object()
+            .expect("Data should be an object")
+            .keys()
+            .collect()
+    }
 
     pub fn apply_property_changes(&mut self, property_changes: &[EntryChange]) {
         for change in property_changes {
             if let EntryChange::Update { key, new_value, .. } = change {
                 match key.as_ref() {
                     "geometry" => {
-                        self.geometry = new_value
+                        self.geometry = base64::decode(new_value
                             .as_str()
                             .expect("Non-string attempted to be set as a geometry")
-                            .to_string()
+                            ).expect("The string was not a base64-encoded geometry")
                     }
                     "discriminator" => {
                         self.discriminator = new_value
