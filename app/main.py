@@ -7,7 +7,8 @@ import osm_db
 from . import locale_setup
 
 def main():
-    logging.basicConfig(level=logging.INFO)
+    level = logging._nameToLevel[os.environ.get("FTS_LOG", "info").upper()]
+    logging.basicConfig(level=level)
     osm_db.init_logging()
     app = wx.App()
     locale_setup.setup_locale()
