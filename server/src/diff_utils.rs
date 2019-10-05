@@ -9,8 +9,8 @@ fn diff_properties(old: &Entity, new: &NotStoredEntity) -> Vec<EntryChange> {
     if old.geometry != new.geometry {
         changes.push(EntryChange::updating(
             "geometry",
-            Value::from(old.geometry.clone()),
-            Value::from(new.geometry.clone()),
+            Value::from(base64::encode(&old.geometry)),
+            Value::from(base64::encode(&new.geometry)),
         ));
     }
     if old.discriminator != new.discriminator {
