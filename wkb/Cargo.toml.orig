@@ -1,0 +1,13 @@
+[package]
+name = "wkb"
+version = "0.4.0"
+authors = ["Rory McCann <rory@technomancy.org>"]
+description = "Convert rust-geo types to/from Well Known Binary"
+keywords = ["geo"]
+repository = "https://github.com/rory/rust-wkb"
+license = "AGPL-3.0+"
+
+[dependencies]
+geo-types = "0.4"
+byteorder = "1"
+num-traits = "0.2.6"
