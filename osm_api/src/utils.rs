@@ -1,6 +1,5 @@
 use crate::object::OSMObject;
 use geo_types::LineString;
-use itertools::Itertools;
 use serde_json;
 use std::collections::HashMap;
 

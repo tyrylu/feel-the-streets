@@ -40,7 +40,7 @@ fn format_query(timeout: u32, query: &str) -> String {
 }
 
 fn format_data_retrieval(area: i64) -> String {
-    format!(r#"((area({area});node(area);area({area};way(area);area({area};rel(area);>>;);>>;)"#, area = area)
+    format!(r#"((area({area});node(area);area({area});way(area);area({area});rel(area);>>;);>>;)"#, area = area)
 }
 
 pub struct OSMObjectManager {
@@ -370,7 +370,7 @@ impl OSMObjectManager {
         match object.specifics {
             Node { lon, lat } => Ok(Some(Geometry::Point(Point::new(lon, lat)))),
             Way { .. } => {
-                let mut coords = self.get_way_coords(&object)?;
+                let coords = self.get_way_coords(&object)?;
                 if coords.num_coords() <= 1 {
                     warn!("One or zero nodes for object {}", object.unique_id());
                     return Ok(None);
