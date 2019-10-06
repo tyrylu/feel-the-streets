@@ -8,10 +8,10 @@ fn main() -> Result<()> {
     server::init_logging();
     let server_conn = SqliteConnection::establish("server.db")?;
     for area in Area::all(&server_conn)? {
-        fs::remove_file(&format!("{}.db", area.name))?;
+        fs::remove_file(&format!("{}.db", area.osm_id))?;
         println!("Recreating area {}...", area.name);
         let start = Instant::now();
-        area_db_creation::create_area_database(&area.name)?;
+        area_db_creation::create_area_database(area.osm_id)?;
         println!("Area created in {:?}", start.elapsed());
     }
     Ok(())

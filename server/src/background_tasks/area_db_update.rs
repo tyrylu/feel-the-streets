@@ -11,7 +11,7 @@ use osm_db::semantic_change::SemanticChange;
 use osm_db::translation::translator;
 
 fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
-    info!("Updating area {}.", area.name);
+    info!("Updating area {} (id {}).", area.name, area.osm_id);
     area.state = AreaState::GettingChanges;
     area.save(&conn)?;
     let after = if let Some(timestamp) = &area.newest_osm_object_timestamp {
@@ -28,11 +28,11 @@ fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
         DateTime::from_utc(area.updated_at, Utc)
     };
     let manager = OSMObjectManager::new();
-    let area_db = AreaDatabase::open_existing(&area.name, true)?;
+    let area_db = AreaDatabase::open_existing(area.osm_id, true)?;
     let mut first = true;
     let mut osm_change_count = 0;
     let mut semantic_changes = vec![];
-    for change in manager.lookup_differences_in(&area.name, &after)? {
+    for change in manager.lookup_differences_in(area.osm_id, &after)? {
         osm_change_count += 1;
         use OSMObjectChangeType::*;
         if first {
@@ -115,7 +115,7 @@ fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
     );
     info!("Publishing the changes...");
     for change in semantic_changes {
-        area_messaging::publish_change_on(&channel, &change, &area.name)?;
+        area_messaging::publish_change_on(&channel, &change, area.osm_id)?;
     }
     info!("Changes successfully published.");
     area.state = AreaState::Updated;

@@ -39,8 +39,8 @@ fn format_query(timeout: u32, query: &str) -> String {
     )
 }
 
-fn format_data_retrieval(area: &str) -> String {
-    format!(r#"((area["name"="{area}"];node(area);area["name"="{area}"];way(area);area["name"="{area}"];rel(area);>>;);>>;)"#, area = area)
+fn format_data_retrieval(area: i64) -> String {
+    format!(r#"((area({area});node(area);area({area};way(area);area({area};rel(area);>>;);>>;)"#, area = area)
 }
 
 pub struct OSMObjectManager {
@@ -210,7 +210,7 @@ impl OSMObjectManager {
         Ok(objects)
     }
 
-    pub fn lookup_objects_in(&self, area: &str) -> Result<()> {
+    pub fn lookup_objects_in(&self, area: i64) -> Result<()> {
         info!("Looking up all objects in area {}.", area);
         let query = format_query(900, &format_data_retrieval(area));
         let readable = self.run_query(&query, false)?;
@@ -517,13 +517,13 @@ impl OSMObjectManager {
     }
     pub fn lookup_differences_in(
         &self,
-        area: &str,
+        area: i64,
         after: &DateTime<Utc>,
     ) -> Result<Box<dyn Iterator<Item = Result<OSMObjectChange>>>> {
         let mut iterators = Vec::with_capacity(3);
         for kind in &["node", "way", "rel"] {
             let query = format!(
-                "((area[\"name\"=\"{area}\"];{object_kind}(area);>>;);>>;)",
+                "((area({area});{object_kind}(area);>>;);>>;)",
                 area = area,
                 object_kind = kind
             );

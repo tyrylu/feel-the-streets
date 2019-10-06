@@ -13,6 +13,7 @@ use std::fs::File;
 
 #[derive(Deserialize)]
 pub struct MaybeCreateAreaRequest {
+    osm_id: i64,
     name: String,
 }
 
@@ -31,26 +32,26 @@ pub fn maybe_create_area(
     request: Json<MaybeCreateAreaRequest>,
     conn: DbConn,
 ) -> Result<status::Custom<Json<Area>>> {
-    let area_name = request.into_inner().name;
-    match Area::find_by_name(&area_name, &*conn) {
+    let area = request.into_inner();
+    match Area::find_by_osm_id(area.osm_id, &*conn) {
         Ok(a) => Ok(status::Custom(Status::Ok, Json(a))),
         Err(_e) => {
-            let area = Area::create(&area_name, &*conn)?;
-            area_messaging::init_exchange(&area_name)?;
-            BackgroundTask::CreateAreaDatabase(area_name).deliver()?;
+            let area = Area::create(area.osm_id, &area.name, &*conn)?;
+            area_messaging::init_exchange(area.osm_id)?;
+            BackgroundTask::CreateAreaDatabase(area.osm_id).deliver()?;
             Ok(status::Custom(Status::Created, Json(area)))
         }
     }
 }
 
-#[get("/areas/<area_name>/download?<client_id>")]
-pub fn download_area(area_name: String, client_id: String, conn: DbConn) -> Result<File> {
-    let area = Area::find_by_name(&area_name, &*conn)?;
+#[get("/areas/<area_osm_id>/download?<client_id>")]
+pub fn download_area(area_osm_id: i64, client_id: String, conn: DbConn) -> Result<File> {
+    let area = Area::find_by_osm_id(area_osm_id, &*conn)?;
     if area.state != AreaState::Updated {
         bail!("Can not guarantee area data integrity.")
     } else {
-        area_messaging::init_queue(&client_id, &area_name)?;
-        Ok(File::open(AreaDatabase::path_for(&area_name, true))?)
+        area_messaging::init_queue(&client_id, area_osm_id)?;
+        Ok(File::open(AreaDatabase::path_for(area_osm_id, true))?)
     }
 }
 

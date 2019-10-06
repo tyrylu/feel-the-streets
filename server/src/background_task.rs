@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone)]
 pub enum BackgroundTask {
-    CreateAreaDatabase(String),
+    CreateAreaDatabase(i64),
     UpdateAreaDatabases,
 }
 
@@ -27,7 +27,7 @@ impl BackgroundTask {
     pub fn execute(&self) -> Result<()> {
         use BackgroundTask::*;
         match self {
-            CreateAreaDatabase(area_name) => area_db_creation::create_area_database(&area_name),
+            CreateAreaDatabase(area_osm_id) => area_db_creation::create_area_database(*area_osm_id),
             UpdateAreaDatabases => area_db_update::update_area_databases(),
         }
     }

@@ -42,8 +42,7 @@ impl AreaDatabase {
     fn common_construct(conn: Connection) -> DbResult<Self> {
         Ok(Self { conn })
     }
-
-    pub fn path_for(area: &str, server_side: bool) -> PathBuf {
+     pub fn path_for(area: i64, server_side: bool) -> PathBuf {
         let mut root = if server_side {
             PathBuf::from(".")
         } else {
@@ -55,15 +54,15 @@ impl AreaDatabase {
         root
     }
 
-    pub fn create(area: &str) -> DbResult<Self> {
-        let conn = Connection::open(&AreaDatabase::path_for(&area, true))?;
+    pub fn create(area: i64) -> DbResult<Self> {
+        let conn = Connection::open(&AreaDatabase::path_for(area, true))?;
         init_extensions(&conn)?;
         conn.execute_batch(INIT_AREA_DB_SQL)?;
         AreaDatabase::common_construct(conn)
     }
-    pub fn open_existing(area: &str, server_side: bool) -> DbResult<Self> {
+    pub fn open_existing(area: i64, server_side: bool) -> DbResult<Self> {
         let conn = Connection::open_with_flags(
-            &AreaDatabase::path_for(&area, server_side),
+            &AreaDatabase::path_for(area, server_side),
             OpenFlags::SQLITE_OPEN_READ_WRITE,
         )?;
         init_extensions(&conn)?;

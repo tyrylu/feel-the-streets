@@ -209,5 +209,46 @@
     </object>
     <title>Select an area</title>
   </object>
-</resource>
+  <object class="wxDialog" name="areas_browser">
+    <object class="wxPanel">
+      <object class="wxGridBagSizer">
+        <object class="sizeritem">
+          <cellpos>0,0</cellpos>
+          <object class="wxStaticText">
+            <label>Areas</label>
+          </object>
+        </object>
+        <object class="sizeritem">
+          <cellpos>1,0</cellpos>
+          <object class="wxListBox" name="areas_list"></object>
+        </object>
+        <object class="sizeritem">
+          <cellpos>0,1</cellpos>
+          <object class="wxStaticText">
+            <label>Area properties</label>
+          </object>
+        </object>
+        <object class="sizeritem">
+          <cellpos>1,1</cellpos>
+          <object class="wxListBox" name="props">
+          </object>
+        </object>
+        <object class="sizeritem">
+          <cellpos>2,0</cellpos>
+          <object class="wxButton" name="wxID_OK">
+            <label>Select</label>
+            <default>1</default>
+          </object>
+        </object>
+        <object class="sizeritem">
+          <cellpos>2,1</cellpos>
+          <object class="wxButton" name="wxID_CANCEL">
+            <label>Close</label>
+          </object>
+        </object>
+      </object>
+    </object>
+    <title>Select the area you mean</title>
+  </object>
+  </resource>
   

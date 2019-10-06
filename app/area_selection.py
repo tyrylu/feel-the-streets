@@ -1,11 +1,15 @@
 import glob
+import logging
 import os
 import wx
 import pendulum
-from .server_interaction import has_api_connectivity, get_areas, request_area_creation
+from .server_interaction import has_api_connectivity, get_areas, request_area_creation, get_areas_with_name
+from uimanager import get
 from .time_utils import rfc_3339_to_local_string
+from .areas_browser import AreasBrowser
 from osm_db import AreaDatabase
 
+log = logging.getLogger(__name__)
 
 
 def get_local_area_infos():
@@ -48,7 +52,22 @@ class AreaSelectionDialog(wx.Dialog):
         name = wx.GetTextFromUser(_("Enter the name of the requested area"), _("Area name requested"))
         if not name:
             return
-        reply = request_area_creation(name)
+        candidates = get_areas_with_name(name)
+        if not candidates:
+            wx.MessageBox(_("The area with name {name} does not correspond to any OSM areas.").format(name=name), _("Area not found"), style=wx.ICON_ERROR)
+            return
+        if len(candidates) == 1:
+            area_id = next(iter(candidates.keys()))
+            log.info("Using area with id %s.", area_id)
+        else:
+            dialog = get().prepare_xrc_dialog(AreasBrowser, areas=candidates)
+            res = dialog.ShowModal()
+            dialog.Destroy()
+            if res == wx.ID_OK:
+                area_id = dialog.selected_area_id
+            else:
+                return
+        reply = request_area_creation(area_id, name)
         if reply and isinstance(reply, dict) and "state" in reply and reply["state"] == "Creating":
             wx.MessageBox(_("The area creation request has been sent successfully. The area will become updated in a few minutes."), _("Success"), style=wx.ICON_INFORMATION)
         else:

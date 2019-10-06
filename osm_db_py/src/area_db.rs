@@ -13,15 +13,15 @@ pub struct PyAreaDatabase {
 #[pymethods]
 impl PyAreaDatabase {
     #[staticmethod]
-    pub fn path_for(name: &str, server_side: bool) -> String {
-        AreaDatabase::path_for(name, server_side)
+    pub fn path_for(osm_id: i64, server_side: bool) -> String {
+        AreaDatabase::path_for(osm_id, server_side)
             .to_string_lossy()
             .into_owned()
     }
 
     #[staticmethod]
-    pub fn open_existing(area_name: &str, server_side: bool) -> PyResult<Self> {
-        match AreaDatabase::open_existing(area_name, server_side) {
+    pub fn open_existing(area_osm_id: i64, server_side: bool) -> PyResult<Self> {
+        match AreaDatabase::open_existing(area_osm_id, server_side) {
             Ok(db) => Ok(Self { inner: db }),
             Err(e) => Err(exceptions::ValueError::py_err(format!(
                 "Failed to open the database, error: {}",

@@ -18,6 +18,7 @@ pub enum AreaState {
 #[derive(Serialize, Queryable, AsChangeset)]
 pub struct Area {
     pub id: i32,
+    pub osm_id: i64,
     pub name: String,
     pub state: AreaState,
     pub created_at: NaiveDateTime,
@@ -34,14 +35,15 @@ impl Area {
         areas::table.find(id).get_result(conn)
     }
 
-    pub fn find_by_name(name: &str, conn: &SqliteConnection) -> QueryResult<Area> {
-        areas::table.filter(areas::name.eq(name)).get_result(conn)
+    pub fn find_by_osm_id(id: i64, conn: &SqliteConnection) -> QueryResult<Area> {
+        areas::table.filter(areas::osm_id.eq(id)).get_result(conn)
     }
 
-    pub fn create(name: &str, conn: &SqliteConnection) -> QueryResult<Area> {
+    pub fn create(osm_id: i64, name: &str, conn: &SqliteConnection) -> QueryResult<Area> {
         // Sqlite3 does not support the returning clause...
         diesel::insert_into(areas::table)
             .values((
+                areas::osm_id.eq(osm_id),
                 areas::name.eq(name),
                 areas::state.eq(AreaState::Creating),
                 areas::created_at.eq(diesel::dsl::now),
@@ -73,9 +75,9 @@ impl Area {
     }
 }
 
-pub fn finalize_area_creation(area: &str, conn: &SqliteConnection) -> QueryResult<usize> {
+pub fn finalize_area_creation(osm_id: i64, conn: &SqliteConnection) -> QueryResult<usize> {
     let query = diesel::update(areas::table)
-        .filter(areas::name.eq(&area))
+        .filter(areas::osm_id.eq(osm_id))
         .set((
             areas::state.eq(AreaState::Updated),
             areas::updated_at.eq(now),
