@@ -20,7 +20,8 @@ def get_local_area_infos():
         name = os.path.basename(db_file).replace(".db", "")
         mtime = pendulum.from_timestamp(os.path.getmtime(db_file)).to_rfc3339_string()
         ctime = pendulum.from_timestamp(os.path.getctime(db_file)).to_rfc3339_string()
-        results.append({"name":name, "updated_at": mtime, "state": "local", "created_at": ctime})
+        # Cache names for offline use, they're ugly now.
+        results.append({"osm_id": name, "name":name, "updated_at": mtime, "state": "local", "created_at": ctime})
     return results
 
 
@@ -35,7 +36,7 @@ class AreaSelectionDialog(wx.Dialog):
         else:
             available = get_local_area_infos()
             self.FindWindowByName("request").Disable()
-        self._area_names = [a["name"] for a in available]
+        self._area_ids = [a["osm_id"] for a in available]
         self._fill_areas(available)
 
     def _fill_areas(self, areas):
@@ -46,7 +47,7 @@ class AreaSelectionDialog(wx.Dialog):
     
     @property
     def selected_map(self):
-        return self._area_names[self._areas.Selection]
+        return self._area_ids[self._areas.Selection]
     
     def on_request_clicked(self, evt):
         name = wx.GetTextFromUser(_("Enter the name of the requested area"), _("Area name requested"))
@@ -58,7 +59,7 @@ class AreaSelectionDialog(wx.Dialog):
             return
         if len(candidates) == 1:
             area_id = next(iter(candidates.keys()))
-            log.info("Using area with id %s.", area_id)
+            log.info("Only one candidate with an admin level of %s and id %s.", next(iter(candidates.values()))["admin_level"], area_id)
         else:
             dialog = get().prepare_xrc_dialog(AreasBrowser, areas=candidates)
             res = dialog.ShowModal()
@@ -70,5 +71,8 @@ class AreaSelectionDialog(wx.Dialog):
         reply = request_area_creation(area_id, name)
         if reply and isinstance(reply, dict) and "state" in reply and reply["state"] == "Creating":
             wx.MessageBox(_("The area creation request has been sent successfully. The area will become updated in a few minutes."), _("Success"), style=wx.ICON_INFORMATION)
+        
+        elif reply and isinstance(reply, dict) and "state" in reply and reply["state"] in {"Creating", "Updated", "ApplyingChanges", "GettingChanges"}:
+            wx.MessageBox(_("The area creation request has already been sent."), _("Success"), style=wx.ICON_INFORMATION)
         else:
             wx.MessageBox(_("The area creation request failed. Response from server: {reply}").format(reply=reply), _("Failure"), style=wx.ICON_ERROR)

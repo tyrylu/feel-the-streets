@@ -34,7 +34,7 @@ def get_areas():
         return None
 
 def request_area_creation(area_id, area_name):
-    resp = session.post(url_for("areas"), json={"name": area_name, "id": area_id})
+    resp = session.post(url_for("areas"), json={"name": area_name, "osm_id": area_id})
     if resp.status_code in {200, 201}:
         return resp.json()
     else:
@@ -46,7 +46,7 @@ def download_area_database(area_id, progress_callback=None):
     if resp.status_code == 200:
         total = int(resp.headers.get("content-length", 0))
         chunk_size = 32*1024
-        fp = open(AreaDatabase.path_for(area_name, server_side=False), "wb")
+        fp = open(AreaDatabase.path_for(area_id, server_side=False), "wb")
         so_far = 0
         for chunk in resp.iter_content(chunk_size):
             so_far += len(chunk)
