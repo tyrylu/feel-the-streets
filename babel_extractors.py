@@ -1,5 +1,5 @@
 import re
-from shared.humanization_utils import format_class_name, underscored_to_words
+from app.humanization_utils import format_class_name, underscored_to_words
 
 def extract_xrc(fileobj, keywords, comment_tags, options):
     """Extract messages from xrc files.
@@ -41,14 +41,11 @@ def extract_entity_related_strings(fileobj, keywords, comment_tags, options):
     """
     for lineno, line in enumerate(fileobj):
         line = line.strip().decode("UTF-8")
-        match = re.match(r"class ([a-zA-Z0-9]+)\(([a-zA-Z0-9]+)\):", line)
-        if match:
-            parent = match.group(2)
-            if parent != "BaseModel" or parent != "enum.Enum":
-                yield (lineno, "", format_class_name(match.group(1)), [])
-        prop_math = re.match(r"([a-z0-9_]+): [a-zA-Z]", line)
-        if prop_math:
-            yield(lineno, "", underscored_to_words(prop_math.group(1)), [])
-        enum_math = re.match(r"([a-z0-9_]+) = \d+", line)
-        if enum_math:
-            yield (lineno, "", underscored_to_words(enum_math.group(1)), [])
+        if not line:
+            continue
+        key, value = line.split(":")
+        if key[0].isupper() and "entities.yml" in fileobj.name:
+            yield (lineno, "", format_class_name(key), [])
+        elif key[0].islower() and key not in {"fields", "display_template", "inherits"}:
+            yield(lineno, "", underscored_to_words(key), [])
+
