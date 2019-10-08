@@ -266,7 +266,7 @@ impl OSMObjectManager {
             }
         }
         if !missing.is_empty() {
-            info!(
+            debug!(
                 "Out of {} objects {} was missing.",
                 total_examined,
                 missing.len()

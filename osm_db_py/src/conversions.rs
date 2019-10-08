@@ -6,7 +6,7 @@ use std::rc::Rc;
 
 pub fn convert_value(val: &Value, py: &Python) -> PyObject {
     match val {
-        Value::Bool(b) => if *b { true.into_py(*py) } else { false.into_py(*py) },
+        Value::Bool(b) => (*b).into_py(*py),
         Value::String(str) => str.into_py(*py),
         Value::Number(n) => {
             if n.is_i64() {
