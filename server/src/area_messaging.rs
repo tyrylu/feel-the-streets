@@ -3,7 +3,7 @@ use lapin::options::{
     BasicPublishOptions, ExchangeDeclareOptions, QueueBindOptions, QueueDeclareOptions,
 };
 use lapin::types::FieldTable;
-use lapin::{BasicProperties, Channel};
+use lapin::{BasicProperties, Channel, ExchangeKind};
 use osm_db::semantic_change::SemanticChange;
 use serde_json;
 use sha3::{Digest, Sha3_256};
@@ -73,7 +73,7 @@ pub fn init_exchange(area_osm_id: i64) -> Result<()> {
         ..Default::default()
     };
     channel
-        .exchange_declare(&area_osm_id.to_string(), "fanout", opts, FieldTable::default())
+        .exchange_declare(&area_osm_id.to_string(), ExchangeKind::Fanout, opts, FieldTable::default())
         .wait()?;
     Ok(())
 }
