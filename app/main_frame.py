@@ -79,7 +79,7 @@ class MainFrame(wx.Frame):
         db = AreaDatabase.open_existing(area, server_side=False)
         db.begin()
         progress = wx.ProgressDialog(_("Change application"), _("Applying changes for the selected database."), style=wx.PD_APP_MODAL|wx.PD_ESTIMATED_TIME|wx.PD_ELAPSED_TIME|wx.PD_AUTO_HIDE, maximum=pending_count)
-        changelog_path = os.path.join(os.path.dirname(AreaDatabase.path_for("someplace", server_side=False)), "..", "changelogs", "{0}_{1}.txt".format(area, datetime.datetime.now().isoformat().replace(":", "_")))
+        changelog_path = os.path.join(os.path.dirname(AreaDatabase.path_for(12345, server_side=False)), "..", "changelogs", "{0}_{1}.txt".format(area, datetime.datetime.now().isoformat().replace(":", "_")))
         os.makedirs(os.path.dirname(changelog_path), exist_ok=True)
         changelog = open(changelog_path, "w", encoding="UTF-8")
         for nth, change in enumerate(retriever.new_changes_in(area)):
