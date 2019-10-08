@@ -7,10 +7,10 @@ Requirements
 ------------
 This application requires Python 3.6 to work, because it utilizes the new variable annotation syntax.
 For the rest of the requirements see the requirement files.
-The majority of them can be installed by invoking a pip install -r requirements/app.txt for the desktop app, or pip install -r requirements/server.txt for the server component.
-Using a shared pipfile would be nice, but until pipfile supports more than the dev packages directive, it is not possible.
+The majority of them can be installed by invoking a pip install -r app_requirements.tx.t
 In addition to the python requirements, it requires the loadable spatialite sqlite3 extension and the yajl2 library. In Debian, those are the libsqlite3-mod-spatialite and libyajl2 packages.
 Optionally, it can use the sqlite3 icu loadable extension. The resulting .so/.dll should be named icu.so or icu.dll, so the sqlite3 extension loading will find the entry point.
+The Rust components handle dependencies as any Rust project, so a cargo build in the root should do the trick.
 
 Components
 ----------
@@ -23,7 +23,5 @@ They might be split in the future, however.
 
 Running the server
 ------------------
-Not including the python package requirements, the server requires a running Rabbitmq broker with the delayed messages extension installed.
-The requirement for the extension might be relaxed in the future, but it is not a high priority task, but if someone wants, he can submit a pull request which makes it at least optional. It is doable, but i am afraid that the scheduling code will not be as efficient.
-If you want to run the flask development server, first set the FLASK_APP environment variable. Assuming you are in the project root, its value would be server.
-Next, you just run flask run.
+The server expects a Rabbitmq server running. The credentials should be in an environment variable named AMQP_BROKER_UR or in a .env file.
+To run it, after cargo build, just run target/debug/server.
