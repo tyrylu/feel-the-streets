@@ -17,6 +17,7 @@ Address:
     postcode: int
     conscriptionnumber: int
     housenumber: str
+    'housenumber:en': str
     streetnumber: str
     street: str
     provisionalnumber: int

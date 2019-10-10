@@ -4,13 +4,14 @@ use crate::Result;
 use crate::{area_messaging, diff_utils};
 use chrono::{DateTime, Utc};
 use diesel::{Connection, SqliteConnection};
+use lapin::Channel;
 use osm_api::change::OSMObjectChangeType;
 use osm_api::object_manager::OSMObjectManager;
 use osm_db::area_db::AreaDatabase;
 use osm_db::semantic_change::SemanticChange;
 use osm_db::translation::translator;
 
-fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
+fn update_area(area: &mut Area, conn: &SqliteConnection, publish_channel: &Channel) -> Result<()> {
     info!("Updating area {} (id {}).", area.name, area.osm_id);
     area.state = AreaState::GettingChanges;
     area.save(&conn)?;
@@ -106,8 +107,6 @@ fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
             }
         }
     }
-    let client = amqp_utils::connect_to_broker()?;
-    let channel = client.create_channel().wait()?;
     info!(
         "Area updated successfully, applyed {} semantic changes resulting from {} OSM changes.",
         semantic_changes.len(),
@@ -115,13 +114,11 @@ fn update_area(area: &mut Area, conn: &SqliteConnection) -> Result<()> {
     );
     info!("Publishing the changes...");
     for change in semantic_changes {
-        area_messaging::publish_change_on(&channel, &change, area.osm_id)?;
+        area_messaging::publish_change_on(&publish_channel, &change, area.osm_id)?;
     }
     info!("Changes successfully published.");
     area.state = AreaState::Updated;
     area.save(&conn)?;
-    channel.close(0, "Normal shutdown").wait()?;
-    info!("Channel successfully closed.");
     Ok(())
 }
 
@@ -129,9 +126,15 @@ pub fn update_area_databases() -> Result<()> {
     info!("Going to perform the area database update for all up-to date areas.");
     let area_db_conn = SqliteConnection::establish("server.db")?;
     let areas = Area::all_updated(&area_db_conn)?;
+    let rabbitmq_conn = amqp_utils::connect_to_broker()?;
+    let channel = rabbitmq_conn.create_channel().wait()?;
     for mut area in areas {
-        update_area(&mut area, &area_db_conn)?;
+        update_area(&mut area, &area_db_conn, &channel)?;
     }
     info!("Area updates finished successfully.");
+    channel.close(0, "Normal shutdown").wait()?;
+    info!("AMQP channel closed.");
+    rabbitmq_conn.close(0, "Normal shutdown").wait()?;
+    info!("Connection closed.");
     Ok(())
 }
