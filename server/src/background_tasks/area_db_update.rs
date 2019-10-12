@@ -132,9 +132,9 @@ pub fn update_area_databases() -> Result<()> {
         update_area(&mut area, &area_db_conn, &channel)?;
     }
     info!("Area updates finished successfully.");
-    channel.close(0, "Normal shutdown").wait()?;
-    info!("AMQP channel closed.");
-    rabbitmq_conn.close(0, "Normal shutdown").wait()?;
+    //channel.close(200, "Normal shutdown").wait()?;
+    //info!("AMQP channel closed.");
+    rabbitmq_conn.close(200, "Normal shutdown").wait()?;
     info!("Connection closed.");
     Ok(())
 }
