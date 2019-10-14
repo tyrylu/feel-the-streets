@@ -117,6 +117,7 @@ fn update_area(area: &mut Area, conn: &SqliteConnection, publish_channel: &Chann
         area_messaging::publish_change_on(&publish_channel, &change, area.osm_id)?;
     }
     info!("Changes successfully published.");
+    info!("After publishing, the channel status is: {:?}", publish_channel.status());
     area.state = AreaState::Updated;
     area.save(&conn)?;
     Ok(())
@@ -132,9 +133,11 @@ pub fn update_area_databases() -> Result<()> {
         update_area(&mut area, &area_db_conn, &channel)?;
     }
     info!("Area updates finished successfully.");
-    //channel.close(200, "Normal shutdown").wait()?;
-    //info!("AMQP channel closed.");
-    //rabbitmq_conn.close(200, "Normal shutdown").wait()?;
-    //info!("Connection closed.");
+    info!("Before closing, the channel status is: {:?}", channel.status());
+    info!("Before closing, the connection status is: {:?}", rabbitmq_conn.status());
+    channel.close(200, "Normal shutdown").wait()?;
+    info!("AMQP channel closed.");
+    rabbitmq_conn.close(200, "Normal shutdown").wait()?;
+    info!("Connection closed.");
     Ok(())
 }
