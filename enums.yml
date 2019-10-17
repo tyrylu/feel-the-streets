@@ -1834,6 +1834,7 @@ ShelterType:
   wather_shelter: 3
   weather_shelter: 6
   wildlife_hide: 7
+  sun_shelter: str
 SupportType:
   none: 0
   wall_mounted: 1
@@ -1908,6 +1909,7 @@ HealthCareType:
   psychotherapist: 3
   physiotherapist: 4
   dentist: 5
+  doctors: 6
 HealthCareSpeciality:
   paediatrics: 0
   emergency: 1
@@ -2330,3 +2332,7 @@ LifeCycle:
   in_use: 0
 Cemt:
   Va: 0
+RegionCategory:
+  physiographic: 0
+RegionType:
+  subprovince: 0

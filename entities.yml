@@ -1,3 +1,16 @@
+Region:
+  inherits: Named
+  fields:
+    wikipedia: str
+    wikidata: str
+    old_name: str
+    name_de: str
+    name_pl: str
+    name_nl: str
+    region_category: RegionCategory
+    region_type: RegionType
+    description: str
+    type: str
 Abandoned:
   inherits: Named
   fields:
@@ -111,6 +124,7 @@ Amenity:
   inherits: Addressable
   display_template: '{{ parent_display }} ({{ type }})'
   fields:
+    source: str
     type: AmenityType
     religion: str
     operator: str
@@ -308,6 +322,7 @@ Bank:
 Barrier:
   inherits: Named
   fields:
+    source: str
     type: '!BarrierType'
     foot: AccessType
     bicycle: AccessType
@@ -454,6 +469,7 @@ Bridge:
 Building:
   inherits: Addressable
   fields:
+    source: str
     levels: int
     flats: int
     amenity: AmenityType
@@ -616,8 +632,9 @@ Building:
     meal_vouchers_payment: bool
     amenity_1: AmenityType
     education: EducationType
-    ruian_type: RUIANType
+    ruian_type: RUIANType # Ensure all the ruian:type fields mapped, e. g. do a rename.
     ruian_building_ref: str
+    building: str # At least make it a bool
 BuildingPart:
   inherits: OSMEntity
   fields:
@@ -732,6 +749,7 @@ Craft:
 Crossing:
   inherits: Named
   fields:
+    source: str
     type: '!CrossingType'
     button_operated: bool
     bicycle: BicycleType
@@ -1004,6 +1022,7 @@ Land:
 Leisure:
   inherits: Addressable
   fields:
+    source: str
     type: '!LeisureType'
     sport: SportType
     surface: str
@@ -1091,6 +1110,11 @@ ManMade:
 Memorial:
   inherits: Historic
   fields:
+    'subject:wikidata': str # Rename it
+    'subject:wikipedia': str # Rename it
+    'artist:wikidata': str # Rename it
+    source: str
+    historic: str # Correct enum
     memorial_kind: MemorialKind
     url: str
     text: str
@@ -1260,6 +1284,8 @@ Piste:
 Place:
   inherits: Named
   fields:
+    'name:ru': str # Rename
+    'name:mk': str # Rename
     type: '!PlaceType'
     population: int
     wikipedia: str
@@ -1287,6 +1313,11 @@ Place:
 Platform:
   inherits: Named
   fields:
+    public_transport: str # Change type
+    highway: str # Correct enum
+    'ref:ztm': str # Rename
+    highway: str # Make it the enum it deserves
+    bus_routes: str
     train: bool
     bus: bool
     tram: bool
@@ -1365,6 +1396,9 @@ Power:
     frequency: int
     area: bool
     operator: str
+    start_date: str
+    ref: str
+    design: str # Make it an enum?
 PowerGenerator:
   inherits: Named
   fields:
@@ -1384,6 +1418,8 @@ PowerGenerator:
 PowerLine:
   inherits: Named
   fields:
+    start_date: str
+    power: str # Make it at least the enum
     type: PowerLineType
     cables: int
     voltage: int
@@ -1436,6 +1472,10 @@ PowerSubstation:
 ProtectedArea:
   inherits: Named
   fields:
+    source: str
+    boundary: str # Make it the proper enum
+    'name:de': str # Rename
+    iucn_level: str # Make it an int
     protect_class: int
     type: ProtectedAreaType
     website: str
@@ -1491,6 +1531,18 @@ PublicTransport:
 RailWay:
   inherits: Named
   fields:
+    ref: str
+    source: str
+    atb-ng: str # Make it a bool?
+    'source:date': str # Rename
+    'ref:ProRailSpoortak': str # Country specific, and rename it
+    loading_gauge: str # Make it an enum?
+    'ref:ProRailID': str # Is it an int?
+    atb: str # Is it a bool?
+    atb-eg: str # A bool?
+    'cutting:name': str # Rename
+    'note:nl': str # Rename
+
     type: '!RailWayType'
     gauge: str
     usage: RailWayUsage
@@ -1701,6 +1753,7 @@ Recycling:
     hazardous_waste: bool
     tyres: bool
     organic: bool
+    aluminium: str # Make it a bool
     barrier: BarrierType
     scrap_metal: bool
     fence_type: FenceType
@@ -1749,6 +1802,34 @@ Road:
   inherits: Named
   display_template: '{{ parent_display }} ({{ type }})'
   fields:
+    'name:nl': str # Rename
+    'name:fr': str # Rename
+    motorroad: str # Make it a bool
+    'source:width': str # Rename it
+    ref: str
+    'source:lit': str
+    'source:highway': str
+    construction: str # Make it the  proper enum
+    'turn:lanes': str
+    'source:maxspeed': str
+    source: str
+    'source:name': str # Rename
+    'vehicle:conditional': str # Rename
+    'TMC:cid_58:tabcd_1:LCLversion': str # Rename, make it a float
+    'TMC:cid_58:tabcd_1:LocationCode': str # Make an int and rename
+    'TMC:cid_58:tabcd_1:NextLocationCode': str # Make an int, rename
+    'TMC:cid_58:tabcd_1:PrevLocationCode': str # Make it an int and rename it
+    'TMC:cid_58:tabcd_1:Class': str # Make this an enum and rename it
+    milestone: str # Make this an integer
+    'note:ref': str # Rename it
+    'proposed:lanes': str # Rename it
+    'toll:bus': str # Rename and make it a bool
+    'toll:hgv': str # Rename and make it a bool
+    'source:maxaxleload': str # Rename it
+    'maxspeed:hgv:conditional': str # Rename it
+    'maxspeed:note': str # Rename it
+    'construction:end_date': str # Rename it
+    'turn:lanes:forward': str # Rename it
     type: RoadType
     railway: RailWayType
     int_ref: str
@@ -2100,6 +2181,18 @@ Road:
 Route:
   inherits: Named
   fields:
+    bdouble: str # Make it a bool
+    'name:cs': str # Rename it
+    'name:de': str # Rename it
+    'name:ru': str # Rename it
+    'name:pl': str # Rename it
+    'name:sk': str # Rename
+    'name:en': str # Rename
+    'name:fr': str # Rename
+    'name:nl': str # Rename
+    bus: str # An enum?
+    'network:type: str # Enum?
+    '
     type: '!RouteType'
     complete: str
     destinations: str
@@ -2260,6 +2353,8 @@ Sport:
 Steps:
   inherits: Named
   fields:
+    highway: str # Proper type
+    source: str
     direction: StepsDirection
     step_count: int
     surface: str
@@ -2307,6 +2402,10 @@ Steps:
 Stop:
   inherits: Named
   fields:
+    bus_routes: str
+    public_transport: str # Make it the proper enum
+    'ref:ztm': str # Make it an int and rename
+    ref: str
     type: StopType
     bus: bool
     tram: bool
@@ -2399,6 +2498,13 @@ Theatre:
 Tourism:
   inherits: Addressable
   fields:
+    ref: str
+    source: str
+    'subject:wikipedia': str # Rename it
+    'subject:wikidata': str # Rename it
+    'name:de': str # Rename it
+    'name:ru': str # Rename it
+    'name:en': str # Rename it
     type: '!TourismType'
     operator: str
     information_type: InfoType
@@ -2555,6 +2661,10 @@ Transformer:
     phases: int
     rating: str
     substation: PowerSubstationType
+    height: str # Make it an int
+    start_date: str
+    source: str
+    ref: str
 Tree:
   inherits: Natural
   fields:
@@ -2587,6 +2697,8 @@ WaterArea:
 WaterWay:
   inherits: Named
   fields:
+    'source:name': str # Rename it
+    'source:waterway': str # Rename it
     type: '!WaterWayType'
     alt_name: str
     tunnel: TunnelType

@@ -1,3 +1,12 @@
+Region:
+  renames:
+    'name:pl': name_pl
+    'name:de': name_de
+    'name:nl': name_nl
+  unprefixes: []
+  replaces_property_value: {}
+  accepts_when: [{property_equals: {type: [region]}}]
+
 Steps:
   renames:
     bycicles: bycicles_allowed
@@ -754,7 +763,7 @@ Building:
     payment:cryptocurrencies: cryptocurrencies_payment
     access:roof: roof_access
     payment:meal_vouchers: meal_vouchers_payment
-    ruian:type: ruian_type
+    'ruian:type': ruian_type
     ref:ruian:building: ruian_building_ref
   unprefixes:
   - building
