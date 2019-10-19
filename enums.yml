@@ -1834,7 +1834,7 @@ ShelterType:
   wather_shelter: 3
   weather_shelter: 6
   wildlife_hide: 7
-  sun_shelter: str
+  sun_shelter: 8
 SupportType:
   none: 0
   wall_mounted: 1
