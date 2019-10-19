@@ -2191,8 +2191,7 @@ Route:
     'name:fr': str # Rename
     'name:nl': str # Rename
     bus: str # An enum?
-    'network:type: str # Enum?
-    '
+    'network:type': str # Enum?
     type: '!RouteType'
     complete: str
     destinations: str
