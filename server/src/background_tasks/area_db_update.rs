@@ -5,6 +5,7 @@ use crate::{area_messaging, diff_utils};
 use chrono::{DateTime, Utc};
 use diesel::{Connection, SqliteConnection};
 use lapin::Channel;
+use lapin::options::ConfirmSelectOptions;
 use osm_api::change::OSMObjectChangeType;
 use osm_api::object_manager::OSMObjectManager;
 use osm_db::area_db::AreaDatabase;
@@ -116,7 +117,12 @@ fn update_area(area: &mut Area, conn: &SqliteConnection, publish_channel: &Chann
     for change in semantic_changes {
         area_messaging::publish_change_on(&publish_channel, &change, area.osm_id)?;
     }
-    info!("Changes successfully published.");
+    for confirmation in publish_channel.wait_for_confirms().wait()? {
+        if confirmation.reply_code != 200 {
+            warn!("Non 200 reply code from delivery: {:?}, code: {}, message: {}", confirmation.delivery, confirmation.reply_code, confirmation.reply_text);
+        }
+    }
+    info!("Changes published and replies checked.");
     info!("After publishing, the channel status is: {:?}", publish_channel.status());
     area.state = AreaState::Updated;
     area.save(&conn)?;
@@ -129,6 +135,7 @@ pub fn update_area_databases() -> Result<()> {
     let areas = Area::all_updated(&area_db_conn)?;
     let rabbitmq_conn = amqp_utils::connect_to_broker()?;
     let channel = rabbitmq_conn.create_channel().wait()?;
+    channel.confirm_select(ConfirmSelectOptions::default()).wait()?;
     for mut area in areas {
         update_area(&mut area, &area_db_conn, &channel)?;
     }
