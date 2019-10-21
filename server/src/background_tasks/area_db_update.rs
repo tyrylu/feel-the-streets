@@ -116,6 +116,12 @@ fn update_area(area: &mut Area, conn: &SqliteConnection, publish_channel: &Chann
     info!("Publishing the changes...");
     for change in semantic_changes {
         area_messaging::publish_change_on(&publish_channel, &change, area.osm_id)?;
+    for confirmation in publish_channel.wait_for_confirms().wait()? {
+        if confirmation.reply_code != 200 {
+            warn!("Non 200 reply code from delivery: {:?}, code: {}, message: {}", confirmation.delivery, confirmation.reply_code, confirmation.reply_text);
+        }
+    }
+    info!("One message done");
     }
     for confirmation in publish_channel.wait_for_confirms().wait()? {
         if confirmation.reply_code != 200 {
