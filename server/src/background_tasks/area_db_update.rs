@@ -121,8 +121,8 @@ fn update_area(area: &mut Area, conn: &SqliteConnection, publish_channel: &Chann
             warn!("Non 200 reply code from delivery: {:?}, code: {}, message: {}", confirmation.delivery, confirmation.reply_code, confirmation.reply_text);
         }
     }
-    info!("One message done");
     }
+    info!("Published, verifiing.");
     for confirmation in publish_channel.wait_for_confirms().wait()? {
         if confirmation.reply_code != 200 {
             warn!("Non 200 reply code from delivery: {:?}, code: {}, message: {}", confirmation.delivery, confirmation.reply_code, confirmation.reply_text);
