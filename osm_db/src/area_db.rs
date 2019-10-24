@@ -1,12 +1,12 @@
+use crate::{Error, Result};
 use crate::entities_query::EntitiesQuery;
 use crate::entity::{Entity, NotStoredEntity};
 use crate::semantic_change::SemanticChange;
 use rusqlite::types::ToSql;
-use rusqlite::{Connection, Error, OpenFlags, Row, Transaction};
+use rusqlite::{Connection, OpenFlags, Row, Transaction};
 use std::path::PathBuf;
 use std::time::Instant;
 
-type DbResult<T> = Result<T, rusqlite::Error>;
 
 const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
 const INSERT_ENTITY_SQL: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, geomFromWKB(?, 4326), ?, ?)";
@@ -23,15 +23,15 @@ fn row_to_entity(row: &Row) -> Entity {
     }
 }
 
-fn init_extensions(conn: &Connection) -> DbResult<()> {
+fn init_extensions(conn: &Connection) -> Result<()> {
     conn.load_extension_enable()?;
     conn.load_extension("mod_spatialite", None)?;
     Ok(())
 }
 
-fn geometry_is_valid_transacted(geometry: &[u8], tx: &Transaction) -> DbResult<bool> {
+fn geometry_is_valid_transacted(geometry: &[u8], tx: &Transaction) -> Result<bool> {
     let mut stmt = tx.prepare_cached("select isValid(geomFromWKB(?, 4326))")?;
-    stmt.query_row(&[&geometry], |row| row.get(0))
+    stmt.query_row(&[&geometry], |row| row.get(0)).map_err(Error::from)
 }
 
 pub struct AreaDatabase {
@@ -39,7 +39,7 @@ pub struct AreaDatabase {
 }
 
 impl AreaDatabase {
-    fn common_construct(conn: Connection) -> DbResult<Self> {
+    fn common_construct(conn: Connection) -> Result<Self> {
         Ok(Self { conn })
     }
      pub fn path_for(area: i64, server_side: bool) -> PathBuf {
@@ -54,13 +54,13 @@ impl AreaDatabase {
         root
     }
 
-    pub fn create(area: i64) -> DbResult<Self> {
+    pub fn create(area: i64) -> Result<Self> {
         let conn = Connection::open(&AreaDatabase::path_for(area, true))?;
         init_extensions(&conn)?;
         conn.execute_batch(INIT_AREA_DB_SQL)?;
         AreaDatabase::common_construct(conn)
     }
-    pub fn open_existing(area: i64, server_side: bool) -> DbResult<Self> {
+    pub fn open_existing(area: i64, server_side: bool) -> Result<Self> {
         let conn = Connection::open_with_flags(
             &AreaDatabase::path_for(area, server_side),
             OpenFlags::SQLITE_OPEN_READ_WRITE,
@@ -69,7 +69,7 @@ impl AreaDatabase {
         AreaDatabase::common_construct(conn)
     }
 
-    pub fn insert_entities<T>(&mut self, entities: T) -> DbResult<()>
+    pub fn insert_entities<T>(&mut self, entities: T) -> Result<()>
     where
         T: Iterator<Item = NotStoredEntity>,
     {
@@ -108,24 +108,24 @@ impl AreaDatabase {
         Ok(())
     }
 
-    pub fn has_entity(&self, osm_id: &str) -> DbResult<bool> {
+    pub fn has_entity(&self, osm_id: &str) -> Result<bool> {
         let mut stmt = self
             .conn
             .prepare_cached("select id from entities where json_extract(data, '$.osm_id') = ?")?;
-        stmt.exists(&[&osm_id])
+        stmt.exists(&[&osm_id]).map_err(Error::from)
     }
 
-    pub fn get_entity(&self, osm_id: &str) -> DbResult<Option<Entity>> {
+    pub fn get_entity(&self, osm_id: &str) -> Result<Option<Entity>> {
         let mut stmt = self.conn.prepare_cached("select id, discriminator, AsBinary(geometry) as geometry, data, effective_width from entities where json_extract(data, '$.osm_id') = ?")?;
         match stmt.query_row(&[&osm_id], row_to_entity) {
             Ok(e) => Ok(Some(e)),
             Err(e) => match e {
-                Error::QueryReturnedNoRows => Ok(None),
-                _ => Err(e),
+                rusqlite::Error::QueryReturnedNoRows => Ok(None),
+                _ => Err(Error::DbError(e)),
             },
         }
     }
-    pub fn get_entities(&self, query: &EntitiesQuery) -> DbResult<Vec<Entity>> {
+    pub fn get_entities(&self, query: &EntitiesQuery) -> Result<Vec<Entity>> {
         debug!("About to execute query {}", query.to_query_sql());
         let mut stmt = self.conn.prepare_cached(&query.to_query_sql())?;
         let orig_params = query.to_query_params();
@@ -147,7 +147,7 @@ impl AreaDatabase {
         x: f64,
         y: f64,
         fast: bool,
-    ) -> DbResult<Vec<Entity>> {
+    ) -> Result<Vec<Entity>> {
         let mut candidate_params = vec![];
         for i in 0..candidate_ids.len() {
             candidate_params.push(format!(":candidate{}", i));
@@ -180,7 +180,7 @@ impl AreaDatabase {
         geometry: &[u8],
         effective_width: &Option<f64>,
         data: &str,
-    ) -> DbResult<()> {
+    ) -> Result<()> {
         let mut stmt = if self.geometry_is_valid(&geometry)? {
             self.conn.prepare_cached(INSERT_ENTITY_SQL)?
         } else {
@@ -190,7 +190,7 @@ impl AreaDatabase {
         Ok(())
     }
 
-    fn remove_entity(&self, osm_id: &str) -> DbResult<()> {
+    fn remove_entity(&self, osm_id: &str) -> Result<()> {
         let mut stmt = self
             .conn
             .prepare_cached("delete from entities where json_extract(data, '$.osm_id') = ?")?;
@@ -198,7 +198,7 @@ impl AreaDatabase {
         Ok(())
     }
 
-    fn save_updated_entity(&self, entity: &Entity) -> DbResult<()> {
+    fn save_updated_entity(&self, entity: &Entity) -> Result<()> {
         let mut stmt = if self.geometry_is_valid(&entity.geometry)? {
             self.conn.prepare_cached("update entities set discriminator = ?, geometry = GeomFromWKB(?, 4326), effective_width = ?, data = ? where id = ?;")?
         } else {
@@ -214,7 +214,7 @@ impl AreaDatabase {
         Ok(())
     }
 
-    pub fn apply_change(&self, change: &SemanticChange) -> DbResult<()> {
+    pub fn apply_change(&self, change: &SemanticChange) -> Result<()> {
         use SemanticChange::*;
         match change {
             Create {
@@ -241,19 +241,19 @@ impl AreaDatabase {
         }
     }
 
-    fn geometry_is_valid(&self, geometry: &[u8]) -> DbResult<bool> {
+    fn geometry_is_valid(&self, geometry: &[u8]) -> Result<bool> {
         let mut stmt = self
             .conn
             .prepare_cached("select isValid(geomFromWKB(?, 4326))")?;
-        stmt.query_row(&[&geometry], |row| row.get(0))
+        stmt.query_row(&[&geometry], |row| row.get(0)).map_err(Error::from)
     }
 
-    pub fn begin(&self) -> DbResult<()> {
+    pub fn begin(&self) -> Result<()> {
         let mut stmt = self.conn.prepare_cached("BEGIN")?;
         stmt.execute(&[])?;
         Ok(())
     }
-    pub fn commit(&self) -> DbResult<()> {
+    pub fn commit(&self) -> Result<()> {
         let mut stmt = self.conn.prepare_cached("COMMIT")?;
         stmt.execute(&[])?;
         Ok(())

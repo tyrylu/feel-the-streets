@@ -21,12 +21,13 @@ pub mod background_task_delivery;
 pub mod background_tasks;
 pub mod datetime_utils;
 mod diff_utils;
+mod error;
 pub mod routes;
 mod schema;
 
 use diesel::SqliteConnection;
-
-pub type Result<T> = core::result::Result<T, failure::Error>;
+pub use error::Error;
+pub type Result<T> = core::result::Result<T, Error>;
 embed_migrations!();
 
 #[database("serverdb")]
@@ -34,8 +35,8 @@ pub struct DbConn(SqliteConnection);
 
 pub fn run_migrations(
     conn: &SqliteConnection,
-) -> std::result::Result<(), diesel_migrations::RunMigrationsError> {
-    embedded_migrations::run(conn)
+) -> Result<()> {
+    embedded_migrations::run(conn).map_err(Error::from)
 }
 
 pub fn init_logging() {

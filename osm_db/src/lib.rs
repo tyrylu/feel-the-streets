@@ -12,7 +12,11 @@ pub mod entities_query;
 pub mod entities_query_condition;
 pub mod entity;
 pub mod entity_metadata;
+mod error;
 pub mod semantic_change;
 pub mod translation;
 pub use crate::area_db::AreaDatabase;
+pub use crate::error::Error;
 pub use rusqlite::types::ToSql;
+
+pub type Result<T> = core::result::Result<T, Error>;

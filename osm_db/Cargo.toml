@@ -14,7 +14,7 @@ linked-hash-map = {version = "*", features = ["serde_impl"]}
 log = "*"
 uom = "*"
 rusqlite = {"version" = "0.14", "features" = ["bundled", "load_extension"]}
-failure = "*"
+thiserror = "*"
 hashbrown = {version="*", features=["serde"]}
 dirs = "*"
 base64 = "*"

@@ -2,6 +2,7 @@ use super::checks;
 use super::conversions;
 use super::spec::TranslationSpec;
 use crate::entity::NotStoredEntity;
+use crate::Error;
 use hashbrown::HashMap;
 use osm_api::object::OSMObject;
 use osm_api::object_manager::OSMObjectManager;
@@ -10,7 +11,7 @@ use serde_json::Value;
 pub fn translate(
     object: &OSMObject,
     manager: &OSMObjectManager,
-) -> Result<Option<NotStoredEntity>, failure::Error> {
+) -> Result<Option<NotStoredEntity>, Error> {
     let lookup_res = TranslationSpec::primary_discriminator_for_object(&object);
     match lookup_res {
         None => {

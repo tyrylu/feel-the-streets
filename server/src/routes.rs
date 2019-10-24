@@ -1,9 +1,7 @@
 use crate::area::{Area, AreaState};
 use crate::area_messaging;
 use crate::background_task::BackgroundTask;
-use crate::DbConn;
-use crate::Result;
-use failure::bail;
+use crate::{DbConn, Error, Result};
 use osm_db::AreaDatabase;
 use rocket::http::Status;
 use rocket::response::status;
@@ -48,7 +46,7 @@ pub fn maybe_create_area(
 pub fn download_area(area_osm_id: i64, client_id: String, conn: DbConn) -> Result<File> {
     let area = Area::find_by_osm_id(area_osm_id, &*conn)?;
     if area.state != AreaState::Updated {
-        bail!("Can not guarantee area data integrity.")
+        return Err(Error::DatabaseIntegrityError);
     } else {
         area_messaging::init_queue(&client_id, area_osm_id)?;
         Ok(File::open(AreaDatabase::path_for(area_osm_id, true))?)
