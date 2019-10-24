@@ -1,6 +1,7 @@
 use crate::change::{OSMObjectChange, OSMObjectChangeType};
 use crate::object::*;
 use crate::Result;
+use crate::Error;
 use hashbrown::HashMap;
 use std::io::Read;
 use std::str::FromStr;
@@ -193,7 +194,7 @@ impl<T: Read> OSMObjectChangeIterator<T> {
             },
             Err(e) => {
                 self.finished = true;
-                return Err(failure::Error::from(e));
+                return Err(Error::from(e));
             }
             event => panic!(format!("Unexpected event during parsing: {:?}", event)),
         }

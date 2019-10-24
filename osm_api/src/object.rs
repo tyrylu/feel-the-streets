@@ -1,4 +1,4 @@
-use failure::Error;
+use crate::Error;
 use hashbrown::HashMap;
 use std::str::FromStr;
 
@@ -20,10 +20,7 @@ impl FromStr for OSMObjectType {
             "node" => Ok(OSMObjectType::Node),
             "way" => Ok(OSMObjectType::Way),
             "relation" => Ok(OSMObjectType::Relation),
-            node_type => Err(failure::format_err!(
-                "Unknown node type specification: {}",
-                node_type
-            )),
+            node_type => Err(Error::UnknownNodeType(node_type.to_string())),
         }
     }
 }
