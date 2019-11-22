@@ -6,8 +6,14 @@ import logging
 
 known_enums = Enum.all_known()
 jinja2_env = jinja2.Environment(loader=jinja2.BaseLoader())
+template_cache = {}
 
 log = logging.getLogger(__name__)
+
+def get_template(metadata):
+    if metadata.discriminator not in template_cache:
+        template_cache[metadata.discriminator] = jinja2_env.from_string(metadata.display_template)
+    return template_cache[metadata.discriminator]
 
 def underscored_to_words(underscored):
     _ = getattr(builtins, "_", lambda s: s)
@@ -46,13 +52,13 @@ def get_class_display_name(klass):
     return _(format_class_name(klass))
 
 def describe_entity(entity, metadata=None):
-    template = None
     if not metadata:
         metadata = EntityMetadata.for_discriminator(entity.discriminator)
-    search_target = metadata
-    while not template:
-        template = search_target.display_template
-        search_target = search_target.parent_metadata
+    template_source = metadata
+    while True:
+        if template_source.display_template:
+            break
+        template_source = template_source.parent_metadata
     context = {}
     fields = metadata.all_fields
     for field_name in entity.defined_field_names:
@@ -61,14 +67,14 @@ def describe_entity(entity, metadata=None):
         value = entity.value_of_field(field_name)
         context[field_name] = format_field_value(value, fields[field_name].type_name)
     # Special variables
-    if search_target:
-        context["parent_display"] = describe_entity(entity, search_target)
+    if template_source.parent_metadata:
+        context["parent_display"] = describe_entity(entity, template_source.parent_metadata)
     context["class_name_display"] = get_class_display_name(entity.discriminator)
-    template_object = jinja2_env.from_string(template)
+    template_object = get_template(template_source)
     return template_object.render(**context)
 
 def describe_nested_object(obj, metadata):
     context = {}
     for key, val in obj.items():
         context[key] = format_field_value(val, metadata.fields[key].type_name)
-    return jinja2_env.from_string(metadata.display_template).render(**context)
+    return get_template(metadata).render(**context)

@@ -38,6 +38,7 @@ Address:
     housename: str
     country: str
     unit: str
+    flats: str # Maybe retype to int
 Addressable:
   inherits: Named
   display_template: '{{ parent_display }}{% if address is defined %}, {{ address }}{% endif %}'
@@ -2596,7 +2597,7 @@ Tourism:
     old_ref: str
     alt_name_cs: str
 Tower:
-  inherits: ManMadeType
+  inherits: ManMade
   fields:
     tower_type: TowerType
     building_part: BuildingPartType
