@@ -18,6 +18,24 @@ pub fn convert_address(tags: &HashMap<String, String>) -> (HashMap<String, Strin
     (address_fields, address_field_names)
 }
 
+fn convert_field_value(raw_value: &str, value_type: &str) -> Option<Value> {
+    match value_type {
+        "str" | "Address" => Some(Value::String(raw_value.to_string())),
+        "int" => convert_int(&raw_value),
+        "bool" => convert_bool(&raw_value),
+        "float" => convert_float(&raw_value),
+        "tons" => convert_to_tons(&raw_value),
+        "meters" => convert_to_meters(&raw_value),
+        _ => {
+            if let Some(enum_spec) = Enum::with_name(&value_type) {
+                convert_value_of_enum(&raw_value, &enum_spec)
+            } else {
+                panic!(format!("Failed to handle type specifier {}.", value_type))
+            }
+        }
+    }
+}
+
 pub fn convert_entity_data(
     discriminator: &str,
     entity_data: &HashMap<String, String>,
@@ -27,26 +45,8 @@ pub fn convert_entity_data(
         .all_fields();
     let mut converted_data = HashMap::new();
     for (key, value) in entity_data.iter() {
-        let type_name = match all_fields.get(key) {
-            Some(field) => field.type_name.as_str(),
-            None => "str",
-        };
-        let converted_value = match type_name {
-            "str" | "Address" => Some(Value::String(value.clone())),
-            "int" => convert_int(&value),
-            "bool" => convert_bool(&value),
-            "float" => convert_float(&value),
-            "tons" => convert_to_tons(&value),
-            "meters" => convert_to_meters(&value),
-            _ => {
-                if let Some(enum_spec) = Enum::with_name(&type_name) {
-                    convert_value_of_enum(&value, &enum_spec)
-                } else {
-                    panic!(format!("Failed to handle type specifier {}.", type_name))
-                }
-            }
-        };
-        if let Some(converted) = converted_value {
+        let type_name = all_fields.get(key).map(|f| f.type_name.as_str()).unwrap_or("str");
+                if let Some(converted) = convert_field_value(&value, &type_name) {
             converted_data.insert(key.clone(), converted);
         } else {
             warn!(
