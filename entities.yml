@@ -43,6 +43,7 @@ Addressable:
   inherits: Named
   display_template: '{{ parent_display }}{% if address is defined %}, {{ address }}{% endif %}'
   fields:
+    'ref:ruian:addr': str # Maybe change type and rename
     address: Address
     note: str
     is_in: str
@@ -125,6 +126,14 @@ Amenity:
   inherits: Addressable
   display_template: '{{ parent_display }} ({{ type }})'
   fields:
+    'payment:coins': str # Make it a bool
+    'payment:mastercard': str # Make it a bool
+    'payment:maestro': str
+    'payment:visaelectron: str'
+    'payment:visadebit': str
+    'payment:visa: str # Make it a bool
+    '
+    ref: str # Make it an int?
     source: str
     type: AmenityType
     religion: str
@@ -323,6 +332,7 @@ Bank:
 Barrier:
   inherits: Named
   fields:
+    tactile_paving: str # Make it a bool
     source: str
     type: '!BarrierType'
     foot: AccessType
@@ -396,6 +406,7 @@ Bench:
 BicycleParking:
   inherits: Amenity
   fields:
+    amenity: str # Make it the proper enum
     parking_type: BicycleParkingType
     surveillance: SurveillanceType
     surveillance_type: SurveillanceKind
@@ -406,6 +417,7 @@ BicycleParking:
 Board:
   inherits: Tourism
   fields:
+    information: str # Make it the proper enum
     board_type: BoardType
     board_number: int
     board_ref: int
@@ -425,6 +437,7 @@ Border:
 Boundary:
   inherits: Named
   fields:
+    source: str
     type: BoundaryType
     name_cs: str
     admin_level: int
@@ -470,6 +483,7 @@ Bridge:
 Building:
   inherits: Addressable
   fields:
+    'ruian:type': str # Make it an int
     source: str
     levels: int
     flats: int
@@ -750,7 +764,9 @@ Craft:
 Crossing:
   inherits: Named
   fields:
-    source: str
+    crossing_ref: str
+    'crossing:island': str
+    source: str # Make it a bool?
     type: '!CrossingType'
     button_operated: bool
     bicycle: BicycleType
@@ -1069,6 +1085,7 @@ Level:
 ManMade:
   inherits: Named
   fields:
+    source: str
     type: '!ManMadeType'
     classification: str
     image: str
@@ -1133,6 +1150,7 @@ Named:
 Natural:
   inherits: Named
   fields:
+    source: str
     type: '!NaturalType'
     lining: str
     man_made: ManMadeType
@@ -1182,6 +1200,7 @@ Notice:
 NoExit:
   inherits: OSMEntity
   fields:
+    noexit: str # Make it a bool
     fixme: str
     note: str
     todo: str
@@ -1235,6 +1254,8 @@ OSMEntity:
 
 Parking:
   fields:
+    source: str
+    amenity: str # Change to AmenityType
     paid: str
     capacity: int
     capacity_for_disabled: str
@@ -1314,6 +1335,7 @@ Place:
 Platform:
   inherits: Named
   fields:
+    source: str
     public_transport: str # Change type
     highway: str # Correct enum
     'ref:ztm': str # Rename
@@ -1383,6 +1405,7 @@ PostBox:
 Power:
   inherits: OSMEntity
   fields:
+    source: str
     type: '!PowerType'
     building: BuildingType
     layer: int
@@ -1446,6 +1469,7 @@ PowerPlant:
 PowerSubstation:
   inherits: Named
   fields:
+    power: str # A PowerType
     type: PowerSubstationType
     location: str
     voltage: str
@@ -1491,6 +1515,7 @@ ProtectedArea:
 Pub:
   inherits: Addressable
   fields:
+    amenity: str # Make it an AmenityType
     phone: str
     smoking: SmokingType
     facebook: str
@@ -1532,6 +1557,7 @@ PublicTransport:
 RailWay:
   inherits: Named
   fields:
+    'source:maxspeed': str
     ref: str
     source: str
     atb-ng: str # Make it a bool?
@@ -1731,6 +1757,7 @@ RailWay:
 Recycling:
   inherits: Named
   fields:
+    amenity: str # Change to AmenityType
     type: RecyclingType
     phone: str
     website: str
@@ -1803,6 +1830,16 @@ Road:
   inherits: Named
   display_template: '{{ parent_display }} ({{ type }})'
   fields:
+    'ref:ruian:street': str # Make it an int?
+    embedded_rails: str # Make an enum from the values?
+    'mtb:scale': str # Make it an int, rename it to mtb_scale on the road level and get it out from track
+    'footway:surface': str # Make it a surface
+    'cycleway:surface': str # Make it a Surface
+    'source:maxspeed:backward': str
+    'source:maxspeed:forward': str
+    'name:ru': str
+    'turn:lanes:backward': str
+    'source:ref': str
     'name:nl': str # Rename
     'name:fr': str # Rename
     motorroad: str # Make it a bool
@@ -2182,6 +2219,7 @@ Road:
 Route:
   inherits: Named
   fields:
+    source: str
     bdouble: str # Make it a bool
     'name:cs': str # Rename it
     'name:de': str # Rename it
@@ -2256,6 +2294,7 @@ SchoolThing:
 ServiceRoad:
   inherits: Road
   fields:
+    highway: str # Make it a RoadType
     delivery: bool
     frequency: int
     vehicle_backward: AccessType
@@ -2622,9 +2661,10 @@ Tower:
 Track:
   inherits: Road
   fields:
+    highway: str # Rename it and correct type
     motorcar_allowed: AccessType
     leisure: LeisureType
-    mtb_scale: int
+    mtb_scale: int # Get the mtb:scale props renamed to this
     mtb_scale_uphill: int
     forestry: bool
     bicycle_class: int
@@ -2657,6 +2697,7 @@ TrafficSign:
 Transformer:
   inherits: Power
   fields:
+    power: str # Make it PowerType
     transformer_type: TransformerType
     phases: int
     rating: str
@@ -2668,6 +2709,8 @@ Transformer:
 Tree:
   inherits: Natural
   fields:
+    source: str
+    natural: str # Make it a NaturalType
     taxon: str
     genus: str
     species: str
@@ -2683,6 +2726,7 @@ Tree:
 WaterArea:
   inherits: Named
   fields:
+    natural: str # Change type to NaturalType
     type: WaterAreaType
     reservoir_type: str
     alt_name: str
@@ -2697,6 +2741,9 @@ WaterArea:
 WaterWay:
   inherits: Named
   fields:
+    'name:de': str
+    'dibavod:id': str # Make it an int and rename it.
+    source: str
     'source:name': str # Rename it
     'source:waterway': str # Rename it
     type: '!WaterWayType'

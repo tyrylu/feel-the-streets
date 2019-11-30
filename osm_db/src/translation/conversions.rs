@@ -18,7 +18,7 @@ pub fn convert_address(tags: &HashMap<String, String>) -> (HashMap<String, Strin
     (address_fields, address_field_names)
 }
 
-fn convert_field_value(raw_value: &str, value_type: &str) -> Option<Value> {
+pub fn convert_field_value(raw_value: &str, value_type: &str) -> Option<Value> {
     match value_type {
         "str" | "Address" => Some(Value::String(raw_value.to_string())),
         "int" => convert_int(&raw_value),

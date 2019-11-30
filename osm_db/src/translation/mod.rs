@@ -1,4 +1,4 @@
 mod checks;
-mod conversions;
+pub mod conversions;
 mod spec;
 pub mod translator;

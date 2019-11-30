@@ -730,6 +730,7 @@ ManMadeType:
   windmill: 52
   wayside_shrine: 53
   mineshaft: 54
+  heat: 55
 SportType:
   none: 0
   tennis: 1
@@ -913,6 +914,7 @@ CrossingType:
   bicycle: 11
   cycle: 12
   controlled: 13
+  zebra: 14
 HistoricType:
   none: -1
   wayside_shrine: 0
@@ -955,6 +957,7 @@ TrafficCalmingType:
   chicane: 8
   island: 9
   cushion: 10
+  hump: 11
 WaterWayType:
   none: 0
   canal: 1
@@ -1024,6 +1027,7 @@ BuildingType:
   transformer_tower: 18
   ruins: 19
   construction: 20
+  tower: 21
 InfoType:
   none: 0
   guidepost: 1
@@ -1220,6 +1224,7 @@ LandType:
   park: 37
   community_food_growing: 38
   vliage_grenn: 39
+  service: 40
 BuildingPartType:
   'yes': 0
   civic: 1
@@ -1708,6 +1713,7 @@ NoticeCategory:
 InternetAccess:
   'yes': 0
   wlan: 1
+  no: 2
 SiteType:
   site: 0
   stop_area: 1
@@ -1910,6 +1916,7 @@ HealthCareType:
   physiotherapist: 4
   dentist: 5
   doctors: 6
+  pharmacy: 7
 HealthCareSpeciality:
   paediatrics: 0
   emergency: 1
@@ -2328,6 +2335,7 @@ WaterAreaType:
   lagoon: 10
   water: 11
   oxbow: 12
+  canal: 13
 LifeCycle:
   in_use: 0
 Cemt:
