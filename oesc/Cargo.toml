@@ -13,3 +13,4 @@ structopt="*"
 anyhow = "*"
 dotenv = "*"
 diesel = {version = "*", features = ["sqlite", "chrono"]}
+lapin = "*"

@@ -34,6 +34,7 @@ fn update_area(area: &mut Area, conn: &SqliteConnection, publish_channel: &Chann
     let mut first = true;
     let mut osm_change_count = 0;
     let mut semantic_changes = vec![];
+    area_db.begin()?;
     for change in manager.lookup_differences_in(area.osm_id, &after)? {
         osm_change_count += 1;
         use OSMObjectChangeType::*;
@@ -108,6 +109,7 @@ fn update_area(area: &mut Area, conn: &SqliteConnection, publish_channel: &Chann
             }
         }
     }
+    area_db.commit()?;
     info!(
         "Area updated successfully, applyed {} semantic changes resulting from {} OSM changes.",
         semantic_changes.len(),
@@ -121,12 +123,6 @@ fn update_area(area: &mut Area, conn: &SqliteConnection, publish_channel: &Chann
             warn!("Non 200 reply code from delivery: {:?}, code: {}, message: {}", confirmation.delivery, confirmation.reply_code, confirmation.reply_text);
         }
     }
-    }
-    info!("Published, verifiing.");
-    for confirmation in publish_channel.wait_for_confirms().wait()? {
-        if confirmation.reply_code != 200 {
-            warn!("Non 200 reply code from delivery: {:?}, code: {}, message: {}", confirmation.delivery, confirmation.reply_code, confirmation.reply_text);
-        }
     }
     info!("Changes published and replies checked.");
     info!("After publishing, the channel status is: {:?}", publish_channel.status());

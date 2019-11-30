@@ -1,3 +1,4 @@
+use lapin::options::ConfirmSelectOptions;
 use anyhow::Result;
 use osm_db::area_db::AreaDatabase;
 use osm_db::entities_query::EntitiesQuery;
@@ -15,6 +16,7 @@ pub fn change_field_type(entity: String, field: String, new_type: String) -> Res
     let server_conn = SqliteConnection::establish("server.db")?;
     let amq_conn = amqp_utils::connect_to_broker()?;
     let channel = amq_conn.create_channel().wait()?;
+    channel.confirm_select(ConfirmSelectOptions::default()).wait()?;
     for area in Area::all_updated(&server_conn)? {
         println!("Processing area {} (id {})...", area.name, area.osm_id);
         let area_db = AreaDatabase::open_existing(area.osm_id, true)?;
@@ -34,14 +36,21 @@ else {
 }
         }
 println!("Applying and publishing {} changes resulting from the type change...", changes.len());
+area_db.begin()?;
 for change in &changes {
     area_db.apply_change(change)?;
     area_messaging::publish_change_on(&channel, change, area.osm_id)?;
+    for confirmation in channel.wait_for_confirms().wait()? {
+        if confirmation.reply_code != 200 {
+            eprintln!("Non 200 reply code from delivery: {:?}, code: {}, message: {}", confirmation.delivery, confirmation.reply_code, confirmation.reply_text);
+        }
+    }
 }
+area_db.commit()?;
 println!("Area processed successfully.");
     }
 println!("Cleaning up...");
-channel.close(0, "Normal shutdown").wait()?;
-amq_conn.close(0, "Normal shutdown").wait()?;
+channel.close(200, "Normal shutdown").wait()?;
+amq_conn.close(200, "Normal shutdown").wait()?;
     Ok(())
 }
