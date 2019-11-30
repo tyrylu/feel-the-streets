@@ -36,7 +36,7 @@ def format_field_value(field_value, field_type):
             if isinstance(field_value, str):
                 log.warn("Field value %s of the enum %s expected to be an int.", field_value, field_type)
                 return underscored_to_words(field_value)
-            return underscored_to_words(Enum.with_name(field_type).name_for_value(field_value))
+            return underscored_to_words(Enum.with_name(field_type).name_for_value(field_value)) or field_value
         except ValueError: pass
     try:
         metadata = EntityMetadata.for_discriminator(field_type)
