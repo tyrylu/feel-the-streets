@@ -763,7 +763,7 @@ Building:
     payment:cryptocurrencies: cryptocurrencies_payment
     access:roof: roof_access
     payment:meal_vouchers: meal_vouchers_payment
-    'ruian:type': ruian_type
+    ruian:type: ruian_type
     ref:ruian:building: ruian_building_ref
   unprefixes:
   - building
