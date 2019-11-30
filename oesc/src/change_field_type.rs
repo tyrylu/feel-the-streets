@@ -11,7 +11,7 @@ use server::amqp_utils;
 use server::area_messaging;
 use std::process;
 
-pub fn change_field_type(entity: String, field: String, new_type: String) -> Result<()> {
+pub fn change_field_type(entity: String, field: String, new_type: String, force: bool) -> Result<()> {
     let _dotenv_path = dotenv::dotenv()?;
     let server_conn = SqliteConnection::establish("server.db")?;
     let amq_conn = amqp_utils::connect_to_broker()?;
@@ -31,8 +31,13 @@ if let Some(new_val) = conversions::convert_field_value(&old_val_str, &new_type)
 changes.push(SemanticChange::updating(entity.value_of_field("osm_id").as_str().expect("OSM Id not a string?"), vec![], vec![EntryChange::updating(&field, old_val, new_val)]));
 }
 else {
-    println!("Could not interpret value {} as the requested type {}, change will not be executed.", old_val, new_type);
+    if force {
+    eprintln!("Could not interpret value {} as the requested type {}, change will not be executed.", old_val, new_type);
     process::exit(1);
+    }
+    else {
+        eprintln!("Could not interpret value {} as the requested type {}, continuing regardless, force flag is in effect.", old_val, new_type);
+    }
 }
         }
 println!("Applying and publishing {} changes resulting from the type change...", changes.len());

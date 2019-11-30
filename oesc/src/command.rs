@@ -9,7 +9,10 @@ pub enum Command {
         /// The field upon which the change should be executed.
         field: String,
         /// The new type for the field. Note that the conversions must all pass before the change will be actually executed.
-        new_type: String
+        new_type: String,
+        /// If specified, ignores the type conversion failures and continues nonetheless.
+        #[structopt(long)]
+        force: bool
     },
     RemoveField {
         /// The entity type to operate against.
