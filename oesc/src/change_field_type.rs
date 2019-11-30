@@ -31,7 +31,7 @@ if let Some(new_val) = conversions::convert_field_value(&old_val_str, &new_type)
 changes.push(SemanticChange::updating(entity.value_of_field("osm_id").as_str().expect("OSM Id not a string?"), vec![], vec![EntryChange::updating(&field, old_val, new_val)]));
 }
 else {
-    if force {
+    if !force {
     eprintln!("Could not interpret value {} as the requested type {}, change will not be executed.", old_val, new_type);
     process::exit(1);
     }
