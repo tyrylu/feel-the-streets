@@ -21,5 +21,12 @@ pub enum Command {
         field: String,
         /// The new name for the field, if specified, the removal is actually a rename.
         new_name: Option<String>,
+    },
+    /// Shows a summary with the current values of a given field.
+    ViewFieldUsage {
+/// The entity to process.
+entity: String,
+/// The field to display statistics about.
+field: String
     }
 }

@@ -38,6 +38,7 @@ Crossing:
   accepts_when: [{property_equals: {highway: [crossing, traffic_signals]}}]
 ProtectedArea:
   renames:
+    name:de: name_de
     leisure: type
     description:cz: description_cz
   unprefixes: []
@@ -45,6 +46,7 @@ ProtectedArea:
   accepts_when: [{has_property: [protection_title]}, {property_equals: {boundary: [protected_area]}}]
 Platform:
   renames:
+    ref:ztm: ztm_ref
     route:ref: route_ref
     indoor:level: indoor_level
   unprefixes: []
@@ -52,6 +54,7 @@ Platform:
   accepts_when: [{property_equals: {public_transport: [platform]}}]
 Stop:
   renames:
+    ref:ztm: ztm_ref
     highway: type
     amenity: type
     railway: type
@@ -89,6 +92,10 @@ Boundary:
   accepts_when: [{has_property: [boundary]}]
 WaterWay:
   renames:
+    name:de: name_de
+    dibavod:id: dibavod_id
+    source:name: name_source
+    source:waterway: waterway_source
     waterway: type
     boat: boats_allowed
     motorboat: motor_boats_allowed
@@ -144,6 +151,29 @@ ServiceRoad:
   accepts_when: [{property_equals: {highway: [service]}}]
 Road:
   renames:
+    vehicle:conditional: vehicle_conditional
+    TMC:cid_58:tabcd_1:LCLversion: TMC_cid_58_tabcd_1_LCLversion
+    TMC:cid_58:tabcd_1:LocationCode: TMC_cid_58_tabcd_1_LocationCode
+    TMC:cid_58:tabcd_1:NextLocationCode: TMC_cid_58_tabcd_1_NextLocationCode
+        TMC:cid_58:tabcd_1:PrevLocationCode: TMC_cid_58_tabcd_1_PrevLocationCode
+        TMC:cid_58:tabcd_1:Class: TMC_cid_58_tabcd_1_Class
+        note:ref: note_ref
+        proposed:lanes: proposed_lanes
+        toll:bus: bus_toll
+        toll:hgv: hgv_toll
+        source:maxaxeload: maxaxleload_source
+        maxspeed:hgv:conditional: conditional_hgv_maxspeed
+        maxspeed:note: maxspeed_note
+        construction:end_date: construction_end_date
+        turn:lanes:forward: turn_lanes_forward
+    ref:ruian:street: ruian_street_ref
+    mtb:scale: mtb_scale
+    footway:surface: footway_surface
+    cycleway:surface: cycleway_surface
+    name:nl: name_nl
+    name:fr: name_fr
+    source:width: width_source
+    source:name: name_source
     highway: type
     junction: junction_type
     bicycle: bicycle_allowed
@@ -337,6 +367,12 @@ Road:
 RailWay:
   address_aware: true
   renames:
+    source:maxspeed: maxspeed_source
+    source:date: date_source
+    ref:ProRailSpoortak: ProRailSpoortak_ref
+    ref:ProRailID: ProRailID_ref
+    cutting:name: cutting_name
+    note:nl: note_nl
     railway: type
     bridge: is_bridge
     crossing:light: crossing_light
@@ -696,6 +732,7 @@ HealthCare:
 Building:
   address_aware: true
   renames:
+    building: type
     roof:height: roof_height
     roof:shape: roof_shape
     building:roof:shape: roof_shape
@@ -773,6 +810,11 @@ Building:
 Tourism:
   address_aware: true
   renames:
+    subject:wikipedia: subject_wikipedia
+    subject:wikidata: subject_wikidata
+    name:de: name_de
+    name:ru: name_ru
+    name:en: name_en
     tourism: type
     information: information_type
     url: website
@@ -890,6 +932,8 @@ Bunker:
   accepts_when: [{property_equals: {military: [bunker]}}]
 Place:
   renames:
+    name:ru: name_ru
+    name:mk: name_mk
     place: type
     alt_name:de: alt_name_de
     wikipedia:cs: wikipedia_cs
@@ -962,6 +1006,9 @@ Barrier:
   accepts_when: [{has_property: [barrier]}]
 Memorial:
   renames:
+    subject:wikidata: subject_wikidata
+    subject:wikipedia: subject_wikipedia
+    artist:wikidata: artist_wikidata
     memorial:type: memorial_type
     memorial: memorial_kind
     heritage:operator: heritage_operator
@@ -994,6 +1041,7 @@ TrafficSign:
 Addressable:
   address_aware: true
   renames:
+    ref:ruian:addr: ruian_addr_ref
     disused:name: disused_name
   unprefixes: []
   replaces_property_value: {}
@@ -1042,6 +1090,14 @@ Notice:
   accepts_when: [{property_equals: {'seamark:type': [notice]}}]
 Route:
   renames:
+    name:cs: name_cs
+    name:de: name_de
+    name:ru: name_ru
+    name:pl: name_pl
+    name:sk: name_sk
+    name:en: name_en
+    name:fr: name_fr
+    name:nl: name_nl
     route: type
     from: from_
     lcn:description: lcn_description

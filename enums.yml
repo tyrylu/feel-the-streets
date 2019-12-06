@@ -1,3 +1,7 @@
+PowerDesign:
+  h-frame: 0
+PublicTransportType:
+  platform: 0
 AbandonedType:
   path: 0
   unclassified: 1
@@ -1028,6 +1032,60 @@ BuildingType:
   ruins: 19
   construction: 20
   tower: 21
+  office: 22
+  school: 23
+  wayside_chapel: 24
+  chapel: 25
+  dormitory: 26
+  university: 27
+  church: 28
+  kindergarten: 29
+  synagogue: 30
+  retail: 31
+  supermarket: 32
+  hotel: 33
+  barn: 34
+  greenhouse: 35
+  basilica: 36
+  public: 37
+  detached: 38
+  hospital: 39
+  hut: 40
+  shed: 41
+  college: 42
+  farm_auxiliary: 43
+  kiosk: 44
+  temple: 45
+  station: 46
+  stadium: 47
+  collapsed: 48
+  sports_hall: 49
+  bungalow: 50
+  barge: 51
+  sports_centre: 52
+  hangar: 53
+  gate_house: 54
+  castle: 55
+  abandoned: 56
+  houseboat: 57
+  tent: 58
+  ship: 59
+  terrace: 60
+  garden_house: 61
+  gatehouse: 62 # Map to gate_house or vice versa
+  bell: 63
+  pavilion: 64
+  'locker rooms': 65
+  elevator: 66
+  wooden_deck: 67
+  column: 68
+  temporary: 69
+  stable: 70
+  monument: 71
+  water_tower: 72
+  cathedral: 73
+  guardhouse: 74
+  bunker: 75
 InfoType:
   none: 0
   guidepost: 1
@@ -1990,6 +2048,10 @@ TransportRelationship:
   platform: 1
   tram_stop: 2
   platform_edge: 3
+  stop_position: 4
+  station: 5
+  stop: 6
+  stop_area: 7
 PlaygroundType:
   sandpit: 0
   slide: 1
