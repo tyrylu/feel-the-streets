@@ -1,5 +1,31 @@
+NetworkType:
+  node_network: 0
+BusType:
+  coach: 0
+  bicycle: 1
+  yes: 2
+  school: 3
+  express: 4
+TMCcid58tabcd1ClassType:
+  Point: 0
+  point: 1 # Change to point
+EmbeddedRails:
+  tram: 0
+  yes: 1
+  rail: 2
+LoadingGauge:
+  GB+: 0
+  GC: 1
+  GB: 2
 PowerDesign:
   h-frame: 0
+  donau: 1
+  portal: 2
+  one-level: 3
+  bipole: 4
+  three-level: 5
+  flag: 6
+  barrell: 7
 PublicTransportType:
   platform: 0
 AbandonedType:
@@ -477,6 +503,10 @@ AmenityType:
   office: 141
   brewery: 142
   love_hotel: 143
+  motorcycle_parking: 144
+  recycling: 145
+  waste_basket: 146
+  waste_disposal: 147
 ShopType:
   none: 0
   unknown: 0
@@ -1481,6 +1511,29 @@ ConstructionType:
   parking: 17
   bus_stop: 18
   reatil: 19
+  primary: 20
+  primary_link: 21
+  secondary_link: 22
+  complete: 23
+  trunkk: 24
+  secondary: 25
+  service: 26
+  highway: 27
+  track: 28
+  footway: 29
+  trunk_link: 31
+  crossing: 31
+  pedestrian: 32
+  steps: 33
+  residential: 34
+  tertiary: 35
+  cycleway: 36
+  minor: 37
+  living_street: 38
+  'yes': 39
+  highway_link: 40
+  unclassified: 41
+  motorway_junction: 42
 IndustrialType:
   factory: 0
   distributor: 1

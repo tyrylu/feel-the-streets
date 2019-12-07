@@ -1090,6 +1090,7 @@ Notice:
   accepts_when: [{property_equals: {'seamark:type': [notice]}}]
 Route:
   renames:
+    network:type: network_type
     name:cs: name_cs
     name:de: name_de
     name:ru: name_ru

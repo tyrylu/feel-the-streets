@@ -1560,7 +1560,7 @@ RailWay:
     atb-ng: bool
     date_source: str
     ProRailSpoortak_ref: str
-    loading_gauge: str # Make it an enum?
+    loading_gauge: str # Change to LoadingGauge
     ProRailID_ref: float
     atb: bool
     atb-eg: bool
@@ -1827,7 +1827,7 @@ Road:
   display_template: '{{ parent_display }} ({{ type }})'
   fields:
     ruian_street_ref: int
-    embedded_rails: str # Make an enum from the values?
+    embedded_rails: str # Change to EmbeddedRails
     mtb_scale: str
     footway_surface: Surface
     cycleway_surface: Surface
@@ -1843,7 +1843,7 @@ Road:
     ref: str
     'source:lit': str
     'source:highway': str
-    construction: str # Make it the  proper enum
+    construction: str # Make it ConstructionType
     'turn:lanes': str
     'source:maxspeed': str
     source: str
@@ -1853,7 +1853,7 @@ Road:
     TMC_cid_58_tabcd_1_LocationCode: int
     TMC_cid_58_tabcd_1_NextLocationCode: int
     TMC_cid_58_tabcd_1_PrevLocationCode: int
-    TMC_cid_58_tabcd_1_Class: str # Make this an enum
+    TMC_cid_58_tabcd_1_Class: str # Change to TMCcid58tabcd1ClassType
     milestone: int
     note_ref: str
     proposed_lanes: str
@@ -2225,8 +2225,8 @@ Route:
     name_en: str
     name_fr: str
     name_nl: str
-    bus: str # An enum?
-    'network:type': str # Enum?
+    bus: str # Change to BusType
+    network_type: str # Change to NetworkType
     type: '!RouteType'
     complete: str
     destinations: str
