@@ -1144,7 +1144,7 @@ BuildingType:
   gate: 102
   offices: 103
   monastery: 104
-  '296' 105
+  '296': 105
   site: 106
   construcion: 107 # Map to construction when we can
   aviary: 108

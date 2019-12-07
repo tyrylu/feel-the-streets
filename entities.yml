@@ -129,7 +129,7 @@ Amenity:
     'payment:coins': bool
     'payment:mastercard': bool
     'payment:maestro': bool
-    'payment:visaelectron: bool
+    'payment:visaelectron': bool
     'payment:visadebit': bool
     payment:visa: bool
     ref: str

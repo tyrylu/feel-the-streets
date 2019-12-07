@@ -152,11 +152,11 @@ ServiceRoad:
 Road:
   renames:
     vehicle:conditional: vehicle_conditional
-    TMC:cid_58:tabcd_1:LCLversion: TMC_cid_58_tabcd_1_LCLversion
-    TMC:cid_58:tabcd_1:LocationCode: TMC_cid_58_tabcd_1_LocationCode
-    TMC:cid_58:tabcd_1:NextLocationCode: TMC_cid_58_tabcd_1_NextLocationCode
-        TMC:cid_58:tabcd_1:PrevLocationCode: TMC_cid_58_tabcd_1_PrevLocationCode
-        TMC:cid_58:tabcd_1:Class: TMC_cid_58_tabcd_1_Class
+    'TMC:cid_58:tabcd_1:LCLversion': TMC_cid_58_tabcd_1_LCLversion
+    'TMC:cid_58:tabcd_1:LocationCode': TMC_cid_58_tabcd_1_LocationCode
+    'TMC:cid_58:tabcd_1:NextLocationCode': TMC_cid_58_tabcd_1_NextLocationCode
+        'TMC:cid_58:tabcd_1:PrevLocationCode': TMC_cid_58_tabcd_1_PrevLocationCode
+        'TMC:cid_58:tabcd_1:Class': TMC_cid_58_tabcd_1_Class
         note:ref: note_ref
         proposed:lanes: proposed_lanes
         toll:bus: bus_toll
