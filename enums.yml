@@ -1513,7 +1513,7 @@ ConstructionType:
   primary_link: 21
   secondary_link: 22
   complete: 23
-  trunkk: 24
+  trunk: 24
   secondary: 25
   service: 26
   highway: 27
