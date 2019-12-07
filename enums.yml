@@ -1157,6 +1157,7 @@ BuildingType:
   campanile: 117
   cabine: 118 # Map to cabin
   medical_faclity: 119 # Map to medical_facility
+  storage_tank: 120
 
 
 InfoType:
