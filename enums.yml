@@ -25,9 +25,7 @@ PowerDesign:
   bipole: 4
   three-level: 5
   flag: 6
-  barrell: 7
-PublicTransportType:
-  platform: 0
+  barrel: 7
 AbandonedType:
   path: 0
   unclassified: 1

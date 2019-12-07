@@ -26,7 +26,19 @@ pub fn change_field_type(entity: String, field: String, new_type: String, force:
         let mut changes = vec![];
         for mut entity in area_db.get_entities(&query)?.into_iter() {
 let old_val = entity.value_of_field(&field).clone();
-let old_val_str = old_val.as_str().expect("Before conversion, the field was not a mere string.");
+let maybe_old_val_str = old_val.as_str();
+let old_val_str = if maybe_old_val_str.is_some() {
+    maybe_old_val_str.unwrap() }
+    else {
+        if force {
+            eprintln!("Value {} was not a string, continuing because of the force flag.", old_val);
+            continue;
+        }
+        else {
+            eprintln!("Value {} was not a string.", old_val);
+            process::exit(1);
+        }
+    };
 if let Some(new_val) = conversions::convert_field_value(&old_val_str, &new_type) {
 changes.push(SemanticChange::updating(entity.value_of_field("osm_id").as_str().expect("OSM Id not a string?"), vec![], vec![EntryChange::updating(&field, old_val, new_val)]));
 }
