@@ -2150,6 +2150,7 @@ TransportRelationship:
   station: 5
   stop: 6
   stop_area: 7
+  waiting_area: 8
 PlaygroundType:
   sandpit: 0
   slide: 1
