@@ -82,8 +82,8 @@ fn convert_int(value: &str) -> Option<Value> {
 
 fn convert_bool(value: &str) -> Option<Value> {
     match value {
-        "yes" => Some(Value::Bool(true)),
-        "no" => Some(Value::Bool(false)),
+        "yes" | "true" => Some(Value::Bool(true)),
+        "no" | "false" => Some(Value::Bool(false)),
         _ => {
             warn!("Could not interpret {} as a bool.", value);
             None

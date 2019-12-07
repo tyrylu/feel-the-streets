@@ -1009,7 +1009,6 @@ NaturalType:
   valley: 25
   hill: 26
 BuildingType:
-  none: -1
   unknown: 0
   'yes': 1
   residential: 2
@@ -1072,7 +1071,7 @@ BuildingType:
   ship: 59
   terrace: 60
   garden_house: 61
-  gatehouse: 62 # Map to gate_house or vice versa
+  gatehouse: 62 # Map gate_house from it
   bell: 63
   pavilion: 64
   'locker rooms': 65
@@ -1086,6 +1085,52 @@ BuildingType:
   cathedral: 73
   guardhouse: 74
   bunker: 75
+  sport: 76
+  courthouse: 77
+  '94': 78
+  store: 79
+  semidetached_house: 80
+  reservoir: 81
+  balcony: 82
+  bridge: 83
+  wayside_shrine: 84
+  building: 85
+  parish_hall: 86
+  religious: 87
+  clinic: 88
+  glasshouse: 89
+  riding_hall: 90
+  parking: 91
+  q: 92
+  storage: 93
+  '11,13,15': 94
+  grandstand: 95
+  gazebo: 96
+  library: 97
+  manufacture: 98
+  restaurant: 99
+  multipolygon: 100
+  museum: 101
+  gate: 102
+  offices: 103
+  monastery: 104
+  '296' 105
+  site: 106
+  construcion: 107 # Map to construction when we can
+  aviary: 108
+  Aviary: 109 # Map to the lowercased variant
+  government: 110
+  tank: 111
+  place_of_worship: 112
+  farm: 113
+  mosque: 114
+  no: 115
+  entrance: 116
+  campanile: 117
+  cabine: 118 # Map to cabin
+  medical_faclity: 119 # Map to medical_facility
+
+
 InfoType:
   none: 0
   guidepost: 1
