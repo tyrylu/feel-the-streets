@@ -48,7 +48,7 @@ pub struct OSMObjectManager {
     geometries_cache: RefCell<HashMap<String, Option<Geometry<f64>>>>,
     api_urls: Vec<&'static str>,
     cache_conn: Option<Connection>,
-    http_client: reqwest::Client,
+    http_client: reqwest::blocking::Client,
     seen_cache: RefCell<bool>,
 }
 
@@ -56,7 +56,7 @@ impl OSMObjectManager {
     pub fn new() -> Self {
         let conn = Connection::open("entity_cache.db").expect("Could not create connection.");
         conn.execute("PRAGMA SYNCHRONOUS=off", &[]).unwrap();
-        let client = reqwest::Client::builder()
+        let client = reqwest::blocking::Client::builder()
             .timeout(None)
             .build()
             .expect("Failed to create http client.");

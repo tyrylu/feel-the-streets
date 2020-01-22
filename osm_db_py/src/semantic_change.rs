@@ -21,8 +21,8 @@ impl PySemanticChange {
             ))),
         }
     }
-    #[getter("type")]
-    fn change_type(&self) -> i32 {
+    #[getter]
+    fn get_type(&self) -> i32 {
         match self.inner {
             SemanticChange::Create { .. } => crate::CHANGE_CREATE,
             SemanticChange::Update { .. } => crate::CHANGE_UPDATE,
