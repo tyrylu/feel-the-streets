@@ -1,11 +1,10 @@
-import pyfmodex as pf
-from pyfmodex.flags import MODE
+import openal
 import os
 import fnmatch
 import random
 from . import sndmgr
-mode_2d = MODE.TWOD
-mode_3d = MODE.THREED
+
+sndmgr = None
 
 class SoundManager(object):
     def __init__(self, sounds_dir="sounds", sound_extensions=["wav", "mp3", "ogg", "flac"], recursive_search=True, **system_init_args):
@@ -15,11 +14,11 @@ class SoundManager(object):
         self._group_counts = {}
         self._exts = sound_extensions
         self._property_patterns = []
-        self.fmodex_system = pf.System()
-        self.fmodex_system.init(**system_init_args)
+        openal.oalInit()
         self._recursive = recursive_search
         self._sounds_dir = sounds_dir
         self._index_dir(sounds_dir)
+        self.listener = openal.Listener()
         sndmgr = self
 
     def _index_dir(self, path):
@@ -50,28 +49,25 @@ class SoundManager(object):
             return self._sounds[name]
         props = self._lookup_properties(name)
         fname = self._sound_files[name]
-        if props.is_3d:
-            mode = mode_3d
-        else:
-            mode = mode_2d
-        sound = self.fmodex_system.create_sound(fname, mode)
+        sound = openal.oalOpen(fname)
         if props.min_distance is not None:
-            sound.min_distance = props.min_distance
+            sound.set_reference_distance(props.min_distance)
         self._sounds[name] = sound
         return sound
     
     def get_channel(self, name, set_loop=False, x=None, y=None, z=None, pan=None):
-        ch = self.get(name).play(paused=True)
-        if set_loop: ch.mode = 2
+        ch = self.get(name)
+        ch.set_looping(set_loop)
         if x is not None:
-            ch.position = [x, y, z]
-        if pan is not None: ch.pan = pan
+            ch.set_position([x, y, z])
+        if pan is not None:
+            ch.set_source_relative(True)
+            ch.set_position([pan, 0, 0])
         return ch
 
     def play(self, name, set_loop=False, x=None, y=None, z=None, pan=None):
         ch = self.get_channel(name, set_loop, x, y, z, pan)
-        ch.paused = False
-        self.fmodex_system.update() #Avoid out of channels error.
+        ch.play()
         return ch
     def add_property_pattern(self, pattern, props):
         self._property_patterns.append((pattern, props))

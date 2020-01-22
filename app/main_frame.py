@@ -77,6 +77,11 @@ class MainFrame(wx.Frame):
         if not pending_count:
             return
         db = AreaDatabase.open_existing(area, server_side=False)
+        generate_changelog = True
+        if pending_count > 10000:
+            resp = wx.MessageBox(_("The server reports %s pending changes. Do you really want to generate the changelog from all of them? It might take a while.")%pending_count, _("Question"), style=wx.ICON_QUESTION|wx.YES_NO)
+            if resp == wx.NO:
+                generate_changelog = False
         db.begin()
         progress = wx.ProgressDialog(_("Change application"), _("Applying changes for the selected database."), style=wx.PD_APP_MODAL|wx.PD_ESTIMATED_TIME|wx.PD_ELAPSED_TIME|wx.PD_AUTO_HIDE, maximum=pending_count)
         changelog_path = os.path.join(os.path.dirname(AreaDatabase.path_for(12345, server_side=False)), "..", "changelogs", "{0}_{1}.txt".format(area, datetime.datetime.now().isoformat().replace(":", "_")))
@@ -85,23 +90,25 @@ class MainFrame(wx.Frame):
         for nth, change in enumerate(retriever.new_changes_in(area)):
             progress.Update(nth, _("Applying changes for the selected database, change {nth} of {total}").format(nth=nth, total=pending_count))
             entity = None
-            if change.type is CHANGE_REMOVE:
-                entity = db.get_entity(change.osm_id)
+            if generate_changelog and change.type is CHANGE_REMOVE:
+                entity= db.get_entity(change.osm_id)
             db.apply_change(change)
-            if not entity:
-                if change.osm_id:
-                    entity = db.get_entity(change.osm_id)
-                    if not entity:
-                        log.error("Local database is missing entity with osm id %s, not generating changelog description for that one.", change.osm_id)
-                        continue
-                else:
-                    # This is somewhat ugly, but we really don't have the entity id in any other place and we need its discriminator.
-                    data = [c.new_value for c in change.property_changes if c.key == "data"][0]
-                    entity = db.get_entity(json.loads(data)["osm_id"])
-                    if not entity:
-                        log.error("No entity for osm id %s.", data["osm_id"])
-                        continue
-            changelog.write(get_change_description(change, entity))
+            wx.Yield()
+            if generate_changelog:
+                if not entity:
+                    if change.osm_id:
+                        entity = db.get_entity(change.osm_id)
+                        if not entity:
+                            log.error("Local database is missing entity with osm id %s, not generating changelog description for that one.", change.osm_id)
+                            continue
+                    else:
+                        # This is somewhat ugly, but we really don't have the entity id in any other place and we need its discriminator.
+                        data = [c.new_value for c in change.property_changes if c.key == "data"][0]
+                        entity = db.get_entity(json.loads(data)["osm_id"])
+                        if not entity:
+                            log.error("No entity for osm id %s.", data["osm_id"])
+                            continue
+                changelog.write(get_change_description(change, entity))
         db.commit()
         changelog.close()
         retriever.acknowledge_changes_for(area)

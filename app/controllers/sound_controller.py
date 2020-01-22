@@ -25,7 +25,7 @@ class SoundController:
         cartesian = sender.position.toCartesian()
         x, y, z = (cartesian.x, cartesian.y, cartesian.z)
         if self._point_of_view is sender:
-            sound().fmodex_system.listener().position = [x, y, z]
+            sound().listener.set_position([x, y, z])
         if not sender.use_step_sounds:
             return
         group_stack = self._groups_map[sender]
@@ -62,5 +62,4 @@ class SoundController:
     def _rotated(self, sender):
         if self._point_of_view is sender:
             angle = anglr.Angle(sender.direction, "degrees")
-            sound().fmodex_system.listener().forward = [angle.x, 0, angle.y] # The mapping to the mathematical cartesian coordinate system is x,z,y
-            sound().fmodex_system.update()
+            sound().listener.set_orientation([angle.x, 0, angle.y, 0, 1, 0]) # The mapping to the mathematical cartesian coordinate system is x,z,y
