@@ -46,7 +46,10 @@ def download_area_database(area_id, progress_callback=None):
     if resp.status_code == 200:
         total = int(resp.headers.get("content-length", 0))
         chunk_size = 32*1024
-        fp = open(AreaDatabase.path_for(area_id, server_side=False), "wb")
+        db_path = AreaDatabase.path_for(area_id, server_side=False)
+        dbs_dir = os.path.dirname(db_path)
+        os.makedirs(dbs_path, exist_ok=True)
+        fp = open(db_path, "wb")
         so_far = 0
         for chunk in resp.iter_content(chunk_size):
             so_far += len(chunk)
