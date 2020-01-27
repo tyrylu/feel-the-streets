@@ -48,7 +48,7 @@ def download_area_database(area_id, progress_callback=None):
         chunk_size = 32*1024
         db_path = AreaDatabase.path_for(area_id, server_side=False)
         dbs_dir = os.path.dirname(db_path)
-        os.makedirs(dbs_path, exist_ok=True)
+        os.makedirs(dbs_dir, exist_ok=True)
         fp = open(db_path, "wb")
         so_far = 0
         for chunk in resp.iter_content(chunk_size):
