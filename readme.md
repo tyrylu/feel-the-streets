@@ -9,9 +9,9 @@ This application requires Python 3.6 to work, because it utilizes the new variab
 For the rest of the requirements see the requirement files.
 The majority of them can be installed by invoking a pip install -r app_requirements.txt
 You can simplify wxpython installation by using your distribution's prebuild package, for example, python3-wxpython4 in Fedora.
-You can do something similar with shapely, e. g. by using the python3-shapely package is a good idea to have.
+You can do something similar with shapely, e. g. python3-shapely package is a good idea to have.
 
-In addition to the python requirements, it requires the loadable spatialite sqlite3 extension and under Linux, you need to install the openal library manually as well. In Debian, those are the libsqlite3-mod-spatialite packages.
+In addition to the python requirements, it requires the loadable spatialite sqlite3 extension and under Linux, you need to install the openal library manually as well. In fedora, those are the libspatialite and openal packages.
 Optionally, it can use the sqlite3 icu loadable extension. The resulting .so/.dll should be named icu.so or icu.dll, so the sqlite3 extension loading will find the entry point.
 The Rust components handle dependencies as any Rust project, so a cargo build in the root should do the trick.
 Note that because of Rocket a nightly rust compiler is necessary.

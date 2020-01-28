@@ -3,7 +3,7 @@ use crate::entities_query::EntitiesQuery;
 use crate::entity::{Entity, NotStoredEntity};
 use crate::semantic_change::SemanticChange;
 use rusqlite::types::ToSql;
-use rusqlite::{Connection, OpenFlags, Row, Transaction};
+use rusqlite::{Connection, OpenFlags, Row, Transaction, params, NO_PARAMS};
 use std::path::PathBuf;
 use std::time::Instant;
 
@@ -12,15 +12,15 @@ const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
 const INSERT_ENTITY_SQL: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, geomFromWKB(?, 4326), ?, ?)";
 const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, Buffer(geomFromWKB(?, 4326), 0), ?, ?)";
 
-fn row_to_entity(row: &Row) -> Entity {
-    Entity {
-        id: row.get(0),
-        geometry: row.get(2),
-        discriminator: row.get(1),
-        data: row.get(3),
-        effective_width: row.get(4),
+fn row_to_entity(row: &Row) -> core::result::Result<Entity, rusqlite::Error> {
+    Ok(Entity {
+        id: row.get_unwrap(0),
+        geometry: row.get_unwrap(2),
+        discriminator: row.get_unwrap(1),
+        data: row.get_unwrap(3),
+        effective_width: row.get_unwrap(4),
         parsed_data: None,
-    }
+    })
 }
 
 fn init_extensions(conn: &Connection) -> Result<()> {
@@ -84,11 +84,11 @@ impl AreaDatabase {
                     insert_tx.prepare(INSERT_ENTITY_SQL_BUFFERED)?
                 };
                 trace!("Inserting {:?}", entity);
-                match insert_stmt.execute(&[
-                    &entity.discriminator,
-                    &entity.geometry,
-                    &entity.effective_width,
-                    &entity.data,
+                match insert_stmt.execute(params![
+                    entity.discriminator,
+                    entity.geometry,
+                    entity.effective_width,
+                    entity.data,
                 ]) {
                     Ok(_) => count += 1,
                     Err(e) => {
@@ -170,7 +170,7 @@ impl AreaDatabase {
             query, candidate_ids
         );
         let mut stmt = self.conn.prepare_cached(&query)?;
-        let res = stmt.query_map_named(params.as_slice(), row_to_entity)?;
+        let res = stmt.query_map_named(params.as_slice(), row_to_entity).map_err(Error::from)?;
         Ok(res.map(|e| e.expect("Failed to retrieve entity")).collect())
     }
 
@@ -186,7 +186,7 @@ impl AreaDatabase {
         } else {
             self.conn.prepare_cached(INSERT_ENTITY_SQL_BUFFERED)?
         };
-        stmt.execute(&[&discriminator, &geometry, effective_width, &data])?;
+        stmt.execute(params![discriminator, geometry, effective_width, data])?;
         Ok(())
     }
 
@@ -204,12 +204,12 @@ impl AreaDatabase {
         } else {
             self.conn.prepare_cached("update entities set discriminator = ?, geometry = Buffer(GeomFromWKB(?, 4326), 0), effective_width = ?, data = ? where id = ?;")?
         };
-        stmt.execute(&[
-            &entity.discriminator,
-            &entity.geometry,
-            &entity.effective_width,
-            &entity.data,
-            &entity.id,
+        stmt.execute(params![
+            entity.discriminator,
+            entity.geometry,
+            entity.effective_width,
+            entity.data,
+            entity.id,
         ])?;
         Ok(())
     }
@@ -250,12 +250,12 @@ impl AreaDatabase {
 
     pub fn begin(&self) -> Result<()> {
         let mut stmt = self.conn.prepare_cached("BEGIN")?;
-        stmt.execute(&[])?;
+        stmt.execute(NO_PARAMS)?;
         Ok(())
     }
     pub fn commit(&self) -> Result<()> {
         let mut stmt = self.conn.prepare_cached("COMMIT")?;
-        stmt.execute(&[])?;
+        stmt.execute(NO_PARAMS)?;
         Ok(())
     }
 }

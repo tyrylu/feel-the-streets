@@ -19,7 +19,8 @@ readme = "README.md"
 license = "MIT"
 repository = "https://gitgud.io/Taywee/sqlitemap"
 [dependencies.rusqlite]
-version = "0.14"
+version = "*"
+features = ["bundled"]
 [dev-dependencies.flate2]
 version = "1.0"
 

@@ -10,6 +10,7 @@ use hashbrown::HashMap;
 use itertools::Itertools;
 use reqwest;
 use rusqlite::Connection;
+use rusqlite::NO_PARAMS;
 use serde::Deserialize;
 use serde_json::{self, Deserializer};
 use sqlitemap::SqliteMap;
@@ -55,7 +56,7 @@ pub struct OSMObjectManager {
 impl OSMObjectManager {
     pub fn new() -> Self {
         let conn = Connection::open("entity_cache.db").expect("Could not create connection.");
-        conn.execute("PRAGMA SYNCHRONOUS=off", &[]).unwrap();
+        conn.execute("PRAGMA SYNCHRONOUS=off", NO_PARAMS).unwrap();
         let client = reqwest::blocking::Client::builder()
             .timeout(None)
             .build()
@@ -176,7 +177,7 @@ impl OSMObjectManager {
         readable: Box<dyn Read>,
         return_objects: bool,
     ) -> Result<Vec<OSMObject>> {
-        self.cache_conn.as_ref().unwrap().execute("BEGIN", &[])?;
+        self.cache_conn.as_ref().unwrap().execute("BEGIN", NO_PARAMS)?;
         let start = Instant::now();
         let mut cache = self.get_cache();
         let mut objects = Vec::new();
@@ -512,7 +513,7 @@ impl OSMObjectManager {
         self.cache_conn
             .as_ref()
             .unwrap()
-            .execute("COMMIT", &[])
+            .execute("COMMIT", NO_PARAMS)
             .expect("Commit failed.");
     }
     pub fn lookup_differences_in(

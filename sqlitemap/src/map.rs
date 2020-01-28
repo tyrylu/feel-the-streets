@@ -4,6 +4,7 @@ use rusqlite::Connection;
 use rusqlite::MappedRows;
 use rusqlite::Result;
 use rusqlite::Row;
+use rusqlite::params;
 
 pub struct SqliteMap<'a> {
     replace_key_value: CachedStatement<'a>,
@@ -36,7 +37,7 @@ impl<'a> SqliteMap<'a> {
             )",
                     tablename, keytype, valuetype
                 ),
-                &[],
+                params![],
             )?;
         }
         let replace_key_value = connection.prepare_cached(&format!(
@@ -76,8 +77,8 @@ impl<'a> SqliteMap<'a> {
         R: FromSql,
     {
         let mut rows = self.select_value.query(&[key])?;
-        let output = match rows.next() {
-            Some(row) => row?.get_checked(0)?,
+        let output = match rows.next()? {
+            Some(row) => row.get(0)?,
             None => None,
         };
         self.replace_key_value.execute(&[key, value])?;
@@ -89,52 +90,51 @@ impl<'a> SqliteMap<'a> {
         R: FromSql,
     {
         let mut rows = self.select_value.query(&[key])?;
-        let row = match rows.next() {
-            Some(row) => row?,
+        let row = match rows.next()? {
+            Some(row) => row,
             None => return Ok(None),
         };
-        Ok(Some(row.get_checked(0)?))
+        Ok(Some(row.get(0)?))
     }
 
-    pub fn keys<R>(&mut self) -> Result<MappedRows<impl FnMut(&Row) -> R>>
+    pub fn keys<R>(&mut self) -> Result<MappedRows<impl FnMut(&Row) -> Result<R>>>
     where
         R: FromSql,
     {
-        self.select_keys.query_map(&[], |row| row.get(0))
+        self.select_keys.query_map(params![], |row| Ok(row.get_unwrap(0)))
     }
 
-    pub fn values<R>(&mut self) -> Result<MappedRows<impl FnMut(&Row) -> R>>
+    pub fn values<R>(&mut self) -> Result<MappedRows<impl FnMut(&Row) -> Result<R>>>
     where
         R: FromSql,
     {
-        self.select_values.query_map(&[], |row| row.get(0))
+        self.select_values.query_map(params![], |row| Ok(row.get_unwrap(0)))
     }
 
-    pub fn iter<K, V>(&mut self) -> Result<MappedRows<impl FnMut(&Row) -> (K, V)>>
+    pub fn iter<K, V>(&mut self) -> Result<MappedRows<impl FnMut(&Row) -> Result<(K, V)>>>
     where
         K: FromSql,
         V: FromSql,
     {
         self.select_keys_values
-            .query_map(&[], |row| (row.get(0), row.get(1)))
+            .query_map(params![], |row| Ok((row.get_unwrap(0), row.get_unwrap(1))))
     }
 
     pub fn contains_key(&mut self, key: &dyn ToSql) -> Result<bool> {
         let mut rows = self.select_key.query(&[key])?;
-        Ok(match rows.next() {
-            Some(Ok(_)) => true,
-            Some(Err(x)) => return Err(x),
+        Ok(match rows.next()? {
+            Some(_) => true,
             None => false,
         })
     }
 
     pub fn len(&mut self) -> Result<usize> {
-        let mut rows = self.select_count.query(&[])?;
-        let row = match rows.next() {
-            Some(row) => row?,
+        let mut rows = self.select_count.query(params![])?;
+        let row = match rows.next()? {
+            Some(row) => row,
             None => return Ok(0),
         };
-        let size: isize = row.get_checked(0)?;
+        let size: isize = row.get(0)?;
         Ok(size as usize)
     }
 
@@ -143,11 +143,11 @@ impl<'a> SqliteMap<'a> {
         R: FromSql,
     {
         let mut rows = self.select_value.query(&[key])?;
-        let row = match rows.next() {
-            Some(row) => row?,
+        let row = match rows.next()? {
+            Some(row) => row,
             None => return Ok(None),
         };
-        match row.get_checked(0) {
+        match row.get(0) {
             Ok(value) => {
                 self.delete_key.execute(&[key])?;
                 Ok(Some(value))
@@ -157,10 +157,9 @@ impl<'a> SqliteMap<'a> {
     }
 
     pub fn is_empty(&mut self) -> Result<bool> {
-        let mut rows = self.select_one.query(&[])?;
-        Ok(match rows.next() {
-            Some(Ok(_)) => false,
-            Some(Err(x)) => return Err(x),
+        let mut rows = self.select_one.query(params![])?;
+        Ok(match rows.next()? {
+            Some(_) => false,
             None => true,
         })
     }
