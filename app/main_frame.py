@@ -51,7 +51,7 @@ class MainFrame(wx.Frame):
             entity = map()._db.get_entities(query)[0]
             geom = wkb.loads(entity.geometry)
             if isinstance(geom, LineString):
-                geom = geom.representative_point
+                geom = geom.representative_point()
             lon = geom.x
             lat = geom.y
             person.move_to(LatLon(lat, lon))
