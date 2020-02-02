@@ -7,6 +7,8 @@ except ImportError:
 
 class SpeechDispatcherOutput(Output):
     name = "Linux Speech dispatcher"
+    priority = 100
+    
     def __init__(self):
         self._client = None
         if has_speechd_api:
