@@ -3,12 +3,14 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import appdirs
+import accessible_output2.outputs
 from accessible_output2.outputs import auto
 from .di import Singleton
 from .sound_manager import SoundManager, SoundProperties
 from .map import Map
 from .config import Config
 from .models import Base
+from . import speech_dispatcher_output
 
 def create_app_db():
     db_path = os.path.join(appdirs.user_data_dir("fts", appauthor=False, roaming=True), "app.db")
@@ -25,7 +27,12 @@ def create_sound():
     mgr.add_property_pattern("*", SoundProperties(is_3d=True, min_distance=1))
     return mgr
 
-speech = Singleton(auto.Auto)
+def create_speech():
+    # This hack inserts the speech dispatcher output to the known outputs for accessible_output2 and then returns the automatic output normally.
+    accessible_output2.outputs.__dict__["speech_dispatcher_output"] = speech_dispatcher_output
+    return auto.Auto()
+
+speech = Singleton(factory=create_speech)
 sound = Singleton(factory=create_sound)
 map = Singleton(Map)
 config = Singleton(Config)
