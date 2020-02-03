@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import appdirs
 import accessible_output2.outputs
-from accessible_output2.outputs import auto, e_speak
+from accessible_output2.outputs import auto
 from .di import Singleton
 from .sound_manager import SoundManager, SoundProperties
 from .map import Map
