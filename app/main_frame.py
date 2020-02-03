@@ -62,6 +62,7 @@ class MainFrame(wx.Frame):
             self._download_progress_dialog = wx.ProgressDialog(_("Download in progress"), _("Downloading the selected database."), parent=self, style=wx.PD_APP_MODAL|wx.PD_ESTIMATED_TIME|wx.PD_ELAPSED_TIME|wx.PD_AUTO_HIDE)
         percentage = int((so_far/total)*100)
         self._download_progress_dialog.Update(percentage, _("Downloading the selected database. Downloaded {so_far} of {total}.").format(so_far=format_size(so_far), total=format_size(total)))
+        wx.Yield()
 
     def _download_database(self, area):
         res = download_area_database(area, self._download_progress_callback)
@@ -92,6 +93,7 @@ class MainFrame(wx.Frame):
         changelog = open(changelog_path, "w", encoding="UTF-8")
         for nth, change in enumerate(retriever.new_changes_in(area)):
             progress.Update(nth, _("Applying changes for the selected database, change {nth} of {total}").format(nth=nth, total=pending_count))
+            wx.Yield()
             entity = None
             if generate_changelog and change.type is CHANGE_REMOVE:
                 entity= db.get_entity(change.osm_id)
