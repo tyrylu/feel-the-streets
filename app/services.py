@@ -12,6 +12,7 @@ from .map import Map
 from .config import Config
 from .models import Base
 from . import speech_dispatcher_output
+from .menu_service import MenuService
 
 def create_app_db():
     db_path = os.path.join(appdirs.user_data_dir("fts", appauthor=False, roaming=True), "app.db")
@@ -41,3 +42,4 @@ sound = Singleton(factory=create_sound)
 map = Singleton(Map)
 config = Singleton(Config)
 app_db_session = Singleton(factory=create_app_db)
+menu_service = Singleton(MenuService)

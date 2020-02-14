@@ -1,5 +1,5 @@
 import logging
-import wx
+from PySide2.QtWidgets import QMainWindow, QDialog, QProgressDialog, QApplication, QMessageBox, QWidget
 import os
 import json
 import datetime
@@ -11,7 +11,7 @@ from shapely.geometry.linestring import LineString
 from .entities import Person
 from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController, LastLocationController
 from .area_selection import AreaSelectionDialog
-from .services import map
+from .services import map, menu_service
 from .server_interaction import download_area_database, SemanticChangeRetriever, has_api_connectivity
 from .semantic_changelog_generator import get_change_description
 from osm_db import AreaDatabase, EntitiesQuery, CHANGE_REMOVE
@@ -23,25 +23,28 @@ def format_size(num_bytes):
     size = bitmath.Byte(num_bytes)
     return size.best_prefix().format("{value:.2f} {unit}")
 
-class MainFrame(wx.Frame):
+class MainWindow(QMainWindow):
 
-    def post_create(self):
+    def __init__(self):
+        super().__init__(None)
+        self.setWindowTitle("Feel the streets")
+        self.setCentralWidget(QWidget(self))
         self._download_progress_dialog = None
-        dlg = get().prepare_xrc_dialog(AreaSelectionDialog)
-        res = dlg.ShowModal()        
-        if res == wx.ID_CANCEL:
-            self.Close()
+        dlg = AreaSelectionDialog(self)
+        res = dlg.exec_()        
+        if res == QDialog.DialogCode.Rejected:
+            self.close()
             return
-        elif res == wx.ID_OK:
+        elif res == QDialog.DialogCode.Accepted:
             if not os.path.exists(AreaDatabase.path_for(dlg.selected_map, server_side=False)):
                 self._download_database(dlg.selected_map)
             else:
                 self._update_database(dlg.selected_map)
-            self.SetFocus()
             map.set_call_args(dlg.selected_map)
+            menu_service.set_call_args(self.menuBar())
         self._app_controller = ApplicationController(self)
         person = Person(map(), LatLon(0, 0))
-        self._person_controller = InteractivePersonController(person)
+        self._person_controller = InteractivePersonController(person, self)
         self._sound_controller = SoundController(person)
         self._announcements_controller = AnnouncementsController(person)
         self._last_location_controller = LastLocationController(person)
@@ -59,15 +62,17 @@ class MainFrame(wx.Frame):
    
     def _download_progress_callback(self, total, so_far):
         if not self._download_progress_dialog:
-            self._download_progress_dialog = wx.ProgressDialog(_("Download in progress"), _("Downloading the selected database."), parent=self, style=wx.PD_APP_MODAL|wx.PD_ESTIMATED_TIME|wx.PD_ELAPSED_TIME|wx.PD_AUTO_HIDE)
+            self._download_progress_dialog = QProgressDialog(_("Downloading the selected database."), "", 0, 100, self)
+            self._download_progress_dialog.setWindowTitle(_("Download in progress"))
         percentage = int((so_far/total)*100)
-        self._download_progress_dialog.Update(percentage, _("Downloading the selected database. Downloaded {so_far} of {total}.").format(so_far=format_size(so_far), total=format_size(total)))
-        wx.Yield()
+        self._download_progress_dialog.setLabelText(_("Downloading the selected database. Downloaded {so_far} of {total}.").format(so_far=format_size(so_far), total=format_size(total)))
+        self._download_progress_dialog.setValue(percentage)
+        QApplication.instance().processEvents()
 
     def _download_database(self, area):
         res = download_area_database(area, self._download_progress_callback)
         if not res:
-            wx.MessageBox(_("Download of the selected area had failed."), _("Download failure"), style=wx.ICON_ERROR)
+            QMessageBox.warning(self, _("Download failure"), _("Download of the selected area had failed."))
             self.Close()
             os.remove(AreaDatabase.path_for(area, server_side=False))
             return
@@ -83,22 +88,24 @@ class MainFrame(wx.Frame):
         db = AreaDatabase.open_existing(area, server_side=False)
         generate_changelog = True
         if pending_count > 10000:
-            resp = wx.MessageBox(_("The server reports %s pending changes. Do you really want to generate the changelog from all of them? It might take a while.")%pending_count, _("Question"), style=wx.ICON_QUESTION|wx.YES_NO)
-            if resp == wx.NO:
+            resp = QMessageBox.question(self, _("Question"), _("The server reports %s pending changes. Do you really want to generate the changelog from all of them? It might take a while.")%pending_count)
+            if resp == QMessageBox.StandardButton.Yes:
                 generate_changelog = False
         db.begin()
-        progress = wx.ProgressDialog(_("Change application"), _("Applying changes for the selected database."), style=wx.PD_APP_MODAL|wx.PD_ESTIMATED_TIME|wx.PD_ELAPSED_TIME|wx.PD_AUTO_HIDE, maximum=pending_count)
+        progress = QProgressDialog(_("Applying changes for the selected database."), "", 0, pending_count, self)
+        progress.setWindowTitle(_("Change application"))
         changelog_path = os.path.join(os.path.dirname(AreaDatabase.path_for(12345, server_side=False)), "..", "changelogs", "{0}_{1}.txt".format(area, datetime.datetime.now().isoformat().replace(":", "_")))
         os.makedirs(os.path.dirname(changelog_path), exist_ok=True)
         changelog = open(changelog_path, "w", encoding="UTF-8")
         for nth, change in enumerate(retriever.new_changes_in(area)):
-            progress.Update(nth, _("Applying changes for the selected database, change {nth} of {total}").format(nth=nth, total=pending_count))
-            wx.Yield()
+            progress.setLabelText(_("Applying changes for the selected database, change {nth} of {total}").format(nth=nth, total=pending_count))
+            progress.setValue(nth)
+            QApplication.instance().processEvents()
             entity = None
             if generate_changelog and change.type is CHANGE_REMOVE:
                 entity= db.get_entity(change.osm_id)
             db.apply_change(change)
-            wx.Yield()
+            QApplication.instance().processEvents()
             if generate_changelog:
                 if not entity:
                     if change.osm_id:
@@ -118,8 +125,8 @@ class MainFrame(wx.Frame):
         changelog.close()
         retriever.acknowledge_changes_for(area)
         changelog_size = os.path.getsize(changelog_path)
-        resp = wx.MessageBox(_("Successfully applied {total} changes. A changelog of size {size} was generated, do you want to view it now?").format(total=pending_count, size=format_size(changelog_size)), _("Success"), style=wx.ICON_QUESTION|wx.YES_NO)
-        if resp == wx.YES:
+        resp = QMessageBox.question(self, _("Success"), _("Successfully applied {total} changes. A changelog of size {size} was generated, do you want to view it now?").format(total=pending_count, size=format_size(changelog_size)))
+        if resp == QMessageBox.StandardButton.Yes:
             # Somewhat hacky, but os.startfile is not cross platform and the webbrowser way appears to be.
             webbrowser.open(changelog_path)
 

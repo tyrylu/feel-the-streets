@@ -1,14 +1,24 @@
-import wx
-import wx.xrc as xrc
+from PySide2.QtWidgets import QDialog, QListWidget, QPushButton, QLabel, QVBoxLayout
 import shapely.wkb as wkb
 from .geometry_utils import get_line_segments, find_closest_line_segment_of, to_shapely_point, to_latlon, distance_between
 from .services import map
 
-class RoadSegmentsBrowserDialog(wx.Dialog):
-    xrc_name = "road_segments_browser"
-    def post_init(self, person, road):
-        self.EscapeId = xrc.XRCID("close")
-        segments_list = self.FindWindowByName("segments")
+class RoadSegmentsBrowserDialog(QDialog):
+    
+    def __init__(self, parent, person, road):
+        super().__init__(parent)
+        self.setWindowTitle(_("Road details"))
+        layout = QVBoxLayout()
+        segments_label = QLabel(_("Road segments"), self)
+        layout.addWidget(segments_label)
+        segments_list = QListWidget(self)
+        segments_label.setBuddy(segments_list)
+        segments_list.setAccessibleName(segments_label.text())
+        layout.addWidget(segments_list)
+        close_button = QPushButton(_("Close"), self)
+        close_button.clicked.connect(self.accept)
+        layout.addWidget(close_button)
+        self.setLayout(layout)
         line = wkb.loads(road.geometry)
         segments = get_line_segments(line)
         closest = find_closest_line_segment_of(segments, to_shapely_point(person.position))
@@ -24,7 +34,7 @@ class RoadSegmentsBrowserDialog(wx.Dialog):
                 middle_distance = distance_between(person.position, segment_latlon)
                 start_distance = distance_between(to_latlon(segment.start), segment_latlon)
                 message = _("{start_distance:.2f} meters of {distance:.2f} meters in angle {angle:.2f}° distant from road center by {middle_distance:.2f}").format(start_distance=start_distance, distance=segment.length, angle=segment.angle, middle_distance=middle_distance)
-            segments_list.Append(message)
+            segments_list.addItem(message)
             if segment.current:
                 current_idx = idx
-        segments_list.Select(current_idx)
+        segments_list.setCurrentRow(current_idx)

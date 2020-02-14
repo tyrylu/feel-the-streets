@@ -1,1 +1,1 @@
-from .frame import ObjectsBrowserFrame
+from .window import ObjectsBrowserWindow

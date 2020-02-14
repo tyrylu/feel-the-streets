@@ -8,7 +8,7 @@ There already are some applications which can present the world's map on the lev
 This application requires Python 3.6 to work, because it utilizes the new variable annotation syntax.
 For the rest of the requirements see the requirement files.
 The majority of them can be installed by invoking a pip install -r app_requirements.txt
-You can simplify wxpython installation by using your distribution's prebuild package, for example, python3-wxpython4 in Fedora.
+You can simplify PySide2 installation by using your distribution's prebuild package, for example, python3-PySide2 in Fedora.
 You can do something similar with shapely, e. g. python3-shapely package is a good idea to have.
 
 In addition to the python requirements, it requires the loadable spatialite sqlite3 extension and under Linux, you need to install the openal library manually as well. In fedora, those are the libspatialite and openal packages.
@@ -20,6 +20,7 @@ And also the development headers for Openssl
 
 The basic components in the repository are:
 - app - the desktop application
+- oesc - the online schema maitenance tool
 - server - the api server which the desktop app uses to download and check available maps, also some server related management commands for schema changes.
 
 They might be split in the future, however.

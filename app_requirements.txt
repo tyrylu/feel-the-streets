@@ -9,7 +9,7 @@ appdirs
 accessible_output2
 https://github.com/tyrylu/uimanager/archive/master.zip
 blinker
-wxpython
+PySide2
 anglr
 bitmath
 pyopenal

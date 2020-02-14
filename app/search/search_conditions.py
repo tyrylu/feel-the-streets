@@ -1,24 +1,57 @@
-import wx
+from PySide2.QtCore import Qt
+from PySide2.QtWidgets import QDialog, QGridLayout, QPushButton, QLabel, QSpinBox, QTreeWidget, QTreeWidgetItem, QComboBox, QListWidget
 from osm_db import EntityMetadata, FieldNamed
 from ..humanization_utils import underscored_to_words, get_class_display_name
 from .operators import operators_for_column_class
 
-class SpecifySearchConditionsDialog(wx.Dialog):
-    xrc_name = "specify_search_conditions"
+class SpecifySearchConditionsDialog(QDialog):
     
-    def post_init(self, entity):
+    def __init__(self, parent, entity):
+        super().__init__(parent)
+        self.setWindowTitle(_("Search criteria"))
+        layout = QGridLayout()
+        fields_label = QLabel(_("Class fields"), self)
+        layout.addWidget(fields_label, 0, 0)
+        self._fields_tree = QTreeWidget(self)
+        fields_label.setBuddy(self._fields_tree)
+        layout.addWidget(self._fields_tree, 1, 0)
+        operator_label = QLabel(_("Operator"), self)
+        layout.addWidget(operator_label, 0, 1)
+        self._operator = QComboBox(self)
+        operator_label.setBuddy(self._operator)
+        layout.addWidget(self._operator, 1, 1)
+        add_button = QPushButton(_("&Add condition"), self)
+        add_button.clicked.connect(self.on_add_clicked)
+        layout.addWidget(add_button, 2, 0, 1, 3)
+        criteria_label = QLabel(_("Current search criteria"), self)
+        layout.addWidget(criteria_label, 3, 0, 1, 3)
+        self._criteria_list = QListWidget(self)
+        criteria_label.setBuddy(self._criteria_list)
+        layout.addWidget(self._criteria_list, 4, 0, 1, 3)
+        remove_button = QPushButton(_("&Remove"), self)
+        remove_button.clicked.connect(self.on_remove_clicked)
+        layout.addWidget(remove_button, 5, 0, 1, 3)
+        distance_label = QLabel(_("Search objects to distance (in meters, 0 no limit)"), self)
+        layout.addWidget(distance_label, 6, 0)
+        self._distance_field = QSpinBox(self)
+        distance_label.setBuddy(self._distance_field)
+        layout.addWidget(self._distance_field, 6, 1)
+        start_button = QPushButton(_("Start search"), self)
+        start_button.clicked.connect(self.accept)
+        layout.addWidget(start_button, 7, 0)
+        cancel_button = QPushButton(_("Cancel"), self)
+        cancel_button.clicked.connect(self.reject)
+        layout.addWidget(cancel_button, 7, 1)
+        self.setLayout(layout)
         self._entity = entity
-        self._fields = self.FindWindowByName("fields")
         self._value_widget = None
         self._value_label = None
         self._search_expression_parts = []
-        self._operator = self.FindWindowByName("operator")
-        self._conditions = self.FindWindowByName("conditions")
         self._populate_fields_tree(self._entity)
 
     def _populate_fields_tree(self, entity, parent=None):
         if parent is None:
-            parent = self._fields.AddRoot("Never to be seen")
+            parent = self._fields_tree.invisibleRootItem()
         metadata = EntityMetadata.for_discriminator(entity)
         for field_name, field in sorted(metadata.all_fields.items(), key=lambda i: underscored_to_words(i[0])):
             child_metadata = None
@@ -26,15 +59,16 @@ class SpecifySearchConditionsDialog(wx.Dialog):
                 child_metadata = EntityMetadata.for_discriminator(field.type_name)
             except KeyError: pass
             if child_metadata:
-                print(f"Create subtree for {field.type_name}")
                 name = get_class_display_name(field.type_name)
-                subparent = self._fields.AppendItem(parent, name)
-                self._fields.SetItemData(subparent, field_name)
+                subparent = QTreeWidgetItem([name])
+                subparent.setData(0, Qt.UserRole, field_name)
+                parent.addChild(subparent)
                 self._populate_fields_tree(field.type_name, subparent)
             else:
-                item = self._fields.AppendItem(parent, underscored_to_words(field_name))
-                self._fields.SetItemData(item, (field_name, field))
-
+                item = QTreeWidgetItem([underscored_to_words(field_name)])
+                item.setData(0, Qt.UserRole, (field_name, field))
+                parent.addChild(item)
+                
     def on_fields_tree_sel_changed(self, evt):
         data = self._fields.GetItemData(evt.Item)
         if data is not None and not isinstance(data, str):
