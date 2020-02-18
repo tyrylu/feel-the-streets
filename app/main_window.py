@@ -1,3 +1,4 @@
+import sys
 import logging
 from PySide2.QtWidgets import QMainWindow, QDialog, QProgressDialog, QApplication, QMessageBox, QWidget
 import os
@@ -33,7 +34,7 @@ class MainWindow(QMainWindow):
         dlg = AreaSelectionDialog(self)
         res = dlg.exec_()        
         if res == QDialog.DialogCode.Rejected:
-            self.close()
+            sys.exit(0) # In this place we don't have the application running yed, so the QT level exit call would be ignored.
             return
         elif res == QDialog.DialogCode.Accepted:
             if not os.path.exists(AreaDatabase.path_for(dlg.selected_map, server_side=False)):
