@@ -37,6 +37,7 @@ class InteractivePersonController:
     def _position_detailed_impl(self, objects):
         window = ObjectsBrowserWindow(self._main_window, title=_("Current position"), unsorted_objects=self._person.is_inside_of, person=self._person)
         window.show()
+        self._browser_window = window
     
     @menu_command(_("Information"), _("Detailed current position"), "shift+l")
     def position_detailed(self, evt):
@@ -53,8 +54,6 @@ class InteractivePersonController:
         self._browser_window = ObjectsBrowserWindow(self._main_window, title=_("Near by objects"), person=self._person, unsorted_objects=objects)
         self._browser_window.show()
 
-
-   
     @menu_command(_("Information"), _("Nearest"), "n")
     def do_nearest(self, evt):
         self._nearest_impl(self._person.map.within_distance(self._person.position, 100))
@@ -147,10 +146,12 @@ class InteractivePersonController:
     @menu_command(_("Information"), _("Search..."), "ctrl+f")
     def do_search(self, evt):
         results = perform_search(self._main_window, self._person.position)
+        print(len(results))
         if results:
             browser = ObjectsBrowserWindow(self._main_window, title=_("Search results"), unsorted_objects=results, person=self._person)
             browser.show()
-        else:
+            self._browser_window = browser
+        elif isinstance(results, list) and len(results) == 0:
             QMessageBox.information(self._main_window, _("Information"), _("No object matches the given search criteria."))
     
     @menu_command(_("Bookmarks"), _("Add bookmark..."), "ctrl+b")
