@@ -2,7 +2,6 @@ use crate::entity_metadata::EntityMetadata;
 use hashbrown::HashMap;
 use linked_hash_map::LinkedHashMap;
 use osm_api::object::OSMObject;
-use serde_yaml;
 use std::fs::File;
 
 lazy_static! {

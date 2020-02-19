@@ -104,20 +104,20 @@ pub fn write_geom_to_wkb<W: Write, T: Into<f64>+Float>(geom: &Geometry<T>, mut r
     // FIXME replace type signature with Into<Geometry<T>>
     // little endian
     result.write_u8(1);
-        match geom {
-        &Geometry::Point(p) => {
+        match *geom {
+        Geometry::Point(p) => {
             result.write_u32::<LittleEndian>(1);
             write_point(&p.0, &mut result);
         },
-        &Geometry::LineString(ref ls) => {
+        Geometry::LineString(ref ls) => {
             result.write_u32::<LittleEndian>(2);
             write_many_points(&ls.0, &mut result);
         },
-        &Geometry::Line(ref l) => {
+        Geometry::Line(ref l) => {
             result.write_u32::<LittleEndian>(2);
             write_many_points(&[l.start, l.end], &mut result);
         },
-        &Geometry::Polygon(ref p) => {
+        Geometry::Polygon(ref p) => {
             result.write_u32::<LittleEndian>(3);
             result.write_u32::<LittleEndian>(1 + p.interiors().len() as u32);
             write_many_points(&p.exterior().0, &mut result);
@@ -125,11 +125,11 @@ pub fn write_geom_to_wkb<W: Write, T: Into<f64>+Float>(geom: &Geometry<T>, mut r
                 write_many_points(&i.0, &mut result);
             }
         }
-        &Geometry::MultiPoint(ref mp) => {
+        Geometry::MultiPoint(ref mp) => {
             result.write_u32::<LittleEndian>(4);
             write_many_points(&mp.0.iter().map(|p| p.0).collect::<Vec<Coordinate<T>>>(), &mut result);
         },
-        &Geometry::MultiLineString(ref mls) => {
+        Geometry::MultiLineString(ref mls) => {
             result.write_u32::<LittleEndian>(5);
             result.write_u32::<LittleEndian>(mls.0.len() as u32);
             for ls in mls.0.iter() {
@@ -140,7 +140,7 @@ pub fn write_geom_to_wkb<W: Write, T: Into<f64>+Float>(geom: &Geometry<T>, mut r
                 write_many_points(&ls.0, &mut result);
             }
         },
-        &Geometry::MultiPolygon(ref mp) => {
+        Geometry::MultiPolygon(ref mp) => {
             result.write_u32::<LittleEndian>(6);
             result.write_u32::<LittleEndian>(mp.0.len() as u32);
             for poly in mp.0.iter() {
@@ -154,7 +154,7 @@ pub fn write_geom_to_wkb<W: Write, T: Into<f64>+Float>(geom: &Geometry<T>, mut r
                 }
             }
         },
-        &Geometry::GeometryCollection(ref gc) => {
+        Geometry::GeometryCollection(ref gc) => {
             result.write_u32::<LittleEndian>(7);
             result.write_u32::<LittleEndian>(gc.len() as u32);
             for geom in gc.0.iter() {

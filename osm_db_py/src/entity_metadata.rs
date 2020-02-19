@@ -43,7 +43,7 @@ impl PyEntityMetadata {
         self.inner
             .all_fields()
             .into_iter()
-            .map(|(k, f)| (k, PyField { inner: f.clone() }))
+            .map(|(k, f)| (k, PyField { inner: f }))
             .collect()
     }
 

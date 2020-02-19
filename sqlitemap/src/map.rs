@@ -122,10 +122,7 @@ impl<'a> SqliteMap<'a> {
 
     pub fn contains_key(&mut self, key: &dyn ToSql) -> Result<bool> {
         let mut rows = self.select_key.query(&[key])?;
-        Ok(match rows.next()? {
-            Some(_) => true,
-            None => false,
-        })
+        Ok(rows.next()?.is_some())
     }
 
     pub fn len(&mut self) -> Result<usize> {
@@ -158,9 +155,6 @@ impl<'a> SqliteMap<'a> {
 
     pub fn is_empty(&mut self) -> Result<bool> {
         let mut rows = self.select_one.query(params![])?;
-        Ok(match rows.next()? {
-            Some(_) => false,
-            None => true,
-        })
+        Ok(rows.next()?.is_none())
     }
 }

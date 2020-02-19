@@ -1,4 +1,3 @@
-use serde_yaml;
 use std::collections::HashMap;
 use std::fs::File;
 

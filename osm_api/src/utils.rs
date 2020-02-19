@@ -1,6 +1,5 @@
 use crate::object::OSMObject;
 use geo_types::LineString;
-use serde_json;
 use std::collections::HashMap;
 
 const POLYGON_CRITERIA_STR: &str = include_str!("polygon_criteria.json");

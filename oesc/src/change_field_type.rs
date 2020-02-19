@@ -26,11 +26,10 @@ pub fn change_field_type(entity: String, field: String, new_type: String, force:
         let mut changes = vec![];
         for mut entity in area_db.get_entities(&query)?.into_iter() {
 let old_val = entity.value_of_field(&field).clone();
-let maybe_old_val_str = old_val.as_str();
-let old_val_str = if maybe_old_val_str.is_some() {
-    maybe_old_val_str.unwrap() }
-    else {
-        if force {
+let old_val_str = match old_val.as_str() {
+    Some(s) => s,
+    None => {
+        if force        {
             eprintln!("Value {} was not a string, continuing because of the force flag.", old_val);
             continue;
         }
@@ -38,19 +37,20 @@ let old_val_str = if maybe_old_val_str.is_some() {
             eprintln!("Value {} was not a string.", old_val);
             process::exit(1);
         }
-    };
+    }
+};
+    
 if let Some(new_val) = conversions::convert_field_value(&old_val_str, &new_type) {
 changes.push(SemanticChange::updating(entity.value_of_field("osm_id").as_str().expect("OSM Id not a string?"), vec![], vec![EntryChange::updating(&field, old_val, new_val)]));
 }
-else {
-    if !force {
+else if !force {
     eprintln!("Could not interpret value {} as the requested type {}, change will not be executed.", old_val, new_type);
     process::exit(1);
     }
     else {
         eprintln!("Could not interpret value {} as the requested type {}, continuing regardless, force flag is in effect.", old_val, new_type);
     }
-}
+
         }
 println!("Applying and publishing {} changes resulting from the type change...", changes.len());
 area_db.begin()?;

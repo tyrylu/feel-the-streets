@@ -8,7 +8,6 @@ use chrono::{DateTime, Utc};
 use geo_types::{Geometry, GeometryCollection, LineString, Point, Polygon};
 use hashbrown::HashMap;
 use itertools::Itertools;
-use reqwest;
 use rusqlite::Connection;
 use rusqlite::NO_PARAMS;
 use serde::Deserialize;
@@ -222,8 +221,8 @@ impl OSMObjectManager {
     fn lookup_objects(&self, ids: &mut [String]) -> Result<()> {
         const MAX_SIMULTANEOUSLY_QUERYED: usize = 1_000_000;
         let mut objects: Vec<OSMObject> = Vec::with_capacity(ids.len());
-        ids.sort_unstable_by_key(|oid| oid.chars().nth(0));
-        for (entity_type, entity_ids) in &ids.iter().group_by(|oid| oid.chars().nth(0).unwrap()) {
+        ids.sort_unstable_by_key(|oid| oid.chars().next());
+        for (entity_type, entity_ids) in &ids.iter().group_by(|oid| oid.chars().next().unwrap()) {
             for chunk in &entity_ids.chunks(MAX_SIMULTANEOUSLY_QUERYED) {
                 let ids_str = chunk.map(|c| c[1..].to_string()).join(",");
                 let query = format_query(
