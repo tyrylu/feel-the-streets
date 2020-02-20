@@ -15,8 +15,9 @@ def main():
     # Now we can import the application window - we have the translation function.
     from .main_window import MainWindow
     mw = MainWindow()
-    mw.show()
-    sys.exit(app.exec_())
+    ret = app.exec_()
+    sys.exit(ret)
+
 
 
 if __name__ == "__main__":
