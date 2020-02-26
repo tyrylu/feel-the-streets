@@ -5,6 +5,7 @@ echo -e "Host $DEPLOY_TO\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 chmod 600 ./travis
 ssh-add travis
 # On the windows builder, we don't have any python3 and we need some.
-if [ "$TRAVIS_OS_NAME" = "windows" ] then
+if [ "$TRAVIS_OS_NAME" = "windows" ]
+then
 choco install -y python3
 fi
