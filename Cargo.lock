@@ -23,23 +23,23 @@ dependencies = [
 
 [[package]]
 name = "amq-protocol"
-version = "4.0.0"
+version = "4.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "amq-protocol-codegen 4.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "amq-protocol-tcp 4.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "amq-protocol-types 4.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "amq-protocol-uri 4.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "amq-protocol-codegen 4.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "amq-protocol-tcp 4.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "amq-protocol-types 4.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "amq-protocol-uri 4.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cookie-factory 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "nom 5.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "amq-protocol-codegen"
-version = "4.0.0"
+version = "4.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "amq-protocol-types 4.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "amq-protocol-types 4.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "handlebars 3.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.104 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_json 1.0.48 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -47,17 +47,17 @@ dependencies = [
 
 [[package]]
 name = "amq-protocol-tcp"
-version = "4.0.0"
+version = "4.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "amq-protocol-uri 4.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "amq-protocol-uri 4.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "mio 0.6.21 (registry+https://github.com/rust-lang/crates.io-index)",
  "tcp-stream 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "amq-protocol-types"
-version = "4.0.0"
+version = "4.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "cookie-factory 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -68,7 +68,7 @@ dependencies = [
 
 [[package]]
 name = "amq-protocol-uri"
-version = "4.0.0"
+version = "4.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "percent-encoding 2.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -931,11 +931,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "lapin"
-version = "0.30.0"
+version = "0.31.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "amq-protocol 4.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "amq-protocol-codegen 4.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "amq-protocol 4.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "amq-protocol-codegen 4.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "crossbeam-channel 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "mio 0.6.21 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1232,7 +1232,7 @@ dependencies = [
  "anyhow 1.0.26 (registry+https://github.com/rust-lang/crates.io-index)",
  "diesel 1.4.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "dotenv 0.15.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "lapin 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "lapin 0.31.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "osm_db 0.1.0",
  "server 0.1.0",
  "structopt 0.3.9 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1990,7 +1990,7 @@ dependencies = [
  "dotenv 0.15.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "env_logger 0.7.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "hex 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "lapin 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "lapin 0.31.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "osm_api 0.1.0",
  "osm_db 0.1.0",
@@ -2627,11 +2627,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum adler32 1.0.4 (registry+https://github.com/rust-lang/crates.io-index)" = "5d2e7343e7fc9de883d1b0341e0b13970f764c14101234857d2ddafa1cb1cac2"
 "checksum ahash 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)" = "0989268a37e128d4d7a8028f1c60099430113fdbc70419010601ce51a228e4fe"
 "checksum aho-corasick 0.7.8 (registry+https://github.com/rust-lang/crates.io-index)" = "743ad5a418686aad3b87fd14c43badd828cf26e214a00f92a384291cf22e1811"
-"checksum amq-protocol 4.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "7867b0dcd5123026993ab3fd1355e34c8b389fcb76486a938881f59197474410"
-"checksum amq-protocol-codegen 4.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "5de80946f0d1a22492a0d6cd1105295ea0278ea6170917cfe4c484f3ae2c7c43"
-"checksum amq-protocol-tcp 4.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "3e3c97c00cc0c55d85223c7ca7b76b82fda6db41e67c45d115e10f86a6fae9db"
-"checksum amq-protocol-types 4.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "c58142511610f0f86e3a6c9a6aed9ba2e2af9ab784d497c4b4b363a312252b43"
-"checksum amq-protocol-uri 4.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "099293f3162fe7937b4ec787dfa34fbafb28fa6a4316b59f0aca44c29e0da175"
+"checksum amq-protocol 4.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "685d8d93f13dabd603f32c04e86bb512f92f03d093e69a8866ae8429846320e3"
+"checksum amq-protocol-codegen 4.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "eef81ac020757c1c2a41eac05d11f1e867fbbf5a0e4304b4e48f50570a37bac1"
+"checksum amq-protocol-tcp 4.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "243f6a04296e9a231b19246a52fc084538de7650889c4dc025b341b527035b8d"
+"checksum amq-protocol-types 4.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "0d81293484e9bcf028abd062c608b61520f42cfd7cff477fcf0048c1825b295f"
+"checksum amq-protocol-uri 4.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "9e5c9a38ef537420a2a04adedc9befc3f1f62ba8c3f0457c2ae0e1375f191576"
 "checksum ansi_term 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)" = "ee49baf6cb617b853aa8d93bf420db2383fab46d314482ca2803b40d5fde979b"
 "checksum anyhow 1.0.26 (registry+https://github.com/rust-lang/crates.io-index)" = "7825f6833612eb2414095684fcf6c635becf3ce97fe48cf6421321e93bfbd53c"
 "checksum arrayref 0.3.6 (registry+https://github.com/rust-lang/crates.io-index)" = "a4c527152e37cf757a3f78aae5a06fbeefdb07ccc535c980a3208ee3060dd544"
@@ -2735,7 +2735,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum keccak 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "67c21572b4949434e4fc1e1978b99c5f77064153c59d998bf13ecd96fb5ecba7"
 "checksum kernel32-sys 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)" = "7507624b29483431c0ba2d82aece8ca6cdba9382bff4ddd0f7490560c056098d"
 "checksum language-tags 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)" = "a91d884b6667cd606bb5a69aa0c99ba811a115fc68915e7056ec08a46e93199a"
-"checksum lapin 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)" = "d02d374c0992e09c5e2fb73ade0331524a65b7440251be540e353b7f01f90cc3"
+"checksum lapin 0.31.0 (registry+https://github.com/rust-lang/crates.io-index)" = "087f8b2f3a76436436ba1f51a61752c22ab5c7271ebc74823ad16064255519e5"
 "checksum lazy_static 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 "checksum lazycell 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "b294d6fa9ee409a054354afc4352b0b9ef7ca222c69b8812cbea9e7d2bf3783f"
 "checksum lexical-core 0.6.2 (registry+https://github.com/rust-lang/crates.io-index)" = "d7043aa5c05dd34fb73b47acb8c3708eac428de4545ea3682ed2f11293ebd890"

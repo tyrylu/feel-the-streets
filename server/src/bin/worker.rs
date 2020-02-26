@@ -33,7 +33,7 @@ fn consume_tasks() -> Result<()> {
     channel.basic_qos(1, opts).wait()?;
     let consumer = channel
                 .basic_consume(
-            &tasks_queue,
+            &tasks_queue.name().as_str(),
             "tasks_consumer",
             BasicConsumeOptions::default(),
             FieldTable::default(),
