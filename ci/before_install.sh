@@ -7,5 +7,7 @@ ssh-add travis
 # On the windows builder, we don't have any python3 and we need some.
 if [ "$TRAVIS_OS_NAME" = "windows" ]
 then
-choco install -y python3
+choco install -y python3 --params "/InstallDir:C:\\Python"
+export PATH="/c/Python:/c/Python/Scripts:$PATH"
+python -m pip install --upgrade pip wheel
 fi
