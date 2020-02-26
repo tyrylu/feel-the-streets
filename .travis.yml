@@ -6,13 +6,13 @@ language: rust
 rust:
 - nightly
 script:
-- bash ci/build.sh
+- source ci/build.sh
 before_install:
-- bash ci/before_install.sh
+- source ci/before_install.sh
 deploy:
   skip_cleanup: true
   provider: script
-  script: bash ci/deploy.sh
+  script: source ci/deploy.sh
   on:
     branch: master
 notifications:
