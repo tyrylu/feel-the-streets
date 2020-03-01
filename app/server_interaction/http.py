@@ -6,10 +6,8 @@ import requests
 from ..services import config
 from osm_db import AreaDatabase
 
-if os.environ.get("API_DEBUG", "0") == "1":
-    API_ENDPOINT = "http://localhost:5000/api"
-else:
-    API_ENDPOINT = "https://fts.trycht.cz/api"
+API_ENDPOINT = os.environ.get("API_ENDPOINT", "https://fts.trycht.cz/api")
+
 log = logging.getLogger(__name__)
 
 session = requests.Session()

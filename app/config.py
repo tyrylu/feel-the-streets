@@ -33,4 +33,4 @@ class Config:
 
     @property
     def amqp_broker_url(self):
-        return "amqps://app:FeelTheStreets@fts.trycht.cz?socket_timeout=2.0" # Maybe store the value in the config too?
+        return os.environ.get("AMQP_BROKER_URL", "amqps://app:FeelTheStreets@fts.trycht.cz?socket_timeout=2.0") # Maybe store the value in the config too?
