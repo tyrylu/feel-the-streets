@@ -4,9 +4,9 @@ mkdir to_deploy
 if [ "$TRAVIS_OS_NAME" = "windows" ]
 then
 cp target/release/*.exe to_deploy/
+zip -r to_deploy/fts.zip dist/fts
 else
 cp target/release/{oesc,server,worker,create_area,recreate_all_areas,libosm_db\.so} to_deploy/
-zip -r to_deploy/fts.zip dist/fts
 fi
 cp Rocket.toml to_deploy/
 find . -name '*.yml' -exec cp {} to_deploy/ \;
