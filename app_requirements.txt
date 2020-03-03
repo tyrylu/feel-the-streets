@@ -2,7 +2,6 @@ pendulum
 pint
 attrs
 pygeodesy
-pydantic
 sqlalchemy
 pika
 appdirs
@@ -16,3 +15,4 @@ pyopenal
 pyogg
 shapely
 jinja2
+requests
