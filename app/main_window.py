@@ -90,10 +90,12 @@ class MainWindow(QMainWindow):
 
     def _update_database(self, area):
         if not has_api_connectivity():
+            self._on_map_ready()
             return
         retriever = SemanticChangeRetriever()
         self._pending_count = retriever.new_change_count_in(area)
         if not self._pending_count:
+            self._on_map_ready()
             return
         generate_changelog = True
         if self._pending_count > 10000:

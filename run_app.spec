@@ -1,4 +1,5 @@
 # -*- mode: python -*-
+from openal.al_lib import lib
 
 block_cipher = None
 
@@ -6,8 +7,8 @@ block_cipher = None
 a = Analysis(['run_app.py'],
              pathex=['C:\\Users\\lukas\\projekty\\feel the streets', r'c:\python3\lib\site-packages\pygeodesy'],
              binaries=[],
-             datas=[("app/sounds", "sounds"), ("app/ui.xrc", "."), ("locale", "locale")],
-             hiddenimports=["faker.providers"],
+             datas=[("app/sounds", "sounds"), ("locale", "locale"), ("*.yml", "."), (lib._name, ".")],
+             hiddenimports=[],
              hookspath=["hooks"],
              runtime_hooks=[],
              excludes=[],
@@ -19,11 +20,11 @@ pyz = PYZ(a.pure, a.zipped_data,
 exe = EXE(pyz,
           a.scripts,
           exclude_binaries=True,
-          name='run_app',
+          name='fts',
           debug=False,
           strip=False,
           upx=True,
-          console=False )
+          console=True )
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
