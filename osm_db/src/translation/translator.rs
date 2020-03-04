@@ -1,6 +1,7 @@
 use super::checks;
 use super::conversions;
 use super::spec::TranslationSpec;
+use super::record::TranslationRecord;
 use crate::entity::NotStoredEntity;
 use crate::Error;
 use hashbrown::HashMap;
@@ -11,6 +12,7 @@ use serde_json::Value;
 pub fn translate(
     object: &OSMObject,
     manager: &OSMObjectManager,
+    mut record: &mut TranslationRecord,
 ) -> Result<Option<NotStoredEntity>, Error> {
     let lookup_res = TranslationSpec::primary_discriminator_for_object(&object);
     match lookup_res {
@@ -23,10 +25,7 @@ pub fn translate(
                 interesting_len -= 1;
             }
             if interesting_len > 0 {
-                warn!(
-                    "Did not find a translation spec for potentially interesting object {:?}.",
-                    object
-                );
+                record.add_potentially_interesting_object(object.clone());
             } else {
                 trace!(
                     "Did not find a translation spec for object {}.",
@@ -74,7 +73,7 @@ pub fn translate(
             entity_data.insert("changeset".to_string(), object.changeset.to_string());
             entity_data.insert("user".to_string(), object.user.clone());
             entity_data.insert("uid".to_string(), object.uid.to_string());
-            let mut converted_data = conversions::convert_entity_data(&discriminator, &entity_data);
+            let mut converted_data = conversions::convert_entity_data(&discriminator, &entity_data, &mut record);
             // Address, must be done there, because we need to nest the object.
             let mut aware = false;
             for spec in &specs {
@@ -96,7 +95,7 @@ pub fn translate(
                 }
             }
 
-            if !checks::check_entity_data_consistency(&discriminator, &converted_data) {
+            if !checks::check_entity_data_consistency(&discriminator, &converted_data, &mut record) {
                 return Ok(None);
             }
             let raw_data =

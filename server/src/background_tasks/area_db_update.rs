@@ -10,9 +10,9 @@ use osm_api::change::OSMObjectChangeType;
 use osm_api::object_manager::OSMObjectManager;
 use osm_db::area_db::AreaDatabase;
 use osm_db::semantic_change::SemanticChange;
-use osm_db::translation::translator;
+use osm_db::translation::{translator, record::TranslationRecord};
 
-fn update_area(area: &mut Area, conn: &SqliteConnection, publish_channel: &Channel) -> Result<()> {
+fn update_area(area: &mut Area, conn: &SqliteConnection, publish_channel: &Channel, mut record: &mut TranslationRecord) -> Result<()> {
     info!("Updating area {} (id {}).", area.name, area.osm_id);
     area.state = AreaState::GettingChanges;
     area.save(&conn)?;
@@ -55,6 +55,7 @@ fn update_area(area: &mut Area, conn: &SqliteConnection, publish_channel: &Chann
             Create => translator::translate(
                 &change.new.expect("No new object for a create change"),
                 &manager,
+                &mut record
             )?
             .map(|o| {
                 SemanticChange::creating(o.geometry, o.discriminator, o.data, o.effective_width)
@@ -78,6 +79,7 @@ fn update_area(area: &mut Area, conn: &SqliteConnection, publish_channel: &Chann
                 let new = translator::translate(
                     &change.new.expect("No new entity during a modify"),
                     &manager,
+                    &mut record
                 )?;
                 match (old, new) {
                     (None, None) => None,
@@ -134,13 +136,16 @@ fn update_area(area: &mut Area, conn: &SqliteConnection, publish_channel: &Chann
 pub fn update_area_databases() -> Result<()> {
     info!("Going to perform the area database update for all up-to date areas.");
     let area_db_conn = SqliteConnection::establish("server.db")?;
+    let mut record = TranslationRecord::new();
     let areas = Area::all_updated(&area_db_conn)?;
     let rabbitmq_conn = amqp_utils::connect_to_broker()?;
     let channel = rabbitmq_conn.create_channel().wait()?;
     channel.confirm_select(ConfirmSelectOptions::default()).wait()?;
+    let now = Utc::now();
     for mut area in areas {
-        update_area(&mut area, &area_db_conn, &channel)?;
+        update_area(&mut area, &area_db_conn, &channel, &mut record)?;
     }
+    record.save_to_file(&format!("area_updates_{}.json", now.to_rfc3339()))?;
     info!("Area updates finished successfully.");
     info!("Before closing, the channel status is: {:?}", channel.status());
     info!("Before closing, the connection status is: {:?}", rabbitmq_conn.status());
