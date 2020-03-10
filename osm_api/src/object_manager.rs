@@ -305,8 +305,13 @@ impl OSMObjectManager {
         object: &'a OSMObject,
     ) -> Result<impl Iterator<Item = OSMObject> + 'a> {
         Ok(self.related_ids_of(&object)?.map(move |(id, maybe_role)| {
-            let mut related = self.get_cached_object(&id).unwrap();
-            OSMObjectManager::enrich_tags(&object, &mut related);
+            let mut related = match self.get_cached_object(&id) {
+                Some(obj) => obj,
+                None => {
+                    panic!("Object {} was not in the cache when it should.", id);
+                }
+            };
+                OSMObjectManager::enrich_tags(&object, &mut related);
             if let Some(role) = maybe_role {
                 related.tags.insert("role".to_string(), role);
             }

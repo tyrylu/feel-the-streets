@@ -27,9 +27,11 @@ Address:
   fields:
     place: str
     city: str
+    city_1: str
     postcode: int
     conscriptionnumber: int
     housenumber: str
+    official_housenumber: str
     'housenumber:en': str
     streetnumber: str
     street: str
@@ -37,6 +39,7 @@ Address:
     suburb: str
     housename: str
     country: str
+    province: str
     unit: str
     flats: int
 Addressable:
