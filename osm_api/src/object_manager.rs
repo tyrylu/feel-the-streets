@@ -304,13 +304,16 @@ impl OSMObjectManager {
         &'a self,
         object: &'a OSMObject,
     ) -> Result<impl Iterator<Item = OSMObject> + 'a> {
-        Ok(self.related_ids_of(&object)?.map(move |(id, maybe_role)| {
-            let mut related = match self.get_cached_object(&id) {
-                Some(obj) => obj,
-                None => {
-                    panic!("Object {} was not in the cache when it should.", id);
-                }
-            };
+        Ok(self.related_ids_of(&object)?.filter_map(move |(id, maybe_role)| {
+            let obj = self.get_cached_object(&id);
+            match obj {
+                Some(o) => Some((o, maybe_role)),
+                None => { 
+                    error!("The OSM API did not return the object with id {}. Assuming that it was not specified as a dependency for some other object.", id);
+                    None
+            }
+        }
+            }).map(move |(mut related, maybe_role)| {
                 OSMObjectManager::enrich_tags(&object, &mut related);
             if let Some(role) = maybe_role {
                 related.tags.insert("role".to_string(), role);
