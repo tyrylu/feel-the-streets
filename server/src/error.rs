@@ -14,7 +14,7 @@ pub enum Error {
     DieselConnectionError(#[from] diesel::ConnectionError),
     #[error("Osm  database error: {0}")]
     OsmDbError(#[from] osm_db::Error),
-        #[error("Osm API error: {0}")]
+    #[error("Osm API error: {0}")]
     OsmApiError(#[from] osm_api::Error),
     #[error("Datetime parssing error: {0}")]
     DateTimeParseError(#[from] chrono::format::ParseError),
@@ -23,6 +23,5 @@ pub enum Error {
     #[error("Can not guarantee database integrity")]
     DatabaseIntegrityError,
     #[error("Dotenv error: {0}")]
-    DotenvError(#[from] dotenv::Error)
-
+    DotenvError(#[from] dotenv::Error),
 }

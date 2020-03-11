@@ -52,10 +52,12 @@ impl Entity {
             if let EntryChange::Update { key, new_value, .. } = change {
                 match key.as_ref() {
                     "geometry" => {
-                        self.geometry = base64::decode(new_value
-                            .as_str()
-                            .expect("Non-string attempted to be set as a geometry")
-                            ).expect("The string was not a base64-encoded geometry")
+                        self.geometry = base64::decode(
+                            new_value
+                                .as_str()
+                                .expect("Non-string attempted to be set as a geometry"),
+                        )
+                        .expect("The string was not a base64-encoded geometry")
                     }
                     "discriminator" => {
                         self.discriminator = new_value

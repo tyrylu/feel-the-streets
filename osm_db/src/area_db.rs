@@ -1,12 +1,11 @@
-use crate::{Error, Result};
 use crate::entities_query::EntitiesQuery;
 use crate::entity::{Entity, NotStoredEntity};
 use crate::semantic_change::SemanticChange;
+use crate::{Error, Result};
 use rusqlite::types::ToSql;
-use rusqlite::{Connection, OpenFlags, Row, Transaction, params, NO_PARAMS};
+use rusqlite::{params, Connection, OpenFlags, Row, Transaction, NO_PARAMS};
 use std::path::PathBuf;
 use std::time::Instant;
-
 
 const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
 const INSERT_ENTITY_SQL: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, geomFromWKB(?, 4326), ?, ?)";
@@ -31,7 +30,8 @@ fn init_extensions(conn: &Connection) -> Result<()> {
 
 fn geometry_is_valid_transacted(geometry: &[u8], tx: &Transaction) -> Result<bool> {
     let mut stmt = tx.prepare_cached("select isValid(geomFromWKB(?, 4326))")?;
-    stmt.query_row(&[&geometry], |row| row.get(0)).map_err(Error::from)
+    stmt.query_row(&[&geometry], |row| row.get(0))
+        .map_err(Error::from)
 }
 
 pub struct AreaDatabase {
@@ -42,7 +42,7 @@ impl AreaDatabase {
     fn common_construct(conn: Connection) -> Result<Self> {
         Ok(Self { conn })
     }
-     pub fn path_for(area: i64, server_side: bool) -> PathBuf {
+    pub fn path_for(area: i64, server_side: bool) -> PathBuf {
         let mut root = if server_side {
             PathBuf::from(".")
         } else {
@@ -170,7 +170,9 @@ impl AreaDatabase {
             query, candidate_ids
         );
         let mut stmt = self.conn.prepare_cached(&query)?;
-        let res = stmt.query_map_named(params.as_slice(), row_to_entity).map_err(Error::from)?;
+        let res = stmt
+            .query_map_named(params.as_slice(), row_to_entity)
+            .map_err(Error::from)?;
         Ok(res.map(|e| e.expect("Failed to retrieve entity")).collect())
     }
 
@@ -222,7 +224,12 @@ impl AreaDatabase {
                 geometry,
                 effective_width,
                 data,
-            } => self.insert_entity(&discriminator, &base64::decode(&geometry).expect("Geometry should be base64 encoded"), &effective_width, &data),
+            } => self.insert_entity(
+                &discriminator,
+                &base64::decode(&geometry).expect("Geometry should be base64 encoded"),
+                &effective_width,
+                &data,
+            ),
             Remove { osm_id } => self.remove_entity(&osm_id),
             Update {
                 osm_id,
@@ -245,7 +252,8 @@ impl AreaDatabase {
         let mut stmt = self
             .conn
             .prepare_cached("select isValid(geomFromWKB(?, 4326))")?;
-        stmt.query_row(&[&geometry], |row| row.get(0)).map_err(Error::from)
+        stmt.query_row(&[&geometry], |row| row.get(0))
+            .map_err(Error::from)
     }
 
     pub fn begin(&self) -> Result<()> {

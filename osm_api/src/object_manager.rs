@@ -1,4 +1,3 @@
-use std::iter::FromIterator;
 use crate::change::OSMObjectChange;
 use crate::change_iterator::OSMObjectChangeIterator;
 use crate::object::{OSMObject, OSMObjectFromNetwork, OSMObjectSpecifics, OSMObjectType};
@@ -18,6 +17,7 @@ use std::cmp;
 use std::fs;
 use std::io::{self, BufReader, Read, Seek, SeekFrom};
 use std::iter;
+use std::iter::FromIterator;
 use std::time::Instant;
 use tempfile::tempfile;
 const QUERY_RETRY_COUNT: u8 = 3;
@@ -40,7 +40,10 @@ fn format_query(timeout: u32, query: &str) -> String {
 }
 
 fn format_data_retrieval(area: i64) -> String {
-    format!(r#"((area({area});node(area);area({area});way(area);area({area});rel(area);>>;);>>;)"#, area = area)
+    format!(
+        r#"((area({area});node(area);area({area});way(area);area({area});rel(area);>>;);>>;)"#,
+        area = area
+    )
 }
 
 pub struct OSMObjectManager {
@@ -176,7 +179,10 @@ impl OSMObjectManager {
         readable: Box<dyn Read>,
         return_objects: bool,
     ) -> Result<Vec<OSMObject>> {
-        self.cache_conn.as_ref().unwrap().execute("BEGIN", NO_PARAMS)?;
+        self.cache_conn
+            .as_ref()
+            .unwrap()
+            .execute("BEGIN", NO_PARAMS)?;
         let start = Instant::now();
         let mut cache = self.get_cache();
         let mut objects = Vec::new();
@@ -308,7 +314,7 @@ impl OSMObjectManager {
             let obj = self.get_cached_object(&id);
             match obj {
                 Some(o) => Some((o, maybe_role)),
-                None => { 
+                None => {
                     error!("The OSM API did not return the object with id {}. Assuming that it was not specified as a dependency for some other object.", id);
                     None
             }
@@ -427,7 +433,6 @@ impl OSMObjectManager {
                     .map(|o| self.get_geometry_of(&o))
                     .filter_map(|g| g.ok())
                     .filter_map(|g| g),
-                    
             ),
         )))
     }

@@ -72,7 +72,12 @@ pub fn init_exchange(area_osm_id: i64) -> Result<()> {
         ..Default::default()
     };
     channel
-        .exchange_declare(&area_osm_id.to_string(), ExchangeKind::Fanout, opts, FieldTable::default())
+        .exchange_declare(
+            &area_osm_id.to_string(),
+            ExchangeKind::Fanout,
+            opts,
+            FieldTable::default(),
+        )
         .wait()?;
     Ok(())
 }

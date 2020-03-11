@@ -1,7 +1,7 @@
 use super::checks;
 use super::conversions;
-use super::spec::TranslationSpec;
 use super::record::TranslationRecord;
+use super::spec::TranslationSpec;
 use crate::entity::NotStoredEntity;
 use crate::Error;
 use hashbrown::HashMap;
@@ -52,7 +52,7 @@ pub fn translate(
                     }
                     for unprefixes in &spec.unprefixes {
                         if new_key.starts_with(unprefixes) {
-                                                        trace!("Unprefixing {}.", new_key);
+                            trace!("Unprefixing {}.", new_key);
                             new_key = new_key.replace(&format!("{}:", unprefixes), "");
                             break;
                         }
@@ -63,8 +63,8 @@ pub fn translate(
                             new_value = new_value.replace(old, new);
                         }
                     }
-                                    }
-                                    entity_data.insert(new_key, new_value);
+                }
+                entity_data.insert(new_key, new_value);
             }
             // Common fields
             entity_data.insert("osm_id".to_string(), object.unique_id());
@@ -73,7 +73,8 @@ pub fn translate(
             entity_data.insert("changeset".to_string(), object.changeset.to_string());
             entity_data.insert("user".to_string(), object.user.clone());
             entity_data.insert("uid".to_string(), object.uid.to_string());
-            let mut converted_data = conversions::convert_entity_data(&discriminator, &entity_data, &mut record);
+            let mut converted_data =
+                conversions::convert_entity_data(&discriminator, &entity_data, &mut record);
             // Address, must be done there, because we need to nest the object.
             let mut aware = false;
             for spec in &specs {
@@ -95,7 +96,8 @@ pub fn translate(
                 }
             }
 
-            if !checks::check_entity_data_consistency(&discriminator, &converted_data, &mut record) {
+            if !checks::check_entity_data_consistency(&discriminator, &converted_data, &mut record)
+            {
                 return Ok(None);
             }
             let raw_data =

@@ -1,11 +1,17 @@
-use crate::entity_metadata::EntityMetadata;
 use super::record::TranslationRecord;
+use crate::entity_metadata::EntityMetadata;
 use hashbrown::{HashMap, HashSet};
 use serde_json::Value;
 
-pub fn check_entity_data_consistency(discriminator: &str, data: &HashMap<String, Value>, mut record: &mut TranslationRecord) -> bool {
+pub fn check_entity_data_consistency(
+    discriminator: &str,
+    data: &HashMap<String, Value>,
+    mut record: &mut TranslationRecord,
+) -> bool {
     match EntityMetadata::for_discriminator(discriminator) {
-        Some(metadata) => check_entity_data_consistency_against_metadata(data, &metadata, &mut record),
+        Some(metadata) => {
+            check_entity_data_consistency_against_metadata(data, &metadata, &mut record)
+        }
         None => {
             warn!(
                 "Failed to get the entity metadata for discriminator {}!",
@@ -26,7 +32,7 @@ fn check_entity_data_consistency_against_metadata(
     for (name, field) in all_fields.iter() {
         if field.required && !data.contains_key(name) {
             record.record_missing_required_field(&metadata.discriminator, &name);
-                        return false;
+            return false;
         }
     }
     for (name, value) in data.iter() {

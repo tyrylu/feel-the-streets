@@ -7,5 +7,5 @@ pub enum Error {
     #[error("I/O error: {0}")]
     IoError(#[from] std::io::Error),
     #[error("Serde error: {0}")]
-    SerdeError(#[from] serde_json::error::Error)
+    SerdeError(#[from] serde_json::error::Error),
 }

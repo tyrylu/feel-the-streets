@@ -6,7 +6,6 @@ use server::{
     background_task_delivery, datetime_utils, Result,
 };
 
-
 fn consume_tasks() -> Result<()> {
     use background_task_constants::*;
     let client = amqp_utils::connect_to_broker()?;
@@ -32,7 +31,7 @@ fn consume_tasks() -> Result<()> {
     };
     channel.basic_qos(1, opts).wait()?;
     let consumer = channel
-                .basic_consume(
+        .basic_consume(
             &tasks_queue.name().as_str(),
             "tasks_consumer",
             BasicConsumeOptions::default(),
@@ -52,9 +51,8 @@ fn consume_tasks() -> Result<()> {
         info!("Task acknowledged.");
         if let Some((hour, minute, second)) = task.get_next_schedule_time() {
             let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);
-            background_task_delivery::perform_delivery_on(&channel2 , &task, Some(ttl))?;
+            background_task_delivery::perform_delivery_on(&channel2, &task, Some(ttl))?;
         }
-        
     }
     client.run()?;
     Ok(())

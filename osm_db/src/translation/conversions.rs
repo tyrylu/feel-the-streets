@@ -1,6 +1,6 @@
+use super::record::TranslationRecord;
 use crate::entity_metadata::EntityMetadata;
 use crate::entity_metadata::Enum;
-use super::record::TranslationRecord;
 use hashbrown::HashMap;
 use serde_json::{Number, Value};
 use uom::si::f64::{Length, Mass};
@@ -19,7 +19,11 @@ pub fn convert_address(tags: &HashMap<String, String>) -> (HashMap<String, Strin
     (address_fields, address_field_names)
 }
 
-pub fn convert_field_value(raw_value: &str, value_type: &str, mut record: &mut TranslationRecord) -> Option<Value> {
+pub fn convert_field_value(
+    raw_value: &str,
+    value_type: &str,
+    mut record: &mut TranslationRecord,
+) -> Option<Value> {
     match value_type {
         "str" | "Address" => Some(Value::String(raw_value.to_string())),
         "int" => convert_int(&raw_value, &mut record),
@@ -39,7 +43,8 @@ pub fn convert_field_value(raw_value: &str, value_type: &str, mut record: &mut T
 
 pub fn convert_entity_data(
     discriminator: &str,
-    entity_data: &HashMap<String, String>, mut record: &mut TranslationRecord
+    entity_data: &HashMap<String, String>,
+    mut record: &mut TranslationRecord,
 ) -> HashMap<String, Value> {
     record.set_current_discriminator(discriminator);
     let all_fields = EntityMetadata::for_discriminator(discriminator)
@@ -48,14 +53,22 @@ pub fn convert_entity_data(
     let mut converted_data = HashMap::new();
     for (key, value) in entity_data.iter() {
         record.set_current_field(key);
-        let type_name = all_fields.get(key).map(|f| f.type_name.as_str()).unwrap_or("str");
-                if let Some(converted) = convert_field_value(&value, &type_name, &mut record) {
+        let type_name = all_fields
+            .get(key)
+            .map(|f| f.type_name.as_str())
+            .unwrap_or("str");
+        if let Some(converted) = convert_field_value(&value, &type_name, &mut record) {
             converted_data.insert(key.clone(), converted);
-        }     }
+        }
+    }
     converted_data
 }
 
-fn convert_value_of_enum(value: &str, enum_spec: &Enum, record: &mut TranslationRecord) -> Option<Value> {
+fn convert_value_of_enum(
+    value: &str,
+    enum_spec: &Enum,
+    record: &mut TranslationRecord,
+) -> Option<Value> {
     if let Some(num) = enum_spec.value_for_name(&value) {
         Some(Value::Number(Number::from(*num)))
     } else {
@@ -101,7 +114,10 @@ fn convert_float(value: &str, record: &mut TranslationRecord) -> Option<Value> {
     }
 }
 
-fn split_unit_spec<'a>(spec: &'a str, record: &mut TranslationRecord) -> Option<(f64, Option<&'a str>)> {
+fn split_unit_spec<'a>(
+    spec: &'a str,
+    record: &mut TranslationRecord,
+) -> Option<(f64, Option<&'a str>)> {
     let parts: Vec<&str> = spec.split(' ').collect();
     if parts.len() > 2 {
         record.record_type_violation(&spec);

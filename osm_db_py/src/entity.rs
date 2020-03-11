@@ -1,9 +1,9 @@
 use crate::conversions;
 use osm_db::entity::Entity;
-use pyo3::types::PyBytes;
 use pyo3::basic::CompareOp;
 use pyo3::class::basic::PyObjectProtocol;
 use pyo3::prelude::*;
+use pyo3::types::PyBytes;
 
 #[pyclass(name=Entity)]
 pub struct PyEntity {

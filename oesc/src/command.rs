@@ -12,7 +12,7 @@ pub enum Command {
         new_type: String,
         /// If specified, ignores the type conversion failures and continues nonetheless.
         #[structopt(long)]
-        force: bool
+        force: bool,
     },
     RemoveField {
         /// The entity type to operate against.
@@ -24,9 +24,9 @@ pub enum Command {
     },
     /// Shows a summary with the current values of a given field.
     ViewFieldUsage {
-/// The entity to process.
-entity: String,
-/// The field to display statistics about.
-field: String
-    }
+        /// The entity to process.
+        entity: String,
+        /// The field to display statistics about.
+        field: String,
+    },
 }

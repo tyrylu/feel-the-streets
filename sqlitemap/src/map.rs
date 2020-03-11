@@ -1,10 +1,10 @@
+use rusqlite::params;
 use rusqlite::types::{FromSql, ToSql};
 use rusqlite::CachedStatement;
 use rusqlite::Connection;
 use rusqlite::MappedRows;
 use rusqlite::Result;
 use rusqlite::Row;
-use rusqlite::params;
 
 pub struct SqliteMap<'a> {
     replace_key_value: CachedStatement<'a>,
@@ -101,14 +101,16 @@ impl<'a> SqliteMap<'a> {
     where
         R: FromSql,
     {
-        self.select_keys.query_map(params![], |row| Ok(row.get_unwrap(0)))
+        self.select_keys
+            .query_map(params![], |row| Ok(row.get_unwrap(0)))
     }
 
     pub fn values<R>(&mut self) -> Result<MappedRows<impl FnMut(&Row) -> Result<R>>>
     where
         R: FromSql,
     {
-        self.select_values.query_map(params![], |row| Ok(row.get_unwrap(0)))
+        self.select_values
+            .query_map(params![], |row| Ok(row.get_unwrap(0)))
     }
 
     pub fn iter<K, V>(&mut self) -> Result<MappedRows<impl FnMut(&Row) -> Result<(K, V)>>>

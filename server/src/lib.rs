@@ -33,9 +33,7 @@ embed_migrations!();
 #[database("serverdb")]
 pub struct DbConn(SqliteConnection);
 
-pub fn run_migrations(
-    conn: &SqliteConnection,
-) -> Result<()> {
+pub fn run_migrations(conn: &SqliteConnection) -> Result<()> {
     embedded_migrations::run(conn).map_err(Error::from)
 }
 
