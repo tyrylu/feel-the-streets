@@ -14,10 +14,20 @@ You can do something similar with shapely, e. g. python3-shapely package is a go
 
 In addition to the python requirements, it requires the loadable spatialite sqlite3 extension and under Linux, you need to install the openal library manually as well. In fedora, those are the libspatialite and openal packages.
 Optionally, it can use the sqlite3 icu loadable extension. The resulting .so/.dll should be named icu.so or icu.dll, so the sqlite3 extension loading will find the entry point.
+
+Also, the Python application requires the osm_db_py rust library somewhere in the Python's search path.
+There are basically two ways how to do that:
+* Copy the libosm_db.so file from the target/debug or target/release directories to the project root directory as osm_db.so, e. g. you drop the lib prefix. Somewhat hackish, but it works.
+* You build a proper wheel using maturin - the steps are as follows:
+  * Install it: pip install maturin
+  * Change to the osm_db_py directory
+  * Run maturin build --release --manylinux 1-unchecked
+  * Install the resulting wheel: pip install ../target/wheels/*.whl
 ### Rust components
 The Rust components handle dependencies as any Rust project, so a cargo build in the root should do the trick. A release build should be performed in production, however.
 Note that because of Rocket a nightly rust compiler is necessary, see the Rustup installation instructions and choose nightly during the initial Rustup install, or, if you already have Rustup installed, rustup toolchain add nightly should suffice to get one, then you either set is as a default or add a per project override (see the Rustup docs for the details).
 In addition, it requires the development files for Openssl.
+
 ## Components
 
 The basic components in the repository are:

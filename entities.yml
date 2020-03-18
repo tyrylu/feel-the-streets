@@ -33,15 +33,20 @@ Address:
     housenumber: str
     official_housenumber: str
     'housenumber:en': str
+    'housenumber:ru': str
     streetnumber: str
     street: str
     provisionalnumber: int
     suburb: str
     housename: str
+    'housename:de': str
+    'housename:ru': str
     country: str
     province: str
     unit: str
     flats: int
+    district: str
+    red: str
 Addressable:
   inherits: Named
   display_template: '{{ parent_display }}{% if address is defined %}, {{ address }}{% endif %}'
