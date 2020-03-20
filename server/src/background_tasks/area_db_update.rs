@@ -11,6 +11,7 @@ use osm_api::object_manager::OSMObjectManager;
 use osm_db::area_db::AreaDatabase;
 use osm_db::semantic_change::SemanticChange;
 use osm_db::translation::{record::TranslationRecord, translator};
+use std::fs;
 
 fn update_area(
     area: &mut Area,
@@ -139,6 +140,7 @@ fn update_area(
         "After publishing, the channel status is: {:?}",
         publish_channel.status()
     );
+    area.db_size = fs::metadata(AreaDatabase::path_for(area.osm_id, true))?.len() as i64;
     area.state = AreaState::Updated;
     area.save(&conn)?;
     Ok(())

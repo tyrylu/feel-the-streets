@@ -9,5 +9,6 @@ table! {
         created_at -> Timestamp,
         updated_at -> Timestamp,
         newest_osm_object_timestamp -> Nullable<Text>,
+        db_size -> BigInt,
     }
 }

@@ -1,3 +1,4 @@
+use crate::Result;
 use crate::schema::areas;
 use chrono::NaiveDateTime;
 use diesel::dsl::now;
@@ -5,7 +6,9 @@ use diesel::prelude::*;
 use diesel::SqliteConnection;
 use diesel_derive_enum::DbEnum;
 use log::debug;
+use osm_db::AreaDatabase;
 use serde::Serialize;
+use std::fs;
 
 #[derive(PartialEq, Serialize, DbEnum, Debug)]
 pub enum AreaState {
@@ -24,6 +27,7 @@ pub struct Area {
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
     pub newest_osm_object_timestamp: Option<String>,
+    pub db_size: i64,
 }
 
 impl Area {
@@ -75,12 +79,14 @@ impl Area {
     }
 }
 
-pub fn finalize_area_creation(osm_id: i64, conn: &SqliteConnection) -> QueryResult<usize> {
+pub fn finalize_area_creation(osm_id: i64, conn: &SqliteConnection) -> Result<usize> {
+    let size = fs::metadata(AreaDatabase::path_for(osm_id, true))?.len();
     let query = diesel::update(areas::table)
         .filter(areas::osm_id.eq(osm_id))
         .set((
             areas::state.eq(AreaState::Updated),
             areas::updated_at.eq(now),
+            areas::db_size.eq(size as i64),
         ));
-    query.execute(conn)
+    Ok(query.execute(conn)?)
 }
