@@ -5,6 +5,7 @@ from PySide2.QtWidgets import QDialog, QGridLayout, QPushButton, QListWidget, QL
 import pendulum
 from .server_interaction import has_api_connectivity, get_areas, request_area_creation, get_areas_with_name
 from .time_utils import rfc_3339_to_local_string
+from .size_utils import format_size
 from .areas_browser import AreasBrowserDialog
 from osm_db import AreaDatabase
 
@@ -58,7 +59,8 @@ class AreaSelectionDialog(QDialog):
         for area in areas:
             area["created_at"] = rfc_3339_to_local_string(area["created_at"])
             area["updated_at"] = rfc_3339_to_local_string(area["updated_at"])
-            self._areas.addItem(_("{name}: {state}, last updated {updated_at}, created {created_at}").format(**area))
+            area["db_size"] = format_size(area["db_size"])
+            self._areas.addItem(_("{name}: {state}, last updated {updated_at}, file size: {db_size}, created {created_at}").format(**area))
     
     @property
     def selected_map(self):

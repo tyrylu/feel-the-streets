@@ -3,7 +3,6 @@ from PySide2.QtWidgets import QMainWindow, QDialog, QProgressDialog, QMessageBox
 import os
 import webbrowser
 from pygeodesy.ellipsoidalVincenty import LatLon
-import bitmath
 import shapely.wkb as wkb
 from shapely.geometry.linestring import LineString
 from .entities import Person
@@ -13,10 +12,8 @@ from .services import map, menu_service
 from .server_interaction import AreaDatabaseDownloader, SemanticChangeRetriever, has_api_connectivity
 from .changes_applier import ChangesApplier
 from osm_db import AreaDatabase, EntitiesQuery
+from .size_utils import format_size
 
-def format_size(num_bytes):
-    size = bitmath.Byte(num_bytes)
-    return size.best_prefix().format("{value:.2f} {unit}")
 
 class MainWindow(QMainWindow):
     

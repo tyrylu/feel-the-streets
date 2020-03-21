@@ -43,7 +43,7 @@ def extract_entity_related_strings(fileobj, keywords, comment_tags, options):
         line = line.strip().decode("UTF-8")
         if not line:
             continue
-        key, value = line.split(":")
+        key, value = line.rsplit(":", 1)
         if key[0].isupper() and "entities.yml" in fileobj.name:
             yield (lineno, "", format_class_name(key), [])
         elif key[0].islower() and key not in {"fields", "display_template", "inherits"}:
