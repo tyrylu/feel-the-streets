@@ -136,11 +136,8 @@ fn update_area(
         }
     }
     info!("Changes published and replies checked.");
-    info!(
-        "After publishing, the channel status is: {:?}",
-        publish_channel.status()
-    );
-    area.db_size = fs::metadata(AreaDatabase::path_for(area.osm_id, true))?.len() as i64;
+    let size = fs::metadata(AreaDatabase::path_for(area.osm_id, true))?.len() as i64;
+    area.db_size = size;
     area.state = AreaState::Updated;
     area.save(&conn)?;
     Ok(())
@@ -162,17 +159,7 @@ pub fn update_area_databases() -> Result<()> {
     }
     record.save_to_file(&format!("area_updates_{}.json", now.to_rfc3339()))?;
     info!("Area updates finished successfully.");
-    info!(
-        "Before closing, the channel status is: {:?}",
-        channel.status()
-    );
-    info!(
-        "Before closing, the connection status is: {:?}",
-        rabbitmq_conn.status()
-    );
     channel.close(200, "Normal shutdown").wait()?;
-    info!("AMQP channel closed.");
     rabbitmq_conn.close(200, "Normal shutdown").wait()?;
-    info!("Connection closed.");
     Ok(())
 }
