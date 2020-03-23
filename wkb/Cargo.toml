@@ -22,7 +22,7 @@ repository = "https://github.com/rory/rust-wkb"
 version = "1"
 
 [dependencies.geo-types]
-version = "0.4"
+version = "0.5"
 
 [dependencies.num-traits]
 version = "0.2.6"

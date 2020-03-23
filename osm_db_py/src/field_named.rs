@@ -12,8 +12,8 @@ pub struct FieldNamed {
 #[pymethods]
 impl FieldNamed {
     #[new]
-    pub fn new(obj: &PyRawObject, name: String) {
-        obj.init({ FieldNamed { name } })
+    pub fn new(name: String) -> Self {
+        FieldNamed { name }
     }
 
     pub fn eq(&self, val: PyObject, py: Python) -> PyResult<PyFieldCondition> {

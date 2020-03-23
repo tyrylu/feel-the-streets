@@ -40,7 +40,6 @@ impl PyEntity {
         conversions::convert_value(self.inner.value_of_field(key), &py)
     }
 
-    #[getter]
     pub fn defined_field_names(&mut self) -> Vec<&String> {
         self.inner.defined_field_names()
     }
@@ -49,12 +48,12 @@ impl PyEntity {
 #[pyproto]
 impl PyObjectProtocol for PyEntity {
     fn __hash__(&'p self) -> PyResult<isize> {
-        Ok(self.id() as isize)
+        Ok(self.inner.id as isize)
     }
 
-    fn __richcmp__(&self, other: &Self, op: CompareOp) -> PyResult<bool> {
-        let id1 = self.id();
-        let id2 = other.id();
+    fn __richcmp__(&'p self, other: PyRef<'p, Self>, op: CompareOp) -> PyResult<bool> {
+        let id1 = self.inner.id;
+        let id2 = other.inner.id;
         match op {
             CompareOp::Eq => Ok(id1 == id2),
             CompareOp::Ne => Ok(id1 != id2),

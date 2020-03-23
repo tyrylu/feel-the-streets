@@ -10,12 +10,11 @@ pub struct PyEntitiesQuery {
 #[pymethods]
 impl PyEntitiesQuery {
     #[new]
-    fn new(obj: &PyRawObject) {
-        obj.init({
+    fn new() -> Self {
             PyEntitiesQuery {
                 inner: EntitiesQuery::default(),
             }
-        })
+        
     }
 
     pub fn set_included_discriminators(&mut self, discriminators: Vec<String>) {
