@@ -92,7 +92,7 @@ class ObjectsBrowserWindow(QWidget):
         common_fields = set(EntityMetadata.for_discriminator("OSMEntity").fields.keys())
         selected_metadata = EntityMetadata.for_discriminator(selected.discriminator)
         known_fields = selected_metadata.all_fields
-        for field_name in selected.defined_field_names:
+        for field_name in selected.defined_field_names():
             raw_value = selected.value_of_field(field_name)
             if field_name not in known_fields:
                 other_item.addChild(QTreeWidgetItem(["%s: %s"%(underscored_to_words(field_name), raw_value)]))

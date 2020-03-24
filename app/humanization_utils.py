@@ -61,7 +61,7 @@ def describe_entity(entity, metadata=None):
         template_source = template_source.parent_metadata
     context = {}
     fields = metadata.all_fields
-    for field_name in entity.defined_field_names:
+    for field_name in entity.defined_field_names():
         if field_name not in fields:
             continue
         value = entity.value_of_field(field_name)
