@@ -33,7 +33,6 @@ pub fn init_queue(client_id: &str, area_osm_id: i64) -> Result<()> {
             FieldTable::default(),
         )
         .wait()?;
-    channel.close(0, "Normal shutdown").wait()?;
     Ok(())
 }
 
@@ -60,7 +59,6 @@ pub fn publish_change(change: &SemanticChange, area_osm_id: i64) -> Result<()> {
     let amqp_conn = amqp_utils::connect_to_broker()?;
     let channel = amqp_conn.create_channel().wait()?;
     publish_change_on(&channel, change, area_osm_id)?;
-    channel.close(0, "Normal shutdown").wait()?;
     Ok(())
 }
 

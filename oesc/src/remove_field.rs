@@ -12,11 +12,11 @@ use server::area_messaging;
 pub fn remove_field(entity: String, field: String, new_name: Option<String>) -> Result<()> {
     let _dotenv_path = dotenv::dotenv()?;
     let server_conn = SqliteConnection::establish("server.db")?;
-    let amq_conn = amqp_utils::connect_to_broker()?;
-    let channel = amq_conn.create_channel().wait()?;
+    let amq_conn = amqp_utils::connect_to_broker().expect("Amqp connect fail");
+    let channel = amq_conn.create_channel().wait().expect("Create channel fail");
     channel
         .confirm_select(ConfirmSelectOptions::default())
-        .wait()?;
+        .wait().expect("Confirm select fail");
     for area in Area::all_updated(&server_conn)? {
         println!("Processing area {} (id {})...", area.name, area.osm_id);
         let area_db = AreaDatabase::open_existing(area.osm_id, true)?;
@@ -53,8 +53,8 @@ pub fn remove_field(entity: String, field: String, new_name: Option<String>) -> 
         area_db.begin()?;
         for change in &changes {
             area_db.apply_change(change)?;
-            area_messaging::publish_change_on(&channel, change, area.osm_id)?;
-            for confirmation in channel.wait_for_confirms().wait()? {
+            area_messaging::publish_change_on(&channel, change, area.osm_id).expect("Publish change fail");
+            for confirmation in channel.wait_for_confirms().wait().expect("Wait for confirms fail") {
                 if confirmation.reply_code != 200 {
                     eprintln!(
                         "Non 200 reply code from delivery: {:?}, code: {}, message: {}",
@@ -67,7 +67,5 @@ pub fn remove_field(entity: String, field: String, new_name: Option<String>) -> 
         println!("Area processed successfully.");
     }
     println!("Cleaning up...");
-    channel.close(200, "Normal shutdown").wait()?;
-    amq_conn.close(200, "Normal shutdown").wait()?;
     Ok(())
 }

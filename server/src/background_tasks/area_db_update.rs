@@ -159,7 +159,5 @@ pub fn update_area_databases() -> Result<()> {
     }
     record.save_to_file(&format!("area_updates_{}.json", now.to_rfc3339()))?;
     info!("Area updates finished successfully.");
-    channel.close(200, "Normal shutdown").wait()?;
-    rabbitmq_conn.close(200, "Normal shutdown").wait()?;
     Ok(())
 }

@@ -3,10 +3,10 @@ use crate::Result;
 use lapin::options::QueueDeclareOptions;
 use lapin::types::{AMQPValue, FieldTable};
 use lapin::Queue;
-use lapin::{Channel, Connection, ConnectionProperties};
+use lapin::{Channel, Connection, ConnectionProperties, CloseOnDrop};
 use std::env;
 
-pub fn connect_to_broker() -> Result<Connection> {
+pub fn connect_to_broker() -> Result<CloseOnDrop<Connection>> {
     let client = Connection::connect(
         &env::var("AMQP_BROKER_URL")?,
         ConnectionProperties::default(),
@@ -16,7 +16,7 @@ pub fn connect_to_broker() -> Result<Connection> {
     Ok(client)
 }
 
-pub fn init_background_job_queues(channel: &mut Channel) -> Result<(Queue, Queue)> {
+pub fn init_background_job_queues(channel: &Channel) -> Result<(Queue, Queue)> {
     let opts = QueueDeclareOptions {
         durable: true,
         ..Default::default()

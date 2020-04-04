@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-03-21 18:18+0100\n"
-"PO-Revision-Date: 2020-03-21 18:32+0100\n"
+"POT-Creation-Date: 2020-03-29 11:47+0200\n"
+"PO-Revision-Date: 2020-03-29 11:52+0200\n"
 "Last-Translator: \n"
 "Language: cs\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -8000,6 +8000,7 @@ msgid "Controlled"
 msgstr "Kontrolovaný"
 
 #: enums.yml:948
+#, fuzzy
 msgid "Zebra"
 msgstr "Přechod"
 
@@ -10794,7 +10795,7 @@ msgstr "Zvolte oblast"
 
 #: app/area_selection.py:33
 msgid "&Available areas"
-msgstr ""
+msgstr "&Dostupné oblasti"
 
 #: app/area_selection.py:36
 msgid "Available areas"
@@ -10813,7 +10814,7 @@ msgid "&Exit"
 msgstr "&Konec"
 
 #: app/area_selection.py:63
-msgid "{name}: {state}, last updated {updated_at}, file size: {db_size}, created {created_at}"
+msgid "{name}: {state}, last updated {updated_at}, file size {db_size}, created {created_at}"
 msgstr "{name}: {state}, poslední změna {updated_at}, velikost souboru {db_size}, vznik {created_at}"
 
 #: app/area_selection.py:70
@@ -11384,3 +11385,11 @@ msgstr "Hodnota"
 #~ msgstr ""
 #~ "Ostatní pole - nejsou prohledávatelná "
 #~ "ani žádným dalším způsobem zpracovávána"
+
+#~ msgid ""
+#~ "{name}: {state}, last updated {updated_at},"
+#~ " file size: {db_size}, created {created_at}"
+#~ msgstr ""
+#~ "{name}: {state}, poslední změna {updated_at},"
+#~ " velikost souboru {db_size}, vznik "
+#~ "{created_at}"

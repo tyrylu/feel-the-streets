@@ -60,7 +60,7 @@ class AreaSelectionDialog(QDialog):
             area["created_at"] = rfc_3339_to_local_string(area["created_at"])
             area["updated_at"] = rfc_3339_to_local_string(area["updated_at"])
             area["db_size"] = format_size(area["db_size"])
-            self._areas.addItem(_("{name}: {state}, last updated {updated_at}, file size: {db_size}, created {created_at}").format(**area))
+            self._areas.addItem(_("{name}: {state}, last updated {updated_at}, file size {db_size}, created {created_at}").format(**area))
     
     @property
     def selected_map(self):

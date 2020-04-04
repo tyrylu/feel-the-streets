@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-03-21 18:18+0100\n"
+"POT-Creation-Date: 2020-03-29 11:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -10338,8 +10338,8 @@ msgstr ""
 
 #: app/area_selection.py:63
 msgid ""
-"{name}: {state}, last updated {updated_at}, file size: {db_size}, created"
-" {created_at}"
+"{name}: {state}, last updated {updated_at}, file size {db_size}, created "
+"{created_at}"
 msgstr ""
 
 #: app/area_selection.py:70

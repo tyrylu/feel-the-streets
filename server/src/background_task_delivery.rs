@@ -30,9 +30,8 @@ pub fn perform_delivery_on(
 
 pub fn deliver(task: &BackgroundTask, ttl: Option<u32>) -> Result<()> {
     let client = amqp_utils::connect_to_broker()?;
-    let mut channel = client.create_channel().wait()?;
-    amqp_utils::init_background_job_queues(&mut channel)?;
+    let channel = client.create_channel().wait()?;
+    amqp_utils::init_background_job_queues(&channel)?;
     perform_delivery_on(&channel, task, ttl)?;
-    channel.close(0, "Normal shutdown").wait()?;
     Ok(())
 }
