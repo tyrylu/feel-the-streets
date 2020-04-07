@@ -53,6 +53,7 @@ class AreaSelectionDialog(QDialog):
             available = get_local_area_infos()
             request_button.setDisabled(True)
         self._area_ids = [a["osm_id"] for a in available]
+        self._area_names = [a["name"] for a in available]
         self._fill_areas(available)
 
     def _fill_areas(self, areas):
@@ -66,6 +67,11 @@ class AreaSelectionDialog(QDialog):
     def selected_map(self):
         return self._area_ids[self._areas.currentRow()]
     
+    @property
+    def selected_map_name(self):
+        return self._area_names[self._areas.currentRow()]
+    
+
     def on_request_clicked(self):
         name, ok = QInputDialog.getText(self, _("Enter the name of the requested area"), _("Area name requested"))
         if not ok or not name:

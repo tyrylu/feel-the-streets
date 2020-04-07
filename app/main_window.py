@@ -3,8 +3,6 @@ from PySide2.QtWidgets import QMainWindow, QDialog, QProgressDialog, QMessageBox
 import os
 import webbrowser
 from pygeodesy.ellipsoidalVincenty import LatLon
-import shapely.wkb as wkb
-from shapely.geometry.linestring import LineString
 from .entities import Person
 from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController, LastLocationController
 from .area_selection import AreaSelectionDialog
@@ -35,13 +33,14 @@ class MainWindow(QMainWindow):
             sys.exit(0)
         elif res == QDialog.DialogCode.Accepted:
             self._selected_map = dlg.selected_map
+            self._selected_map_name = dlg.selected_map_name
             if not os.path.exists(AreaDatabase.path_for(dlg.selected_map, server_side=False)):
                 self._download_database(dlg.selected_map)
             else:
                 self._update_database(dlg.selected_map)
 
     def _on_map_ready(self):
-        map.set_call_args(self._selected_map)
+        map.set_call_args(self._selected_map, self._selected_map_name)
         menu_service.set_call_args(self.menuBar())
         self._app_controller = ApplicationController(self)
         person = Person(map(), LatLon(0, 0))
@@ -49,16 +48,8 @@ class MainWindow(QMainWindow):
         self._sound_controller = SoundController(person)
         self._announcements_controller = AnnouncementsController(person)
         self._last_location_controller = LastLocationController(person)
-        if not self._last_location_controller.restored_position:
-            query = EntitiesQuery()
-            query.set_limit(1)
-            entity = map()._db.get_entities(query)[0]
-            geom = wkb.loads(entity.geometry)
-            if isinstance(geom, LineString):
-                geom = geom.representative_point()
-            lon = geom.x
-            lat = geom.y
-            person.move_to(LatLon(lat, lon))
+        if self._last_location_controller.restored_position:
+                  person.move_to(map().default_start_location)
         self.show()
 
    
