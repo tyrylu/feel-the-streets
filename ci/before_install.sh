@@ -7,7 +7,7 @@ if [ "$TRAVIS_OS_NAME" = "windows" ]
 then
 choco install -y python3 --params "/InstallDir:C:\\Python"
 export PATH="/c/Python:/c/Python/Scripts:$PATH"
-python -m pip install --upgrade pip wheel
+python -m pip install --upgrade pip wheel setuptools
 # Because of a pyinstaller bug, we currently need a dev version.
 pip install https://github.com/pyinstaller/pyinstaller/tarball/develop
 fi
