@@ -48,7 +48,7 @@ class MainWindow(QMainWindow):
         self._sound_controller = SoundController(person)
         self._announcements_controller = AnnouncementsController(person)
         self._last_location_controller = LastLocationController(person)
-        if self._last_location_controller.restored_position:
+        if not self._last_location_controller.restored_position:
                   person.move_to(map().default_start_location)
         self.show()
 

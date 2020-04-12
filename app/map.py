@@ -1,11 +1,15 @@
+import logging
 from osm_db import EntitiesQuery, FieldNamed, AreaDatabase
 from pygeodesy.ellipsoidalVincenty import LatLon
 import shapely.wkb as wkb
-from shapely.geometry.linestring import LineString
+from shapely.geometry.point import Point
 from .geometry_utils import distance_filter, effective_width_filter, xy_ranges_bounding_square
 from .measuring import measure
 from .models import Bookmark, LastLocation
 from .import services
+
+
+log = logging.getLogger(__name__)
 
 class Map:
     def __init__(self, map_id, map_name):
@@ -76,12 +80,18 @@ class Map:
     @property
     def default_start_location(self):
         query = EntitiesQuery()
-        #query.set_limit(1)
+        query.set_limit(1)
+        query.set_included_discriminators(["Place"])
         query.add_condition(FieldNamed("name").eq(self._name))
         candidates =self._db.get_entities(query)
-        entity = candidates[-1]
+        if not candidates:
+            log.warn("Area %s does not have a Place entity, falling back to the first entity in the database.", self._area_name)
+            query = EntitiesQuery()
+            query.set_limit(1)
+            candidates = self._db.get_entities(query)
+        entity = candidates[0]
         geom = wkb.loads(entity.geometry)
-        if isinstance(geom, LineString):
+        if not isinstance(geom, Point):
             geom = geom.representative_point()
         lon = geom.x
         lat = geom.y
