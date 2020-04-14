@@ -20,7 +20,7 @@ license = "MIT"
 repository = "https://gitgud.io/Taywee/sqlitemap"
 [dependencies.rusqlite]
 version = "*"
-features = ["bundled"]
+features = ["bundled-windows"]
 [dev-dependencies.flate2]
 version = "1.0"
 
