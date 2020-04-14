@@ -9,7 +9,7 @@ serde = {version="*", features=["derive"]}
 serde_json = "*"
 thiserror = "*"
 reqwest = {version="*", features=["blocking"]}
-rusqlite = {"version" = "*", "features" = ["bundled"]}
+rusqlite = {"version" = "*", "features" = ["bundled-windows"]}
 sqlitemap = {path="../sqlitemap"}
 log = "*"
 itertools = "*"
