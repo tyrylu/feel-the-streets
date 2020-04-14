@@ -44,6 +44,7 @@ Address:
     country: str
     province: str
     unit: str
+    floor: str
     flats: int
     district: str
     red: str
