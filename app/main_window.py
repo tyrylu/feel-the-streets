@@ -103,6 +103,7 @@ class MainWindow(QMainWindow):
         self._progress.setValue(nth)
             
     def _on_changes_applied(self, changelog_path):
+        self._applier.deleteLater()
         changelog_size = os.path.getsize(changelog_path)
         resp = QMessageBox.question(self, _("Success"), _("Successfully applied {total} changes. A changelog of size {size} was generated, do you want to view it now?").format(total=self._pending_count, size=format_size(changelog_size)))
         if resp == QMessageBox.StandardButton.Yes:
