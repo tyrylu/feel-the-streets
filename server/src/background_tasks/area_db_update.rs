@@ -109,12 +109,8 @@ fn update_area(
             }
         };
         if let Some(semantic_change) = semantic_change {
-            match area_db.apply_change(&semantic_change) {
-                Ok(()) => {
+            area_db.apply_change(&semantic_change)?;
                     semantic_changes.push(semantic_change);
-                }
-                Err(e) => error!("Failed to apply change {:?}, error: {}", semantic_change, e),
-            }
         }
     }
     area_db.commit()?;

@@ -9,7 +9,7 @@ use std::time::Instant;
 
 const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
 const INSERT_ENTITY_SQL: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, geomFromWKB(?, 4326), ?, ?)";
-const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, MakeValid(Buffer(geomFromWKB(?, 4326), 0)), ?, ?)";
+const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, Buffer(geomFromWKB(?, 4326), 0), ?, ?)";
 
 fn row_to_entity(row: &Row) -> core::result::Result<Entity, rusqlite::Error> {
     Ok(Entity {
