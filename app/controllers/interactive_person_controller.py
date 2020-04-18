@@ -146,7 +146,6 @@ class InteractivePersonController:
     @menu_command(_("Information"), _("Search..."), "ctrl+f")
     def do_search(self, evt):
         results = perform_search(self._main_window, self._person.position)
-        print(len(results))
         if results:
             browser = ObjectsBrowserWindow(self._main_window, title=_("Search results"), unsorted_objects=results, person=self._person)
             browser.show()
