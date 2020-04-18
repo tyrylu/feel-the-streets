@@ -16,3 +16,4 @@ pyogg
 shapely
 jinja2
 requests
+atomicwrites
