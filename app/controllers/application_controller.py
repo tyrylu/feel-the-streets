@@ -1,3 +1,4 @@
+from PySide2.QtWidgets import QApplication
 from ..services import menu_service
 from ..menu_service import menu_command
 
@@ -8,4 +9,4 @@ class ApplicationController:
     
     @menu_command(_("Program"), _("Quit"), "ctrl+q")
     def do_quit(self, evt):
-        self._main_window.close()
+        QApplication.instance().quit()
