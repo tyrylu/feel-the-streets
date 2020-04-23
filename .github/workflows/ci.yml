@@ -1,19 +1,38 @@
-name: Rust
-
+name: Continuous integration
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
     steps:
     - uses: actions/checkout@v2
+    - name: Install latest nightly
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        override: true
+        components: clippy
     - name: Build
       run: cargo build --verbose
     - name: Run tests
       run: cargo test --verbose
+    - name: Build in release mode
+    run: cargo build --release
+    - name: Install python app dependencies
+    if: runner.os == 'Windows'
+    run: pip install -r app_requirements.txt
+    - name: Install Pyinstaller
+    if: runner.os == 'Windows'
+    run: pip install https://github.com/pyinstaller/pyinstaller/tarball/develop
+    - name: Move osm_db extension to the right place
+    if: runner.os == 'Windows'
+    run: mv target/release/osm_db.dll osm_db.pyd
+    - name: Build the app executable
+    if: runner.os == 'Windows'
+    run: pyinstaller run_app.spec
