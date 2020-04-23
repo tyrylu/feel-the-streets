@@ -19,7 +19,7 @@ jobs:
         toolchain: nightly
         override: true
         components: clippy
-    - name: Install the sqlite3 library on Linux
+    - name: "Install the sqlite3 library on Linux"
       if: runner.os == 'Linux'
       run: sudo apt install sqlite3
     - name: Build
