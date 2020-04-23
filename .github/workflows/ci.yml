@@ -21,7 +21,7 @@ jobs:
         components: clippy
     - name: Install the sqlite3 library on Linux
       if: runner.os == 'Linux'
-      run: sudo apt install sqlite3
+      run: sudo apt install sqlite3 libsqlite3-dev
     - name: Build
       run: cargo build --verbose
     - name: Run tests
