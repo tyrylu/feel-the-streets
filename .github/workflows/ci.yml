@@ -40,3 +40,31 @@ jobs:
     - name: Build the app executable
       if: runner.os == 'Windows'
       run: pyinstaller run_app.spec
+    - name: Prepare deployment directory
+      run: mkdir to_deploy
+    - name: Copy common artifacts
+      run: cp *.yml to_deploy
+    - name: Copy Linux artifact s
+      run: cp target/release/{oesc,server,worker,create_area,recreate_all_areas,libosm_db\.so} to_deploy
+    - name: Upload Windows artifacts
+      if: runner.os == 'Windows'  
+      uses: actions/upload-artifact@v1
+      with:
+        name: to_deploy_windows
+        path: deploy_to
+    - name: Upload Linux artifacts
+      if: runner.os == 'Linux'  
+      uses: actions/upload-artifact@v1
+      with:
+        name: to_deploy_linux
+        path: deploy_to
+    - name: Cleanup python app binary
+      if: runner.os == 'Windows'
+      run: rm dist/fts/{Qt5Quick.dll,Qt5QmlModels.dll,Qt5VirtualKeyboard.dll}
+    - name: Upload Python app binary
+      if: runner.os == 'Windows'  
+      uses: actions/upload-artifact@v1
+      with:
+        name: fts_app
+        path: dist/fts
+    
