@@ -23,16 +23,16 @@ jobs:
     - name: Run tests
       run: cargo test --verbose
     - name: Build in release mode
-    run: cargo build --release
+      run: cargo build --release
     - name: Install python app dependencies
-    if: runner.os == 'Windows'
-    run: pip install -r app_requirements.txt
+      if: runner.os == 'Windows'
+      run: "pip install -r app_requirements.txt"
     - name: Install Pyinstaller
-    if: runner.os == 'Windows'
-    run: pip install https://github.com/pyinstaller/pyinstaller/tarball/develop
+      if: runner.os == 'Windows'
+      run: pip install https://github.com/pyinstaller/pyinstaller/tarball/develop
     - name: Move osm_db extension to the right place
-    if: runner.os == 'Windows'
-    run: mv target/release/osm_db.dll osm_db.pyd
+      if: runner.os == 'Windows'
+      run: mv target/release/osm_db.dll osm_db.pyd
     - name: Build the app executable
-    if: runner.os == 'Windows'
-    run: pyinstaller run_app.spec
+      if: runner.os == 'Windows'
+      run: pyinstaller run_app.spec
