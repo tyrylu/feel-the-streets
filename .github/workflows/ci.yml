@@ -19,9 +19,9 @@ jobs:
         toolchain: nightly
         override: true
         components: clippy
-    - name: Install the sqlite3 library on Linux
+    - name: Install Linux build dependencies
       if: runner.os == 'Linux'
-      run: sudo apt install sqlite3 libsqlite3-dev
+      run: sudo apt install sqlite3 libsqlite3-dev python3-dev libpython3-dev
     - name: Build
       run: cargo build --verbose
     - name: Run tests
@@ -45,6 +45,7 @@ jobs:
     - name: Copy common artifacts
       run: cp *.yml to_deploy
     - name: Copy Linux artifact s
+      if: runner.os == 'Linux'
       run: cp target/release/{oesc,server,worker,create_area,recreate_all_areas,libosm_db\.so} to_deploy
     - name: Upload Windows artifacts
       if: runner.os == 'Windows'  
