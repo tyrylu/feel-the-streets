@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
-    fail-fast: false
+      fail-fast: false
     steps:
     - uses: actions/checkout@v2
     - name: Install latest nightly
@@ -19,7 +19,7 @@ jobs:
         toolchain: nightly
         override: true
         components: clippy
-    - name: "Install the sqlite3 library on Linux"
+    - name: Install the sqlite3 library on Linux
       if: runner.os == 'Linux'
       run: sudo apt install sqlite3
     - name: Build
