@@ -23,7 +23,7 @@ mod tests {
     #[test]
     fn it_works() {
         let connection = Connection::open_in_memory().unwrap();
-        let mut book_reviews = SqliteMap::new(&connection, "map", "TEXT", "TEXT").unwrap();
+        let mut book_reviews = SqliteMap::new(&connection, "map", "TEXT", "TEXT", true).unwrap();
 
         assert!(book_reviews.is_empty().unwrap());
 
@@ -153,7 +153,7 @@ mod tests {
     impl FromSql for Foo {
         fn column_result(value: ValueRef) -> FromSqlResult<Self> {
             match value {
-                ValueRef::Text(s) => serde_json::from_str(s),
+                ValueRef::Text(s) => serde_json::from_slice(s),
                 ValueRef::Blob(b) => serde_json::from_slice(b),
                 _ => return Err(FromSqlError::InvalidType),
             }
@@ -164,7 +164,7 @@ mod tests {
     #[test]
     fn json_output() {
         let connection = Connection::open_in_memory().unwrap();
-        let mut book_reviews = SqliteMap::new(&connection, "map", "TEXT", "TEXT").unwrap();
+        let mut book_reviews = SqliteMap::new(&connection, "map", "TEXT", "TEXT", true).unwrap();
         let foo = Foo {
             x: 8,
             y: String::from("This is a test string"),
@@ -214,7 +214,7 @@ mod tests {
     #[test]
     fn zip_json_output() {
         let connection = Connection::open_in_memory().unwrap();
-        let mut book_reviews = SqliteMap::new(&connection, "map", "BLOB", "BLOB").unwrap();
+        let mut book_reviews = SqliteMap::new(&connection, "map", "BLOB", "BLOB", true).unwrap();
         let foo = ZipFoo(Foo {
             x: 8,
             y: String::from("This is a test string"),
