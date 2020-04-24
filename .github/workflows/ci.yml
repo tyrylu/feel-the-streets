@@ -48,6 +48,9 @@ jobs:
     - name: Copy Linux artifact s
       if: runner.os == 'Linux'
       run: cp target/release/{oesc,server,worker,create_area,recreate_all_areas,libosm_db\.so} to_deploy
+    - name: Copy Windows artifacts:
+      if: runner.os == 'Windows'
+      run: cp target/release/*.exe to_deploy
     - name: Upload Windows artifacts
       if: runner.os == 'Windows'  
       uses: actions/upload-artifact@v1
@@ -62,7 +65,7 @@ jobs:
         path: to_deploy
     - name: Cleanup python app binary
       if: runner.os == 'Windows'
-      run: rm dist/fts/Qt5Quick.dll dist/fts/Qt5QmlModels.dll dist/fts/Qt5VirtualKeyboard.dll
+      run: rm dist/fts/Qt5Quick.dll, dist/fts/Qt5QmlModels.dll, dist/fts/Qt5VirtualKeyboard.dll
     - name: Upload Python app binary
       if: runner.os == 'Windows'  
       uses: actions/upload-artifact@v1
