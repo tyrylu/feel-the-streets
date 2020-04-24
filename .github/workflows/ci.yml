@@ -45,10 +45,10 @@ jobs:
       run: mkdir to_deploy
     - name: Copy common artifacts
       run: cp *.yml to_deploy
-    - name: Copy Linux artifact s
+    - name: Copy Linux artifacts
       if: runner.os == 'Linux'
       run: cp target/release/{oesc,server,worker,create_area,recreate_all_areas,libosm_db\.so} to_deploy
-    - name: Copy Windows artifacts:
+    - name: Copy Windows artifacts
       if: runner.os == 'Windows'
       run: cp target/release/*.exe to_deploy
     - name: Upload Windows artifacts
