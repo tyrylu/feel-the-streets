@@ -72,4 +72,22 @@ jobs:
       with:
         name: fts_app
         path: dist/fts
-    
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download Linux build files
+      uses: actions/download-artifact@v1
+      with:
+        name: to_deploy_linux
+        path: deploy_to_linux
+    - name: Deploy to production
+      uses: AEnterprise/rsync-deploy@v1.0
+      env:
+        DEPLOY_KEY: ${{ secrets.SERVER_SSH_KEY }}
+        ARGS: "-zzrvh --delete"
+        SERVER_PORT: ${{ secrets.SERVER_PORT }}
+        FOLDER: "deploy_to_linux"
+        SERVER_IP: ${{ secrets.SERVER_IP }}
+        USERNAME: ${{ secrets.USERNAME }}
+        SERVER_DESTINATION: /srv/feel-the-streets
