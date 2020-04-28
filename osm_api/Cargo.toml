@@ -19,5 +19,5 @@ xml-rs = "*"
 tempfile = "*"
 bincode = "*"
 hashbrown = {version="*", features=["serde"]}
-wkb = {path="../wkb"}
+wkb = " "*"
 geo-types = "*"
