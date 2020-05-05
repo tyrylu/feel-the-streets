@@ -36,4 +36,6 @@ class SpeechDispatcherOutput(Output):
     def close(self):
         self._client.close()
 
+    def __del__(self):
+        self.close()
 output_class = SpeechDispatcherOutput

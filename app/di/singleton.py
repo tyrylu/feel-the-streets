@@ -20,3 +20,7 @@ class Singleton:
     def set_call_args(self, *args, **kwargs):
         self._args = args
         self._kwargs = kwargs
+
+    def reset(self):
+        del self._instance
+        self._instance = None
