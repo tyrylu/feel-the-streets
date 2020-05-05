@@ -8,9 +8,11 @@ from ..amqp_queue_naming import get_client_queue_name
 class SemanticChangeRetriever:
 
     def __init__(self):
+        self._needs_closing = False
         try:
             self._conn = pika.BlockingConnection(pika.URLParameters(config().amqp_broker_url))
             self._chan = self._conn.channel()
+            self._needs_closing = True
         except Exception:
             pass
         self._max_delivery_tags = defaultdict(lambda: 0)
@@ -29,11 +31,15 @@ class SemanticChangeRetriever:
             raise ValueError("Changes for area %s not requested yet."%area)
         self._chan.basic_ack(self._max_delivery_tags[area], multiple=True)
     
+    def close(self):
+        if self._needs_closing:
+            self._chan.close()
+            self._conn.close()
+            self._needs_closing = False
+
+
     def __del__(self):
-        self._chan.close()
-        self._conn.close()
-
-
+        self.close()
     def new_change_count_in(self, area):
         resp = self._chan.queue_declare(get_client_queue_name(config().client_id, area), passive=True, durable=True)
         return resp.method.message_count

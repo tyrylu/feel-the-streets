@@ -49,5 +49,6 @@ class ChangesApplier(QThread):
         db.commit()
         changelog.close()
         self._retriever.acknowledge_changes_for(self._area)
+        self._retriever.close()
         self.changes_applied.emit(changelog_path)
         
