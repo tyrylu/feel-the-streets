@@ -1,5 +1,4 @@
 import ctypes
-import ctypes.util
 import os
 import sys
 import platform
@@ -31,7 +30,7 @@ run_tests = lambda lib, tests: [f(lib) for f in tests]
 
 class ExternalLibrary:
     @staticmethod
-    def load(name, paths = None, tests = []):
+    def load(name, paths = None, tests=[]):
         if name in _loaded_libraries:
             return _loaded_libraries[name]
         if sys.platform == "win32":
@@ -44,23 +43,23 @@ class ExternalLibrary:
             return lib
 
     @staticmethod
-    def load_other(name, paths = None, tests = []):
+    def load_other(name, paths = None, tests=[]):
         os.environ["PATH"] += ";" + ";".join((os.getcwd(), _here))
         if paths: os.environ["PATH"] += ";" + ";".join(paths)
 
         for style in _other_styles:
-            candidate = style.format(name)
-            library = ctypes.util.find_library(candidate)
-            if library:
+            for name in (name.upper(), name.lower()):
+                candidate = style.format(name)
+                library = ctypes.util.find_library(candidate)
                 try:
                     lib = ctypes.CDLL(library)
-                    if tests and all(run_tests(lib, tests)):
+                    if all(run_tests(lib,tests)):
                         return lib
                 except:
                     pass
 
     @staticmethod
-    def load_windows(name, paths = None, tests = []):
+    def load_windows(name, paths = None, tests=[]):
         os.environ["PATH"] += ";" + ";".join((os.getcwd(), _here))
         if paths: os.environ["PATH"] += ";" + ";".join(paths)
         
@@ -70,14 +69,15 @@ class ExternalLibrary:
             library = ctypes.util.find_library(candidate)
             if library:
                 try:
-                    lib = ctypes.CDLL(library)
-                    if tests and all(run_tests(lib, tests)):
+                    lib = ctypes.CDLL(candidate)
+                    if all(run_tests(lib,tests)):
                         return lib
-                    not_supported.append(library)
+                    else:
+                        not_supported.append(candidate)
                 except WindowsError:
                     pass
                 except OSError:
-                    not_supported.append(library)
+                    not_supported.append(candidate)
             
 
         if not_supported:

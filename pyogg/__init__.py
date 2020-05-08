@@ -47,19 +47,15 @@ if (PYOGG_OGG_AVAIL and PYOGG_VORBIS_AVAIL and PYOGG_VORBIS_FILE_AVAIL):
             bitstream = ctypes.c_int()
             bitstream_pointer = ctypes.pointer(bitstream)
 
-            while True:
-                new_bytes = vorbis.libvorbisfile.ov_read(ctypes.byref(vf), buffer_, 4096, 0, 2, 1, bitstream_pointer)
-                
-                array_ = ctypes.cast(buffer_, ctypes.POINTER(ctypes.c_char*4096)).contents
-                
-                self.buffer_array.append(array_.raw[:new_bytes])
+            new_bytes = 1
 
-                if new_bytes == 0:
-                    break
+            while new_bytes:
+                new_bytes = vorbis.libvorbisfile.ov_read(ctypes.byref(vf), buffer_, 4096, 0, 2, 1, bitstream_pointer)
+                self.buffer_array.append(array.raw[:new_bytes])
 
             self.buffer = b"".join(self.buffer_array)
 
-            #vorbis.libvorbisfile.ov_clear(ctypes.byref(vf))
+            vorbis.libvorbisfile.ov_clear(ctypes.byref(vf))
 
             self.buffer_length = len(self.buffer)
 
@@ -76,9 +72,9 @@ if (PYOGG_OGG_AVAIL and PYOGG_VORBIS_AVAIL and PYOGG_VORBIS_FILE_AVAIL):
 
             self.frequency = info.contents.rate
 
-            array = (ctypes.c_char*(PYOGG_STREAM_BUFFER_SIZE*self.channels))()
+            self.array = (ctypes.c_char*(PYOGG_STREAM_BUFFER_SIZE*self.channels))()
 
-            self.buffer_ = ctypes.cast(ctypes.pointer(array), ctypes.c_char_p)
+            self.buffer_ = ctypes.cast(ctypes.pointer(self.array), ctypes.c_char_p)
 
             self.bitstream = ctypes.c_int()
             self.bitstream_pointer = ctypes.pointer(self.bitstream)
@@ -101,18 +97,15 @@ if (PYOGG_OGG_AVAIL and PYOGG_VORBIS_AVAIL and PYOGG_VORBIS_FILE_AVAIL):
                 return None
             buffer = []
             total_bytes_written = 0
+
+            new_bytes = 1
             
-            while True:
+            while new_bytes and total_bytes_written < PYOGG_STREAM_BUFFER_SIZE*self.channels:
                 new_bytes = vorbis.ov_read(ctypes.byref(self.vf), self.buffer_, PYOGG_STREAM_BUFFER_SIZE*self.channels - total_bytes_written, 0, 2, 1, self.bitstream_pointer)
                 
-                array_ = ctypes.cast(self.buffer_, ctypes.POINTER(ctypes.c_char*(PYOGG_STREAM_BUFFER_SIZE*self.channels))).contents
-                
-                buffer.append(array_.raw[:new_bytes])
+                buffer.append(self.array.raw[:new_bytes])
 
                 total_bytes_written += new_bytes
-
-                if new_bytes == 0 or total_bytes_written >= PYOGG_STREAM_BUFFER_SIZE*self.channels:
-                    break
 
             out_buffer = b"".join(buffer)
 
@@ -136,7 +129,7 @@ else:
 
 
 
-if (PYOGG_OGG_AVAIL and PYOGG_OPUS_AVAIL and PYOGG_OPUS_FILE_AVAIL):
+if (PYOGG_OPUS_AVAIL and PYOGG_OPUS_FILE_AVAIL):
     class OpusFile:
         def __init__(self, path):
             error = ctypes.c_int()
