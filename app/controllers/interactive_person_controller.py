@@ -80,7 +80,7 @@ class InteractivePersonController:
     
     @menu_command(_("Information"), _("Current direction"), "r")
     def do_current_rotation(self, evt):
-        speech().speak(_("{degrees} degrees").format(degrees=self._person.direction))
+        speech().speak(_("{degrees} degrees").format(degrees=round(self._person.direction)))
     
     @menu_command(_("Movement"), _("Turn 90 degrees to the right"), "ctrl+d")
     def turn_right90(self, evt):
