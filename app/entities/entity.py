@@ -1,6 +1,7 @@
 import attr
 from . import entity_pre_move, entity_post_move, entity_pre_enter, entity_post_enter, entity_pre_leave, entity_post_leave, entity_rotated
 from ..measuring import measure
+from pygeodesy.ellipsoidalVincenty import LatLon
 
 @attr.s
 class Entity:
@@ -31,7 +32,9 @@ class Entity:
                 for func, ret in entity_pre_leave.send(self, leaves=leaving):
                     if not ret:
                         return False
-        self.position = pos
+        # Keeping more than 7 decimal digits is pointless as we can not get anything more accurate from OSM anyway.
+        rounded_pos = pos.latlon2(7)
+        self.position = LatLon(rounded_pos.lat, rounded_pos.lon)
         self.is_inside_of = new_inside_of
         if entity_post_leave.has_receivers_for(self):
             for place in leaves:
