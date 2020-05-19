@@ -10,7 +10,7 @@ from ..entities import entity_post_move, entity_post_enter, entity_post_leave, e
 class SoundController:
     _point_of_view = attr.ib()
     _load_sound_played = attr.ib(default=False)
-    _groups_map = attr.ib(init=False, default=collections.defaultdict(collections.OrderedDict))
+    _groups_map = attr.ib(init=False, default=collections.defaultdict(dict))
     
     def __attrs_post_init__(self):
         entity_post_move.connect(self.post_move)
