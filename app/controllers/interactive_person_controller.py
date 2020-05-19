@@ -21,8 +21,9 @@ class InteractivePersonController:
         speech().speak(("Longitude: {longitude}, latitude: {latitude}.").format(longitude=self._person.position.lon, latitude=self._person.position.lat))
 
     def _position_impl(self, objects):    
-        for obj in self._person.is_inside_of:
-            speech().speak(describe_entity(obj))
+        if objects:
+            for obj in objects:
+                speech().speak(describe_entity(obj))
         else:
             speech().speak(_("Not known."))
     
@@ -105,7 +106,7 @@ class InteractivePersonController:
          for obj in self._person.is_inside_of:
             if obj.discriminator == "Road" and not obj.value_of_field("area"):
                 angle = get_road_section_angle(self._person, obj)
-                speech().speak(_("{road}: {angle:.2f}°").format(road=describe_entity(obj), angle=angle))
+                speech().speak(_("{road}: {angle:.0f}°").format(road=describe_entity(obj), angle=angle))
 
     @menu_command(_("Information"), _("Road details"), "ctrl+o")
     def road_details(self, evt):
@@ -121,7 +122,7 @@ class InteractivePersonController:
         if not road:
             return
         rot = get_road_section_angle(self._person, road)
-        self._person.direction = rot
+        self._person.set_direction(rot)
 
     @menu_command(_("Movement"), _("Turn about..."), "Ctrl+r")
     def rotate_by(self, evt):

@@ -50,7 +50,10 @@ class Entity:
         self.direction = new_dir
     
     def rotate(self, amount):
-        self.direction = (self.direction + amount) % 360
+        self.set_direction((self.direction + amount) % 360)
+    
+    def set_direction(self, direction):
+        self.direction = direction
         entity_rotated.send(self)
     
     @property
