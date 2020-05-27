@@ -1,3 +1,4 @@
+import locale
 from accessible_output2.outputs.base import Output, OutputError
 try:
     from speechd import Client, SSIPCommunicationError
@@ -10,9 +11,14 @@ class SpeechDispatcherOutput(Output):
     priority = 100
     
     def __init__(self):
+        super().__init__()
         self._client = None
         if has_speechd_api:
             self._client = Client()
+            lang, encoding = locale.getdefaultlocale()
+            if "_" in lang:
+                lang = lang.split("_")[0]
+            self._client.set_language(lang)
         else:
             raise OutputError("Failed to import the speechd module.")
         
