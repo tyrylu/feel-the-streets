@@ -5,7 +5,7 @@ use std::collections::HashMap;
 const POLYGON_CRITERIA_STR: &str = include_str!("polygon_criteria.json");
 lazy_static! {
     static ref POLYGON_CRITERIA: Vec<PolygonCreationCriterion> =
-        { serde_json::from_str::<Vec<PolygonCreationCriterion>>(&POLYGON_CRITERIA_STR).unwrap() };
+        serde_json::from_str::<Vec<PolygonCreationCriterion>>(&POLYGON_CRITERIA_STR).unwrap();
 }
 
 #[derive(Deserialize)]

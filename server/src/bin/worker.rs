@@ -39,14 +39,14 @@ fn consume_tasks() -> Result<()> {
         )
         .wait()?;
     info!("Starting tasks consumption...");
-    for delivery in consumer {
-        let delivery_obj = delivery?;
-        trace!("Received message: {:?}", delivery_obj);
-        let task: BackgroundTask = serde_json::from_slice(&delivery_obj.data)?;
+    for delivery_data in consumer {
+        let (chan, delivery) = delivery_data?;
+        trace!("Received message: {:?}", delivery);
+        let task: BackgroundTask = serde_json::from_slice(&delivery.data)?;
         task.execute()?;
         info!("Task executed successfully.");
-        channel
-            .basic_ack(delivery_obj.delivery_tag, BasicAckOptions::default())
+        chan
+            .basic_ack(delivery.delivery_tag, BasicAckOptions::default())
             .wait()?;
         info!("Task acknowledged.");
         if let Some((hour, minute, second)) = task.get_next_schedule_time() {
