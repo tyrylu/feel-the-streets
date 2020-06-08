@@ -8,4 +8,6 @@ pub enum Error {
     IoError(#[from] std::io::Error),
     #[error("Serde error: {0}")]
     SerdeError(#[from] serde_json::error::Error),
+    #[error("Attempted an application of a change type which should be never applied")]
+    IllegalChangeType,
 }

@@ -222,6 +222,7 @@ impl AreaDatabase {
     pub fn apply_change(&self, change: &SemanticChange) -> Result<()> {
         use SemanticChange::*;
         match change {
+            RedownloadDatabase => Err(Error::IllegalChangeType),
             Create {
                 discriminator,
                 geometry,

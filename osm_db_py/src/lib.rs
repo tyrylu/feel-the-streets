@@ -13,6 +13,7 @@ mod semantic_change;
 const CHANGE_CREATE: i32 = 0;
 const CHANGE_UPDATE: i32 = 1;
 const CHANGE_REMOVE: i32 = 2;
+const CHANGE_REDOWNLOAD_DATABASE: i32 = 3;
 
 #[pymodule]
 fn osm_db(_py: Python, m: &PyModule) -> PyResult<()> {
@@ -31,6 +32,7 @@ fn osm_db(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add("CHANGE_CREATE", CHANGE_CREATE)?;
     m.add("CHANGE_UPDATE", CHANGE_UPDATE)?;
     m.add("CHANGE_REMOVE", CHANGE_REMOVE)?;
+    m.add("CHANGE_REDOWNLOAD_DATABASE", CHANGE_REDOWNLOAD_DATABASE)?;
     m.add_class::<semantic_change::PySemanticChange>()?;
     m.add_class::<dict_change::DictChange>()?;
     m.add_class::<entity::PyEntity>()?;

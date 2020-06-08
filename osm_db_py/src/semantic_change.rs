@@ -24,6 +24,7 @@ impl PySemanticChange {
     #[getter]
     fn get_type(&self) -> i32 {
         match self.inner {
+            SemanticChange::RedownloadDatabase => crate::CHANGE_REDOWNLOAD_DATABASE,
             SemanticChange::Create { .. } => crate::CHANGE_CREATE,
             SemanticChange::Update { .. } => crate::CHANGE_UPDATE,
             SemanticChange::Remove { .. } => crate::CHANGE_REMOVE,
@@ -35,7 +36,7 @@ impl PySemanticChange {
             SemanticChange::Remove { osm_id, .. } | SemanticChange::Update { osm_id, .. } => {
                 Some(osm_id)
             }
-            SemanticChange::Create { .. } => None,
+            SemanticChange::Create { .. } | SemanticChange::RedownloadDatabase => None,
         }
     }
     #[getter]
@@ -45,7 +46,7 @@ impl PySemanticChange {
                 .iter()
                 .map(|c| DictChange::new(c.clone()))
                 .collect(),
-            SemanticChange::Remove { .. } | SemanticChange::Create { .. } => vec![],
+            SemanticChange::Remove { .. } | SemanticChange::Create { .. } | SemanticChange::RedownloadDatabase => vec![],
         }
     }
 
@@ -79,7 +80,7 @@ impl PySemanticChange {
                 }
                 ret
             }
-            SemanticChange::Remove { .. } => vec![],
+            SemanticChange::Remove { .. } | SemanticChange::RedownloadDatabase => vec![],
         }
     }
 }

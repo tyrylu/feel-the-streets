@@ -40,6 +40,7 @@ impl EntryChange {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum SemanticChange {
+    RedownloadDatabase,
     Create {
         geometry: String,
         discriminator: String,
