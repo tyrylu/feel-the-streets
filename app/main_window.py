@@ -7,7 +7,7 @@ from .entities import Person
 from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController, LastLocationController
 from .area_selection import AreaSelectionDialog
 from .services import map, menu_service
-from .server_interaction import AreaDatabaseDownloader, SemanticChangeRetriever, has_api_connectivity
+from .server_interaction import AreaDatabaseDownloader, SemanticChangeRetriever, has_api_connectivity, ConnectionError
 from .changes_applier import ChangesApplier
 from osm_db import AreaDatabase, EntitiesQuery
 from .size_utils import format_size
@@ -80,8 +80,13 @@ class MainWindow(QMainWindow):
         if not has_api_connectivity():
             self._on_map_ready()
             return
-        retriever = SemanticChangeRetriever()
-        self._pending_count = retriever.new_change_count_in(area)
+        try:
+            retriever = SemanticChangeRetriever()
+            self._pending_count = retriever.new_change_count_in(area)
+        except ConnectionError:
+            QMessageBox.warning(self, _("Warning"), _("Could not retrieve changes in the selected area, using the potentially stale local copy."))
+            self._on_map_ready()
+            return
         if not self._pending_count:
             self._on_map_ready()
             return
@@ -95,8 +100,12 @@ class MainWindow(QMainWindow):
         self._applier = ChangesApplier(area, retriever, generate_changelog)
         self._applier.will_process_change.connect(self._on_will_process_change)
         self._applier.changes_applied.connect(self._on_changes_applied)
+        self._applier.redownload_requested.connect(self._redownload_requested)
         self._applier.start()
         
+    def _on_redownload_requested(self):
+        QMessageBox.information(self, _("Redownload requested"), _("The server has requested a redownload of the selected database, proceeding with the operation."))
+        self._download_database(self._area)
         
     def _on_will_process_change(self, nth):
         self._progress.setLabelText(_("Applying changes for the selected database, change {nth} of {total}").format(nth=nth, total=self._pending_count))

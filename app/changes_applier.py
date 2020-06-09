@@ -3,13 +3,14 @@ import json
 import datetime
 import logging
 from PySide2.QtCore import QThread, Signal
-from osm_db import AreaDatabase, CHANGE_REMOVE
+from osm_db import AreaDatabase, CHANGE_REMOVE, CHANGE_REDOWNLOAD_DATABASE
 from .semantic_changelog_generator import get_change_description
 
 
 log = logging.getLogger(__name__)
 
 class ChangesApplier(QThread):
+    redownload_requested = Signal()
     will_process_change = Signal(int)
     changes_applied = Signal(str)
     
@@ -26,6 +27,9 @@ class ChangesApplier(QThread):
         os.makedirs(os.path.dirname(changelog_path), exist_ok=True)
         changelog = open(changelog_path, "w", encoding="UTF-8")
         for nth, change in enumerate(self._retriever.new_changes_in(self._area)):
+            if change.type is CHANGE_REDOWNLOAD_DATABASE:
+                self.redownload_requested.emit()
+                break
             self.will_process_change.emit(nth + 1)
             entity = None
             if self._generate_changelog and change.type is CHANGE_REMOVE:

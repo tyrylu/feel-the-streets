@@ -4,6 +4,12 @@ import pika
 from ..services import config
 from ..amqp_queue_naming import get_client_queue_name
 
+class ConnectionError(RuntimeError):
+    pass
+
+class UnknownQueueError(RuntimeError):
+    pass
+
 
 class SemanticChangeRetriever:
 
@@ -13,8 +19,8 @@ class SemanticChangeRetriever:
             self._conn = pika.BlockingConnection(pika.URLParameters(config().amqp_broker_url))
             self._chan = self._conn.channel()
             self._needs_closing = True
-        except Exception:
-            pass
+        except Exception as e:
+            raise ConnectionError from e
         self._max_delivery_tags = defaultdict(lambda: 0)
 
     def new_changes_in(self, area):
