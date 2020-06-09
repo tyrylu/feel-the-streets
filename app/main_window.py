@@ -7,7 +7,7 @@ from .entities import Person
 from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController, LastLocationController
 from .area_selection import AreaSelectionDialog
 from .services import map, menu_service
-from .server_interaction import AreaDatabaseDownloader, SemanticChangeRetriever, has_api_connectivity, ConnectionError
+from .server_interaction import AreaDatabaseDownloader, SemanticChangeRetriever, has_api_connectivity, ConnectionError, UnknownQueueError
 from .changes_applier import ChangesApplier
 from osm_db import AreaDatabase, EntitiesQuery
 from .size_utils import format_size
@@ -87,6 +87,10 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, _("Warning"), _("Could not retrieve changes in the selected area, using the potentially stale local copy."))
             self._on_map_ready()
             return
+        except UnknownQueueError:
+            QMessageBox.warning(self, _("Warning"), _("The changes queue for the selected database no longer exists on the server, downloading it as if it was a new area."))
+            self._download_database(area)
+            return
         if not self._pending_count:
             self._on_map_ready()
             return
@@ -105,7 +109,7 @@ class MainWindow(QMainWindow):
         
     def _on_redownload_requested(self):
         QMessageBox.information(self, _("Redownload requested"), _("The server has requested a redownload of the selected database, proceeding with the operation."))
-        self._download_database(self._area)
+        self._download_database(self._selected_map)
         
     def _on_will_process_change(self, nth):
         self._progress.setLabelText(_("Applying changes for the selected database, change {nth} of {total}").format(nth=nth, total=self._pending_count))

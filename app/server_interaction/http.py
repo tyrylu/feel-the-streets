@@ -63,7 +63,7 @@ class AreaDatabaseDownloader(QThread):
             db_path = AreaDatabase.path_for(self._area, server_side=False)
             dbs_dir = os.path.dirname(db_path)
             os.makedirs(dbs_dir, exist_ok=True)
-            with atomicwrites.atomic_write(db_path, mode="wb") as fp:
+            with atomicwrites.atomic_write(db_path, overwrite=True, mode="wb") as fp:
                 so_far = 0
                 for chunk in resp.iter_content(chunk_size):
                     so_far += len(chunk)

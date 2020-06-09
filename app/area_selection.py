@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 def cache_area_names(areas_response):
     with open(os.path.join(config().config_path, "area.names"), "w", encoding="utf-8") as fp:
         for area in areas_response:
-            fp.write("{}={}\n").format(area["osm_id"], area["name"])
+            fp.write("{}={}\n".format(area["osm_id"], area["name"]))
 
 def get_area_names_cache():
     names = {}
