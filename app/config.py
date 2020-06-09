@@ -6,9 +6,9 @@ import appdirs
 class Config:
 
     def __init__(self):
-        self._config_path = appdirs.user_config_dir("fts", appauthor=False, roaming=True)
-        os.makedirs(self._config_path, exist_ok=True)
-        self._config_file = os.path.join(self._config_path, "config.ini")
+        self.config_path = appdirs.user_config_dir("fts", appauthor=False, roaming=True)
+        os.makedirs(self.config_path, exist_ok=True)
+        self._config_file = os.path.join(self.config_path, "config.ini")
         self._config = configparser.ConfigParser()
         self._config.read(self._config_file)
         self._maybe_initialize_values()
