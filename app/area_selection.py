@@ -15,13 +15,14 @@ log = logging.getLogger(__name__)
 def get_local_area_infos():
     results = []
     # Somewhat hacky, but we need the storage root only there and the path generation logic does not care whether the area actually exists.
-    areas_storage_path = os.path.dirname(AreaDatabase.path_for("someplace", False))
+    areas_storage_path = os.path.dirname(AreaDatabase.path_for(12345, False))
     for db_file in glob.glob(os.path.join(areas_storage_path, "*.db")):
+        info = os.stat(db_file)
         name = os.path.basename(db_file).replace(".db", "")
-        mtime = pendulum.from_timestamp(os.path.getmtime(db_file)).to_rfc3339_string()
-        ctime = pendulum.from_timestamp(os.path.getctime(db_file)).to_rfc3339_string()
+        mtime = pendulum.from_timestamp(info.st_mtime).to_rfc3339_string()
+        ctime = pendulum.from_timestamp(info.st_ctime).to_rfc3339_string()
         # Cache names for offline use, they're ugly now.
-        results.append({"osm_id": name, "name":name, "updated_at": mtime, "state": "local", "created_at": ctime})
+        results.append({"osm_id": int(name), "name":name, "updated_at": mtime, "state": "local", "created_at": ctime, "db_size": info.st_size})
     return results
 
 
