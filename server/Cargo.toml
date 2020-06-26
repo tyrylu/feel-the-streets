@@ -9,7 +9,7 @@ log = "*"
 env_logger = "*"
 osm_db = {path="../osm_db"}
 osm_api = {path="../osm_api"}
-rocket = "*"
+rocket = {version="*", default_features=false}
 rocket_contrib = {version="*", features = ["diesel_sqlite_pool"]}
 diesel = {version = "*", features = ["sqlite", "chrono"]}
 diesel_migrations = "*"
