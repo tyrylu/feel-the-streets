@@ -9,8 +9,8 @@ osm_api = {path = "../osm_api"}
 serde = {version="*", features=["derive"]}
 serde_json = "*"
 serde_yaml = "*"
+indexmap = {version = "*", features = ["serde-1"]}
 lazy_static = "*"
-linked-hash-map = {version = "*", features = ["serde_impl"]}
 log = "*"
 uom = "*"
 rusqlite = {"version" = "*", "features" = ["bundled-windows", "load_extension"]}

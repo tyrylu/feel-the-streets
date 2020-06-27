@@ -1,11 +1,11 @@
 use crate::entity_metadata::EntityMetadata;
 use hashbrown::HashMap;
-use linked_hash_map::LinkedHashMap;
+use indexmap::IndexMap;
 use osm_api::object::OSMObject;
 use std::fs::File;
 
 lazy_static! {
-    static ref TRANSLATION_SPECS: LinkedHashMap<String, TranslationSpec> = {
+    static ref TRANSLATION_SPECS: IndexMap<String, TranslationSpec> = {
         let fp =
             File::open("translation_specs.yml").expect("Failed to open the translation specs file");
         serde_yaml::from_reader::<_, _>(fp).expect("Failed to deserialize the specs.")
