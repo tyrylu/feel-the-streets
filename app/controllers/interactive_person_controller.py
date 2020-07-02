@@ -108,7 +108,8 @@ class InteractivePersonController:
          for obj in self._person.is_inside_of:
             if obj.discriminator == "Road" and not obj.value_of_field("area"):
                 angle = get_road_section_angle(self._person, obj)
-                speech().speak(_("{road}: {angle:.0f}°").format(road=describe_entity(obj), angle=angle))
+                angle = round(angle, config().angle_decimal_places)
+                speech().speak(_("{road}: {angle}°").format(road=describe_entity(obj), angle=angle))
 
     @menu_command(_("Information"), _("Road details"), "ctrl+o")
     def road_details(self, evt):
