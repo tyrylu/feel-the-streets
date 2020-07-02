@@ -65,7 +65,8 @@ class ObjectsBrowserWindow(QWidget):
         for dist, obj, closest in objects:
             bearing = bearing_to(person.position, closest)
             rel_bearing = (bearing - self._person.direction) % 360
-            self._objects_list.addItem(_("{object}: distance {distance:.2f} meters, {rel_bearing:.2f}° relatively").format(object=describe_entity(obj), distance=dist, rel_bearing=rel_bearing))
+            dist = round(dist, services.config().distance_decimal_places)
+            self._objects_list.addItem(_("{object}: distance {distance} meters, {rel_bearing:.2f}° relatively").format(object=describe_entity(obj), distance=dist, rel_bearing=rel_bearing))
         self._objects = objects
         self._all_actions = []
         for member in object_actions.__dict__.values():

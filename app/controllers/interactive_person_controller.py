@@ -1,7 +1,7 @@
 from PySide2.QtWidgets import QInputDialog, QMessageBox
 from pygeodesy.ellipsoidalVincenty import LatLon
 from ..humanization_utils import describe_entity
-from ..services import speech, map
+from ..services import speech, map, config
 from ..objects_browser import ObjectsBrowserWindow
 from ..road_segments_browser import RoadSegmentsBrowserDialog
 from ..geometry_utils import get_road_section_angle, distance_filter
@@ -18,7 +18,9 @@ class InteractivePersonController:
     
     @menu_command(_("Information"), _("Current coordinates"), "c")
     def do_current_coords(self, evt):
-        speech().speak(("Longitude: {longitude}, latitude: {latitude}.").format(longitude=self._person.position.lon, latitude=self._person.position.lat))
+        lat = round(self._person.position.lat, config().coordinate_decimal_places)
+        lon = round(self._person.position.lon, config().coordinate_decimal_places)
+        speech().speak(_("Longitude: {longitude}, latitude: {latitude}.").format(longitude=lon, latitude=lat))
 
     def _position_impl(self, objects):    
         if objects:
@@ -81,7 +83,7 @@ class InteractivePersonController:
     
     @menu_command(_("Information"), _("Current direction"), "r")
     def do_current_rotation(self, evt):
-        speech().speak(_("{degrees} degrees").format(degrees=round(self._person.direction)))
+        speech().speak(_("{degrees} degrees").format(degrees=round(self._person.direction, config().angle_decimal_places)))
     
     @menu_command(_("Movement"), _("Turn 90 degrees to the right"), "ctrl+d")
     def turn_right90(self, evt):
