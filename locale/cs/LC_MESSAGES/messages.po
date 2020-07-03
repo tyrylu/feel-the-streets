@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-07-02 23:53+0200\n"
-"PO-Revision-Date: 2020-07-03 00:23+0200\n"
+"POT-Creation-Date: 2020-07-03 20:24+0200\n"
+"PO-Revision-Date: 2020-07-03 20:26+0200\n"
 "Last-Translator: \n"
 "Language: cs\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -1328,9 +1328,9 @@ msgstr "Cedule"
 #: app/controllers/interactive_person_controller.py:64
 #: app/controllers/interactive_person_controller.py:84
 #: app/controllers/interactive_person_controller.py:106
-#: app/controllers/interactive_person_controller.py:113
-#: app/controllers/interactive_person_controller.py:149
-#: app/controllers/interactive_person_controller.py:157 entities.yml:427
+#: app/controllers/interactive_person_controller.py:114
+#: app/controllers/interactive_person_controller.py:150
+#: app/controllers/interactive_person_controller.py:158 entities.yml:427
 #: entities.yml:1401 enums.yml:914 enums.yml:1441 enums.yml:1496 enums.yml:1802
 msgid "Information"
 msgstr "Informace"
@@ -10850,7 +10850,7 @@ msgstr "Nepodařilo se získat změny ve vybrané oblasti, bude použita potenci
 msgid "The changes queue for the selected database no longer exists on the server, downloading it as if it was a new area."
 msgstr "Fronta změn pro vybranou oblast na serveru již neexistuje, oblast bude stažena jako by se jednalo o novou oblast."
 
-#: app/controllers/interactive_person_controller.py:184 app/main_window.py:99
+#: app/controllers/interactive_person_controller.py:185 app/main_window.py:99
 msgid "Question"
 msgstr "Otázka"
 
@@ -10883,7 +10883,7 @@ msgstr "Provádění změn nad zvolenou databází, změna {nth} z {total}."
 msgid "Successfully applied {total} changes. A changelog of size {size} was generated, do you want to view it now?"
 msgstr "Úspěšně bylo provedeno {total} změn. Byl vytvořen protokol změn o velikosti {size}, přejete si ho nyní vidět?"
 
-#: app/controllers/interactive_person_controller.py:113
+#: app/controllers/interactive_person_controller.py:114
 #: app/road_segments_browser.py:10
 msgid "Road details"
 msgstr "Detaily cesty"
@@ -11004,8 +11004,8 @@ msgstr "Nejbližší - všechny objekty, může být pomalé"
 #: app/controllers/interactive_person_controller.py:88
 #: app/controllers/interactive_person_controller.py:92
 #: app/controllers/interactive_person_controller.py:96
-#: app/controllers/interactive_person_controller.py:121
-#: app/controllers/interactive_person_controller.py:129
+#: app/controllers/interactive_person_controller.py:122
+#: app/controllers/interactive_person_controller.py:130
 msgid "Movement"
 msgstr "Pohyb"
 
@@ -11058,84 +11058,84 @@ msgstr "Zadej zeměpisnou šířku"
 msgid "Current road section angle"
 msgstr "Úhel aktuální části cesty"
 
-#: app/controllers/interactive_person_controller.py:111
-msgid "{road}: {angle:.0f}°"
-msgstr ""
+#: app/controllers/interactive_person_controller.py:112
+msgid "{road}: {angle}°"
+msgstr "{road}: {angle}°"
 
-#: app/controllers/interactive_person_controller.py:121
+#: app/controllers/interactive_person_controller.py:122
 msgid "Turn according to a road"
 msgstr "Otočit se podle cesty"
 
-#: app/controllers/interactive_person_controller.py:129
+#: app/controllers/interactive_person_controller.py:130
 msgid "Turn about..."
 msgstr "Otočit se o..."
 
-#: app/controllers/interactive_person_controller.py:131
+#: app/controllers/interactive_person_controller.py:132
 msgid "Data"
 msgstr "Údaj"
 
-#: app/controllers/interactive_person_controller.py:131
+#: app/controllers/interactive_person_controller.py:132
 msgid "Enter the angle"
 msgstr "Zadej úhel"
 
-#: app/controllers/interactive_person_controller.py:144
+#: app/controllers/interactive_person_controller.py:145
 msgid "Request"
 msgstr "Požadavek"
 
-#: app/controllers/interactive_person_controller.py:144
+#: app/controllers/interactive_person_controller.py:145
 msgid "Select the road which should be the target of the operation"
 msgstr "Zvolte cestu, nad kterou se má operace provést"
 
-#: app/controllers/interactive_person_controller.py:149
+#: app/controllers/interactive_person_controller.py:150
 msgid "Search..."
 msgstr "Hledat..."
 
-#: app/controllers/interactive_person_controller.py:153
+#: app/controllers/interactive_person_controller.py:154
 msgid "Search results"
 msgstr "Výsledky vyhledávání"
 
-#: app/controllers/interactive_person_controller.py:157
+#: app/controllers/interactive_person_controller.py:158
 msgid "No object matches the given search criteria."
 msgstr "Zadaným podmínkám vyhledávání neodpovídá žádný objekt."
 
-#: app/controllers/interactive_person_controller.py:159
-#: app/controllers/interactive_person_controller.py:166
-#: app/controllers/interactive_person_controller.py:176
+#: app/controllers/interactive_person_controller.py:160
+#: app/controllers/interactive_person_controller.py:167
+#: app/controllers/interactive_person_controller.py:177
 msgid "Bookmarks"
 msgstr "Záložky"
 
-#: app/controllers/interactive_person_controller.py:159
+#: app/controllers/interactive_person_controller.py:160
 msgid "Add bookmark..."
 msgstr "Přidat záložku..."
 
-#: app/controllers/interactive_person_controller.py:161
-#: app/controllers/interactive_person_controller.py:170
-#: app/controllers/interactive_person_controller.py:180
+#: app/controllers/interactive_person_controller.py:162
+#: app/controllers/interactive_person_controller.py:171
+#: app/controllers/interactive_person_controller.py:181
 msgid "Data entry"
 msgstr "Datový vstup"
 
-#: app/controllers/interactive_person_controller.py:161
+#: app/controllers/interactive_person_controller.py:162
 msgid "Enter a name for the new bookmark"
 msgstr "Zadej jméno nové záložky"
 
-#: app/controllers/interactive_person_controller.py:166
+#: app/controllers/interactive_person_controller.py:167
 msgid "Go to bookmark..."
 msgstr "Jít na záložku..."
 
-#: app/controllers/interactive_person_controller.py:170
-#: app/controllers/interactive_person_controller.py:180
+#: app/controllers/interactive_person_controller.py:171
+#: app/controllers/interactive_person_controller.py:181
 msgid "Select a bookmark"
 msgstr "Zvolte záložku"
 
-#: app/controllers/interactive_person_controller.py:176
+#: app/controllers/interactive_person_controller.py:177
 msgid "Remove bookmark..."
 msgstr "Odstranit záložku..."
 
-#: app/controllers/interactive_person_controller.py:179
+#: app/controllers/interactive_person_controller.py:180
 msgid "{name}: longitude: {longitude}, latitude: {latitude}"
 msgstr "{name}: zeměpisná délka: {longitude}, zeměpisná šířka: {latitude}"
 
-#: app/controllers/interactive_person_controller.py:184
+#: app/controllers/interactive_person_controller.py:185
 msgid "Do you really want to delete the bookmark {name}?"
 msgstr "Opravdu si přejete záložku {bookmark} odstranit?"
 
@@ -11175,19 +11175,19 @@ msgstr "Jít na"
 msgid " ({num_objects} objects shown)"
 msgstr " (zobrazeno {num_objects} objektů)"
 
-#: app/objects_browser/window.py:69
-msgid "{object}: distance {distance} meters, {rel_bearing:.2f}° relatively"
-msgstr ""
+#: app/objects_browser/window.py:70
+msgid "{object}: distance {distance} meters, {rel_bearing}° relatively"
+msgstr "{object}: vzdálenost {distance} metrů, {rel_bearing}° relativně"
 
-#: app/objects_browser/window.py:90
+#: app/objects_browser/window.py:91
 msgid "Common properties"
 msgstr "Společné vlastnosti"
 
-#: app/objects_browser/window.py:91
+#: app/objects_browser/window.py:92
 msgid "Specific properties"
 msgstr "Specifické vlastnosti"
 
-#: app/objects_browser/window.py:92
+#: app/objects_browser/window.py:93
 msgid "Other properties - they can not be searched and are not processed in any way"
 msgstr "Ostatní vlastnosti - nelze podle nich vyhledávat a nejsou žádným způsobem zpracovány"
 
@@ -11381,3 +11381,9 @@ msgstr "Hodnota"
 
 #~ msgid "{object}: distance {distance:.2f} meters, {rel_bearing:.2f}° relatively"
 #~ msgstr "{object}: vzdálenost {distance:.2f} metrů, {rel_bearing:.2f}° relativně"
+
+#~ msgid "{road}: {angle:.0f}°"
+#~ msgstr ""
+
+#~ msgid "{object}: distance {distance} meters, {rel_bearing:.2f}° relatively"
+#~ msgstr ""
