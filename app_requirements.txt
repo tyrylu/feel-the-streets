@@ -10,7 +10,6 @@ https://github.com/tyrylu/uimanager/archive/master.zip
 blinker
 PySide2
 anglr
-bitmath
 pyopenal
 pyogg
 shapely
