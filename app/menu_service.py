@@ -21,6 +21,7 @@ class MenuService:
                 label += "\t%s"%cmd.item_shortcut
             item = menu.addAction(label)
             item.triggered.connect(cmd)
+            item.setCheckable(cmd.checkable)
             if cmd.item_shortcut:
                 item.setShortcut(QKeySequence(cmd.item_shortcut))
             if cmd.item_name:
@@ -56,12 +57,13 @@ class MenuService:
         return self._menu_items_by_name[name]
 
 
-def menu_command(menu, label, shortcut, name=None):
+def menu_command(menu, label, shortcut=None, name=None, checkable=False):
     def wrap(func):
         func.menu = menu
         func.item_label = label
         func.item_shortcut = shortcut
         func.item_name = name
+        func.checkable = checkable
         return func
     return wrap
 

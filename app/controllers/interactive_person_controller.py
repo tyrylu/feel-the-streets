@@ -184,3 +184,7 @@ class InteractivePersonController:
         bookmark = bookmarks[reprs.index(repr)]
         if QMessageBox.question(self._main_window, _("Question"), _("Do you really want to delete the bookmark {name}?").format(name=bookmark.name)) == QMessageBox.Yes:
             map().remove_bookmark(bookmark)
+
+    @menu_command(_("Options"), _("Disallow leaving roads"), "alt+o", checkable=True)
+    def disallow_leaving_roads(self, checked):
+        pass
