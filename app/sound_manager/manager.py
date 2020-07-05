@@ -85,3 +85,6 @@ class SoundManager(object):
         choice = random.randint(1, count)
         sound = "%s.%02d"%(group, choice)
         return self.play(sound, *args, **kwargs)
+
+    def __del__(self):
+        openal.oalQuit()
