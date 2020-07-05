@@ -55,7 +55,7 @@ class MainWindow(QMainWindow):
    
     def _download_progress_callback(self, total, so_far):
         if not self._download_progress_dialog:
-            self._download_progress_dialog = QProgressDialog(_("Downloading the selected database."), "", 0, 100, self)
+            self._download_progress_dialog = QProgressDialog(_("Downloading the selected database."), None, 0, 100, self)
             self._download_progress_dialog.setWindowTitle(_("Download in progress"))
         percentage = int((so_far/total)*100)
         self._download_progress_dialog.setLabelText(_("Downloading the selected database. Downloaded {so_far} of {total}.").format(so_far=format_size(so_far), total=format_size(total)))
@@ -99,7 +99,7 @@ class MainWindow(QMainWindow):
             resp = QMessageBox.question(self, _("Question"), _("The server reports %s pending changes. Do you really want to generate the changelog from all of them? It might take a while.")%self._pending_count)
             if resp == QMessageBox.StandardButton.Yes:
                 generate_changelog = False
-        self._progress = QProgressDialog(_("Applying changes for the selected database."), "", 0, self._pending_count, self)
+        self._progress = QProgressDialog(_("Applying changes for the selected database."), None, 0, self._pending_count, self)
         self._progress.setWindowTitle(_("Change application"))
         self._applier = ChangesApplier(area, retriever, generate_changelog)
         self._applier.will_process_change.connect(self._on_will_process_change)
