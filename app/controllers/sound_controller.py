@@ -4,7 +4,7 @@ import attr
 import anglr
 from osm_db import Enum
 from ..services import sound
-from ..entities import entity_post_move, entity_post_enter, entity_post_leave, entity_rotated
+from ..entities import entity_post_move, entity_post_enter, entity_post_leave, entity_rotated, entity_move_rejected
 
 @attr.s
 class SoundController:
@@ -17,6 +17,7 @@ class SoundController:
         entity_post_enter.connect(self.post_enter)
         entity_post_leave.connect(self.post_leave)
         entity_rotated.connect(self._rotated)
+        entity_move_rejected.connect(self._entity_move_rejected)
 
     def post_move(self, sender):
         if not self._load_sound_played:
@@ -63,3 +64,7 @@ class SoundController:
         if self._point_of_view is sender:
             angle = anglr.Angle(sender.direction, "degrees")
             sound().listener.set_orientation([angle.x, 0, angle.y, 0, 1, 0]) # The mapping to the mathematical cartesian coordinate system is x,z,y
+
+    def _entity_move_rejected(self, sender):
+        cartesian = sender.position.toCartesian()
+        sound().play("leave_disallowed", x=cartesian.x, y=cartesian.y, z=cartesian.z)

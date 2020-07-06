@@ -1,5 +1,5 @@
 import attr
-from . import entity_pre_move, entity_post_move, entity_pre_enter, entity_post_enter, entity_pre_leave, entity_post_leave, entity_rotated
+from . import entity_pre_move, entity_post_move, entity_pre_enter, entity_post_enter, entity_pre_leave, entity_post_leave, entity_rotated, entity_move_rejected
 from ..measuring import measure
 from pygeodesy.ellipsoidalVincenty import LatLon
 
@@ -15,6 +15,7 @@ class Entity:
         if entity_pre_move.has_receivers_for(self):
             for func, ret in entity_pre_move.send(self, new_pos=pos):
                 if not ret:
+                    entity_move_rejected.send(self)
                     return False
         with measure("Inside of query"):
             new_inside_of = set(entity for entity in self.map.intersections_at_position(pos))
@@ -24,6 +25,7 @@ class Entity:
             for entered in enters:
                 for func, ret in entity_pre_enter.send(self, enters=entered):
                     if not ret:
+                        entity_move_rejected.send(self)
                         return False
         if entity_pre_leave.has_receivers_for(self) or entity_post_leave.has_receivers_for(self):
             leaves = self.is_inside_of.difference(new_inside_of)
@@ -31,6 +33,7 @@ class Entity:
             for leaving in leaves:
                 for func, ret in entity_pre_leave.send(self, leaves=leaving):
                     if not ret:
+                        entity_move_rejected.send(self)
                         return False
         # Keeping more than 7 decimal digits is pointless as we can not get anything more accurate from OSM anyway.
         rounded_pos = pos.latlon2(7)
