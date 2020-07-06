@@ -9,33 +9,32 @@ class Config:
         self.config_path = appdirs.user_config_dir("fts", appauthor=False, roaming=True)
         os.makedirs(self.config_path, exist_ok=True)
         self._config_file = os.path.join(self.config_path, "config.ini")
+        self._dirty = False
         self._config = configparser.ConfigParser()
         self._config.read(self._config_file)
         self._maybe_initialize_values()
     
     def _maybe_initialize_value(self, section, key, default):
-        dirty = False
         if not section in self._config:
-            self._config[section] = {}
-            dirty = True
+            self._config.add_section(section)
+            self._dirty = True
         if key not in self._config[section]:
             self._config[section][key] = str(default)
-            dirty = True
-        return dirty
+            self._dirty = True
 
     def _maybe_initialize_values(self):
-        need_saving = False
-        need_saving = self._maybe_initialize_value("general", "client_id", secrets.token_urlsafe())
-        need_saving = need_saving or self._maybe_initialize_value("presentation", "distance_decimal_places", 1)
-        need_saving = need_saving or self._maybe_initialize_value("presentation", "coordinate_decimal_places", 6)
-        need_saving = need_saving or self._maybe_initialize_value("presentation", "angle_decimal_places", 0)
-        need_saving = need_saving or self._maybe_initialize_value("navigation", "disallow_leaving_roads", False)
-        if need_saving:
+        self._maybe_initialize_value("general", "client_id", secrets.token_urlsafe())
+        self._maybe_initialize_value("presentation", "distance_decimal_places", 1)
+        self._maybe_initialize_value("presentation", "coordinate_decimal_places", 6)
+        self._maybe_initialize_value("presentation", "angle_decimal_places", 0)
+        self._maybe_initialize_value("navigation", "disallow_leaving_roads", False)
+        if self._dirty:
             self._save()
 
     def _save(self):
         with open(self._config_file, "w", encoding="UTF-8") as fp:
             self._config.write(fp)
+        self._dirty = False
 
     @property
     def client_id(self):
