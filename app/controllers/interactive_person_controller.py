@@ -15,6 +15,7 @@ class InteractivePersonController:
         self._main_window = main_window
         self._browser_window = None
         menu_service().register_menu_commands(self)
+        menu_service().menu_item_with_name("toggle_disallow_leave_roads").setChecked(config().disallow_leaving_roads)
     
     @menu_command(_("Information"), _("Current coordinates"), "c")
     def do_current_coords(self, evt):
@@ -185,6 +186,6 @@ class InteractivePersonController:
         if QMessageBox.question(self._main_window, _("Question"), _("Do you really want to delete the bookmark {name}?").format(name=bookmark.name)) == QMessageBox.Yes:
             map().remove_bookmark(bookmark)
 
-    @menu_command(_("Options"), _("Disallow leaving roads"), "alt+o", checkable=True)
+    @menu_command(_("Options"), _("Disallow leaving roads"), "alt+o", checkable=True, name="toggle_disallow_leave_roads")
     def disallow_leaving_roads(self, checked):
-        pass
+        config().disallow_leaving_roads = bool(checked)

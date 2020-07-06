@@ -4,7 +4,7 @@ import os
 import webbrowser
 from pygeodesy.ellipsoidalVincenty import LatLon
 from .entities import Person
-from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController, LastLocationController
+from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController, LastLocationController, MovementRestrictionController
 from .area_selection import AreaSelectionDialog
 from .services import map, menu_service
 from .server_interaction import AreaDatabaseDownloader, SemanticChangeRetriever, has_api_connectivity, ConnectionError, UnknownQueueError
@@ -48,6 +48,7 @@ class MainWindow(QMainWindow):
         self._sound_controller = SoundController(person)
         self._announcements_controller = AnnouncementsController(person)
         self._last_location_controller = LastLocationController(person)
+        self._restriction_controller = MovementRestrictionController(person)
         if not self._last_location_controller.restored_position:
                   person.move_to(map().default_start_location)
         self.show()

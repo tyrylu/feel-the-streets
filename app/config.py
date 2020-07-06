@@ -29,6 +29,7 @@ class Config:
         need_saving = need_saving or self._maybe_initialize_value("presentation", "distance_decimal_places", 1)
         need_saving = need_saving or self._maybe_initialize_value("presentation", "coordinate_decimal_places", 6)
         need_saving = need_saving or self._maybe_initialize_value("presentation", "angle_decimal_places", 0)
+        need_saving = need_saving or self._maybe_initialize_value("navigation", "disallow_leaving_roads", False)
         if need_saving:
             self._save()
 
@@ -52,6 +53,19 @@ class Config:
     def angle_decimal_places(self):
         return int(self._config["presentation"]["angle_decimal_places"])
     
+    @property
+    def disallow_leaving_roads(self):
+        raw_value = self._config["navigation"]["disallow_leaving_roads"]
+        if raw_value == "True":
+            return True
+        else:
+            return False
+
+    @disallow_leaving_roads.setter
+    def disallow_leaving_roads(self, val):
+        self._config["navigation"]["disallow_leaving_roads"] = str(val)
+        self._save()
+
     @property
     def amqp_broker_url(self):
         return os.environ.get("AMQP_BROKER_URL", "amqps://app:FeelTheStreets@fts.trycht.cz?socket_timeout=2.0") # Maybe store the value in the config too?
