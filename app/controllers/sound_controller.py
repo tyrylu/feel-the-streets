@@ -49,7 +49,9 @@ class SoundController:
         if base_group:
             count = sound().get_group_size(base_group)
             group = "%s.%02d"%(base_group, random.randint(1, count))
-            self._groups_map[sender][enters] = group
+        else:
+            group = "steps_unknown"
+        self._groups_map[sender][enters] = group
     
     def post_leave(self, sender, leaves):
         if not sender.use_step_sounds:
