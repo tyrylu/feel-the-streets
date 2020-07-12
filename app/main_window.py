@@ -119,7 +119,7 @@ class MainWindow(QMainWindow):
     def _on_changes_applied(self, changelog_path):
         self._applier.deleteLater()
         changelog_size = os.path.getsize(changelog_path)
-        resp = QMessageBox.question(self, _("Success"), _("Successfully applied {total} changes. A changelog of size {size} was generated, do you want to view it now?").format(total=self._pending_count, size=format_size(changelog_size)))
+        resp = QMessageBox.question(self, _("Success"), _("Successfully applied {total} changes. A changelog of size {size} was generated, do you want to view it now?").format(total=self._pending_count, size=format_size(changelog_size)), defaultButton=QMessageBox.No)
         if resp == QMessageBox.StandardButton.Yes:
             # Somewhat hacky, but os.startfile is not cross platform and the webbrowser way appears to be.
             webbrowser.open(changelog_path)
