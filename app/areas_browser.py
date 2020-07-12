@@ -29,8 +29,7 @@ class AreasBrowserDialog(QDialog):
         self._areas = list(areas.items())
         for id, data in self._areas:
             self._areas_list.addItem(_("Area {id}").format(id=id))
-        self._areas_list.setSelection(0)
-        self.on_areas_list_listbox(0)
+        self._areas_list.setCurrentRow(0)
 
     def on_areas_list_listbox(self, index):
         self._area_props.clear()
