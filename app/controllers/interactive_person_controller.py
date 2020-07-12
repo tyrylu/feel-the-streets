@@ -106,11 +106,15 @@ class InteractivePersonController:
 
     @menu_command(_("Information"), _("Current road section angle"), "o")
     def current_road_section_angle(self, evt):
-         for obj in self._person.is_inside_of:
+        seen_road = False
+        for obj in self._person.is_inside_of:
             if obj.discriminator == "Road" and not obj.value_of_field("area"):
+                seen_road = True
                 angle = get_road_section_angle(self._person, obj)
                 angle = round(angle, config().angle_decimal_places)
                 speech().speak(_("{road}: {angle}°").format(road=describe_entity(obj), angle=angle))
+        if not seen_road:
+            speech().speak(_("You are not on a road."))
 
     @menu_command(_("Information"), _("Road details"), "ctrl+o")
     def road_details(self, evt):
@@ -138,6 +142,7 @@ class InteractivePersonController:
     def _maybe_select_road(self):
         roads = [r for r in self._person.is_inside_of if r.discriminator == "Road"]
         if not roads:
+            speech().speak(_("You are not on a road."))
             return None
         if len(roads) == 1:
             return roads[0]
