@@ -1,58 +1,51 @@
 from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QDialog, QGridLayout, QPushButton, QLabel, QSpinBox, QTreeWidget, QTreeWidgetItem, QComboBox, QListWidget, QWidget
+from PySide2.QtWidgets import QPushButton, QLabel, QSpinBox, QTreeWidget, QTreeWidgetItem, QComboBox, QListWidget, QWidget
 from osm_db import EntityMetadata, FieldNamed
+from ..base_dialog import BaseDialog
 from ..humanization_utils import underscored_to_words, get_class_display_name
 from .operators import operators_for_column_class
 
-class SpecifySearchConditionsDialog(QDialog):
+class SpecifySearchConditionsDialog(BaseDialog):
     
     def __init__(self, parent, entity):
-        super().__init__(parent)
-        self.setWindowTitle(_("Search criteria"))
-        layout = QGridLayout()
-        fields_label = QLabel(_("Class fields"), self)
-        layout.addWidget(fields_label, 0, 0)
-        self._fields_tree = QTreeWidget(self)
-        fields_label.setBuddy(self._fields_tree)
-        self._fields_tree.currentItemChanged.connect(self.on_fields_tree_sel_changed)
-        layout.addWidget(self._fields_tree, 1, 0)
-        operator_label = QLabel(_("Operator"), self)
-        layout.addWidget(operator_label, 0, 1)
-        self._operator = QComboBox(self)
-        operator_label.setBuddy(self._operator)
-        layout.addWidget(self._operator, 1, 1)
-        self._operator.currentIndexChanged.connect(self.on_operator_choice)
-        self._operator.setCurrentIndex(0)
-        add_button = QPushButton(_("&Add condition"), self)
-        add_button.clicked.connect(self.on_add_clicked)
-        layout.addWidget(add_button, 2, 0, 1, 3)
-        criteria_label = QLabel(_("Current search criteria"), self)
-        layout.addWidget(criteria_label, 3, 0, 1, 3)
-        self._criteria_list = QListWidget(self)
-        criteria_label.setBuddy(self._criteria_list)
-        layout.addWidget(self._criteria_list, 4, 0, 1, 3)
-        remove_button = QPushButton(_("&Remove condition"), self)
-        remove_button.clicked.connect(self.on_remove_clicked)
-        layout.addWidget(remove_button, 5, 0, 1, 3)
-        distance_label = QLabel(_("Search objects to distance (in meters, 0 no limit)"), self)
-        layout.addWidget(distance_label, 6, 0)
-        self._distance_field = QSpinBox(self)
-        distance_label.setBuddy(self._distance_field)
-        layout.addWidget(self._distance_field, 6, 1)
-        start_button = QPushButton(_("Start search"), self)
-        start_button.setDefault(True)
-        start_button.clicked.connect(self.accept)
-        layout.addWidget(start_button, 7, 0)
-        cancel_button = QPushButton(_("Cancel"), self)
-        cancel_button.clicked.connect(self.reject)
-        layout.addWidget(cancel_button, 7, 1)
-        self.setLayout(layout)
+        super().__init__(parent, _("Search criteria"), _("&Start search"), _("&Cancel"))
         self._entity = entity
         self._value_widget = None
         self._value_label = None
         self._search_expression_parts = []
         self._populate_fields_tree(self._entity)
 
+    def create_ui(self):
+        fields_label = QLabel(_("Class fields"), self)
+        self.layout.addWidget(fields_label, 0, 0)
+        self._fields_tree = QTreeWidget(self)
+        fields_label.setBuddy(self._fields_tree)
+        self._fields_tree.currentItemChanged.connect(self.on_fields_tree_sel_changed)
+        self.layout.addWidget(self._fields_tree, 1, 0)
+        operator_label = QLabel(_("Operator"), self)
+        self.layout.addWidget(operator_label, 0, 1)
+        self._operator = QComboBox(self)
+        operator_label.setBuddy(self._operator)
+        self.layout.addWidget(self._operator, 1, 1)
+        self._operator.currentIndexChanged.connect(self.on_operator_choice)
+        self._operator.setCurrentIndex(0)
+        add_button = QPushButton(_("&Add condition"), self)
+        add_button.clicked.connect(self.on_add_clicked)
+        self.layout.addWidget(add_button, 2, 0, 1, 3)
+        criteria_label = QLabel(_("Current search criteria"), self)
+        self.layout.addWidget(criteria_label, 3, 0, 1, 3)
+        self._criteria_list = QListWidget(self)
+        criteria_label.setBuddy(self._criteria_list)
+        self.layout.addWidget(self._criteria_list, 4, 0, 1, 3)
+        remove_button = QPushButton(_("&Remove condition"), self)
+        remove_button.clicked.connect(self.on_remove_clicked)
+        self.layout.addWidget(remove_button, 5, 0, 1, 3)
+        distance_label = QLabel(_("Search objects to distance (in meters, 0 no limit)"), self)
+        self.layout.addWidget(distance_label, 6, 0)
+        self._distance_field = QSpinBox(self)
+        distance_label.setBuddy(self._distance_field)
+        self.layout.addWidget(self._distance_field, 6, 1)
+        
     def _populate_fields_tree(self, entity, parent=None):
         if parent is None:
             parent = self._fields_tree.invisibleRootItem()
@@ -85,10 +78,10 @@ class SpecifySearchConditionsDialog(QDialog):
 
     def on_operator_choice(self, index):
         if self._value_widget:
-            self.layout().removeWidget(self._value_widget)
+            self.layout.removeWidget(self._value_widget)
             self._value_widget.deleteLater()
         if self._value_label:
-            self.layout().removeWidget(self._value_label)
+            self.layout.removeWidget(self._value_label)
             self._value_label.deleteLater()
             self._value_label = None
         operator = self._operators[self._operator.currentIndex()]
@@ -100,8 +93,8 @@ class SpecifySearchConditionsDialog(QDialog):
         self._value_label = value_label
         if self._value_label:
             self._value_label.setBuddy(self._value_widget)
-            self.layout().addWidget(self._value_label, 0, 2)
-        self.layout().addWidget(self._value_widget, 1, 2)
+            self.layout.addWidget(self._value_label, 0, 2)
+        self.layout.addWidget(self._value_widget, 1, 2)
 
     def _create_value_label(self, label):
         if not label:

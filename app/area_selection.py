@@ -1,8 +1,9 @@
 import glob
 import logging
 import os
-from PySide2.QtWidgets import QDialog, QGridLayout, QPushButton, QListWidget, QLabel, QMessageBox, QInputDialog
+from PySide2.QtWidgets import QPushButton, QListWidget, QLabel, QMessageBox, QInputDialog
 import pendulum
+from .base_dialog import BaseDialog
 from .server_interaction import has_api_connectivity, get_areas, request_area_creation, get_areas_with_name
 from .time_utils import rfc_3339_to_local_string
 from .size_utils import format_size
@@ -43,29 +44,9 @@ def get_local_area_infos():
         results.append({"osm_id": osm_id, "name":name, "updated_at": mtime, "state": "local", "created_at": ctime, "db_size": info.st_size})
     return results
 
-
-class AreaSelectionDialog(QDialog):
+class AreaSelectionDialog(BaseDialog):
     def __init__(self, parent):
-        super().__init__(parent)
-        self.setWindowTitle(_("Select an area"))
-        layout = QGridLayout(self)
-        areas_label = QLabel(_("&Available areas"))
-        layout.addWidget(areas_label, 0, 0, 1, 3)
-        self._areas = QListWidget()
-        self._areas.setAccessibleName(_("Available areas"))
-        layout.addWidget(self._areas, 1, 0, 1, 3)
-        areas_label.setBuddy(self._areas)
-        select_button = QPushButton(_("&Select"))
-        layout.addWidget(select_button, 2, 0)
-        select_button.setDefault(True)
-        select_button.clicked.connect(self.accept)
-        request_button = QPushButton(_("&Request a new area"))
-        layout.addWidget(request_button, 2, 1)
-        request_button.clicked.connect(self.on_request_clicked)
-        exit_button = QPushButton(_("&Exit"))
-        layout.addWidget(exit_button, 2, 2)
-        exit_button.clicked.connect(self.reject)
-        self.setLayout(layout)
+        super().__init__(parent, _("Select an area"), _("&Select"), _("&Exit"), cancel_button_column=2, buttons_to_new_row=False)
         if has_api_connectivity():
             available = get_areas()
             cache_area_names(available)
@@ -75,6 +56,17 @@ class AreaSelectionDialog(QDialog):
         self._area_ids = [a["osm_id"] for a in available]
         self._area_names = [a["name"] for a in available]
         self._fill_areas(available)
+        
+    def create_ui(self):
+        areas_label = QLabel(_("&Available areas"))
+        self.layout.addWidget(areas_label, 0, 0, 1, 3)
+        self._areas = QListWidget()
+        self._areas.setAccessibleName(_("Available areas"))
+        self.layout.addWidget(self._areas, 1, 0, 1, 3)
+        areas_label.setBuddy(self._areas)
+        self.request_button = QPushButton(_("&Request a new area"))
+        self.layout.addWidget(self.request_button, 2, 1)
+        self.request_button.clicked.connect(self.on_request_clicked)
 
     def _fill_areas(self, areas):
         for area in areas:
