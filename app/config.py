@@ -6,7 +6,7 @@ import appdirs
 class Config:
 
     def __init__(self):
-        self.config_path = appdirs.user_config_dir("fts", appauthor=False, roaming=True)
+        self.config_path = appdirs.user_config_dir("feel-the-streets", appauthor=False, roaming=True)
         os.makedirs(self.config_path, exist_ok=True)
         self._config_file = os.path.join(self.config_path, "config.ini")
         self._dirty = False

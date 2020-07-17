@@ -47,7 +47,7 @@ impl AreaDatabase {
             PathBuf::from(".")
         } else {
             let mut appdata_dir = dirs::data_local_dir().expect("No local app data dir");
-            appdata_dir.push("fts/areas");
+            appdata_dir.push("feel-the-streets/areas");
             appdata_dir
         };
         root.push(format!("{}.db", area));

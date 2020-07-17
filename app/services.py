@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 import platform
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -15,7 +15,7 @@ from . import speech_dispatcher_output
 from .menu_service import MenuService
 
 def create_app_db():
-    db_path = os.path.join(appdirs.user_data_dir("fts", appauthor=False, roaming=True), "app.db")
+    db_path = os.path.join(config().config_path, "app.db")
     engine = create_engine("sqlite:///{0}".format(db_path))
     Base.metadata.create_all(engine)
     session = sessionmaker(bind=engine)()
