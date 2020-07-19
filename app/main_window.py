@@ -43,7 +43,7 @@ class MainWindow(QMainWindow):
         map.set_call_args(self._selected_map, self._selected_map_name)
         menu_service.set_call_args(self.menuBar())
         self._app_controller = ApplicationController(self)
-        person = Person(map(), LatLon(0, 0))
+        person = Person(map=map(), position=LatLon(0, 0))
         self._person_controller = InteractivePersonController(person, self)
         self._sound_controller = SoundController(person)
         self._announcements_controller = AnnouncementsController(person)

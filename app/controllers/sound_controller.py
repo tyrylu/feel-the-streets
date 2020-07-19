@@ -1,19 +1,17 @@
 import collections
 import random
-from pydantic import BaseModel, Field
 from typing import DefaultDict, Dict
 import anglr
 from osm_db import Enum
 from ..services import sound
 from ..entities import entity_post_move, entity_post_enter, entity_post_leave, entity_rotated, entity_move_rejected, Entity
 
-class SoundController(pydantic.BaseModel):
-    _point_of_view: Entity
-    _load_sound_played: bool = False
-    _groups_map: DefaultDict[Entity, Dict[Entity, str]] = Field(default_factory=collections.defaultdict(dict))
+class SoundController:
     
-    def __init__(self, **data):
-        super().__init__(**data)
+    def __init__(self, person):
+        self._point_of_view: Entity = person
+        self._load_sound_played = False
+        self._groups_map: DefaultDict[Entity, Dict[Entity, str]] = collections.defaultdict(dict)
         entity_post_move.connect(self.post_move)
         entity_post_enter.connect(self.post_enter)
         entity_post_leave.connect(self.post_leave)

@@ -1,6 +1,5 @@
-import attr
+import pydantic
 
-@attr.s
-class SoundProperties:
-    is_3d = attr.ib()
-    min_distance = attr.ib()
+class SoundProperties(pydantic.BaseModel):
+    is_3d: bool
+    min_distance: float

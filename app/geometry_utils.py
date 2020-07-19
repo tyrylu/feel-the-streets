@@ -1,7 +1,7 @@
 import logging
 import shapely.wkb as wkb
 import shapely.geometry as geometry
-import attr
+import pydantic
 from pygeodesy.ellipsoidalVincenty import LatLon, VincentyError
 from . import services
 from .measuring import measure
@@ -33,15 +33,17 @@ def bearings_to(initial, target):
     except:
         return 0, 0
 
-@attr.s
-class LineSegment:
-    line = attr.ib()
-    start = attr.ib()
-    end = attr.ib()
-    length = attr.ib(default=None, init=False)
-    angle = attr.ib(default=None, init=False)
-    end_angle = attr.ib(default=None, init=False)
-    current = attr.ib(default=False)
+class LineSegment(pydantic.BaseModel):
+    line: geometry.linestring.LineString
+    start: geometry.point.Point
+    end: geometry.point.Point
+    length: float = None
+    angle: float = None
+    end_angle: float = None
+    current: bool = False
+
+    class Config:
+        arbitrary_types_allowed = True
 
     def calculate_length(self):
         self.length = distance_between(to_latlon(self.start), to_latlon(self.end))

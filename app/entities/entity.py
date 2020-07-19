@@ -1,15 +1,22 @@
-import attr
+from pydantic import BaseModel, Field
+from typing import ClassVar, Set
 from . import entity_pre_move, entity_post_move, entity_pre_enter, entity_post_enter, entity_pre_leave, entity_post_leave, entity_rotated, entity_move_rejected
 from ..measuring import measure
+from ..map import Map
 from pygeodesy.ellipsoidalVincenty import LatLon
 
-@attr.s
-class Entity:
-    use_step_sounds = False
-    map = attr.ib(hash=False)
-    position = attr.ib(hash=False)
-    is_inside_of = attr.ib(default=attr.Factory(set), hash=False)
-    direction = attr.ib(default=0, hash=False)
+class Entity(BaseModel):
+    use_step_sounds: ClassVar[bool] = False
+    map: Map
+    position: LatLon
+    is_inside_of: "Set[Entity]" = Field(default_factory=set)
+    direction: float = 0.0
+
+    class Config:
+        arbitrary_types_allowed = True
+
+    def __hash__(self):
+        return id(self)
 
     def move_to(self, pos):
         if entity_pre_move.has_receivers_for(self):
@@ -63,3 +70,5 @@ class Entity:
     def cartesian_position(self):
         cartesian = self.position.toCartesian()
         return cartesian.x, cartesian.y, cartesian.z
+
+Entity.update_forward_refs()

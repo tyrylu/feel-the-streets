@@ -1,10 +1,10 @@
-import attr
+from typing import ClassVar
 from . import Entity
 
-@attr.s(hash=True)
+
 class Person(Entity):
     use_step_sounds = True
-    STEP_LENGTH = 0.7874 # Meters
+    STEP_LENGTH: ClassVar[float] = 0.7874 # Meters
     
     def move_to_current(self):
         self.move_to(self.position)
