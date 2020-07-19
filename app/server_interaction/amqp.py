@@ -25,7 +25,7 @@ class SemanticChangeRetriever:
         self._max_delivery_tags = defaultdict(lambda: 0)
 
     def new_changes_in(self, area):
-        queue_name = get_client_queue_name(config().client_id, area)
+        queue_name = get_client_queue_name(config().general.client_id, area)
         while True:
             method, props, body = self._chan.basic_get(queue_name)
             if not method:
@@ -51,8 +51,9 @@ class SemanticChangeRetriever:
     
     def new_change_count_in(self, area):
         try:
-            resp = self._chan.queue_declare(get_client_queue_name(config().client_id, area), passive=True, durable=True)
+            resp = self._chan.queue_declare(get_client_queue_name(config().general.client_id, area), passive=True, durable=True)
         except Exception as e:
+            print(e)
             self._needs_channel_closing = False
             raise UnknownQueueError() from e
         return resp.method.message_count

@@ -1,6 +1,6 @@
 pendulum
 pint
-attrs
+pydantic
 pygeodesy
 sqlalchemy
 pika

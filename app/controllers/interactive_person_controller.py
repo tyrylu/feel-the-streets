@@ -15,12 +15,12 @@ class InteractivePersonController:
         self._main_window = main_window
         self._browser_window = None
         menu_service().register_menu_commands(self)
-        menu_service().menu_item_with_name("toggle_disallow_leave_roads").setChecked(config().disallow_leaving_roads)
+        menu_service().menu_item_with_name("toggle_disallow_leave_roads").setChecked(config().navigation.disallow_leaving_roads)
     
     @menu_command(_("Information"), _("Current coordinates"), "c")
     def do_current_coords(self, evt):
-        lat = round(self._person.position.lat, config().coordinate_decimal_places)
-        lon = round(self._person.position.lon, config().coordinate_decimal_places)
+        lat = round(self._person.position.lat, config().presentation.coordinate_decimal_places)
+        lon = round(self._person.position.lon, config().presentation.coordinate_decimal_places)
         speech().speak(_("Longitude: {longitude}, latitude: {latitude}.").format(longitude=lon, latitude=lat))
 
     def _position_impl(self, objects):    
@@ -84,7 +84,7 @@ class InteractivePersonController:
     
     @menu_command(_("Information"), _("Current direction"), "r")
     def do_current_rotation(self, evt):
-        speech().speak(_("{degrees} degrees").format(degrees=round(self._person.direction, config().angle_decimal_places)))
+        speech().speak(_("{degrees} degrees").format(degrees=round(self._person.direction, config().presentation.angle_decimal_places)))
     
     @menu_command(_("Movement"), _("Turn 90 degrees to the right"), "ctrl+d")
     def turn_right90(self, evt):
@@ -111,7 +111,7 @@ class InteractivePersonController:
             if obj.discriminator == "Road" and not obj.value_of_field("area"):
                 seen_road = True
                 angle = get_road_section_angle(self._person, obj)
-                angle = round(angle, config().angle_decimal_places)
+                angle = round(angle, config().presentation.angle_decimal_places)
                 speech().speak(_("{road}: {angle}°").format(road=describe_entity(obj), angle=angle))
         if not seen_road:
             speech().speak(_("You are not on a road."))
@@ -193,4 +193,5 @@ class InteractivePersonController:
 
     @menu_command(_("Options"), _("Disallow leaving roads"), "alt+o", checkable=True, name="toggle_disallow_leave_roads")
     def disallow_leaving_roads(self, checked):
-        config().disallow_leaving_roads = bool(checked)
+        config().navigation.disallow_leaving_roads = bool(checked)
+        config().save_to_user_config()

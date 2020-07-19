@@ -1,69 +1,39 @@
 import os
-import configparser
 import secrets
+from typing import ClassVar
 import appdirs
+import pydantic
+from . import ini_utils
 
-class Config:
+class GeneralConfig(pydantic.BaseModel):
+    client_id: str = ""
 
-    def __init__(self):
-        self.config_path = appdirs.user_config_dir("feel-the-streets", appauthor=False, roaming=True)
-        os.makedirs(self.config_path, exist_ok=True)
-        self._config_file = os.path.join(self.config_path, "config.ini")
-        self._dirty = False
-        self._config = configparser.ConfigParser()
-        self._config.read(self._config_file)
-        self._maybe_initialize_values()
-    
-    def _maybe_initialize_value(self, section, key, default):
-        if not section in self._config:
-            self._config.add_section(section)
-            self._dirty = True
-        if key not in self._config[section]:
-            self._config[section][key] = str(default)
-            self._dirty = True
+class NavigationConfig(pydantic.BaseModel):
+    disallow_leaving_roads: bool = True
 
-    def _maybe_initialize_values(self):
-        self._maybe_initialize_value("general", "client_id", secrets.token_urlsafe())
-        self._maybe_initialize_value("presentation", "distance_decimal_places", 1)
-        self._maybe_initialize_value("presentation", "coordinate_decimal_places", 6)
-        self._maybe_initialize_value("presentation", "angle_decimal_places", 0)
-        self._maybe_initialize_value("navigation", "disallow_leaving_roads", False)
-        if self._dirty:
-            self._save()
+class PresentationConfig(pydantic.BaseModel):
+    angle_decimal_places: int = 0
+    coordinate_decimal_places: int = 7
+    distance_decimal_places: int = 1
 
-    def _save(self):
-        with open(self._config_file, "w", encoding="UTF-8") as fp:
-            self._config.write(fp)
-        self._dirty = False
+class Config(pydantic.BaseModel):
+    config_path: ClassVar[str] = appdirs.user_config_dir("feel-the-streets", appauthor=False, roaming=True)
+    _config_file: ClassVar[str] = os.path.join(config_path, "config.ini")
+    general: GeneralConfig
+    navigation: NavigationConfig
+    presentation: PresentationConfig
 
-    @property
-    def client_id(self):
-        return self._config["general"]["client_id"]
-
-    @property
-    def distance_decimal_places(self):
-        return int(self._config["presentation"]["distance_decimal_places"])
-
-    @property
-    def coordinate_decimal_places(self):
-        return int(self._config["presentation"]["coordinate_decimal_places"])
-
-    @property
-    def angle_decimal_places(self):
-        return int(self._config["presentation"]["angle_decimal_places"])
-    
-    @property
-    def disallow_leaving_roads(self):
-        raw_value = self._config["navigation"]["disallow_leaving_roads"]
-        if raw_value == "True":
-            return True
-        else:
-            return False
-
-    @disallow_leaving_roads.setter
-    def disallow_leaving_roads(self, val):
-        self._config["navigation"]["disallow_leaving_roads"] = str(val)
-        self._save()
+    @classmethod
+    def from_user_config(cls):
+        os.makedirs(cls.config_path, exist_ok=True)
+        cfg = cls(**ini_utils.ini_file_to_dict(cls._config_file))
+        if not cfg.general.client_id:
+            cfg.general.client_id = secrets.token_urlsafe()
+            cfg.save_to_user_config()
+        return cfg
+        
+    def save_to_user_config(self):
+        ini_utils.dict_to_ini_file(self.dict(), self._config_file)
 
     @property
     def amqp_broker_url(self):

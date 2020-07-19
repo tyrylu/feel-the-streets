@@ -40,6 +40,6 @@ def create_speech():
 speech = Singleton(factory=create_speech)
 sound = Singleton(factory=create_sound)
 map = Singleton(Map)
-config = Singleton(Config)
+config = Singleton(factory=lambda: Config.from_user_config())
 app_db_session = Singleton(factory=create_app_db)
 menu_service = Singleton(MenuService)

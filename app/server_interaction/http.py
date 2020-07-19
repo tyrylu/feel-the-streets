@@ -56,7 +56,7 @@ class AreaDatabaseDownloader(QThread):
 
 
     def run(self):
-        resp = session.get(url_for("areas/{0}/download".format(self._area)), stream=True, params={"client_id": config().client_id})
+        resp = session.get(url_for("areas/{0}/download".format(self._area)), stream=True, params={"client_id": config().general.client_id})
         if resp.status_code == 200:
             total = int(resp.headers.get("content-length", 0))
             chunk_size = 32*1024

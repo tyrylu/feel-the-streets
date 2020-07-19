@@ -26,8 +26,8 @@ class RoadSegmentsBrowserDialog(QDialog):
         for idx, segment in enumerate(segments):
             segment.calculate_angle()
             segment.calculate_length()
-            segment_length = round(segment.length, config().distance_decimal_places)
-            segment_angle = round(segment.angle, config().angle_decimal_places)
+            segment_length = round(segment.length, config().presentation.distance_decimal_places)
+            segment_angle = round(segment.angle, config().presentation.angle_decimal_places)
             if not segment.current:
                 message = _("{distance} meters in angle {angle}°").format(distance=segment_length, angle=segment_angle)
             else:
@@ -35,8 +35,8 @@ class RoadSegmentsBrowserDialog(QDialog):
                 segment_latlon = to_latlon(segment_point)
                 middle_distance = distance_between(person.position, segment_latlon)
                 start_distance = distance_between(to_latlon(segment.start), segment_latlon)
-                start_distance = round(start_distance, config().distance_decimal_places)
-                middle_distance = round(middle_distance, config().distance_decimal_places)
+                start_distance = round(start_distance, config().presentation.distance_decimal_places)
+                middle_distance = round(middle_distance, config().presentation.distance_decimal_places)
                 message = _("{start_distance} meters of {distance} meters in angle {angle}° distant from road center by {middle_distance}").format(start_distance=start_distance, distance=segment_length, angle=segment_angle, middle_distance=middle_distance)
             segments_list.addItem(message)
             if segment.current:
