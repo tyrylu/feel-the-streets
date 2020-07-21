@@ -19,9 +19,9 @@ class PresentationConfig(pydantic.BaseModel):
 class Config(pydantic.BaseModel):
     config_path: ClassVar[str] = appdirs.user_config_dir("feel-the-streets", appauthor=False, roaming=True)
     _config_file: ClassVar[str] = os.path.join(config_path, "config.ini")
-    general: GeneralConfig
-    navigation: NavigationConfig
-    presentation: PresentationConfig
+    general: GeneralConfig = GeneralConfig()
+    navigation: NavigationConfig = NavigationConfig()
+    presentation: PresentationConfig = PresentationConfig()
 
     @classmethod
     def from_user_config(cls):
