@@ -11,7 +11,7 @@ fn consume_tasks() -> Result<()> {
     let client = amqp_utils::connect_to_broker()?;
     let mut channel = client.create_channel().wait()?;
     let channel2 = client.create_channel().wait()?;
-    let (tasks_queue, future_tasks_queue) = amqp_utils::init_background_job_queues(&mut channel)?;
+    let (tasks_queue, future_tasks_queue) = amqp_utils::init_background_job_queues(&channel)?;
     let count = future_tasks_queue.message_count();
     if count == 0 {
         info!("Initially scheduling the databases update task...");

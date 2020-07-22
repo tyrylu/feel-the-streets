@@ -1,7 +1,6 @@
 use crate::Result;
 use osm_api::object::OSMObject;
 use serde::{Deserialize, Serialize};
-use serde_json;
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::Write;
@@ -46,7 +45,7 @@ impl TranslationRecord {
         *(self
             .missing_enum_members
             .entry(enum_name.to_string())
-            .or_insert(HashMap::new())
+            .or_insert_with(HashMap::new)
             .entry(member.to_string())
             .or_insert(0)) += 1;
     }
@@ -62,25 +61,25 @@ impl TranslationRecord {
             .expect("You should set a current field first.");
         self.type_violations
             .entry(discriminator.to_string())
-            .or_insert(HashMap::new())
+            .or_insert_with(HashMap::new)
             .entry(field.to_string())
-            .or_insert(Vec::new())
+            .or_insert_with(Vec::new)
             .push(value.to_string());
     }
     pub fn record_missing_required_field(&mut self, discriminator: &str, field: &str) {
         *(self
             .missing_required_fields
             .entry(discriminator.to_string())
-            .or_insert(HashMap::new())
+            .or_insert_with(HashMap::new)
             .entry(field.to_string())
             .or_insert(0)) += 1;
     }
     pub fn record_unknown_field(&mut self, discriminator: &str, field: &str, value: &str) {
         self.unknown_fields
             .entry(discriminator.to_string())
-            .or_insert(HashMap::new())
+            .or_insert_with(HashMap::new)
             .entry(field.to_string())
-            .or_insert(Vec::new())
+            .or_insert_with(Vec::new)
             .push(value.to_string());
     }
 

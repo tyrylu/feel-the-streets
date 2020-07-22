@@ -16,7 +16,7 @@ jobs:
     - name: Install latest nightly
       uses: actions-rs/toolchain@v1
       with:
-        toolchain: nightly
+        toolchain: nightly-2020-07-11
         override: true
         components: clippy
     - name: Install Linux build dependencies
