@@ -6,10 +6,10 @@ from ctypes.util import find_library
 
 block_cipher = None
 spatialite_lib = find_library("mod_spatialite")
-# Assume that the library under Linux is a system-wide installed one residing in the system-wide library directory
+# Assumes that the libraries under Linux are a system-wide installed ones residing in the system-wide library directory
 if platform.system() == "Linux" and platform.architecture()[0] == "64bit":
     openal_library_path = f"/usr/lib64/{lib._name}"
-    spatialite_library_path = f"/usr/lib64/{spatialite_lib}"
+    spatialite_library_path = "/usr/lib64/mod_spatialite.so"
 elif platform.system() == "Windows":
     openal_library_path = lib._name
     spatialite_library_path = spatialite_lib
