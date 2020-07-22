@@ -1,7 +1,7 @@
 import glob
 import logging
 import os
-from PySide2.QtWidgets import QPushButton, QListWidget, QLabel, QMessageBox, QInputDialog
+from PySide2.QtWidgets import QPushButton, QListWidget, QLabel, QMessageBox, QInputDialog, QDialog
 import pendulum
 from .base_dialog import BaseDialog
 from .server_interaction import has_api_connectivity, get_areas, request_area_creation, get_areas_with_name
