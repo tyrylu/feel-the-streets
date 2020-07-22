@@ -6,7 +6,7 @@ from pygeodesy.ellipsoidalVincenty import LatLon
 from .entities import Person
 from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController, LastLocationController, MovementRestrictionController
 from .area_selection import AreaSelectionDialog
-from .services import map, menu_service
+from .services import map, menu_service, config
 from .server_interaction import AreaDatabaseDownloader, SemanticChangeRetriever, has_api_connectivity, ConnectionError, UnknownQueueError
 from .changes_applier import ChangesApplier
 from osm_db import AreaDatabase, EntitiesQuery
@@ -95,8 +95,8 @@ class MainWindow(QMainWindow):
         if not self._pending_count:
             self._on_map_ready()
             return
-        generate_changelog = True
-        if self._pending_count > 10000:
+        generate_changelog = config().changelogs.enabled
+        if self._pending_count > 10000 and generate_changelog:
             resp = QMessageBox.question(self, _("Question"), _("The server reports %s pending changes. Do you really want to generate the changelog from all of them? It might take a while.")%self._pending_count)
             if resp == QMessageBox.StandardButton.Yes:
                 generate_changelog = False
@@ -118,10 +118,13 @@ class MainWindow(QMainWindow):
             
     def _on_changes_applied(self, changelog_path):
         self._applier.deleteLater()
-        changelog_size = os.path.getsize(changelog_path)
-        resp = QMessageBox.question(self, _("Success"), _("Successfully applied {total} changes. A changelog of size {size} was generated, do you want to view it now?").format(total=self._pending_count, size=format_size(changelog_size)), defaultButton=QMessageBox.No)
-        if resp == QMessageBox.StandardButton.Yes:
-            # Somewhat hacky, but os.startfile is not cross platform and the webbrowser way appears to be.
-            webbrowser.open(changelog_path)
+        if changelog_path:
+            changelog_size = os.path.getsize(changelog_path)
+            resp = QMessageBox.question(self, _("Success"), _("Successfully applied {total} changes. A changelog of size {size} was generated, do you want to view it now?").format(total=self._pending_count, size=format_size(changelog_size)), defaultButton=QMessageBox.No)
+            if resp == QMessageBox.StandardButton.Yes:
+                # Somewhat hacky, but os.startfile is not cross platform and the webbrowser way appears to be.
+                webbrowser.open(changelog_path)
+        else:
+            QMessageBox.information(self, _("Success"), _("Successfully applied {total} changes.").format(total=self._pending_count))
         self._on_map_ready()
 

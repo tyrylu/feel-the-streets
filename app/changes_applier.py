@@ -23,15 +23,19 @@ class ChangesApplier(QThread):
     def run(self):
         db = AreaDatabase.open_existing(self._area, server_side=False)
         db.begin()
-        changelog_path = os.path.join(os.path.dirname(AreaDatabase.path_for(12345, server_side=False)), "..", "changelogs", "{0}_{1}.txt".format(self._area, datetime.datetime.now().isoformat().replace(":", "_")))
-        os.makedirs(os.path.dirname(changelog_path), exist_ok=True)
-        changelog = open(changelog_path, "w", encoding="UTF-8")
+        if self._generate_changelog:
+            changelog_path = os.path.join(os.path.dirname(AreaDatabase.path_for(12345, server_side=False)), "..", "changelogs", "{0}_{1}.txt".format(self._area, datetime.datetime.now().isoformat().replace(":", "_")))
+            os.makedirs(os.path.dirname(changelog_path), exist_ok=True)
+            changelog = open(changelog_path, "w", encoding="UTF-8")
+        else:
+            changelog_path = None
         for nth, change in enumerate(self._retriever.new_changes_in(self._area)):
             if change.type is CHANGE_REDOWNLOAD_DATABASE:
                 self.redownload_requested.emit()
                 break
             self.will_process_change.emit(nth + 1)
             entity = None
+            # We must retrieve the entity before deleting it so we can produce the display representation of it.
             if self._generate_changelog and change.type is CHANGE_REMOVE:
                 entity= db.get_entity(change.osm_id)
             db.apply_change(change)
@@ -51,7 +55,8 @@ class ChangesApplier(QThread):
                             continue
                 changelog.write(get_change_description(change, entity))
         db.commit()
-        changelog.close()
+        if self._generate_changelog:
+            changelog.close()
         self._retriever.acknowledge_changes_for(self._area)
         self._retriever.close()
         self.changes_applied.emit(changelog_path)

@@ -2,26 +2,30 @@ import os
 import secrets
 from typing import ClassVar
 import appdirs
-import pydantic
+from pydantic import BaseModel
 from . import ini_utils
 
-class GeneralConfig(pydantic.BaseModel):
+class GeneralConfig(BaseModel):
     client_id: str = ""
 
-class NavigationConfig(pydantic.BaseModel):
+class NavigationConfig(BaseModel):
     disallow_leaving_roads: bool = True
 
-class PresentationConfig(pydantic.BaseModel):
+class PresentationConfig(BaseModel):
     angle_decimal_places: int = 0
     coordinate_decimal_places: int = 7
     distance_decimal_places: int = 1
 
-class Config(pydantic.BaseModel):
+class ChangelogsConfig(BaseModel):
+    enabled: bool = False
+
+class Config(BaseModel):
     config_path: ClassVar[str] = appdirs.user_config_dir("feel-the-streets", appauthor=False, roaming=True)
     _config_file: ClassVar[str] = os.path.join(config_path, "config.ini")
     general: GeneralConfig = GeneralConfig()
     navigation: NavigationConfig = NavigationConfig()
     presentation: PresentationConfig = PresentationConfig()
+    changelogs: ChangelogsConfig = ChangelogsConfig()
 
     @classmethod
     def from_user_config(cls):
