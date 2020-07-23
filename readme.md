@@ -10,7 +10,6 @@ This application requires Python 3.6 to work, because it utilizes the new variab
 For the rest of the requirements see app_requirements.txt.
 The majority of them can be installed by invoking a pip install -r app_requirements.txt without much trouble.
 You can simplify PySide2 installation by using your distribution's prebuild package, for example, python3-PySide2 in Fedora.
-You can do something similar with shapely, e. g. python3-shapely package is a good idea to have, because there appear not to be any binary wheels for Linux for these two.
 
 In addition to the python requirements, it requires the loadable spatialite sqlite3 extension and under Linux, you need to install the openal library manually as well. In fedora, those are the libspatialite and openal packages.
 Optionally, it can use the sqlite3 icu loadable extension. The resulting .so/.dll should be named icu.so or icu.dll, so the sqlite3 extension loading will find the entry point.
