@@ -38,6 +38,15 @@ jobs:
     - name: Move osm_db extension to the right place
       if: runner.os == 'Windows'
       run: mv target/release/osm_db.dll osm_db.pyd
+    - name: Download mod_spatialite
+      if: runner.os == 'Windows'
+      run: wget -outfile spatialite.zip https://www.nuget.org/api/v2/package/mod_spatialite/4.3.0.100-rc1
+    - name: Unpack the archive
+      if: runner.os == 'Windows'
+      run: expand-archive spatialite.zip
+    - name: Add spatialite to path
+      if: runner.os == 'Windows'
+      run: echo ::add-path::$pwd\spatialite\runtimes\win-x64\native
     - name: Build the app executable
       if: runner.os == 'Windows'
       run: pyinstaller run_app.spec
