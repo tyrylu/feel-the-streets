@@ -40,7 +40,7 @@ jobs:
       run: mv target/release/osm_db.dll osm_db.pyd
     - name: Download mod_spatialite
       if: runner.os == 'Windows'
-      run: wget -outfile spatialite.zip https://www.nuget.org/api/v2/package/mod_spatialite/4.3.0.100-rc1
+      run: Invoke-WebRequest -outfile spatialite.zip https://www.nuget.org/api/v2/package/mod_spatialite/4.3.0.100-rc1
     - name: Unpack the archive
       if: runner.os == 'Windows'
       run: expand-archive spatialite.zip
