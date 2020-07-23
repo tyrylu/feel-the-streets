@@ -62,13 +62,13 @@ jobs:
       run: cp target/release/*.exe to_deploy
     - name: Upload Windows artifacts
       if: runner.os == 'Windows'  
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: to_deploy_windows
         path: to_deploy
     - name: Upload Linux artifacts
       if: runner.os == 'Linux'  
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: to_deploy_linux
         path: to_deploy
@@ -77,7 +77,7 @@ jobs:
       run: rm dist/fts/Qt5Quick.dll, dist/fts/Qt5QmlModels.dll, dist/fts/Qt5VirtualKeyboard.dll
     - name: Upload Python app binary
       if: runner.os == 'Windows'  
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: fts_app
         path: dist/fts
@@ -86,7 +86,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Download Linux build files
-      uses: actions/download-artifact@v1
+      uses: actions/download-artifact@v2
       with:
         name: to_deploy_linux
         path: deploy_to_linux
