@@ -1,8 +1,18 @@
+from PySide2.QtCore import Qt
 from PySide2.QtGui import QKeySequence
+from PySide2.QtWidgets import QAction, QWidget
+
+def safe_set_checked(target, new_state):
+    target.blockSignals(True)
+    target.setChecked(new_state)
+    target.blockSignals(False)
 
 class MenuService:
-    def __init__(self, menubar):
-        self._menubar = menubar
+    def __init__(self, app_window):
+        self._window = app_window
+        self._key_capturer = QWidget(self._window)
+        self._key_capturer.setFocus()
+        self._menubar = app_window.menuBar()
         self._menu_items_by_name = {}
         self._menus = {}
     
@@ -19,13 +29,23 @@ class MenuService:
             label = cmd.item_label
             if cmd.item_shortcut:
                 label += "\t%s"%cmd.item_shortcut
-            item = menu.addAction(label)
+            item = QAction(label, self._key_capturer)
+            item.setShortcutContext(Qt.WidgetShortcut)
+            # We must add a separate action to the menu, otherwise the shortcut is being triggered even when the menubar is focused.
+            menu_action = menu.addAction(label)
+            self._key_capturer.addAction(item)
             item.triggered.connect(cmd)
+            menu_action.triggered.connect(cmd)
             item.setCheckable(cmd.checkable)
+            menu_action.setCheckable(cmd.checkable)
             if cmd.item_shortcut:
-                item.setShortcut(QKeySequence(cmd.item_shortcut))
+                seq = QKeySequence(cmd.item_shortcut)
+                item.setShortcut(seq)
             if cmd.item_name:
-                self._menu_items_by_name[cmd.item_name] = item
+                self._menu_items_by_name[cmd.item_name] = menu_action
+            if cmd.checkable:
+                item.toggled.connect(lambda checked, mi=menu_action: safe_set_checked(mi, checked))
+                menu_action.toggled.connect(lambda checked, si=item: safe_set_checked(si, checked))
     
     def _ensure_menu(self, path, parent=None):
         if tuple(path) in self._menus:

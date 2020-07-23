@@ -66,19 +66,19 @@ class InteractivePersonController:
     def do_nearest_slow(self, evt):
         self._nearest_impl(self._person.map.within_distance(self._person.position, 100, fast=False))
     
-    @menu_command(_("Movement"), _("Step forward"), "w")
+    @menu_command(_("Movement"), _("Step forward"), "up")
     def do_forward(self, evt):
         self._person.step_forward() 
 
-    @menu_command(_("Movement"), _("Step backward"), "s")
+    @menu_command(_("Movement"), _("Step backward"), "down")
     def do_backward(self, evt):
         self._person.step_backward() 
     
-    @menu_command(_("Movement"), _("Turn 5 degrees to the right"), "d")
+    @menu_command(_("Movement"), _("Turn 5 degrees to the right"), "right")
     def turn_right(self, evt):
         self._person.rotate(5)
     
-    @menu_command(_("Movement"), _("Turn 5 degrees to the left"), "a")
+    @menu_command(_("Movement"), _("Turn 5 degrees to the left"), "left")
     def turn_left(self, evt):
         self._person.rotate(-5)
     
@@ -86,11 +86,11 @@ class InteractivePersonController:
     def do_current_rotation(self, evt):
         speech().speak(_("{degrees} degrees").format(degrees=round(self._person.direction, config().presentation.angle_decimal_places)))
     
-    @menu_command(_("Movement"), _("Turn 90 degrees to the right"), "ctrl+d")
+    @menu_command(_("Movement"), _("Turn 90 degrees to the right"), "ctrl+right")
     def turn_right90(self, evt):
         self._person.rotate(90)
     
-    @menu_command(_("Movement"), _("Turn 90 degrees to the left"), "ctrl+a")
+    @menu_command(_("Movement"), _("Turn 90 degrees to the left"), "ctrl+left")
     def turn_left90(self, evt):
         self._person.rotate(-90)
     
