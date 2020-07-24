@@ -104,7 +104,7 @@ class AreaSelectionDialog(BaseDialog):
                 return
         reply = request_area_creation(area_id, name)
         if reply and isinstance(reply, dict) and "state" in reply and reply["state"] == "Creating":
-            QMessageBox.information(self, message=_("The area creation request has been sent successfully. The area will become updated in a few minutes."), title=_("Success"))
+            QMessageBox.information(self, text=_("The area creation request has been sent successfully. The area will become updated in a few minutes."), title=_("Success"))
         elif reply and isinstance(reply, dict) and "state" in reply and reply["state"] in {"Creating", "Updated", "ApplyingChanges", "GettingChanges"}:
             QMessageBox.information(self, text=_("The area creation request has already been sent."), title=_("Success"))
         else:
