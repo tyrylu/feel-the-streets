@@ -11,7 +11,7 @@ block_cipher = None
 
 # Assumes that the libraries under Linux are a system-wide installed ones residing in the system-wide library directory
 if platform.system() == "Linux" and platform.architecture()[0] == "64bit":
-    additional_libs = (f"/usr/lib64/{lib._name}", "/usr/lib64/mod_spatialite.so")
+    additional_libs = (f"/usr/lib64/{lib._name}", "/usr/lib64/mod_spatialite.so", "/usr/lib64/libvorbisfile.so")
 elif platform.system() == "Windows":
     additional_libs = (lib._name, find_library("mod_spatialite"), find_library("libvorbisfile"))
 
