@@ -1,22 +1,28 @@
 # -*- mode: python -*-
+import os
 from openal.al_lib import lib
 import platform
 from ctypes.util import find_library
+import PyInstaller.depend.bindepend as bd
+
 
 
 block_cipher = None
-spatialite_lib = find_library("mod_spatialite")
+
 # Assumes that the libraries under Linux are a system-wide installed ones residing in the system-wide library directory
 if platform.system() == "Linux" and platform.architecture()[0] == "64bit":
-    openal_library_path = f"/usr/lib64/{lib._name}"
-    spatialite_library_path = "/usr/lib64/mod_spatialite.so"
+    additional_libs = (f"/usr/lib64/{lib._name}", "/usr/lib64/mod_spatialite.so")
 elif platform.system() == "Windows":
-    openal_library_path = lib._name
-    spatialite_library_path = spatialite_lib
+    additional_libs = (lib._name, find_library("mod_spatialite"))
+
+toc = [(os.path.basename(name), name, "BINARY") for name in additional_libs]
+toc_with_deps = bd.Dependencies(toc)
+print(f"Toc with deps: {toc_with_deps}")
+binaries = [(path, ".") for local_name, path, typ in toc_with_deps]
 
 a = Analysis(['run_app.py'],
              pathex=['C:\\Users\\lukas\\projekty\\feel the streets', r'c:\python3\lib\site-packages\pygeodesy'],
-             binaries=[(openal_library_path, "."), (spatialite_library_path, ".")],
+             binaries=binaries,
              datas=[("app/sounds", "sounds"), ("locale", "locale"), ("*.yml", ".")],
              hiddenimports=["pkg_resources.py2_warn"],
              hookspath=["hooks"],
