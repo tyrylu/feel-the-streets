@@ -13,7 +13,7 @@ block_cipher = None
 if platform.system() == "Linux" and platform.architecture()[0] == "64bit":
     additional_libs = (f"/usr/lib64/{lib._name}", "/usr/lib64/mod_spatialite.so")
 elif platform.system() == "Windows":
-    additional_libs = (lib._name, find_library("mod_spatialite"))
+    additional_libs = (lib._name, find_library("mod_spatialite"), find_library("libvorbisfile"))
 
 toc = [(os.path.basename(name), name, "BINARY") for name in additional_libs]
 toc_with_deps = bd.Dependencies(toc)
