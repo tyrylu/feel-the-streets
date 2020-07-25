@@ -104,7 +104,8 @@ class SpecifySearchConditionsDialog(BaseDialog):
 
     def on_add_clicked(self, evt):
         json_path = []
-        parent_data = self._fields_tree.currentItem().parent().data(0, Qt.UserRole)
+        parent_item = self._fields_tree.currentItem().parent()
+        parent_data = parent_item.data(0, Qt.UserRole) if parent_item else None
         if isinstance(parent_data, str):
             json_path.append(parent_data)
         json_path.append(self._field_name)
