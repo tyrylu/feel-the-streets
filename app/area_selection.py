@@ -52,7 +52,7 @@ class AreaSelectionDialog(BaseDialog):
             cache_area_names(available)
         else:
             available = get_local_area_infos()
-            request_button.setDisabled(True)
+            self.request_button.setDisabled(True)
         self._area_ids = [a["osm_id"] for a in available]
         self._area_names = [a["name"] for a in available]
         self._fill_areas(available)
