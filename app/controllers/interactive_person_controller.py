@@ -68,11 +68,11 @@ class InteractivePersonController:
 
     @menu_command(_("Information"), _("Nearest"), "n")
     def do_nearest(self, evt):
-        self._nearest_impl(self._person.map.within_distance(self._person.position, 100))
+        self._nearest_impl(self._person.map.within_distance(self._person.position, config().presentation.near_by_radius))
 
     @menu_command(_("Information"), _("Nearest - all objects, may be slow"), "ctrl+n")
     def do_nearest_slow(self, evt):
-        self._nearest_impl(self._person.map.within_distance(self._person.position, 100, fast=False))
+        self._nearest_impl(self._person.map.within_distance(self._person.position, config().presentation.near_by_radius, fast=False))
     
     @menu_command(_("Movement"), _("Step forward"), "up")
     def do_forward(self, evt):
