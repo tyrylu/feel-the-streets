@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QInputDialog, QMessageBox
+from PySide2.QtWidgets import QInputDialog, QMessageBox, QApplication
 from pygeodesy.ellipsoidalVincenty import LatLon
 from ..humanization_utils import describe_entity, format_number
 from ..services import speech, map, config
@@ -17,11 +17,19 @@ class InteractivePersonController:
         menu_service().register_menu_commands(self)
         menu_service().menu_item_with_name("toggle_disallow_leave_roads").setChecked(config().navigation.disallow_leaving_roads)
     
-    @menu_command(_("Information"), _("Current coordinates"), "c")
-    def do_current_coords(self, evt):
+    def _get_current_coordinates_string(self):
         lat = format_number(self._person.position.lat, config().presentation.coordinate_decimal_places)
         lon = format_number(self._person.position.lon, config().presentation.coordinate_decimal_places)
-        speech().speak(_("Longitude: {longitude}, latitude: {latitude}.").format(longitude=lon, latitude=lat))
+        return _("Longitude: {longitude}, latitude: {latitude}.").format(longitude=lon, latitude=lat)
+
+    @menu_command(_("Information"), _("Current coordinates"), "c")
+    def do_current_coords(self, evt):
+        speech().speak(self._get_current_coordinates_string())
+
+    @menu_command(_("Information"), _("Copy current coordinates"), "ctrl+c")
+    def copy_current_coordinates(self, evt):
+        QApplication.clipboard().setText(self._get_current_coordinates_string())
+        speech().speak(_("Copied."))
 
     def _position_impl(self, objects):    
         if objects:
