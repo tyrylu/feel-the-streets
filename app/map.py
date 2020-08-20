@@ -16,6 +16,7 @@ class Map:
         self._id = map_id
         self._name = map_name
         self._db = AreaDatabase.open_existing(map_id, False)
+        self._rough_distant_cache = None
     
     def intersections_at_position(self, position, fast=True):
         x, y = (position.lon, position.lat)
@@ -31,15 +32,24 @@ class Map:
             intersecting = self._db.get_entities_really_intersecting(candidate_ids, x, y, fast)
             return list(intersecting) + effectively_inside
     
-    def within_distance(self, position, distance, fast=True):
+    def roughly_within_distance(self, position, distance, fast=True):
+        if fast and self._rough_distant_cache is not None and self._rough_distant_cache[0] == position:
+            return self._rough_distant_cache[1]
         min_x, min_y, max_x, max_y = xy_ranges_bounding_square(position, distance*2)
         query = EntitiesQuery()
         query.set_rectangle_of_interest(min_x, max_x, min_y, max_y)
         if fast:
-            query.set_excluded_discriminators(["Route", "Boundary"])
+            query.set_excluded_discriminators(["Boundary", "Route"])
         with measure("Index query"):
             rough_distant = self._db.get_entities(query)
+        if fast:
+            self._rough_distant_cache = (position, rough_distant)
+        return rough_distant
+    
+    def within_distance(self, position, distance, fast=True):
+        rough_distant = self.roughly_within_distance(position, distance, fast)
         entities = distance_filter(rough_distant, position, distance)
+        log.debug("The distance filter decreased the count of entities from %s to %s.", len(rough_distant), len(entities))
         return entities
 
     def add_bookmark(self, name, lat, lon):
