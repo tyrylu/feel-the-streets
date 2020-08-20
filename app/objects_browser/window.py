@@ -3,7 +3,7 @@ from PySide2.QtGui import QKeySequence
 from PySide2.QtWidgets import QWidget, QListWidget, QTreeWidget, QTreeWidgetItem, QPushButton, QLabel, QGridLayout, QMenuBar, QApplication, QAction
 from osm_db import EntityMetadata
 from shapely.geometry.point import Point
-from ..humanization_utils import format_field_value, underscored_to_words, describe_entity
+from ..humanization_utils import format_field_value, underscored_to_words, describe_entity, format_number
 from .. import services
 from ..geometry_utils import closest_point_to, distance_between, bearing_to, to_shapely_point, to_latlon
 from . import object_actions
@@ -65,8 +65,8 @@ class ObjectsBrowserWindow(QWidget):
         for dist, obj, closest in objects:
             bearing = bearing_to(person.position, closest)
             rel_bearing = (bearing - self._person.direction) % 360
-            rel_bearing = round(rel_bearing, services.config().presentation.angle_decimal_places)
-            dist = round(dist, services.config().presentation.distance_decimal_places)
+            rel_bearing = format_number(rel_bearing, services.config().presentation.angle_decimal_places)
+            dist = format_number(dist, services.config().presentation.distance_decimal_places)
             self._objects_list.addItem(_("{object}: distance {distance} meters, {rel_bearing}° relatively").format(object=describe_entity(obj), distance=dist, rel_bearing=rel_bearing))
         self._objects = objects
         self._all_actions = []

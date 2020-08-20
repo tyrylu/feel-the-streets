@@ -1,6 +1,6 @@
-from ..services import speech
+from ..services import speech, config
 from ..entities import entity_post_enter, entity_post_leave, entity_rotated
-from ..humanization_utils import describe_entity
+from ..humanization_utils import describe_entity, format_number
 
 class AnnouncementsController:
     def __init__(self, pov):
@@ -19,4 +19,4 @@ class AnnouncementsController:
 
     def _on_rotated(self, sender):
         if self._point_of_view is sender:
-            speech().speak(_("{degrees} degrees").format(degrees=round(sender.direction)))
+            speech().speak(_("{degrees} degrees").format(degrees=format_number(sender.direction, config().presentation.angle_decimal_places)))

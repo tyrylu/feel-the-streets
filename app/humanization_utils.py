@@ -3,10 +3,13 @@ import builtins
 from osm_db import EntityMetadata, Enum
 import jinja2
 import logging
+from PySide2.QtCore import QLocale
 
 known_enums = Enum.all_known()
 jinja2_env = jinja2.Environment(loader=jinja2.BaseLoader())
 template_cache = {}
+locale = QLocale()
+
 
 log = logging.getLogger(__name__)
 
@@ -78,3 +81,12 @@ def describe_nested_object(obj, metadata):
     for key, val in obj.items():
         context[key] = format_field_value(val, metadata.fields[key].type_name)
     return get_template(metadata).render(**context)
+
+def format_number(value, decimal_places):
+    rounded = round(value, decimal_places)
+    # Make it an integer if the precision allows
+    if int(rounded) == rounded:
+        rounded = int(rounded)
+    rounded_str = str(rounded)
+    rounded_str = rounded_str.replace(".", locale.decimalPoint())
+    return rounded_str

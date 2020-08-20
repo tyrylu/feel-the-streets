@@ -51,7 +51,9 @@ class MainWindow(QMainWindow):
         self._restriction_controller = MovementRestrictionController(person)
         if not self._last_location_controller.restored_position:
                   person.move_to(map().default_start_location)
+        print("About to show")
         self.show()
+        print("Shown")
 
    
     def _download_progress_callback(self, total, so_far):
