@@ -14,8 +14,8 @@ class NavigationConfig(BaseModel):
 
 class PresentationConfig(BaseModel):
     angle_decimal_places: int = 0
-    coordinate_decimal_places: int = 7
-    distance_decimal_places: int = 1
+    coordinate_decimal_places: int = 6
+    distance_decimal_places: int = 0
 
 class ChangelogsConfig(BaseModel):
     enabled: bool = False
