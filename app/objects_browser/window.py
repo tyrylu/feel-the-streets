@@ -112,7 +112,6 @@ class ObjectsBrowserWindow(QWidget):
         if other_item.childCount() > 0:
             self._props.addTopLevelItem(other_item)
         self._object_actions.clear()
-        print("Actions")
         for action in self._all_actions:
             if action.executable(selected):
                 mi = self._object_actions.addAction(action.label)
