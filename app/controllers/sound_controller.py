@@ -5,6 +5,7 @@ import anglr
 from osm_db import Enum
 from ..services import sound
 from ..entities import entity_post_move, entity_post_enter, entity_post_leave, entity_rotated, entity_move_rejected, Entity
+from .interesting_entities_controller import interesting_entity_out_of_range, interesting_entity_in_range
 
 class SoundController:
     
@@ -17,6 +18,7 @@ class SoundController:
         entity_post_leave.connect(self.post_leave)
         entity_rotated.connect(self._rotated)
         entity_move_rejected.connect(self._entity_move_rejected)
+        interesting_entity_in_range.connect(self._interesting_entity_in_range)
 
     def post_move(self, sender):
         if not self._load_sound_played:
@@ -69,3 +71,7 @@ class SoundController:
     def _entity_move_rejected(self, sender):
         cartesian = sender.position.toCartesian()
         sound().play("leave_disallowed", x=cartesian.x, y=cartesian.y, z=cartesian.z)
+
+    def _interesting_entity_in_range(self, sender, entity):
+        from ..humanization_utils import describe_entity
+        print(f"Should spawn sound for {describe_entity(entity)}")

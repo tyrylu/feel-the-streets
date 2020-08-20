@@ -4,7 +4,7 @@ import os
 import webbrowser
 from pygeodesy.ellipsoidalVincenty import LatLon
 from .entities import Person
-from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController, LastLocationController, MovementRestrictionController
+from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController, LastLocationController, MovementRestrictionController, InterestingEntitiesController
 from .area_selection import AreaSelectionDialog
 from .services import map, menu_service, config
 from .server_interaction import AreaDatabaseDownloader, SemanticChangeRetriever, has_api_connectivity, ConnectionError, UnknownQueueError
@@ -45,16 +45,14 @@ class MainWindow(QMainWindow):
         self._app_controller = ApplicationController(self)
         person = Person(map=map(), position=LatLon(0, 0))
         self._person_controller = InteractivePersonController(person, self)
+        self._interesting_entities_controller = InterestingEntitiesController(person)
         self._sound_controller = SoundController(person)
         self._announcements_controller = AnnouncementsController(person)
         self._last_location_controller = LastLocationController(person)
         self._restriction_controller = MovementRestrictionController(person)
         if not self._last_location_controller.restored_position:
                   person.move_to(map().default_start_location)
-        print("About to show")
         self.show()
-        print("Shown")
-
    
     def _download_progress_callback(self, total, so_far):
         if not self._download_progress_dialog:
