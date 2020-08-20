@@ -1,4 +1,5 @@
 import openal
+from pyogg import VorbisFile
 import os
 import fnmatch
 import random
@@ -47,16 +48,20 @@ class SoundManager(object):
     def get(self, name):
         if name in self._sounds:
             return self._sounds[name]
-        props = self._lookup_properties(name)
         fname = self._sound_files[name]
-        sound = openal.oalOpen(fname)
-        if props.min_distance is not None:
-            sound.set_reference_distance(props.min_distance)
+        if os.path.splitext(fname)[1] != ".ogg":
+            raise ValueError("Not an Ogg file.")
+        fp = VorbisFile(fname)
+        sound = openal.Buffer(fp)
         self._sounds[name] = sound
         return sound
     
     def get_channel(self, name, set_loop=False, x=None, y=None, z=None, pan=None):
-        ch = self.get(name)
+        buffer = self.get(name)
+        ch = openal.Source(buffer, False)
+        props = self._lookup_properties(name)
+        if props.min_distance is not None:
+            ch.set_reference_distance(props.min_distance)
         ch.set_looping(set_loop)
         if x is not None:
             ch.set_position([x, y, z])
