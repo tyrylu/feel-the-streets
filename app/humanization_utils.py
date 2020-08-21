@@ -90,3 +90,23 @@ def format_number(value, decimal_places):
     rounded_str = str(rounded)
     rounded_str = rounded_str.replace(".", locale.decimalPoint())
     return rounded_str
+
+def describe_relative_angle(angle):
+    if 5 <= angle < 85:
+        return _("On the front right")
+    elif 85 <= angle < 95:
+        return _("On the right")
+    elif 95 <= angle < 175:
+        return _("On the rear right")
+    elif 175 <= angle < 185:
+        return _("Behind")
+    elif 185 <= angle < 265:
+        return _("On the rear left")
+    elif 265 <= angle < 275:
+        return _("On the left")
+    elif 285 <= angle < 355:
+        return _("On the front left")
+    elif (355 <= angle <= 360) or (0 <= angle < 5):
+        return _("In the front")
+    else:
+        raise ValueError("Unhandled relative angle {}".format(angle))

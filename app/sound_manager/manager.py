@@ -5,6 +5,9 @@ import fnmatch
 import random
 from . import sndmgr
 
+# Constants not exposed by the pyopenal bindings
+AL_SOURCE_RADIUS = 0x1031
+
 sndmgr = None
 
 class SoundManager(object):
