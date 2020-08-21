@@ -40,13 +40,13 @@ jobs:
       run: mv target/release/osm_db.dll osm_db.pyd
     - name: Download mod_spatialite
       if: runner.os == 'Windows'
-      run: Invoke-WebRequest -outfile spatialite.7z http://www.gaia-gis.it/gaia-sins/windows-bin-NEXTGEN-amd64/mod_spatialite-NG-win-amd64.7z
+      run: Invoke-WebRequest -outfile spatialite.7z http://www.gaia-gis.it/gaia-sins/windows-bin-NEXTGEN-amd64/spatialite-loadable-modules-NG-RC1-win-amd64.7z
     - name: Unpack the archive
       if: runner.os == 'Windows'
       run: 7z.exe x spatialite.7z
     - name: Add spatialite to path
       if: runner.os == 'Windows'
-      run: echo ::add-path::$pwd\mod_spatialite-NG-win-amd64
+      run: echo ::add-path::$pwd\spatialite-loadable-modules-NG-RC1-win-amd64
     - name: Build the app executable
       if: runner.os == 'Windows'
       run: pyinstaller run_app.spec
