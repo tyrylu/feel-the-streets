@@ -2552,6 +2552,8 @@ Theatre:
     flats: int
 Tourism:
   inherits: Addressable
+  long_display_template: '{{ parent_display }} ({{ type }})'
+  short_display_template: '{{ type }}'
   fields:
     ref: str
     source: str

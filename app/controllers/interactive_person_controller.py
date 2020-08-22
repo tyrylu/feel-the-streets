@@ -4,10 +4,11 @@ from ..humanization_utils import describe_entity, format_number
 from ..services import speech, map, config
 from ..objects_browser import ObjectsBrowserWindow
 from ..road_segments_browser import RoadSegmentsBrowserDialog
-from ..geometry_utils import get_road_section_angle, distance_filter
+from ..geometry_utils import get_road_section_angle, distance_filter, distance_between
 from ..search import perform_search
 from ..services import menu_service
 from ..menu_service import menu_command
+from .interesting_entities_controller import interesting_entity_in_range
 
 class InteractivePersonController: 
     def __init__(self, person, main_window):
@@ -203,3 +204,22 @@ class InteractivePersonController:
     def disallow_leaving_roads(self, checked):
         config().navigation.disallow_leaving_roads = bool(checked)
         config().save_to_user_config()
+
+    def _go_looking_for_interesting(self, movement_fn):
+        found_interesting = False
+        initial_position = self._person.position
+        def on_interesting(sender, entity):
+            nonlocal found_interesting
+            found_interesting = True
+        interesting_entity_in_range.connect(on_interesting)
+        while not found_interesting:
+            movement_fn()
+        distance = distance_between(initial_position, self._person.position)
+        speech().speak(_("Interesting object found after {} meters.").format(distance))
+    @menu_command(_("Movement"), _("Go forward looking for an interesting object"), "ctrl+up")
+    def do_forward_until_no_interesting(self, evt):
+        self._go_looking_for_interesting(self._person.step_forward)
+
+    @menu_command(_("Movement"), _("Go backward looking for an interesting object"), "ctrl+down")
+    def do_backward_until_no_interesting(self, evt):
+        self._go_looking_for_interesting(self._person.step_backward)
