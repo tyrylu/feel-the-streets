@@ -114,7 +114,7 @@ def describe_relative_angle(angle):
         return _("On the rear left")
     elif 265 <= angle < 275:
         return _("On the left")
-    elif 285 <= angle < 355:
+    elif 275 <= angle < 355:
         return _("On the front left")
     elif (355 <= angle <= 360) or (0 <= angle < 5):
         return _("In the front")
