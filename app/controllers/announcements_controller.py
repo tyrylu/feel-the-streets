@@ -28,5 +28,5 @@ class AnnouncementsController:
         shapely_point = to_shapely_point(self._point_of_view.position)
         closest_point = to_latlon(closest_point_to(shapely_point, entity.geometry))
         bearing = bearing_to(self._point_of_view.position, closest_point)
-        rel_bearing = (bearing - self._point_of_view.direction) % 36
+        rel_bearing = (bearing - self._point_of_view.direction) % 360
         speech().speak(_("{angle_description} is a {entity_description}").format(angle_description=describe_relative_angle(rel_bearing), entity_description=describe_entity(entity, template_type=TemplateType.short)))

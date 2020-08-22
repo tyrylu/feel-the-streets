@@ -215,7 +215,7 @@ class InteractivePersonController:
         while not found_interesting:
             movement_fn()
         distance = distance_between(initial_position, self._person.position)
-        speech().speak(_("Interesting object found after {} meters.").format(distance))
+        speech().speak(_("Interesting object found after {} meters.").format(format_number(distance, config().presentation.distance_decimal_places)))
     @menu_command(_("Movement"), _("Go forward looking for an interesting object"), "ctrl+up")
     def do_forward_until_no_interesting(self, evt):
         self._go_looking_for_interesting(self._person.step_forward)
