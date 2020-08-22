@@ -1,7 +1,7 @@
 from ..services import speech, config
 from ..entities import entity_post_enter, entity_post_leave, entity_rotated
 from ..controllers.interesting_entities_controller import interesting_entity_in_range
-from ..humanization_utils import describe_entity, format_number, describe_relative_angle
+from ..humanization_utils import describe_entity, format_number, describe_relative_angle, TemplateType
 from ..geometry_utils import to_shapely_point, closest_point_to, bearing_to, to_latlon
 
 class AnnouncementsController:
@@ -29,4 +29,4 @@ class AnnouncementsController:
         closest_point = to_latlon(closest_point_to(shapely_point, entity.geometry))
         bearing = bearing_to(self._point_of_view.position, closest_point)
         rel_bearing = (bearing - self._point_of_view.direction) % 36
-        speech().speak(_("{angle_description} is a {entity_description}").format(angle_description=describe_relative_angle(rel_bearing), entity_description=describe_entity(entity)))
+        speech().speak(_("{angle_description} is a {entity_description}").format(angle_description=describe_relative_angle(rel_bearing), entity_description=describe_entity(entity, template_type=TemplateType.short)))
