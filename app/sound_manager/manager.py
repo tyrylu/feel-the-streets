@@ -18,6 +18,7 @@ class SoundManager(object):
         self._group_counts = {}
         self._exts = sound_extensions
         self._property_patterns = []
+        self._sources = []
         openal.oalInit()
         self._recursive = recursive_search
         self._sounds_dir = sounds_dir
@@ -59,9 +60,21 @@ class SoundManager(object):
         self._sounds[name] = sound
         return sound
     
+    def _create_or_find_usabe_source(self, buffer):
+        try:
+            source = openal.Source(buffer, False)
+            self._sources.append(source)
+            return source
+        except openal.ALError:
+            for candidate_source in self._sources:
+                if candidate_source.get_state() == openal.AL_STOPPED:
+                    candidate_source._set_buffer(buffer)
+                    return candidate_source
+            raise RuntimeError("Can not create audio source.")
+
     def get_channel(self, name, set_loop=False, x=None, y=None, z=None, pan=None):
         buffer = self.get(name)
-        ch = openal.Source(buffer, False)
+        ch = self._create_or_find_usabe_source(buffer)
         props = self._lookup_properties(name)
         if props.min_distance is not None:
             ch.set_reference_distance(props.min_distance)
@@ -77,6 +90,7 @@ class SoundManager(object):
         ch = self.get_channel(name, set_loop, x, y, z, pan)
         ch.play()
         return ch
+
     def add_property_pattern(self, pattern, props):
         self._property_patterns.append((pattern, props))
     def _lookup_properties(self, name):
