@@ -23,7 +23,7 @@ Accessible:
     level: str
     door: AccessType
 Address:
-  display_template: '{% if housename %}{{ housename }}, {% endif %}{{ street }} {{ housenumber }}, {{ postcode }}{% if city %} {{ city }}{% endif %}{% if place %} {{ place }}{% endif %}'
+  long_display_template: '{% if housename %}{{ housename }}, {% endif %}{{ street }} {{ housenumber }}, {{ postcode }}{% if city %} {{ city }}{% endif %}{% if place %} {{ place }}{% endif %}'
   fields:
     place: str
     city: str
@@ -50,7 +50,7 @@ Address:
     red: str
 Addressable:
   inherits: Named
-  display_template: '{{ parent_display }}{% if address is defined %}, {{ address }}{% endif %}'
+  long_display_template: '{{ parent_display }}{% if address is defined %}, {{ address }}{% endif %}'
   fields:
     ruian_addr_ref: int
     address: Address
@@ -133,7 +133,7 @@ AerialWay:
     iata: str
 Amenity:
   inherits: Addressable
-  display_template: '{{ parent_display }} ({{ type }})'
+  long_display_template: '{{ parent_display }} ({{ type }})'
   fields:
     'payment:coins': bool
     'payment:mastercard': bool
@@ -1091,6 +1091,7 @@ Level:
     indoor: IndoorType
 ManMade:
   inherits: Named
+  long_display_template: '{{ parent_display }} ({{ type }})'
   fields:
     source: str
     type: '!ManMadeType'
@@ -1151,7 +1152,7 @@ Memorial:
     fixme: str
 Named:
   inherits: OSMEntity
-  display_template: '{{ parent_display }}{% if name is defined %} {{ name }}{% endif %}'
+  long_display_template: '{{ parent_display }}{% if name is defined %} {{ name }}{% endif %}'
   fields:
     name: str
 Natural:
@@ -1249,7 +1250,7 @@ Office:
     designation: str
     description_en: str
 OSMEntity:
-  display_template: '{{ class_name_display }}'
+  long_display_template: '{{ class_name_display }}'
   fields:
     osm_id: '!str'
     timestamp: '!str'
@@ -1833,7 +1834,7 @@ RF:
     callsign: str
 Road:
   inherits: Named
-  display_template: '{{ parent_display }} ({{ type }})'
+  long_display_template: '{{ parent_display }} ({{ type }})'
   fields:
     ruian_street_ref: int
     embedded_rails: EmbeddedRails

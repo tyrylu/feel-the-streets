@@ -34,8 +34,13 @@ impl PyEntityMetadata {
     }
 
     #[getter]
-    pub fn display_template(&self) -> Option<&String> {
-        self.inner.display_template.as_ref()
+    pub fn long_display_template(&self) -> Option<&String> {
+        self.inner.long_display_template.as_ref()
+    }
+
+    #[getter]
+    pub fn short_display_template(&self) -> Option<&String> {
+        self.inner.short_display_template.as_ref()
     }
 
     #[getter]

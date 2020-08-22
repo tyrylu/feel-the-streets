@@ -26,7 +26,8 @@ pub fn all_known_discriminators() -> Vec<&'static String> {
 #[derive(Deserialize)]
 struct RawEntityMetadata {
     inherits: Option<String>,
-    display_template: Option<String>,
+    long_display_template: Option<String>,
+    short_display_template: Option<String>,
     fields: HashMap<String, String>,
 }
 
@@ -44,7 +45,8 @@ pub struct Field {
 
 pub struct EntityMetadata {
     pub discriminator: String,
-    pub display_template: Option<String>,
+    pub long_display_template: Option<String>,
+    pub short_display_template: Option<String>,
     inherits: Option<String>,
     pub fields: HashMap<String, Field>,
 }
@@ -66,7 +68,8 @@ impl EntityMetadata {
         }
         Some(Self {
             fields,
-            display_template: raw.display_template.clone(),
+            long_display_template: raw.long_display_template.clone(),
+            short_display_template: raw.short_display_template.clone(),
             inherits: raw.inherits.clone(),
             discriminator: discriminator.to_string(),
         })

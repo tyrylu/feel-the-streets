@@ -1,3 +1,5 @@
+from collections import defaultdict
+import enum
 import re
 import builtins
 from osm_db import EntityMetadata, Enum
@@ -5,18 +7,26 @@ import jinja2
 import logging
 from PySide2.QtCore import QLocale
 
+class TemplateType(enum.Enum):
+    long = 1
+    short = 2
+
 known_enums = Enum.all_known()
 jinja2_env = jinja2.Environment(loader=jinja2.BaseLoader())
-template_cache = {}
+template_cache = defaultdict(dict)
 locale = QLocale()
 
 
 log = logging.getLogger(__name__)
 
-def get_template(metadata):
-    if metadata.discriminator not in template_cache:
-        template_cache[metadata.discriminator] = jinja2_env.from_string(metadata.display_template)
-    return template_cache[metadata.discriminator]
+def get_template_string(metadata, template_type):
+    return metadata.short_display_template if template_type is TemplateType.short else metadata.long_display_template # If we add a third type, we'll have to change this oneliner to something with more lines.
+
+def get_template(metadata, template_type):
+    if template_type not in template_cache[metadata.discriminator]:
+        template = get_template_string(metadata, template_type)
+        template_cache[metadata.discriminator][template_type] = jinja2_env.from_string(template)
+    return template_cache[metadata.discriminator][template_type]
 
 def underscored_to_words(underscored):
     _ = getattr(builtins, "_", lambda s: s)
@@ -33,7 +43,7 @@ def get_field_type(key, fields):
         return "str"
     
 
-def format_field_value(field_value, field_type):
+def format_field_value(field_value, field_type, template_type=TemplateType.long):
     if field_type in known_enums:
         try:
             if isinstance(field_value, str):
@@ -45,7 +55,7 @@ def format_field_value(field_value, field_type):
         metadata = EntityMetadata.for_discriminator(field_type)
     except KeyError:
         return field_value
-    return describe_nested_object(field_value, metadata)
+    return describe_nested_object(field_value, metadata, template_type)
     
 def format_class_name(name):
     return re.sub(r"([a-z\d])([A-Z])([a-z\d])", lambda m: "%s %s%s"%(m.group(1), m.group(2).lower(), m.group(3)), name)
@@ -54,12 +64,12 @@ def get_class_display_name(klass):
     _ = getattr(builtins, "_", lambda s: s)
     return _(format_class_name(klass))
 
-def describe_entity(entity, metadata=None):
+def describe_entity(entity, metadata=None, template_type=TemplateType.long):
     if not metadata:
         metadata = EntityMetadata.for_discriminator(entity.discriminator)
     template_source = metadata
     while True:
-        if template_source.display_template:
+        if get_template_string(template_source, template_type):
             break
         template_source = template_source.parent_metadata
     context = {}
@@ -73,14 +83,14 @@ def describe_entity(entity, metadata=None):
     if template_source.parent_metadata:
         context["parent_display"] = describe_entity(entity, template_source.parent_metadata)
     context["class_name_display"] = get_class_display_name(entity.discriminator)
-    template_object = get_template(template_source)
+    template_object = get_template(template_source, template_type)
     return template_object.render(**context)
 
-def describe_nested_object(obj, metadata):
+def describe_nested_object(obj, metadata, template_type):
     context = {}
     for key, val in obj.items():
         context[key] = format_field_value(val, metadata.fields[key].type_name)
-    return get_template(metadata).render(**context)
+    return get_template(metadata, template_type).render(**context)
 
 def format_number(value, decimal_places):
     rounded = round(value, decimal_places)
