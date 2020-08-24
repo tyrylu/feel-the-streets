@@ -2,15 +2,8 @@ use crate::semantic_change::EntryChange;
 use serde_json::{Map, Value};
 
 #[derive(Debug)]
-pub struct NotStoredEntity {
-    pub geometry: Vec<u8>,
-    pub discriminator: String,
-    pub data: String,
-    pub effective_width: Option<f64>,
-}
-
 pub struct Entity {
-    pub id: i32,
+    pub id: String,
     pub geometry: Vec<u8>,
     pub discriminator: String,
     pub data: String,

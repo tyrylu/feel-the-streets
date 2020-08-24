@@ -1,5 +1,5 @@
 use crate::entities_query::EntitiesQuery;
-use crate::entity::{Entity, NotStoredEntity};
+use crate::entity::Entity;
 use crate::semantic_change::SemanticChange;
 use crate::{Error, Result};
 use rusqlite::types::ToSql;
@@ -8,8 +8,8 @@ use std::path::PathBuf;
 use std::time::Instant;
 
 const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
-const INSERT_ENTITY_SQL: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, geomFromWKB(?, 4326), ?, ?)";
-const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (discriminator, geometry, effective_width, data) values (?, Buffer(geomFromWKB(?, 4326), 0), ?, ?)";
+const INSERT_ENTITY_SQL: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (?, ?, geomFromWKB(?, 4326), ?, ?)";
+const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (?, ?, Buffer(geomFromWKB(?, 4326), 0), ?, ?)";
 
 fn row_to_entity(row: &Row) -> core::result::Result<Entity, rusqlite::Error> {
     Ok(Entity {
@@ -74,7 +74,7 @@ impl AreaDatabase {
 
     pub fn insert_entities<T>(&mut self, entities: T) -> Result<()>
     where
-        T: Iterator<Item = NotStoredEntity>,
+        T: Iterator<Item = Entity>,
     {
         let mut count = 0;
         let insert_tx = self.conn.transaction()?;
@@ -88,6 +88,7 @@ impl AreaDatabase {
                 };
                 trace!("Inserting {:?}", entity);
                 match insert_stmt.execute(params![
+                    entity.id,
                     entity.discriminator,
                     entity.geometry,
                     entity.effective_width,
@@ -114,12 +115,12 @@ impl AreaDatabase {
     pub fn has_entity(&self, osm_id: &str) -> Result<bool> {
         let mut stmt = self
             .conn
-            .prepare_cached("select id from entities where json_extract(data, '$.osm_id') = ?")?;
+            .prepare_cached("select id from entities where id = ?")?;
         stmt.exists(&[&osm_id]).map_err(Error::from)
     }
 
     pub fn get_entity(&self, osm_id: &str) -> Result<Option<Entity>> {
-        let mut stmt = self.conn.prepare_cached("select id, discriminator, AsBinary(geometry) as geometry, data, effective_width from entities where json_extract(data, '$.osm_id') = ?")?;
+        let mut stmt = self.conn.prepare_cached("select id, discriminator, AsBinary(geometry) as geometry, data, effective_width from entities where id = ?")?;
         match stmt.query_row(&[&osm_id], row_to_entity) {
             Ok(e) => Ok(Some(e)),
             Err(e) => match e {
@@ -198,7 +199,7 @@ impl AreaDatabase {
     fn remove_entity(&self, osm_id: &str) -> Result<()> {
         let mut stmt = self
             .conn
-            .prepare_cached("delete from entities where json_extract(data, '$.osm_id') = ?")?;
+            .prepare_cached("delete from entities where id = ?")?;
         stmt.execute(&[&osm_id])?;
         Ok(())
     }

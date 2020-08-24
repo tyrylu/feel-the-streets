@@ -1,10 +1,10 @@
 use crate::Result;
-use osm_db::entity::{Entity, NotStoredEntity};
+use osm_db::entity::Entity;
 use osm_db::semantic_change::EntryChange;
 use serde_json::{Map, Value};
 use std::collections::HashSet;
 
-fn diff_properties(old: &Entity, new: &NotStoredEntity) -> Vec<EntryChange> {
+fn diff_properties(old: &Entity, new: &Entity) -> Vec<EntryChange> {
     let mut changes = vec![];
     if old.geometry != new.geometry {
         changes.push(EntryChange::updating(
@@ -90,7 +90,7 @@ fn to_composite_key(prefix: &Option<String>, subkey: &str) -> String {
 
 pub fn diff_entities(
     old: &Entity,
-    new: &NotStoredEntity,
+    new: &Entity,
 ) -> Result<(Vec<EntryChange>, Vec<EntryChange>)> {
     let property_changes = diff_properties(&old, &new);
     let data_changes = if old.data != new.data {

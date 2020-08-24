@@ -2,7 +2,7 @@ use super::checks;
 use super::conversions;
 use super::record::TranslationRecord;
 use super::spec::TranslationSpec;
-use crate::entity::NotStoredEntity;
+use crate::entity::Entity;
 use crate::Error;
 use hashbrown::HashMap;
 use osm_api::object::OSMObject;
@@ -13,7 +13,7 @@ pub fn translate(
     object: &OSMObject,
     manager: &OSMObjectManager,
     mut record: &mut TranslationRecord,
-) -> Result<Option<NotStoredEntity>, Error> {
+) -> Result<Option<Entity>, Error> {
     let lookup_res = TranslationSpec::primary_discriminator_for_object(&object);
     match lookup_res {
         None => {
@@ -67,7 +67,6 @@ pub fn translate(
                 entity_data.insert(new_key, new_value);
             }
             // Common fields
-            entity_data.insert("osm_id".to_string(), object.unique_id());
             entity_data.insert("timestamp".to_string(), object.timestamp.clone());
             entity_data.insert("version".to_string(), object.version.to_string());
             entity_data.insert("changeset".to_string(), object.changeset.to_string());
@@ -106,11 +105,13 @@ pub fn translate(
             match geometry {
                 Some(geom) => {
                     let effective_width = calculate_effective_width(&discriminator, &entity_data);
-                    Ok(Some(NotStoredEntity {
+                    Ok(Some(Entity {
+                        id: object.unique_id(),
                         discriminator,
                         effective_width,
                         geometry: geom,
                         data: raw_data,
+                        parsed_data: None,
                     }))
                 }
                 None => {

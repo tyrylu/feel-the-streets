@@ -4,6 +4,8 @@ use pyo3::basic::CompareOp;
 use pyo3::class::basic::PyObjectProtocol;
 use pyo3::prelude::*;
 use pyo3::types::PyBytes;
+use std::hash::{Hash, Hasher};
+use std::collections::hash_map::DefaultHasher;
 
 #[pyclass(name=Entity)]
 pub struct PyEntity {
@@ -13,8 +15,8 @@ pub struct PyEntity {
 #[pymethods]
 impl PyEntity {
     #[getter]
-    pub fn id(&self) -> i32 {
-        self.inner.id
+    pub fn id(&self) -> &String {
+        &self.inner.id
     }
 
     #[getter]
@@ -47,13 +49,16 @@ impl PyEntity {
 
 #[pyproto]
 impl PyObjectProtocol for PyEntity {
-    fn __hash__(&'p self) -> PyResult<isize> {
-        Ok(self.inner.id as isize)
+    fn __hash__(&'p self) -> PyResult<u64> {
+        let mut hasher = DefaultHasher::new();
+        self.inner.id.hash(&mut hasher);
+        let hash = hasher.finish();
+        Ok(hash)
     }
 
     fn __richcmp__(&'p self, other: PyRef<'p, Self>, op: CompareOp) -> PyResult<bool> {
-        let id1 = self.inner.id;
-        let id2 = other.inner.id;
+        let id1 = &self.inner.id;
+        let id2 = &other.inner.id;
         match op {
             CompareOp::Eq => Ok(id1 == id2),
             CompareOp::Ne => Ok(id1 != id2),
