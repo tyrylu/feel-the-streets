@@ -64,7 +64,14 @@ fn update_area(
                 &mut record,
             )?
             .map(|(o, ids)| {
-                SemanticChange::creating(o.id, o.geometry, o.discriminator, o.data, o.effective_width, ids.collect())
+                SemanticChange::creating(
+                    o.id,
+                    o.geometry,
+                    o.discriminator,
+                    o.data,
+                    o.effective_width,
+                    ids.collect(),
+                )
             }),
             Delete => {
                 let osm_id = change.old.expect("No old in a deletion change").unique_id();
@@ -101,8 +108,8 @@ fn update_area(
                     (Some(old), Some((new, new_ids))) => {
                         let (data_changes, property_changes) =
                             diff_utils::diff_entities(&old, &new)?;
-                            let old_ids = area_db.get_entity_child_ids(&old.id)?;
-                            let child_id_changes = diff_utils::diff_lists(&old_ids, &new_ids.collect());
+                        let old_ids = area_db.get_entity_child_ids(&old.id)?;
+                        let child_id_changes = diff_utils::diff_lists(&old_ids, &new_ids.collect());
                         Some(SemanticChange::updating(
                             &osm_id,
                             property_changes,
@@ -115,10 +122,15 @@ fn update_area(
         };
         if let Some(semantic_change) = semantic_change {
             match area_db.apply_change(&semantic_change) {
-                    Ok(_) => semantic_changes.push(semantic_change),
-                    Err(e) => {warn!("Failed to apply semantic change {:?} with error {}", semantic_change, e); }
+                Ok(_) => semantic_changes.push(semantic_change),
+                Err(e) => {
+                    warn!(
+                        "Failed to apply semantic change {:?} with error {}",
+                        semantic_change, e
+                    );
+                }
             }
-    }
+        }
     }
     area_db.commit()?;
     info!(

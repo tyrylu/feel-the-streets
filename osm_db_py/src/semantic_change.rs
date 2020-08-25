@@ -46,13 +46,14 @@ impl PySemanticChange {
                 .iter()
                 .map(|c| DictChange::new(c.clone()))
                 .collect(),
-            SemanticChange::Remove { .. } | SemanticChange::Create { .. } | SemanticChange::RedownloadDatabase => vec![],
+            SemanticChange::Remove { .. }
+            | SemanticChange::Create { .. }
+            | SemanticChange::RedownloadDatabase => vec![],
         }
     }
 
     #[getter]
     fn property_changes(&self) -> Vec<DictChange> {
-
         match &self.inner {
             SemanticChange::Update {
                 property_changes, ..
@@ -61,7 +62,7 @@ impl PySemanticChange {
                 .map(|c| DictChange::new(c.clone()))
                 .collect(),
             // We don't need the child_ids in the changelog, they are important, but spamming the changelog with them is pointless.
-                SemanticChange::Create {
+            SemanticChange::Create {
                 id,
                 geometry,
                 discriminator,

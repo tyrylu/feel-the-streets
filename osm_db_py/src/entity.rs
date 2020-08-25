@@ -4,8 +4,8 @@ use pyo3::basic::CompareOp;
 use pyo3::class::basic::PyObjectProtocol;
 use pyo3::prelude::*;
 use pyo3::types::PyBytes;
-use std::hash::{Hash, Hasher};
 use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
 
 #[pyclass(name=Entity)]
 pub struct PyEntity {

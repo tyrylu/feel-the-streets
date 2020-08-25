@@ -7,13 +7,14 @@ type RawEntityMetadataMap = HashMap<String, RawEntityMetadata>;
 
 lazy_static! {
     static ref RAW_METADATA_MAP: RawEntityMetadataMap = {
-
-        let entities_file = file_finder::find_file_in_current_or_exe_dir("entities.yml").expect("Could not find entities.yml");
+        let entities_file = file_finder::find_file_in_current_or_exe_dir("entities.yml")
+            .expect("Could not find entities.yml");
         let fp = File::open(entities_file).expect("Could not open entity definition file.");
         serde_yaml::from_reader::<_, RawEntityMetadataMap>(fp).unwrap()
     };
     static ref ENUM_MAP: EnumMap = {
-        let enums_file = file_finder::find_file_in_current_or_exe_dir("enums.yml").expect("Could not find enums.yml");        
+        let enums_file = file_finder::find_file_in_current_or_exe_dir("enums.yml")
+            .expect("Could not find enums.yml");
         let fp = File::open(enums_file).expect("Could not open enums definition file.");
         serde_yaml::from_reader::<_, EnumMap>(fp).unwrap()
     };

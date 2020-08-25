@@ -88,10 +88,7 @@ fn to_composite_key(prefix: &Option<String>, subkey: &str) -> String {
     }
 }
 
-pub fn diff_entities(
-    old: &Entity,
-    new: &Entity,
-) -> Result<(Vec<EntryChange>, Vec<EntryChange>)> {
+pub fn diff_entities(old: &Entity, new: &Entity) -> Result<(Vec<EntryChange>, Vec<EntryChange>)> {
     let property_changes = diff_properties(&old, &new);
     let data_changes = if old.data != new.data {
         diff_json_maps(&old.data, &new.data)?

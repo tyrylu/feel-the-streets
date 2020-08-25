@@ -1,6 +1,6 @@
 use crate::entities_query::EntitiesQuery;
 use crate::entity::Entity;
-use crate::semantic_change::{SemanticChange, ListChange};
+use crate::semantic_change::{ListChange, SemanticChange};
 use crate::{Error, Result};
 use rusqlite::types::ToSql;
 use rusqlite::{params, Connection, OpenFlags, Row, Transaction, NO_PARAMS};
@@ -10,16 +10,16 @@ use std::time::Instant;
 const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
 const INSERT_ENTITY_SQL: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (?, ?, geomFromWKB(?, 4326), ?, ?)";
 const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (?, ?, Buffer(geomFromWKB(?, 4326), 0), ?, ?)";
-const INSERT_ENTITY_RELATIONSHIP_SQL: &str = "INSERT INTO entity_relationships (parent_id, child_id) VALUES (?, ?)";
+const INSERT_ENTITY_RELATIONSHIP_SQL: &str =
+    "INSERT INTO entity_relationships (parent_id, child_id) VALUES (?, ?)";
 
-fn is_foreign_key_violation(err: &rusqlite::Error, parent_id: &str, child_id: &str)  -> bool {
+fn is_foreign_key_violation(err: &rusqlite::Error, parent_id: &str, child_id: &str) -> bool {
     if let rusqlite::Error::SqliteFailure(_, Some(_msg)) = err {
         if child_id.chars().nth(0).unwrap() == 'r' {
             warn!("Entity {} has as a child the relation {} but we did not insert it into the db yet.", parent_id, child_id);
         }
         return true; // We just tried to insert a relationship for an entity which we don't know, but that's fine.
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -70,14 +70,18 @@ impl AreaDatabase {
 
     pub fn create(area: i64) -> Result<Self> {
         // We're not, and will not, be using anything which a relatively new sqlite would not support, so, if it can help Fedora in not crashing...
-        unsafe { rusqlite::bypass_sqlite_version_check(); }
+        unsafe {
+            rusqlite::bypass_sqlite_version_check();
+        }
         let conn = Connection::open(&AreaDatabase::path_for(area, true))?;
         init_extensions(&conn)?;
         conn.execute_batch(INIT_AREA_DB_SQL)?;
         AreaDatabase::common_construct(conn)
     }
     pub fn open_existing(area: i64, server_side: bool) -> Result<Self> {
-                unsafe { rusqlite::bypass_sqlite_version_check(); }
+        unsafe {
+            rusqlite::bypass_sqlite_version_check();
+        }
         let conn = Connection::open_with_flags(
             &AreaDatabase::path_for(area, server_side),
             OpenFlags::SQLITE_OPEN_READ_WRITE,
@@ -88,13 +92,14 @@ impl AreaDatabase {
 
     pub fn insert_entities<T>(&mut self, entities: T) -> Result<()>
     where
-        T: Iterator<Item = (Entity, Box<dyn Iterator<Item=String>>)>,
+        T: Iterator<Item = (Entity, Box<dyn Iterator<Item = String>>)>,
     {
         let mut count = 0;
         let insert_tx = self.conn.transaction()?;
-                for (entity, related_ids) in entities {
-                    let mut insert_related_stmt = insert_tx.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
-                    if entity.geometry.len() < 1_000_000 {
+        for (entity, related_ids) in entities {
+            let mut insert_related_stmt =
+                insert_tx.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
+            if entity.geometry.len() < 1_000_000 {
                 let mut insert_stmt = if geometry_is_valid_transacted(&entity.geometry, &insert_tx)?
                 {
                     insert_tx.prepare(INSERT_ENTITY_SQL)?
@@ -112,16 +117,17 @@ impl AreaDatabase {
                     Ok(_) => {
                         count += 1;
                         for related_id in related_ids {
-                            if let Err(e) = insert_related_stmt.execute(params![entity.id, related_id]) {
-                                    if is_foreign_key_violation(&e, &entity.id, &related_id) {
+                            if let Err(e) =
+                                insert_related_stmt.execute(params![entity.id, related_id])
+                            {
+                                if is_foreign_key_violation(&e, &entity.id, &related_id) {
                                     continue; // We just tried to insert a relationship for an entity which we don't know, but that's fine.
-                                }
-                                else {
-                                    return Err(Error::DbError(e))
+                                } else {
+                                    return Err(Error::DbError(e));
                                 }
                             }
                         }
-                    },
+                    }
                     Err(e) => {
                         error!("Failed to insert entity {:?}, error: {}", entity, e);
                     }
@@ -227,9 +233,8 @@ impl AreaDatabase {
             if let Err(e) = insert_child_id_stmt.execute(params![id, child_id]) {
                 if is_foreign_key_violation(&e, &id, &child_id) {
                     continue;
-                }
-                else {
-                    return Err(Error::DbError(e))
+                } else {
+                    return Err(Error::DbError(e));
                 }
             }
         }
@@ -319,13 +324,19 @@ impl AreaDatabase {
     }
 
     fn apply_child_id_changes(&self, parent_id: &str, changes: &[ListChange]) -> Result<()> {
-                for change in changes {
+        for change in changes {
             match change {
                 ListChange::Add { value } => {
-self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?.execute(params![parent_id, value])?;
-                },
+                    self.conn
+                        .prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?
+                        .execute(params![parent_id, value])?;
+                }
                 ListChange::Remove { value } => {
-                    self.conn.prepare_cached("DELETE FROM entity_relationships where parent_id = ? and child_id = ?")?.execute(params![parent_id, value])?;
+                    self.conn
+                        .prepare_cached(
+                            "DELETE FROM entity_relationships where parent_id = ? and child_id = ?",
+                        )?
+                        .execute(params![parent_id, value])?;
                 }
             }
         }
@@ -333,6 +344,11 @@ self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?.execute(params![parent
     }
 
     pub fn get_entity_child_ids(&self, parent_id: &str) -> Result<Vec<String>> {
-        Ok(self.conn.prepare_cached("SELECT child_id from entity_relationships WHERE parent_id = ?")?.query_and_then(params![parent_id], |row| Ok(row.get_unwrap(0)))?.filter_map(Result::ok).collect())
+        Ok(self
+            .conn
+            .prepare_cached("SELECT child_id from entity_relationships WHERE parent_id = ?")?
+            .query_and_then(params![parent_id], |row| Ok(row.get_unwrap(0)))?
+            .filter_map(Result::ok)
+            .collect())
     }
 }

@@ -213,28 +213,21 @@ impl OSMObject {
         }
     }
 
-    pub fn related_ids(
-        &self
-    ) -> Box<dyn Iterator<Item = (String, Option<String>)>> {
+    pub fn related_ids(&self) -> Box<dyn Iterator<Item = (String, Option<String>)>> {
         use OSMObjectSpecifics::*;
         match self.specifics {
             Node { .. } => Box::new(iter::empty()),
             Way { ref nodes, .. } => {
-                Box::new(
-                    nodes.clone().into_iter().map(|n| (format!("n{}", n), None)),
-                )
+                Box::new(nodes.clone().into_iter().map(|n| (format!("n{}", n), None)))
             }
-            Relation { ref members, .. } => {
-                Box::new(
-                    members
-                        .clone()
-                        .into_iter()
-                        .map(|m| (m.unique_reference(), Some(m.role))),
-                )
-            }
+            Relation { ref members, .. } => Box::new(
+                members
+                    .clone()
+                    .into_iter()
+                    .map(|m| (m.unique_reference(), Some(m.role))),
+            ),
         }
     }
-    
 }
 
 impl OSMRelationMember {

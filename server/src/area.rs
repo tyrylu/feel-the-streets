@@ -1,5 +1,5 @@
-use crate::Result;
 use crate::schema::areas;
+use crate::Result;
 use chrono::NaiveDateTime;
 use diesel::dsl::now;
 use diesel::prelude::*;

@@ -2,7 +2,6 @@ use crate::field_condition::PyFieldCondition;
 use osm_db::entities_query::EntitiesQuery;
 use pyo3::prelude::*;
 
-
 #[pyclass(name=EntitiesQuery, unsendable)]
 pub struct PyEntitiesQuery {
     pub(crate) inner: EntitiesQuery,
@@ -12,10 +11,9 @@ pub struct PyEntitiesQuery {
 impl PyEntitiesQuery {
     #[new]
     fn new() -> Self {
-            PyEntitiesQuery {
-                inner: EntitiesQuery::default(),
-            }
-        
+        PyEntitiesQuery {
+            inner: EntitiesQuery::default(),
+        }
     }
 
     pub fn set_included_discriminators(&mut self, discriminators: Vec<String>) {

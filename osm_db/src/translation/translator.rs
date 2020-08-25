@@ -13,7 +13,7 @@ pub fn translate(
     object: &OSMObject,
     manager: &OSMObjectManager,
     mut record: &mut TranslationRecord,
-) -> Result<Option<(Entity, Box<dyn Iterator<Item=String>>)>, Error> {
+) -> Result<Option<(Entity, Box<dyn Iterator<Item = String>>)>, Error> {
     let lookup_res = TranslationSpec::primary_discriminator_for_object(&object);
     match lookup_res {
         None => {
@@ -105,14 +105,17 @@ pub fn translate(
             match geometry {
                 Some(geom) => {
                     let effective_width = calculate_effective_width(&discriminator, &entity_data);
-                    Ok(Some((Entity {
-                        id: object.unique_id(),
-                        discriminator,
-                        effective_width,
-                        geometry: geom,
-                        data: raw_data,
-                        parsed_data: None,
-                    }, Box::new(object.related_ids().map(|(id, _)| id)))))
+                    Ok(Some((
+                        Entity {
+                            id: object.unique_id(),
+                            discriminator,
+                            effective_width,
+                            geometry: geom,
+                            data: raw_data,
+                            parsed_data: None,
+                        },
+                        Box::new(object.related_ids().map(|(id, _)| id)),
+                    )))
                 }
                 None => {
                     warn!("Failed to generate geometry for object {:?}", &object);

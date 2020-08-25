@@ -1,8 +1,6 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-
-
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum EntryChange {
     Create {
@@ -43,16 +41,16 @@ impl EntryChange {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum ListChange {
     Add { value: String },
-    Remove { value: String }
+    Remove { value: String },
 }
 
 impl ListChange {
     pub fn adding(value: String) -> Self {
-        ListChange::Add{value}
+        ListChange::Add { value }
     }
 
     pub fn removing(value: String) -> Self {
-        ListChange::Remove{value}
+        ListChange::Remove { value }
     }
 }
 
@@ -88,7 +86,6 @@ impl SemanticChange {
         child_ids: Vec<String>,
     ) -> Self {
         SemanticChange::Create {
-
             geometry: base64::encode(&geometry),
             id,
             discriminator,

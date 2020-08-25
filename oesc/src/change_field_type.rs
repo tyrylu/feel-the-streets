@@ -20,10 +20,14 @@ pub fn change_field_type(
     let _dotenv_path = dotenv::dotenv()?;
     let server_conn = SqliteConnection::establish("server.db")?;
     let amq_conn = amqp_utils::connect_to_broker().expect("Connect fail");
-    let channel = amq_conn.create_channel().wait().expect("Could not create channel");
+    let channel = amq_conn
+        .create_channel()
+        .wait()
+        .expect("Could not create channel");
     channel
         .confirm_select(ConfirmSelectOptions::default())
-        .wait().expect("Confirm select fail");
+        .wait()
+        .expect("Confirm select fail");
     for area in Area::all_updated(&server_conn)? {
         println!("Processing area {} (id {})...", area.name, area.osm_id);
         let area_db = AreaDatabase::open_existing(area.osm_id, true)?;
@@ -77,7 +81,11 @@ pub fn change_field_type(
         for change in &changes {
             area_db.apply_change(change)?;
             area_messaging::publish_change_on(&channel, change, area.osm_id).expect("Publish fail");
-            for confirmation in channel.wait_for_confirms().wait().expect("Wait for confirms fail") {
+            for confirmation in channel
+                .wait_for_confirms()
+                .wait()
+                .expect("Wait for confirms fail")
+            {
                 if confirmation.reply_code != 200 {
                     eprintln!(
                         "Non 200 reply code from delivery: {:?}, code: {}, message: {}",

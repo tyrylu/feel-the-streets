@@ -45,8 +45,7 @@ fn consume_tasks() -> Result<()> {
         let task: BackgroundTask = serde_json::from_slice(&delivery.data)?;
         task.execute()?;
         info!("Task executed successfully.");
-        chan
-            .basic_ack(delivery.delivery_tag, BasicAckOptions::default())
+        chan.basic_ack(delivery.delivery_tag, BasicAckOptions::default())
             .wait()?;
         info!("Task acknowledged.");
         if let Some((hour, minute, second)) = task.get_next_schedule_time() {
