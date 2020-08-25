@@ -37,6 +37,7 @@ pub fn remove_field(entity: String, field: String, new_name: Option<String>) -> 
                     .expect("OSM Id not a string?"),
                 vec![],
                 entry_changes,
+                vec![],
             ));
         }
         if new_name.is_some() {

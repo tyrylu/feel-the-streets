@@ -1,6 +1,6 @@
 use crate::entities_query::EntitiesQuery;
 use crate::entity::Entity;
-use crate::semantic_change::SemanticChange;
+use crate::semantic_change::{SemanticChange, ListChange};
 use crate::{Error, Result};
 use rusqlite::types::ToSql;
 use rusqlite::{params, Connection, OpenFlags, Row, Transaction, NO_PARAMS};
@@ -10,6 +10,19 @@ use std::time::Instant;
 const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
 const INSERT_ENTITY_SQL: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (?, ?, geomFromWKB(?, 4326), ?, ?)";
 const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (?, ?, Buffer(geomFromWKB(?, 4326), 0), ?, ?)";
+const INSERT_ENTITY_RELATIONSHIP_SQL: &str = "INSERT INTO entity_relationships (parent_id, child_id) VALUES (?, ?)";
+
+fn is_foreign_key_violation(err: &rusqlite::Error, parent_id: &str, child_id: &str)  -> bool {
+    if let rusqlite::Error::SqliteFailure(_, Some(_msg)) = err {
+        if child_id.chars().nth(0).unwrap() == 'r' {
+            warn!("Entity {} has as a child the relation {} but we did not insert it into the db yet.", parent_id, child_id);
+        }
+        return true; // We just tried to insert a relationship for an entity which we don't know, but that's fine.
+    }
+    else {
+        return false;
+    }
+}
 
 fn row_to_entity(row: &Row) -> core::result::Result<Entity, rusqlite::Error> {
     Ok(Entity {
@@ -40,6 +53,7 @@ pub struct AreaDatabase {
 
 impl AreaDatabase {
     fn common_construct(conn: Connection) -> Result<Self> {
+        conn.execute("PRAGMA foreign_keys=on", params![])?;
         Ok(Self { conn })
     }
     pub fn path_for(area: i64, server_side: bool) -> PathBuf {
@@ -74,12 +88,13 @@ impl AreaDatabase {
 
     pub fn insert_entities<T>(&mut self, entities: T) -> Result<()>
     where
-        T: Iterator<Item = Entity>,
+        T: Iterator<Item = (Entity, Box<dyn Iterator<Item=String>>)>,
     {
         let mut count = 0;
         let insert_tx = self.conn.transaction()?;
-        for entity in entities {
-            if entity.geometry.len() < 1_000_000 {
+                for (entity, related_ids) in entities {
+                    let mut insert_related_stmt = insert_tx.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
+                    if entity.geometry.len() < 1_000_000 {
                 let mut insert_stmt = if geometry_is_valid_transacted(&entity.geometry, &insert_tx)?
                 {
                     insert_tx.prepare(INSERT_ENTITY_SQL)?
@@ -94,7 +109,19 @@ impl AreaDatabase {
                     entity.effective_width,
                     entity.data,
                 ]) {
-                    Ok(_) => count += 1,
+                    Ok(_) => {
+                        count += 1;
+                        for related_id in related_ids {
+                            if let Err(e) = insert_related_stmt.execute(params![entity.id, related_id]) {
+                                    if is_foreign_key_violation(&e, &entity.id, &related_id) {
+                                    continue; // We just tried to insert a relationship for an entity which we don't know, but that's fine.
+                                }
+                                else {
+                                    return Err(Error::DbError(e))
+                                }
+                            }
+                        }
+                    },
                     Err(e) => {
                         error!("Failed to insert entity {:?}, error: {}", entity, e);
                     }
@@ -182,17 +209,30 @@ impl AreaDatabase {
 
     fn insert_entity(
         &self,
+        id: &str,
         discriminator: &str,
         geometry: &[u8],
         effective_width: &Option<f64>,
         data: &str,
+        child_ids: &[String],
     ) -> Result<()> {
         let mut stmt = if self.geometry_is_valid(&geometry)? {
             self.conn.prepare_cached(INSERT_ENTITY_SQL)?
         } else {
             self.conn.prepare_cached(INSERT_ENTITY_SQL_BUFFERED)?
         };
-        stmt.execute(params![discriminator, geometry, effective_width, data])?;
+        stmt.execute(params![id, discriminator, geometry, effective_width, data])?;
+        let mut insert_child_id_stmt = self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
+        for child_id in child_ids {
+            if let Err(e) = insert_child_id_stmt.execute(params![id, child_id]) {
+                if is_foreign_key_violation(&e, &id, &child_id) {
+                    continue;
+                }
+                else {
+                    return Err(Error::DbError(e))
+                }
+            }
+        }
         Ok(())
     }
 
@@ -225,26 +265,32 @@ impl AreaDatabase {
         match change {
             RedownloadDatabase => Err(Error::IllegalChangeType),
             Create {
+                id,
                 discriminator,
                 geometry,
                 effective_width,
                 data,
+                child_ids,
             } => self.insert_entity(
+                &id,
                 &discriminator,
                 &base64::decode(&geometry).expect("Geometry should be base64 encoded"),
                 &effective_width,
                 &data,
+                &child_ids,
             ),
             Remove { osm_id } => self.remove_entity(&osm_id),
             Update {
                 osm_id,
                 property_changes,
                 data_changes,
+                child_id_changes,
             } => {
                 if let Some(mut entity) = self.get_entity(&osm_id)? {
                     entity.apply_property_changes(&property_changes);
                     entity.apply_data_changes(&data_changes);
-                    self.save_updated_entity(&entity)
+                    self.save_updated_entity(&entity)?;
+                    self.apply_child_id_changes(&entity.id, child_id_changes)
                 } else {
                     warn!("Change application requested an update of non-existent entity with osm id {}.", osm_id);
                     Ok(())
@@ -270,5 +316,23 @@ impl AreaDatabase {
         let mut stmt = self.conn.prepare_cached("COMMIT")?;
         stmt.execute(NO_PARAMS)?;
         Ok(())
+    }
+
+    fn apply_child_id_changes(&self, parent_id: &str, changes: &[ListChange]) -> Result<()> {
+                for change in changes {
+            match change {
+                ListChange::Add { value } => {
+self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?.execute(params![parent_id, value])?;
+                },
+                ListChange::Remove { value } => {
+                    self.conn.prepare_cached("DELETE FROM entity_relationships where parent_id = ? and child_id = ?")?.execute(params![parent_id, value])?;
+                }
+            }
+        }
+        Ok(())
+    }
+
+    pub fn get_entity_child_ids(&self, parent_id: &str) -> Result<Vec<String>> {
+        Ok(self.conn.prepare_cached("SELECT child_id from entity_relationships WHERE parent_id = ?")?.query_and_then(params![parent_id], |row| Ok(row.get_unwrap(0)))?.filter_map(Result::ok).collect())
     }
 }

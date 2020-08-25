@@ -60,6 +60,7 @@ pub fn change_field_type(
                         .expect("OSM Id not a string?"),
                     vec![],
                     vec![EntryChange::updating(&field, old_val, new_val)],
+                    vec![],
                 ));
             } else if !force {
                 eprintln!("Could not interpret value {} as the requested type {}, change will not be executed.", old_val, new_type);

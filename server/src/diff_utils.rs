@@ -1,6 +1,6 @@
 use crate::Result;
 use osm_db::entity::Entity;
-use osm_db::semantic_change::EntryChange;
+use osm_db::semantic_change::{EntryChange, ListChange};
 use serde_json::{Map, Value};
 use std::collections::HashSet;
 
@@ -99,4 +99,17 @@ pub fn diff_entities(
         Vec::new()
     };
     Ok((data_changes, property_changes))
+}
+
+pub fn diff_lists(old_ids: &Vec<String>, new_ids: &Vec<String>) -> Vec<ListChange> {
+    let old: HashSet<&String> = old_ids.iter().collect();
+    let new: HashSet<&String> = new_ids.iter().collect();
+    let mut res = vec![];
+    for added in new.difference(&old) {
+        res.push(ListChange::adding(added.to_string()));
+    }
+    for removed in old.difference(&new) {
+        res.push(ListChange::removing(removed.to_string()));
+    }
+    res
 }

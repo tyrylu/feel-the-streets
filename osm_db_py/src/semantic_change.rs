@@ -52,6 +52,7 @@ impl PySemanticChange {
 
     #[getter]
     fn property_changes(&self) -> Vec<DictChange> {
+
         match &self.inner {
             SemanticChange::Update {
                 property_changes, ..
@@ -59,13 +60,17 @@ impl PySemanticChange {
                 .iter()
                 .map(|c| DictChange::new(c.clone()))
                 .collect(),
-            SemanticChange::Create {
+            // We don't need the child_ids in the changelog, they are important, but spamming the changelog with them is pointless.
+                SemanticChange::Create {
+                id,
                 geometry,
                 discriminator,
                 data,
                 effective_width,
+                ..
             } => {
                 let mut ret = vec![];
+                ret.push(DictChange::creating("id", Value::from(id.as_str())));
                 ret.push(DictChange::creating(
                     "discriminator",
                     Value::from(discriminator.clone()),

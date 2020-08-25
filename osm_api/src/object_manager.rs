@@ -16,7 +16,6 @@ use std::cell::RefCell;
 use std::cmp;
 use std::fs;
 use std::io::{self, BufReader, Read, Seek, SeekFrom};
-use std::iter;
 use std::iter::FromIterator;
 use std::time::Instant;
 use tempfile::tempfile;
@@ -282,35 +281,12 @@ impl OSMObjectManager {
         Ok(())
     }
 
-    fn related_ids_of<'a>(
-        &'a self,
-        object: &'a OSMObject,
-    ) -> Result<Box<dyn Iterator<Item = (String, Option<String>)>>> {
-        use self::OSMObjectSpecifics::*;
-        match object.specifics {
-            Node { .. } => Ok(Box::new(iter::empty())),
-            Way { ref nodes, .. } => {
-                self.ensure_has_cached_dependencies_for(&[object.clone()])?;
-                Ok(Box::new(
-                    nodes.clone().into_iter().map(|n| (format!("n{}", n), None)),
-                ))
-            }
-            Relation { ref members, .. } => {
-                self.ensure_has_cached_dependencies_for(&[object.clone()])?;
-                Ok(Box::new(
-                    members
-                        .clone()
-                        .into_iter()
-                        .map(|m| (m.unique_reference(), Some(m.role))),
-                ))
-            }
-        }
-    }
     fn related_objects_of<'a>(
         &'a self,
         object: &'a OSMObject,
     ) -> Result<impl Iterator<Item = OSMObject> + 'a> {
-        Ok(self.related_ids_of(&object)?.filter_map(move |(id, maybe_role)| {
+        self.ensure_has_cached_dependencies_for(&[object.clone()])?;
+        Ok(object.related_ids().filter_map(move |(id, maybe_role)| {
             let obj = self.get_cached_object(&id);
             match obj {
                 Some(o) => Some((o, maybe_role)),

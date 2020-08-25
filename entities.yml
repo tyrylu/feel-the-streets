@@ -1262,7 +1262,6 @@ OSMEntity:
   long_display_template: '{{ class_name_display }}'
   short_display_template: '{{ class_name_display }}'
   fields:
-    osm_id: '!str'
     timestamp: '!str'
     version: '!int'
     changeset: '!int'

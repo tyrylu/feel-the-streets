@@ -58,7 +58,7 @@ impl PyAreaDatabase {
         }
     }
 
-    pub fn apply_change(&self, change: &PySemanticChange) -> PyResult<()> {
+    pub fn apply_change(&mut self, change: &PySemanticChange) -> PyResult<()> {
         match self.inner.apply_change(&change.inner) {
             Ok(()) => Ok(()),
             Err(e) => Err(exceptions::ValueError::py_err(format!(

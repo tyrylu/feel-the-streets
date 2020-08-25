@@ -1,5 +1,6 @@
 use crate::Error;
 use hashbrown::HashMap;
+use std::iter;
 use std::str::FromStr;
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
@@ -211,6 +212,29 @@ impl OSMObject {
             OSMObjectType::Relation => format!("r{}", self.id),
         }
     }
+
+    pub fn related_ids(
+        &self
+    ) -> Box<dyn Iterator<Item = (String, Option<String>)>> {
+        use OSMObjectSpecifics::*;
+        match self.specifics {
+            Node { .. } => Box::new(iter::empty()),
+            Way { ref nodes, .. } => {
+                Box::new(
+                    nodes.clone().into_iter().map(|n| (format!("n{}", n), None)),
+                )
+            }
+            Relation { ref members, .. } => {
+                Box::new(
+                    members
+                        .clone()
+                        .into_iter()
+                        .map(|m| (m.unique_reference(), Some(m.role))),
+                )
+            }
+        }
+    }
+    
 }
 
 impl OSMRelationMember {

@@ -63,8 +63,8 @@ fn update_area(
                 &manager,
                 &mut record,
             )?
-            .map(|o| {
-                SemanticChange::creating(o.geometry, o.discriminator, o.data, o.effective_width)
+            .map(|(o, ids)| {
+                SemanticChange::creating(o.id, o.geometry, o.discriminator, o.data, o.effective_width, ids.collect())
             }),
             Delete => {
                 let osm_id = change.old.expect("No old in a deletion change").unique_id();
@@ -90,19 +90,24 @@ fn update_area(
                 match (old, new) {
                     (None, None) => None,
                     (Some(_), None) => Some(SemanticChange::removing(&osm_id)),
-                    (None, Some(new)) => Some(SemanticChange::creating(
+                    (None, Some((new, new_ids))) => Some(SemanticChange::creating(
+                        new.id,
                         new.geometry,
                         new.discriminator,
                         new.data,
                         new.effective_width,
+                        new_ids.collect(),
                     )),
-                    (Some(old), Some(new)) => {
+                    (Some(old), Some((new, new_ids))) => {
                         let (data_changes, property_changes) =
                             diff_utils::diff_entities(&old, &new)?;
+                            let old_ids = area_db.get_entity_child_ids(&old.id)?;
+                            let child_id_changes = diff_utils::diff_lists(&old_ids, &new_ids.collect());
                         Some(SemanticChange::updating(
                             &osm_id,
                             property_changes,
                             data_changes,
+                            child_id_changes,
                         ))
                     }
                 }
