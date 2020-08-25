@@ -14,3 +14,6 @@ anyhow = "*"
 dotenv = "*"
 diesel = {version = "*", features = ["sqlite", "chrono"]}
 lapin = "*"
+url = "*"
+reqwest = {version="*", features=["blocking", "json"]}
+serde = {version="*", features=["derive"]}

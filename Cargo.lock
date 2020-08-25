@@ -1180,8 +1180,11 @@ dependencies = [
  "dotenv 0.15.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "lapin 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "osm_db 0.1.0",
+ "reqwest 0.10.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde 1.0.115 (registry+https://github.com/rust-lang/crates.io-index)",
  "server 0.1.0",
  "structopt 0.3.16 (registry+https://github.com/rust-lang/crates.io-index)",
+ "url 1.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1613,6 +1616,7 @@ dependencies = [
  "percent-encoding 2.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pin-project-lite 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.115 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde_json 1.0.57 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_urlencoded 0.6.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "tokio 0.2.22 (registry+https://github.com/rust-lang/crates.io-index)",
  "tokio-tls 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",

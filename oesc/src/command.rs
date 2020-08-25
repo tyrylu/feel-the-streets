@@ -1,6 +1,5 @@
 use structopt::StructOpt;
-
-#[derive(StructOpt)]
+#[derive(StructOpt, Debug)]
 pub enum Command {
     /// Changes an entity field's type. Note that it must be run in production where the area databases are stored, so it can actually do the changes. In addition, the entities.yml file must be modified manually.
     ChangeFieldType {
@@ -29,4 +28,13 @@ pub enum Command {
         /// The field to display statistics about.
         field: String,
     },
+    /// Forces a redownload of the given areas or all of them.
+    RequestRedownload {
+        /// Request redownload for all areas
+    #[structopt(long, conflicts_with="area")]
+    all: bool,
+    /// Request redownload for a specific area
+    #[structopt(long, conflicts_with="all")]
+    area: Option<i64>
+    }
 }

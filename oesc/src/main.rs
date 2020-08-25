@@ -3,7 +3,9 @@ use structopt::StructOpt;
 
 mod change_field_type;
 mod command;
+mod rabbitmq_admin_api;
 mod remove_field;
+mod request_redownload;
 mod view_field_usage;
 
 use command::Command;
@@ -23,6 +25,7 @@ fn main() -> Result<()> {
         } => remove_field::remove_field(entity, field, new_name),
         Command::ViewFieldUsage { entity, field } => {
             view_field_usage::view_field_usage(entity, field)
-        }
+        },
+        Command::RequestRedownload { all, area } => request_redownload::request_redownload(all, area)
     }
 }

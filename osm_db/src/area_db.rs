@@ -15,12 +15,12 @@ const INSERT_ENTITY_RELATIONSHIP_SQL: &str =
 
 fn is_foreign_key_violation(err: &rusqlite::Error, parent_id: &str, child_id: &str) -> bool {
     if let rusqlite::Error::SqliteFailure(_, Some(_msg)) = err {
-        if child_id.chars().nth(0).unwrap() == 'r' {
+        if child_id.chars().next().unwrap() == 'r' {
             warn!("Entity {} has as a child the relation {} but we did not insert it into the db yet.", parent_id, child_id);
         }
-        return true; // We just tried to insert a relationship for an entity which we don't know, but that's fine.
+        true // We just tried to insert a relationship for an entity which we don't know, but that's fine.
     } else {
-        return false;
+        false
     }
 }
 
