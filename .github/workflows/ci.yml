@@ -96,7 +96,7 @@ jobs:
         DEPLOY_KEY: ${{ secrets.SERVER_SSH_KEY }}
         ARGS: "-zzrvh --delete"
         SERVER_PORT: ${{ secrets.SERVER_PORT }}
-        FOLDER: "deploy_to_linux"
+        FOLDER: "deploy_to_linux/*"
         SERVER_IP: ${{ secrets.SERVER_IP }}
         USERNAME: ${{ secrets.USERNAME }}
         SERVER_DESTINATION: /srv/feel-the-streets
