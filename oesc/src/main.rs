@@ -25,7 +25,9 @@ fn main() -> Result<()> {
         } => remove_field::remove_field(entity, field, new_name),
         Command::ViewFieldUsage { entity, field } => {
             view_field_usage::view_field_usage(entity, field)
-        },
-        Command::RequestRedownload { all, area } => request_redownload::request_redownload(all, area)
+        }
+        Command::RequestRedownload { all, area } => {
+            request_redownload::request_redownload(all, area)
+        }
     }
 }

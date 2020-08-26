@@ -2,7 +2,7 @@ use crate::change::OSMObjectChange;
 use crate::change_iterator::OSMObjectChangeIterator;
 use crate::object::{OSMObject, OSMObjectFromNetwork, OSMObjectSpecifics, OSMObjectType};
 use crate::utils;
-use crate::{Result, Error};
+use crate::{Error, Result};
 use chrono::{DateTime, Utc};
 use geo_types::{Geometry, GeometryCollection, LineString, Point, Polygon};
 use hashbrown::HashMap;
@@ -59,7 +59,7 @@ impl OSMObjectManager {
         let conn = Connection::open("entity_cache.db").expect("Could not create connection.");
         conn.execute("PRAGMA SYNCHRONOUS=off", NO_PARAMS).unwrap();
         let client = ureq::agent();
-            OSMObjectManager {
+        OSMObjectManager {
             api_urls: vec![
                 "https://z.overpass-api.de/api",
                 "https://lz4.overpass-api.de/api",
@@ -145,16 +145,21 @@ impl OSMObjectManager {
             .http_client
             .post(&final_url)
             .send_form(&[("data", query)]);
-            if let Some(e) = resp.synthetic_error() {
-                return Err(Error::HttpError(e.body_text()));
-            }
+        if let Some(e) = resp.synthetic_error() {
+            return Err(Error::HttpError(e.body_text()));
+        }
         match resp.status() {
             429 => {
                 warn!("Multiple requests, killing them and going to a different api host.");
-                
-                    if let Some(e) = self.http_client.get(&format!("{0}/kill_my_queries", &url)).call().synthetic_error() {
-                        return Err(Error::HttpError(e.body_text()));
-                    }
+
+                if let Some(e) = self
+                    .http_client
+                    .get(&format!("{0}/kill_my_queries", &url))
+                    .call()
+                    .synthetic_error()
+                {
+                    return Err(Error::HttpError(e.body_text()));
+                }
                 self.run_query(&query, result_to_tempfile)
             }
             200 => {

@@ -31,10 +31,10 @@ pub enum Command {
     /// Forces a redownload of the given areas or all of them.
     RequestRedownload {
         /// Request redownload for all areas
-    #[structopt(long, conflicts_with="area")]
-    all: bool,
-    /// Request redownload for a specific area
-    #[structopt(long, conflicts_with="all")]
-    area: Option<i64>
-    }
+        #[structopt(long, conflicts_with = "area")]
+        all: bool,
+        /// Request redownload for a specific area
+        #[structopt(long, conflicts_with = "all")]
+        area: Option<i64>,
+    },
 }
