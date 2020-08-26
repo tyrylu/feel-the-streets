@@ -21,7 +21,7 @@ Area::all(&server_conn)?.iter().map(|a| a.osm_id).collect()
     };
     let amqp_client = amqp_utils::connect_to_broker()?;
     let channel = amqp_client.create_channel().wait()?;
-for area_id in areas {
+    for area_id in areas {
     println!("Processing area {}", area_id);
     let bindings = client.get_queues_bound_to_exchange("%2f", &area_id.to_string())?;
     for binding in &bindings {
