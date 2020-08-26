@@ -3,6 +3,8 @@ use rusqlite::types::ToSql;
 use std::f64;
 
 const RECTANGLE_CONDITION_SQL: &str = "(entities.id = idx_entities_geometry.pkid) AND (idx_entities_geometry.xmin <= :max_x) AND (idx_entities_geometry.xmax >= :min_x) AND (idx_entities_geometry.ymin <= :max_y) AND (idx_entities_geometry.ymax >= :min_y)";
+const PARENT_ID_FILTER_SQL: &str = "id in (select child_id from entity_relationships where parent_id = :child_id";
+const CHILD_ID_FILTER_SQL: &str = "id in (select parent_id from entity_relationships where child_id = :child_id";
 
 pub struct EntitiesQuery {
     included_discriminators: Vec<String>,
@@ -11,6 +13,8 @@ pub struct EntitiesQuery {
     max_x: f64,
     min_y: f64,
     max_y: f64,
+    parent_id: Option<String>,
+    child_id: Option<String>,
     conditions: Vec<FieldCondition>,
     limit: Option<usize>,
 }
@@ -24,6 +28,8 @@ impl Default for EntitiesQuery {
             max_x: f64::INFINITY,
             min_y: f64::NEG_INFINITY,
             max_y: f64::INFINITY,
+            child_id: None,
+            parent_id: None,
             conditions: Vec::new(),
             limit: None,
         }
@@ -43,6 +49,14 @@ impl EntitiesQuery {
         self.max_x = max_x;
         self.min_y = min_y;
         self.max_y = max_y;
+    }
+
+    pub fn set_child_id(&mut self, id: String) {
+        self.child_id = Some(id);
+    }
+
+    pub fn set_parent_id(&mut self, id: String) {
+        self.parent_id = Some(id);
     }
 
     pub fn add_condition(&mut self, condition: FieldCondition) {
@@ -76,6 +90,12 @@ impl EntitiesQuery {
                 discriminator_placeholders.join(",")
             ));
         }
+        if self.child_id.is_some() {
+            condition_fragments.push(CHILD_ID_FILTER_SQL.to_string());
+        }
+        if self.parent_id.is_some() {
+            condition_fragments.push(PARENT_ID_FILTER_SQL.to_string());
+        }
         for (idx, condition) in self.conditions.iter().enumerate() {
             condition_fragments.push(condition.to_query_fragment(idx));
         }
@@ -104,7 +124,15 @@ impl EntitiesQuery {
         for (idx, discriminator) in self.excluded_discriminators.iter().enumerate() {
             params.push((format!(":excluded_discriminator{}", idx), discriminator));
         }
+        if self.child_id.is_some() {
+            params.push((":child_id".to_string(), self.child_id.as_ref().unwrap()));
+        }
+        if self.parent_id.is_some() {
+            params.push((":parent_id".to_string(), self.parent_id.as_ref().unwrap()));
+        }
+        
         for (idx, condition) in self.conditions.iter().enumerate() {
+
             if let Some(val) = condition.to_param_value() {
                 params.push((format!(":param{}", idx), val));
             }
