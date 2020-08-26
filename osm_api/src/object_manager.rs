@@ -2,7 +2,7 @@ use crate::change::OSMObjectChange;
 use crate::change_iterator::OSMObjectChangeIterator;
 use crate::object::{OSMObject, OSMObjectFromNetwork, OSMObjectSpecifics, OSMObjectType};
 use crate::utils;
-use crate::Result;
+use crate::{Result, Error};
 use chrono::{DateTime, Utc};
 use geo_types::{Geometry, GeometryCollection, LineString, Point, Polygon};
 use hashbrown::HashMap;
@@ -50,7 +50,7 @@ pub struct OSMObjectManager {
     geometries_cache: RefCell<HashMap<String, Option<Geometry<f64>>>>,
     api_urls: Vec<&'static str>,
     cache_conn: Option<Connection>,
-    http_client: reqwest::blocking::Client,
+    http_client: ureq::Agent,
     seen_cache: RefCell<bool>,
 }
 
@@ -58,11 +58,8 @@ impl OSMObjectManager {
     pub fn new() -> Self {
         let conn = Connection::open("entity_cache.db").expect("Could not create connection.");
         conn.execute("PRAGMA SYNCHRONOUS=off", NO_PARAMS).unwrap();
-        let client = reqwest::blocking::Client::builder()
-            .timeout(None)
-            .build()
-            .expect("Failed to create http client.");
-        OSMObjectManager {
+        let client = ureq::agent();
+            OSMObjectManager {
             api_urls: vec![
                 "https://z.overpass-api.de/api",
                 "https://lz4.overpass-api.de/api",
@@ -142,26 +139,31 @@ impl OSMObjectManager {
         let url = self.next_api_url();
         let final_url = format!("{}/interpreter", url);
         debug!("Requesting resource {}", final_url);
-        let mut resp = self
+        let mut body = qstring::QString::default();
+        body.add_pair(("data", query));
+        let resp = self
             .http_client
             .post(&final_url)
-            .form(&[("data", query)])
-            .send()?;
-        match resp.status().as_u16() {
+            .send_form(&[("data", query)]);
+            if let Some(e) = resp.synthetic_error() {
+                return Err(Error::HttpError(e.body_text()));
+            }
+        match resp.status() {
             429 => {
                 warn!("Multiple requests, killing them and going to a different api host.");
-                self.http_client
-                    .get(&format!("{0}/kill_my_queries", &url))
-                    .send()?;
+                
+                    if let Some(e) = self.http_client.get(&format!("{0}/kill_my_queries", &url)).call().synthetic_error() {
+                        return Err(Error::HttpError(e.body_text()));
+                    }
                 self.run_query(&query, result_to_tempfile)
             }
             200 => {
                 debug!("Request successfully finished after {:?}.", start.elapsed());
                 if !result_to_tempfile {
-                    Ok(Box::new(resp))
+                    Ok(Box::new(resp.into_reader()))
                 } else {
                     let mut file = tempfile()?;
-                    io::copy(&mut resp, &mut file)?;
+                    io::copy(&mut resp.into_reader(), &mut file)?;
                     file.seek(SeekFrom::Start(0))?;
                     Ok(Box::new(file))
                 }

@@ -6,8 +6,8 @@ pub enum Error {
     IoError(#[from] std::io::Error),
     #[error("Disk cache error: {0}")]
     DiskCacheError(#[from] rusqlite::Error),
-    #[error("HTTP error: {0}")]
-    HttpError(#[from] reqwest::Error),
     #[error("XML reading error: {0}")]
     XmlReaderError(#[from] xml::reader::Error),
+    #[error("HTTP related error: {0}")]
+    HttpError(String),
 }
