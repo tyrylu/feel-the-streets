@@ -1,9 +1,10 @@
-use crate::entities_query::EntitiesQuery;
 use crate::entity::Entity;
+use crate::entities_query::EntitiesQuery;
 use crate::semantic_change::{ListChange, SemanticChange};
 use crate::{Error, Result};
 use rusqlite::types::ToSql;
 use rusqlite::{params, Connection, OpenFlags, Row, Transaction, NO_PARAMS};
+use std::collections::HashMap;
 use std::path::PathBuf;
 use std::time::Instant;
 
@@ -13,14 +14,24 @@ const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (id, discriminato
 const INSERT_ENTITY_RELATIONSHIP_SQL: &str =
     "INSERT INTO entity_relationships (parent_id, child_id) VALUES (?, ?)";
 
-fn is_foreign_key_violation(err: &rusqlite::Error, parent_id: &str, child_id: &str) -> bool {
+        #[derive(PartialEq)]
+    enum ForeignKeyViolationClassification {
+        Fatal,
+        Retryable,
+        NoViolation
+    }
+
+fn classify_db_error(err: &rusqlite::Error, child_id: &str) -> ForeignKeyViolationClassification {
     if let rusqlite::Error::SqliteFailure(_, Some(_msg)) = err {
         if child_id.chars().next().unwrap() == 'r' {
-            warn!("Entity {} has as a child the relation {} but we did not insert it into the db yet.", parent_id, child_id);
+            ForeignKeyViolationClassification::Retryable // Only relations can have relations as a child, so it is enough to look at the child id.
         }
-        true // We just tried to insert a relationship for an entity which we don't know, but that's fine.
-    } else {
-        false
+        else {
+            ForeignKeyViolationClassification::Fatal
+        }
+    }
+    else {
+        ForeignKeyViolationClassification::NoViolation
     }
 }
 
@@ -96,6 +107,7 @@ impl AreaDatabase {
     {
         let mut count = 0;
         let insert_tx = self.conn.transaction()?;
+        let mut deferred_relationship_insertions = HashMap::new();
         for (entity, related_ids) in entities {
             let mut insert_related_stmt =
                 insert_tx.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
@@ -120,11 +132,12 @@ impl AreaDatabase {
                             if let Err(e) =
                                 insert_related_stmt.execute(params![entity.id, related_id])
                             {
-                                if is_foreign_key_violation(&e, &entity.id, &related_id) {
-                                    continue; // We just tried to insert a relationship for an entity which we don't know, but that's fine.
-                                } else {
-                                    return Err(Error::DbError(e));
+                                match classify_db_error(&e, &related_id) {
+                                    ForeignKeyViolationClassification::Retryable => {deferred_relationship_insertions.insert(entity.id.clone(), related_id);},
+                                    ForeignKeyViolationClassification::Fatal => {continue;}, // Now it only means that we tryed to insert a relationship for an entity which we definitely don't have in the database - relations are handled separately and anything else can only depend on a smaller object which was inserted before (because of the overpass API query ordering the entities just right)
+                                    ForeignKeyViolationClassification::NoViolation => {return Err(Error::DbError(e));},
                                 }
+                                   
                             }
                         }
                     }
@@ -139,6 +152,10 @@ impl AreaDatabase {
                     entity.geometry.len()
                 )
             }
+        }
+        // Handle deffered relationship insertions.
+        for (parent, child) in deferred_relationship_insertions.iter() {
+            insert_tx.prepare(INSERT_ENTITY_RELATIONSHIP_SQL)?.execute(params![parent, child])?; // Whatever error there is fatal - the relationships should all be there and nothing else should be inserted to the relationships table at this point.
         }
         insert_tx.commit()?;
         info!("Successfully inserted {} entities.", count);
@@ -231,8 +248,8 @@ impl AreaDatabase {
         let mut insert_child_id_stmt = self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
         for child_id in child_ids {
             if let Err(e) = insert_child_id_stmt.execute(params![id, child_id]) {
-                if is_foreign_key_violation(&e, &id, &child_id) {
-                    continue;
+                if classify_db_error(&e, &child_id) != ForeignKeyViolationClassification::NoViolation {
+                    continue; // We can't do much in the single entity case no matter what kind of failure it really is.
                 } else {
                     return Err(Error::DbError(e));
                 }
