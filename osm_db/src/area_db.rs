@@ -159,9 +159,17 @@ impl AreaDatabase {
         }
         // Handle deffered relationship insertions.
         for (parent, child) in deferred_relationship_insertions.iter() {
-            insert_tx
+            let res = insert_tx
                 .prepare(INSERT_ENTITY_RELATIONSHIP_SQL)?
-                .execute(params![parent, child])?; // Whatever error there is fatal - the relationships should all be there and nothing else should be inserted to the relationships table at this point.
+                .execute(params![parent, child]); // Whatever error there is fatal - the relationships should all be there and nothing else should be inserted to the relationships table at this point.
+                if let Err(e) = res {
+                    match classify_db_error(&e, &child) {
+                        ForeignKeyViolationClassification::Retryable => {
+                            warn!("Even after deferring the relationship insertions, the child entity with id {} failed to insert for parent entity {}.", child, parent);
+                        },
+                        _ => return Err(Error::DbError(e)),
+                    }
+                }
         }
         insert_tx.commit()?;
         info!("Successfully inserted {} entities.", count);
