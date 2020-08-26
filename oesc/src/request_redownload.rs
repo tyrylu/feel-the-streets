@@ -1,7 +1,7 @@
 use anyhow::Result;
 use crate::rabbitmq_admin_api::Client;
 use diesel::{Connection, SqliteConnection};
-use lapin::options::QueuePurgeOptions;
+use lapin::{types::FieldTable, options::QueuePurgeOptions};
 use osm_db::semantic_change::SemanticChange;
 use server::amqp_utils;
 use server::area::Area;
@@ -23,13 +23,18 @@ Area::all(&server_conn)?.iter().map(|a| a.osm_id).collect()
     let channel = amqp_client.create_channel().wait()?;
 for area_id in areas {
     println!("Processing area {}", area_id);
-    for binding in client.get_queues_bound_to_exchange("%2f", &area_id.to_string())? {
+    let bindings = client.get_queues_bound_to_exchange("%2f", &area_id.to_string())?;
+    for binding in &bindings {
         println!("Purging bound queue {}", binding.destination);
         let message_count = channel.queue_purge(&binding.destination, QueuePurgeOptions::default()).wait()?;
         println!("Purged {} messages from the queue, sending redownload message.", message_count);
             }
             println!("Publishing the redownload request...");
             area_messaging::publish_change_on(&channel, &SemanticChange::RedownloadDatabase, area_id)?;
+            println!("Unbinding the queues...");
+            for binding in &bindings {
+                channel.queue_unbind(&binding.destination, &binding.source, "", FieldTable::default()).wait()?;
+            }
             println!("Success.");
 }
     Ok(())
