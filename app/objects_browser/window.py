@@ -91,19 +91,24 @@ class ObjectsBrowserWindow(QWidget):
         common_item = QTreeWidgetItem([_("Common properties")])
         specific_item = QTreeWidgetItem([_("Specific properties")])
         other_item = QTreeWidgetItem([_("Other properties - they can not be searched and are not processed in any way")])
-        common_fields = set(EntityMetadata.for_discriminator("OSMEntity").fields.keys())
+        common_fields = list(EntityMetadata.for_discriminator("OSMEntity").fields.keys())
         selected_metadata = EntityMetadata.for_discriminator(selected.discriminator)
         known_fields = selected_metadata.all_fields
+        formatted_values = {}
         for field_name in selected.defined_field_names():
             raw_value = selected.value_of_field(field_name)
             if field_name not in known_fields:
+                # By the mere fact that the other fields have no defined order, we can add them there without losing anything.
                 other_item.addChild(QTreeWidgetItem(["%s: %s"%(underscored_to_words(field_name), raw_value)]))
             else:
                 value_str = "%s: %s"%(underscored_to_words(field_name), format_field_value(raw_value, known_fields[field_name].type_name))
-                if field_name in common_fields:
-                    common_item.addChild(QTreeWidgetItem([value_str]))
-                else:
-                    specific_item.addChild(QTreeWidgetItem([value_str]))
+                formatted_values[field_name] = value_str
+        for common in common_fields:
+            del known_fields[common]
+            common_item.addChild(QTreeWidgetItem([formatted_values[common]]))
+        for specific in known_fields.keys(): # Because we deleted the common ones in the loop before this, only the specific remain.
+            if specific in formatted_values:
+                specific_item.addChild(QTreeWidgetItem([formatted_values[specific]]))
         self._props.addTopLevelItem(common_item)
         if specific_item.childCount() > 0:
             self._props.addTopLevelItem(specific_item)

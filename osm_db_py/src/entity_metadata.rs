@@ -1,6 +1,7 @@
 use osm_db::entity_metadata::{EntityMetadata, Enum, Field};
 use pyo3::exceptions;
 use pyo3::prelude::*;
+use pyo3::types::PyDict;
 use std::collections::HashMap;
 
 #[pyclass(name=EntityMetadata)]
@@ -25,12 +26,12 @@ impl PyEntityMetadata {
     }
 
     #[getter]
-    pub fn fields(&self) -> HashMap<&String, PyField> {
-        self.inner
-            .fields
-            .iter()
-            .map(|(k, v)| (k, PyField { inner: v.clone() }))
-            .collect()
+    pub fn fields(&self, py: Python) -> PyResult<PyObject> {
+        let dict = PyDict::new(py);
+        for (k, v) in &self.inner.fields{
+            dict.set_item(k, Py::new(py, PyField { inner: v.clone() })?)?;
+        }
+        Ok(dict.into())
     }
 
     #[getter]
@@ -44,12 +45,12 @@ impl PyEntityMetadata {
     }
 
     #[getter]
-    pub fn all_fields(&self) -> HashMap<String, PyField> {
-        self.inner
-            .all_fields()
-            .into_iter()
-            .map(|(k, f)| (k, PyField { inner: f }))
-            .collect()
+    pub fn all_fields(&self, py: Python) -> PyResult<PyObject> {
+        let dict = PyDict::new(py);
+        for (k, f) in self.inner.all_fields(){
+            dict.set_item(k, Py::new(py, PyField { inner: f })?)?;
+        }
+        Ok(dict.into())
     }
 
     #[getter]

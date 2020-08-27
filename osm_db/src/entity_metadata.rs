@@ -1,4 +1,5 @@
 use crate::file_finder;
+use indexmap::IndexMap;
 use std::collections::HashMap;
 use std::fs::File;
 
@@ -29,7 +30,7 @@ struct RawEntityMetadata {
     inherits: Option<String>,
     long_display_template: Option<String>,
     short_display_template: Option<String>,
-    fields: HashMap<String, String>,
+    fields: IndexMap<String, String>,
 }
 
 impl RawEntityMetadata {
@@ -49,13 +50,13 @@ pub struct EntityMetadata {
     pub long_display_template: Option<String>,
     pub short_display_template: Option<String>,
     inherits: Option<String>,
-    pub fields: HashMap<String, Field>,
+    pub fields: IndexMap<String, Field>,
 }
 
 impl EntityMetadata {
     pub fn for_discriminator(discriminator: &str) -> Option<Self> {
         let raw = RawEntityMetadata::for_discriminator(discriminator)?;
-        let mut fields = HashMap::with_capacity(raw.fields.len());
+        let mut fields = IndexMap::with_capacity(raw.fields.len());
         for (name, type_name) in &raw.fields {
             let required = type_name.starts_with('!');
             let start = if required { 1 } else { 0 };
@@ -79,7 +80,7 @@ impl EntityMetadata {
     pub fn parent_metadata(&self) -> Option<Self> {
         EntityMetadata::for_discriminator(&self.inherits.clone()?)
     }
-    pub fn all_fields(&self) -> HashMap<String, Field> {
+    pub fn all_fields(&self) -> IndexMap<String, Field> {
         let mut ret = self.fields.clone();
         if let Some(parent) = self.parent_metadata() {
             ret.extend(parent.all_fields());
