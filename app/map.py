@@ -95,7 +95,7 @@ class Map:
         query.add_condition(FieldNamed("name").eq(self._name))
         candidates =self._db.get_entities(query)
         if not candidates:
-            log.warn("Area %s does not have a Place entity, falling back to the first entity in the database.", self._area_name)
+            log.warn("Area %s does not have a Place entity, falling back to the first entity in the database.", self._name)
             query = EntitiesQuery()
             query.set_limit(1)
             candidates = self._db.get_entities(query)

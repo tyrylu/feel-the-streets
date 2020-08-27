@@ -341,6 +341,7 @@ Bank:
     office: OfficeType
 Barrier:
   inherits: Named
+  long_display_template: '{{ parent_display }} ({{ type }})'
   fields:
     tactile_paving: bool
     source: str
