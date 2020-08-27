@@ -211,7 +211,7 @@ impl AreaDatabase {
 
     pub fn get_entities_really_intersecting(
         &self,
-        candidate_ids: &[i32],
+        candidate_ids: &[&str],
         x: f64,
         y: f64,
         fast: bool,

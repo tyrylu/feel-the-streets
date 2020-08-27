@@ -41,7 +41,7 @@ impl PyAreaDatabase {
     }
     pub fn get_entities_really_intersecting(
         &self,
-        candidate_ids: Vec<i32>,
+        candidate_ids: Vec<&str>,
         x: f64,
         y: f64,
         fast: bool,

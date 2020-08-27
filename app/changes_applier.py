@@ -29,6 +29,7 @@ class ChangesApplier(QThread):
             changelog = open(changelog_path, "w", encoding="UTF-8")
         else:
             changelog_path = None
+        changes_applyed = False
         for nth, change in enumerate(self._retriever.new_changes_in(self._area)):
             if change.type is CHANGE_REDOWNLOAD_DATABASE:
                 self.redownload_requested.emit()
@@ -39,6 +40,7 @@ class ChangesApplier(QThread):
             if self._generate_changelog and change.type is CHANGE_REMOVE:
                 entity= db.get_entity(change.osm_id)
             db.apply_change(change)
+            changes_applyed = True
             if self._generate_changelog:
                 if not entity:
                     if change.osm_id:
@@ -59,5 +61,6 @@ class ChangesApplier(QThread):
             changelog.close()
         self._retriever.acknowledge_changes_for(self._area)
         self._retriever.close()
-        self.changes_applied.emit(changelog_path)
+        if changes_applyed:
+            self.changes_applied.emit(changelog_path)
         

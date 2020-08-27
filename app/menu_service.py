@@ -10,8 +10,11 @@ def safe_set_checked(target, new_state):
 class MenuService:
     def __init__(self, app_window):
         self._window = app_window
+        # No idea why, but if we add the child widget when the window is shown, it either doesn't get added or it doesn't get keyboard focus, no idea which of these two actually happens.
+        app_window.hide()
         self._key_capturer = QWidget(self._window)
         self._key_capturer.setFocus()
+        app_window.show()
         self._menubar = app_window.menuBar()
         self._menu_items_by_name = {}
         self._menus = {}
@@ -76,6 +79,8 @@ class MenuService:
     def menu_item_with_name(self, name):
         return self._menu_items_by_name[name]
 
+    def ensure_key_capturer_focus(self):
+        self._key_capturer.setFocus()
 
 def menu_command(menu, label, shortcut=None, name=None, checkable=False):
     def wrap(func):

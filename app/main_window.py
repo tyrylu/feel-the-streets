@@ -1,5 +1,5 @@
 import sys
-from PySide2.QtWidgets import QMainWindow, QDialog, QProgressDialog, QMessageBox, QWidget
+from PySide2.QtWidgets import QMainWindow, QDialog, QProgressDialog, QMessageBox, QWidget, QApplication
 import os
 import webbrowser
 from pygeodesy.ellipsoidalVincenty import LatLon
@@ -28,7 +28,7 @@ class MainWindow(QMainWindow):
 
     def _do_select_db(self):
         dlg = AreaSelectionDialog(self)
-        res = dlg.exec_()        
+        res = dlg.exec_()
         if res == QDialog.DialogCode.Rejected:
             sys.exit(0)
         elif res == QDialog.DialogCode.Accepted:
@@ -52,8 +52,10 @@ class MainWindow(QMainWindow):
         self._restriction_controller = MovementRestrictionController(person)
         if not self._last_location_controller.restored_position:
                   person.move_to(map().default_start_location)
-        self.show()
-   
+        self.raise_()
+        menu_service().ensure_key_capturer_focus()
+
+
     def _download_progress_callback(self, total, so_far):
         if not self._download_progress_dialog:
             self._download_progress_dialog = QProgressDialog(_("Downloading the selected database."), None, 0, 100, self)
@@ -63,11 +65,12 @@ class MainWindow(QMainWindow):
         self._download_progress_dialog.setValue(percentage)
 
     def _download_database(self, area):
-        self._downloader = AreaDatabaseDownloader(area, self)
+        self._downloader = AreaDatabaseDownloader(area, None)
+        self._downloader.moveToThread(QApplication.instance().thread())
         self._downloader.download_progressed.connect(self._download_progress_callback)
         self._downloader.download_finished.connect(self._on_download_finished)
         self._downloader.start()
-    
+
     def _on_download_finished(self, res):
         if not res:
             QMessageBox.warning(self, _("Download failure"), _("Download of the selected area had failed."))
@@ -109,6 +112,8 @@ class MainWindow(QMainWindow):
         self._applier.start()
         
     def _on_redownload_requested(self):
+        self._progress.close()
+        self._progress = None
         QMessageBox.information(self, _("Redownload requested"), _("The server has requested a redownload of the selected database, proceeding with the operation."))
         self._download_database(self._selected_map)
         

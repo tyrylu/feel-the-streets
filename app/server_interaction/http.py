@@ -56,9 +56,12 @@ class AreaDatabaseDownloader(QThread):
 
 
     def run(self):
+        print("Start.")
         resp = session.get(url_for("areas/{0}/download".format(self._area)), stream=True, params={"client_id": config().general.client_id})
+        print(f"We have a response with status {resp.status_code}")
         if resp.status_code == 200:
             total = int(resp.headers.get("content-length", 0))
+            print(f"Total size: {total}")
             chunk_size = 32*1024
             db_path = AreaDatabase.path_for(self._area, server_side=False)
             dbs_dir = os.path.dirname(db_path)

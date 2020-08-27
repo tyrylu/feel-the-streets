@@ -16,7 +16,10 @@ def main():
     # Now we can import the application window - we have the translation function.
     from .main_window import MainWindow
     mw = MainWindow()
+    # If we don't show the main window early enough, the event loop can exit prematurely in some cases.
+    mw.show()
     ret = app.exec_()
+    print(f"Past app exec with return {ret}")
     # On Linux, the speech dispatcher communication thread is still running and it's a daemon one, so using sys.exit now would not have any effect.
     # To workaround that, destroy the speech instance and let the destructor take care of the things it needs
     speech.reset()
