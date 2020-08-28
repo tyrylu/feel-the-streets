@@ -36,7 +36,8 @@ impl PySemanticChange {
             SemanticChange::Remove { osm_id, .. } | SemanticChange::Update { osm_id, .. } => {
                 Some(osm_id)
             }
-            SemanticChange::Create { .. } | SemanticChange::RedownloadDatabase => None,
+            SemanticChange::Create { id, .. } => Some(id),
+            SemanticChange::RedownloadDatabase => None,
         }
     }
     #[getter]

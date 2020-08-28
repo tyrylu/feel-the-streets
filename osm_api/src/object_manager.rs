@@ -139,8 +139,6 @@ impl OSMObjectManager {
         let url = self.next_api_url();
         let final_url = format!("{}/interpreter", url);
         debug!("Requesting resource {}", final_url);
-        let mut body = qstring::QString::default();
-        body.add_pair(("data", query));
         let resp = self
             .http_client
             .post(&final_url)

@@ -38,23 +38,15 @@ class ChangesApplier(QThread):
             entity = None
             # We must retrieve the entity before deleting it so we can produce the display representation of it.
             if self._generate_changelog and change.type is CHANGE_REMOVE:
-                entity= db.get_entity(change.osm_id)
+                entity = db.get_entity(change.osm_id)
             db.apply_change(change)
             changes_applyed = True
             if self._generate_changelog:
                 if not entity:
-                    if change.osm_id:
-                        entity = db.get_entity(change.osm_id)
-                        if not entity:
-                            log.error("Local database is missing entity with osm id %s, not generating changelog description for that one.", change.osm_id)
-                            continue
-                    else:
-                        # This is somewhat ugly, but we really don't have the entity id in any other place and we need its discriminator.
-                        data = [c.new_value for c in change.property_changes if c.key == "data"][0]
-                        entity = db.get_entity(json.loads(data)["osm_id"])
-                        if not entity:
-                            log.error("No entity for osm id %s.", data["osm_id"])
-                            continue
+                    entity = db.get_entity(change.osm_id)
+                    if not entity:
+                        log.error("Local database is missing entity with osm id %s, not generating changelog description for that one.", change.osm_id)
+                        continue
                 changelog.write(get_change_description(change, entity))
         db.apply_deferred_relationship_additions()
         db.commit()

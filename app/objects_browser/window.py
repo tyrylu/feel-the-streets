@@ -5,7 +5,7 @@ from osm_db import EntityMetadata
 from shapely.geometry.point import Point
 from ..humanization_utils import format_field_value, underscored_to_words, describe_entity, format_number
 from .. import services
-from ..geometry_utils import closest_point_to, distance_between, bearing_to, to_shapely_point, to_latlon
+from ..geometry_utils import distance_between, bearing_to
 from . import object_actions
 from .object_actions.action import ObjectAction
 
@@ -55,10 +55,8 @@ class ObjectsBrowserWindow(QWidget):
         self.setWindowTitle(title + _(" ({num_objects} objects shown)").format(num_objects=len(unsorted_objects)))
         self._person = person
         objects = []
-        shapely_point = to_shapely_point(person.position)
         for obj in unsorted_objects:
-            closest = closest_point_to(shapely_point, obj.geometry)
-            closest_latlon = to_latlon(closest)
+            closest_latlon = person.closest_point_to(obj.geometry)
             cur_distance = distance_between(closest_latlon, person.position)
             objects.append((cur_distance, obj, closest_latlon))
         objects.sort(key=lambda e: e[0])

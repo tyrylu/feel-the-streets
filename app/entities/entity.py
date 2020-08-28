@@ -3,7 +3,9 @@ from typing import ClassVar, Set
 from . import entity_pre_move, entity_post_move, entity_pre_enter, entity_post_enter, entity_pre_leave, entity_post_leave, entity_rotated, entity_move_rejected
 from ..measuring import measure
 from ..map import Map
+from ..geometry_utils import to_shapely_point, to_latlon, closest_point_to
 from pygeodesy.ellipsoidalVincenty import LatLon
+
 
 class Entity(BaseModel):
     use_step_sounds: ClassVar[bool] = False
@@ -71,4 +73,6 @@ class Entity(BaseModel):
         cartesian = self.position.toCartesian()
         return cartesian.x, cartesian.y, cartesian.z
 
+    def closest_point_to(self, geometry):
+        return to_latlon(closest_point_to(to_shapely_point(self.position), geometry))
 Entity.update_forward_refs()
