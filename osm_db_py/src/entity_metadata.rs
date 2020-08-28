@@ -2,7 +2,6 @@ use osm_db::entity_metadata::{EntityMetadata, Enum, Field};
 use pyo3::exceptions;
 use pyo3::prelude::*;
 use pyo3::types::PyDict;
-use std::collections::HashMap;
 
 #[pyclass(name=EntityMetadata)]
 pub struct PyEntityMetadata {

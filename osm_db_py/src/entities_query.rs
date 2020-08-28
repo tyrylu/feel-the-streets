@@ -35,4 +35,12 @@ impl PyEntitiesQuery {
     pub fn set_limit(&mut self, limit: usize) {
         self.inner.set_limit(limit)
     }
+
+    pub fn set_child_id(&mut self, id: &str) {
+        self.inner.set_child_id(id);
+    }
+
+    pub fn set_parent_id(&mut self, id: &str) {
+        self.inner.set_parent_id(id);
+    }
 }
