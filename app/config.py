@@ -17,6 +17,8 @@ class PresentationConfig(BaseModel):
     coordinate_decimal_places: int = 6
     distance_decimal_places: int = 0
     near_by_radius: int = 100 # In meters
+    play_sounds_for_interesting_objects: bool = True
+    announce_interesting_objects: bool = True
 
 class ChangelogsConfig(BaseModel):
     enabled: bool = False

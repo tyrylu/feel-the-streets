@@ -25,6 +25,7 @@ class AnnouncementsController:
             speech().speak(_("{degrees} degrees").format(degrees=format_number(sender.direction, config().presentation.angle_decimal_places)))
 
     def _interesting_entity_in_range(self, sender, entity):
+        if not config().presentation.announce_interesting_objects: return
         closest_point = self._point_of_view.closest_point_to(entity.geometry)
         bearing = bearing_to(self._point_of_view.position, closest_point)
         rel_bearing = (bearing - self._point_of_view.direction) % 360

@@ -4,6 +4,7 @@ import os
 import fnmatch
 import random
 from . import sndmgr
+from .hrtf_init import oalInitHRTF
 
 # Constants not exposed by the pyopenal bindings
 AL_SOURCE_RADIUS = 0x1031
@@ -11,7 +12,7 @@ AL_SOURCE_RADIUS = 0x1031
 sndmgr = None
 
 class SoundManager(object):
-    def __init__(self, sounds_dir="sounds", sound_extensions=["wav", "mp3", "ogg", "flac"], recursive_search=True, **system_init_args):
+    def __init__(self, sounds_dir="sounds", sound_extensions=["wav", "mp3", "ogg", "flac"], recursive_search=True, init_hrtf=True):
         global sndmgr
         self._sounds = {}
         self._sound_files = {}
@@ -20,6 +21,8 @@ class SoundManager(object):
         self._property_patterns = []
         self._sources = []
         openal.oalInit()
+        if init_hrtf:
+            oalInitHRTF(None)
         self._recursive = recursive_search
         self._sounds_dir = sounds_dir
         self._index_dir(sounds_dir)

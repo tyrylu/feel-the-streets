@@ -4,7 +4,7 @@ import random
 from typing import DefaultDict, Dict
 import anglr
 from osm_db import Enum
-from ..services import sound
+from ..services import sound, config
 from ..entities import entity_post_move, entity_post_enter, entity_post_leave, entity_rotated, entity_move_rejected, Entity
 from ..humanization_utils import describe_entity
 from .interesting_entities_controller import interesting_entity_out_of_range, interesting_entity_in_range
@@ -30,6 +30,7 @@ class SoundController:
         entity_rotated.connect(self._rotated)
         entity_move_rejected.connect(self._entity_move_rejected)
         interesting_entity_in_range.connect(self._interesting_entity_in_range)
+        interesting_entity_out_of_range.connect(self._interesting_entity_out_of_range)
 
     def post_move(self, sender):
         if not self._load_sound_played:
@@ -87,9 +88,14 @@ class SoundController:
         sound().play("leave_disallowed", x=cartesian.x, y=cartesian.y, z=cartesian.z)
 
     def _interesting_entity_in_range(self, sender, entity):
+        if not config().presentation.play_sounds_for_interesting_objects: return
         sound_name = get_sound(entity)
         if not sound_name:
             log.warn("Could not determine sound for %s", describe_entity(entity))
             return
         cartesian = self._point_of_view.closest_point_to(entity.geometry).toCartesian()
         self._interesting_sounds[entity] = sound().play(sound_name, set_loop=True, x=cartesian.x, y=cartesian.y, z=cartesian.z)
+
+    def _interesting_entity_out_of_range(self, entity):
+        if not config().presentation.play_sounds_for_interesting_objects: return
+        self._interesting_sounds[entity].stop()
