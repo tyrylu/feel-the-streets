@@ -384,4 +384,11 @@ impl AreaDatabase {
             .filter_map(Result::ok)
             .collect())
     }
+
+    pub fn get_parent_count(&self, child_id: &str) -> Result<u32> {
+        Ok(self.conn.prepare_cached("SELECT count(*) from entity_relationships WHERE child_id = ?")?.query_row(params![child_id], |row| Ok(row.get_unwrap(0)))?)
+    }
+    pub fn get_child_count(&self, child_id: &str) -> Result<u32> {
+        Ok(self.conn.prepare_cached("SELECT count(*) from entity_relationships WHERE parent_id = ?")?.query_row(params![child_id], |row| Ok(row.get_unwrap(0)))?)
+    }
 }

@@ -12,5 +12,5 @@ class OpenRUIANDetails(ObjectAction):
         return entity.value_of_field("ruian_building_ref") is not None
     
     @classmethod
-    def execute(cls, entity):
+    def execute(cls, entity, objects_browser):
         return webbrowser.open("http://vdp.cuzk.cz/vdp/ruian/stavebniobjekty/{0}".format(entity.value_of_field("ruian_building_ref")))

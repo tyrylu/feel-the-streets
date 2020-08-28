@@ -9,9 +9,9 @@ from ..geometry_utils import closest_point_to, distance_between, bearing_to, to_
 from . import object_actions
 from .object_actions.action import ObjectAction
 
-def action_execution_handler_factory(action, entity):
+def action_execution_handler_factory(action, entity, window):
     def handler(evt):
-        return action.execute(entity)
+        return action.execute(entity, window)
     return handler
 
 class ObjectsBrowserWindow(QWidget):
@@ -120,7 +120,7 @@ class ObjectsBrowserWindow(QWidget):
         for action in self._all_actions:
             if action.executable(selected):
                 mi = self._object_actions.addAction(action.label)
-                mi.triggered.connect(action_execution_handler_factory(action, selected))
+                mi.triggered.connect(action_execution_handler_factory(action, selected, self))
 
     @property
     def selected_object(self):

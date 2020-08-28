@@ -37,10 +37,10 @@ impl PyEntitiesQuery {
     }
 
     pub fn set_child_id(&mut self, id: &str) {
-        self.inner.set_child_id(id);
+        self.inner.set_child_id(id.to_string())
     }
 
     pub fn set_parent_id(&mut self, id: &str) {
-        self.inner.set_parent_id(id);
+        self.inner.set_parent_id(id.to_string())
     }
 }

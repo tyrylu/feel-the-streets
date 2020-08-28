@@ -12,5 +12,5 @@ class OpenWikidataRecord(ObjectAction):
         return entity.value_of_field("wikidata")
 
     @classmethod
-    def execute(cls, entity):
+    def execute(cls, entity, objects_browser):
         return webbrowser.open("https://www.wikidata.org/wiki/{0}".format(entity.value_of_field("wikidata")))

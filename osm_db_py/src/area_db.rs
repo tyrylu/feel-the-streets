@@ -96,4 +96,17 @@ impl PyAreaDatabase {
             ))),
         }
     }
+
+    pub fn get_child_count(&self, parent_id: &str) -> PyResult<u32> {
+        match self.inner.get_child_count(parent_id) {
+            Ok(num) => Ok(num),
+            Err(e) => Err(exceptions::ValueError::py_err(format!("Failed to query child count: {}", e)))
+        }
+    }
+    pub fn get_parent_count(&self, parent_id: &str) -> PyResult<u32> {
+        match self.inner.get_parent_count(parent_id) {
+            Ok(num) => Ok(num),
+            Err(e) => Err(exceptions::ValueError::py_err(format!("Failed to query parent count: {}", e)))
+        }
+    }
 }

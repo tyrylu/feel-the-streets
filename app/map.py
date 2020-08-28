@@ -107,3 +107,17 @@ class Map:
         lat = geom.y
         return LatLon(lat, lon)
       
+    def parents_of(self, entity):
+        query = EntitiesQuery()
+        query.set_parent_id(entity.id)
+        return self._db.get_entities(query)
+    def children_of(self, entity):
+        query = EntitiesQuery()
+        query.set_child_id(entity.id)
+        return self._db.get_entities(query)
+
+    def get_child_count(self, parent_id):
+        return self._db.get_child_count(parent_id)
+
+    def get_parent_count(self, child_id):
+        return self._db.get_parent_count(child_id)

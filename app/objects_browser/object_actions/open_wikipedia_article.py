@@ -12,5 +12,5 @@ class OpenWikipediaArticle(ObjectAction):
         return entity.value_of_field("wikipedia") is not None
 
     @classmethod
-    def execute(cls, entity):
+    def execute(cls, entity, objects_browser):
         return webbrowser.open("https://wikipedia.org/wiki/{0}".format(entity.value_of_field("wikipedia")))

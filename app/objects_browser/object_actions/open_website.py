@@ -12,5 +12,5 @@ class OpenWebsite(ObjectAction):
         return entity.value_of_field("website") is not None
 
     @classmethod
-    def execute(cls, entity):
+    def execute(cls, entity, objects_browser):
         return webbrowser.open(entity.value_of_field("website"))

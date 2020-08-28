@@ -3,8 +3,8 @@ use rusqlite::types::ToSql;
 use std::f64;
 
 const RECTANGLE_CONDITION_SQL: &str = "(entities.rowid = idx_entities_geometry.pkid) AND (idx_entities_geometry.xmin <= :max_x) AND (idx_entities_geometry.xmax >= :min_x) AND (idx_entities_geometry.ymin <= :max_y) AND (idx_entities_geometry.ymax >= :min_y)";
-const PARENT_ID_FILTER_SQL: &str = "id in (select child_id from entity_relationships where parent_id = :child_id";
-const CHILD_ID_FILTER_SQL: &str = "id in (select parent_id from entity_relationships where child_id = :child_id";
+const CHILD_ID_FILTER_SQL: &str = "id in (select child_id from entity_relationships where parent_id = :parent_id)";
+const PARENT_ID_FILTER_SQL: &str = "id in (select parent_id from entity_relationships where child_id = :child_id)";
 
 pub struct EntitiesQuery {
     included_discriminators: Vec<String>,
@@ -125,10 +125,10 @@ impl EntitiesQuery {
             params.push((format!(":excluded_discriminator{}", idx), discriminator));
         }
         if self.child_id.is_some() {
-            params.push((":child_id".to_string(), self.child_id.as_ref().unwrap()));
+            params.push((":parent_id".to_string(), self.child_id.as_ref().unwrap()));
         }
         if self.parent_id.is_some() {
-            params.push((":parent_id".to_string(), self.parent_id.as_ref().unwrap()));
+            params.push((":child_id".to_string(), self.parent_id.as_ref().unwrap()));
         }
         
         for (idx, condition) in self.conditions.iter().enumerate() {

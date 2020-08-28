@@ -15,5 +15,5 @@ class ObjectAction(abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def execute(cls, entity):
+    def execute(cls, entity, objects_browser):
         raise NotImplementedError("Must override")
