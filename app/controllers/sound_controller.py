@@ -1,11 +1,21 @@
 import collections
+import logging
 import random
 from typing import DefaultDict, Dict
 import anglr
 from osm_db import Enum
 from ..services import sound
 from ..entities import entity_post_move, entity_post_enter, entity_post_leave, entity_rotated, entity_move_rejected, Entity
+from ..humanization_utils import describe_entity
 from .interesting_entities_controller import interesting_entity_out_of_range, interesting_entity_in_range
+
+def get_sound(entity):
+    if entity.discriminator == "Shop":
+        return "shop"
+    else:
+        return None
+
+log = logging.getLogger(__name__)
 
 class SoundController:
     
@@ -13,6 +23,7 @@ class SoundController:
         self._point_of_view: Entity = person
         self._load_sound_played = False
         self._groups_map: DefaultDict[Entity, Dict[Entity, str]] = collections.defaultdict(dict)
+        self._interesting_sounds = {}
         entity_post_move.connect(self.post_move)
         entity_post_enter.connect(self.post_enter)
         entity_post_leave.connect(self.post_leave)
@@ -28,6 +39,9 @@ class SoundController:
         x, y, z = (cartesian.x, cartesian.y, cartesian.z)
         if self._point_of_view is sender:
             sound().listener.set_position([x, y, z])
+            for entity, source in self._interesting_sounds.items():
+                cartesian = self._point_of_view.closest_point_to(entity.geometry).toCartesian()
+                source.set_position([cartesian.x, cartesian.y, cartesian.z])
         if not sender.use_step_sounds:
             return
         group_stack = self._groups_map[sender]
@@ -73,5 +87,9 @@ class SoundController:
         sound().play("leave_disallowed", x=cartesian.x, y=cartesian.y, z=cartesian.z)
 
     def _interesting_entity_in_range(self, sender, entity):
-        from ..humanization_utils import describe_entity
-        print(f"Should spawn sound for {describe_entity(entity)}")
+        sound_name = get_sound(entity)
+        if not sound_name:
+            log.warn("Could not determine sound for %s", describe_entity(entity))
+            return
+        cartesian = self._point_of_view.closest_point_to(entity.geometry).toCartesian()
+        self._interesting_sounds[entity] = sound().play(sound_name, set_loop=True, x=cartesian.x, y=cartesian.y, z=cartesian.z)
