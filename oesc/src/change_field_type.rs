@@ -30,7 +30,7 @@ pub fn change_field_type(
         .expect("Confirm select fail");
     for area in Area::all_updated(&server_conn)? {
         println!("Processing area {} (id {})...", area.name, area.osm_id);
-        let area_db = AreaDatabase::open_existing(area.osm_id, true)?;
+        let mut area_db = AreaDatabase::open_existing(area.osm_id, true)?;
         let mut query = EntitiesQuery::default();
         query.set_included_discriminators(vec![entity.clone()]);
         query.add_condition(FieldCondition::new(field.clone(), Condition::IsNotNull));

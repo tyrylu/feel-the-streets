@@ -36,7 +36,7 @@ fn update_area(
         DateTime::from_utc(area.updated_at, Utc)
     };
     let manager = OSMObjectManager::new();
-    let area_db = AreaDatabase::open_existing(area.osm_id, true)?;
+    let mut area_db = AreaDatabase::open_existing(area.osm_id, true)?;
     let mut first = true;
     let mut osm_change_count = 0;
     let mut semantic_changes = vec![];
@@ -132,6 +132,7 @@ fn update_area(
             }
         }
     }
+    area_db.apply_deferred_relationship_additions()?;
     area_db.commit()?;
     info!(
         "Area updated successfully, applyed {} semantic changes resulting from {} OSM changes.",

@@ -27,7 +27,7 @@ impl PyEntityMetadata {
     #[getter]
     pub fn fields(&self, py: Python) -> PyResult<PyObject> {
         let dict = PyDict::new(py);
-        for (k, v) in &self.inner.fields{
+        for (k, v) in &self.inner.fields {
             dict.set_item(k, Py::new(py, PyField { inner: v.clone() })?)?;
         }
         Ok(dict.into())
@@ -46,7 +46,7 @@ impl PyEntityMetadata {
     #[getter]
     pub fn all_fields(&self, py: Python) -> PyResult<PyObject> {
         let dict = PyDict::new(py);
-        for (k, f) in self.inner.all_fields(){
+        for (k, f) in self.inner.all_fields() {
             dict.set_item(k, Py::new(py, PyField { inner: f })?)?;
         }
         Ok(dict.into())

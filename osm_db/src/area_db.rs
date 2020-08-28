@@ -3,7 +3,7 @@ use crate::entity::Entity;
 use crate::semantic_change::{ListChange, SemanticChange};
 use crate::{Error, Result};
 use rusqlite::types::ToSql;
-use rusqlite::{params, Connection, OpenFlags, Row, Transaction, NO_PARAMS};
+use rusqlite::{params, Connection, OpenFlags, Row, NO_PARAMS};
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::time::Instant;
@@ -50,20 +50,18 @@ fn init_extensions(conn: &Connection) -> Result<()> {
     Ok(())
 }
 
-fn geometry_is_valid_transacted(geometry: &[u8], tx: &Transaction) -> Result<bool> {
-    let mut stmt = tx.prepare_cached("select isValid(geomFromWKB(?, 4326))")?;
-    stmt.query_row(&[&geometry], |row| row.get(0))
-        .map_err(Error::from)
-}
-
 pub struct AreaDatabase {
     conn: Connection,
+    deferred_relationship_additions: HashMap<String, String>,
 }
 
 impl AreaDatabase {
     fn common_construct(conn: Connection) -> Result<Self> {
         conn.execute("PRAGMA foreign_keys=on", params![])?;
-        Ok(Self { conn })
+        Ok(Self {
+            conn,
+            deferred_relationship_additions: HashMap::new(),
+        })
     }
     pub fn path_for(area: i64, server_side: bool) -> PathBuf {
         let mut root = if server_side {
@@ -104,17 +102,16 @@ impl AreaDatabase {
         T: Iterator<Item = (Entity, Box<dyn Iterator<Item = String>>)>,
     {
         let mut count = 0;
-        let insert_tx = self.conn.transaction()?;
+        self.begin()?;
         let mut deferred_relationship_insertions = HashMap::new();
         for (entity, related_ids) in entities {
             let mut insert_related_stmt =
-                insert_tx.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
+                self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
             if entity.geometry.len() < 1_000_000 {
-                let mut insert_stmt = if geometry_is_valid_transacted(&entity.geometry, &insert_tx)?
-                {
-                    insert_tx.prepare(INSERT_ENTITY_SQL)?
+                let mut insert_stmt = if self.geometry_is_valid(&entity.geometry)? {
+                    self.conn.prepare(INSERT_ENTITY_SQL)?
                 } else {
-                    insert_tx.prepare(INSERT_ENTITY_SQL_BUFFERED)?
+                    self.conn.prepare(INSERT_ENTITY_SQL_BUFFERED)?
                 };
                 trace!("Inserting {:?}", entity);
                 match insert_stmt.execute(params![
@@ -157,21 +154,12 @@ impl AreaDatabase {
                 )
             }
         }
-        // Handle deffered relationship insertions.
+        // Handle deferred relationship insertions.
         for (parent, child) in deferred_relationship_insertions.iter() {
-            let res = insert_tx
-                .prepare(INSERT_ENTITY_RELATIONSHIP_SQL)?
-                .execute(params![parent, child]); // Whatever error there is fatal - the relationships should all be there and nothing else should be inserted to the relationships table at this point.
-                if let Err(e) = res {
-                    match classify_db_error(&e, &child) {
-                        ForeignKeyViolationClassification::Retryable => {
-                            warn!("Even after deferring the relationship insertions, the child entity with id {} failed to insert for parent entity {}.", child, parent);
-                        },
-                        _ => return Err(Error::DbError(e)),
-                    }
-                }
+            self.insert_deferred_entity_relationship(parent, child)?;
         }
-        insert_tx.commit()?;
+
+        self.commit()?;
         info!("Successfully inserted {} entities.", count);
         Ok(())
     }
@@ -245,7 +233,7 @@ impl AreaDatabase {
     }
 
     fn insert_entity(
-        &self,
+        &mut self,
         id: &str,
         discriminator: &str,
         geometry: &[u8],
@@ -262,12 +250,17 @@ impl AreaDatabase {
         let mut insert_child_id_stmt = self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
         for child_id in child_ids {
             if let Err(e) = insert_child_id_stmt.execute(params![id, child_id]) {
-                if classify_db_error(&e, &child_id)
-                    != ForeignKeyViolationClassification::NoViolation
-                {
-                    continue; // We can't do much in the single entity case no matter what kind of failure it really is.
-                } else {
-                    return Err(Error::DbError(e));
+                match classify_db_error(&e, &child_id) {
+                    ForeignKeyViolationClassification::Retryable => {
+                        self.deferred_relationship_additions
+                            .insert(id.to_string(), child_id.to_string());
+                    }
+                    ForeignKeyViolationClassification::Fatal => {
+                        continue;
+                    } // Now it only means that we tryed to insert a relationship for an entity which we definitely don't have in the database - relations are handled separately and anything else can only depend on a smaller object which was inserted before (because we do separate queries for node, way and relation changes and this can be called only from a change application)
+                    ForeignKeyViolationClassification::NoViolation => {
+                        return Err(Error::DbError(e));
+                    }
                 }
             }
         }
@@ -298,7 +291,7 @@ impl AreaDatabase {
         Ok(())
     }
 
-    pub fn apply_change(&self, change: &SemanticChange) -> Result<()> {
+    pub fn apply_change(&mut self, change: &SemanticChange) -> Result<()> {
         use SemanticChange::*;
         match change {
             RedownloadDatabase => Err(Error::IllegalChangeType),
@@ -356,13 +349,28 @@ impl AreaDatabase {
         Ok(())
     }
 
-    fn apply_child_id_changes(&self, parent_id: &str, changes: &[ListChange]) -> Result<()> {
+    fn apply_child_id_changes(&mut self, parent_id: &str, changes: &[ListChange]) -> Result<()> {
         for change in changes {
             match change {
                 ListChange::Add { value } => {
-                    self.conn
+                    if let Err(e) = self
+                        .conn
                         .prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?
-                        .execute(params![parent_id, value])?;
+                        .execute(params![parent_id, value])
+                    {
+                        match classify_db_error(&e, &value) {
+                            ForeignKeyViolationClassification::Retryable => {
+                                self.deferred_relationship_additions
+                                    .insert(parent_id.to_string(), value.to_string());
+                            }
+                            ForeignKeyViolationClassification::Fatal => {
+                                continue;
+                            }
+                            ForeignKeyViolationClassification::NoViolation => {
+                                return Err(Error::DbError(e));
+                            }
+                        }
+                    }
                 }
                 ListChange::Remove { value } => {
                     self.conn
@@ -386,9 +394,39 @@ impl AreaDatabase {
     }
 
     pub fn get_parent_count(&self, child_id: &str) -> Result<u32> {
-        Ok(self.conn.prepare_cached("SELECT count(*) from entity_relationships WHERE child_id = ?")?.query_row(params![child_id], |row| Ok(row.get_unwrap(0)))?)
+        Ok(self
+            .conn
+            .prepare_cached("SELECT count(*) from entity_relationships WHERE child_id = ?")?
+            .query_row(params![child_id], |row| Ok(row.get_unwrap(0)))?)
     }
     pub fn get_child_count(&self, child_id: &str) -> Result<u32> {
-        Ok(self.conn.prepare_cached("SELECT count(*) from entity_relationships WHERE parent_id = ?")?.query_row(params![child_id], |row| Ok(row.get_unwrap(0)))?)
+        Ok(self
+            .conn
+            .prepare_cached("SELECT count(*) from entity_relationships WHERE parent_id = ?")?
+            .query_row(params![child_id], |row| Ok(row.get_unwrap(0)))?)
+    }
+
+    fn insert_deferred_entity_relationship(&self, parent: &str, child: &str) -> Result<()> {
+        let res = self
+            .conn
+            .prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?
+            .execute(params![parent, child]); // Whatever error there is fatal - the relationships should all be there and nothing else should be inserted to the relationships table at this point.
+        if let Err(e) = res {
+            match classify_db_error(&e, &child) {
+                ForeignKeyViolationClassification::Retryable => {
+                    warn!("Even after deferring the relationship insertions, the child entity with id {} failed to insert for parent entity {}.", child, parent);
+                }
+                _ => return Err(Error::DbError(e)),
+            }
+        }
+        Ok(())
+    }
+
+    pub fn apply_deferred_relationship_additions(&mut self) -> Result<()> {
+        for (parent, child) in self.deferred_relationship_additions.iter() {
+            self.insert_deferred_entity_relationship(parent, child)?;
+        }
+        self.deferred_relationship_additions.clear();
+        Ok(())
     }
 }

@@ -56,6 +56,7 @@ class ChangesApplier(QThread):
                             log.error("No entity for osm id %s.", data["osm_id"])
                             continue
                 changelog.write(get_change_description(change, entity))
+        db.apply_deferred_relationship_additions()
         db.commit()
         if self._generate_changelog:
             changelog.close()
