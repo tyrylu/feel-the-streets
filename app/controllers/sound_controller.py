@@ -81,7 +81,8 @@ class SoundController:
     def _rotated(self, sender):
         if self._point_of_view is sender:
             angle = anglr.Angle(sender.direction, "degrees")
-            sound().listener.set_orientation([angle.x, 0, angle.y, 0, 1, 0]) # The mapping to the mathematical cartesian coordinate system is x,z,y
+            print(f"Setting listener forward vector to {angle.x} {angle.y}")
+            sound().listener.set_orientation([-angle.y, 0, -angle.x, 0, 1, 0]) # The mapping to the mathematical cartesian coordinate system is x,z,y
 
     def _entity_move_rejected(self, sender):
         cartesian = sender.position.toCartesian()
@@ -96,6 +97,7 @@ class SoundController:
         cartesian = self._point_of_view.closest_point_to(entity.geometry).toCartesian()
         self._interesting_sounds[entity] = sound().play(sound_name, set_loop=True, x=cartesian.x, y=cartesian.y, z=cartesian.z)
 
-    def _interesting_entity_out_of_range(self, entity):
+    def _interesting_entity_out_of_range(self, sender, entity):
         if not config().presentation.play_sounds_for_interesting_objects: return
-        self._interesting_sounds[entity].stop()
+        if entity in self._interesting_sounds:
+            self._interesting_sounds[entity].stop()
