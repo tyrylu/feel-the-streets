@@ -90,13 +90,13 @@ class AreaSelectionDialog(BaseDialog):
             return
         candidates = get_areas_with_name(name)
         if not candidates:
-            QMessageBox.warning(self, text=_("The area with name {name} does not correspond to any OSM areas.").format(name=name), title=_("Area not found"))
+            QMessageBox.warning(self, _("Area not found"), _("The area with name {name} does not correspond to any OSM areas.").format(name=name))
             return
         if len(candidates) == 1:
             area_id = next(iter(candidates.keys()))
             log.info("Only one candidate with an admin level of %s and id %s.", next(iter(candidates.values()))["admin_level"], area_id)
         else:
-            dialog = AreasBrowserDialog(self, areas=candidates)
+            dialog = AreasBrowserDialog(self, area_name=name, areas=candidates)
             res = dialog.exec_()
             if res == QDialog.DialogCode.Accepted:
                 area_id = dialog.selected_area_id

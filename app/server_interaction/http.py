@@ -1,7 +1,7 @@
 from PySide2.QtCore import QObject, Signal, QThread
 import os
-import threading
 import logging
+import xml.etree.ElementTree as et
 import requests
 import atomicwrites
 from ..services import config
@@ -87,3 +87,20 @@ def has_api_connectivity():
             return True
     except requests.ConnectionError:
         return False
+
+def get_area_parents(area_id):
+    if area_id > 3600000000:
+        type = "relation"
+        id = area_id - 3600000000
+    else:
+        type = "way"
+        id = area_id - 2400000000
+    resp = requests.get(f"https://openstreetmap.org/api/0.6/{type}/{id}/relations")
+    doc = et.fromstring(resp.text)
+    res = {}
+    for rel in doc:
+        tags = {}
+        for tag in rel.findall("tag"):
+            tags[tag.attrib["k"]] = tag.attrib["v"]
+        res[rel.attrib["id"]] = tags
+    return res

@@ -74,7 +74,7 @@ class MainWindow(QMainWindow):
     def _on_download_finished(self, res):
         if not res:
             QMessageBox.warning(self, _("Download failure"), _("Download of the selected area had failed."))
-            self.Close()
+            self.close()
             os.remove(AreaDatabase.path_for(area, server_side=False))
         else:
             self._on_map_ready()
