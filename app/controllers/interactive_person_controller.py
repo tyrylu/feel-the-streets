@@ -17,7 +17,9 @@ class InteractivePersonController:
         self._browser_window = None
         menu_service().register_menu_commands(self)
         menu_service().menu_item_with_name("toggle_disallow_leave_roads").setChecked(config().navigation.disallow_leaving_roads)
-    
+        menu_service().menu_item_with_name("toggle_play_sounds_for_interesting_objects").setChecked(config().presentation.play_sounds_for_interesting_objects)
+        menu_service().menu_item_with_name("toggle_announce_interesting_objects").setChecked(config().presentation.announce_interesting_objects)
+
     def _get_current_coordinates_string(self):
         lat = format_number(self._person.position.lat, config().presentation.coordinate_decimal_places)
         lon = format_number(self._person.position.lon, config().presentation.coordinate_decimal_places)
@@ -203,6 +205,16 @@ class InteractivePersonController:
     @menu_command(_("Options"), _("Disallow leaving roads"), "alt+o", checkable=True, name="toggle_disallow_leave_roads")
     def disallow_leaving_roads(self, checked):
         config().navigation.disallow_leaving_roads = bool(checked)
+        config().save_to_user_config()
+
+    @menu_command(_("Options"), _("Announce interesting objects"), checkable=True, name="toggle_announce_interesting_objects")
+    def announce_interesting_objects(self, checked):
+        config().presentation.announce_interesting_objects = bool(checked)
+        config().save_to_user_config()
+
+    @menu_command(_("Options"), _("Play sounds for interesting objects"), checkable=True, name="toggle_play_sounds_for_interesting_objects")
+    def play_sounds_for_interesting_objects(self, checked):
+        config().presentation.play_sounds_for_interesting_objects = bool(checked)
         config().save_to_user_config()
 
     def _go_looking_for_interesting(self, movement_fn):

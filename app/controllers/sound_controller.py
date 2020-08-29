@@ -4,10 +4,10 @@ import random
 from typing import DefaultDict, Dict
 import anglr
 from osm_db import Enum
-from ..services import sound, config
+from ..services import sound, config, menu_service
 from ..entities import entity_post_move, entity_post_enter, entity_post_leave, entity_rotated, entity_move_rejected, Entity
 from ..humanization_utils import describe_entity
-from .interesting_entities_controller import interesting_entity_out_of_range, interesting_entity_in_range
+from .interesting_entities_controller import interesting_entity_out_of_range, interesting_entity_in_range, request_interesting_entities
 
 def get_sound(entity):
     if entity.discriminator == "Shop":
@@ -31,6 +31,7 @@ class SoundController:
         entity_move_rejected.connect(self._entity_move_rejected)
         interesting_entity_in_range.connect(self._interesting_entity_in_range)
         interesting_entity_out_of_range.connect(self._interesting_entity_out_of_range)
+        menu_service().menu_item_with_name("toggle_play_sounds_for_interesting_objects").triggered.connect(self._play_sounds_triggered)
 
     def post_move(self, sender):
         if not self._load_sound_played:
@@ -90,6 +91,9 @@ class SoundController:
 
     def _interesting_entity_in_range(self, sender, entity):
         if not config().presentation.play_sounds_for_interesting_objects: return
+        self._spawn_sound_for(entity)
+    
+    def _spawn_sound_for(self, entity):
         sound_name = get_sound(entity)
         if not sound_name:
             log.warn("Could not determine sound for %s", describe_entity(entity))
@@ -101,3 +105,19 @@ class SoundController:
         if not config().presentation.play_sounds_for_interesting_objects: return
         if entity in self._interesting_sounds:
             self._interesting_sounds[entity].stop()
+            del self._interesting_sounds[entity]
+
+    def _play_sounds_triggered(self, checked):
+        if not checked:
+            self._stop_interesting_sounds()
+        else:
+            self._spawn_interesting_sounds()
+
+    def _stop_interesting_sounds(self):
+        for sound in self._interesting_sounds.values():
+            sound.stop()
+        self._interesting_sounds.clear()
+
+    def _spawn_interesting_sounds(self):
+        for entity in request_interesting_entities.send(self)[0][1]:
+            self._spawn_sound_for(entity)

@@ -5,6 +5,7 @@ from ..geometry_utils import distance_filter
 
 interesting_entity_in_range = Signal()
 interesting_entity_out_of_range = Signal()
+request_interesting_entities = Signal()
 
 def entity_has_none_of_these_fields(entity, *field_names):
     for field_name in field_names:
@@ -34,6 +35,7 @@ class InterestingEntitiesController:
         self._point_of_view = point_of_view
         self._interesting_entities = set()
         entity_post_move.connect(self._entity_post_move)
+        request_interesting_entities.connect(self._interesting_entities_requested)
 
     def _entity_post_move(self, sender):
         if sender is not self._point_of_view: return
@@ -50,3 +52,5 @@ class InterestingEntitiesController:
             interesting_entity_out_of_range.send(self, entity=entity)
         self._interesting_entities = within_distance
 
+    def _interesting_entities_requested(self, sender):
+        return self._interesting_entities
