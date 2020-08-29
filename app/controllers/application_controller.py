@@ -1,5 +1,5 @@
 from PySide2.QtWidgets import QApplication
-from ..services import menu_service
+from ..services import menu_service, speech
 from ..menu_service import menu_command
 
 class ApplicationController:
@@ -7,6 +7,10 @@ class ApplicationController:
         self._main_window = window
         menu_service().register_menu_commands(self)
     
+    @menu_command(_("Program"), _("Silence speech"), "s")
+    def silence_speech(self, evt):
+        speech().get_first_available_output().silence()
+
     @menu_command(_("Program"), _("Quit"), "ctrl+q")
     def do_quit(self, evt):
         self._main_window.close()
