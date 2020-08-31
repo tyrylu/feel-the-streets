@@ -1,6 +1,7 @@
 import logging
 import shapely.wkb as wkb
 import shapely.geometry as geometry
+from shapely.geometry.linestring import LineString
 import pydantic
 from pygeodesy.ellipsoidalVincenty import LatLon, VincentyError
 from . import services
@@ -34,7 +35,7 @@ def bearings_to(initial, target):
         return 0, 0
 
 class LineSegment(pydantic.BaseModel):
-    line: geometry.linestring.LineString
+    line: LineString
     start: geometry.point.Point
     end: geometry.point.Point
     length: float = None
@@ -51,6 +52,24 @@ class LineSegment(pydantic.BaseModel):
     def calculate_angle(self):
         self.angle, self.end_angle = bearings_to(to_latlon(self.start), to_latlon(self.end))
 
+def merge_similar_line_segments(line_segments, precision):
+    """Merges adjacent line segments whose angle is same after rounding to a particular precision."""
+    merged = []
+    first_segment = line_segments[0]
+    first_segment.calculate_angle()
+    current_segment = first_segment
+    current_angle = round(first_segment.angle, precision)
+    for segment in line_segments:
+        segment.calculate_angle()
+        if round(segment.angle, precision) == current_angle:
+            current_segment = LineSegment(start=current_segment.start, end=segment.end, line=LineString([current_segment.line.coords[0], segment.line.coords[1]]))
+        else:
+            merged.append(current_segment)
+            current_segment = segment
+            current_angle = round(current_segment.angle, precision)
+    merged.append(current_segment) # We must add this one manually because it did not have time to be replaced by another one
+    return merged
+
 def get_line_segments(line):
     x_coords, y_coords = line.coords.xy
     num_coords = len(x_coords) - 1 # Every segment must have two points, so for example, for two points we get one segment, for three segments we get two, etc.
@@ -58,7 +77,7 @@ def get_line_segments(line):
     for segment in range(num_coords):
         x1, y1 = x_coords[segment], y_coords[segment]
         x2, y2 = x_coords[segment + 1], y_coords[segment + 1]
-        line_segment = geometry.linestring.LineString([(x1, y1),(x2, y2)])
+        line_segment = LineString([(x1, y1),(x2, y2)])
         segments.append(LineSegment(line=line_segment, start=geometry.point.Point(x1, y1), end=geometry.point.Point(x2, y2)))
     return segments
 
