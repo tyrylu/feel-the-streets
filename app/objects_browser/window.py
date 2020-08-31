@@ -107,6 +107,8 @@ class ObjectsBrowserWindow(QWidget):
         for specific in known_fields.keys(): # Because we deleted the common ones in the loop before this, only the specific remain.
             if specific in formatted_values:
                 specific_item.addChild(QTreeWidgetItem([formatted_values[specific]]))
+        # We add the entity ID mainly for debugging purposes, and that's the reason why it is added the last and so special in the first place.
+            common_item.addChild(QTreeWidgetItem([_("Object id: {}").format(selected.id)]))
         self._props.addTopLevelItem(common_item)
         if specific_item.childCount() > 0:
             self._props.addTopLevelItem(specific_item)
