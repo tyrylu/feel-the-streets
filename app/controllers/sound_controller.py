@@ -9,9 +9,13 @@ from ..entities import entity_post_move, entity_post_enter, entity_post_leave, e
 from ..humanization_utils import describe_entity
 from .interesting_entities_controller import interesting_entity_out_of_range, interesting_entity_in_range, request_interesting_entities
 
+DEFAULT_STEPS_GROUP = "steps_unknown"
+
 def get_sound(entity):
     if entity.discriminator == "Shop":
         return "shop"
+    elif entity.discriminator == "Land":
+        return "land"
     else:
         return None
 
@@ -46,9 +50,15 @@ class SoundController:
                 source.set_position([cartesian.x, cartesian.y, cartesian.z])
         if not sender.use_step_sounds:
             return
+        print(self._groups_map)
         group_stack = self._groups_map[sender]
         if len(group_stack):
-            group = group_stack[list(group_stack.keys())[-1]]
+            group = DEFAULT_STEPS_GROUP
+            # Use the latest non-default steps group
+            for group_candidate in reversed(group_stack.values()):
+                if group_candidate != DEFAULT_STEPS_GROUP:
+                    group = group_candidate
+                    break
         else:
             group = None
         if group:
@@ -67,7 +77,7 @@ class SoundController:
             count = sound().get_group_size(base_group)
             group = "%s.%02d"%(base_group, random.randint(1, count))
         else:
-            group = "steps_unknown"
+            group = DEFAULT_STEPS_GROUP
         self._groups_map[sender][enters] = group
     
     def post_leave(self, sender, leaves):
