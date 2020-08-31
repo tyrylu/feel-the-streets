@@ -15,7 +15,7 @@ def entity_has_none_of_these_fields(entity, *field_names):
 
 def is_interesting(entity):
     # For our purposes, the following discriminators are not interesting.
-    not_interesting_discriminators = {"Road", "ServiceRoad", "Crossing", "Addressable", "Barrier", "PowerLine", "NoExit", "Entrance", "RailWay"}
+    not_interesting_discriminators = {"Road", "ServiceRoad", "Crossing", "Addressable", "Barrier", "PowerLine", "NoExit", "Entrance", "RailWay", "Tree", "Steps"}
     if entity.discriminator in not_interesting_discriminators:
         return False
     # Filter out uninteresting buildings

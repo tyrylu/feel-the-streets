@@ -53,11 +53,11 @@ class LineSegment(pydantic.BaseModel):
 
 def get_line_segments(line):
     x_coords, y_coords = line.coords.xy
-    num_coords = len(x_coords)
+    num_coords = len(x_coords) - 1 # Every segment must have two points, so for example, for two points we get one segment, for three segments we get two, etc.
     segments = []
     for segment in range(num_coords):
         x1, y1 = x_coords[segment], y_coords[segment]
-        x2, y2 = x_coords[(segment + 1)%num_coords], y_coords[(segment + 1)%num_coords]
+        x2, y2 = x_coords[segment + 1], y_coords[segment + 1]
         line_segment = geometry.linestring.LineString([(x1, y1),(x2, y2)])
         segments.append(LineSegment(line=line_segment, start=geometry.point.Point(x1, y1), end=geometry.point.Point(x2, y2)))
     return segments
