@@ -151,7 +151,7 @@ class InteractivePersonController:
         self._person.direction += float(amount)
     
     def _maybe_select_road(self):
-        roads = [r for r in self._person.is_inside_of if r.discriminator == "Road"]
+        roads = [r for r in self._person.is_inside_of if r.discriminator in {"Road", "ServiceRoad"}]
         if not roads:
             speech().speak(_("You are not on a road."))
             return None

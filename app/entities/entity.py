@@ -73,6 +73,11 @@ class Entity(BaseModel):
         cartesian = self.position.toCartesian()
         return cartesian.x, cartesian.y, cartesian.z
 
-    def closest_point_to(self, geometry):
-        return to_latlon(closest_point_to(to_shapely_point(self.position), geometry))
+    def closest_point_to(self, geometry, convert_geometry=True):
+        return to_latlon(closest_point_to(self.position_point, geometry, convert_geometry))
+
+    @property
+    def position_point(self):
+        """The entity's position as a shapely Point."""
+        return to_shapely_point(self.position)
 Entity.update_forward_refs()

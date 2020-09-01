@@ -50,7 +50,6 @@ class SoundController:
                 source.set_position([cartesian.x, cartesian.y, cartesian.z])
         if not sender.use_step_sounds:
             return
-        print(self._groups_map)
         group_stack = self._groups_map[sender]
         if len(group_stack):
             group = DEFAULT_STEPS_GROUP
@@ -83,7 +82,7 @@ class SoundController:
     def post_leave(self, sender, leaves):
         if not sender.use_step_sounds:
             return
-        if leaves.discriminator == "Road":
+        if leaves.discriminator in {"Road", "ServiceRoad"}:
             if sender not in self._groups_map:
                 print("Already left %s."%sender)
             else:
@@ -92,7 +91,6 @@ class SoundController:
     def _rotated(self, sender):
         if self._point_of_view is sender:
             angle = anglr.Angle(sender.direction, "degrees")
-            print(f"Setting listener forward vector to {angle.x} {angle.y}")
             sound().listener.set_orientation([-angle.y, 0, -angle.x, 0, 1, 0]) # The mapping to the mathematical cartesian coordinate system is x,z,y
 
     def _entity_move_rejected(self, sender):

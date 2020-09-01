@@ -120,3 +120,12 @@ def describe_relative_angle(angle):
         return _("In the front")
     else:
         raise ValueError("Unhandled relative angle {}".format(angle))
+
+def describe_angle_as_turn_instructions(angle, precision):
+    if 180 <= angle <= 360:
+        angle = 360 - angle
+        direction = _("to the left")
+    else:
+        direction = _("to the right")
+    formatted_angle = format_number(angle, precision)
+    return _("{angle} degrees {direction}").format(angle=formatted_angle, direction=direction)

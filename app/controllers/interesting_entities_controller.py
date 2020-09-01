@@ -42,9 +42,7 @@ class InterestingEntitiesController:
         rough_distant = map().roughly_within_distance(sender.position, config().presentation.near_by_radius)
         interesting = filter_interesting_entities(rough_distant)
         within_distance = set(distance_filter(interesting, self._point_of_view.position, config().presentation.near_by_radius))
-        print(f"Out of {len(interesting)} entities {len(within_distance)} went through the distance check.")
         in_range = within_distance.difference(self._interesting_entities)
-        print(f"{len(in_range)} are newly in range.")
         out_of_range = self._interesting_entities.difference(within_distance)
         for entity in in_range:
             interesting_entity_in_range.send(self, entity=entity)

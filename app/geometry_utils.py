@@ -165,3 +165,22 @@ def effective_width_filter(entities, position):
             if cur_distance <= entity.effective_width:
                 res_entities.append(entity)
         return res_entities
+
+def calculate_absolute_distances(segments, entity):
+    """Calculates how far could the entity based on its position trawel along the line represented by the segments in both directions, e. g. to the start or the end points of the whole line. Assumes that the closest segment calculation has already been done, e. g. that the LineSegment.current property is set correctly."""
+    from_start = 0
+    to_end = 0
+    seen_current = False
+    for segment in segments:
+        if not segment.current:
+            segment.calculate_length()
+            if not seen_current:
+                from_start += segment.length
+            else:
+                to_end += segment.length
+        else:
+            seen_current = True
+            line_point = entity.closest_point_to(segment.line, False)
+            from_start += distance_between(to_latlon(segment.start), entity.position)
+            to_end += distance_between(entity.position, to_latlon(segment.end))
+    return from_start, to_end

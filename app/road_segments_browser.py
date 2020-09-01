@@ -1,6 +1,6 @@
 from PySide2.QtWidgets import QDialog, QListWidget, QPushButton, QLabel, QVBoxLayout
 import shapely.wkb as wkb
-from .geometry_utils import get_line_segments, find_closest_line_segment_of, to_shapely_point, to_latlon, distance_between, merge_similar_line_segments
+from .geometry_utils import get_line_segments, find_closest_line_segment_of, to_latlon, distance_between, merge_similar_line_segments
 from .humanization_utils import format_number
 from .services import map, config
 
@@ -23,7 +23,7 @@ class RoadSegmentsBrowserDialog(QDialog):
         line = wkb.loads(road.geometry)
         segments = get_line_segments(line)
         segments = merge_similar_line_segments(segments, config().presentation.angle_decimal_places)
-        closest = find_closest_line_segment_of(segments, to_shapely_point(person.position))
+        closest = find_closest_line_segment_of(segments, person.position_point)
         current_idx = None
         for idx, segment in enumerate(segments):
             segment.calculate_angle()
@@ -33,8 +33,7 @@ class RoadSegmentsBrowserDialog(QDialog):
             if not segment.current:
                 message = _("{distance} meters in angle {angle}°").format(distance=segment_length, angle=segment_angle)
             else:
-                segment_point = segment.line.interpolate(segment.line.project(to_shapely_point(person.position)))
-                segment_latlon = to_latlon(segment_point)
+                segment_latlon = person.closest_point_to(segment.line, False)
                 middle_distance = distance_between(person.position, segment_latlon)
                 start_distance = distance_between(to_latlon(segment.start), segment_latlon)
                 start_distance = format_number(start_distance, config().presentation.distance_decimal_places)
