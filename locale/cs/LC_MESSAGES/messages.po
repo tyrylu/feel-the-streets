@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-08-29 20:25+0200\n"
-"PO-Revision-Date: 2020-08-29 20:51+0200\n"
+"POT-Creation-Date: 2020-09-03 12:03+0200\n"
+"PO-Revision-Date: 2020-09-03 14:32+0200\n"
 "Last-Translator: \n"
 "Language: cs\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -210,9 +210,8 @@ msgid "Unit"
 msgstr "Byt"
 
 #: entities.yml:47
-#, fuzzy
 msgid "Floor"
-msgstr "Dřevěná podlaha"
+msgstr "Podlaží"
 
 #: entities.yml:48 entities.yml:332 entities.yml:498 entities.yml:1250
 #: entities.yml:1539 entities.yml:1608 entities.yml:2363 entities.yml:2551
@@ -1219,9 +1218,8 @@ msgid "Maxheight"
 msgstr "Nejvyšší možná výška"
 
 #: entities.yml:387 entities.yml:787 entities.yml:2013 enums.yml:882
-#, fuzzy
 msgid "Kerb"
-msgstr "Bunkr"
+msgstr "Obrubník"
 
 #: entities.yml:390 entities.yml:1025 entities.yml:1190 entities.yml:2073
 #: entities.yml:2626
@@ -1278,9 +1276,8 @@ msgid "Goods"
 msgstr ""
 
 #: entities.yml:410 entities.yml:2024 enums.yml:293 enums.yml:2094
-#, fuzzy
 msgid "Agricultural"
-msgstr "Přírodní"
+msgstr "Zemědělský"
 
 #: entities.yml:411
 msgid "Swing gate type"
@@ -1843,14 +1840,12 @@ msgid "Meal vouchers payment"
 msgstr "Platba stravenkamy"
 
 #: entities.yml:659
-#, fuzzy
 msgid "Ruian type"
-msgstr "Typ stezky"
+msgstr "Typ podle Ruian"
 
 #: entities.yml:660
-#, fuzzy
 msgid "Ruian building ref"
-msgstr "Zbouraná budova"
+msgstr "Reference podle Ruian"
 
 #: entities.yml:675 entities.yml:1138
 msgid "Building material"
@@ -1885,14 +1880,12 @@ msgid "Checkpoint"
 msgstr "Kontrolní bod"
 
 #: entities.yml:700
-#, fuzzy
 msgid "Checkpoint type"
-msgstr "Kontrolní bod"
+msgstr "Typ kontrolního bodu"
 
 #: entities.yml:702
-#, fuzzy
 msgid "Checkpoint name"
-msgstr "Kontrolní bod"
+msgstr "Jméno kontrolního bodu"
 
 #: entities.yml:703 enums.yml:392
 msgid "Clock"
@@ -2339,9 +2332,8 @@ msgid "Artist wikidata"
 msgstr "Začíná na"
 
 #: entities.yml:1153
-#, fuzzy
 msgid "Memorial kind"
-msgstr "Pomník"
+msgstr "Druh pomníku"
 
 #: entities.yml:1155
 msgid "Text"
@@ -2542,9 +2534,8 @@ msgid "Trolleybus"
 msgstr "Trolejbus"
 
 #: entities.yml:1380 entities.yml:2483
-#, fuzzy
 msgid "Route ref"
-msgstr "Chráněná oblast"
+msgstr "Reference trasy"
 
 #: entities.yml:1390 entities.yml:2506 enums.yml:1224 enums.yml:1693
 #: enums.yml:2106 enums.yml:2453 enums.yml:2455
@@ -2709,9 +2700,8 @@ msgid "Pub"
 msgstr "Hospoda"
 
 #: entities.yml:1553
-#, fuzzy
 msgid "Other payment"
-msgstr "Elektrárna"
+msgstr "Ostatní platba"
 
 #: entities.yml:1555
 msgid "Debitcards payment"
@@ -2831,9 +2821,8 @@ msgid "Traffic mode"
 msgstr ""
 
 #: entities.yml:1617
-#, fuzzy
 msgid "Preferred direction"
-msgstr "Aktuální směr"
+msgstr "Upřednostňovaný směr"
 
 #: entities.yml:1623 entities.yml:2152
 msgid "Hazard"
@@ -3866,9 +3855,8 @@ msgid "Ref name note"
 msgstr "Požadováno jméno oblasti"
 
 #: entities.yml:2022
-#, fuzzy
 msgid "Placement"
-msgstr "Vynucení"
+msgstr "Umístění"
 
 #: entities.yml:2025
 #, fuzzy
@@ -4760,9 +4748,8 @@ msgid "Right handrail"
 msgstr "Pravé zábradlí"
 
 #: entities.yml:2442
-#, fuzzy
 msgid "Center handrail"
-msgstr "Zadej úhel"
+msgstr "Zábradlí uprostřed"
 
 #: entities.yml:2443
 msgid "Step condition"
@@ -4858,9 +4845,8 @@ msgid "Tents"
 msgstr "Stany"
 
 #: entities.yml:2616
-#, fuzzy
 msgid "En description"
-msgstr "Omezení"
+msgstr "Popis anglicky"
 
 #: entities.yml:2618 entities.yml:2731
 msgid "Species"
@@ -4910,9 +4896,8 @@ msgid "Artist"
 msgstr "Umělec"
 
 #: entities.yml:2645
-#, fuzzy
 msgid "En note"
-msgstr "S poznámkou"
+msgstr "Poznámka anglicky"
 
 #: entities.yml:2646 enums.yml:1744
 #, fuzzy
@@ -5888,9 +5873,8 @@ msgid "Opposite"
 msgstr ""
 
 #: enums.yml:306
-#, fuzzy
 msgid "Destinaton"
-msgstr "Omezení"
+msgstr "Cíl"
 
 #: enums.yml:307 enums.yml:1606
 msgid "Limited"
@@ -6851,9 +6835,8 @@ msgid "Bed"
 msgstr "Postel"
 
 #: enums.yml:615 enums.yml:2275
-#, fuzzy
 msgid "Ticket"
-msgstr "Oznámení"
+msgstr "Lístek"
 
 #: enums.yml:617
 msgid "Souvenir"
@@ -6877,9 +6860,8 @@ msgid "Sewing"
 msgstr ""
 
 #: enums.yml:623
-#, fuzzy
 msgid "Bookmaker"
-msgstr "Záložky"
+msgstr "Bookmaker"
 
 #: enums.yml:624 enums.yml:1822
 #, fuzzy
@@ -7179,9 +7161,8 @@ msgid "Crane"
 msgstr "Vchod"
 
 #: enums.yml:727
-#, fuzzy
 msgid "Cellar entrance"
-msgstr "Vchod"
+msgstr "Vchod do sklepa"
 
 #: enums.yml:728
 msgid "Adit"
@@ -7445,9 +7426,8 @@ msgid "Trampoline"
 msgstr "Trampolína"
 
 #: enums.yml:806
-#, fuzzy
 msgid "Chess"
-msgstr "Úspěch"
+msgstr "Šachy"
 
 #: enums.yml:807 enums.yml:2430
 msgid "Paintball"
@@ -7780,9 +7760,8 @@ msgid "Isolated"
 msgstr "Označené údajem o nadmořské výšce"
 
 #: enums.yml:915
-#, fuzzy
 msgid "Viewpoint"
-msgstr "Kontrolní bod"
+msgstr "Vyhlídka"
 
 #: enums.yml:916
 msgid "Guest house"
@@ -7793,14 +7772,12 @@ msgid "Museum"
 msgstr "Muzeum"
 
 #: enums.yml:918 enums.yml:1072 enums.yml:1506
-#, fuzzy
 msgid "Hotel"
-msgstr "Trasa"
+msgstr "Hotel"
 
 #: enums.yml:919
-#, fuzzy
 msgid "Picnic site"
-msgstr "Otevřít webovou stránku"
+msgstr "Místo pro pikniky"
 
 #: enums.yml:920 enums.yml:1767
 msgid "Artwork"
@@ -7819,9 +7796,8 @@ msgid "Alpine hut"
 msgstr ""
 
 #: enums.yml:924
-#, fuzzy
 msgid "Motel"
-msgstr "Trasa"
+msgstr "Motel"
 
 #: enums.yml:925
 msgid "Gallery"
@@ -7844,9 +7820,8 @@ msgid "Wine cellar"
 msgstr "Vinný sklípek"
 
 #: enums.yml:936 enums.yml:989 enums.yml:1737
-#, fuzzy
 msgid "Island"
-msgstr "Pozemek"
+msgstr "Ostrov"
 
 #: enums.yml:937
 msgid "Uncontrolled"
@@ -7911,9 +7886,8 @@ msgid "Highwater mark"
 msgstr "Označení vvýšky vody při povodni"
 
 #: enums.yml:975
-#, fuzzy
 msgid "Palace"
-msgstr "Místo"
+msgstr "Palác"
 
 #: enums.yml:983
 msgid "Bump"
@@ -7949,14 +7923,12 @@ msgid "Canal"
 msgstr "Kanál"
 
 #: enums.yml:995
-#, fuzzy
 msgid "Stream"
-msgstr "Oblast"
+msgstr "Proud"
 
 #: enums.yml:996 enums.yml:1352 enums.yml:2487
-#, fuzzy
 msgid "River"
-msgstr "Překážka"
+msgstr "Řeka"
 
 #: enums.yml:997
 msgid "Riverbank"
@@ -7971,9 +7943,8 @@ msgid "Drain"
 msgstr ""
 
 #: enums.yml:1002
-#, fuzzy
 msgid "Waterfall"
-msgstr "Přírodní"
+msgstr "Vodopád"
 
 #: enums.yml:1003
 msgid "Wadi"
@@ -7989,9 +7960,8 @@ msgid "Boatyard"
 msgstr "Cedule"
 
 #: enums.yml:1007
-#, fuzzy
 msgid "Dock"
-msgstr "Hodiny"
+msgstr "Dok"
 
 #: enums.yml:1012
 msgid "Scrub"
@@ -8053,9 +8023,8 @@ msgid "Heath"
 msgstr "Divadlo"
 
 #: enums.yml:1032 enums.yml:1550
-#, fuzzy
 msgid "Sand"
-msgstr "Pozemek"
+msgstr "Písek"
 
 #: enums.yml:1033
 msgid "Bedrock"
@@ -8078,9 +8047,8 @@ msgid "Hill"
 msgstr "Kopec"
 
 #: enums.yml:1042 enums.yml:1508 enums.yml:2132
-#, fuzzy
 msgid "Transportation"
-msgstr "Informace"
+msgstr "Přeprava"
 
 #: enums.yml:1043 enums.yml:1361
 msgid "Civic"
@@ -8710,9 +8678,8 @@ msgid "Greenfield"
 msgstr ""
 
 #: enums.yml:1345
-#, fuzzy
 msgid "Vineyard"
-msgstr "Hřbitov"
+msgstr "Vinice"
 
 #: enums.yml:1346
 msgid "Greenhouse horticulture"
@@ -9148,23 +9115,20 @@ msgid "Earth"
 msgstr "Země"
 
 #: enums.yml:1571
-#, fuzzy
 msgid "Rocks"
-msgstr "Stezka"
+msgstr "Skály"
 
 #: enums.yml:1573
 msgid "Pebblestone"
 msgstr ""
 
 #: enums.yml:1574
-#, fuzzy
 msgid "Panel"
-msgstr "Zrušit"
+msgstr "Panel"
 
 #: enums.yml:1575
-#, fuzzy
 msgid "Pannel"
-msgstr "Zrušit"
+msgstr "Panel"
 
 #: enums.yml:1576
 msgid "Artificial turf"
@@ -9331,9 +9295,8 @@ msgid "Rooftop"
 msgstr ""
 
 #: enums.yml:1659 enums.yml:2290 enums.yml:2308 enums.yml:2338
-#, fuzzy
 msgid "Lane"
-msgstr "Místo"
+msgstr "Pruh"
 
 #: enums.yml:1660
 msgid "Kiss and ride"
@@ -9394,14 +9357,12 @@ msgid "Town"
 msgstr "Město"
 
 #: enums.yml:1704
-#, fuzzy
 msgid "Traffic"
-msgstr "Dopravní značka"
+msgstr "Provoz"
 
 #: enums.yml:1729
-#, fuzzy
 msgid "Village"
-msgstr "Sledování"
+msgstr "Vesnice"
 
 #: enums.yml:1730
 msgid "Hamlet"
@@ -9421,9 +9382,8 @@ msgid "Islet"
 msgstr "Titulek"
 
 #: enums.yml:1738
-#, fuzzy
 msgid "Square"
-msgstr "Volnočasová aktivita"
+msgstr "Náměstí"
 
 #: enums.yml:1740
 msgid "Isolated dwelling"
@@ -9469,9 +9429,8 @@ msgid "Urban"
 msgstr ""
 
 #: enums.yml:1760 enums.yml:1813
-#, fuzzy
 msgid "War memorial"
-msgstr "Pomník"
+msgstr "Válečný pomník"
 
 #: enums.yml:1761 enums.yml:1809
 msgid "Plaque"
@@ -9523,14 +9482,12 @@ msgid "Major"
 msgstr "Hlavní"
 
 #: enums.yml:1781 enums.yml:2236 enums.yml:2387
-#, fuzzy
 msgid "Local"
-msgstr "Hodiny"
+msgstr "Místní"
 
 #: enums.yml:1782
-#, fuzzy
 msgid "Learning"
-msgstr "Parkoviště"
+msgstr "Učení"
 
 #: enums.yml:1783
 msgid "Ruin"
@@ -9599,9 +9556,8 @@ msgid "Installation"
 msgstr "Instalace"
 
 #: enums.yml:1840
-#, fuzzy
 msgid "Relief"
-msgstr "Strom"
+msgstr "Reliéf"
 
 #: enums.yml:1841
 msgid "Topiary"
@@ -9617,9 +9573,8 @@ msgid "Billboard"
 msgstr "Billboard"
 
 #: enums.yml:1846
-#, fuzzy
 msgid "Totem"
-msgstr "Trasa"
+msgstr "Totem"
 
 #: enums.yml:1848
 msgid "Upstream"
@@ -9688,9 +9643,8 @@ msgid "Settlement"
 msgstr "Osídlení"
 
 #: enums.yml:1875
-#, fuzzy
 msgid "Fortification"
-msgstr "Informace"
+msgstr "Opevnění"
 
 #: enums.yml:1876
 #, fuzzy
@@ -9712,14 +9666,12 @@ msgid "Parking aisle"
 msgstr "Parkoviště"
 
 #: enums.yml:1886
-#, fuzzy
 msgid "North"
-msgstr "Sport"
+msgstr "Sever"
 
 #: enums.yml:1887
-#, fuzzy
 msgid "South"
-msgstr "Trasa"
+msgstr "Jih"
 
 #: enums.yml:1890
 msgid "West"
@@ -9784,9 +9736,8 @@ msgid "Hydro"
 msgstr ""
 
 #: enums.yml:1951
-#, fuzzy
 msgid "Solar"
-msgstr "Cedule"
+msgstr "Solární"
 
 #: enums.yml:1952 enums.yml:2163
 msgid "Solar photovoltaic panel"
@@ -9797,9 +9748,8 @@ msgid "Gas"
 msgstr "Plyn"
 
 #: enums.yml:1956
-#, fuzzy
 msgid "Barracks"
-msgstr "Stezka"
+msgstr "Kasárna"
 
 #: enums.yml:1957
 #, fuzzy
@@ -9816,27 +9766,24 @@ msgid "Minor line"
 msgstr "Elektrické vedení"
 
 #: enums.yml:1967
-#, fuzzy
 msgid "Cable"
-msgstr "Hodnota"
+msgstr "Kabel"
 
 #: enums.yml:1968
 msgid "Insulator"
 msgstr "Izolátor"
 
 #: enums.yml:1971
-#, fuzzy
 msgid "Transition"
-msgstr "Omezení"
+msgstr "Přechod"
 
 #: enums.yml:1973
 msgid "Switchgear"
 msgstr ""
 
 #: enums.yml:1979
-#, fuzzy
 msgid "Observation"
-msgstr "Informace"
+msgstr "Pozorování"
 
 #: enums.yml:1981
 msgid "Bell tower"
@@ -9852,9 +9799,8 @@ msgid "Meteo"
 msgstr ""
 
 #: enums.yml:1988
-#, fuzzy
 msgid "Fire"
-msgstr "Kancelář"
+msgstr "Oheň"
 
 #: enums.yml:1989
 msgid "Anchor"
@@ -9901,9 +9847,8 @@ msgid "Tax"
 msgstr "Daně"
 
 #: enums.yml:2018
-#, fuzzy
 msgid "It"
-msgstr "Areál"
+msgstr "It"
 
 #: enums.yml:2021
 msgid "Therapist"
@@ -9931,9 +9876,8 @@ msgid "Translation"
 msgstr "Překlad"
 
 #: enums.yml:2028
-#, fuzzy
 msgid "Research"
-msgstr "Zahájit vyhledávání"
+msgstr "Výzkum"
 
 #: enums.yml:2030
 msgid "Travel agent"
@@ -10169,9 +10113,8 @@ msgid "Notary"
 msgstr "Notář"
 
 #: enums.yml:2146
-#, fuzzy
 msgid "Platform edge"
-msgstr "Nástupiště"
+msgstr "Hrana nástupiště"
 
 #: enums.yml:2151
 msgid "Waiting area"
@@ -10346,14 +10289,12 @@ msgid "Inside"
 msgstr ""
 
 #: enums.yml:2259 enums.yml:2336
-#, fuzzy
 msgid "Centre"
-msgstr "Divadlo"
+msgstr "Centrum"
 
 #: enums.yml:2260
-#, fuzzy
 msgid "Container"
-msgstr "Fontána"
+msgstr "Kontejner"
 
 #: enums.yml:2266
 msgid "Rxtx"
@@ -10417,9 +10358,8 @@ msgid "O"
 msgstr ""
 
 #: enums.yml:2330
-#, fuzzy
 msgid "Airport"
-msgstr "Sport"
+msgstr "Letiště"
 
 #: enums.yml:2334
 msgid "Shopping"
@@ -10463,9 +10403,8 @@ msgid "Stair landing"
 msgstr ""
 
 #: enums.yml:2383
-#, fuzzy
 msgid "Connection"
-msgstr "Kolekce"
+msgstr "Spojení"
 
 #: enums.yml:2385
 msgid "Long distance"
@@ -10726,27 +10665,24 @@ msgid "On the front right"
 msgstr "V předu v pravo"
 
 #: app/humanization_utils.py:108
-#, fuzzy
 msgid "On the right"
-msgstr "Nejmenší výška"
+msgstr "V pravo"
 
 #: app/humanization_utils.py:110
 msgid "On the rear right"
 msgstr "V zadu v pravo"
 
 #: app/humanization_utils.py:112
-#, fuzzy
 msgid "Behind"
-msgstr "Druh"
+msgstr "Vzadu"
 
 #: app/humanization_utils.py:114
 msgid "On the rear left"
 msgstr "V zadu v levo"
 
 #: app/humanization_utils.py:116
-#, fuzzy
 msgid "On the left"
-msgstr "Zadej úhel"
+msgstr "V levo"
 
 #: app/humanization_utils.py:118
 msgid "On the front left"
@@ -10755,6 +10691,18 @@ msgstr "V předu v levo"
 #: app/humanization_utils.py:120
 msgid "In the front"
 msgstr "Ve předu"
+
+#: app/humanization_utils.py:127
+msgid "to the left"
+msgstr "do leva"
+
+#: app/humanization_utils.py:129
+msgid "to the right"
+msgstr "do prava"
+
+#: app/humanization_utils.py:131
+msgid "{angle} degrees {direction}"
+msgstr "{angle} stupňů {direction}"
 
 #: app/main_window.py:61
 msgid "Downloading the selected database."
@@ -10777,9 +10725,8 @@ msgid "Download of the selected area had failed."
 msgstr "Stažení zvolené oblasti se nezdařilo."
 
 #: app/main_window.py:91 app/main_window.py:95
-#, fuzzy
 msgid "Warning"
-msgstr "Parkoviště"
+msgstr "Varování"
 
 #: app/main_window.py:91
 msgid "Could not retrieve changes in the selected area, using the potentially stale local copy."
@@ -10807,9 +10754,8 @@ msgid "Change application"
 msgstr "Provádění změn"
 
 #: app/main_window.py:117
-#, fuzzy
 msgid "Redownload requested"
-msgstr "Požadováno jméno oblasti"
+msgstr "Vyžadováno opětovné stažení"
 
 #: app/main_window.py:117
 msgid "The server has requested a redownload of the selected database, proceeding with the operation."
@@ -10852,7 +10798,7 @@ msgstr "Úseky cesty"
 msgid "Close"
 msgstr "Zavřít"
 
-#: app/road_segments_browser.py:33
+#: app/road_segments_browser.py:34
 msgid "{distance} meters in angle {angle}°"
 msgstr "{distance} metrů v úhlu {angle}°"
 
@@ -10888,20 +10834,28 @@ msgstr "Objekt {osm_id} ({object}) byl změněn"
 msgid "Geometry was changed."
 msgstr "Geometrie byla změněna."
 
-#: app/controllers/announcements_controller.py:17
+#: app/controllers/announcements_controller.py:21
 msgid "You are entering {enters}."
 msgstr "Vstupujete do {enters}"
 
-#: app/controllers/announcements_controller.py:21
+#: app/controllers/announcements_controller.py:43
+msgid "You could turn {direction} and continue for {distance} meters."
+msgstr "Můžete odbočit {direction} a pokračovat {distance} metů."
+
+#: app/controllers/announcements_controller.py:46
+msgid "You could turn {direction1} and continue for {distance1} meters, or you could turn {direction2} and continue for {distance2} meters."
+msgstr "Můžete odbočit {direction1} pokračovat {distance1} metrů, nebo můžete odbočit {direction2} pokračovat {distance2} metrů."
+
+#: app/controllers/announcements_controller.py:55
 msgid "You are leaving {leaves}"
 msgstr "Opouštíte {leaves}"
 
-#: app/controllers/announcements_controller.py:25
+#: app/controllers/announcements_controller.py:59
 #: app/controllers/interactive_person_controller.py:98
 msgid "{degrees} degrees"
 msgstr "{degrees} stupňů"
 
-#: app/controllers/announcements_controller.py:32
+#: app/controllers/announcements_controller.py:66
 msgid "{angle_description} is a {entity_description}"
 msgstr "{angle_description} je {entity_description}"
 
@@ -10927,9 +10881,8 @@ msgid "Current coordinates"
 msgstr "Aktuální souřadnice"
 
 #: app/controllers/interactive_person_controller.py:32
-#, fuzzy
 msgid "Copy current coordinates"
-msgstr "Aktuální souřadnice"
+msgstr "Zkopírovat aktuální souřadnice"
 
 #: app/controllers/interactive_person_controller.py:35
 msgid "Copied."
@@ -11131,14 +11084,12 @@ msgid "Disallow leaving roads"
 msgstr "Zakázat opuštění cesty"
 
 #: app/controllers/interactive_person_controller.py:210
-#, fuzzy
 msgid "Announce interesting objects"
-msgstr "Zajímavý objekt"
+msgstr "Oznavmovat zajímavé objekty"
 
 #: app/controllers/interactive_person_controller.py:215
-#, fuzzy
 msgid "Play sounds for interesting objects"
-msgstr "Zajímavý objekt"
+msgstr "Přehrát zvuk zajímavých objektů"
 
 #: app/controllers/interactive_person_controller.py:230
 msgid "Interesting object found after {} meters."
@@ -11204,6 +11155,10 @@ msgstr "Specifické vlastnosti"
 msgid "Other properties - they can not be searched and are not processed in any way"
 msgstr "Ostatní vlastnosti - nelze podle nich vyhledávat a nejsou žádným způsobem zpracovány"
 
+#: app/objects_browser/window.py:111
+msgid "Object id: {}"
+msgstr "Id objektu: {}"
+
 #: app/objects_browser/object_actions/open_ruian_details.py:8
 msgid "Open the ruian register details"
 msgstr "Otevřít detaily z registru RUIAN"
@@ -11221,24 +11176,20 @@ msgid "Open wikipedia article"
 msgstr "Otevřít článek na wikipedii"
 
 #: app/objects_browser/object_actions/show_children.py:10
-#, fuzzy
 msgid "Show children"
-msgstr "Děti"
+msgstr "Zobrazit potomky"
 
 #: app/objects_browser/object_actions/show_children.py:19
-#, fuzzy
 msgid "Children of {}"
-msgstr "Děti"
+msgstr "Potomci {}"
 
 #: app/objects_browser/object_actions/show_parents.py:10
-#, fuzzy
 msgid "Show parents"
-msgstr "Platba mincemi"
+msgstr "Zobrazit rodiče"
 
 #: app/objects_browser/object_actions/show_parents.py:19
-#, fuzzy
 msgid "Parents of {}"
-msgstr "Byty"
+msgstr "Rodiče {}"
 
 #: app/search/__init__.py:13
 msgid "Search class"
@@ -11328,7 +11279,8 @@ msgstr "Začíná na"
 #: app/search/widgets/spin_ctrl.py:6 app/search/widgets/spin_ctrl_double.py:7
 #: app/search/widgets/text_ctrl.py:7
 msgid "Value"
-msgstr "Hodnota"
+msgstr "Hodnota\n"
+"a"
 
 #~ msgid "Object {osm_id} was deleted"
 #~ msgstr "Objekt{osm_id} byl odstraněn"

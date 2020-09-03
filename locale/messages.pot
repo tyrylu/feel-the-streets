@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-08-29 20:25+0200\n"
+"POT-Creation-Date: 2020-09-03 12:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -10442,6 +10442,18 @@ msgstr ""
 msgid "In the front"
 msgstr ""
 
+#: app/humanization_utils.py:127
+msgid "to the left"
+msgstr ""
+
+#: app/humanization_utils.py:129
+msgid "to the right"
+msgstr ""
+
+#: app/humanization_utils.py:131
+msgid "{angle} degrees {direction}"
+msgstr ""
+
 #: app/main_window.py:61
 msgid "Downloading the selected database."
 msgstr ""
@@ -10536,7 +10548,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: app/road_segments_browser.py:33
+#: app/road_segments_browser.py:34
 msgid "{distance} meters in angle {angle}°"
 msgstr ""
 
@@ -10572,20 +10584,28 @@ msgstr ""
 msgid "Geometry was changed."
 msgstr ""
 
-#: app/controllers/announcements_controller.py:17
+#: app/controllers/announcements_controller.py:21
 msgid "You are entering {enters}."
 msgstr ""
 
-#: app/controllers/announcements_controller.py:21
+#: app/controllers/announcements_controller.py:43
+msgid "You could turn {direction} and continue for {distance} meters."
+msgstr ""
+
+#: app/controllers/announcements_controller.py:46
+msgid "You could turn {direction1} and continue for {distance1} meters, or you could turn {direction2} and continue for {distance2} meters."
+msgstr ""
+
+#: app/controllers/announcements_controller.py:55
 msgid "You are leaving {leaves}"
 msgstr ""
 
-#: app/controllers/announcements_controller.py:25
+#: app/controllers/announcements_controller.py:59
 #: app/controllers/interactive_person_controller.py:98
 msgid "{degrees} degrees"
 msgstr ""
 
-#: app/controllers/announcements_controller.py:32
+#: app/controllers/announcements_controller.py:66
 msgid "{angle_description} is a {entity_description}"
 msgstr ""
 
@@ -10883,6 +10903,10 @@ msgstr ""
 
 #: app/objects_browser/window.py:91
 msgid "Other properties - they can not be searched and are not processed in any way"
+msgstr ""
+
+#: app/objects_browser/window.py:111
+msgid "Object id: {}"
 msgstr ""
 
 #: app/objects_browser/object_actions/open_ruian_details.py:8
