@@ -44,9 +44,7 @@ class Entity(BaseModel):
                     if not ret:
                         entity_move_rejected.send(self)
                         return False
-        # Keeping more than 7 decimal digits is pointless as we can not get anything more accurate from OSM anyway.
-        rounded_pos = pos.latlon2(7)
-        self.position = LatLon(rounded_pos.lat, rounded_pos.lon)
+        self.position = pos
         self.is_inside_of = new_inside_of
         if entity_post_leave.has_receivers_for(self):
             for place in leaves:
