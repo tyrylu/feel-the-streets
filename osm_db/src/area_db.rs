@@ -213,7 +213,7 @@ impl AreaDatabase {
             query += " AND length(geometry) < 100000";
         }
         let fragment = format!(
-            " AND contains(geometry, GeomFromText('POINT({} {})', 4326))",
+            " AND St_Disjoint(geometry, GeomFromText('POINT({} {})', 4326)) = 0",
             x, y
         );
         query += &fragment;
