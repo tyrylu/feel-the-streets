@@ -10,4 +10,6 @@ pub enum Error {
     XmlReaderError(#[from] xml::reader::Error),
     #[error("HTTP related error: {0}")]
     HttpError(String),
+    #[error("WKB write error: {0}")]
+    WKBWriteError(String),
 }
