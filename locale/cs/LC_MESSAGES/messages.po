@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-09-03 12:03+0200\n"
-"PO-Revision-Date: 2020-09-05 18:37+0200\n"
+"POT-Creation-Date: 2020-09-05 22:47+0200\n"
+"PO-Revision-Date: 2020-09-05 23:49+0200\n"
 "Last-Translator: \n"
 "Language: cs\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -10660,47 +10660,55 @@ msgstr "Oblasti"
 msgid "Area properties"
 msgstr "Vlastnosti oblasti"
 
-#: app/humanization_utils.py:106
+#: app/humanization_utils.py:108
 msgid "On the front right"
 msgstr "V předu v pravo"
 
-#: app/humanization_utils.py:108
+#: app/humanization_utils.py:110
 msgid "On the right"
 msgstr "V pravo"
 
-#: app/humanization_utils.py:110
+#: app/humanization_utils.py:112
 msgid "On the rear right"
 msgstr "V zadu v pravo"
 
-#: app/humanization_utils.py:112
+#: app/humanization_utils.py:114
 msgid "Behind"
 msgstr "Vzadu"
 
-#: app/humanization_utils.py:114
+#: app/humanization_utils.py:116
 msgid "On the rear left"
 msgstr "V zadu v levo"
 
-#: app/humanization_utils.py:116
+#: app/humanization_utils.py:118
 msgid "On the left"
 msgstr "V levo"
 
-#: app/humanization_utils.py:118
+#: app/humanization_utils.py:120
 msgid "On the front left"
 msgstr "V předu v levo"
 
-#: app/humanization_utils.py:120
+#: app/humanization_utils.py:122
 msgid "In the front"
 msgstr "Ve předu"
 
-#: app/humanization_utils.py:127
+#: app/humanization_utils.py:129
+msgid "slightly"
+msgstr "mírně"
+
+#: app/humanization_utils.py:133
+msgid "sharply"
+msgstr "ostře"
+
+#: app/humanization_utils.py:140
 msgid "to the left"
 msgstr "do leva"
 
-#: app/humanization_utils.py:129
+#: app/humanization_utils.py:142
 msgid "to the right"
 msgstr "do prava"
 
-#: app/humanization_utils.py:131
+#: app/humanization_utils.py:145
 msgid "{angle} degrees {direction}"
 msgstr "{angle} stupňů {direction}"
 
@@ -10838,24 +10846,24 @@ msgstr "Geometrie byla změněna."
 msgid "You are entering {enters}."
 msgstr "Vstupujete do {enters}"
 
-#: app/controllers/announcements_controller.py:43
+#: app/controllers/announcements_controller.py:29
 msgid "You could turn {direction} and continue for {distance} meters."
 msgstr "Můžete odbočit {direction} a pokračovat {distance} metrů."
 
-#: app/controllers/announcements_controller.py:46
+#: app/controllers/announcements_controller.py:32
 msgid "You could turn {direction1} and continue for {distance1} meters, or you could turn {direction2} and continue for {distance2} meters."
 msgstr "Můžete odbočit {direction1} a pokračovat {distance1} metrů, nebo můžete odbočit {direction2} a pokračovat {distance2} metrů."
 
-#: app/controllers/announcements_controller.py:55
+#: app/controllers/announcements_controller.py:41
 msgid "You are leaving {leaves}"
 msgstr "Opouštíte {leaves}"
 
-#: app/controllers/announcements_controller.py:59
+#: app/controllers/announcements_controller.py:45
 #: app/controllers/interactive_person_controller.py:98
 msgid "{degrees} degrees"
 msgstr "{degrees} stupňů"
 
-#: app/controllers/announcements_controller.py:66
+#: app/controllers/announcements_controller.py:52
 msgid "{angle_description} is a {entity_description}"
 msgstr "{angle_description} je {entity_description}"
 
@@ -10935,6 +10943,7 @@ msgstr "Nejbližší - všechny objekty, může být pomalé"
 #: app/controllers/interactive_person_controller.py:146
 #: app/controllers/interactive_person_controller.py:231
 #: app/controllers/interactive_person_controller.py:235
+#: app/controllers/interactive_person_controller.py:239
 msgid "Movement"
 msgstr "Pohyb"
 
@@ -11013,6 +11022,7 @@ msgid "Enter the angle"
 msgstr "Zadej úhel"
 
 #: app/controllers/interactive_person_controller.py:162
+#: app/controllers/interactive_person_controller.py:257
 msgid "Request"
 msgstr "Požadavek"
 
@@ -11102,6 +11112,27 @@ msgstr "Jít vpřed, dokud nebude nalezen zajímavý objekt"
 #: app/controllers/interactive_person_controller.py:235
 msgid "Go backward looking for an interesting object"
 msgstr "Jít vzad, dokud nebude nalezen zajímavý objekt"
+
+#: app/controllers/interactive_person_controller.py:239
+msgid "Turn to a new road"
+msgstr "Otočit se podle novou cestu"
+
+#: app/controllers/interactive_person_controller.py:243
+msgid "There is no meaningful turn to perform, you are not on a road."
+msgstr "Není podle čeho se otočit, nejste na cestě."
+
+#: app/controllers/interactive_person_controller.py:250
+msgid "There is no meaningful turn to perform, the new road is too short."
+msgstr "Není se podle čeho otočit, nová cesta je příliš krátká."
+
+#: app/controllers/interactive_person_controller.py:253
+#: app/controllers/interactive_person_controller.py:260
+msgid "Done."
+msgstr "Hotovo."
+
+#: app/controllers/interactive_person_controller.py:257
+msgid "Which turn you want to perform?"
+msgstr "Jak se chcete otočit?"
 
 #: app/objects_browser/window.py:27
 msgid "Object actions"
