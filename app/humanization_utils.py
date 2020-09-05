@@ -6,6 +6,8 @@ from osm_db import EntityMetadata, Enum
 import jinja2
 import logging
 from PySide2.QtCore import QLocale
+from .services import config
+
 
 class TemplateType(enum.Enum):
     long = 1
@@ -121,11 +123,30 @@ def describe_relative_angle(angle):
     else:
         raise ValueError("Unhandled relative angle {}".format(angle))
 
+def format_angle_as_turn_sharpiness(angle):
+    """Describes an angle as an indication of the sharpiness of a turn. Angle is expected to lie in the range 0 <= angle <= 180."""
+    if 0 <= angle < 45:
+        return _("slightly")
+    elif 45 <= angle < 135: # Normal turn, if someone finds an usable description, feel free to send a PR.
+        return ""
+    elif 135 <= angle <= 180:
+        return _("sharply")
+    else:
+        raise ValueError(f"Unsupported angle {angle}.")
+        
 def describe_angle_as_turn_instructions(angle, precision):
     if 180 <= angle <= 360:
         angle = 360 - angle
         direction = _("to the left")
     else:
         direction = _("to the right")
-    formatted_angle = format_number(angle, precision)
-    return _("{angle} degrees {direction}").format(angle=formatted_angle, direction=direction)
+    if config().presentation.use_detailed_turn_directions:
+        formatted_angle = format_number(angle, precision)
+        return _("{angle} degrees {direction}").format(angle=formatted_angle, direction=direction)
+    else:
+        angle_description = format_angle_as_turn_sharpiness(angle)
+        if angle_description:
+            return f"{angle_description} {direction}"
+        else:
+            return direction
+

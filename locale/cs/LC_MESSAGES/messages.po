@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2020-09-03 12:03+0200\n"
-"PO-Revision-Date: 2020-09-03 14:32+0200\n"
+"PO-Revision-Date: 2020-09-05 18:37+0200\n"
 "Last-Translator: \n"
 "Language: cs\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -10840,11 +10840,11 @@ msgstr "Vstupujete do {enters}"
 
 #: app/controllers/announcements_controller.py:43
 msgid "You could turn {direction} and continue for {distance} meters."
-msgstr "Můžete odbočit {direction} a pokračovat {distance} metů."
+msgstr "Můžete odbočit {direction} a pokračovat {distance} metrů."
 
 #: app/controllers/announcements_controller.py:46
 msgid "You could turn {direction1} and continue for {distance1} meters, or you could turn {direction2} and continue for {distance2} meters."
-msgstr "Můžete odbočit {direction1} pokračovat {distance1} metrů, nebo můžete odbočit {direction2} pokračovat {distance2} metrů."
+msgstr "Můžete odbočit {direction1} a pokračovat {distance1} metrů, nebo můžete odbočit {direction2} a pokračovat {distance2} metrů."
 
 #: app/controllers/announcements_controller.py:55
 msgid "You are leaving {leaves}"

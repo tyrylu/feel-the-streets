@@ -19,6 +19,7 @@ class PresentationConfig(BaseModel):
     near_by_radius: int = 100 # In meters
     play_sounds_for_interesting_objects: bool = True
     announce_interesting_objects: bool = True
+    use_detailed_turn_directions: bool = False
 
 class ChangelogsConfig(BaseModel):
     enabled: bool = False
