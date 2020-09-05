@@ -4,7 +4,7 @@ from ..humanization_utils import describe_entity, format_number
 from ..services import speech, map, config
 from ..objects_browser import ObjectsBrowserWindow
 from ..road_segments_browser import RoadSegmentsBrowserDialog
-from ..geometry_utils import get_road_section_angle, distance_filter, distance_between
+from ..geometry_utils import get_road_section_angle, distance_filter, distance_between, get_meaningful_turns
 from ..search import perform_search
 from ..services import menu_service
 from ..menu_service import menu_command
@@ -235,3 +235,27 @@ class InteractivePersonController:
     @menu_command(_("Movement"), _("Go backward looking for an interesting object"), "ctrl+down")
     def do_backward_until_no_interesting(self, evt):
         self._go_looking_for_interesting(self._person.step_backward)
+
+    @menu_command(_("Movement"), _("Turn to a new road"), "t")
+    def _turn_to_a_new_road(self, evt):
+        roads = [r for r in self._person.is_inside_of if r.discriminator in {"Road", "ServiceRoad"}]
+        if not roads:
+            speech().speak(_("There is no meaningful turn to perform, you are not on a road."))
+            return
+        # Assume that the last road is the one the user wants to turn to.
+        new_road = roads[-1]
+        turns = get_meaningful_turns(new_road, self._person)
+        print(turns[0][2])
+        if not turns:
+            speech().speak(_("There is no meaningful turn to perform, the new road is too short."))
+        elif len(turns) == 1:
+            self._person.rotate(turns[0][2])
+            speech().speak(_("Done."))
+        else:
+            angles_mapping = {turn[0]: turn[2] for turn in turns}
+            angle_choices = list(angles_mapping.keys())
+            angle_desc, ok = QInputDialog.getItem(self._main_window, _("Request"), _("Which turn you want to perform?"), angle_choices, editable=False)
+            if not ok: return
+            self._person.rotate(angles_mapping[angle_desc])
+            speech().speak(_("Done."))
+

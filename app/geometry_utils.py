@@ -4,7 +4,6 @@ import shapely.geometry as geometry
 from shapely.geometry.linestring import LineString
 import pydantic
 from pygeodesy.ellipsoidalVincenty import LatLon, VincentyError
-from . import services
 from .measuring import measure
 
 log = logging.getLogger(__name__)
@@ -184,3 +183,21 @@ def calculate_absolute_distances(segments, entity):
             from_start += distance_between(to_latlon(segment.start), entity.position)
             to_end += distance_between(entity.position, to_latlon(segment.end))
     return from_start, to_end
+
+def get_meaningful_turns(new_road, entity):
+    """Returns the meaningful turns which could the given entity perform if you want to continue along the given road. Returns a list of tuples in the form (direction_description, formatted_distance, direction_change)."""
+    from .humanization_utils import format_number, describe_angle_as_turn_instructions
+    # These two imports are only needed in this function, so no point of doing them globally and complicating everything.
+    from .services import config
+    new_segments = merge_similar_line_segments(get_line_segments(wkb.loads(new_road.geometry)), config().presentation.angle_decimal_places)
+    closest_new_segment = find_closest_line_segment_of(new_segments, entity.position_point)
+    closest_new_segment.calculate_angle()
+    new_angle = abs(closest_new_segment.angle - entity.direction)
+    from_start, to_end = calculate_absolute_distances(new_segments, entity)
+    meaningful_directions = []
+    if from_start > 10:
+        meaningful_directions.append((describe_angle_as_turn_instructions((new_angle + 180)%360, config().presentation.angle_decimal_places), format_number(from_start, config().presentation.distance_decimal_places), (new_angle + 180)%360))
+    if to_end > 10:
+        meaningful_directions.append((describe_angle_as_turn_instructions(new_angle, config().presentation.angle_decimal_places), format_number(to_end, config().presentation.distance_decimal_places), new_angle))
+    return meaningful_directions
+        
