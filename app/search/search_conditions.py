@@ -24,11 +24,11 @@ class SpecifySearchConditionsDialog(BaseDialog):
         self.layout.addWidget(self._fields_tree, 1, 0)
         operator_label = QLabel(_("Operator"), self)
         self.layout.addWidget(operator_label, 0, 1)
-        self._operator = QComboBox(self)
+        self._operator = QListWidget(self)
         operator_label.setBuddy(self._operator)
         self.layout.addWidget(self._operator, 1, 1)
-        self._operator.currentIndexChanged.connect(self.on_operator_choice)
-        self._operator.setCurrentIndex(0)
+        self._operator.currentRowChanged.connect(self.on_operator_choice)
+        self._operator.setCurrentRow(0)
         add_button = QPushButton(_("&Add condition"), self)
         add_button.clicked.connect(self.on_add_clicked)
         self.layout.addWidget(add_button, 2, 0, 1, 3)
@@ -73,9 +73,7 @@ class SpecifySearchConditionsDialog(BaseDialog):
             self._field = data[1]
             self._operators = operators_for_column_class(self._field.type_name)
             self._operator.clear()
-            for operator in self._operators:
-                self._operator.addItem(operator.label)
-
+            self._operator.addItems([o.label for o in self._operators])
     def on_operator_choice(self, index):
         if self._value_widget:
             self.layout.removeWidget(self._value_widget)
@@ -84,7 +82,7 @@ class SpecifySearchConditionsDialog(BaseDialog):
             self.layout.removeWidget(self._value_label)
             self._value_label.deleteLater()
             self._value_label = None
-        operator = self._operators[self._operator.currentIndex()]
+        operator = self._operators[self._operator.currentRow()]
         value_label = self._create_value_label(operator.get_value_label(self._field))
         self._value_widget = operator.get_value_widget(self, self._field)
         if not self._value_widget:
@@ -110,7 +108,7 @@ class SpecifySearchConditionsDialog(BaseDialog):
             json_path.append(parent_data)
         json_path.append(self._field_name)
         json_path = ".".join(json_path)
-        operator_obj = self._operators[self._operator.currentIndex()]
+        operator_obj = self._operators[self._operator.currentRow()]
         expression = operator_obj.get_comparison_expression(self._field, FieldNamed(json_path), self._value_widget)
         self._search_expression_parts.append(expression)
         self._criteria_list.addItem(f"{underscored_to_words(self._field_name)} {operator_obj.label} {operator_obj.get_value_as_string(self._field, self._value_widget)}")
@@ -127,7 +125,7 @@ class SpecifySearchConditionsDialog(BaseDialog):
         return conditions
        
     def on_remove_clicked(self, evt):   
-        selection = self._criteria_list.currentIndex()
+        selection = self._criteria_list.currentRow()
         if selection < 0:
             return
         del self._search_expression_parts[selection]
