@@ -121,3 +121,6 @@ class Map:
 
     def get_parent_count(self, child_id):
         return self._db.get_parent_count(child_id)
+
+    def get_entities(self, query):
+        return self._db.get_entities(query)

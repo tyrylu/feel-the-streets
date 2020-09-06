@@ -2,7 +2,7 @@ use osm_db::ToSql;
 use pyo3::prelude::*;
 use serde_json::Value;
 use std::collections::HashMap;
-use std::rc::Rc;
+use std::sync::Arc;
 
 pub fn convert_value(val: &Value, py: &Python) -> PyObject {
     match val {
@@ -31,15 +31,15 @@ pub fn convert_value(val: &Value, py: &Python) -> PyObject {
     }
 }
 
-pub fn convert_object_for_query(obj: &PyObject, py: Python) -> Option<Rc<dyn ToSql>> {
+pub fn convert_object_for_query(obj: &PyObject, py: Python) -> Option<Arc<dyn ToSql + Send + Sync>> {
     if let Ok(val) = obj.extract::<String>(py) {
-        return Some(Rc::new(val));
+        return Some(Arc::new(val));
     }
     if let Ok(val) = obj.extract::<i64>(py) {
-        return Some(Rc::new(val));
+        return Some(Arc::new(val));
     }
     if let Ok(val) = obj.extract::<f64>(py) {
-        return Some(Rc::new(val));
+        return Some(Arc::new(val));
     }
 
     None

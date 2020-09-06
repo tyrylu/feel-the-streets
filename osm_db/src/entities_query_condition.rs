@@ -1,17 +1,17 @@
 use rusqlite::types::ToSql;
-use std::rc::Rc;
+use std::sync::Arc;
 
 #[derive(Clone)]
 pub enum Condition {
     IsNull,
     IsNotNull,
-    Eq { value: Rc<dyn ToSql> },
-    Neq { value: Rc<dyn ToSql> },
-    Lt { value: Rc<dyn ToSql> },
-    Le { value: Rc<dyn ToSql> },
-    Gt { value: Rc<dyn ToSql> },
-    Ge { value: Rc<dyn ToSql> },
-    Like { value: Rc<dyn ToSql> },
+    Eq { value: Arc<dyn ToSql + Send + Sync> },
+    Neq { value: Arc<dyn ToSql + Send + Sync> },
+    Lt { value: Arc<dyn ToSql + Send + Sync> },
+    Le { value: Arc<dyn ToSql + Send + Sync> },
+    Gt { value: Arc<dyn ToSql + Send + Sync> },
+    Ge { value: Arc<dyn ToSql + Send + Sync> },
+    Like { value: Arc<dyn ToSql + Send + Sync> },
 }
 
 #[derive(Clone)]

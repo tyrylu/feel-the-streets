@@ -5,7 +5,7 @@ from ..services import speech, map, config
 from ..objects_browser import ObjectsBrowserWindow
 from ..road_segments_browser import RoadSegmentsBrowserDialog
 from ..geometry_utils import get_road_section_angle, distance_filter, distance_between, get_meaningful_turns
-from ..search import perform_search
+from ..search import get_query_from_user, QueryExecutor, SearchIndicator
 from ..services import menu_service
 from ..menu_service import menu_command
 from .interesting_entities_controller import interesting_entity_in_range
@@ -15,6 +15,8 @@ class InteractivePersonController:
         self._person = person
         self._main_window = main_window
         self._browser_window = None
+        self._search_progress = None
+        self._search_executor = None
         menu_service().register_menu_commands(self)
         menu_service().menu_item_with_name("toggle_disallow_leave_roads").setChecked(config().navigation.disallow_leaving_roads)
         menu_service().menu_item_with_name("toggle_play_sounds_for_interesting_objects").setChecked(config().presentation.play_sounds_for_interesting_objects)
@@ -166,12 +168,22 @@ class InteractivePersonController:
             
     @menu_command(_("Information"), _("Search..."), "ctrl+f")
     def do_search(self, evt):
-        results = perform_search(self._main_window, self._person.position)
+        query, distance = get_query_from_user(self._main_window)
+        self._search_executor = QueryExecutor(query, self._person.position, distance)
+        self._search_executor.results_ready.connect(self._search_results_ready)
+        self._search_executor.start()
+        self._search_progress = SearchIndicator(self._main_window)
+        #self._search_progress.show()
+        speech().speak(_("Searching, please wait."))
+
+    def _search_results_ready(self, results):
         if results:
             browser = ObjectsBrowserWindow(self._main_window, title=_("Search results"), unsorted_objects=results, person=self._person)
+            self._search_progress.hide()
             browser.show()
             self._browser_window = browser
-        elif isinstance(results, list) and len(results) == 0:
+        else:
+            self._search_progres.hide()
             QMessageBox.information(self._main_window, _("Information"), _("No object matches the given search criteria."))
     
     @menu_command(_("Bookmarks"), _("Add bookmark..."), "ctrl+b")

@@ -1,11 +1,12 @@
-from PySide2.QtWidgets import QInputDialog
+from PySide2.QtWidgets import QInputDialog, QProgressDialog
 from osm_db import EntityMetadata, all_known_discriminators, EntitiesQuery
 from ..humanization_utils import get_class_display_name
 from .search_conditions import SpecifySearchConditionsDialog
-from ..geometry_utils import distance_filter, xy_ranges_bounding_square
-from ..services import map
+from .query_executor import QueryExecutor
+from .search_indicator import SearchIndicator
+from ..geometry_utils import xy_ranges_bounding_square
 
-def perform_search(parent, position):
+def get_query_from_user(parent):
     entities = all_known_discriminators()
     name_mapping = {}
     for entity in entities:
@@ -40,7 +41,5 @@ def perform_search(parent, position):
     query.set_excluded_discriminators(list(excluded_discriminators))
     for condition in conditions:
         query.add_condition(condition)
-    results = map()._db.get_entities(query)
-    filtered_objects = distance_filter(results, position, distance)
-    return filtered_objects
-
+    return query, distance
+    

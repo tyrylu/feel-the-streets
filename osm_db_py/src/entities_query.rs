@@ -2,7 +2,7 @@ use crate::field_condition::PyFieldCondition;
 use osm_db::entities_query::EntitiesQuery;
 use pyo3::prelude::*;
 
-#[pyclass(name=EntitiesQuery, unsendable)]
+#[pyclass(name=EntitiesQuery)]
 pub struct PyEntitiesQuery {
     pub(crate) inner: EntitiesQuery,
 }

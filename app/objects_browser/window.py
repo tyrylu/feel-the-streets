@@ -1,3 +1,4 @@
+import time
 import inspect
 from PySide2.QtGui import QKeySequence
 from PySide2.QtWidgets import QWidget, QListWidget, QTreeWidget, QTreeWidgetItem, QPushButton, QLabel, QGridLayout, QMenuBar, QApplication, QAction
@@ -18,6 +19,7 @@ class ObjectsBrowserWindow(QWidget):
 
     def __init__(self, parent, title, person, unsorted_objects):
         super().__init__(None)
+        now = time.time()
         act = QAction("close", self)
         act.triggered.connect(self.close)
         act.setShortcut(QKeySequence("escape"))
@@ -72,7 +74,7 @@ class ObjectsBrowserWindow(QWidget):
             if inspect.isclass(member) and issubclass(member, ObjectAction):
                 self._all_actions.append(member)
         self._objects_list.setCurrentRow(0)
-
+        print(f"Browser init took {time.time() - now}")
     def _create_item(self, menu, label, shortcut, callback):
         action = menu.addAction(label)
         action.triggered.connect(callback)
