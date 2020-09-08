@@ -3,6 +3,7 @@ import logging
 import random
 from typing import DefaultDict, Dict
 import anglr
+from blinker import Signal
 from osm_db import Enum
 from ..services import sound, config, menu_service
 from ..entities import entity_post_move, entity_post_enter, entity_post_leave, entity_rotated, entity_move_rejected, Entity
@@ -10,6 +11,8 @@ from ..humanization_utils import describe_entity
 from .interesting_entities_controller import interesting_entity_out_of_range, interesting_entity_in_range, request_interesting_entities
 
 DEFAULT_STEPS_GROUP = "steps_unknown"
+
+leave_disallowed_sound_played = Signal()
 
 def get_sound(entity):
     if entity.discriminator == "Shop":
@@ -67,7 +70,7 @@ class SoundController:
         if not sender.use_step_sounds:
             return
         base_group = None
-        if enters.discriminator == "Road":
+        if enters.is_road_like:
             if enters.value_of_field("type") == Enum.with_name("RoadType").value_for_name("path"):
                 base_group = "steps_path"
             else:
@@ -82,7 +85,7 @@ class SoundController:
     def post_leave(self, sender, leaves):
         if not sender.use_step_sounds:
             return
-        if leaves.discriminator in {"Road", "ServiceRoad"}:
+        if leaves.is_road_like:
             if sender not in self._groups_map:
                 print("Already left %s."%sender)
             else:
@@ -96,6 +99,7 @@ class SoundController:
     def _entity_move_rejected(self, sender):
         cartesian = sender.position.toCartesian()
         sound().play("leave_disallowed", x=cartesian.x, y=cartesian.y, z=cartesian.z)
+        leave_disallowed_sound_played.send(self, because_of=sender)
 
     def _interesting_entity_in_range(self, sender, entity):
         if not config().presentation.play_sounds_for_interesting_objects: return
