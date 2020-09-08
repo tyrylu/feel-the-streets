@@ -56,8 +56,8 @@ class Entity(BaseModel):
     
     def move_by(self, pos_delta):
         pos, new_dir = self.position.destination2(pos_delta, self.direction)
-        self.move_to(pos)
-        self.direction = new_dir
+        if self.move_to(pos):
+            self.direction = new_dir
     
     def rotate(self, amount):
         self.set_direction((self.direction + amount) % 360)
