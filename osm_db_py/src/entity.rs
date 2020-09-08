@@ -45,6 +45,11 @@ impl PyEntity {
     pub fn defined_field_names(&mut self) -> Vec<&String> {
         self.inner.defined_field_names()
     }
+
+    #[getter]
+    pub fn is_road_like(&self) -> bool {
+        self.inner.discriminator == "Road" || self.inner.discriminator == "ServiceRoad" || self.inner.discriminator == "Track"
+    }
 }
 
 #[pyproto]
