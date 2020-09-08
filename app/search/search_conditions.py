@@ -1,5 +1,5 @@
 from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QPushButton, QLabel, QSpinBox, QTreeWidget, QTreeWidgetItem, QComboBox, QListWidget, QWidget
+from PySide2.QtWidgets import QPushButton, QLabel, QSpinBox, QTreeWidget, QTreeWidgetItem, QListWidget, QWidget, QMessageBox
 from osm_db import EntityMetadata, FieldNamed
 from ..base_dialog import BaseDialog
 from ..humanization_utils import underscored_to_words, get_class_display_name
@@ -13,6 +13,7 @@ class SpecifySearchConditionsDialog(BaseDialog):
         self._value_widget = None
         self._value_label = None
         self._search_expression_parts = []
+        self._added_condition = False
         self._populate_fields_tree(self._entity)
 
     def create_ui(self):
@@ -74,7 +75,10 @@ class SpecifySearchConditionsDialog(BaseDialog):
             self._operators = operators_for_column_class(self._field.type_name)
             self._operator.clear()
             self._operator.addItems([o.label for o in self._operators])
+            self._added_condition = False
+    
     def on_operator_choice(self, index):
+        self._added_condition = False
         if self._value_widget:
             self.layout.removeWidget(self._value_widget)
             self._value_widget.deleteLater()
@@ -101,6 +105,7 @@ class SpecifySearchConditionsDialog(BaseDialog):
         return label
 
     def on_add_clicked(self, evt):
+        self._added_condition = True
         json_path = []
         parent_item = self._fields_tree.currentItem().parent()
         parent_data = parent_item.data(0, Qt.UserRole) if parent_item else None
@@ -130,3 +135,9 @@ class SpecifySearchConditionsDialog(BaseDialog):
             return
         del self._search_expression_parts[selection]
         self._criteria_list.removeItemWidget(self._criteria_list.currentItem())
+
+    def ok_clicked(self):
+        if not self._added_condition:
+            if QMessageBox.question(self, _("Question"), _("It appears that you forgot to add the current condition to the conditions list. Do you want to add it before starting the search?")):
+                self.on_add_clicked(None)
+        super().ok_clicked()

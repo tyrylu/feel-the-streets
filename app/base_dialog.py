@@ -10,9 +10,12 @@ class BaseDialog(QDialog):
         buttons_row = self.layout.rowCount() if not buttons_to_new_row else self.layout.rowCount() + 1
         ok_button = QPushButton(ok_text, self)
         ok_button.setDefault(True)
-        ok_button.clicked.connect(self.accept)
+        ok_button.clicked.connect(self.ok_clicked)
         self.layout.addWidget(ok_button, buttons_row, ok_button_column)
         cancel_button = QPushButton(cancel_text, self)
         cancel_button.clicked.connect(self.reject)
         self.layout.addWidget(cancel_button, buttons_row, cancel_button_column)
         
+
+    def ok_clicked(self):
+        self.accept()
