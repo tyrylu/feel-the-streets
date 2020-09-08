@@ -9,6 +9,7 @@ from ..search import get_query_from_user, QueryExecutor, SearchIndicator
 from ..services import menu_service
 from ..menu_service import menu_command
 from .interesting_entities_controller import interesting_entity_in_range
+from .sound_controller import leave_disallowed_sound_played
 
 class InteractivePersonController: 
     def __init__(self, person, main_window):
@@ -21,6 +22,7 @@ class InteractivePersonController:
         menu_service().menu_item_with_name("toggle_disallow_leave_roads").setChecked(config().navigation.disallow_leaving_roads)
         menu_service().menu_item_with_name("toggle_play_sounds_for_interesting_objects").setChecked(config().presentation.play_sounds_for_interesting_objects)
         menu_service().menu_item_with_name("toggle_announce_interesting_objects").setChecked(config().presentation.announce_interesting_objects)
+        leave_disallowed_sound_played.connect(self._leave_disalloved_sound_played)
 
     def _get_current_coordinates_string(self):
         lat = format_number(self._person.position.lat, config().presentation.coordinate_decimal_places)
@@ -121,7 +123,7 @@ class InteractivePersonController:
     def current_road_section_angle(self, evt):
         seen_road = False
         for obj in self._person.is_inside_of:
-            if obj.discriminator == "Road" and not obj.value_of_field("area"):
+            if obj.is_road_like and not obj.value_of_field("area"):
                 seen_road = True
                 angle = get_road_section_angle(self._person, obj)
                 angle = format_number(angle, config().presentation.angle_decimal_places)
@@ -150,10 +152,10 @@ class InteractivePersonController:
         amount, ok = QInputDialog.getDouble(self._main_window, _("Data"), _("Enter the angle"), minValue=-360, maxValue=360)
         if not ok:
             return
-        self._person.direction += float(amount)
+        self._person.rotate(float(amount))
     
     def _maybe_select_road(self):
-        roads = [r for r in self._person.is_inside_of if r.discriminator in {"Road", "ServiceRoad"}]
+        roads = [r for r in self._person.is_inside_of if r.is_road_like]
         if not roads:
             speech().speak(_("You are not on a road."))
             return None
@@ -250,7 +252,7 @@ class InteractivePersonController:
 
     @menu_command(_("Movement"), _("Turn to a new road"), "t")
     def _turn_to_a_new_road(self, evt):
-        roads = [r for r in self._person.is_inside_of if r.discriminator in {"Road", "ServiceRoad"}]
+        roads = [r for r in self._person.is_inside_of if r.is_road_like]
         if not roads:
             speech().speak(_("There is no meaningful turn to perform, you are not on a road."))
             return
@@ -271,3 +273,13 @@ class InteractivePersonController:
             self._person.rotate(angles_mapping[angle_desc])
             speech().speak(_("Done."))
 
+
+    def _leave_disalloved_sound_played(self, sender, because_of):
+        if not config().navigation.correct_direction_after_leave_disallowed: return
+        last_road = [r for r in because_of.is_inside_of if r.is_road_like][0]
+        turn_choices = get_meaningful_turns(last_road, because_of)
+        smaller = min(turn_choices, key=lambda i: i[2])
+        speech().speak(_("Because of you settings, you will be turned {}").format(smaller[0]))
+        because_of.rotate(smaller[2])
+
+        

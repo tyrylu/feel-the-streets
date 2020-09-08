@@ -11,6 +11,7 @@ class GeneralConfig(BaseModel):
 class NavigationConfig(BaseModel):
     disallow_leaving_roads: bool = True
     step_length: float = 0.7874 # Meters
+    correct_direction_after_leave_disallowed: bool = True
 
 class PresentationConfig(BaseModel):
     angle_decimal_places: int = 0

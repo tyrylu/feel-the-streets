@@ -5,9 +5,6 @@ from ..controllers.interesting_entities_controller import interesting_entity_in_
 from ..humanization_utils import describe_entity, format_number, describe_relative_angle, TemplateType, describe_angle_as_turn_instructions
 from ..geometry_utils import bearing_to, get_meaningful_turns
 
-def is_road_like(entity):
-    return entity.discriminator in {"Road", "ServiceRoad"}
-
 class AnnouncementsController:
     def __init__(self, pov):
         self._point_of_view = pov
@@ -19,7 +16,7 @@ class AnnouncementsController:
     def _on_post_enter(self, sender, enters):
         if sender is self._point_of_view:
             speech().speak(_("You are entering {enters}.").format(enters=describe_entity(enters)))
-            if is_road_like(enters):
+            if enters.is_road_like:
                 self._announce_possible_turn_opportunity(enters)
             
     def _announce_possible_turn_opportunity(self, new_road):
