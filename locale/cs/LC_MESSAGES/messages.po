@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-09-05 22:47+0200\n"
-"PO-Revision-Date: 2020-09-05 23:49+0200\n"
+"POT-Creation-Date: 2020-09-09 10:34+0200\n"
+"PO-Revision-Date: 2020-09-09 10:45+0200\n"
 "Last-Translator: \n"
 "Language: cs\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -432,7 +432,7 @@ msgstr "Struktura mostu"
 msgid "Bridge"
 msgstr "Most"
 
-#: app/search/search_conditions.py:25 entities.yml:102 entities.yml:149
+#: app/search/search_conditions.py:26 entities.yml:102 entities.yml:149
 #: entities.yml:311 entities.yml:327 entities.yml:363 entities.yml:513
 #: entities.yml:753 entities.yml:828 entities.yml:900 entities.yml:997
 #: entities.yml:1069 entities.yml:1119 entities.yml:1224 entities.yml:1241
@@ -1326,19 +1326,19 @@ msgstr ""
 msgid "Board"
 msgstr "Cedule"
 
-#: app/controllers/interactive_person_controller.py:28
-#: app/controllers/interactive_person_controller.py:32
-#: app/controllers/interactive_person_controller.py:44
-#: app/controllers/interactive_person_controller.py:48
-#: app/controllers/interactive_person_controller.py:57
-#: app/controllers/interactive_person_controller.py:61
-#: app/controllers/interactive_person_controller.py:72
-#: app/controllers/interactive_person_controller.py:76
-#: app/controllers/interactive_person_controller.py:96
-#: app/controllers/interactive_person_controller.py:118
-#: app/controllers/interactive_person_controller.py:130
-#: app/controllers/interactive_person_controller.py:167
-#: app/controllers/interactive_person_controller.py:175 entities.yml:430
+#: app/controllers/interactive_person_controller.py:33
+#: app/controllers/interactive_person_controller.py:37
+#: app/controllers/interactive_person_controller.py:49
+#: app/controllers/interactive_person_controller.py:53
+#: app/controllers/interactive_person_controller.py:62
+#: app/controllers/interactive_person_controller.py:66
+#: app/controllers/interactive_person_controller.py:77
+#: app/controllers/interactive_person_controller.py:81
+#: app/controllers/interactive_person_controller.py:101
+#: app/controllers/interactive_person_controller.py:123
+#: app/controllers/interactive_person_controller.py:135
+#: app/controllers/interactive_person_controller.py:172
+#: app/controllers/interactive_person_controller.py:190 entities.yml:430
 #: entities.yml:1412 enums.yml:914 enums.yml:1441 enums.yml:1496 enums.yml:1802
 msgid "Information"
 msgstr "Informace"
@@ -2042,7 +2042,7 @@ msgstr "Vynucení"
 msgid "Fire hydrant"
 msgstr "Požární hydrant"
 
-#: app/controllers/interactive_person_controller.py:44 entities.yml:868
+#: app/controllers/interactive_person_controller.py:49 entities.yml:868
 #: entities.yml:1712
 msgid "Position"
 msgstr "Pozice"
@@ -2937,9 +2937,8 @@ msgid "Main switch off"
 msgstr ""
 
 #: entities.yml:1677
-#, fuzzy
 msgid "Exact position"
-msgstr "Aktuální pozice"
+msgstr "Přesná pozice"
 
 #: entities.yml:1678
 msgid "Local operated"
@@ -3357,7 +3356,7 @@ msgstr "Organické"
 
 #: entities.yml:1799
 msgid "Aluminium"
-msgstr ""
+msgstr "Hliník"
 
 #: entities.yml:1801
 msgid "Scrap metal"
@@ -3373,7 +3372,7 @@ msgstr ""
 
 #: entities.yml:1807
 msgid "Newspaper"
-msgstr ""
+msgstr "Noviny"
 
 #: entities.yml:1808
 msgid "Paper packaging"
@@ -3489,27 +3488,27 @@ msgstr ""
 
 #: entities.yml:1852
 msgid "Footway surface"
-msgstr ""
+msgstr "Povrch chodníku"
 
 #: entities.yml:1853
 msgid "Cycleway surface"
-msgstr ""
+msgstr "Povrch cyklostezky"
 
 #: entities.yml:1860 entities.yml:2246
 msgid "Name fr"
-msgstr ""
+msgstr "Jméno francouzsky"
 
 #: entities.yml:1861 enums.yml:2335
 msgid "Motorroad"
-msgstr ""
+msgstr "Dálnice"
 
 #: entities.yml:1862
 msgid "Width source"
-msgstr ""
+msgstr "Zdroj šířky"
 
 #: entities.yml:1870 entities.yml:2762
 msgid "Name source"
-msgstr ""
+msgstr "Zdroj jména"
 
 #: entities.yml:1871
 msgid "Vehicle conditional"
@@ -6259,7 +6258,7 @@ msgstr ""
 
 #: enums.yml:427
 msgid "Compressed air"
-msgstr ""
+msgstr "Stlačený vzduch"
 
 #: enums.yml:429
 msgid "Bureau de change"
@@ -9688,7 +9687,7 @@ msgstr "Pomník"
 
 #: enums.yml:1907
 msgid "Cafeteria"
-msgstr ""
+msgstr "Kavárna"
 
 #: enums.yml:1909
 msgid "Ambassadors residence"
@@ -9729,7 +9728,7 @@ msgstr "Bez východu"
 
 #: enums.yml:1947
 msgid "Transmission"
-msgstr ""
+msgstr "Přenos"
 
 #: enums.yml:1950
 msgid "Hydro"
@@ -9852,11 +9851,11 @@ msgstr "It"
 
 #: enums.yml:2021
 msgid "Therapist"
-msgstr ""
+msgstr "Terapeut"
 
 #: enums.yml:2022
 msgid "Telecommunication"
-msgstr ""
+msgstr "Telekomunikace"
 
 #: enums.yml:2024
 msgid "Water utility"
@@ -9885,11 +9884,11 @@ msgstr "Cestovní agent"
 
 #: enums.yml:2031
 msgid "Camping"
-msgstr ""
+msgstr "Kempování"
 
 #: enums.yml:2033
 msgid "Guide"
-msgstr ""
+msgstr "Průvodce"
 
 #: enums.yml:2034
 msgid "Financial"
@@ -9910,7 +9909,7 @@ msgstr "Logistika"
 
 #: enums.yml:2039
 msgid "Energy supplier"
-msgstr ""
+msgstr "Dodavatel energií"
 
 #: enums.yml:2041
 #, fuzzy
@@ -10744,7 +10743,8 @@ msgstr "Nepodařilo se získat změny z vybrané oblasti, bude použita potenci�
 msgid "The changes queue for the selected database no longer exists on the server, downloading it as if it was a new area."
 msgstr "Fronta změn vybrané oblasti již na serveru neexistuje, oblast bude stažena, jako by se jednalo o novou oblast."
 
-#: app/controllers/interactive_person_controller.py:202 app/main_window.py:103
+#: app/controllers/interactive_person_controller.py:217 app/main_window.py:103
+#: app/search/search_conditions.py:141
 msgid "Question"
 msgstr "Otázka"
 
@@ -10793,7 +10793,7 @@ msgstr "&Uložit změny"
 msgid "&Discard changes"
 msgstr "&Zahodit změny"
 
-#: app/controllers/interactive_person_controller.py:130
+#: app/controllers/interactive_person_controller.py:135
 #: app/road_segments_browser.py:11
 msgid "Road details"
 msgstr "Detaily cesty"
@@ -10802,7 +10802,7 @@ msgstr "Detaily cesty"
 msgid "Road segments"
 msgstr "Úseky cesty"
 
-#: app/objects_browser/window.py:50 app/road_segments_browser.py:19
+#: app/objects_browser/window.py:52 app/road_segments_browser.py:19
 msgid "Close"
 msgstr "Zavřít"
 
@@ -10842,28 +10842,28 @@ msgstr "Objekt {osm_id} ({object}) byl změněn"
 msgid "Geometry was changed."
 msgstr "Geometrie byla změněna."
 
-#: app/controllers/announcements_controller.py:21
+#: app/controllers/announcements_controller.py:18
 msgid "You are entering {enters}."
 msgstr "Vstupujete do {enters}"
 
-#: app/controllers/announcements_controller.py:29
+#: app/controllers/announcements_controller.py:26
 msgid "You could turn {direction} and continue for {distance} meters."
 msgstr "Můžete odbočit {direction} a pokračovat {distance} metrů."
 
-#: app/controllers/announcements_controller.py:32
+#: app/controllers/announcements_controller.py:29
 msgid "You could turn {direction1} and continue for {distance1} meters, or you could turn {direction2} and continue for {distance2} meters."
 msgstr "Můžete odbočit {direction1} a pokračovat {distance1} metrů, nebo můžete odbočit {direction2} a pokračovat {distance2} metrů."
 
-#: app/controllers/announcements_controller.py:41
+#: app/controllers/announcements_controller.py:38
 msgid "You are leaving {leaves}"
 msgstr "Opouštíte {leaves}"
 
-#: app/controllers/announcements_controller.py:45
-#: app/controllers/interactive_person_controller.py:98
+#: app/controllers/announcements_controller.py:42
+#: app/controllers/interactive_person_controller.py:103
 msgid "{degrees} degrees"
 msgstr "{degrees} stupňů"
 
-#: app/controllers/announcements_controller.py:52
+#: app/controllers/announcements_controller.py:49
 msgid "{angle_description} is a {entity_description}"
 msgstr "{angle_description} je {entity_description}"
 
@@ -10880,313 +10880,326 @@ msgstr "Zastavit řeč"
 msgid "Quit"
 msgstr "Ukončit"
 
-#: app/controllers/interactive_person_controller.py:26
+#: app/controllers/interactive_person_controller.py:31
 msgid "Longitude: {longitude}, latitude: {latitude}."
 msgstr "Zeměpisná délka: {longitude}, zeměpisná šířka: {latitude}."
 
-#: app/controllers/interactive_person_controller.py:28
+#: app/controllers/interactive_person_controller.py:33
 msgid "Current coordinates"
 msgstr "Aktuální souřadnice"
 
-#: app/controllers/interactive_person_controller.py:32
+#: app/controllers/interactive_person_controller.py:37
 msgid "Copy current coordinates"
 msgstr "Zkopírovat aktuální souřadnice"
 
-#: app/controllers/interactive_person_controller.py:35
+#: app/controllers/interactive_person_controller.py:40
 msgid "Copied."
 msgstr "Zkopírováno."
 
-#: app/controllers/interactive_person_controller.py:42
+#: app/controllers/interactive_person_controller.py:47
 msgid "Not known."
 msgstr "Není známo."
 
-#: app/controllers/interactive_person_controller.py:48
+#: app/controllers/interactive_person_controller.py:53
 msgid "Position - all objects, may be slow"
 msgstr "Pozice - všechny objekty, může být pomalé"
 
-#: app/controllers/interactive_person_controller.py:53
+#: app/controllers/interactive_person_controller.py:58
 msgid "Current position"
 msgstr "Aktuální pozice"
 
-#: app/controllers/interactive_person_controller.py:57
+#: app/controllers/interactive_person_controller.py:62
 msgid "Detailed current position"
 msgstr "Aktuální pozice podrobně"
 
-#: app/controllers/interactive_person_controller.py:61
+#: app/controllers/interactive_person_controller.py:66
 msgid "Detailed current position - all objects, may be slow"
 msgstr "Aktuální pozice podrobně - všechny objekty, může být pomalé"
 
-#: app/controllers/interactive_person_controller.py:67
+#: app/controllers/interactive_person_controller.py:72
 msgid "Nothing."
 msgstr "Nic."
 
-#: app/controllers/interactive_person_controller.py:69
+#: app/controllers/interactive_person_controller.py:74
 msgid "Near by objects"
 msgstr "Blízké objekty"
 
-#: app/controllers/interactive_person_controller.py:72
+#: app/controllers/interactive_person_controller.py:77
 msgid "Nearest"
 msgstr "Nejbližší"
 
-#: app/controllers/interactive_person_controller.py:76
+#: app/controllers/interactive_person_controller.py:81
 msgid "Nearest - all objects, may be slow"
 msgstr "Nejbližší - všechny objekty, může být pomalé"
 
-#: app/controllers/interactive_person_controller.py:80
-#: app/controllers/interactive_person_controller.py:84
-#: app/controllers/interactive_person_controller.py:88
-#: app/controllers/interactive_person_controller.py:92
-#: app/controllers/interactive_person_controller.py:100
-#: app/controllers/interactive_person_controller.py:104
-#: app/controllers/interactive_person_controller.py:108
-#: app/controllers/interactive_person_controller.py:138
-#: app/controllers/interactive_person_controller.py:146
-#: app/controllers/interactive_person_controller.py:231
-#: app/controllers/interactive_person_controller.py:235
-#: app/controllers/interactive_person_controller.py:239
+#: app/controllers/interactive_person_controller.py:85
+#: app/controllers/interactive_person_controller.py:89
+#: app/controllers/interactive_person_controller.py:93
+#: app/controllers/interactive_person_controller.py:97
+#: app/controllers/interactive_person_controller.py:105
+#: app/controllers/interactive_person_controller.py:109
+#: app/controllers/interactive_person_controller.py:113
+#: app/controllers/interactive_person_controller.py:143
+#: app/controllers/interactive_person_controller.py:151
+#: app/controllers/interactive_person_controller.py:246
+#: app/controllers/interactive_person_controller.py:250
+#: app/controllers/interactive_person_controller.py:254
 msgid "Movement"
 msgstr "Pohyb"
 
-#: app/controllers/interactive_person_controller.py:80
+#: app/controllers/interactive_person_controller.py:85
 msgid "Step forward"
 msgstr "Krok vpřed"
 
-#: app/controllers/interactive_person_controller.py:84
+#: app/controllers/interactive_person_controller.py:89
 msgid "Step backward"
 msgstr "Krok vzad"
 
-#: app/controllers/interactive_person_controller.py:88
+#: app/controllers/interactive_person_controller.py:93
 msgid "Turn 5 degrees to the right"
 msgstr "Otočit se o 5 stupňů do prava"
 
-#: app/controllers/interactive_person_controller.py:92
+#: app/controllers/interactive_person_controller.py:97
 msgid "Turn 5 degrees to the left"
 msgstr "Otočit se o 5 stupňů do leva"
 
-#: app/controllers/interactive_person_controller.py:96
+#: app/controllers/interactive_person_controller.py:101
 msgid "Current direction"
 msgstr "Aktuální směr"
 
-#: app/controllers/interactive_person_controller.py:100
+#: app/controllers/interactive_person_controller.py:105
 msgid "Turn 90 degrees to the right"
 msgstr "Otočit se o 90 stupňů do prava"
 
-#: app/controllers/interactive_person_controller.py:104
+#: app/controllers/interactive_person_controller.py:109
 msgid "Turn 90 degrees to the left"
 msgstr "Otočit se o 90 stupňů do leva"
 
-#: app/controllers/interactive_person_controller.py:108
+#: app/controllers/interactive_person_controller.py:113
 msgid "Coordinate jump..."
 msgstr "Skok na souřadnice..."
 
-#: app/controllers/interactive_person_controller.py:110
-#: app/controllers/interactive_person_controller.py:113
+#: app/controllers/interactive_person_controller.py:115
+#: app/controllers/interactive_person_controller.py:118
 msgid "Coordinate"
 msgstr "Souřadnice"
 
-#: app/controllers/interactive_person_controller.py:110
+#: app/controllers/interactive_person_controller.py:115
 msgid "Enter the longitude"
 msgstr "Zadej zeměpisnou délku"
 
-#: app/controllers/interactive_person_controller.py:113
+#: app/controllers/interactive_person_controller.py:118
 msgid "Enter the latitude"
 msgstr "Zadej zeměpisnou šířku"
 
-#: app/controllers/interactive_person_controller.py:118
+#: app/controllers/interactive_person_controller.py:123
 msgid "Current road section angle"
 msgstr "Úhel aktuální části cesty"
 
-#: app/controllers/interactive_person_controller.py:126
+#: app/controllers/interactive_person_controller.py:131
 msgid "{road}: {angle}°"
 msgstr "{road}: {angle}°"
 
-#: app/controllers/interactive_person_controller.py:128
-#: app/controllers/interactive_person_controller.py:156
+#: app/controllers/interactive_person_controller.py:133
+#: app/controllers/interactive_person_controller.py:161
 msgid "You are not on a road."
 msgstr "Nejste na cestě."
 
-#: app/controllers/interactive_person_controller.py:138
+#: app/controllers/interactive_person_controller.py:143
 msgid "Turn according to a road"
 msgstr "Otočit se podle cesty"
 
-#: app/controllers/interactive_person_controller.py:146
+#: app/controllers/interactive_person_controller.py:151
 msgid "Turn about..."
 msgstr "Otočit se o..."
 
-#: app/controllers/interactive_person_controller.py:148
+#: app/controllers/interactive_person_controller.py:153
 msgid "Data"
 msgstr "Údaj"
 
-#: app/controllers/interactive_person_controller.py:148
+#: app/controllers/interactive_person_controller.py:153
 msgid "Enter the angle"
 msgstr "Zadej úhel"
 
-#: app/controllers/interactive_person_controller.py:162
-#: app/controllers/interactive_person_controller.py:257
+#: app/controllers/interactive_person_controller.py:167
+#: app/controllers/interactive_person_controller.py:272
 msgid "Request"
 msgstr "Požadavek"
 
-#: app/controllers/interactive_person_controller.py:162
+#: app/controllers/interactive_person_controller.py:167
 msgid "Select the road which should be the target of the operation"
 msgstr "Zvolte cestu, nad kterou se má operace provést"
 
-#: app/controllers/interactive_person_controller.py:167
+#: app/controllers/interactive_person_controller.py:172
 msgid "Search..."
 msgstr "Hledat..."
 
-#: app/controllers/interactive_person_controller.py:171
+#: app/controllers/interactive_person_controller.py:180
+msgid "Searching, please wait."
+msgstr "Vyhledávání, prosím, čekejte"
+
+#: app/controllers/interactive_person_controller.py:184
 msgid "Search results"
 msgstr "Výsledky vyhledávání"
 
-#: app/controllers/interactive_person_controller.py:175
+#: app/controllers/interactive_person_controller.py:190
 msgid "No object matches the given search criteria."
 msgstr "Zadaným podmínkám vyhledávání neodpovídá žádný objekt."
 
-#: app/controllers/interactive_person_controller.py:177
-#: app/controllers/interactive_person_controller.py:184
-#: app/controllers/interactive_person_controller.py:194
+#: app/controllers/interactive_person_controller.py:192
+#: app/controllers/interactive_person_controller.py:199
+#: app/controllers/interactive_person_controller.py:209
 msgid "Bookmarks"
 msgstr "Záložky"
 
-#: app/controllers/interactive_person_controller.py:177
+#: app/controllers/interactive_person_controller.py:192
 msgid "Add bookmark..."
 msgstr "Přidat záložku..."
 
-#: app/controllers/interactive_person_controller.py:179
-#: app/controllers/interactive_person_controller.py:188
-#: app/controllers/interactive_person_controller.py:198
+#: app/controllers/interactive_person_controller.py:194
+#: app/controllers/interactive_person_controller.py:203
+#: app/controllers/interactive_person_controller.py:213
 msgid "Data entry"
 msgstr "Datový vstup"
 
-#: app/controllers/interactive_person_controller.py:179
+#: app/controllers/interactive_person_controller.py:194
 msgid "Enter a name for the new bookmark"
 msgstr "Zadej jméno nové záložky"
 
-#: app/controllers/interactive_person_controller.py:184
+#: app/controllers/interactive_person_controller.py:199
 msgid "Go to bookmark..."
 msgstr "Jít na záložku..."
 
-#: app/controllers/interactive_person_controller.py:188
-#: app/controllers/interactive_person_controller.py:198
+#: app/controllers/interactive_person_controller.py:203
+#: app/controllers/interactive_person_controller.py:213
 msgid "Select a bookmark"
 msgstr "Zvolte záložku"
 
-#: app/controllers/interactive_person_controller.py:194
+#: app/controllers/interactive_person_controller.py:209
 msgid "Remove bookmark..."
 msgstr "Odstranit záložku..."
 
-#: app/controllers/interactive_person_controller.py:197
+#: app/controllers/interactive_person_controller.py:212
 msgid "{name}: longitude: {longitude}, latitude: {latitude}"
 msgstr "{name}: zeměpisná délka: {longitude}, zeměpisná šířka: {latitude}"
 
-#: app/controllers/interactive_person_controller.py:202
+#: app/controllers/interactive_person_controller.py:217
 msgid "Do you really want to delete the bookmark {name}?"
 msgstr "Opravdu si přejete záložku {bookmark} odstranit?"
 
-#: app/controllers/interactive_person_controller.py:205
-#: app/controllers/interactive_person_controller.py:210
-#: app/controllers/interactive_person_controller.py:215
+#: app/controllers/interactive_person_controller.py:220
+#: app/controllers/interactive_person_controller.py:225
+#: app/controllers/interactive_person_controller.py:230
+#: app/controllers/interactive_person_controller.py:287
 msgid "Options"
 msgstr "Možnosti"
 
-#: app/controllers/interactive_person_controller.py:205
+#: app/controllers/interactive_person_controller.py:220
 msgid "Disallow leaving roads"
 msgstr "Zakázat opuštění cesty"
 
-#: app/controllers/interactive_person_controller.py:210
+#: app/controllers/interactive_person_controller.py:225
 msgid "Announce interesting objects"
 msgstr "Oznavmovat zajímavé objekty"
 
-#: app/controllers/interactive_person_controller.py:215
+#: app/controllers/interactive_person_controller.py:230
 msgid "Play sounds for interesting objects"
 msgstr "Přehrát zvuk zajímavých objektů"
 
-#: app/controllers/interactive_person_controller.py:230
+#: app/controllers/interactive_person_controller.py:245
 msgid "Interesting object found after {} meters."
 msgstr "Zajímavý objekt nalezen po {} metrech."
 
-#: app/controllers/interactive_person_controller.py:231
+#: app/controllers/interactive_person_controller.py:246
 msgid "Go forward looking for an interesting object"
 msgstr "Jít vpřed, dokud nebude nalezen zajímavý objekt"
 
-#: app/controllers/interactive_person_controller.py:235
+#: app/controllers/interactive_person_controller.py:250
 msgid "Go backward looking for an interesting object"
 msgstr "Jít vzad, dokud nebude nalezen zajímavý objekt"
 
-#: app/controllers/interactive_person_controller.py:239
+#: app/controllers/interactive_person_controller.py:254
 msgid "Turn to a new road"
 msgstr "Otočit se podle novou cestu"
 
-#: app/controllers/interactive_person_controller.py:243
+#: app/controllers/interactive_person_controller.py:258
 msgid "There is no meaningful turn to perform, you are not on a road."
 msgstr "Není podle čeho se otočit, nejste na cestě."
 
-#: app/controllers/interactive_person_controller.py:250
+#: app/controllers/interactive_person_controller.py:265
 msgid "There is no meaningful turn to perform, the new road is too short."
 msgstr "Není se podle čeho otočit, nová cesta je příliš krátká."
 
-#: app/controllers/interactive_person_controller.py:253
-#: app/controllers/interactive_person_controller.py:260
+#: app/controllers/interactive_person_controller.py:268
+#: app/controllers/interactive_person_controller.py:275
 msgid "Done."
 msgstr "Hotovo."
 
-#: app/controllers/interactive_person_controller.py:257
+#: app/controllers/interactive_person_controller.py:272
 msgid "Which turn you want to perform?"
 msgstr "Jak se chcete otočit?"
 
-#: app/objects_browser/window.py:27
+#: app/controllers/interactive_person_controller.py:283
+msgid "Because of you settings, you will be turned {}"
+msgstr "Vzhledem k vašemu nastavení bude váš směr změněn {}"
+
+#: app/controllers/interactive_person_controller.py:287
+msgid "Automatically correct your direction when attempting to exit the last road"
+msgstr "Automaticky opravit směr, pokud se pokusíte opustit poslední cestu"
+
+#: app/objects_browser/window.py:29
 msgid "Object actions"
 msgstr "Akce objektu"
 
-#: app/objects_browser/window.py:28
+#: app/objects_browser/window.py:30
 msgid "Property actions"
 msgstr "Akce vlastnosti"
 
-#: app/objects_browser/window.py:29
+#: app/objects_browser/window.py:31
 msgid "Copy property value"
 msgstr "Zkopírovat hodnotu vlastnosti"
 
-#: app/objects_browser/window.py:30
+#: app/objects_browser/window.py:32
 msgid "Copy property name"
 msgstr "Zkopírovat jméno vlastnosti"
 
-#: app/objects_browser/window.py:31
+#: app/objects_browser/window.py:33
 msgid "Copy property name and value"
 msgstr "Zkopírovat jméno vlastnosti a její hodnotu"
 
-#: app/objects_browser/window.py:32
+#: app/objects_browser/window.py:34
 msgid "Objects"
 msgstr "Objekty"
 
-#: app/objects_browser/window.py:39
+#: app/objects_browser/window.py:41
 msgid "Object properties"
 msgstr "Vlastnosti objektu"
 
-#: app/objects_browser/window.py:45
+#: app/objects_browser/window.py:47
 msgid "Go to"
 msgstr "Jít na"
 
-#: app/objects_browser/window.py:55
+#: app/objects_browser/window.py:57
 msgid " ({num_objects} objects shown)"
 msgstr " (zobrazeno {num_objects} objektů)"
 
-#: app/objects_browser/window.py:68
+#: app/objects_browser/window.py:70
 msgid "{object}: distance {distance} meters, {rel_bearing}° relatively"
 msgstr "{object}: vzdálenost {distance} metrů, {rel_bearing}° relativně"
 
-#: app/objects_browser/window.py:89
+#: app/objects_browser/window.py:91
 msgid "Common properties"
 msgstr "Společné vlastnosti"
 
-#: app/objects_browser/window.py:90
+#: app/objects_browser/window.py:92
 msgid "Specific properties"
 msgstr "Specifické vlastnosti"
 
-#: app/objects_browser/window.py:91
+#: app/objects_browser/window.py:93
 msgid "Other properties - they can not be searched and are not processed in any way"
 msgstr "Ostatní vlastnosti - nelze podle nich vyhledávat a nejsou žádným způsobem zpracovány"
 
-#: app/objects_browser/window.py:111
+#: app/objects_browser/window.py:113
 msgid "Object id: {}"
 msgstr "Id objektu: {}"
 
@@ -11222,11 +11235,11 @@ msgstr "Zobrazit rodiče"
 msgid "Parents of {}"
 msgstr "Rodiče {}"
 
-#: app/search/__init__.py:13
+#: app/search/__init__.py:14
 msgid "Search class"
 msgstr "Třída k prohledání"
 
-#: app/search/__init__.py:13
+#: app/search/__init__.py:14
 msgid "Select the class to search"
 msgstr "Zvolte třídu k prohledání"
 
@@ -11242,25 +11255,38 @@ msgstr "&Zahájit vyhledávání"
 msgid "&Cancel"
 msgstr "&Zrušit"
 
-#: app/search/search_conditions.py:19
+#: app/search/search_conditions.py:20
 msgid "Class fields"
 msgstr "Pole třídy"
 
-#: app/search/search_conditions.py:32
+#: app/search/search_conditions.py:33
 msgid "&Add condition"
 msgstr "&Přidat podmínku"
 
-#: app/search/search_conditions.py:35
+#: app/search/search_conditions.py:36
 msgid "Current search criteria"
 msgstr "Aktuální podmínky vyhledávání"
 
-#: app/search/search_conditions.py:40
+#: app/search/search_conditions.py:41
 msgid "&Remove condition"
 msgstr "&Odstranit podmínku"
 
-#: app/search/search_conditions.py:43
+#: app/search/search_conditions.py:44
 msgid "Search objects to distance (in meters, 0 no limit)"
 msgstr "Hledat objekty do vzdálenosti (v metrech, 0 je bez limitu)"
+
+#: app/search/search_conditions.py:141
+msgid "It appears that you forgot to add the current condition to the conditions list. Do you want to add it before starting the search?"
+msgstr "Vypadá to, že jste aktuální podmínku vyhledávání zapomněli přidat k seznamu podmínek vyhledávání. Chcete ji tam nyní přidat?"
+
+#: app/search/search_indicator.py:7
+#, fuzzy
+msgid "Search in progress"
+msgstr "Probíhá stahování"
+
+#: app/search/search_indicator.py:9
+msgid "The search is in progress, please wait..."
+msgstr "Vyhledávání probíhá, prosím, čekejte..."
 
 #: app/search/operators/contains.py:6
 msgid "Contains"
