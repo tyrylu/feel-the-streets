@@ -22,6 +22,7 @@ class InteractivePersonController:
         menu_service().menu_item_with_name("toggle_disallow_leave_roads").setChecked(config().navigation.disallow_leaving_roads)
         menu_service().menu_item_with_name("toggle_play_sounds_for_interesting_objects").setChecked(config().presentation.play_sounds_for_interesting_objects)
         menu_service().menu_item_with_name("toggle_announce_interesting_objects").setChecked(config().presentation.announce_interesting_objects)
+        menu_service().menu_item_with_name("toggle_correct_direction").setChecked(config().navigation.correct_direction_after_leave_disallowed)
         leave_disallowed_sound_played.connect(self._leave_disalloved_sound_played)
 
     def _get_current_coordinates_string(self):
@@ -283,3 +284,7 @@ class InteractivePersonController:
         because_of.rotate(smaller[2])
 
         
+    @menu_command(_("Options"), _("Automatically correct your direction when attempting to exit the last road"), checkable=True, name="toggle_correct_direction")
+    def toggle_correct_direction(self, checked):
+        config().navigation.correct_direction_after_leave_disallowed = int(checked)
+        config().save_to_user_config()
