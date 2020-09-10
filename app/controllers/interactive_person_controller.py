@@ -56,7 +56,6 @@ class InteractivePersonController:
     
     def _position_detailed_impl(self, objects):
         window = ObjectsBrowserWindow(self._main_window, title=_("Current position"), unsorted_objects=self._person.is_inside_of, person=self._person)
-        window.show()
         self._browser_window = window
     
     @menu_command(_("Information"), _("Detailed current position"), "shift+l")
@@ -72,7 +71,6 @@ class InteractivePersonController:
             speech().speak(_("Nothing."))
             return
         self._browser_window = ObjectsBrowserWindow(self._main_window, title=_("Near by objects"), person=self._person, unsorted_objects=objects)
-        self._browser_window.show()
 
     @menu_command(_("Information"), _("Nearest"), "n")
     def do_nearest(self, evt):
@@ -183,7 +181,6 @@ class InteractivePersonController:
         if results:
             browser = ObjectsBrowserWindow(self._main_window, title=_("Search results"), unsorted_objects=results, person=self._person)
             self._search_progress.hide()
-            browser.show()
             self._browser_window = browser
         else:
             self._search_progres.hide()

@@ -3,12 +3,10 @@ import inspect
 from PySide2.QtGui import QKeySequence
 from PySide2.QtWidgets import QWidget, QListWidget, QTreeWidget, QTreeWidgetItem, QPushButton, QLabel, QGridLayout, QMenuBar, QApplication, QAction
 from osm_db import EntityMetadata
-from shapely.geometry.point import Point
-from ..humanization_utils import format_field_value, underscored_to_words, describe_entity, format_number
-from .. import services
-from ..geometry_utils import distance_between, bearing_to
+from ..humanization_utils import format_field_value, underscored_to_words
 from . import object_actions
 from .object_actions.action import ObjectAction
+from .objects_sorter import ObjectsSorter
 
 def action_execution_handler_factory(action, entity, window):
     def handler(evt):
@@ -17,7 +15,7 @@ def action_execution_handler_factory(action, entity, window):
 
 class ObjectsBrowserWindow(QWidget):
 
-    def __init__(self, parent, title, person, unsorted_objects):
+    def __init__(self, parent, title, person, unsorted_objects, autoshow=True):
         super().__init__(None)
         now = time.time()
         act = QAction("close", self)
@@ -53,33 +51,32 @@ class ObjectsBrowserWindow(QWidget):
         close_button.clicked.connect(self.close)
         layout.addWidget(close_button, 2, 1)
         self.setLayout(layout)
-        unsorted_objects = list(unsorted_objects)
         self.setWindowTitle(title + _(" ({num_objects} objects shown)").format(num_objects=len(unsorted_objects)))
         self._person = person
-        objects = []
-        for obj in unsorted_objects:
-            closest_latlon = person.closest_point_to(obj.geometry)
-            cur_distance = distance_between(closest_latlon, person.position)
-            objects.append((cur_distance, obj, closest_latlon))
-        objects.sort(key=lambda e: e[0])
-        for dist, obj, closest in objects:
-            bearing = bearing_to(person.position, closest)
-            rel_bearing = (bearing - self._person.direction) % 360
-            rel_bearing = format_number(rel_bearing, services.config().presentation.angle_decimal_places)
-            dist = format_number(dist, services.config().presentation.distance_decimal_places)
-            self._objects_list.addItem(_("{object}: distance {distance} meters, {rel_bearing}° relatively").format(object=describe_entity(obj), distance=dist, rel_bearing=rel_bearing))
-        self._objects = objects
+        self._autoshow = autoshow
         self._all_actions = []
         for member in object_actions.__dict__.values():
             if inspect.isclass(member) and issubclass(member, ObjectAction):
                 self._all_actions.append(member)
         self._objects_list.setCurrentRow(0)
+        self._sorter = ObjectsSorter(unsorted_objects, person)
+        self._sorter.objects_sorted.connect(self._objects_sorted)
+        self._sorter.start()
         print(f"Browser init took {time.time() - now}")
+    
+    def _objects_sorted(self, data):
+        objects, item_data = data
+        self._objects = objects
+        for (desc, dist, rel_bearing) in item_data:
+            self._objects_list.addItem(_("{object}: distance {distance} meters, {rel_bearing}° relatively").format(object=desc, distance=dist, rel_bearing=rel_bearing))
+        if self._autoshow:
+            self._objects_list.setCurrentRow(0)
+            self.show()
+
     def _create_item(self, menu, label, shortcut, callback):
         action = menu.addAction(label)
         action.triggered.connect(callback)
         action.setShortcut(QKeySequence(shortcut))
-
 
     def on_goto_clicked(self, evt):
         self._person.move_to(self.selected_object[2])

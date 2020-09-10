@@ -16,5 +16,4 @@ class ShowParents(ObjectAction):
     def execute(cls, entity, objects_browser):
         from .. import ObjectsBrowserWindow
         parents = map().parents_of(entity)
-        window = ObjectsBrowserWindow(objects_browser.parent(), unsorted_objects=parents, title=_("Parents of {}").format(describe_entity(entity)), person=objects_browser._person)
-        window.show()
+        cls.window = ObjectsBrowserWindow(objects_browser.parent(), unsorted_objects=parents, title=_("Parents of {}").format(describe_entity(entity)), person=objects_browser._person)
