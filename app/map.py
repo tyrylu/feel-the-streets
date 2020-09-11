@@ -1,4 +1,4 @@
-import logging
+import logging, gc
 from osm_db import EntitiesQuery, FieldNamed, AreaDatabase
 from pygeodesy.ellipsoidalVincenty import LatLon
 import shapely.wkb as wkb
@@ -123,4 +123,5 @@ class Map:
         return self._db.get_parent_count(child_id)
 
     def get_entities(self, query):
+        #db = AreaDatabase.open_existing(self._id, server_side=False)
         return self._db.get_entities(query)
