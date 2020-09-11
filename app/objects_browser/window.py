@@ -15,9 +15,8 @@ def action_execution_handler_factory(action, entity, window):
 
 class ObjectsBrowserWindow(QWidget):
 
-    def __init__(self, parent, title, person, unsorted_objects, autoshow=True):
+    def __init__(self, parent, title, person, unsorted_objects, autoshow=True, progress_indicator=None):
         super().__init__(None)
-        now = time.time()
         act = QAction("close", self)
         act.triggered.connect(self.close)
         act.setShortcut(QKeySequence("escape"))
@@ -54,6 +53,7 @@ class ObjectsBrowserWindow(QWidget):
         self.setWindowTitle(title + _(" ({num_objects} objects shown)").format(num_objects=len(unsorted_objects)))
         self._person = person
         self._autoshow = autoshow
+        self._progress_indicator = progress_indicator
         self._all_actions = []
         for member in object_actions.__dict__.values():
             if inspect.isclass(member) and issubclass(member, ObjectAction):
@@ -62,13 +62,15 @@ class ObjectsBrowserWindow(QWidget):
         self._sorter = ObjectsSorter(unsorted_objects, person)
         self._sorter.objects_sorted.connect(self._objects_sorted)
         self._sorter.start()
-        print(f"Browser init took {time.time() - now}")
     
     def _objects_sorted(self, data):
         objects, item_data = data
         self._objects = objects
         for (desc, dist, rel_bearing) in item_data:
             self._objects_list.addItem(_("{object}: distance {distance} meters, {rel_bearing}° relatively").format(object=desc, distance=dist, rel_bearing=rel_bearing))
+        if self._progress_indicator:
+            self._progress_indicator.hide()
+            self._progress_indicator.deleteLater()
         if self._autoshow:
             self._objects_list.setCurrentRow(0)
             self.show()

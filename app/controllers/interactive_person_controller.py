@@ -179,8 +179,7 @@ class InteractivePersonController:
     
     def _search_results_ready(self, results):
         if results:
-            browser = ObjectsBrowserWindow(self._main_window, title=_("Search results"), unsorted_objects=results, person=self._person)
-            self._search_progress.hide()
+            browser = ObjectsBrowserWindow(self._main_window, title=_("Search results"), unsorted_objects=results, person=self._person, progress_indicator=self._search_progress)
             self._browser_window = browser
         else:
             self._search_progres.hide()
