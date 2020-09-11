@@ -1,5 +1,4 @@
 import os
-import json
 import datetime
 import logging
 from PySide2.QtCore import QThread, Signal
@@ -13,7 +12,7 @@ class ChangesApplier(QThread):
     redownload_requested = Signal()
     will_process_change = Signal(int)
     changes_applied = Signal(str)
-    
+
     def __init__(self, area, retriever, generate_changelog):
         super().__init__()
         self._area = area

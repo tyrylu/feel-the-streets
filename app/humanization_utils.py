@@ -43,13 +43,12 @@ def get_field_type(key, fields):
         return fields[key].type_name
     else:
         return "str"
-    
 
 def format_field_value(field_value, field_type, template_type=TemplateType.long):
     if field_type in known_enums:
         try:
             if isinstance(field_value, str):
-                log.warn("Field value %s of the enum %s expected to be an int.", field_value, field_type)
+                log.warning("Field value %s of the enum %s expected to be an int.", field_value, field_type)
                 return underscored_to_words(field_value)
             return underscored_to_words(Enum.with_name(field_type).name_for_value(field_value)) or field_value
         except ValueError: pass
@@ -58,7 +57,7 @@ def format_field_value(field_value, field_type, template_type=TemplateType.long)
     except KeyError:
         return field_value
     return describe_nested_object(field_value, metadata, template_type)
-    
+
 def format_class_name(name):
     return re.sub(r"([a-z\d])([A-Z])([a-z\d])", lambda m: "%s %s%s"%(m.group(1), m.group(2).lower(), m.group(3)), name)
 
@@ -133,7 +132,7 @@ def format_angle_as_turn_sharpiness(angle):
         return _("sharply")
     else:
         raise ValueError(f"Unsupported angle {angle}.")
-        
+
 def describe_angle_as_turn_instructions(angle, precision):
     if 180 <= angle <= 360:
         angle = 360 - angle
@@ -149,4 +148,3 @@ def describe_angle_as_turn_instructions(angle, precision):
             return f"{angle_description} {direction}"
         else:
             return direction
-

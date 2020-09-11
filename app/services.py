@@ -3,7 +3,6 @@ import sys
 import platform
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import appdirs
 import accessible_output2.outputs
 from accessible_output2.outputs import auto
 from .di import Singleton

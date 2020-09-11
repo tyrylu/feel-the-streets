@@ -1,4 +1,4 @@
-import logging, gc
+import logging
 from osm_db import EntitiesQuery, FieldNamed, AreaDatabase
 from pygeodesy.ellipsoidalVincenty import LatLon
 import shapely.wkb as wkb

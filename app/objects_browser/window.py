@@ -1,4 +1,4 @@
-import time
+
 import inspect
 from PySide2.QtGui import QKeySequence
 from PySide2.QtWidgets import QWidget, QListWidget, QTreeWidget, QTreeWidgetItem, QPushButton, QLabel, QGridLayout, QMenuBar, QApplication, QAction

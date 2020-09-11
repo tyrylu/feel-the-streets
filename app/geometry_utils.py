@@ -19,7 +19,7 @@ def distance_between(point1, point2):
         return point1.distanceTo(point2)
     except VincentyError:
         return 0
-    
+
 def bearing_to(initial, target):
     try:
         return initial.initialBearingTo(target)
@@ -94,7 +94,6 @@ def find_closest_line_segment_of(segments, point):
 def get_closest_line_segment(point, line):
     return find_closest_line_segment_of(get_line_segments(line), point)
 
-  
 def xy_ranges_bounding_square(center_latlon, side):
     # First, get the x bounds
     side1 = center_latlon.destination(side/2, 0)
@@ -180,8 +179,8 @@ def calculate_absolute_distances(segments, entity):
         else:
             seen_current = True
             line_point = entity.closest_point_to(segment.line, False)
-            from_start += distance_between(to_latlon(segment.start), entity.position)
-            to_end += distance_between(entity.position, to_latlon(segment.end))
+            from_start += distance_between(to_latlon(segment.start), to_latlon(line_point))
+            to_end += distance_between(to_latlon(line_point), to_latlon(segment.end))
     return from_start, to_end
 
 def get_meaningful_turns(new_road, entity):

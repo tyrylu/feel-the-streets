@@ -1,4 +1,4 @@
-class ClassPropertyDescriptor(object):
+class ClassPropertyDescriptor:
 
     def __init__(self, fget, fset=None):
         self.fget = fget

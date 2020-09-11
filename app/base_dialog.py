@@ -15,7 +15,7 @@ class BaseDialog(QDialog):
         cancel_button = QPushButton(cancel_text, self)
         cancel_button.clicked.connect(self.reject)
         self.layout.addWidget(cancel_button, buttons_row, cancel_button_column)
-        
+
 
     def ok_clicked(self):
         self.accept()

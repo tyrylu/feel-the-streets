@@ -41,7 +41,7 @@ class Config(BaseModel):
             cfg.general.client_id = secrets.token_urlsafe()
             cfg.save_to_user_config()
         return cfg
-        
+
     def save_to_user_config(self):
         ini_utils.dict_to_ini_file(self.dict(), self._config_file)
 

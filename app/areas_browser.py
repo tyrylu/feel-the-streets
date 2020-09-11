@@ -14,11 +14,11 @@ class AreasBrowserDialog(BaseDialog):
         for id, data in self._areas:
             parents = get_area_parents(id)
             if len(parents) > 1:
-                log.warn("Area with id %s has multiple parents, falling back on the first.", id)
+                log.warning("Area with id %s has multiple parents, falling back on the first.", id)
             parent_name = next(iter(parents.values()))["name"]
             self._areas_list.addItem(_("{area_name}, {parent_name}").format(area_name=area_name, parent_name=parent_name))
         self._areas_list.setCurrentRow(0)
-        
+
     def create_ui(self):
         areas_label = QLabel(_("Areas"))
         self.layout.addWidget(areas_label, 0, 0)

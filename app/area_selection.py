@@ -3,13 +3,13 @@ import logging
 import os
 from PySide2.QtWidgets import QPushButton, QListWidget, QLabel, QMessageBox, QInputDialog, QDialog
 import pendulum
+from osm_db import AreaDatabase
 from .base_dialog import BaseDialog
 from .server_interaction import has_api_connectivity, get_areas, request_area_creation, get_areas_with_name
 from .time_utils import rfc_3339_to_local_string
 from .size_utils import format_size
 from .areas_browser import AreasBrowserDialog
 from .services import config
-from osm_db import AreaDatabase
 
 log = logging.getLogger(__name__)
 
@@ -56,7 +56,7 @@ class AreaSelectionDialog(BaseDialog):
         self._area_ids = [a["osm_id"] for a in available]
         self._area_names = [a["name"] for a in available]
         self._fill_areas(available)
-        
+
     def create_ui(self):
         areas_label = QLabel(_("&Available areas"))
         self.layout.addWidget(areas_label, 0, 0, 1, 3)
@@ -74,15 +74,15 @@ class AreaSelectionDialog(BaseDialog):
             area["updated_at"] = rfc_3339_to_local_string(area["updated_at"])
             area["db_size"] = format_size(area["db_size"])
             self._areas.addItem(_("{name}: {state}, last updated {updated_at}, file size {db_size}, created {created_at}").format(**area))
-    
+
     @property
     def selected_map(self):
         return self._area_ids[self._areas.currentRow()]
-    
+
     @property
     def selected_map_name(self):
         return self._area_names[self._areas.currentRow()]
-    
+
 
     def on_request_clicked(self):
         name, ok = QInputDialog.getText(self, _("Enter the name of the requested area"), _("Area name requested"))
