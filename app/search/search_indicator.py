@@ -5,5 +5,5 @@ class SearchIndicator(QWidget):
     def __init__(self, parent):
         super().__init__(None)
         self.setWindowTitle(_("Search in progress"))
-        #self.setWindowModality(Qt.ApplicationModal)
+        self.setWindowModality(Qt.ApplicationModal)
         label = QLabel(_("The search is in progress, please wait..."), self)

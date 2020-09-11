@@ -175,9 +175,8 @@ class InteractivePersonController:
         self._search_executor.results_ready.connect(self._search_results_ready)
         self._search_executor.start()
         self._search_progress = SearchIndicator(self._main_window)
-        #self._search_progress.show()
-        speech().speak(_("Searching, please wait."), interrupt=True)
-
+        self._search_progress.show()
+    
     def _search_results_ready(self, results):
         if results:
             browser = ObjectsBrowserWindow(self._main_window, title=_("Search results"), unsorted_objects=results, person=self._person)
