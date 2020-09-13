@@ -179,8 +179,8 @@ def calculate_absolute_distances(segments, entity):
         else:
             seen_current = True
             line_point = entity.closest_point_to(segment.line, False)
-            from_start += distance_between(to_latlon(segment.start), to_latlon(line_point))
-            to_end += distance_between(to_latlon(line_point), to_latlon(segment.end))
+            from_start += distance_between(to_latlon(segment.start), line_point)
+            to_end += distance_between(line_point, to_latlon(segment.end))
     return from_start, to_end
 
 def get_meaningful_turns(new_road, entity):
