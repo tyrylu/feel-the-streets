@@ -117,7 +117,7 @@ class InteractivePersonController:
         y, ok = QInputDialog.getDouble(self._main_window, _("Coordinate"), _("Enter the latitude"), decimals=6, minValue=-90, maxValue=90)
         if not ok:
             return
-        self._person.move_to(LatLon(y, x))
+        self._person.move_to(LatLon(y, x), force=True)
 
     @menu_command(_("Information"), _("Current road section angle"), "o")
     def current_road_section_angle(self, evt):
@@ -200,7 +200,7 @@ class InteractivePersonController:
         if not ok:
             return
         bookmark = bookmarks[names.index(name)]
-        self._person.move_to(LatLon(bookmark.latitude, bookmark.longitude))
+        self._person.move_to(LatLon(bookmark.latitude, bookmark.longitude), force=True)
 
     @menu_command(_("Bookmarks"), _("Remove bookmark..."), "ctrl+shift+b")
     def remove_bookmark(self, evt):

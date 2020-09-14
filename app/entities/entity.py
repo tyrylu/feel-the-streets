@@ -20,8 +20,8 @@ class Entity(BaseModel):
     def __hash__(self):
         return id(self)
 
-    def move_to(self, pos):
-        if entity_pre_move.has_receivers_for(self):
+    def move_to(self, pos, force=False):
+        if not force and entity_pre_move.has_receivers_for(self):
             for func, ret in entity_pre_move.send(self, new_pos=pos):
                 if not ret:
                     entity_move_rejected.send(self)
@@ -30,7 +30,7 @@ class Entity(BaseModel):
             new_inside_of = set(entity for entity in self.map.intersections_at_position(pos))
         if entity_pre_enter.has_receivers_for(self) or entity_post_enter.has_receivers_for(self):
             enters = new_inside_of.difference(self.is_inside_of)
-        if entity_pre_enter.has_receivers_for(self):
+        if not force and entity_pre_enter.has_receivers_for(self):
             for entered in enters:
                 for func, ret in entity_pre_enter.send(self, enters=entered):
                     if not ret:
@@ -38,7 +38,7 @@ class Entity(BaseModel):
                         return False
         if entity_pre_leave.has_receivers_for(self) or entity_post_leave.has_receivers_for(self):
             leaves = self.is_inside_of.difference(new_inside_of)
-        if entity_pre_leave.has_receivers_for(self):
+        if not force and entity_pre_leave.has_receivers_for(self):
             for leaving in leaves:
                 for func, ret in entity_pre_leave.send(self, leaves=leaving):
                     if not ret:
@@ -54,9 +54,9 @@ class Entity(BaseModel):
                 entity_post_enter.send(self, enters=place)
         entity_post_move.send(self)
     
-    def move_by(self, pos_delta):
+    def move_by(self, pos_delta, force=False):
         pos, new_dir = self.position.destination2(pos_delta, self.direction)
-        if self.move_to(pos):
+        if self.move_to(pos, force):
             self.direction = new_dir
     
     def rotate(self, amount):

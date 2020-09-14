@@ -51,7 +51,7 @@ class MainWindow(QMainWindow):
         self._last_location_controller = LastLocationController(person)
         self._restriction_controller = MovementRestrictionController(person)
         if not self._last_location_controller.restored_position:
-                  person.move_to(map().default_start_location)
+                  person.move_to(map().default_start_location, force=True)
         self.raise_()
         menu_service().ensure_key_capturer_focus()
 

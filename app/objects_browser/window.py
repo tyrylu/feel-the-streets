@@ -81,7 +81,7 @@ class ObjectsBrowserWindow(QWidget):
         action.setShortcut(QKeySequence(shortcut))
 
     def on_goto_clicked(self, evt):
-        self._person.move_to(self.selected_object[2])
+        self._person.move_to(self.selected_object[2], force=True)
         self.close()
     
     def on_objects_listbox(self, current_index):

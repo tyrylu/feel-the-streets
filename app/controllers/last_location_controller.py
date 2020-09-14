@@ -8,7 +8,7 @@ class LastLocationController:
         self.restored_position = False
         last = map().last_location
         if last:
-            self._point_of_view.move_to(last)
+            self._point_of_view.move_to(last, force=True)
             self.restored_position = True
         # We connect the post move signal here to not store the potentially restored position unnecessarily
         entity_post_move.connect(self._on_post_move)
