@@ -15,7 +15,7 @@ impl PySemanticChange {
     fn from_json(json: &str) -> PyResult<PySemanticChange> {
         match serde_json::from_str::<SemanticChange>(json) {
             Ok(change) => Ok(PySemanticChange { inner: change }),
-            Err(e) => Err(exceptions::ValueError::py_err(format!(
+            Err(e) => Err(exceptions::PyValueError::new_err(format!(
                 "Could not parse json, error: {}",
                 e
             ))),
