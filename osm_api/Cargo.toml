@@ -8,7 +8,7 @@ edition = "2018"
 serde = {version="*", features=["derive"]}
 serde_json = "*"
 thiserror = "*"
-ureq = {path="../ureq"}
+ureq = "*"
 rusqlite = {"version" = "*", "features" = ["bundled-windows"]}
 sqlitemap = {path="../sqlitemap"}
 log = "*"
