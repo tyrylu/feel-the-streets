@@ -13,6 +13,7 @@ from .interesting_entities_controller import interesting_entity_out_of_range, in
 DEFAULT_STEPS_GROUP = "steps_unknown"
 
 leave_disallowed_sound_played = Signal()
+interesting_entity_sound_not_found = Signal()
 
 def get_sound(entity):
     if entity.discriminator == "Shop":
@@ -108,7 +109,8 @@ class SoundController:
     def _spawn_sound_for(self, entity):
         sound_name = get_sound(entity)
         if not sound_name:
-            log.warn("Could not determine sound for %s", describe_entity(entity))
+            log.warning("Could not determine sound for %s", describe_entity(entity))
+            interesting_entity_sound_not_found.send(self, entity=entity)
             return
         cartesian = self._point_of_view.closest_point_to(entity.geometry).toCartesian()
         self._interesting_sounds[entity] = sound().play(sound_name, set_loop=True, x=cartesian.x, y=cartesian.y, z=cartesian.z)

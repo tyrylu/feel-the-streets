@@ -1,9 +1,10 @@
 import shapely.wkb as wkb
 from ..services import speech, config
 from ..entities import entity_post_enter, entity_post_leave, entity_rotated
-from ..controllers.interesting_entities_controller import interesting_entity_in_range
 from ..humanization_utils import describe_entity, format_number, describe_relative_angle, TemplateType, describe_angle_as_turn_instructions
 from ..geometry_utils import bearing_to, get_meaningful_turns
+from .interesting_entities_controller import interesting_entity_in_range
+from .sound_controller import interesting_entity_sound_not_found
 
 class AnnouncementsController:
     def __init__(self, pov):
@@ -12,6 +13,7 @@ class AnnouncementsController:
         entity_post_leave.connect(self._on_post_leave)
         entity_rotated.connect(self._on_rotated)
         interesting_entity_in_range.connect(self._interesting_entity_in_range)
+        interesting_entity_sound_not_found.connect(self._interesting_entity_sound_not_found)
     
     def _on_post_enter(self, sender, enters):
         if sender is self._point_of_view:
@@ -43,7 +45,15 @@ class AnnouncementsController:
 
     def _interesting_entity_in_range(self, sender, entity):
         if not config().presentation.announce_interesting_objects: return
+            self._announce_interesting_entity(entity)
+
+    def _announce_interesting_entity(self, entity):
+        if entity.is_road_like: return
         closest_point = self._point_of_view.closest_point_to(entity.geometry)
         bearing = bearing_to(self._point_of_view.position, closest_point)
         rel_bearing = (bearing - self._point_of_view.direction) % 360
         speech().speak(_("{angle_description} is a {entity_description}").format(angle_description=describe_relative_angle(rel_bearing), entity_description=describe_entity(entity, template_type=TemplateType.short)))
+
+    def _interesting-entity_sound_not_found(self, sender, entity):
+        if not congi().presentation.announce_interesting_objects:
+            self._announce_interesting_entity(entity)
