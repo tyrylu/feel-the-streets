@@ -45,7 +45,7 @@ class AnnouncementsController:
 
     def _interesting_entity_in_range(self, sender, entity):
         if not config().presentation.announce_interesting_objects: return
-            self._announce_interesting_entity(entity)
+        self._announce_interesting_entity(entity)
 
     def _announce_interesting_entity(self, entity):
         if entity.is_road_like: return
@@ -54,6 +54,6 @@ class AnnouncementsController:
         rel_bearing = (bearing - self._point_of_view.direction) % 360
         speech().speak(_("{angle_description} is a {entity_description}").format(angle_description=describe_relative_angle(rel_bearing), entity_description=describe_entity(entity, template_type=TemplateType.short)))
 
-    def _interesting-entity_sound_not_found(self, sender, entity):
-        if not congi().presentation.announce_interesting_objects:
+    def _interesting_entity_sound_not_found(self, sender, entity):
+        if not config().presentation.announce_interesting_objects:
             self._announce_interesting_entity(entity)

@@ -4,6 +4,7 @@ import random
 from typing import DefaultDict, Dict
 import anglr
 from blinker import Signal
+import shapely.wkb as wkb
 from osm_db import Enum
 from ..services import sound, config, menu_service
 from ..entities import entity_post_move, entity_post_enter, entity_post_leave, entity_rotated, entity_move_rejected, Entity
@@ -32,6 +33,7 @@ class SoundController:
         self._load_sound_played = False
         self._groups_map: DefaultDict[Entity, Dict[Entity, str]] = collections.defaultdict(dict)
         self._interesting_sounds = {}
+        self._interesting_roads = set()
         entity_post_move.connect(self.post_move)
         entity_post_enter.connect(self.post_enter)
         entity_post_leave.connect(self.post_leave)
@@ -50,6 +52,7 @@ class SoundController:
         if self._point_of_view is sender:
             sound().listener.set_position([x, y, z])
             for entity, source in self._interesting_sounds.items():
+                if entity.is_road_like: return # We're not moving the road crossing sounds with the listener
                 cartesian = self._point_of_view.closest_point_to(entity.geometry).toCartesian()
                 source.set_position([cartesian.x, cartesian.y, cartesian.z])
         if not sender.use_step_sounds:
@@ -72,6 +75,9 @@ class SoundController:
             return
         base_group = None
         if enters.is_road_like:
+            # Simulate that all the currentl interesting roads just became interesting.
+            for road in self._interesting_roads:
+                self._maybe_spawn_crossing_sound_for_road(wkb.loads(enters.geometry), wkb.loads(road.geometry))
             if enters.value_of_field("type") == Enum.with_name("RoadType").value_for_name("path"):
                 base_group = "steps_path"
             else:
@@ -103,9 +109,24 @@ class SoundController:
         leave_disallowed_sound_played.send(self, because_of=sender)
 
     def _interesting_entity_in_range(self, sender, entity):
-        if not config().presentation.play_sounds_for_interesting_objects: return
-        self._spawn_sound_for(entity)
+        if not entity.is_road_like and config().presentation.play_sounds_for_interesting_objects:
+            self._spawn_sound_for(entity)   
+        elif config().presentation.play_crossing_sounds:
+            self    ._spawn_crossing_sound_for(entity)
+
     
+    def _spawn_crossing_sound_for(self, road):
+        new_geom = wkb.loads(road.geometry)
+        road_geoms = [wkb.loads(e.geometry) for e in self._point_of_view.is_inside_of if e.is_road_like]
+        for geom in road_geoms:
+            self._maybe_spawn_crossing_sound_for_road(geom, new_geom)
+    
+    def _maybe_spawn_crossing_sound_for_road(self, current_road_geom, interesting_road_geom):
+        intersection = current_road_geom.intersection(interesting_road_geom)
+        if not intersection: return
+        print(intersection)
+
+
     def _spawn_sound_for(self, entity):
         sound_name = get_sound(entity)
         if not sound_name:
@@ -116,7 +137,10 @@ class SoundController:
         self._interesting_sounds[entity] = sound().play(sound_name, set_loop=True, x=cartesian.x, y=cartesian.y, z=cartesian.z)
 
     def _interesting_entity_out_of_range(self, sender, entity):
-        if not config().presentation.play_sounds_for_interesting_objects: return
+        if config().presentation.play_crossing_sounds:
+            if entity in self._interesting_roads:
+                self._interesting_roads.remove(entity)
+        if not config().presentation.play_sounds_for_interesting_objects and not config().presentation.play_crossing_sounds: return
         if entity in self._interesting_sounds:
             self._interesting_sounds[entity].stop()
             del self._interesting_sounds[entity]

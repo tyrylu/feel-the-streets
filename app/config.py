@@ -21,6 +21,7 @@ class PresentationConfig(BaseModel):
     play_sounds_for_interesting_objects: bool = True
     announce_interesting_objects: bool = True
     use_detailed_turn_directions: bool = False
+    play_crossing_sounds: bool = True
 
 class ChangelogsConfig(BaseModel):
     enabled: bool = False
