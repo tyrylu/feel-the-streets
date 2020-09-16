@@ -7,6 +7,7 @@ from blinker import Signal
 import shapely.wkb as wkb
 from osm_db import Enum
 from ..services import sound, config, menu_service
+from ..geometry_utils import to_latlon
 from ..entities import entity_post_move, entity_post_enter, entity_post_leave, entity_rotated, entity_move_rejected, Entity
 from ..humanization_utils import describe_entity
 from .interesting_entities_controller import interesting_entity_out_of_range, interesting_entity_in_range, request_interesting_entities
@@ -52,7 +53,7 @@ class SoundController:
         if self._point_of_view is sender:
             sound().listener.set_position([x, y, z])
             for entity, source in self._interesting_sounds.items():
-                if entity.is_road_like: return # We're not moving the road crossing sounds with the listener
+                if entity.is_road_like: continue # We're not moving the road crossing sounds with the listener
                 cartesian = self._point_of_view.closest_point_to(entity.geometry).toCartesian()
                 source.set_position([cartesian.x, cartesian.y, cartesian.z])
         if not sender.use_step_sounds:
@@ -77,7 +78,7 @@ class SoundController:
         if enters.is_road_like:
             # Simulate that all the currentl interesting roads just became interesting.
             for road in self._interesting_roads:
-                self._maybe_spawn_crossing_sound_for_road(wkb.loads(enters.geometry), wkb.loads(road.geometry))
+                self._maybe_spawn_crossing_sound_for_road(wkb.loads(enters.geometry), road)
             if enters.value_of_field("type") == Enum.with_name("RoadType").value_for_name("path"):
                 base_group = "steps_path"
             else:
@@ -114,15 +115,23 @@ class SoundController:
 
     
     def _spawn_crossing_sound_for(self, road):
-        new_geom = wkb.loads(road.geometry)
         road_geoms = [wkb.loads(e.geometry) for e in self._point_of_view.is_inside_of if e.is_road_like]
         for geom in road_geoms:
-            self._maybe_spawn_crossing_sound_for_road(geom, new_geom)
+            self._maybe_spawn_crossing_sound_for_road(geom, road)
     
-    def _maybe_spawn_crossing_sound_for_road(self, current_road_geom, interesting_road_geom):
+    def _maybe_spawn_crossing_sound_for_road(self, current_road_geom, interesting_road):
+        interesting_road_geom = wkb.loads(interesting_road.geometry)
         intersection = current_road_geom.intersection(interesting_road_geom)
         if not intersection: return
-        print(intersection)
+        dest_latlon = None
+        if intersection.geom_type == "Point":
+            dest_latlon = to_latlon(intersection)
+        else:
+            log.warning("No way how to determine the point to spawn the sound at for intersection %s.", intersection)
+        if dest_latlon:
+            cartesian = dest_latlon.toCartesian()
+            snd = sound().play("road_turn", x=cartesian.x, y=cartesian.y, z=cartesian.z, set_loop=True)
+            self._interesting_sounds[interesting_road] = snd
 
 
     def _spawn_sound_for(self, entity):
