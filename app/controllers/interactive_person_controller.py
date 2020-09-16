@@ -233,7 +233,8 @@ class InteractivePersonController:
         initial_position = self._person.position
         def on_interesting(sender, entity):
             nonlocal found_interesting
-            found_interesting = True
+            if not entity.is_road_like:
+                found_interesting = True
         interesting_entity_in_range.connect(on_interesting)
         while not found_interesting:
             movement_fn()
