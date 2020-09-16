@@ -94,7 +94,6 @@ class SoundController:
             return
         if leaves.is_road_like:
             if sender not in self._groups_map:
-                print("Already left %s."%sender)
             else:
                 del self._groups_map[sender][leaves]
 
