@@ -93,8 +93,7 @@ class SoundController:
         if not sender.use_step_sounds:
             return
         if leaves.is_road_like:
-            if sender not in self._groups_map:
-            else:
+            if sender in self._groups_map:
                 del self._groups_map[sender][leaves]
 
     def _rotated(self, sender):
