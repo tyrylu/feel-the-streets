@@ -279,6 +279,13 @@ class InteractivePersonController:
         smaller = min(turn_choices, key=lambda i: i[2])
         speech().speak(_("Because of you settings, you will be turned {}").format(smaller[0]), interrupt=True)
         because_of.rotate(smaller[2])
+        # Move the colliding entity to wards the road so it can continue in its walk.
+        closest = because_of.closest_point_to(last_road.geometry)
+        # Don't play the step sound for this movement command
+        orig = because_of.use_step_sounds
+        because_of.use_step_sounds = False
+        because_of.move_to(closest)
+        because_of.use_step_sounds = orig
 
         
     @menu_command(_("Options"), _("Automatically correct your direction when attempting to exit the last road"), checkable=True, name="toggle_correct_direction")
