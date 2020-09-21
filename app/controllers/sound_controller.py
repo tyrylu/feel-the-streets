@@ -43,6 +43,7 @@ class SoundController:
         interesting_entity_in_range.connect(self._interesting_entity_in_range)
         interesting_entity_out_of_range.connect(self._interesting_entity_out_of_range)
         menu_service().menu_item_with_name("toggle_play_sounds_for_interesting_objects").triggered.connect(self._play_sounds_triggered)
+        menu_service().menu_item_with_name("toggle_play_crossing_sounds").triggered.connect(self._play_crossing_sounds_triggered)
 
     def post_move(self, sender):
         if not self._load_sound_played:
@@ -154,15 +155,32 @@ class SoundController:
 
     def _play_sounds_triggered(self, checked):
         if not checked:
-            self._stop_interesting_sounds()
+            self._stop_interesting_sounds(False)
         else:
             self._spawn_interesting_sounds()
 
-    def _stop_interesting_sounds(self):
-        for sound in self._interesting_sounds.values():
+    def _stop_interesting_sounds(self, stop_road_likes):
+        to_remove = []
+        for entity, sound in self._interesting_sounds.items():
+            if entity.is_road_like != stop_road_likes: continue
             sound.stop()
-        self._interesting_sounds.clear()
+            to_remove.append(entity)
+        for entity in to_remove:
+            del self._interesting_sounds[entity]
+
 
     def _spawn_interesting_sounds(self):
         for entity in request_interesting_entities.send(self)[0][1]:
-            self._spawn_sound_for(entity)
+            if not entity.is_road_like:
+                self._spawn_sound_for(entity)
+
+    def _play_crossing_sounds_triggered(self, checked):
+        if not checked:
+            self._stop_interesting_sounds(True)
+        else:
+            self._spawn_crossing_sounds()
+
+    def _spawn_crossing_sounds(self):
+        for entity in request_interesting_entities.send(self)[0][1]:
+            if entity.is_road_like:
+                self._spawn_crossing_sound_for(entity)
