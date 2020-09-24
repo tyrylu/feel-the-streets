@@ -135,7 +135,7 @@ AerialWay:
 Amenity:
   inherits: Addressable
   long_display_template: '{{ parent_display }} ({{ type }})'
-  short_display_template: '{{ type }}'
+  short_display_template: '{{ type }} {% if name %} {{ name }}{% endif %}'
   fields:
     'payment:coins': bool
     'payment:mastercard': bool
@@ -946,7 +946,7 @@ HealthCare:
 Historic:
   inherits: Named
   long_display_template: '{{ parent_display }} ({{ type }})'
-  short_display_template: '{{ type }}'
+  short_display_template: '{{ type }} {% if name %} {{ name }}{% endif %}'
   fields:
     type: '!HistoricType'
     ele: float
@@ -982,7 +982,7 @@ Historic:
 Land:
   inherits: Named
   long_display_template: '{{ parent_display }} ({{ type }})'
-  short_display_template: '{{ type }}'
+  short_display_template: '{{ type }} {% if name %} {{ name }}{% endif %}'
   fields:
     type: '!LandType'
     shop_type: ShopType
@@ -1053,7 +1053,7 @@ Land:
 Leisure:
   inherits: Addressable
   long_display_template: '{{ parent_display }} ({{ type }})'
-  short_display_template: '{{ type }}'
+  short_display_template: '{{ type }} {% if name %} {{ name }}{% endif %}'
   fields:
     source: str
     type: '!LeisureType'
@@ -1101,7 +1101,7 @@ Level:
 ManMade:
   inherits: Named
   long_display_template: '{{ parent_display }} ({{ type }})'
-  short_display_template: '{{ type }}'
+  short_display_template: '{{ type }} {% if name %} {{ name }}{% endif %}'
   fields:
     source: str
     type: '!ManMadeType'
@@ -1163,6 +1163,7 @@ Memorial:
 Named:
   inherits: OSMEntity
   long_display_template: '{{ parent_display }}{% if name is defined %} {{ name }}{% endif %}'
+  short_display_template: '{{ parent_display }}{% if name is defined %} {{ name }}{% endif %}'
   fields:
     name: str
 Natural:
@@ -1845,7 +1846,7 @@ RF:
 Road:
   inherits: Named
   long_display_template: '{{ parent_display }} ({{ type }})'
-  short_display_template: '{{ type }}'
+  short_display_template: '{{ type }} {% if name %} {{ name }}{% endif %}'
   fields:
     ruian_street_ref: int
     embedded_rails: EmbeddedRails
@@ -2553,7 +2554,7 @@ Theatre:
 Tourism:
   inherits: Addressable
   long_display_template: '{{ parent_display }} ({{ type }})'
-  short_display_template: '{{ type }}'
+  short_display_template: '{{ type }} {% if name %} {{ name }}{% endif %}'
   fields:
     ref: str
     source: str
