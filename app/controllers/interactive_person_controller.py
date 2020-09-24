@@ -258,19 +258,18 @@ class InteractivePersonController:
         # Assume that the last road is the one the user wants to turn to.
         new_road = roads[-1]
         turns = get_meaningful_turns(new_road, self._person)
-        print(turns[0][2])
         if not turns:
             speech().speak(_("There is no meaningful turn to perform, the new road is too short."), interrupt=True)
         elif len(turns) == 1:
             self._person.rotate(turns[0][2])
-            speech().speak(_("Done."), interrupt=True)
+            speech().speak(_("There is only a single meaningful turn, so you've been rotated {}").format(turns[0][0]), interrupt=True)
         else:
             angles_mapping = {turn[0]: turn[2] for turn in turns}
             angle_choices = list(angles_mapping.keys())
             angle_desc, ok = QInputDialog.getItem(self._main_window, _("Request"), _("Which turn you want to perform?"), angle_choices, editable=False)
             if not ok: return
             self._person.rotate(angles_mapping[angle_desc])
-            speech().speak(_("Done."), interrupt=True)
+            speech().speak(_("You've been rotated {}.").format(angle_desc), interrupt=True)
 
 
     def _leave_disalloved_sound_played(self, sender, because_of):
