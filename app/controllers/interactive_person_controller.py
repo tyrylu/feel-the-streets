@@ -277,7 +277,12 @@ class InteractivePersonController:
         last_road = [r for r in because_of.is_inside_of if r.is_road_like][0]
         turn_choices = get_meaningful_turns(last_road, because_of)
         smaller = min(turn_choices, key=lambda i: i[2])
-        speech().speak(_("Because of you settings, you will be turned {}").format(smaller[0]), interrupt=True)
+        if config().navigation.automatic_direction_corrections < 6:
+            speech().speak(_("Because of you settings, you will be turned {}").format(smaller[0]), interrupt=True)
+            config().navigation.automatic_direction_corrections += 1
+            config().save_to_user_config()
+        else:
+            speech().speak(_("You will be turned {}").format(smaller[0]), interrupt=True)
         because_of.rotate(smaller[2])
         # Move the colliding entity to wards the road so it can continue in its walk.
         closest = because_of.closest_point_to(last_road.geometry)
