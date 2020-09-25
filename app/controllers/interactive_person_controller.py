@@ -37,18 +37,13 @@ class InteractivePersonController:
     def do_current_coords(self, evt):
         speech().speak(self._get_current_coordinates_string(), interrupt=True)
 
-    @menu_command(_("Information"), _("Copy current coordinates"), "ctrl+c")
-    def copy_current_coordinates(self, evt):
-        QApplication.clipboard().setText(self._get_current_coordinates_string())
-        speech().speak(_("Copied."), interrupt=True)
-
     def _position_impl(self, objects):    
         if objects:
             speech().silence()
             for obj in objects:
-                speech().speak(describe_entity(obj))
+                speech().speak(describe_entity(obj), add_to_history=False)
         else:
-            speech().speak(_("Not known."))
+            speech().speak(_("Not known."), add_to_history=False)
     
     @menu_command(_("Information"), _("Position"), "l")
     def do_position(self, evt):
@@ -72,7 +67,7 @@ class InteractivePersonController:
     
     def _nearest_impl(self, objects):
         if not objects:
-            speech().speak(_("Nothing."), interrupt=True)
+            speech().speak(_("Nothing."), interrupt=True, add_to_history=False)
             return
         self._browser_window = ObjectsBrowserWindow(self._main_window, title=_("Near by objects"), person=self._person, unsorted_objects=objects)
 
@@ -102,7 +97,7 @@ class InteractivePersonController:
     
     @menu_command(_("Information"), _("Current direction"), "r")
     def do_current_rotation(self, evt):
-        speech().speak(_("{degrees} degrees").format(degrees=format_number(self._person.direction, config().presentation.angle_decimal_places)), interrupt=True)
+        speech().speak(_("{degrees} degrees").format(degrees=format_number(self._person.direction, config().presentation.angle_decimal_places)), interrupt=True, add_to_history=False)
     
     @menu_command(_("Movement"), _("Turn 90 degrees to the right"), "ctrl+right")
     def turn_right90(self, evt):
@@ -130,9 +125,9 @@ class InteractivePersonController:
                 seen_road = True
                 angle = get_road_section_angle(self._person, obj)
                 angle = format_number(angle, config().presentation.angle_decimal_places)
-                speech().speak(_("{road}: {angle}°").format(road=describe_entity(obj), angle=angle), interrupt=True)
+                speech().speak(_("{road}: {angle}°").format(road=describe_entity(obj), angle=angle), interrupt=True, add_to_history=False)
         if not seen_road:
-            speech().speak(_("You are not on a road."), interrupt=True)
+            speech().speak(_("You are not on a road."), interrupt=True, add_to_history=False)
 
     @menu_command(_("Information"), _("Road details"), "ctrl+o")
     def road_details(self, evt):
@@ -160,7 +155,7 @@ class InteractivePersonController:
     def _maybe_select_road(self):
         roads = self._person.inside_of_roads
         if not roads:
-            speech().speak(_("You are not on a road."), interrupt=True)
+            speech().speak(_("You are not on a road."), interrupt=True, add_to_history=False)
             return None
         if len(roads) == 1:
             return roads[0]
@@ -229,6 +224,7 @@ class InteractivePersonController:
             movement_fn()
         distance = distance_between(initial_position, self._person.position)
         speech().speak(_("Interesting object found after {} meters.").format(format_number(distance, config().presentation.distance_decimal_places)))
+
     @menu_command(_("Movement"), _("Go forward looking for an interesting object"), "ctrl+up")
     def do_forward_until_no_interesting(self, evt):
         self._go_looking_for_interesting(self._person.step_forward)
@@ -241,23 +237,23 @@ class InteractivePersonController:
     def _turn_to_a_new_road(self, evt):
         roads = self._person.inside_of_roads
         if not roads:
-            speech().speak(_("There is no meaningful turn to perform, you are not on a road."), interrupt=True)
+            speech().speak(_("There is no meaningful turn to perform, you are not on a road."), interrupt=True, add_to_history=False)
             return
         # Assume that the last road is the one the user wants to turn to.
         new_road = roads[-1]
         turns = get_meaningful_turns(new_road, self._person)
         if not turns:
-            speech().speak(_("There is no meaningful turn to perform, the new road is too short."), interrupt=True)
+            speech().speak(_("There is no meaningful turn to perform, the new road is too short."), interrupt=True, add_to_history=False)
         elif len(turns) == 1:
             self._person.rotate(turns[0][2])
-            speech().speak(_("There is only a single meaningful turn, so you've been rotated {}").format(turns[0][0]), interrupt=True)
+            speech().speak(_("There is only a single meaningful turn, so you've been rotated {}").format(turns[0][0]), interrupt=True, add_to_history=False)
         else:
             angles_mapping = {turn[0]: turn[2] for turn in turns}
             angle_choices = list(angles_mapping.keys())
             angle_desc, ok = QInputDialog.getItem(self._main_window, _("Request"), _("Which turn you want to perform?"), angle_choices, editable=False)
             if not ok: return
             self._person.rotate(angles_mapping[angle_desc])
-            speech().speak(_("You've been rotated {}.").format(angle_desc), interrupt=True)
+            speech().speak(_("You've been rotated {}.").format(angle_desc), interrupt=True, add_to_history=False)
 
 
     def _leave_disalloved_sound_played(self, sender, because_of):

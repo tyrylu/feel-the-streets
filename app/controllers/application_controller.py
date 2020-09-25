@@ -7,10 +7,6 @@ class ApplicationController:
         self._main_window = window
         menu_service().register_menu_commands(self)
     
-    @menu_command(_("Program"), _("Silence speech"), "s")
-    def silence_speech(self, evt):
-        speech().silence()
-
     @menu_command(_("Program"), _("Quit"), "ctrl+q")
     def do_quit(self, evt):
         self._main_window.close()

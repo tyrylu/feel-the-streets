@@ -47,7 +47,7 @@ class AnnouncementsController:
 
     def _on_rotated(self, sender):
         if self._point_of_view is sender:
-            speech().speak(_("{degrees} degrees").format(degrees=format_number(sender.direction, config().presentation.angle_decimal_places)))
+            speech().speak(_("{degrees} degrees").format(degrees=format_number(sender.direction, config().presentation.angle_decimal_places)), add_to_history=False)
 
     def _interesting_entity_in_range(self, sender, entity):
         if not config().presentation.announce_interesting_objects: return

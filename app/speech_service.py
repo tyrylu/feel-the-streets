@@ -12,10 +12,46 @@ class SpeechService:
         # Now, we can rely on the standard automatic output selection.
         self._output = auto.Auto()
         self._speech_history = []
+        self._speech_history_position = 0
 
-    def speak(self, message, interrupt=False):
-        self._speech_history.append(message)
+    def speak(self, message, interrupt=False, add_to_history=True):
+        if add_to_history:
+            self._speech_history.append(message)
         self._output.speak(message, interrupt=interrupt)
 
     def silence(self):
         self._output.get_first_available_output().silence()
+
+    def move_to_next_history_item(self):
+        if self._speech_history_position == len(self._speech_history) - 1:
+            return False
+        else:
+            self._speech_history_position += 1
+            return True         
+
+    def move_to_previous_history_item(self):
+        if self._speech_history_position == 0:
+            return False
+        else:
+            self._speech_history_position -= 1
+            return True
+
+    def move_to_first_history_item(self):
+        if self._speech_history_position == 0:
+            return False
+        self._speech_history_position = 0
+        return True
+
+    def move_to_last_history_item(self):
+        last_pos = len(self._speech_history) - 1
+        if self._speech_history_position == last_pos:
+            return False
+        self._speech_history_position = last_pos
+        return True
+
+    @property
+    def current_history_item(self):
+        return self._speech_history[self._speech_history_position]
+
+    def speak_current_history_item(self):
+        self.speak(self.current_history_item, interrupt=True, add_to_history=False)
