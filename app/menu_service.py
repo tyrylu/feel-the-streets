@@ -27,28 +27,31 @@ class MenuService:
 
     def register_menu_commands(self, source):
         for cmd in self._menu_item_callables(source):
-            menu_path = cmd.menu.split("/")
-            menu = self._ensure_menu(menu_path)
-            label = cmd.item_label
-            if cmd.item_shortcut:
-                label += "\t%s"%cmd.item_shortcut
-            item = QAction(label, self._key_capturer)
-            item.setShortcutContext(Qt.WidgetShortcut)
-            # We must add a separate action to the menu, otherwise the shortcut is being triggered even when the menubar is focused.
-            menu_action = menu.addAction(label)
-            self._key_capturer.addAction(item)
-            item.triggered.connect(cmd)
-            menu_action.triggered.connect(cmd)
-            item.setCheckable(cmd.checkable)
-            menu_action.setCheckable(cmd.checkable)
-            if cmd.item_shortcut:
-                seq = QKeySequence(cmd.item_shortcut)
-                item.setShortcut(seq)
-            if cmd.item_name:
-                self._menu_items_by_name[cmd.item_name] = menu_action
-            if cmd.checkable:
-                item.toggled.connect(lambda checked, mi=menu_action: safe_set_checked(mi, checked))
-                menu_action.toggled.connect(lambda checked, si=item: safe_set_checked(si, checked))
+            self.register_menu_command(cmd)
+
+    def register_menu_command(self, cmd):
+        menu_path = cmd.menu.split("/")
+        menu = self._ensure_menu(menu_path)
+        label = cmd.item_label
+        if cmd.item_shortcut:
+            label += "\t%s"%cmd.item_shortcut
+        item = QAction(label, self._key_capturer)
+        item.setShortcutContext(Qt.WidgetShortcut)
+        # We must add a separate action to the menu, otherwise the shortcut is being triggered even when the menubar is focused.
+        menu_action = menu.addAction(label)
+        self._key_capturer.addAction(item)
+        item.triggered.connect(cmd)
+        menu_action.triggered.connect(cmd)
+        item.setCheckable(cmd.checkable)
+        menu_action.setCheckable(cmd.checkable)
+        if cmd.item_shortcut:
+            seq = QKeySequence(cmd.item_shortcut)
+            item.setShortcut(seq)
+        if cmd.item_name:
+            self._menu_items_by_name[cmd.item_name] = menu_action
+        if cmd.checkable:
+            item.toggled.connect(lambda checked, mi=menu_action: safe_set_checked(mi, checked))
+            menu_action.toggled.connect(lambda checked, si=item: safe_set_checked(si, checked))
     
     def _ensure_menu(self, path, parent=None):
         if tuple(path) in self._menus:

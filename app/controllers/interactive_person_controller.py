@@ -1,12 +1,12 @@
 from PySide2.QtWidgets import QInputDialog, QMessageBox, QApplication
 from pygeodesy.ellipsoidalVincenty import LatLon
 from ..humanization_utils import describe_entity, format_number
-from ..services import speech, map, config
+from ..services import speech, map, config, menu_service
 from ..objects_browser import ObjectsBrowserWindow
 from ..road_segments_browser import RoadSegmentsBrowserDialog
 from ..geometry_utils import get_road_section_angle, distance_filter, distance_between, get_meaningful_turns
 from ..search import get_query_from_user, QueryExecutor, SearchIndicator
-from ..services import menu_service
+from ..config_utils import make_config_option_switchable
 from ..menu_service import menu_command
 from .interesting_entities_controller import interesting_entity_in_range
 from .sound_controller import leave_disallowed_sound_played
@@ -19,11 +19,13 @@ class InteractivePersonController:
         self._search_progress = None
         self._search_executor = None
         menu_service().register_menu_commands(self)
-        menu_service().menu_item_with_name("toggle_disallow_leave_roads").setChecked(config().navigation.disallow_leaving_roads)
-        menu_service().menu_item_with_name("toggle_play_sounds_for_interesting_objects").setChecked(config().presentation.play_sounds_for_interesting_objects)
-        menu_service().menu_item_with_name("toggle_announce_interesting_objects").setChecked(config().presentation.announce_interesting_objects)
-        menu_service().menu_item_with_name("toggle_correct_direction").setChecked(config().navigation.correct_direction_after_leave_disallowed)
-        menu_service().menu_item_with_name("toggle_play_crossing_sounds").setChecked(config().presentation.play_crossing_sounds)
+        cfg = config()
+        make_config_option_switchable(_("Disallow leaving roads"), cfg.navigation, "disallow_leaving_roads", "alt+o")
+        make_config_option_switchable(_("Automatically correct your direction when attempting to exit the last road"), cfg.navigation, "correct_direction_after_leave_disallowed")
+        make_config_option_switchable(_("Play sounds for interesting objects"), cfg.presentation, "play_sounds_for_interesting_objects")
+        make_config_option_switchable(_("Play crossing sounds"), cfg.presentation, "play_crossing_sounds")
+        make_config_option_switchable(_("Announce interesting objects"), cfg.presentation, "announce_interesting_objects")
+        make_config_option_switchable(_("Use detailed turn instructions"), cfg.presentation, "use_detailed_turn_directions")
         leave_disallowed_sound_played.connect(self._leave_disalloved_sound_played)
 
     def _get_current_coordinates_string(self):
@@ -214,20 +216,6 @@ class InteractivePersonController:
         if QMessageBox.question(self._main_window, _("Question"), _("Do you really want to delete the bookmark {name}?").format(name=bookmark.name)) == QMessageBox.Yes:
             map().remove_bookmark(bookmark)
 
-    @menu_command(_("Options"), _("Disallow leaving roads"), "alt+o", checkable=True, name="toggle_disallow_leave_roads")
-    def disallow_leaving_roads(self, checked):
-        config().navigation.disallow_leaving_roads = bool(checked)
-        config().save_to_user_config()
-
-    @menu_command(_("Options"), _("Announce interesting objects"), checkable=True, name="toggle_announce_interesting_objects")
-    def announce_interesting_objects(self, checked):
-        config().presentation.announce_interesting_objects = bool(checked)
-        config().save_to_user_config()
-
-    @menu_command(_("Options"), _("Play sounds for interesting objects"), checkable=True, name="toggle_play_sounds_for_interesting_objects")
-    def play_sounds_for_interesting_objects(self, checked):
-        config().presentation.play_sounds_for_interesting_objects = bool(checked)
-        config().save_to_user_config()
 
     def _go_looking_for_interesting(self, movement_fn):
         found_interesting = False
@@ -292,13 +280,3 @@ class InteractivePersonController:
         because_of.move_to(closest)
         because_of.use_step_sounds = orig
 
-        
-    @menu_command(_("Options"), _("Automatically correct your direction when attempting to exit the last road"), checkable=True, name="toggle_correct_direction")
-    def toggle_correct_direction(self, checked):
-        config().navigation.correct_direction_after_leave_disallowed = int(checked)
-        config().save_to_user_config()
-
-    @menu_command(_("Options"), _("Play crossing sounds"), checkable=True, name="toggle_play_crossing_sounds")
-    def toggle_play_crossing_sounds(self, checked):
-        config().presentation.play_crossing_sounds = int(checked)
-        config().save_to_user_config()
