@@ -78,4 +78,9 @@ class Entity(BaseModel):
     def position_point(self):
         """The entity's position as a shapely Point."""
         return to_shapely_point(self.position)
+
+    @property
+    def inside_of_roads(self):
+        return [r for r in self.is_inside_of if r.is_road_like]
+
 Entity.update_forward_refs()

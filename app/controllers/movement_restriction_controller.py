@@ -10,7 +10,7 @@ class MovementRestrictionController:
     def _entity_pre_leave(self, sender, leaves):
         if not config().navigation.disallow_leaving_roads or sender is not self._restricted_entity:
             return True
-        remaining_road_like = [thing for thing in sender.is_inside_of if thing is not leaves and thing.is_road_like]
+        remaining_road_like = [thing for thing in sender.inside_of_roads if thing is not leaves]
         # Are we leaving a road like thing and no other road like thing remains?
         if leaves.is_road_like and not remaining_road_like:
             return False

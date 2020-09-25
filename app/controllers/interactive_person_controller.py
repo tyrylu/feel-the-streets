@@ -158,7 +158,7 @@ class InteractivePersonController:
         self._person.rotate(float(amount))
     
     def _maybe_select_road(self):
-        roads = [r for r in self._person.is_inside_of if r.is_road_like]
+        roads = self._person.inside_of_roads
         if not roads:
             speech().speak(_("You are not on a road."), interrupt=True)
             return None
@@ -239,7 +239,7 @@ class InteractivePersonController:
 
     @menu_command(_("Movement"), _("Turn to a new road"), "t")
     def _turn_to_a_new_road(self, evt):
-        roads = [r for r in self._person.is_inside_of if r.is_road_like]
+        roads = self._person.inside_of_roads
         if not roads:
             speech().speak(_("There is no meaningful turn to perform, you are not on a road."), interrupt=True)
             return
@@ -262,7 +262,7 @@ class InteractivePersonController:
 
     def _leave_disalloved_sound_played(self, sender, because_of):
         if not config().navigation.correct_direction_after_leave_disallowed: return
-        last_road = [r for r in because_of.is_inside_of if r.is_road_like][0]
+        last_road = because_of.inside_of_roads[0]
         turn_choices = get_meaningful_turns(last_road, because_of)
         smaller = min(turn_choices, key=lambda i: i[2])
         if config().navigation.automatic_direction_corrections < 6:

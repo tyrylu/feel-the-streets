@@ -116,7 +116,7 @@ class SoundController:
 
     
     def _spawn_crossing_sound_for(self, road):
-        road_geoms = [wkb.loads(e.geometry) for e in self._point_of_view.is_inside_of if e.is_road_like]
+        road_geoms = [wkb.loads(e.geometry) for e in self._point_of_view.inside_of_roads]
         for geom in road_geoms:
             self._maybe_spawn_crossing_sound_for_road(geom, road)
     
