@@ -44,7 +44,7 @@ class InteractivePersonController:
 
     def _position_impl(self, objects):    
         if objects:
-            speech().get_first_available_output().silence()
+            speech().silence()
             for obj in objects:
                 speech().speak(describe_entity(obj))
         else:

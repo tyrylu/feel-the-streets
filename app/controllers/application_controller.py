@@ -9,7 +9,7 @@ class ApplicationController:
     
     @menu_command(_("Program"), _("Silence speech"), "s")
     def silence_speech(self, evt):
-        speech().get_first_available_output().silence()
+        speech().silence()
 
     @menu_command(_("Program"), _("Quit"), "ctrl+q")
     def do_quit(self, evt):
