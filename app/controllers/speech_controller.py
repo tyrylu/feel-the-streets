@@ -1,3 +1,4 @@
+from PySide2.QtWidgets import QApplication
 from ..services import speech, menu_service
 from ..menu_service import menu_command
 
@@ -36,3 +37,8 @@ class SpeechController:
             speech().speak_current_history_item()
         else:
             speech().speak(_("Already on the last history item."), add_to_history=False)
+
+    @menu_command(_("Speech"), _("Copy current speech history item to the clipboard"), "ctrl+c")
+    def copy_current_item(self):
+        QApplication.clipboard().setText(speech().current_history_item)
+        speech().speak(_("Copied."), interrupt=True, add_to_history=False)
