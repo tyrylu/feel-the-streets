@@ -6,8 +6,7 @@ from shapely.geometry.point import Point
 from .geometry_utils import distance_filter, effective_width_filter, xy_ranges_bounding_square
 from .measuring import measure
 from .models import Bookmark, LastLocation
-from .import services
-
+from . import services
 
 log = logging.getLogger(__name__)
 
@@ -54,20 +53,18 @@ class Map:
 
     def add_bookmark(self, name, lat, lon):
         bookmark = Bookmark(name=name, longitude=lon, latitude=lat, area=self._id)
-        services.app_db_session().add(bookmark)
-        services.app_db_session().commit()
+        services.app_db().add_bookmark(bookmark)
 
     @property
     def bookmarks(self):
-        return services.app_db_session().query(Bookmark).filter(Bookmark.area == self._id)
+        return services.app_db().bookmarks_for_area(self._id)
 
     def remove_bookmark(self, mark):
-        services.app_db_session().delete(mark)
-        services.app_db_session().commit()
+        services.app_db().remove_bookmark(mark.id)
 
     @property
     def _last_location_entity(self):
-        return services.app_db_session().query(LastLocation).filter(LastLocation.area == self._id).first()
+        return services.app_db().last_location_for(str(self._id))
 
     @property
     def last_location(self):
@@ -79,13 +76,7 @@ class Map:
 
     @last_location.setter
     def last_location(self, val):
-        loc = self._last_location_entity
-        if not loc:
-            loc = LastLocation(area=self._id)
-            services.app_db_session().add(loc)
-        loc.latitude = val.lat
-        loc.longitude = val.lon
-        services.app_db_session().commit()
+        services.app_db().update_last_location_for(str(self._id), val.lat, val.lon)
 
     @property
     def default_start_location(self):

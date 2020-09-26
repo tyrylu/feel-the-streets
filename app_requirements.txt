@@ -1,7 +1,6 @@
 pendulum # 177 ms
 pydantic # 153 ms
 pygeodesy # 74 ms
-sqlalchemy # 583 ms
 pika # 90 ms
 appdirs # 43 ms
 accessible_output2 # 90
