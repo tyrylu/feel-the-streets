@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from ordered_set import OrderedSet
 from typing import ClassVar, Set
 from . import entity_pre_move, entity_post_move, entity_pre_enter, entity_post_enter, entity_pre_leave, entity_post_leave, entity_rotated, entity_move_rejected
 from ..measuring import measure
@@ -11,7 +12,7 @@ class Entity(BaseModel):
     use_step_sounds: ClassVar[bool] = False
     map: Map
     position: LatLon
-    is_inside_of: "Set[Entity]" = Field(default_factory=set)
+    is_inside_of: "OrderedSet[Entity]" = Field(default_factory=OrderedSet)
     direction: float = 0.0
 
     class Config:
@@ -27,7 +28,7 @@ class Entity(BaseModel):
                     entity_move_rejected.send(self)
                     return False
         with measure("Inside of query"):
-            new_inside_of = set(entity for entity in self.map.intersections_at_position(pos))
+            new_inside_of = OrderedSet(entity for entity in self.map.intersections_at_position(pos))
         if entity_pre_enter.has_receivers_for(self) or entity_post_enter.has_receivers_for(self):
             enters = new_inside_of.difference(self.is_inside_of)
         if not force and entity_pre_enter.has_receivers_for(self):
@@ -45,7 +46,11 @@ class Entity(BaseModel):
                         entity_move_rejected.send(self)
                         return False
         self.position = pos
-        self.is_inside_of = new_inside_of
+        # Note that we unfortunately can not assign the new_inside_of set directly as it has no defined ordering from the database, or rather, it has likely the wrong one.
+        for leaving in leaves:
+            self.is_inside_of.remove(leaving)
+        for entering in enters:
+            self.is_inside_of.add(entering)
         if entity_post_leave.has_receivers_for(self):
             for place in leaves:
                 entity_post_leave.send(self, leaves=place)
