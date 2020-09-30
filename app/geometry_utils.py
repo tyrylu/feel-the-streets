@@ -197,8 +197,8 @@ def ensure_turn_angle_positive(turn_angle):
 
 def get_meaningful_turns(new_road, entity):
     """Returns the meaningful turns which could the given entity perform if you want to continue along the given road. Returns a list of tuples in the form (direction_description, formatted_distance, direction_change)."""
-    from .humanization_utils import format_number, describe_angle_as_turn_instructions
     # These two imports are only needed in this function, so no point of doing them globally and complicating everything.
+    from .humanization_utils import format_number, describe_angle_as_turn_instructions
     from .services import config
     new_segments = merge_similar_line_segments(get_line_segments(wkb.loads(new_road.geometry)), config().presentation.angle_decimal_places)
     closest_new_segment = find_closest_line_segment_of(new_segments, entity.position_point)
@@ -206,9 +206,9 @@ def get_meaningful_turns(new_road, entity):
     required_angle_difference = closest_new_segment.angle - entity.direction
     from_start, to_end = calculate_absolute_distances(new_segments, entity)
     meaningful_directions = []
-    if from_start > 10:
+    if from_start > 10 or abs(opposite_turn_angle(required_angle_difference)) != 0:
         meaningful_directions.append((describe_angle_as_turn_instructions(ensure_turn_angle_positive(opposite_turn_angle(required_angle_difference)), config().presentation.angle_decimal_places), format_number(from_start, config().presentation.distance_decimal_places), opposite_turn_angle(required_angle_difference)))
-    if to_end > 10:
+    if to_end > 10 or abs(required_angle_difference) != 0:
         meaningful_directions.append((describe_angle_as_turn_instructions(ensure_turn_angle_positive(required_angle_difference), config().presentation.angle_decimal_places), format_number(to_end, config().presentation.distance_decimal_places), required_angle_difference))
     return meaningful_directions
         
