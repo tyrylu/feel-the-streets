@@ -23,7 +23,7 @@ class PresentationConfig(BaseModel):
     announce_interesting_objects: bool = True
     use_detailed_turn_directions: bool = False
     play_crossing_sounds: bool = True
-    announce_current_road_after_leaving_other: bool = True
+    announce_current_object_after_leaving_other: bool = True
 
 class ChangelogsConfig(BaseModel):
     enabled: bool = False

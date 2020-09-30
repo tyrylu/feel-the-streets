@@ -26,6 +26,7 @@ class InteractivePersonController:
         make_config_option_switchable(_("Play crossing sounds"), cfg.presentation, "play_crossing_sounds")
         make_config_option_switchable(_("Announce interesting objects"), cfg.presentation, "announce_interesting_objects")
         make_config_option_switchable(_("Use detailed turn instructions"), cfg.presentation, "use_detailed_turn_directions")
+        make_config_option_switchable(_("Announce the current object after leaving other"), cfg.presentation, "announce_current_object_after_leaving_other")
         leave_disallowed_sound_played.connect(self._leave_disalloved_sound_played)
 
     def _get_current_coordinates_string(self):

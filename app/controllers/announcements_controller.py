@@ -38,12 +38,11 @@ class AnnouncementsController:
     def _on_post_leave(self, sender, leaves):
         if sender is self._point_of_view:
             speech().speak(_("You are leaving {leaves}").format(leaves=describe_entity(leaves)))
-            if leaves.is_road_like and config().presentation.announce_current_road_after_leaving_other:
-                roads = self._point_of_view.inside_of_roads
-                if not roads:
-                    speech().speak(_("Now, you are not on any road."))
+            if config().presentation.announce_current_object_after_leaving_other:
+                if not self._point_of_view.is_inside_of:
+                    speech().speak(_("Now, your location is not known."))
                 else:
-                    speech().speak(_("Now, you're on {}.").format(describe_entity(roads[-1])))
+                    speech().speak(_("Now, you're on {}.").format(describe_entity(self._point_of_view.is_inside_of[-1])))
 
     def _on_rotated(self, sender):
         if self._point_of_view is sender:
