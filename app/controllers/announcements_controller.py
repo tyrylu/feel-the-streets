@@ -26,7 +26,7 @@ class AnnouncementsController:
         if len(self._point_of_view.inside_of_roads) < 2:
             return # That's not definitely a crossing event.
         current_road = self._point_of_view.inside_of_roads[-2] # We don't want to use the last one, that's the one which the person just entered.
-        turns = get_meaningful_turns(current_road, self._point_of_view)
+        turns = get_meaningful_turns(current_road, self._point_of_view, zero_turn_is_meaningful=True)
         current_dir_info = min(turns, key=lambda i: abs(i[2]))
         if abs(current_dir_info[2]) < 90:
             speech().speak(_("Or, you can continue along the current road for another {} meters.").format(current_dir_info[1]))
