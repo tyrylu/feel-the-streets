@@ -260,7 +260,7 @@ class InteractivePersonController:
         if not config().navigation.correct_direction_after_leave_disallowed: return
         last_road = because_of.inside_of_roads[0]
         turn_choices = get_meaningful_turns(last_road, because_of)
-        smaller = min(turn_choices, key=lambda i: i[2])
+        smaller = min(turn_choices, key=lambda i: abs(i[2]))
         if config().navigation.automatic_direction_corrections < 6:
             speech().speak(_("Because of you settings, you will be turned {}").format(smaller[0]), interrupt=True)
             config().navigation.automatic_direction_corrections += 1
@@ -273,6 +273,6 @@ class InteractivePersonController:
         # Don't play the step sound for this movement command
         orig = because_of.use_step_sounds
         because_of.use_step_sounds = False
-        because_of.move_to(closest)
+        #because_of.move_to(closest)
         because_of.use_step_sounds = orig
 

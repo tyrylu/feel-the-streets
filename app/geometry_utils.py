@@ -183,6 +183,18 @@ def calculate_absolute_distances(segments, entity):
             to_end += distance_between(line_point, to_latlon(segment.end))
     return from_start, to_end
 
+def opposite_turn_angle(angle):
+    if angle < 0:
+        return angle + 180
+    else:
+        return -(180 - angle)
+    
+def ensure_turn_angle_positive(turn_angle):
+    if turn_angle < 0:
+        return turn_angle + 360
+    else:
+        return turn_angle
+
 def get_meaningful_turns(new_road, entity):
     """Returns the meaningful turns which could the given entity perform if you want to continue along the given road. Returns a list of tuples in the form (direction_description, formatted_distance, direction_change)."""
     from .humanization_utils import format_number, describe_angle_as_turn_instructions
@@ -191,12 +203,12 @@ def get_meaningful_turns(new_road, entity):
     new_segments = merge_similar_line_segments(get_line_segments(wkb.loads(new_road.geometry)), config().presentation.angle_decimal_places)
     closest_new_segment = find_closest_line_segment_of(new_segments, entity.position_point)
     closest_new_segment.calculate_angle()
-    new_angle = abs(closest_new_segment.angle - entity.direction)
+    required_angle_difference = closest_new_segment.angle - entity.direction
     from_start, to_end = calculate_absolute_distances(new_segments, entity)
     meaningful_directions = []
     if from_start > 10:
-        meaningful_directions.append((describe_angle_as_turn_instructions((new_angle + 180)%360, config().presentation.angle_decimal_places), format_number(from_start, config().presentation.distance_decimal_places), (new_angle + 180)%360))
+        meaningful_directions.append((describe_angle_as_turn_instructions(ensure_turn_angle_positive(opposite_turn_angle(required_angle_difference)), config().presentation.angle_decimal_places), format_number(from_start, config().presentation.distance_decimal_places), opposite_turn_angle(required_angle_difference)))
     if to_end > 10:
-        meaningful_directions.append((describe_angle_as_turn_instructions(new_angle, config().presentation.angle_decimal_places), format_number(to_end, config().presentation.distance_decimal_places), new_angle))
+        meaningful_directions.append((describe_angle_as_turn_instructions(ensure_turn_angle_positive(required_angle_difference), config().presentation.angle_decimal_places), format_number(to_end, config().presentation.distance_decimal_places), required_angle_difference))
     return meaningful_directions
         
