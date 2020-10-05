@@ -274,6 +274,6 @@ class InteractivePersonController:
         # Don't play the step sound for this movement command
         orig = because_of.use_step_sounds
         because_of.use_step_sounds = False
-        #because_of.move_to(closest)
+        because_of.move_to(closest)
         because_of.use_step_sounds = orig
 
