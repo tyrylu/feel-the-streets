@@ -19,8 +19,9 @@ class Map:
     
     def intersections_at_position(self, position, fast=True):
         x, y = (position.lon, position.lat)
+        min_x, min_y, max_x, max_y = xy_ranges_bounding_square(position, 0.5)
         query = EntitiesQuery()
-        query.set_rectangle_of_interest(x, x, y, y)
+        query.set_rectangle_of_interest(min_x, max_x, min_y, max_y)
         if fast:
             query.set_excluded_discriminators(["Route", "Boundary"])
         with measure("Retrieve candidates"):
