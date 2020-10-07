@@ -247,6 +247,7 @@ class InteractivePersonController:
             speech().speak(_("There is no meaningful turn to perform, the new road is too short."), interrupt=True, add_to_history=False)
         elif len(turns) == 1:
             self._person.rotate(turns[0][2])
+            self._person.move_to_center_of(new_road)
             speech().speak(_("There is only a single meaningful turn, so you've been rotated {}").format(turns[0][0]), interrupt=True, add_to_history=False)
         else:
             angles_mapping = {turn[0]: turn[2] for turn in turns}
@@ -254,6 +255,7 @@ class InteractivePersonController:
             angle_desc, ok = QInputDialog.getItem(self._main_window, _("Request"), _("Which turn you want to perform?"), angle_choices, editable=False)
             if not ok: return
             self._person.rotate(angles_mapping[angle_desc])
+            self._person.move_to_center_of(new_road)
             speech().speak(_("You've been rotated {}.").format(angle_desc), interrupt=True, add_to_history=False)
 
 
@@ -272,10 +274,5 @@ class InteractivePersonController:
             speech().speak(_("You will be turned {}").format(smaller[0]), interrupt=True)
         because_of.rotate(smaller[2])
         # Move the colliding entity to wards the road so it can continue in its walk.
-        closest = because_of.closest_point_to(last_road.geometry)
-        # Don't play the step sound for this movement command
-        orig = because_of.use_step_sounds
-        because_of.use_step_sounds = False
-        because_of.move_to(closest)
-        because_of.use_step_sounds = orig
-
+        because_of.move_to_center_of(last_road)
+        

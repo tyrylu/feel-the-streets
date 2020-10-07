@@ -39,12 +39,11 @@ class Entity(BaseModel):
                         return False
         if entity_pre_leave.has_receivers_for(self) or entity_post_leave.has_receivers_for(self):
             leaves = self.is_inside_of.difference(new_inside_of)
-        if not force and entity_pre_leave.has_receivers_for(self):
-            for leaving in leaves:
-                for func, ret in entity_pre_leave.send(self, leaves=leaving):
-                    if not ret:
-                        entity_move_rejected.send(self)
-                        return False
+        if not force and entity_pre_leave.has_receivers_for(self) and leaves:
+            for func, ret in entity_pre_leave.send(self, leaves=leaves):
+                if not ret:
+                    entity_move_rejected.send(self)
+                    return False
         self.position = pos
         # Note that we unfortunately can not assign the new_inside_of set directly as it has no defined ordering from the database, or rather, it has likely the wrong one.
         for leaving in leaves:
@@ -87,5 +86,14 @@ class Entity(BaseModel):
     @property
     def inside_of_roads(self):
         return [r for r in self.is_inside_of if r.is_road_like]
+
+    def move_to_center_of(self, road):
+        closest = self.closest_point_to(road.geometry)
+        # Don't play the step sound for this movement command
+        orig = self.use_step_sounds
+        self.use_step_sounds = False
+        self.move_to(closest)
+        self.use_step_sounds = orig
+
 
 Entity.update_forward_refs()
