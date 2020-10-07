@@ -261,6 +261,8 @@ class InteractivePersonController:
         if not config().navigation.correct_direction_after_leave_disallowed: return
         last_road = because_of.inside_of_roads[0]
         turn_choices = get_meaningful_turns(last_road, because_of)
+        if not turn_choices:
+            return
         smaller = min(turn_choices, key=lambda i: abs(i[2]))
         if config().navigation.automatic_direction_corrections < 6:
             speech().speak(_("Because of you settings, you will be turned {}").format(smaller[0]), interrupt=True)
