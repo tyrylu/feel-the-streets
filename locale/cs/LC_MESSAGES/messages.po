@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-09-25 20:10+0200\n"
-"PO-Revision-Date: 2020-09-25 20:28+0200\n"
+"POT-Creation-Date: 2020-10-10 23:14+0200\n"
+"PO-Revision-Date: 2020-10-10 23:43+0200\n"
 "Last-Translator: \n"
 "Language: cs\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -1325,18 +1325,18 @@ msgstr ""
 msgid "Board"
 msgstr "Cedule"
 
-#: app/controllers/interactive_person_controller.py:36
-#: app/controllers/interactive_person_controller.py:48
-#: app/controllers/interactive_person_controller.py:52
-#: app/controllers/interactive_person_controller.py:60
-#: app/controllers/interactive_person_controller.py:64
-#: app/controllers/interactive_person_controller.py:74
-#: app/controllers/interactive_person_controller.py:78
-#: app/controllers/interactive_person_controller.py:98
-#: app/controllers/interactive_person_controller.py:120
-#: app/controllers/interactive_person_controller.py:132
-#: app/controllers/interactive_person_controller.py:169
-#: app/controllers/interactive_person_controller.py:184 entities.yml:430
+#: app/controllers/interactive_person_controller.py:37
+#: app/controllers/interactive_person_controller.py:49
+#: app/controllers/interactive_person_controller.py:53
+#: app/controllers/interactive_person_controller.py:61
+#: app/controllers/interactive_person_controller.py:65
+#: app/controllers/interactive_person_controller.py:75
+#: app/controllers/interactive_person_controller.py:79
+#: app/controllers/interactive_person_controller.py:99
+#: app/controllers/interactive_person_controller.py:121
+#: app/controllers/interactive_person_controller.py:133
+#: app/controllers/interactive_person_controller.py:170
+#: app/controllers/interactive_person_controller.py:185 entities.yml:430
 #: entities.yml:1413 enums.yml:914 enums.yml:1441 enums.yml:1496 enums.yml:1802
 msgid "Information"
 msgstr "Informace"
@@ -1424,9 +1424,8 @@ msgid "End date"
 msgstr "Koncové datum"
 
 #: entities.yml:465 entities.yml:1521
-#, fuzzy
 msgid "Protect class"
-msgstr "Třída k prohledání"
+msgstr "Třída ochrany"
 
 #: entities.yml:466
 msgid "Fixname"
@@ -2036,7 +2035,7 @@ msgstr "Vynucení"
 msgid "Fire hydrant"
 msgstr "Požární hydrant"
 
-#: app/controllers/interactive_person_controller.py:48 entities.yml:868
+#: app/controllers/interactive_person_controller.py:49 entities.yml:868
 #: entities.yml:1713
 msgid "Position"
 msgstr "Pozice"
@@ -2135,9 +2134,8 @@ msgid "Crop"
 msgstr ""
 
 #: entities.yml:995
-#, fuzzy
 msgid "Natural type"
-msgstr "Přírodní"
+msgstr "Typ přírodního"
 
 #: entities.yml:996
 msgid "Military type"
@@ -2933,14 +2931,12 @@ msgid "Local operated"
 msgstr ""
 
 #: entities.yml:1680
-#, fuzzy
 msgid "Signal direction"
-msgstr "Aktuální směr"
+msgstr "Směr signálu"
 
 #: entities.yml:1681
-#, fuzzy
 msgid "Signal position"
-msgstr "Aktuální pozice"
+msgstr "Pozice signálu"
 
 #: entities.yml:1682
 msgid "Shunting signal"
@@ -3887,9 +3883,8 @@ msgid "Wet maxspeed"
 msgstr ""
 
 #: entities.yml:2039
-#, fuzzy
 msgid "Variable maxspeed"
-msgstr "Dostupné oblasti"
+msgstr "Proměnná nejvyšší povolená rychlost"
 
 #: entities.yml:2042
 msgid "Bus overtaking"
@@ -3948,9 +3943,8 @@ msgid "Destination int ref"
 msgstr ""
 
 #: entities.yml:2058
-#, fuzzy
 msgid "Destination ref"
-msgstr "Omezení"
+msgstr "Reference cíle"
 
 #: entities.yml:2059
 msgid "Maxspeed type"
@@ -3981,9 +3975,8 @@ msgid "Parking lane left diagonal"
 msgstr ""
 
 #: entities.yml:2067
-#, fuzzy
 msgid "Maxspeed conditional"
-msgstr "&Přidat podmínku"
+msgstr "Podmíněná nejvyšší povolená rychlost"
 
 #: entities.yml:2068
 msgid "Forward maxspeed conditional"
@@ -4040,9 +4033,8 @@ msgid "Survey date"
 msgstr ""
 
 #: entities.yml:2085
-#, fuzzy
 msgid "Abandoned higway"
-msgstr "Opuštěné"
+msgstr "Opuštěná silnice"
 
 #: entities.yml:2087 enums.yml:95
 msgid "Informal"
@@ -5218,9 +5210,8 @@ msgid "Brick"
 msgstr "Cihla"
 
 #: enums.yml:73
-#, fuzzy
 msgid "Noise barrier"
-msgstr "Překážka"
+msgstr "Zvuková bariéra"
 
 #: enums.yml:74
 msgid "Dry stone"
@@ -5276,9 +5267,8 @@ msgid "Stands"
 msgstr "Stojany"
 
 #: enums.yml:92
-#, fuzzy
 msgid "Lockers"
-msgstr "Hodiny"
+msgstr "Skříňky"
 
 #: enums.yml:93
 msgid "Ground slots"
@@ -5541,9 +5531,8 @@ msgid "Building for water transportation"
 msgstr "Stavba k plavebním účelům v korytech nebo na březích vodních toků"
 
 #: enums.yml:178
-#, fuzzy
 msgid "Water power plant"
-msgstr "Elektrárna"
+msgstr "Vodní elektrárna"
 
 #: enums.yml:179
 msgid "Sludge lagoon"
@@ -5567,9 +5556,8 @@ msgid "Pier"
 msgstr "Pilíř"
 
 #: enums.yml:194
-#, fuzzy
 msgid "Czech"
-msgstr "Lavička"
+msgstr "Česky"
 
 #: enums.yml:196
 msgid "Anchor berth"
@@ -5666,9 +5654,8 @@ msgid "Handicraft"
 msgstr ""
 
 #: enums.yml:237
-#, fuzzy
 msgid "Window construction"
-msgstr "Konstrukce"
+msgstr "Výroba oken"
 
 #: enums.yml:238 enums.yml:678
 msgid "Plumber"
@@ -5712,9 +5699,8 @@ msgid "Hvac"
 msgstr ""
 
 #: enums.yml:248
-#, fuzzy
 msgid "Graphic designer"
-msgstr "Dopravní značka"
+msgstr "Grafický návrhář"
 
 #: enums.yml:249
 msgid "Designer"
@@ -5994,9 +5980,8 @@ msgid "Meadow"
 msgstr "Louka"
 
 #: enums.yml:350
-#, fuzzy
 msgid "Beach resort"
-msgstr "Výsledky vyhledávání"
+msgstr "Plážový rezort"
 
 #: enums.yml:353
 msgid "Racetrack"
@@ -6428,9 +6413,8 @@ msgid "Seating"
 msgstr "Sezení"
 
 #: enums.yml:488
-#, fuzzy
 msgid "Check in"
-msgstr "Kontrolní bod"
+msgstr "Vstup"
 
 #: enums.yml:489
 msgid "Reception desk"
@@ -6772,9 +6756,8 @@ msgid "Variety store"
 msgstr ""
 
 #: enums.yml:605
-#, fuzzy
 msgid "Erotic"
-msgstr "Oznámení"
+msgstr "Erotika"
 
 #: enums.yml:606
 msgid "Cheese"
@@ -6817,9 +6800,8 @@ msgid "Souvenir"
 msgstr "Suvenýr"
 
 #: enums.yml:619
-#, fuzzy
 msgid "Curtain"
-msgstr "Fontána"
+msgstr "Clona"
 
 #: enums.yml:620 enums.yml:2020
 msgid "Estate agent"
@@ -7117,9 +7099,8 @@ msgid "Works"
 msgstr ""
 
 #: enums.yml:717
-#, fuzzy
 msgid "Water well"
-msgstr "Vodní tok"
+msgstr "Studna"
 
 #: enums.yml:718
 msgid "Survey point"
@@ -7130,9 +7111,8 @@ msgid "Observatory"
 msgstr "Observatoř"
 
 #: enums.yml:725
-#, fuzzy
 msgid "Crane"
-msgstr "Vchod"
+msgstr "Jeřáb"
 
 #: enums.yml:727
 msgid "Cellar entrance"
@@ -7155,9 +7135,8 @@ msgid "Watermill"
 msgstr "Vodní mlýn"
 
 #: enums.yml:733
-#, fuzzy
 msgid "Water works"
-msgstr "Vodní tok"
+msgstr "Vodní díla"
 
 #: enums.yml:734
 msgid "Flagpole"
@@ -7295,9 +7274,8 @@ msgid "Skateboard"
 msgstr "Skateboard"
 
 #: enums.yml:774
-#, fuzzy
 msgid "Cycling"
-msgstr "Recyklace"
+msgstr "Cyklistika"
 
 #: enums.yml:775
 msgid "Beachvolleyball"
@@ -7321,9 +7299,8 @@ msgid "Climbing"
 msgstr "Lezení"
 
 #: enums.yml:784
-#, fuzzy
 msgid "Karting"
-msgstr "Parkoviště"
+msgstr "Motokáry"
 
 #: enums.yml:785
 msgid "Athletics"
@@ -7706,32 +7683,28 @@ msgid "Rope"
 msgstr "Lano"
 
 #: enums.yml:896
-#, fuzzy
 msgid "Banister"
-msgstr "Sjezdovka"
+msgstr "Sloupek"
 
 #: enums.yml:898 enums.yml:973
 msgid "Border control"
 msgstr "Hraniční kontrola"
 
 #: enums.yml:899 enums.yml:1590 enums.yml:2380
-#, fuzzy
 msgid "Recommended"
-msgstr "Okomentované"
+msgstr "Doporučovaný"
 
 #: enums.yml:904
-#, fuzzy
 msgid "Outside"
-msgstr "Trasa"
+msgstr "Venku"
 
 #: enums.yml:907
 msgid "Separated"
 msgstr ""
 
 #: enums.yml:908
-#, fuzzy
 msgid "Isolated"
-msgstr "Označené údajem o nadmořské výšce"
+msgstr "Izolované"
 
 #: enums.yml:915
 msgid "Viewpoint"
@@ -7830,9 +7803,8 @@ msgid "Wayside cross"
 msgstr "Kříž u cesty"
 
 #: enums.yml:956
-#, fuzzy
 msgid "Boundary stone"
-msgstr "Hranice"
+msgstr "Hraniční kámen"
 
 #: enums.yml:958
 msgid "Archaeological site"
@@ -7884,9 +7856,8 @@ msgid "Chicane"
 msgstr ""
 
 #: enums.yml:990
-#, fuzzy
 msgid "Cushion"
-msgstr "Otázka"
+msgstr "Polštář"
 
 #: enums.yml:991
 msgid "Hump"
@@ -7929,9 +7900,8 @@ msgid "Lock gate"
 msgstr ""
 
 #: enums.yml:1005
-#, fuzzy
 msgid "Boatyard"
-msgstr "Cedule"
+msgstr "Loděnice"
 
 #: enums.yml:1007
 msgid "Dock"
@@ -7971,9 +7941,8 @@ msgid "Bare rock"
 msgstr ""
 
 #: enums.yml:1026
-#, fuzzy
 msgid "Ridge"
-msgstr "Most"
+msgstr "Hřbet"
 
 #: enums.yml:1027 enums.yml:1322 enums.yml:1548 enums.yml:1628 enums.yml:1852
 msgid "Grass"
@@ -7992,9 +7961,8 @@ msgid "Shingle"
 msgstr ""
 
 #: enums.yml:1031
-#, fuzzy
 msgid "Heath"
-msgstr "Divadlo"
+msgstr "Vřesoviště"
 
 #: enums.yml:1032 enums.yml:1550
 msgid "Sand"
@@ -8053,9 +8021,8 @@ msgid "Cabin"
 msgstr "Kabina"
 
 #: enums.yml:1057
-#, fuzzy
 msgid "Transformer tower"
-msgstr "Transformátor"
+msgstr "Transformátorová věž"
 
 #: enums.yml:1063
 msgid "Wayside chapel"
@@ -8074,9 +8041,8 @@ msgid "Synagogue"
 msgstr ""
 
 #: enums.yml:1070 enums.yml:1338 enums.yml:1498 enums.yml:2123
-#, fuzzy
 msgid "Retail"
-msgstr "Oblast"
+msgstr "Maloobchod"
 
 #: enums.yml:1073
 msgid "Barn"
@@ -8330,9 +8296,8 @@ msgid "Turntable"
 msgstr "Přírodní"
 
 #: enums.yml:1202
-#, fuzzy
 msgid "Level crossing"
-msgstr "Křižovatka"
+msgstr "Přejezd"
 
 #: enums.yml:1203
 msgid "Buffer stop"
@@ -8359,9 +8324,8 @@ msgid "Service station"
 msgstr "Servisní stanice"
 
 #: enums.yml:1214
-#, fuzzy
 msgid "Junction"
-msgstr "Otázka"
+msgstr "Křižovatka"
 
 #: enums.yml:1216
 #, fuzzy
@@ -8421,9 +8385,8 @@ msgid "Culvert"
 msgstr ""
 
 #: enums.yml:1243
-#, fuzzy
 msgid "Building passage"
-msgstr "Část budovy"
+msgstr "Průchod budovy"
 
 #: enums.yml:1244
 msgid "Avalanche protector"
@@ -8535,9 +8498,8 @@ msgid "Motorway link"
 msgstr "Dálniční spojka"
 
 #: enums.yml:1293
-#, fuzzy
 msgid "Raceway"
-msgstr "Vodní tok"
+msgstr "Závodní dráha"
 
 #: enums.yml:1295 enums.yml:1713
 msgid "Corridor"
@@ -8548,9 +8510,8 @@ msgid "Traffic island"
 msgstr "Dopravní ostrůvek"
 
 #: enums.yml:1299
-#, fuzzy
 msgid "Give way"
-msgstr "Koleje"
+msgstr "Dát přednost"
 
 #: enums.yml:1301
 msgid "Emergency access point"
@@ -8594,7 +8555,6 @@ msgid "Bus stop"
 msgstr "Autobusová zastávka"
 
 #: enums.yml:1311
-#, fuzzy
 msgid "Contruction"
 msgstr "Konstrukce"
 
@@ -8619,9 +8579,8 @@ msgid "Farmland"
 msgstr ""
 
 #: enums.yml:1326
-#, fuzzy
 msgid "Orchard"
-msgstr "Cedule"
+msgstr "Ovocný sad"
 
 #: enums.yml:1328
 msgid "Allotments"
@@ -8755,18 +8714,16 @@ msgid "Pyrmidal"
 msgstr "Pyramidální"
 
 #: enums.yml:1397 enums.yml:1619
-#, fuzzy
 msgid "Tile"
-msgstr "Titulek"
+msgstr "Dlaždice"
 
 #: enums.yml:1398
 msgid "Many"
 msgstr "Hodně"
 
 #: enums.yml:1404
-#, fuzzy
 msgid "Overground"
-msgstr "Dětské hřiště"
+msgstr "Nadzemní"
 
 #: enums.yml:1407
 msgid "Beam"
@@ -9168,14 +9125,12 @@ msgid "Driving range"
 msgstr ""
 
 #: enums.yml:1601
-#, fuzzy
 msgid "Lowered"
-msgstr "Věž"
+msgstr "Snížený"
 
 #: enums.yml:1602
-#, fuzzy
 msgid "Raised"
-msgstr "Nepoužívané"
+msgstr "Zvýšený"
 
 #: enums.yml:1610 enums.yml:2195 enums.yml:2238 enums.yml:2316 enums.yml:2347
 #: enums.yml:2449
@@ -9197,7 +9152,7 @@ msgstr ""
 
 #: enums.yml:1617
 msgid "Roof tiles"
-msgstr ""
+msgstr "Střešní tašky"
 
 #: enums.yml:1618
 msgid "Tin"
@@ -9205,30 +9160,27 @@ msgstr ""
 
 #: enums.yml:1621
 msgid "Tar paper"
-msgstr ""
+msgstr "Dehtový papír"
 
 #: enums.yml:1622
 msgid "Copper"
-msgstr ""
+msgstr "Měď"
 
 #: enums.yml:1626
-#, fuzzy
 msgid "Slate"
-msgstr "Označené údajem o nadmořské výšce"
+msgstr "Břidlice"
 
 #: enums.yml:1629 enums.yml:1821
 msgid "Limestone"
-msgstr ""
+msgstr "Vápenec"
 
 #: enums.yml:1630
-#, fuzzy
 msgid "Plaster"
-msgstr "Hrad"
+msgstr "Omítka"
 
 #: enums.yml:1633 enums.yml:1823
-#, fuzzy
 msgid "Sandstone"
-msgstr "Opuštěné"
+msgstr "Pískovec"
 
 #: enums.yml:1634
 msgid "Linestone"
@@ -9240,7 +9192,7 @@ msgstr "Webkamera"
 
 #: enums.yml:1642
 msgid "Chain link"
-msgstr ""
+msgstr "Řetěz"
 
 #: enums.yml:1643
 msgid "Electric"
@@ -9248,7 +9200,7 @@ msgstr "Elektrický"
 
 #: enums.yml:1648
 msgid "Corrugated metal"
-msgstr ""
+msgstr "Vlnitý kov"
 
 #: enums.yml:1649
 msgid "Balustrade"
@@ -9281,7 +9233,7 @@ msgstr "Sport"
 
 #: enums.yml:1663
 msgid "Sheds"
-msgstr ""
+msgstr "Přístřešky"
 
 #: enums.yml:1666
 msgid "No right turn"
@@ -9289,11 +9241,11 @@ msgstr ""
 
 #: enums.yml:1667
 msgid "Only right turn"
-msgstr ""
+msgstr "Pouze otočení do prava"
 
 #: enums.yml:1668
 msgid "Only straight on"
-msgstr ""
+msgstr "Pouze dopředu"
 
 #: enums.yml:1669
 msgid "No left turn"
@@ -9309,7 +9261,7 @@ msgstr ""
 
 #: enums.yml:1673
 msgid "Only left turn"
-msgstr ""
+msgstr "Pouze otočení do leva"
 
 #: enums.yml:1694
 msgid "Tourist train"
@@ -9338,7 +9290,7 @@ msgstr "Vesnice"
 
 #: enums.yml:1730
 msgid "Hamlet"
-msgstr ""
+msgstr "Osada"
 
 #: enums.yml:1733
 msgid "Locality"
@@ -9349,9 +9301,8 @@ msgid "Neighbourhood"
 msgstr "Sousedství"
 
 #: enums.yml:1736
-#, fuzzy
 msgid "Islet"
-msgstr "Titulek"
+msgstr "Ostrůvek"
 
 #: enums.yml:1738
 msgid "Square"
@@ -9370,9 +9321,8 @@ msgid "Zoo part"
 msgstr ""
 
 #: enums.yml:1748 enums.yml:1943
-#, fuzzy
 msgid "Distribution"
-msgstr "Omezení"
+msgstr "Distribuce"
 
 #: enums.yml:1749 enums.yml:1946
 msgid "Traction"
@@ -9397,7 +9347,7 @@ msgstr ""
 
 #: enums.yml:1756
 msgid "Urban"
-msgstr ""
+msgstr "Městský"
 
 #: enums.yml:1760 enums.yml:1813
 msgid "War memorial"
@@ -9470,7 +9420,7 @@ msgstr "Zajímavý objekt"
 
 #: enums.yml:1794
 msgid "Ambulance station"
-msgstr ""
+msgstr "Stanice sanitek"
 
 #: enums.yml:1795
 msgid "Access point"
@@ -9490,7 +9440,7 @@ msgstr "Prohibice"
 
 #: enums.yml:1806
 msgid "Small craft facility"
-msgstr ""
+msgstr "Malé řemeslné zařízení"
 
 #: enums.yml:1810
 msgid "Stolperstein"
@@ -9502,7 +9452,7 @@ msgstr "Mdf"
 
 #: enums.yml:1825
 msgid "Granite"
-msgstr ""
+msgstr "Žula"
 
 #: enums.yml:1826
 msgid "Mirror"
@@ -9517,9 +9467,8 @@ msgid "Sculpture"
 msgstr "Skulptura"
 
 #: enums.yml:1836
-#, fuzzy
 msgid "Mural"
-msgstr "Přírodní"
+msgstr "Nástěnná malba"
 
 #: enums.yml:1839
 msgid "Installation"
@@ -9547,11 +9496,11 @@ msgstr "Totem"
 
 #: enums.yml:1848
 msgid "Upstream"
-msgstr ""
+msgstr "Proti proudu"
 
 #: enums.yml:1849
 msgid "Downstream"
-msgstr ""
+msgstr "Po proudu"
 
 #: enums.yml:1850
 msgid "Right bank"
@@ -9559,23 +9508,23 @@ msgstr ""
 
 #: enums.yml:1855
 msgid "No passage left"
-msgstr ""
+msgstr "Není průchod do leva"
 
 #: enums.yml:1856
 msgid "No passage right"
-msgstr ""
+msgstr "Není průchod do prava"
 
 #: enums.yml:1857
 msgid "No anchoring"
-msgstr ""
+msgstr "Kotvení nepovoleno"
 
 #: enums.yml:1858
 msgid "Berthing permitted"
-msgstr ""
+msgstr "Možnost kotvení"
 
 #: enums.yml:1859
 msgid "Limited headroom"
-msgstr ""
+msgstr "Omezená světlá výška"
 
 #: enums.yml:1860
 msgid "Channel distance right"
@@ -9666,7 +9615,7 @@ msgstr "Rezidence ambasádora"
 
 #: enums.yml:1922
 msgid "Roman catholic"
-msgstr ""
+msgstr "Římsko-katolický"
 
 #: enums.yml:1923
 msgid "Catholic"
@@ -9674,7 +9623,7 @@ msgstr "Katolický"
 
 #: enums.yml:1924
 msgid "Evangelical"
-msgstr ""
+msgstr "Evangelický"
 
 #: enums.yml:1926
 msgid "City limit"
@@ -9689,9 +9638,8 @@ msgid "Home"
 msgstr ""
 
 #: enums.yml:1937 enums.yml:2223
-#, fuzzy
 msgid "Exit"
-msgstr "Bez východu"
+msgstr "Východ"
 
 #: enums.yml:1947
 msgid "Transmission"
@@ -9707,7 +9655,7 @@ msgstr "Solární"
 
 #: enums.yml:1952 enums.yml:2163
 msgid "Solar photovoltaic panel"
-msgstr ""
+msgstr "Fotovoltaický solární panel"
 
 #: enums.yml:1953
 msgid "Gas"
@@ -9723,7 +9671,7 @@ msgstr "Nebezpečná plocha"
 
 #: enums.yml:1965
 msgid "Cable distribution cabinet"
-msgstr ""
+msgstr "Kabelová rozvodná skříň"
 
 #: enums.yml:1966
 #, fuzzy
@@ -9792,11 +9740,11 @@ msgstr "Přístřešek před sluncem"
 
 #: enums.yml:2009
 msgid "Employment agency"
-msgstr ""
+msgstr "Pracovní agentura"
 
 #: enums.yml:2011
 msgid "Physician"
-msgstr ""
+msgstr "Lékař"
 
 #: enums.yml:2013
 msgid "Ngo"
@@ -9864,9 +9812,8 @@ msgid "Publisher"
 msgstr "Vydavatel"
 
 #: enums.yml:2036
-#, fuzzy
 msgid "Print distribution"
-msgstr "Aktuální směr"
+msgstr "Distribuce tiskovin"
 
 #: enums.yml:2037
 msgid "Logistics"
@@ -9923,7 +9870,7 @@ msgstr "Doktor"
 
 #: enums.yml:2068
 msgid "Optometrist"
-msgstr ""
+msgstr "Optometrista"
 
 #: enums.yml:2069
 msgid "Psychotherapist"
@@ -9931,19 +9878,19 @@ msgstr "Psychoterapeut"
 
 #: enums.yml:2070
 msgid "Physiotherapist"
-msgstr ""
+msgstr "Fyzioterapeut"
 
 #: enums.yml:2075
 msgid "Paediatrics"
-msgstr ""
+msgstr "Pediatrie"
 
 #: enums.yml:2077
 msgid "Gynaecology"
-msgstr ""
+msgstr "Ginekologie"
 
 #: enums.yml:2078
 msgid "Otolaryngology"
-msgstr ""
+msgstr "Otolaringologie"
 
 #: enums.yml:2079
 msgid "Psychiatry"
@@ -9959,15 +9906,15 @@ msgstr ""
 
 #: enums.yml:2083
 msgid "Vascular surgery"
-msgstr ""
+msgstr "Cévní chirurgie"
 
 #: enums.yml:2084
 msgid "Orthopaedics"
-msgstr ""
+msgstr "Ortopedie"
 
 #: enums.yml:2086
 msgid "Tombstone"
-msgstr ""
+msgstr "Náhrobek"
 
 #: enums.yml:2087
 msgid "Vault"
@@ -9979,7 +9926,7 @@ msgstr "Válečný hrob"
 
 #: enums.yml:2090
 msgid "Cherry trees"
-msgstr ""
+msgstr "Třešně"
 
 #: enums.yml:2091
 msgid "Apple trees"
@@ -9995,14 +9942,12 @@ msgid "Perpetual"
 msgstr ""
 
 #: enums.yml:2098
-#, fuzzy
 msgid "Detention"
-msgstr "Omezení"
+msgstr "Zadržení"
 
 #: enums.yml:2099
-#, fuzzy
 msgid "Retention"
-msgstr "Omezení"
+msgstr "Zadržení"
 
 #: enums.yml:2100
 msgid "Infiltration"
@@ -10022,11 +9967,11 @@ msgstr "Bažina"
 
 #: enums.yml:2116
 msgid "Marsh"
-msgstr ""
+msgstr "Bažina"
 
 #: enums.yml:2118
 msgid "Deciduous"
-msgstr ""
+msgstr "Opadavý"
 
 #: enums.yml:2119
 msgid "Evergreen"
@@ -10043,7 +9988,7 @@ msgstr ""
 
 #: enums.yml:2124
 msgid "Headquarters"
-msgstr ""
+msgstr "Hlavní sídlo"
 
 #: enums.yml:2126
 msgid "Finance"
@@ -10083,7 +10028,7 @@ msgstr "Čekací oblast"
 
 #: enums.yml:2153
 msgid "Sandpit"
-msgstr ""
+msgstr "Písková díra"
 
 #: enums.yml:2154
 msgid "Slide"
@@ -10124,11 +10069,11 @@ msgstr ""
 
 #: enums.yml:2171
 msgid "Bay"
-msgstr ""
+msgstr "Záliv"
 
 #: enums.yml:2172
 msgid "Busbar"
-msgstr ""
+msgstr "Přípojnice"
 
 #: enums.yml:2181 enums.yml:2369
 msgid "Open"
@@ -10140,7 +10085,7 @@ msgstr "Větev"
 
 #: enums.yml:2189
 msgid "Dangerous junction"
-msgstr ""
+msgstr "Nebezpečná křižovatka"
 
 #: enums.yml:2199
 msgid "Above"
@@ -10152,7 +10097,7 @@ msgstr ""
 
 #: enums.yml:2210
 msgid "Yellow"
-msgstr ""
+msgstr "Žlutá"
 
 #: enums.yml:2212
 msgid "Abt"
@@ -10183,9 +10128,8 @@ msgid "Semaphore"
 msgstr "Semafor"
 
 #: enums.yml:2222
-#, fuzzy
 msgid "Entry"
-msgstr "Datový vstup"
+msgstr "Vsup"
 
 #: enums.yml:2225
 msgid "Between"
@@ -10509,9 +10453,8 @@ msgid "Lake"
 msgstr "Jezero"
 
 #: enums.yml:2494
-#, fuzzy
 msgid "Lagoon"
-msgstr "Dětské hřiště"
+msgstr "Laguna"
 
 #: enums.yml:2496
 msgid "Oxbow"
@@ -10703,7 +10646,7 @@ msgstr "Nepodařilo se získat změny z vybrané oblasti, bude použita potenci�
 msgid "The changes queue for the selected database no longer exists on the server, downloading it as if it was a new area."
 msgstr "Fronta změn vybrané oblasti již na serveru neexistuje, oblast bude stažena, jako by se jednalo o novou oblast."
 
-#: app/controllers/interactive_person_controller.py:211 app/main_window.py:104
+#: app/controllers/interactive_person_controller.py:217 app/main_window.py:104
 #: app/search/search_conditions.py:141
 msgid "Question"
 msgstr "Otázka"
@@ -10753,7 +10696,7 @@ msgstr "&Uložit změny"
 msgid "&Discard changes"
 msgstr "&Zahodit změny"
 
-#: app/controllers/interactive_person_controller.py:132
+#: app/controllers/interactive_person_controller.py:133
 #: app/road_segments_browser.py:11
 msgid "Road details"
 msgstr "Detaily cesty"
@@ -10802,36 +10745,40 @@ msgstr "Objekt {osm_id} ({object}) byl změněn"
 msgid "Geometry was changed."
 msgstr "Geometrie byla změněna."
 
-#: app/controllers/announcements_controller.py:20
+#: app/controllers/announcements_controller.py:22
 msgid "You are entering {enters}."
 msgstr "Vstupujete do {enters}"
 
-#: app/controllers/announcements_controller.py:28
+#: app/controllers/announcements_controller.py:34
+msgid "Or, you can continue along the current road for another {} meters."
+msgstr "Nebo můžete po stávající cestě pokračovat {} metrů."
+
+#: app/controllers/announcements_controller.py:42
 msgid "You could turn {direction} and continue for {distance} meters."
 msgstr "Můžete odbočit {direction} a pokračovat {distance} metrů."
 
-#: app/controllers/announcements_controller.py:31
+#: app/controllers/announcements_controller.py:45
 msgid "You could turn {direction1} and continue for {distance1} meters, or you could turn {direction2} and continue for {distance2} meters."
 msgstr "Můžete odbočit {direction1} a pokračovat {distance1} metrů, nebo můžete odbočit {direction2} a pokračovat {distance2} metrů."
 
-#: app/controllers/announcements_controller.py:40
+#: app/controllers/announcements_controller.py:56
 msgid "You are leaving {leaves}"
 msgstr "Opouštíte {leaves}"
 
-#: app/controllers/announcements_controller.py:44
-msgid "Now, you are not on any road."
-msgstr "Nyní nejste na cestě."
+#: app/controllers/announcements_controller.py:59
+msgid "Now, your location is not known."
+msgstr "Nyní není vaše pozice známa."
 
-#: app/controllers/announcements_controller.py:46
+#: app/controllers/announcements_controller.py:61
 msgid "Now, you're on {}."
 msgstr "Nyní jste na {}."
 
-#: app/controllers/announcements_controller.py:50
-#: app/controllers/interactive_person_controller.py:100
+#: app/controllers/announcements_controller.py:65
+#: app/controllers/interactive_person_controller.py:101
 msgid "{degrees} degrees"
 msgstr "{degrees} stupňů"
 
-#: app/controllers/announcements_controller.py:61
+#: app/controllers/announcements_controller.py:76
 msgid "{angle_description} is a {entity_description}"
 msgstr "{angle_description} je {entity_description}"
 
@@ -10867,242 +10814,250 @@ msgstr "Oznavmovat zajímavé objekty"
 msgid "Use detailed turn instructions"
 msgstr "Používat podrobné pokyny k otočení"
 
-#: app/controllers/interactive_person_controller.py:34
+#: app/controllers/interactive_person_controller.py:29
+msgid "Announce the current object after leaving other"
+msgstr "Oznámit aktuální objekt po opuštění jiného"
+
+#: app/controllers/interactive_person_controller.py:35
 msgid "Longitude: {longitude}, latitude: {latitude}."
 msgstr "Zeměpisná délka: {longitude}, zeměpisná šířka: {latitude}."
 
-#: app/controllers/interactive_person_controller.py:36
+#: app/controllers/interactive_person_controller.py:37
 msgid "Current coordinates"
 msgstr "Aktuální souřadnice"
 
-#: app/controllers/interactive_person_controller.py:46
+#: app/controllers/interactive_person_controller.py:47
 msgid "Not known."
 msgstr "Není známo."
 
-#: app/controllers/interactive_person_controller.py:52
+#: app/controllers/interactive_person_controller.py:53
 msgid "Position - all objects, may be slow"
 msgstr "Pozice - všechny objekty, může být pomalé"
 
-#: app/controllers/interactive_person_controller.py:57
+#: app/controllers/interactive_person_controller.py:58
 msgid "Current position"
 msgstr "Aktuální pozice"
 
-#: app/controllers/interactive_person_controller.py:60
+#: app/controllers/interactive_person_controller.py:61
 msgid "Detailed current position"
 msgstr "Aktuální pozice podrobně"
 
-#: app/controllers/interactive_person_controller.py:64
+#: app/controllers/interactive_person_controller.py:65
 msgid "Detailed current position - all objects, may be slow"
 msgstr "Aktuální pozice podrobně - všechny objekty, může být pomalé"
 
-#: app/controllers/interactive_person_controller.py:70
+#: app/controllers/interactive_person_controller.py:71
 msgid "Nothing."
 msgstr "Nic."
 
-#: app/controllers/interactive_person_controller.py:72
+#: app/controllers/interactive_person_controller.py:73
 msgid "Near by objects"
 msgstr "Blízké objekty"
 
-#: app/controllers/interactive_person_controller.py:74
+#: app/controllers/interactive_person_controller.py:75
 msgid "Nearest"
 msgstr "Nejbližší"
 
-#: app/controllers/interactive_person_controller.py:78
+#: app/controllers/interactive_person_controller.py:79
 msgid "Nearest - all objects, may be slow"
 msgstr "Nejbližší - všechny objekty, může být pomalé"
 
-#: app/controllers/interactive_person_controller.py:82
-#: app/controllers/interactive_person_controller.py:86
-#: app/controllers/interactive_person_controller.py:90
-#: app/controllers/interactive_person_controller.py:94
-#: app/controllers/interactive_person_controller.py:102
-#: app/controllers/interactive_person_controller.py:106
-#: app/controllers/interactive_person_controller.py:110
-#: app/controllers/interactive_person_controller.py:140
-#: app/controllers/interactive_person_controller.py:148
-#: app/controllers/interactive_person_controller.py:228
-#: app/controllers/interactive_person_controller.py:232
-#: app/controllers/interactive_person_controller.py:236
+#: app/controllers/interactive_person_controller.py:83
+#: app/controllers/interactive_person_controller.py:87
+#: app/controllers/interactive_person_controller.py:91
+#: app/controllers/interactive_person_controller.py:95
+#: app/controllers/interactive_person_controller.py:103
+#: app/controllers/interactive_person_controller.py:107
+#: app/controllers/interactive_person_controller.py:111
+#: app/controllers/interactive_person_controller.py:141
+#: app/controllers/interactive_person_controller.py:149
+#: app/controllers/interactive_person_controller.py:234
+#: app/controllers/interactive_person_controller.py:238
+#: app/controllers/interactive_person_controller.py:242
 msgid "Movement"
 msgstr "Pohyb"
 
-#: app/controllers/interactive_person_controller.py:82
+#: app/controllers/interactive_person_controller.py:83
 msgid "Step forward"
 msgstr "Krok vpřed"
 
-#: app/controllers/interactive_person_controller.py:86
+#: app/controllers/interactive_person_controller.py:87
 msgid "Step backward"
 msgstr "Krok vzad"
 
-#: app/controllers/interactive_person_controller.py:90
+#: app/controllers/interactive_person_controller.py:91
 msgid "Turn 5 degrees to the right"
 msgstr "Otočit se o 5 stupňů do prava"
 
-#: app/controllers/interactive_person_controller.py:94
+#: app/controllers/interactive_person_controller.py:95
 msgid "Turn 5 degrees to the left"
 msgstr "Otočit se o 5 stupňů do leva"
 
-#: app/controllers/interactive_person_controller.py:98
+#: app/controllers/interactive_person_controller.py:99
 msgid "Current direction"
 msgstr "Aktuální směr"
 
-#: app/controllers/interactive_person_controller.py:102
+#: app/controllers/interactive_person_controller.py:103
 msgid "Turn 90 degrees to the right"
 msgstr "Otočit se o 90 stupňů do prava"
 
-#: app/controllers/interactive_person_controller.py:106
+#: app/controllers/interactive_person_controller.py:107
 msgid "Turn 90 degrees to the left"
 msgstr "Otočit se o 90 stupňů do leva"
 
-#: app/controllers/interactive_person_controller.py:110
+#: app/controllers/interactive_person_controller.py:111
 msgid "Coordinate jump..."
 msgstr "Skok na souřadnice..."
 
-#: app/controllers/interactive_person_controller.py:112
-#: app/controllers/interactive_person_controller.py:115
+#: app/controllers/interactive_person_controller.py:113
+#: app/controllers/interactive_person_controller.py:116
 msgid "Coordinate"
 msgstr "Souřadnice"
 
-#: app/controllers/interactive_person_controller.py:112
+#: app/controllers/interactive_person_controller.py:113
 msgid "Enter the longitude"
 msgstr "Zadej zeměpisnou délku"
 
-#: app/controllers/interactive_person_controller.py:115
+#: app/controllers/interactive_person_controller.py:116
 msgid "Enter the latitude"
 msgstr "Zadej zeměpisnou šířku"
 
-#: app/controllers/interactive_person_controller.py:120
+#: app/controllers/interactive_person_controller.py:121
 msgid "Current road section angle"
 msgstr "Úhel aktuální části cesty"
 
-#: app/controllers/interactive_person_controller.py:128
+#: app/controllers/interactive_person_controller.py:129
 msgid "{road}: {angle}°"
 msgstr "{road}: {angle}°"
 
-#: app/controllers/interactive_person_controller.py:130
-#: app/controllers/interactive_person_controller.py:158
+#: app/controllers/interactive_person_controller.py:131
+#: app/controllers/interactive_person_controller.py:159
 msgid "You are not on a road."
 msgstr "Nejste na cestě."
 
-#: app/controllers/interactive_person_controller.py:140
+#: app/controllers/interactive_person_controller.py:141
 msgid "Turn according to a road"
 msgstr "Otočit se podle cesty"
 
-#: app/controllers/interactive_person_controller.py:148
+#: app/controllers/interactive_person_controller.py:149
 msgid "Turn about..."
 msgstr "Otočit se o..."
 
-#: app/controllers/interactive_person_controller.py:150
+#: app/controllers/interactive_person_controller.py:151
 msgid "Data"
 msgstr "Údaj"
 
-#: app/controllers/interactive_person_controller.py:150
+#: app/controllers/interactive_person_controller.py:151
 msgid "Enter the angle"
 msgstr "Zadej úhel"
 
-#: app/controllers/interactive_person_controller.py:164
-#: app/controllers/interactive_person_controller.py:253
+#: app/controllers/interactive_person_controller.py:165
+#: app/controllers/interactive_person_controller.py:260
 msgid "Request"
 msgstr "Požadavek"
 
-#: app/controllers/interactive_person_controller.py:164
+#: app/controllers/interactive_person_controller.py:165
 msgid "Select the road which should be the target of the operation"
 msgstr "Zvolte cestu, nad kterou se má operace provést"
 
-#: app/controllers/interactive_person_controller.py:169
+#: app/controllers/interactive_person_controller.py:170
 msgid "Search..."
 msgstr "Hledat..."
 
-#: app/controllers/interactive_person_controller.py:180
+#: app/controllers/interactive_person_controller.py:181
 msgid "Search results"
 msgstr "Výsledky vyhledávání"
 
-#: app/controllers/interactive_person_controller.py:184
+#: app/controllers/interactive_person_controller.py:185
 msgid "No object matches the given search criteria."
 msgstr "Zadaným podmínkám vyhledávání neodpovídá žádný objekt."
 
-#: app/controllers/interactive_person_controller.py:186
-#: app/controllers/interactive_person_controller.py:193
-#: app/controllers/interactive_person_controller.py:203
+#: app/controllers/interactive_person_controller.py:187
+#: app/controllers/interactive_person_controller.py:194
+#: app/controllers/interactive_person_controller.py:209
 msgid "Bookmarks"
 msgstr "Záložky"
 
-#: app/controllers/interactive_person_controller.py:186
+#: app/controllers/interactive_person_controller.py:187
 msgid "Add bookmark..."
 msgstr "Přidat záložku..."
 
-#: app/controllers/interactive_person_controller.py:188
-#: app/controllers/interactive_person_controller.py:197
-#: app/controllers/interactive_person_controller.py:207
+#: app/controllers/interactive_person_controller.py:189
+#: app/controllers/interactive_person_controller.py:203
+#: app/controllers/interactive_person_controller.py:213
 msgid "Data entry"
 msgstr "Datový vstup"
 
-#: app/controllers/interactive_person_controller.py:188
+#: app/controllers/interactive_person_controller.py:189
 msgid "Enter a name for the new bookmark"
 msgstr "Zadej jméno nové záložky"
 
-#: app/controllers/interactive_person_controller.py:193
+#: app/controllers/interactive_person_controller.py:194
 msgid "Go to bookmark..."
 msgstr "Jít na záložku..."
 
-#: app/controllers/interactive_person_controller.py:197
-#: app/controllers/interactive_person_controller.py:207
+#: app/controllers/interactive_person_controller.py:202
+msgid "{name}: distance {distance} meters, {bearing}° relatively"
+msgstr "{name}: vzdálenost {distance} metrů, {bearing}° relativně"
+
+#: app/controllers/interactive_person_controller.py:203
+#: app/controllers/interactive_person_controller.py:213
 msgid "Select a bookmark"
 msgstr "Zvolte záložku"
 
-#: app/controllers/interactive_person_controller.py:203
+#: app/controllers/interactive_person_controller.py:209
 msgid "Remove bookmark..."
 msgstr "Odstranit záložku..."
 
-#: app/controllers/interactive_person_controller.py:206
+#: app/controllers/interactive_person_controller.py:212
 msgid "{name}: longitude: {longitude}, latitude: {latitude}"
 msgstr "{name}: zeměpisná délka: {longitude}, zeměpisná šířka: {latitude}"
 
-#: app/controllers/interactive_person_controller.py:211
+#: app/controllers/interactive_person_controller.py:217
 msgid "Do you really want to delete the bookmark {name}?"
 msgstr "Opravdu si přejete záložku {bookmark} odstranit?"
 
-#: app/controllers/interactive_person_controller.py:226
+#: app/controllers/interactive_person_controller.py:232
 msgid "Interesting object found after {} meters."
 msgstr "Zajímavý objekt nalezen po {} metrech."
 
-#: app/controllers/interactive_person_controller.py:228
+#: app/controllers/interactive_person_controller.py:234
 msgid "Go forward looking for an interesting object"
 msgstr "Jít vpřed, dokud nebude nalezen zajímavý objekt"
 
-#: app/controllers/interactive_person_controller.py:232
+#: app/controllers/interactive_person_controller.py:238
 msgid "Go backward looking for an interesting object"
 msgstr "Jít vzad, dokud nebude nalezen zajímavý objekt"
 
-#: app/controllers/interactive_person_controller.py:236
+#: app/controllers/interactive_person_controller.py:242
 msgid "Turn to a new road"
 msgstr "Otočit se podle novou cestu"
 
-#: app/controllers/interactive_person_controller.py:240
+#: app/controllers/interactive_person_controller.py:246
 msgid "There is no meaningful turn to perform, you are not on a road."
 msgstr "Není podle čeho se otočit, nejste na cestě."
 
-#: app/controllers/interactive_person_controller.py:246
+#: app/controllers/interactive_person_controller.py:252
 msgid "There is no meaningful turn to perform, the new road is too short."
 msgstr "Není se podle čeho otočit, nová cesta je příliš krátká."
 
-#: app/controllers/interactive_person_controller.py:249
+#: app/controllers/interactive_person_controller.py:256
 msgid "There is only a single meaningful turn, so you've been rotated {}"
 msgstr "Existuje pouze jediná smysluplná možnost jak se otočit, takže došlo k otočení {}"
 
-#: app/controllers/interactive_person_controller.py:253
+#: app/controllers/interactive_person_controller.py:260
 msgid "Which turn you want to perform?"
 msgstr "Jak se chcete otočit?"
 
-#: app/controllers/interactive_person_controller.py:256
+#: app/controllers/interactive_person_controller.py:264
 msgid "You've been rotated {}."
 msgstr "Bylo provedeno otočení {}."
 
-#: app/controllers/interactive_person_controller.py:265
+#: app/controllers/interactive_person_controller.py:275
 msgid "Because of you settings, you will be turned {}"
 msgstr "Vzhledem k vašemu nastavení bude váš směr změněn {}"
 
-#: app/controllers/interactive_person_controller.py:269
+#: app/controllers/interactive_person_controller.py:279
 msgid "You will be turned {}"
 msgstr "Bude provedeno otočení {}"
 
@@ -11490,3 +11445,6 @@ msgstr "Hodnota\n"
 
 #~ msgid "Done."
 #~ msgstr "Hotovo."
+
+#~ msgid "Now, you are not on any road."
+#~ msgstr "Nyní nejste na cestě."

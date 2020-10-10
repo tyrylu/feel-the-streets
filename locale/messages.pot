@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-09-25 20:10+0200\n"
+"POT-Creation-Date: 2020-10-10 23:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1315,18 +1315,18 @@ msgstr ""
 msgid "Board"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:36
-#: app/controllers/interactive_person_controller.py:48
-#: app/controllers/interactive_person_controller.py:52
-#: app/controllers/interactive_person_controller.py:60
-#: app/controllers/interactive_person_controller.py:64
-#: app/controllers/interactive_person_controller.py:74
-#: app/controllers/interactive_person_controller.py:78
-#: app/controllers/interactive_person_controller.py:98
-#: app/controllers/interactive_person_controller.py:120
-#: app/controllers/interactive_person_controller.py:132
-#: app/controllers/interactive_person_controller.py:169
-#: app/controllers/interactive_person_controller.py:184 entities.yml:430
+#: app/controllers/interactive_person_controller.py:37
+#: app/controllers/interactive_person_controller.py:49
+#: app/controllers/interactive_person_controller.py:53
+#: app/controllers/interactive_person_controller.py:61
+#: app/controllers/interactive_person_controller.py:65
+#: app/controllers/interactive_person_controller.py:75
+#: app/controllers/interactive_person_controller.py:79
+#: app/controllers/interactive_person_controller.py:99
+#: app/controllers/interactive_person_controller.py:121
+#: app/controllers/interactive_person_controller.py:133
+#: app/controllers/interactive_person_controller.py:170
+#: app/controllers/interactive_person_controller.py:185 entities.yml:430
 #: entities.yml:1413 enums.yml:914 enums.yml:1441 enums.yml:1496 enums.yml:1802
 msgid "Information"
 msgstr ""
@@ -2016,7 +2016,7 @@ msgstr ""
 msgid "Fire hydrant"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:48 entities.yml:868
+#: app/controllers/interactive_person_controller.py:49 entities.yml:868
 #: entities.yml:1713
 msgid "Position"
 msgstr ""
@@ -10497,7 +10497,7 @@ msgstr ""
 msgid "The changes queue for the selected database no longer exists on the server, downloading it as if it was a new area."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:211 app/main_window.py:104
+#: app/controllers/interactive_person_controller.py:217 app/main_window.py:104
 #: app/search/search_conditions.py:141
 msgid "Question"
 msgstr ""
@@ -10547,7 +10547,7 @@ msgstr ""
 msgid "&Discard changes"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:132
+#: app/controllers/interactive_person_controller.py:133
 #: app/road_segments_browser.py:11
 msgid "Road details"
 msgstr ""
@@ -10596,36 +10596,40 @@ msgstr ""
 msgid "Geometry was changed."
 msgstr ""
 
-#: app/controllers/announcements_controller.py:20
+#: app/controllers/announcements_controller.py:22
 msgid "You are entering {enters}."
 msgstr ""
 
-#: app/controllers/announcements_controller.py:28
+#: app/controllers/announcements_controller.py:34
+msgid "Or, you can continue along the current road for another {} meters."
+msgstr ""
+
+#: app/controllers/announcements_controller.py:42
 msgid "You could turn {direction} and continue for {distance} meters."
 msgstr ""
 
-#: app/controllers/announcements_controller.py:31
+#: app/controllers/announcements_controller.py:45
 msgid "You could turn {direction1} and continue for {distance1} meters, or you could turn {direction2} and continue for {distance2} meters."
 msgstr ""
 
-#: app/controllers/announcements_controller.py:40
+#: app/controllers/announcements_controller.py:56
 msgid "You are leaving {leaves}"
 msgstr ""
 
-#: app/controllers/announcements_controller.py:44
-msgid "Now, you are not on any road."
-msgstr ""
-
-#: app/controllers/announcements_controller.py:46
-msgid "Now, you're on {}."
-msgstr ""
-
-#: app/controllers/announcements_controller.py:50
-#: app/controllers/interactive_person_controller.py:100
-msgid "{degrees} degrees"
+#: app/controllers/announcements_controller.py:59
+msgid "Now, your location is not known."
 msgstr ""
 
 #: app/controllers/announcements_controller.py:61
+msgid "Now, you're on {}."
+msgstr ""
+
+#: app/controllers/announcements_controller.py:65
+#: app/controllers/interactive_person_controller.py:101
+msgid "{degrees} degrees"
+msgstr ""
+
+#: app/controllers/announcements_controller.py:76
 msgid "{angle_description} is a {entity_description}"
 msgstr ""
 
@@ -10661,242 +10665,250 @@ msgstr ""
 msgid "Use detailed turn instructions"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:34
+#: app/controllers/interactive_person_controller.py:29
+msgid "Announce the current object after leaving other"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:35
 msgid "Longitude: {longitude}, latitude: {latitude}."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:36
+#: app/controllers/interactive_person_controller.py:37
 msgid "Current coordinates"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:46
+#: app/controllers/interactive_person_controller.py:47
 msgid "Not known."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:52
+#: app/controllers/interactive_person_controller.py:53
 msgid "Position - all objects, may be slow"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:57
+#: app/controllers/interactive_person_controller.py:58
 msgid "Current position"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:60
+#: app/controllers/interactive_person_controller.py:61
 msgid "Detailed current position"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:64
+#: app/controllers/interactive_person_controller.py:65
 msgid "Detailed current position - all objects, may be slow"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:70
+#: app/controllers/interactive_person_controller.py:71
 msgid "Nothing."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:72
+#: app/controllers/interactive_person_controller.py:73
 msgid "Near by objects"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:74
+#: app/controllers/interactive_person_controller.py:75
 msgid "Nearest"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:78
+#: app/controllers/interactive_person_controller.py:79
 msgid "Nearest - all objects, may be slow"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:82
-#: app/controllers/interactive_person_controller.py:86
-#: app/controllers/interactive_person_controller.py:90
-#: app/controllers/interactive_person_controller.py:94
-#: app/controllers/interactive_person_controller.py:102
-#: app/controllers/interactive_person_controller.py:106
-#: app/controllers/interactive_person_controller.py:110
-#: app/controllers/interactive_person_controller.py:140
-#: app/controllers/interactive_person_controller.py:148
-#: app/controllers/interactive_person_controller.py:228
-#: app/controllers/interactive_person_controller.py:232
-#: app/controllers/interactive_person_controller.py:236
+#: app/controllers/interactive_person_controller.py:83
+#: app/controllers/interactive_person_controller.py:87
+#: app/controllers/interactive_person_controller.py:91
+#: app/controllers/interactive_person_controller.py:95
+#: app/controllers/interactive_person_controller.py:103
+#: app/controllers/interactive_person_controller.py:107
+#: app/controllers/interactive_person_controller.py:111
+#: app/controllers/interactive_person_controller.py:141
+#: app/controllers/interactive_person_controller.py:149
+#: app/controllers/interactive_person_controller.py:234
+#: app/controllers/interactive_person_controller.py:238
+#: app/controllers/interactive_person_controller.py:242
 msgid "Movement"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:82
+#: app/controllers/interactive_person_controller.py:83
 msgid "Step forward"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:86
+#: app/controllers/interactive_person_controller.py:87
 msgid "Step backward"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:90
+#: app/controllers/interactive_person_controller.py:91
 msgid "Turn 5 degrees to the right"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:94
+#: app/controllers/interactive_person_controller.py:95
 msgid "Turn 5 degrees to the left"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:98
+#: app/controllers/interactive_person_controller.py:99
 msgid "Current direction"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:102
+#: app/controllers/interactive_person_controller.py:103
 msgid "Turn 90 degrees to the right"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:106
+#: app/controllers/interactive_person_controller.py:107
 msgid "Turn 90 degrees to the left"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:110
+#: app/controllers/interactive_person_controller.py:111
 msgid "Coordinate jump..."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:112
-#: app/controllers/interactive_person_controller.py:115
+#: app/controllers/interactive_person_controller.py:113
+#: app/controllers/interactive_person_controller.py:116
 msgid "Coordinate"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:112
+#: app/controllers/interactive_person_controller.py:113
 msgid "Enter the longitude"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:115
+#: app/controllers/interactive_person_controller.py:116
 msgid "Enter the latitude"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:120
+#: app/controllers/interactive_person_controller.py:121
 msgid "Current road section angle"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:128
+#: app/controllers/interactive_person_controller.py:129
 msgid "{road}: {angle}°"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:130
-#: app/controllers/interactive_person_controller.py:158
+#: app/controllers/interactive_person_controller.py:131
+#: app/controllers/interactive_person_controller.py:159
 msgid "You are not on a road."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:140
+#: app/controllers/interactive_person_controller.py:141
 msgid "Turn according to a road"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:148
+#: app/controllers/interactive_person_controller.py:149
 msgid "Turn about..."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:150
+#: app/controllers/interactive_person_controller.py:151
 msgid "Data"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:150
+#: app/controllers/interactive_person_controller.py:151
 msgid "Enter the angle"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:164
-#: app/controllers/interactive_person_controller.py:253
+#: app/controllers/interactive_person_controller.py:165
+#: app/controllers/interactive_person_controller.py:260
 msgid "Request"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:164
+#: app/controllers/interactive_person_controller.py:165
 msgid "Select the road which should be the target of the operation"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:169
+#: app/controllers/interactive_person_controller.py:170
 msgid "Search..."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:180
+#: app/controllers/interactive_person_controller.py:181
 msgid "Search results"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:184
+#: app/controllers/interactive_person_controller.py:185
 msgid "No object matches the given search criteria."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:186
-#: app/controllers/interactive_person_controller.py:193
-#: app/controllers/interactive_person_controller.py:203
+#: app/controllers/interactive_person_controller.py:187
+#: app/controllers/interactive_person_controller.py:194
+#: app/controllers/interactive_person_controller.py:209
 msgid "Bookmarks"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:186
+#: app/controllers/interactive_person_controller.py:187
 msgid "Add bookmark..."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:188
-#: app/controllers/interactive_person_controller.py:197
-#: app/controllers/interactive_person_controller.py:207
+#: app/controllers/interactive_person_controller.py:189
+#: app/controllers/interactive_person_controller.py:203
+#: app/controllers/interactive_person_controller.py:213
 msgid "Data entry"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:188
+#: app/controllers/interactive_person_controller.py:189
 msgid "Enter a name for the new bookmark"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:193
+#: app/controllers/interactive_person_controller.py:194
 msgid "Go to bookmark..."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:197
-#: app/controllers/interactive_person_controller.py:207
-msgid "Select a bookmark"
+#: app/controllers/interactive_person_controller.py:202
+msgid "{name}: distance {distance} meters, {bearing}° relatively"
 msgstr ""
 
 #: app/controllers/interactive_person_controller.py:203
+#: app/controllers/interactive_person_controller.py:213
+msgid "Select a bookmark"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:209
 msgid "Remove bookmark..."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:206
+#: app/controllers/interactive_person_controller.py:212
 msgid "{name}: longitude: {longitude}, latitude: {latitude}"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:211
+#: app/controllers/interactive_person_controller.py:217
 msgid "Do you really want to delete the bookmark {name}?"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:226
+#: app/controllers/interactive_person_controller.py:232
 msgid "Interesting object found after {} meters."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:228
+#: app/controllers/interactive_person_controller.py:234
 msgid "Go forward looking for an interesting object"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:232
+#: app/controllers/interactive_person_controller.py:238
 msgid "Go backward looking for an interesting object"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:236
+#: app/controllers/interactive_person_controller.py:242
 msgid "Turn to a new road"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:240
+#: app/controllers/interactive_person_controller.py:246
 msgid "There is no meaningful turn to perform, you are not on a road."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:246
+#: app/controllers/interactive_person_controller.py:252
 msgid "There is no meaningful turn to perform, the new road is too short."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:249
+#: app/controllers/interactive_person_controller.py:256
 msgid "There is only a single meaningful turn, so you've been rotated {}"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:253
+#: app/controllers/interactive_person_controller.py:260
 msgid "Which turn you want to perform?"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:256
+#: app/controllers/interactive_person_controller.py:264
 msgid "You've been rotated {}."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:265
+#: app/controllers/interactive_person_controller.py:275
 msgid "Because of you settings, you will be turned {}"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:269
+#: app/controllers/interactive_person_controller.py:279
 msgid "You will be turned {}"
 msgstr ""
 
