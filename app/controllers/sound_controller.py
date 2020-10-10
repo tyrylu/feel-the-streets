@@ -75,9 +75,13 @@ class SoundController:
     def post_enter(self, sender, enters):
         if not sender.use_step_sounds:
             return
+        for place in enters:
+            self._handle_enter_into(sender, place)
+        
+    def _handle_enter_into(self, sender, enters):
         base_group = None
         if enters.is_road_like:
-            # Simulate that all the currentl interesting roads just became interesting.
+            # Simulate that all the currently interesting roads just became interesting.
             for road in self._interesting_roads:
                 self._maybe_spawn_crossing_sound_for_road(wkb.loads(enters.geometry), road)
             if enters.value_of_field("type") == Enum.with_name("RoadType").value_for_name("path"):
@@ -94,6 +98,10 @@ class SoundController:
     def post_leave(self, sender, leaves):
         if not sender.use_step_sounds:
             return
+        for place in leaves:
+            self._handle_leave_of(sender, place)
+        
+    def _handle_leave_of(self, sender, leaves):
         if leaves.is_road_like:
             if sender in self._groups_map:
                 del self._groups_map[sender][leaves]

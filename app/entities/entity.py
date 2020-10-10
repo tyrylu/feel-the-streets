@@ -31,12 +31,11 @@ class Entity(BaseModel):
             new_inside_of = OrderedSet(entity for entity in self.map.intersections_at_position(pos))
         if entity_pre_enter.has_receivers_for(self) or entity_post_enter.has_receivers_for(self):
             enters = new_inside_of.difference(self.is_inside_of)
-        if not force and entity_pre_enter.has_receivers_for(self):
-            for entered in enters:
-                for func, ret in entity_pre_enter.send(self, enters=entered):
-                    if not ret:
-                        entity_move_rejected.send(self)
-                        return False
+        if enters and not force and entity_pre_enter.has_receivers_for(self):
+            for func, ret in entity_pre_enter.send(self, enters=enters):
+                if not ret:
+                    entity_move_rejected.send(self)
+                    return False
         if entity_pre_leave.has_receivers_for(self) or entity_post_leave.has_receivers_for(self):
             leaves = self.is_inside_of.difference(new_inside_of)
         if not force and entity_pre_leave.has_receivers_for(self) and leaves:
@@ -50,12 +49,10 @@ class Entity(BaseModel):
             self.is_inside_of.remove(leaving)
         for entering in enters:
             self.is_inside_of.add(entering)
-        if entity_post_leave.has_receivers_for(self):
-            for place in leaves:
-                entity_post_leave.send(self, leaves=place)
-        if entity_post_leave.has_receivers_for(self):
-            for place in enters:
-                entity_post_enter.send(self, enters=place)
+        if leaves and entity_post_leave.has_receivers_for(self):
+            entity_post_leave.send(self, leaves=leaves)
+        if enters and entity_post_enter.has_receivers_for(self):
+            entity_post_enter.send(self, enters=enters)
         entity_post_move.send(self)
     
     def move_by(self, pos_delta, force=False):

@@ -1,3 +1,4 @@
+38
 import shapely.wkb as wkb
 from ..services import speech, config
 from ..entities import entity_post_enter, entity_post_leave, entity_rotated
@@ -17,10 +18,11 @@ class AnnouncementsController:
     
     def _on_post_enter(self, sender, enters):
         if sender is self._point_of_view:
-            speech().speak(_("You are entering {enters}.").format(enters=describe_entity(enters)))
-            if enters.is_road_like:
-                self._announce_possible_turn_opportunity(enters)
-                self._announce_possible_continuation_opportunity()
+            for place in enters:
+                speech().speak(_("You are entering {enters}.").format(enters=describe_entity(place)))
+                if place.is_road_like:
+                    self._announce_possible_turn_opportunity(place)
+            self._announce_possible_continuation_opportunity()
             
     def _announce_possible_continuation_opportunity(self):
         if len(self._point_of_view.inside_of_roads) < 2:
@@ -48,8 +50,10 @@ class AnnouncementsController:
 
 
     def _on_post_leave(self, sender, leaves):
+        print(f"{sender} left {leaves}")
         if sender is self._point_of_view:
-            speech().speak(_("You are leaving {leaves}").format(leaves=describe_entity(leaves)))
+            for place in leaves:
+                speech().speak(_("You are leaving {leaves}").format(leaves=describe_entity(place)))
             if config().presentation.announce_current_object_after_leaving_other:
                 if not self._point_of_view.is_inside_of:
                     speech().speak(_("Now, your location is not known."))
