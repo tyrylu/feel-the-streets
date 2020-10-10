@@ -1,10 +1,10 @@
 from PySide2.QtWidgets import QInputDialog, QMessageBox, QApplication
 from pygeodesy.ellipsoidalVincenty import LatLon
-from ..humanization_utils import describe_entity, format_number
+from ..humanization_utils import describe_entity, format_number, describe_angle_as_turn_instructions
 from ..services import speech, map, config, menu_service
 from ..objects_browser import ObjectsBrowserWindow
 from ..road_segments_browser import RoadSegmentsBrowserDialog
-from ..geometry_utils import get_road_section_angle, distance_filter, distance_between, get_meaningful_turns
+from ..geometry_utils import get_road_section_angle, distance_filter, distance_between, get_meaningful_turns, bearing_to
 from ..search import get_query_from_user, QueryExecutor, SearchIndicator
 from ..config_utils import make_config_option_switchable
 from ..menu_service import menu_command
@@ -193,12 +193,17 @@ class InteractivePersonController:
     
     @menu_command(_("Bookmarks"), _("Go to bookmark..."), "b")
     def go_to_bookmark(self, evt):
-        bookmarks = list(self._person.map.bookmarks)
-        names = [b.name for b in bookmarks]
-        name, ok = QInputDialog.getItem(self._main_window, _("Data entry"), _("Select a bookmark"), names, editable=False)
+        bookmarks = self._person.map.bookmarks
+        reprs = []
+        for mark in bookmarks:
+            point = LatLon(mark.latitude, mark.longitude)
+            dist = format_number(distance_between(self._person.position, point), config().presentation.distance_decimal_places)
+            bearing = format_number((bearing_to(self._person.position, point) - self._person.direction) % 360, config().presentation.angle_decimal_places)
+            reprs.append(_("{name}: distance {distance} meters, {bearing}° relatively").format(name=mark.name, distance=dist, bearing=bearing))
+        name, ok = QInputDialog.getItem(self._main_window, _("Data entry"), _("Select a bookmark"), reprs, editable=False)
         if not ok:
             return
-        bookmark = bookmarks[names.index(name)]
+        bookmark = bookmarks[reprs.index(name)]
         self._person.move_to(LatLon(bookmark.latitude, bookmark.longitude), force=True)
 
     @menu_command(_("Bookmarks"), _("Remove bookmark..."), "ctrl+shift+b")
