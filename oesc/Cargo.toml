@@ -15,5 +15,5 @@ dotenv = "*"
 diesel = {version = "*", features = ["sqlite", "chrono"]}
 lapin = "*"
 url = "*"
-ureq = {version="*", features=["json"]}
+ureq = {version="*", default_features=false, features=["tls", "json"]}
 serde = {version="*", features=["derive"]}
