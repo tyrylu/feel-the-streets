@@ -14,7 +14,7 @@ sqlitemap = {path="../sqlitemap"}
 log = "*"
 itertools = "*"
 lazy_static = "*"
-chrono = "*"
+chrono = {version="*", default_features=false, features=["std", "clock"]}
 xml-rs = "*"
 tempfile = "*"
 bincode = "*"

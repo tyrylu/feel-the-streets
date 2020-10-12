@@ -105,6 +105,8 @@ class SpecifySearchConditionsDialog(BaseDialog):
         return label
 
     def on_add_clicked(self, evt):
+        if not hasattr(self, "_field_name"):
+            return
         self._added_condition = True
         json_path = []
         parent_item = self._fields_tree.currentItem().parent()
