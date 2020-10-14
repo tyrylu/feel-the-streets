@@ -169,7 +169,7 @@ class InteractivePersonController:
             
     @menu_command(_("Information"), _("Search..."), "ctrl+f")
     def do_search(self, evt):
-        query, distance = get_query_from_user(self._main_window)
+        query, distance = get_query_from_user(self._main_window, self._person.position)
         self._search_executor = QueryExecutor(query, self._person.position, distance)
         self._search_executor.results_ready.connect(self._search_results_ready)
         self._search_executor.start()
@@ -181,7 +181,7 @@ class InteractivePersonController:
             browser = ObjectsBrowserWindow(self._main_window, title=_("Search results"), unsorted_objects=results, person=self._person, progress_indicator=self._search_progress)
             self._browser_window = browser
         else:
-            self._search_progres.hide()
+            self._search_progress.hide()
             QMessageBox.information(self._main_window, _("Information"), _("No object matches the given search criteria."))
     
     @menu_command(_("Bookmarks"), _("Add bookmark..."), "ctrl+b")

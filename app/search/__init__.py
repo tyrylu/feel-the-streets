@@ -6,10 +6,10 @@ from .query_executor import QueryExecutor
 from .search_indicator import SearchIndicator
 from ..geometry_utils import xy_ranges_bounding_square
 
-def create_query(discriminator, distance, conditions):
+def create_query(discriminator, current_position, distance, conditions):
     query = EntitiesQuery()
     if distance < float("inf"):
-        min_x, min_y, max_x, max_y = xy_ranges_bounding_square(position, distance*2)
+        min_x, min_y, max_x, max_y = xy_ranges_bounding_square(current_position, distance*2)
         query.set_rectangle_of_interest(min_x, max_x, min_y, max_y)
     # We have no easy way how to determine the children of a class, so we would have to iterate through all the classes anyway.
     # There's an assumption that the excluded classes will not be as numerous (for example almost anything is named), so find the exceptions instead.
@@ -29,7 +29,7 @@ def create_query(discriminator, distance, conditions):
         query.add_condition(condition)
     return query
 
-def get_query_from_user(parent):
+def get_query_from_user(parent, position):
     entities = all_known_discriminators()
     name_mapping = {}
     for entity in entities:
@@ -42,6 +42,6 @@ def get_query_from_user(parent):
     if conditions_dialog.exec_() != SpecifySearchConditionsDialog.Accepted:
         return
     distance = conditions_dialog.distance or float("inf")
-    query = create_query(discriminator, distance, conditions_dialog.create_conditions())
+    query = create_query(discriminator, position, distance, conditions_dialog.create_conditions())
     return query, distance
     

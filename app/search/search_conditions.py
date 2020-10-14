@@ -44,6 +44,7 @@ class SpecifySearchConditionsDialog(BaseDialog):
         distance_label = QLabel(_("Search objects to distance (in meters, 0 no limit)"), self)
         self.layout.addWidget(distance_label, 6, 0)
         self._distance_field = QSpinBox(self)
+        self._distance_field.setMaximum(100000)
         distance_label.setBuddy(self._distance_field)
         self.layout.addWidget(self._distance_field, 6, 1)
         
