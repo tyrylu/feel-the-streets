@@ -14,7 +14,7 @@ class AppDb:
         self._last_location_ids = dict(res.fetchall())
 
     def add_bookmark(self, mark):
-        self._db.execute("INSERT INTO bookmarks (name, area, latitude, longitude), VALUES (?, ?, ?, ?)", (makr.name, mark.area, mark.latitude, mark.longitude))
+        self._db.execute("INSERT INTO bookmarks (name, area, latitude, longitude) VALUES (?, ?, ?, ?)", (mark.name, mark.area, mark.latitude, mark.longitude))
         self._db.commit()
 
     def bookmarks_for_area(self, area):

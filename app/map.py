@@ -53,7 +53,7 @@ class Map:
         return entities
 
     def add_bookmark(self, name, lat, lon):
-        bookmark = Bookmark(name=name, longitude=lon, latitude=lat, area=self._id)
+        bookmark = Bookmark(name=name, longitude=lon, latitude=lat, area=self._id, id=0)
         services.app_db().add_bookmark(bookmark)
 
     @property
