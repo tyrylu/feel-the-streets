@@ -195,6 +195,12 @@ def ensure_turn_angle_positive(turn_angle):
     else:
         return turn_angle
 
+def turn_angle_as_diff_from_zero(turn_angle):
+    if turn_angle <= 180:
+        return turn_angle
+    else:
+        return 360 - turn_angle
+
 def get_meaningful_turns(new_road, entity, zero_turn_is_meaningful=False):
     """Returns the meaningful turns which could the given entity perform if you want to continue along the given road. Returns a list of tuples in the form (direction_description, formatted_distance, direction_change)."""
     # These two imports are only needed in this function, so no point of doing them globally and complicating everything.
