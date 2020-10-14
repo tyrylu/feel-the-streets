@@ -58,13 +58,13 @@ class Entity(BaseModel):
     def move_by(self, pos_delta, force=False):
         pos, new_dir = self.position.destination2(pos_delta, self.direction)
         if self.move_to(pos, force):
-            self.direction = new_dir
+            self.set_direction(new_dir)
     
     def rotate(self, amount):
-        self.set_direction((self.direction + amount) % 360)
+        self.set_direction(self.direction + amount)
     
     def set_direction(self, direction):
-        self.direction = direction
+        self.direction = direction % 360
         entity_rotated.send(self)
     
     @property
