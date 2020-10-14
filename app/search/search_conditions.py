@@ -41,10 +41,12 @@ class SpecifySearchConditionsDialog(BaseDialog):
         remove_button = QPushButton(_("&Remove condition"), self)
         remove_button.clicked.connect(self.on_remove_clicked)
         self.layout.addWidget(remove_button, 5, 0, 1, 3)
-        distance_label = QLabel(_("Search objects to distance (in meters, 0 no limit)"), self)
+        distance_label = QLabel(_("Search objects to distance"), self)
         self.layout.addWidget(distance_label, 6, 0)
         self._distance_field = QSpinBox(self)
         self._distance_field.setMaximum(100000)
+        self._distance_field.setSuffix(_("meters"))
+        self._distance_field.setSpecialValueText(_("No limit"))
         distance_label.setBuddy(self._distance_field)
         self.layout.addWidget(self._distance_field, 6, 1)
         
