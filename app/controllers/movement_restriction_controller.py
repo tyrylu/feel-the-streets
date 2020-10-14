@@ -1,11 +1,21 @@
-from ..entities import entity_pre_leave
+from ..entities import entity_pre_leave, entity_pre_enter
 from ..services import config
+from osm_db import Enum
 
 class MovementRestrictionController:
 
     def __init__(self, restricted):
         self._restricted_entity = restricted
         entity_pre_leave.connect(self._entity_pre_leave)
+        entity_pre_enter.connect(self._entity_pre_enter)
+
+    def _entity_pre_enter(self, sender, enters):
+        if not config().navigation.disallow_entering_sidewalks:
+            return True
+        for place in enters:
+            if place.discriminator == "Road" and place.value_of_field("type") == Enum.with_name("RoadType").value_for_name("footway"):
+                return False
+        return True
 
     def _entity_pre_leave(self, sender, leaves):
         if not config().navigation.disallow_leaving_roads or sender is not self._restricted_entity:

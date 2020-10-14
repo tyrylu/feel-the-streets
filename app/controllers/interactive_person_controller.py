@@ -21,6 +21,7 @@ class InteractivePersonController:
         menu_service().register_menu_commands(self)
         cfg = config()
         make_config_option_switchable(_("Disallow leaving roads"), cfg.navigation, "disallow_leaving_roads", "alt+o")
+        make_config_option_switchable(_("Disallow entering sidewalks"), cfg.navigation, "disallow_entering_sidewalks")
         make_config_option_switchable(_("Automatically correct your direction when attempting to exit the last road"), cfg.navigation, "correct_direction_after_leave_disallowed")
         make_config_option_switchable(_("Play sounds for interesting objects"), cfg.presentation, "play_sounds_for_interesting_objects")
         make_config_option_switchable(_("Play crossing sounds"), cfg.presentation, "play_crossing_sounds")
@@ -287,6 +288,7 @@ class InteractivePersonController:
         if not turn_choices:
             return
         smaller = min(turn_choices, key=lambda i: abs(i[2]))
+        print(turn_choices)
         if config().navigation.automatic_direction_corrections < 6:
             speech().speak(_("Because of you settings, you will be turned {}").format(smaller[0]), interrupt=True)
             config().navigation.automatic_direction_corrections += 1
