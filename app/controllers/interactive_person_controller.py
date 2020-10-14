@@ -5,7 +5,7 @@ from ..services import speech, map, config, menu_service
 from ..objects_browser import ObjectsBrowserWindow
 from ..road_segments_browser import RoadSegmentsBrowserDialog
 from ..geometry_utils import get_road_section_angle, distance_filter, distance_between, get_meaningful_turns, bearing_to
-from ..search import get_query_from_user, QueryExecutor, SearchIndicator
+from ..search import get_query_from_user, QueryExecutor, SearchIndicator, create_query_for_name_search
 from ..config_utils import make_config_option_switchable
 from ..menu_service import menu_command
 from .interesting_entities_controller import interesting_entity_in_range
@@ -167,12 +167,25 @@ class InteractivePersonController:
                 return None
             return roads[road_reprs.index(road_repr)]
             
-    @menu_command(_("Information"), _("Search..."), "ctrl+f")
+    @menu_command(_("Information"), _("Search by name..."), "ctrl+f")
+    def do_search_by_name(self):
+        name, ok = QInputDialog.getText(self._main_window, _("Enter name"), _("Enter the name or its part"))
+        if not ok:
+            return
+        query = create_query_for_name_search(name)
+        self._handle_search(query, float("inf"))
+
+
+    @menu_command(_("Information"), _("Advanced search..."), "ctrl+shift+f")
     def do_search(self, evt):
         ret = get_query_from_user(self._main_window, self._person.position)
         if not ret:
             return
         query, distance = ret
+        self._handle_search(query, distance)
+        
+   
+    def _handle_search(self, query, distance):
         self._search_executor = QueryExecutor(query, self._person.position, distance)
         self._search_executor.results_ready.connect(self._search_results_ready)
         self._search_executor.start()
