@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-10-10 23:14+0200\n"
-"PO-Revision-Date: 2020-10-10 23:43+0200\n"
+"POT-Creation-Date: 2020-10-14 12:00+0200\n"
+"PO-Revision-Date: 2020-10-14 12:08+0200\n"
 "Last-Translator: \n"
 "Language: cs\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -10473,6 +10473,14 @@ msgstr ""
 msgid "Subprovince"
 msgstr ""
 
+#: app/search/__init__.py:37 old.py:14
+msgid "Search class"
+msgstr "Třída k prohledání"
+
+#: app/search/__init__.py:37 old.py:14
+msgid "Select the class to search"
+msgstr "Zvolte třídu k prohledání"
+
 #: app/area_selection.py:49
 msgid "Select an area"
 msgstr "Zvolte oblast"
@@ -10647,7 +10655,7 @@ msgid "The changes queue for the selected database no longer exists on the serve
 msgstr "Fronta změn vybrané oblasti již na serveru neexistuje, oblast bude stažena, jako by se jednalo o novou oblast."
 
 #: app/controllers/interactive_person_controller.py:217 app/main_window.py:104
-#: app/search/search_conditions.py:141
+#: app/search/search_conditions.py:146
 msgid "Question"
 msgstr "Otázka"
 
@@ -11196,14 +11204,6 @@ msgstr "Zobrazit rodiče"
 msgid "Parents of {}"
 msgstr "Rodiče {}"
 
-#: app/search/__init__.py:14
-msgid "Search class"
-msgstr "Třída k prohledání"
-
-#: app/search/__init__.py:14
-msgid "Select the class to search"
-msgstr "Zvolte třídu k prohledání"
-
 #: app/search/search_conditions.py:11
 msgid "Search criteria"
 msgstr "Podmínky vyhledávání"
@@ -11233,10 +11233,18 @@ msgid "&Remove condition"
 msgstr "&Odstranit podmínku"
 
 #: app/search/search_conditions.py:44
-msgid "Search objects to distance (in meters, 0 no limit)"
-msgstr "Hledat objekty do vzdálenosti (v metrech, 0 je bez limitu)"
+msgid "Search objects to distance"
+msgstr "Hledat objekty do vzdálenosti"
 
-#: app/search/search_conditions.py:141
+#: app/search/search_conditions.py:48
+msgid "meters"
+msgstr "Metrů"
+
+#: app/search/search_conditions.py:49
+msgid "No limit"
+msgstr "Bez omezení"
+
+#: app/search/search_conditions.py:146
 msgid "It appears that you forgot to add the current condition to the conditions list. Do you want to add it before starting the search?"
 msgstr "Vypadá to, že jste aktuální podmínku vyhledávání zapomněli přidat k seznamu podmínek vyhledávání. Chcete ji tam nyní přidat?"
 

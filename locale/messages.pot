@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-10-10 23:14+0200\n"
+"POT-Creation-Date: 2020-10-14 12:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -10324,6 +10324,14 @@ msgstr ""
 msgid "Subprovince"
 msgstr ""
 
+#: app/search/__init__.py:37 old.py:14
+msgid "Search class"
+msgstr ""
+
+#: app/search/__init__.py:37 old.py:14
+msgid "Select the class to search"
+msgstr ""
+
 #: app/area_selection.py:49
 msgid "Select an area"
 msgstr ""
@@ -10498,7 +10506,7 @@ msgid "The changes queue for the selected database no longer exists on the serve
 msgstr ""
 
 #: app/controllers/interactive_person_controller.py:217 app/main_window.py:104
-#: app/search/search_conditions.py:141
+#: app/search/search_conditions.py:146
 msgid "Question"
 msgstr ""
 
@@ -11047,14 +11055,6 @@ msgstr ""
 msgid "Parents of {}"
 msgstr ""
 
-#: app/search/__init__.py:14
-msgid "Search class"
-msgstr ""
-
-#: app/search/__init__.py:14
-msgid "Select the class to search"
-msgstr ""
-
 #: app/search/search_conditions.py:11
 msgid "Search criteria"
 msgstr ""
@@ -11084,10 +11084,18 @@ msgid "&Remove condition"
 msgstr ""
 
 #: app/search/search_conditions.py:44
-msgid "Search objects to distance (in meters, 0 no limit)"
+msgid "Search objects to distance"
 msgstr ""
 
-#: app/search/search_conditions.py:141
+#: app/search/search_conditions.py:48
+msgid "meters"
+msgstr ""
+
+#: app/search/search_conditions.py:49
+msgid "No limit"
+msgstr ""
+
+#: app/search/search_conditions.py:146
 msgid "It appears that you forgot to add the current condition to the conditions list. Do you want to add it before starting the search?"
 msgstr ""
 
