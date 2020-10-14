@@ -7,6 +7,7 @@ from ..road_segments_browser import RoadSegmentsBrowserDialog
 from ..geometry_utils import get_road_section_angle, distance_filter, distance_between, get_meaningful_turns, bearing_to, turn_angle_as_diff_from_zero
 from ..search import get_query_from_user, QueryExecutor, SearchIndicator, create_query_for_name_search
 from ..config_utils import make_config_option_switchable
+from ..entity_utils import get_last_important_road
 from ..menu_service import menu_command
 from .interesting_entities_controller import interesting_entity_in_range
 from .sound_controller import leave_disallowed_sound_played
@@ -21,7 +22,7 @@ class InteractivePersonController:
         menu_service().register_menu_commands(self)
         cfg = config()
         make_config_option_switchable(_("Disallow leaving roads"), cfg.navigation, "disallow_leaving_roads", "alt+o")
-        make_config_option_switchable(_("Disallow entering sidewalks"), cfg.navigation, "disallow_entering_sidewalks")
+        make_config_option_switchable(_("Try avoid sidewalks"), cfg.navigation, "try_avoid_sidewalks")
         make_config_option_switchable(_("Automatically correct your direction when attempting to exit the last road"), cfg.navigation, "correct_direction_after_leave_disallowed")
         make_config_option_switchable(_("Play sounds for interesting objects"), cfg.presentation, "play_sounds_for_interesting_objects")
         make_config_option_switchable(_("Play crossing sounds"), cfg.presentation, "play_crossing_sounds")
@@ -263,7 +264,7 @@ class InteractivePersonController:
             speech().speak(_("There is no meaningful turn to perform, you are not on a road."), interrupt=True, add_to_history=False)
             return
         # Assume that the last road is the one the user wants to turn to.
-        new_road = roads[-1]
+        new_road = get_last_important_road(roads)
         turns = get_meaningful_turns(new_road, self._person)
         if not turns:
             speech().speak(_("There is no meaningful turn to perform, the new road is too short."), interrupt=True, add_to_history=False)
@@ -283,7 +284,7 @@ class InteractivePersonController:
 
     def _leave_disalloved_sound_played(self, sender, because_of):
         if not config().navigation.correct_direction_after_leave_disallowed: return
-        last_road = because_of.inside_of_roads[0]
+        last_road = get_last_important_road(because_of.inside_of_roads)
         turn_choices = get_meaningful_turns(last_road, because_of)
         if not turn_choices:
             return
