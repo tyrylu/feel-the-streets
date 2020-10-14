@@ -169,7 +169,10 @@ class InteractivePersonController:
             
     @menu_command(_("Information"), _("Search..."), "ctrl+f")
     def do_search(self, evt):
-        query, distance = get_query_from_user(self._main_window, self._person.position)
+        ret = get_query_from_user(self._main_window, self._person.position)
+        if not ret:
+            return
+        query, distance = ret
         self._search_executor = QueryExecutor(query, self._person.position, distance)
         self._search_executor.results_ready.connect(self._search_results_ready)
         self._search_executor.start()
