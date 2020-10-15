@@ -25,7 +25,14 @@ class SpeechDispatcherOutput(Output):
     def is_active(self):
         return self._client is not None
     
+    def _sanitize_message(self, msg):
+        """Under Linux, Espeak ignores any punctuation mode settings and if a dot is preceded by a right paren, says the dot regardless of any settings."""
+        if msg.endswith(")."):
+            msg = msg[:-1]
+        return msg
+
     def speak(self, message, **kwargs):
+        message = self._sanitize_message(message)
         if kwargs.get("interrupt", False):
             self.silence()
         try:
