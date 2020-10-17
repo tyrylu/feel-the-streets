@@ -4,7 +4,7 @@ from ..humanization_utils import describe_entity, format_number, describe_angle_
 from ..services import speech, map, config, menu_service
 from ..objects_browser import ObjectsBrowserWindow
 from ..road_segments_browser import RoadSegmentsBrowserDialog
-from ..geometry_utils import get_road_section_angle, distance_filter, distance_between, get_meaningful_turns, bearing_to, turn_angle_as_diff_from_zero
+from ..geometry_utils import get_road_section_angle, distance_filter, distance_between, get_meaningful_turns, bearing_to, get_smaller_turn
 from ..search import get_query_from_user, QueryExecutor, SearchIndicator, create_query_for_name_search
 from ..config_utils import make_config_option_switchable
 from ..entity_utils import get_last_important_road
@@ -288,7 +288,7 @@ class InteractivePersonController:
         turn_choices = get_meaningful_turns(last_road, because_of)
         if not turn_choices:
             return
-        smaller = min(turn_choices, key=lambda i: turn_angle_as_diff_from_zero(abs(i[2])))
+        smaller = get_smaller_turn(turn_choices)
         if config().navigation.automatic_direction_corrections < 6:
             speech().speak(_("Because of you settings, you will be turned {}").format(smaller[0]), interrupt=True)
             config().navigation.automatic_direction_corrections += 1

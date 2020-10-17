@@ -201,7 +201,7 @@ def turn_angle_as_diff_from_zero(turn_angle):
     else:
         return 360 - turn_angle
 
-def get_meaningful_turns(new_road, entity, zero_turn_is_meaningful=False):
+def get_meaningful_turns(new_road, entity, zero_turn_is_meaningful=False, ignore_length=False):
     """Returns the meaningful turns which could the given entity perform if you want to continue along the given road. Returns a list of tuples in the form (direction_description, formatted_distance, direction_change)."""
     # These two imports are only needed in this function, so no point of doing them globally and complicating everything.
     from .humanization_utils import format_number, describe_angle_as_turn_instructions
@@ -212,9 +212,11 @@ def get_meaningful_turns(new_road, entity, zero_turn_is_meaningful=False):
     required_angle_difference = closest_new_segment.angle - entity.direction
     from_start, to_end = calculate_absolute_distances(new_segments, entity)
     meaningful_directions = []
-    if from_start > 5 and (zero_turn_is_meaningful or abs(opposite_turn_angle(required_angle_difference)) != 0):
+    if (ignore_length or from_start > 5) and (zero_turn_is_meaningful or abs(opposite_turn_angle(required_angle_difference)) != 0):
         meaningful_directions.append((describe_angle_as_turn_instructions(ensure_turn_angle_positive(opposite_turn_angle(required_angle_difference)), config().presentation.angle_decimal_places), format_number(from_start, config().presentation.distance_decimal_places), opposite_turn_angle(required_angle_difference)))
-    if to_end > 5 and (zero_turn_is_meaningful or abs(required_angle_difference) != 0):
+    if (ignore_length or to_end > 5) and (zero_turn_is_meaningful or abs(required_angle_difference) != 0):
         meaningful_directions.append((describe_angle_as_turn_instructions(ensure_turn_angle_positive(required_angle_difference), config().presentation.angle_decimal_places), format_number(to_end, config().presentation.distance_decimal_places), required_angle_difference))
     return meaningful_directions
         
+def get_smaller_turn(turn_choices):
+    return min(turn_choices, key=lambda i: turn_angle_as_diff_from_zero(abs(i[2])))
