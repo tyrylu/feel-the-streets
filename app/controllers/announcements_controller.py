@@ -1,3 +1,4 @@
+import collections
 import shapely.wkb as wkb
 from ..services import speech, config
 from ..entities import entity_post_enter, entity_post_leave, entity_rotated
@@ -18,8 +19,14 @@ class AnnouncementsController:
     
     def _on_post_enter(self, sender, enters):
         if sender is self._point_of_view:
+            current_descs = collections.Counter(describe_entity(p) for p in self._point_of_view.is_inside_of)
+            new_descs = collections.Counter(describe_entity(e) for e in enters)
             for place in enters:
-                speech().speak(_("You are entering {enters}.").format(enters=describe_entity(place)))
+                desc = describe_entity(place)
+                if current_descs[desc] - new_descs[desc] > 0:
+                    continue # We would repeat a name which we already announced before
+                new_descs[desc] -= 1 # In case of entering an entity with a repeated same name in the same execution, we want to say the name only once.
+                speech().speak(_("You are entering {enters}.").format(enters=desc))
                 entered_road = False
                 if place.is_road_like:
                     entered_road = True
@@ -56,11 +63,18 @@ class AnnouncementsController:
 
 
     def _on_post_leave(self, sender, leaves):
-        print(f"{sender} left {leaves}")
         if sender is self._point_of_view:
+            seen_descs = set()
+            current_descs = collections.Counter(describe_entity(e) for e in self._point_of_view.is_inside_of)
+            announced_leave = False
             for place in leaves:
+                desc = describe_entity(place)
+                if current_descs[desc] > 0 or desc in seen_descs:
+                    continue # Say the message only if we aren't in an entity with the same name and we're saying it for the first time.
+                seen_descs.add(desc)
+                announced_leave = True
                 speech().speak(_("You are leaving {leaves}").format(leaves=describe_entity(place)))
-            if config().presentation.announce_current_object_after_leaving_other:
+            if announced_leave and config().presentation.announce_current_object_after_leaving_other:
                 if not self._point_of_view.is_inside_of:
                     speech().speak(_("Now, your location is not known."))
                 else:
