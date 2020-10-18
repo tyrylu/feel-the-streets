@@ -7,10 +7,16 @@ from ..road_segments_browser import RoadSegmentsBrowserDialog
 from ..geometry_utils import get_road_section_angle, distance_filter, distance_between, get_meaningful_turns, bearing_to, get_smaller_turn
 from ..search import get_query_from_user, QueryExecutor, SearchIndicator, create_query_for_name_search
 from ..config_utils import make_config_option_switchable
-from ..entity_utils import get_last_important_road
+from ..entity_utils import get_last_important_road, filter_important_roads
 from ..menu_service import menu_command
 from .interesting_entities_controller import interesting_entity_in_range
 from .sound_controller import leave_disallowed_sound_played
+
+def describe_turn(turn, use_detailed_description):
+    if use_detailed_description:
+        return _("{turn_description} to {target_description}").format(turn_description=turn[0], target_description=describe_entity(turn[3]))
+    else:
+        return turn[0]
 
 class InteractivePersonController: 
     def __init__(self, person, main_window):
@@ -263,17 +269,25 @@ class InteractivePersonController:
         if not roads:
             speech().speak(_("There is no meaningful turn to perform, you are not on a road."), interrupt=True, add_to_history=False)
             return
-        # Assume that the last road is the one the user wants to turn to.
-        new_road = get_last_important_road(roads)
-        turns = get_meaningful_turns(new_road, self._person)
+        roads = filter_important_roads(self._person.inside_of_roads)
+        describe_roads_in_turns = False
+        if len(roads) > 2: # A current road and two new - likely a crossing of more roads
+            describe_roads_in_turns = True
+        turns = []
+        for road in roads[1:]:
+            current_turns = get_meaningful_turns(road, self._person)
+            for turn in current_turns:
+                turn = list(turn)
+                turn.append(road)
+                turns.append(turn)
         if not turns:
-            speech().speak(_("There is no meaningful turn to perform, the new road is too short."), interrupt=True, add_to_history=False)
+            speech().speak(_("There is no meaningful turn to perform, you aren't on a new road."), interrupt=True, add_to_history=False)
         elif len(turns) == 1:
             self._person.rotate(turns[0][2])
             self._person.move_to_center_of(new_road)
             speech().speak(_("There is only a single meaningful turn, so you've been rotated {}").format(turns[0][0]), interrupt=True, add_to_history=False)
         else:
-            angles_mapping = {turn[0]: turn[2] for turn in turns}
+            angles_mapping = {describe_turn(turn, describe_roads_in_turns): turn[2] for turn in turns}
             angle_choices = list(angles_mapping.keys())
             angle_desc, ok = QInputDialog.getItem(self._main_window, _("Request"), _("Which turn you want to perform?"), angle_choices, editable=False)
             if not ok: return
