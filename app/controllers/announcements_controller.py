@@ -30,6 +30,8 @@ class AnnouncementsController:
             return # Before entering the current roads, the person was not on a road at all, so it's definitely not an event of a continuation possibility.
         current_road = get_last_important_road(roads_before_entering)
         turns = get_meaningful_turns(current_road, self._point_of_view, zero_turn_is_meaningful=True)
+        if not turns:
+            return
         current_dir_info = min(turns, key=lambda i: abs(i[2]))
         if abs(current_dir_info[2]) < 90:
             speech().speak(_("Or, you can continue along the current road for another {} meters.").format(current_dir_info[1]))
