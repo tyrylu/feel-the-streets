@@ -1,9 +1,9 @@
-38
 import shapely.wkb as wkb
 from ..services import speech, config
 from ..entities import entity_post_enter, entity_post_leave, entity_rotated
 from ..humanization_utils import describe_entity, format_number, describe_relative_angle, TemplateType, describe_angle_as_turn_instructions
 from ..geometry_utils import bearing_to, get_meaningful_turns
+from ..entity_utils import get_last_important_road
 from .interesting_entities_controller import interesting_entity_in_range
 from .sound_controller import interesting_entity_sound_not_found
 
@@ -22,12 +22,13 @@ class AnnouncementsController:
                 speech().speak(_("You are entering {enters}.").format(enters=describe_entity(place)))
                 if place.is_road_like:
                     self._announce_possible_turn_opportunity(place)
-            self._announce_possible_continuation_opportunity()
+            self._announce_possible_continuation_opportunity(enters)
             
-    def _announce_possible_continuation_opportunity(self):
-        if len(self._point_of_view.inside_of_roads) < 2:
-            return # That's not definitely a crossing event.
-        current_road = self._point_of_view.inside_of_roads[-2] # We don't want to use the last one, that's the one which the person just entered.
+    def _announce_possible_continuation_opportunity(self, newly_entered):
+        roads_before_entering = [r for r in self._point_of_view.inside_of_roads if r not in newly_entered]
+        if len(roads_before_entering) < 1:
+            return # Before entering the current roads, the person was not on a road at all, so it's definitely not an event of a continuation possibility.
+        current_road = get_last_important_road(roads_before_entering)
         turns = get_meaningful_turns(current_road, self._point_of_view, zero_turn_is_meaningful=True)
         current_dir_info = min(turns, key=lambda i: abs(i[2]))
         if abs(current_dir_info[2]) < 90:

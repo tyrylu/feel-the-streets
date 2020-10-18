@@ -104,6 +104,9 @@ class SoundController:
     def _handle_leave_of(self, sender, leaves):
         if leaves.is_road_like:
             if sender in self._groups_map:
+                if leaves not in self._groups_map[sender]:
+                    log.warn("Entity %s about to be deleted from the sounds stack, but it was not in it in the first place.", describe_entity(leaves))
+                    return
                 del self._groups_map[sender][leaves]
 
     def _rotated(self, sender):
