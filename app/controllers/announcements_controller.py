@@ -20,9 +20,12 @@ class AnnouncementsController:
         if sender is self._point_of_view:
             for place in enters:
                 speech().speak(_("You are entering {enters}.").format(enters=describe_entity(place)))
+                entered_road = False
                 if place.is_road_like:
+                    entered_road = True
                     self._announce_possible_turn_opportunity(place)
-            self._announce_possible_continuation_opportunity(enters)
+            if entered_road:
+                self._announce_possible_continuation_opportunity(enters)
             
     def _announce_possible_continuation_opportunity(self, newly_entered):
         roads_before_entering = [r for r in self._point_of_view.inside_of_roads if r not in newly_entered]
