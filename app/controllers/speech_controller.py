@@ -42,3 +42,7 @@ class SpeechController:
     def copy_current_item(self):
         QApplication.clipboard().setText(speech().current_history_item)
         speech().speak(_("Copied."), interrupt=True, add_to_history=False)
+
+    @menu_command(_("Speech"), _("Repeat the current speech history item"), "del")
+    def repeat_history_item(self):
+        speech().speak_current_history_item()
