@@ -284,7 +284,7 @@ class InteractivePersonController:
             speech().speak(_("There is no meaningful turn to perform, you aren't on a new road."), interrupt=True, add_to_history=False)
         elif len(turns) == 1:
             self._person.rotate(turns[0][2])
-            self._person.move_to_center_of(new_road)
+            self._person.move_to_center_of(turns[0][3])
             speech().speak(_("There is only a single meaningful turn, so you've been rotated {}").format(turns[0][0]), interrupt=True, add_to_history=False)
         else:
             angles_mapping = {describe_turn(turn, describe_roads_in_turns): turn[2] for turn in turns}
