@@ -3,6 +3,7 @@ from osm_db import Enum
 from ..entities import entity_post_move
 from ..services import config, map
 from ..geometry_utils import distance_filter
+from ..entity_utils import is_footway
 
 interesting_entity_in_range = Signal()
 interesting_entity_out_of_range = Signal()
@@ -24,7 +25,10 @@ def is_interesting(entity):
         return False
     # Filter out house gardens - we might consider making them at least sound in the future, though
     if entity.discriminator == "Garden" and entity.value_of_field("garden_type") == Enum.with_name("GardenType").value_for_name("residential"):
-            return False
+        return False
+    # Filter out sidewalks if we want to avoid them
+    if config().navigation.try_avoid_sidewalks and is_footway(entity):
+        return False
     return True
 
 def  filter_interesting_entities(objects):
