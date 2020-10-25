@@ -122,12 +122,14 @@ class SoundController:
     def _interesting_entity_in_range(self, sender, entity):
         if not entity.is_road_like and config().presentation.play_sounds_for_interesting_objects:
             self._spawn_sound_for(entity)   
-        elif config().presentation.play_crossing_sounds:
-            self    ._spawn_crossing_sound_for(entity)
+        elif entity.is_road_like:
+            self._interesting_roads.add(entity)
+            if config().presentation.play_crossing_sounds:
+                self    ._spawn_crossing_sound_for(entity)
 
     
     def _spawn_crossing_sound_for(self, road):
-        road_geoms = [wkb.loads(e.geometry) for e in self._point_of_view.inside_of_roads]
+        road_geoms = [wkb.loads(e.geometry) for e in self._interesting_roads if e != road]
         for geom in road_geoms:
             self._maybe_spawn_crossing_sound_for_road(geom, road)
     
