@@ -9,7 +9,7 @@ from ..search import get_query_from_user, QueryExecutor, SearchIndicator, create
 from ..config_utils import make_config_option_switchable
 from ..entity_utils import get_last_important_road, filter_important_roads
 from ..menu_service import menu_command
-from .interesting_entities_controller import interesting_entity_in_range
+from .interesting_entities_controller import interesting_entity_in_range, request_interesting_entities
 from .sound_controller import leave_disallowed_sound_played
 
 def describe_turn(turn, use_detailed_description):
@@ -74,20 +74,24 @@ class InteractivePersonController:
     def do_position_detailed_slow(self, evt):
         self._position_detailed_impl(map().intersections_at_position(self._person.position, fast=False))
     
-    def _nearest_impl(self, objects):
+    def _show_list_of_objects(self, title, objects):
         if not objects:
             speech().speak(_("Nothing."), interrupt=True, add_to_history=False)
             return
-        self._browser_window = ObjectsBrowserWindow(self._main_window, title=_("Near by objects"), person=self._person, unsorted_objects=objects)
+        self._browser_window = ObjectsBrowserWindow(self._main_window, title=title, person=self._person, unsorted_objects=objects)
 
     @menu_command(_("Information"), _("Nearest"), "n")
     def do_nearest(self, evt):
-        self._nearest_impl(self._person.map.within_distance(self._person.position, config().presentation.near_by_radius))
+        self._show_list_of_objects(_("Near by objects"), self._person.map.within_distance(self._person.position, config().presentation.near_by_radius))
 
     @menu_command(_("Information"), _("Nearest - all objects, may be slow"), "ctrl+n")
     def do_nearest_slow(self, evt):
-        self._nearest_impl(self._person.map.within_distance(self._person.position, config().presentation.near_by_radius, fast=False))
+        self._show_list_of_objects(_("Near by objects"), self._person.map.within_distance(self._person.position, config().presentation.near_by_radius, fast=False))
     
+    @menu_command(_("Information"), _("Interesting objects"), "i")
+    def _do_interesting(self):
+        self._show_list_of_objects(_("Interesting objects"), request_interesting_entities.send(self)[0][1])
+
     @menu_command(_("Movement"), _("Step forward"), "up")
     def do_forward(self, evt):
         self._person.step_forward() 
