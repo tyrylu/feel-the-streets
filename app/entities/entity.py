@@ -89,7 +89,7 @@ class Entity(BaseModel):
         # Don't play the step sound for this movement command
         orig = self.use_step_sounds
         self.use_step_sounds = False
-        self.move_to(closest)
+        self.move_to(closest, force=True)
         self.use_step_sounds = orig
 
 
