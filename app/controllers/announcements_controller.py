@@ -51,10 +51,10 @@ class AnnouncementsController:
     def _announce_possible_turn_opportunity(self, new_road):
         meaningful_directions = get_meaningful_turns(new_road, self._point_of_view)
         if len(meaningful_directions) == 1:
-            ((dir, dist, _angle_diff),) = meaningful_directions
+            ((dir, dist, _angle_diff, _road),) = meaningful_directions
             speech().speak(_("You could turn {direction} and continue for {distance} meters.").format(direction=dir, distance=dist))
         elif len(meaningful_directions) == 2:
-            ((dir1, dist1, _angle_diff1), (dir2, dist2, _angle_diff2)) = meaningful_directions
+            ((dir1, dist1, _angle_diff1, _road1), (dir2, dist2, _angle_diff2, _road2)) = meaningful_directions
             speech().speak(_("You could turn {direction1} and continue for {distance1} meters, or you could turn {direction2} and continue for {distance2} meters.").format(direction1=dir1, distance1=dist1, direction2=dir2, distance2=dist2))
 
 

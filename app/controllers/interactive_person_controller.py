@@ -155,8 +155,9 @@ class InteractivePersonController:
         road = self._maybe_select_road()
         if not road:
             return
-        rot = get_road_section_angle(self._person, road)
-        self._person.set_direction(rot)
+        turns = get_meaningful_turns(road, self._person)
+        self._maybe_perform_turn(turns, False, _("There is no meaningful turn, the road is too short."))
+        
 
     @menu_command(_("Movement"), _("Turn about..."), "Ctrl+r")
     def rotate_by(self, evt):
@@ -280,25 +281,32 @@ class InteractivePersonController:
         turns = []
         for road in roads[1:]:
             current_turns = get_meaningful_turns(road, self._person)
-            for turn in current_turns:
-                turn = list(turn)
-                turn.append(road)
-                turns.append(turn)
+            turns.extend(current_turns)
+        self._maybe_perform_turn(turns, describe_roads_in_turns, _("There is no meaningful turn to perform, you aren't on a new road."))
+
+    def _maybe_perform_turn(self, turns, describe_roads_in_turns, no_turns_message):
         if not turns:
-            speech().speak(_("There is no meaningful turn to perform, you aren't on a new road."), interrupt=True, add_to_history=False)
+            speech().speak(no_turns_message, interrupt=True, add_to_history=False)
         elif len(turns) == 1:
             self._person.rotate(turns[0][2])
             self._person.move_to_center_of(turns[0][3])
             speech().speak(_("There is only a single meaningful turn, so you've been rotated {}").format(turns[0][0]), interrupt=True, add_to_history=False)
         else:
-            angles_mapping = {describe_turn(turn, describe_roads_in_turns): turn[2] for turn in turns}
-            angle_choices = list(angles_mapping.keys())
-            angle_desc, ok = QInputDialog.getItem(self._main_window, _("Request"), _("Which turn you want to perform?"), angle_choices, editable=False)
-            if not ok: return
-            self._person.rotate(angles_mapping[angle_desc])
-            self._person.move_to_center_of(new_road)
-            speech().speak(_("You've been rotated {}.").format(angle_desc), interrupt=True, add_to_history=False)
+            turn = self._select_turn(turns, describe_roads_in_turns)
+            if not turn:
+                return
+            self._person.rotate(turn[2])
+            self._person.move_to_center_of(turn[3])
+            speech().speak(_("You've been rotated {}.").format(turn[0]), interrupt=True, add_to_history=False)
 
+
+    def _select_turn(self, turns, describe_roads_in_turns):
+        mapping = {describe_turn(turn, describe_roads_in_turns): turn for turn in turns}
+        angle_choices = list(mapping.keys())
+        angle_desc, ok = QInputDialog.getItem(self._main_window, _("Request"), _("Which turn you want to perform?"), angle_choices, editable=False)
+        if not ok: return
+        return mapping[angle_desc]
+            
 
     def _leave_disalloved_sound_played(self, sender, because_of):
         if not config().navigation.correct_direction_after_leave_disallowed: return

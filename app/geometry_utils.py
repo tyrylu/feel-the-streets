@@ -202,7 +202,7 @@ def turn_angle_as_diff_from_zero(turn_angle):
         return 360 - turn_angle
 
 def get_meaningful_turns(new_road, entity, zero_turn_is_meaningful=False, ignore_length=False):
-    """Returns the meaningful turns which could the given entity perform if you want to continue along the given road. Returns a list of tuples in the form (direction_description, formatted_distance, direction_change)."""
+    """Returns the meaningful turns which could the given entity perform if you want to continue along the given road. Returns a list of tuples in the form (direction_description, formatted_distance, direction_change, road). Adding the road is done only because of the fact that the turn tuples are processed by functions lacking the selected road context, but the functions need it anyway."""
     # These two imports are only needed in this function, so no point of doing them globally and complicating everything.
     from .humanization_utils import format_number, describe_angle_as_turn_instructions
     from .services import config
@@ -213,9 +213,9 @@ def get_meaningful_turns(new_road, entity, zero_turn_is_meaningful=False, ignore
     from_start, to_end = calculate_absolute_distances(new_segments, entity)
     meaningful_directions = []
     if (ignore_length or from_start > 5) and (zero_turn_is_meaningful or abs(opposite_turn_angle(required_angle_difference)) != 0):
-        meaningful_directions.append((describe_angle_as_turn_instructions(ensure_turn_angle_positive(opposite_turn_angle(required_angle_difference)), config().presentation.angle_decimal_places), format_number(from_start, config().presentation.distance_decimal_places), opposite_turn_angle(required_angle_difference)))
+        meaningful_directions.append((describe_angle_as_turn_instructions(ensure_turn_angle_positive(opposite_turn_angle(required_angle_difference)), config().presentation.angle_decimal_places), format_number(from_start, config().presentation.distance_decimal_places), opposite_turn_angle(required_angle_difference), new_road))
     if (ignore_length or to_end > 5) and (zero_turn_is_meaningful or abs(required_angle_difference) != 0):
-        meaningful_directions.append((describe_angle_as_turn_instructions(ensure_turn_angle_positive(required_angle_difference), config().presentation.angle_decimal_places), format_number(to_end, config().presentation.distance_decimal_places), required_angle_difference))
+        meaningful_directions.append((describe_angle_as_turn_instructions(ensure_turn_angle_positive(required_angle_difference), config().presentation.angle_decimal_places), format_number(to_end, config().presentation.distance_decimal_places), required_angle_difference, new_road))
     return meaningful_directions
         
 def get_smaller_turn(turn_choices):
