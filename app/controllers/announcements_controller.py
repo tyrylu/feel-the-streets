@@ -21,13 +21,13 @@ class AnnouncementsController:
         if sender is self._point_of_view:
             current_descs = collections.Counter(describe_entity(p) for p in self._point_of_view.is_inside_of)
             new_descs = collections.Counter(describe_entity(e) for e in enters)
+            entered_road = False
             for place in enters:
                 desc = describe_entity(place)
                 if current_descs[desc] - new_descs[desc] > 0:
                     continue # We would repeat a name which we already announced before
                 new_descs[desc] -= 1 # In case of entering an entity with a repeated same name in the same execution, we want to say the name only once.
                 speech().speak(_("You are entering {enters}.").format(enters=desc))
-                entered_road = False
                 if place.is_road_like:
                     entered_road = True
                     self._announce_possible_turn_opportunity(place)
