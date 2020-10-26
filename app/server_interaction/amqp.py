@@ -53,7 +53,6 @@ class SemanticChangeRetriever:
         try:
             resp = self._chan.queue_declare(get_client_queue_name(config().general.client_id, area), passive=True, durable=True)
         except Exception as e:
-            print(e)
             self._needs_channel_closing = False
             raise UnknownQueueError() from e
         return resp.method.message_count
