@@ -33,7 +33,7 @@ class SoundController:
         self._point_of_view: Entity = person
         self._load_sound_played = False
         self._groups_map: DefaultDict[Entity, Dict[Entity, str]] = collections.defaultdict(dict)
-        self._interesting_sounds = {}
+        self._interesting_sounds = collections.defaultdict(dict) # A mapping which maps a sound originating entity, some entity which was a reason for the sound source generation (e. g. the second part of a crossing tuple) to the sound source.
         self._interesting_roads = set()
         entity_post_move.connect(self.post_move)
         entity_post_enter.connect(self.post_enter)
@@ -56,6 +56,8 @@ class SoundController:
             for entity, source in self._interesting_sounds.items():
                 if entity.is_road_like: continue # We're not moving the road crossing sounds with the listener
                 cartesian = self._point_of_view.closest_point_to(entity.geometry).toCartesian()
+                # For classic interesting object sounds, we'll always get only one sound source without a specifying entity.
+                source = source[None]
                 source.set_position([cartesian.x, cartesian.y, cartesian.z])
         if not sender.use_step_sounds:
             return
@@ -83,7 +85,7 @@ class SoundController:
         if enters.is_road_like:
             # Simulate that all the currently interesting roads just became interesting.
             for road in self._interesting_roads:
-                self._maybe_spawn_crossing_sound_for_road(wkb.loads(enters.geometry), road)
+                self._maybe_spawn_crossing_sound_for_road(enters, road)
             if enters.value_of_field("type") == Enum.with_name("RoadType").value_for_name("path"):
                 base_group = "steps_path"
             else:
@@ -108,6 +110,10 @@ class SoundController:
                     log.warn("Entity %s about to be deleted from the sounds stack, but it was not in it in the first place.", describe_entity(leaves))
                     return
                 del self._groups_map[sender][leaves]
+            if leaves in self._interesting_sounds:
+                for source in self._interesting_sounds[leaves].values():
+                    source.stop()
+                del self._interesting_sounds[leaves]
 
     def _rotated(self, sender):
         if self._point_of_view is sender:
@@ -129,14 +135,21 @@ class SoundController:
 
     
     def _spawn_crossing_sound_for(self, road):
-        road_geoms = [wkb.loads(e.geometry) for e in self._interesting_roads if e != road]
-        for geom in road_geoms:
-            self._maybe_spawn_crossing_sound_for_road(geom, road)
+        roads = [e for e in self._point_of_view.inside_of_roads if e != road]
+        for current_road in roads:
+            self._maybe_spawn_crossing_sound_for_road(current_road, road)
     
-    def _maybe_spawn_crossing_sound_for_road(self, current_road_geom, interesting_road):
+    def _maybe_spawn_crossing_sound_for_road(self, current_road, interesting_road):
+        if describe_entity(current_road) == describe_entity(interesting_road):
+            return # We entered a part of a split road which intersects with the old one, but we're pretending that those part differences don't exist, so don't a sound for it.
+        sounds = self._interesting_sounds.get(interesting_road, {})
+        if current_road in sounds:
+            return # We will not spawn a sound for a crossing of roads b and a if we already have one for a and b
+        current_road_geom = wkb.loads(current_road.geometry)
         interesting_road_geom = wkb.loads(interesting_road.geometry)
         intersection = current_road_geom.intersection(interesting_road_geom)
-        if not intersection: return
+        if not intersection:
+            return # There's no intersection of the roads
         dest_latlon = None
         if intersection.geom_type == "Point":
             dest_latlon = to_latlon(intersection)
@@ -145,7 +158,7 @@ class SoundController:
         if dest_latlon:
             cartesian = dest_latlon.toCartesian()
             snd = sound().play("road_turn", x=cartesian.x, y=cartesian.y, z=cartesian.z, set_loop=True)
-            self._interesting_sounds[interesting_road] = snd
+            self._interesting_sounds[current_road][interesting_road] = snd
 
 
     def _spawn_sound_for(self, entity):
@@ -155,7 +168,7 @@ class SoundController:
             interesting_entity_sound_not_found.send(self, entity=entity)
             return
         cartesian = self._point_of_view.closest_point_to(entity.geometry).toCartesian()
-        self._interesting_sounds[entity] = sound().play(sound_name, set_loop=True, x=cartesian.x, y=cartesian.y, z=cartesian.z)
+        self._interesting_sounds[entity][None] = sound().play(sound_name, set_loop=True, x=cartesian.x, y=cartesian.y, z=cartesian.z)
 
     def _interesting_entity_out_of_range(self, sender, entity):
         if config().presentation.play_crossing_sounds:
@@ -163,7 +176,8 @@ class SoundController:
                 self._interesting_roads.remove(entity)
         if not config().presentation.play_sounds_for_interesting_objects and not config().presentation.play_crossing_sounds: return
         if entity in self._interesting_sounds:
-            self._interesting_sounds[entity].stop()
+            for source in self._interesting_sounds[entity].values():
+                source.stop()
             del self._interesting_sounds[entity]
 
     def _play_sounds_triggered(self, checked):
@@ -174,9 +188,10 @@ class SoundController:
 
     def _stop_interesting_sounds(self, stop_road_likes):
         to_remove = []
-        for entity, sound in self._interesting_sounds.items():
+        for entity, sounds in self._interesting_sounds.items():
             if entity.is_road_like != stop_road_likes: continue
-            sound.stop()
+            for sound in sounds.values():
+                sound.stop()
             to_remove.append(entity)
         for entity in to_remove:
             del self._interesting_sounds[entity]
