@@ -3,8 +3,8 @@ import shapely.wkb as wkb
 from ..services import speech, config
 from ..entities import entity_post_enter, entity_post_leave, entity_rotated
 from ..humanization_utils import describe_entity, format_number, describe_relative_angle, TemplateType, describe_angle_as_turn_instructions
-from ..geometry_utils import bearing_to, get_meaningful_turns
-from ..entity_utils import get_last_important_road
+from ..geometry_utils import bearing_to, get_meaningful_turns, get_smaller_turn
+from ..entity_utils import get_last_important_road, filter_important_roads
 from .interesting_entities_controller import interesting_entity_in_range
 from .sound_controller import interesting_entity_sound_not_found
 
@@ -12,6 +12,7 @@ class AnnouncementsController:
     def __init__(self, pov):
         self._point_of_view = pov
         self._description_counts = collections.Counter()
+        self._do_not_announce_leave_of = set()
         entity_post_enter.connect(self._on_post_enter)
         entity_post_leave.connect(self._on_post_leave)
         entity_rotated.connect(self._on_rotated)
@@ -26,10 +27,22 @@ class AnnouncementsController:
                 self._description_counts[desc] += 1
                 if self._description_counts[desc] > 1: # After adding the current entry we find out that we already said it
                     continue
-                speech().speak(_("You are entering {enters}.").format(enters=desc))
                 if place.is_road_like:
+                    road_diff = get_smaller_turn(get_meaningful_turns(place, self._point_of_view))[2]
+                    if 355 <= road_diff or 0 <= road_diff <= 5:
+                        important_roads = filter_important_roads(self._point_of_view.inside_of_roads)
+                        old_roads = [r for r in important_roads if r not in enters]
+                        if not old_roads:
+                            speech().speak(_("You are entering {enters}.").format(enters=desc))
+                        else:
+                            self._do_not_announce_leave_of.add(old_roads[-1])
+                            speech().speak(_("{before} changes to {after}.").format(before=describe_entity(old_roads[-1]), after=desc))
+                    else:
+                        speech().speak(_("You are crossing {enters}.").format(enters=desc))
                     entered_road = True
                     self._announce_possible_turn_opportunity(place)
+                else:
+                    speech().speak(_("You are entering {enters}.").format(enters=desc))
             if entered_road:
                 self._announce_possible_continuation_opportunity(enters)
             
@@ -71,8 +84,14 @@ class AnnouncementsController:
                     del self._description_counts[desc]
                 if self._description_counts[desc] > 0:
                     continue # Say the message only if we aren't in an entity with the same description because of a different entity
-                announced_leave = True
-                speech().speak(_("You are leaving {leaves}").format(leaves=describe_entity(place)))
+                if place in self._do_not_announce_leave_of:
+                    self._do_not_announce_leave_of.remove(place)
+                else:
+                    announced_leave = True
+                    if place.is_road_like:
+                        speech().speak(_("You crossed {leaves}.").format(leaves=desc))
+                    else:
+                        speech().speak(_("You are leaving {leaves}").format(leaves=describe_entity(place)))
             if announced_leave and config().presentation.announce_current_object_after_leaving_other:
                 if not self._point_of_view.is_inside_of:
                     speech().speak(_("Now, your location is not known."))
