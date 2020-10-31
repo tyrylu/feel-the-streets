@@ -14,6 +14,7 @@ pub mod entity;
 pub mod entity_metadata;
 mod error;
 mod file_finder;
+pub mod entity_relationship_kind;
 pub mod semantic_change;
 pub mod translation;
 pub use crate::area_db::AreaDatabase;

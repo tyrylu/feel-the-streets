@@ -1,5 +1,6 @@
 use crate::entities_query::EntitiesQuery;
 use crate::entity::Entity;
+use crate::entity_relationship_kind::EntityRelationshipKind;
 use crate::semantic_change::{ListChange, SemanticChange};
 use crate::{Error, Result};
 use rusqlite::types::ToSql;
@@ -12,7 +13,7 @@ const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
 const INSERT_ENTITY_SQL: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (?, ?, geomFromWKB(?, 4326), ?, ?)";
 const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (?, ?, Buffer(geomFromWKB(?, 4326), 0), ?, ?)";
 const INSERT_ENTITY_RELATIONSHIP_SQL: &str =
-    "INSERT INTO entity_relationships (parent_id, child_id) VALUES (?, ?)";
+    "INSERT INTO entity_relationships (parent_id, child_id, kind) VALUES (?, ?, ?)";
 
 #[derive(PartialEq)]
 enum ForeignKeyViolationClassification {
@@ -125,7 +126,7 @@ impl AreaDatabase {
                         count += 1;
                         for related_id in related_ids {
                             if let Err(e) =
-                                insert_related_stmt.execute(params![entity.id, related_id])
+                                insert_related_stmt.execute(params![entity.id, related_id, EntityRelationshipKind::OSMChild])
                             {
                                 match classify_db_error(&e, &related_id) {
                                     ForeignKeyViolationClassification::Retryable => {
@@ -249,7 +250,7 @@ impl AreaDatabase {
         stmt.execute(params![id, discriminator, geometry, effective_width, data])?;
         let mut insert_child_id_stmt = self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
         for child_id in child_ids {
-            if let Err(e) = insert_child_id_stmt.execute(params![id, child_id]) {
+            if let Err(e) = insert_child_id_stmt.execute(params![id, child_id, EntityRelationshipKind::OSMChild]) {
                 match classify_db_error(&e, &child_id) {
                     ForeignKeyViolationClassification::Retryable => {
                         self.deferred_relationship_additions
@@ -356,7 +357,7 @@ impl AreaDatabase {
                     if let Err(e) = self
                         .conn
                         .prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?
-                        .execute(params![parent_id, value])
+                        .execute(params![parent_id, value, EntityRelationshipKind::OSMChild])
                     {
                         match classify_db_error(&e, &value) {
                             ForeignKeyViolationClassification::Retryable => {
@@ -375,9 +376,9 @@ impl AreaDatabase {
                 ListChange::Remove { value } => {
                     self.conn
                         .prepare_cached(
-                            "DELETE FROM entity_relationships where parent_id = ? and child_id = ?",
+                            "DELETE FROM entity_relationships where parent_id = ? and child_id = ? AND kind = ?",
                         )?
-                        .execute(params![parent_id, value])?;
+                        .execute(params![parent_id, value, EntityRelationshipKind::OSMChild])?;
                 }
             }
         }
@@ -387,8 +388,8 @@ impl AreaDatabase {
     pub fn get_entity_child_ids(&self, parent_id: &str) -> Result<Vec<String>> {
         Ok(self
             .conn
-            .prepare_cached("SELECT child_id from entity_relationships WHERE parent_id = ?")?
-            .query_and_then(params![parent_id], |row| Ok(row.get_unwrap(0)))?
+            .prepare_cached("SELECT child_id from entity_relationships WHERE parent_id = ? AND kind = ?")?
+            .query_and_then(params![parent_id, EntityRelationshipKind::OSMChild], |row| Ok(row.get_unwrap(0)))?
             .filter_map(Result::ok)
             .collect())
     }
@@ -397,20 +398,20 @@ impl AreaDatabase {
         Ok(self
             .conn
             .prepare_cached("SELECT count(*) from entity_relationships WHERE child_id = ?")?
-            .query_row(params![child_id], |row| Ok(row.get_unwrap(0)))?)
+            .query_row(params![child_id, EntityRelationshipKind::OSMChild], |row| Ok(row.get_unwrap(0)))?)
     }
-    pub fn get_child_count(&self, child_id: &str) -> Result<u32> {
+    pub fn get_child_count(&self, parent_id: &str) -> Result<u32> {
         Ok(self
             .conn
-            .prepare_cached("SELECT count(*) from entity_relationships WHERE parent_id = ?")?
-            .query_row(params![child_id], |row| Ok(row.get_unwrap(0)))?)
+            .prepare_cached("SELECT count(*) from entity_relationships WHERE parent_id = ? AND kind = ?")?
+            .query_row(params![parent_id, EntityRelationshipKind::OSMChild], |row| Ok(row.get_unwrap(0)))?)
     }
 
     fn insert_deferred_entity_relationship(&self, parent: &str, child: &str) -> Result<()> {
         let res = self
             .conn
             .prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?
-            .execute(params![parent, child]); // Whatever error there is fatal - the relationships should all be there and nothing else should be inserted to the relationships table at this point.
+            .execute(params![parent, child, EntityRelationshipKind::OSMChild]); // Whatever error there is fatal - the relationships should all be there and nothing else should be inserted to the relationships table at this point.
         if let Err(e) = res {
             match classify_db_error(&e, &child) {
                 ForeignKeyViolationClassification::Retryable => {
