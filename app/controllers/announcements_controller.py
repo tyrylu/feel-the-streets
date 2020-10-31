@@ -11,6 +11,7 @@ from .sound_controller import interesting_entity_sound_not_found
 class AnnouncementsController:
     def __init__(self, pov):
         self._point_of_view = pov
+        self._description_counts = collections.Counter()
         entity_post_enter.connect(self._on_post_enter)
         entity_post_leave.connect(self._on_post_leave)
         entity_rotated.connect(self._on_rotated)
@@ -19,14 +20,12 @@ class AnnouncementsController:
     
     def _on_post_enter(self, sender, enters):
         if sender is self._point_of_view:
-            current_descs = collections.Counter(describe_entity(p) for p in self._point_of_view.is_inside_of)
-            new_descs = collections.Counter(describe_entity(e) for e in enters)
             entered_road = False
             for place in enters:
                 desc = describe_entity(place)
-                if current_descs[desc] - new_descs[desc] > 0:
-                    continue # We would repeat a name which we already announced before
-                new_descs[desc] -= 1 # In case of entering an entity with a repeated same name in the same execution, we want to say the name only once.
+                self._description_counts[desc] += 1
+                if self._description_counts[desc] > 1: # After adding the current entry we find out that we already said it
+                    continue
                 speech().speak(_("You are entering {enters}.").format(enters=desc))
                 if place.is_road_like:
                     entered_road = True
@@ -64,14 +63,14 @@ class AnnouncementsController:
 
     def _on_post_leave(self, sender, leaves):
         if sender is self._point_of_view:
-            seen_descs = set()
-            current_descs = collections.Counter(describe_entity(e) for e in self._point_of_view.is_inside_of)
             announced_leave = False
             for place in leaves:
                 desc = describe_entity(place)
-                if current_descs[desc] > 0 or desc in seen_descs:
-                    continue # Say the message only if we aren't in an entity with the same name and we're saying it for the first time.
-                seen_descs.add(desc)
+                self._description_counts[desc] -= 1
+                if self._description_counts[desc] == 0:
+                    del self._description_counts[desc]
+                if self._description_counts[desc] > 0:
+                    continue # Say the message only if we aren't in an entity with the same description because of a different entity
                 announced_leave = True
                 speech().speak(_("You are leaving {leaves}").format(leaves=describe_entity(place)))
             if announced_leave and config().presentation.announce_current_object_after_leaving_other:
