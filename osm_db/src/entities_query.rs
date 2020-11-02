@@ -15,6 +15,7 @@ pub struct EntitiesQuery {
     max_x: f64,
     min_y: f64,
     max_y: f64,
+    has_interest_rectangle: bool,
     parent_id: Option<String>,
     child_id: Option<String>,
     conditions: Vec<FieldCondition>,
@@ -30,6 +31,7 @@ impl Default for EntitiesQuery {
             max_x: f64::INFINITY,
             min_y: f64::NEG_INFINITY,
             max_y: f64::INFINITY,
+            has_interest_rectangle: false,
             child_id: None,
             parent_id: None,
             conditions: Vec::new(),
@@ -47,6 +49,7 @@ impl EntitiesQuery {
     }
 
     pub fn set_rectangle_of_interest(&mut self, min_x: f64, max_x: f64, min_y: f64, max_y: f64) {
+        self.has_interest_rectangle = true;
         self.min_x = min_x;
         self.max_x = max_x;
         self.min_y = min_y;
@@ -70,8 +73,16 @@ impl EntitiesQuery {
     }
 
     pub fn to_query_sql(&self) -> String {
-        let base_query = "select id, discriminator, AsBinary(geometry) as geometry, data, effective_width from entities, idx_entities_geometry";
-        let mut condition_fragments = vec![RECTANGLE_CONDITION_SQL.to_string()];
+        let base_query = if self.has_interest_rectangle {
+            "select id, discriminator, AsBinary(geometry) as geometry, data, effective_width from entities, idx_entities_geometry"
+        } else {
+            "select id, discriminator, AsBinary(geometry) as geometry, data, effective_width from entities"
+        };
+        let mut condition_fragments = if self.has_interest_rectangle {
+            vec![RECTANGLE_CONDITION_SQL.to_string()]
+        } else {
+            Vec::new()
+        };
         let mut discriminator_placeholders = vec![];
         for idx in 0..self.included_discriminators.len() {
             discriminator_placeholders.push(format!(":included_discriminator{}", idx));
@@ -114,12 +125,16 @@ impl EntitiesQuery {
     }
 
     pub fn to_query_params(&self) -> Vec<(String, &dyn ToSql)> {
-        let mut params: Vec<(String, &dyn ToSql)> = vec![
+        let mut params: Vec<(String, &dyn ToSql)> = if self.has_interest_rectangle {
+            vec![
             (":min_x".to_string(), &self.min_x),
             (":max_x".to_string(), &self.max_x),
             (":min_y".to_string(), &self.min_y),
             (":max_y".to_string(), &self.max_y),
-        ];
+        ] }
+        else {
+            vec![]
+        };
         for (idx, discriminator) in self.included_discriminators.iter().enumerate() {
             params.push((format!(":included_discriminator{}", idx), discriminator));
         }
