@@ -33,28 +33,29 @@ class AnnouncementsController:
         interesting_entity_sound_not_found.connect(self._interesting_entity_sound_not_found)
     
     def _on_post_enter(self, sender, enters):
-        if sender is self._point_of_view:
-            entered_road = False
-            for place in enters:
-                desc = describe_entity(place)
-                self._description_counts[desc] += 1
-                if self._description_counts[desc] > 1: # After adding the current entry we find out that we already said it
-                    continue
-                if place.is_road_like:
-                    classification, maybe_road = self._classify_enter_into(place, enters)
-                    if classification == EntranceKind.initial:
-                        speech().speak(_("You are entering {enters}.").format(enters=desc))
-                    elif classification == EntranceKind.continuation:
-                        self._do_not_announce_leave_of.add(maybe_road)
-                        speech().speak(_("{before} changes to {after}.").format(before=describe_entity(maybe_road), after=desc))
-                    elif classification == EntranceKind.turn:
-                        speech().speak(_("You are crossing {enters}.").format(enters=desc))
-                    entered_road = True
-                    self._announce_possible_turn_opportunity(place)
-                else:
+        if sender is not self._point_of_view:
+            return
+        entered_road = False
+        for place in enters:
+            desc = describe_entity(place)
+            self._description_counts[desc] += 1
+            if self._description_counts[desc] > 1: # After adding the current entry we find out that we already said it
+                continue
+            if place.is_road_like:
+                classification, maybe_road = self._classify_enter_into(place, enters)
+                if classification == EntranceKind.initial:
                     speech().speak(_("You are entering {enters}.").format(enters=desc))
-            if entered_road:
-                self._announce_possible_continuation_opportunity(enters)
+                elif classification == EntranceKind.continuation:
+                    self._do_not_announce_leave_of.add(maybe_road)
+                    speech().speak(_("{before} changes to {after}.").format(before=describe_entity(maybe_road), after=desc))
+                elif classification == EntranceKind.turn:
+                    speech().speak(_("You are crossing {enters}.").format(enters=desc))
+                entered_road = True
+                self._announce_possible_turn_opportunity(place)
+            else:
+                speech().speak(_("You are entering {enters}.").format(enters=desc))
+        if entered_road:
+            self._announce_possible_continuation_opportunity(enters)
             
     def _classify_enter_into(self, place, enters):
         turns = get_meaningful_turns(place, self._point_of_view, zero_turn_is_meaningful=True, ignore_length=True)
@@ -110,34 +111,35 @@ class AnnouncementsController:
 
 
     def _on_post_leave(self, sender, leaves):
-        if sender is self._point_of_view:
-            announced_leave = False
-            for place in leaves:
-                desc = describe_entity(place)
-                self._description_counts[desc] -= 1
-                if self._description_counts[desc] == 0:
-                    del self._description_counts[desc]
-                if self._description_counts[desc] > 0:
-                    continue # Say the message only if we aren't in an entity with the same description because of a different entity
-                if place in self._do_not_announce_leave_of:
-                    self._do_not_announce_leave_of.remove(place)
-                else:
-                    announced_leave = True
-                    if place.is_road_like:
-                        classification, maybe_road = self._classify_leave_of(place)
-                        if classification == LeaveKind.turn:
-                            speech().speak(_("You crossed {leaves}.").format(leaves=desc))
-                        elif classification == LeaveKind.continuation:
-                            speech().speak(_("{before} changes to {after}.").format(before=desc, after=describe_entity(maybe_road)))
-                        elif classification == LeaveKind.last:
-                            speech().speak(_("You are leaving {leaves}").format(leaves=describe_entity(place)))
-                    else:
+        if sender is not self._point_of_view:
+            return
+        announced_leave = False
+        for place in leaves:
+            desc = describe_entity(place)
+            self._description_counts[desc] -= 1
+            if self._description_counts[desc] == 0:
+                del self._description_counts[desc]
+            if self._description_counts[desc] > 0:
+                continue # Say the message only if we aren't in an entity with the same description because of a different entity
+            if place in self._do_not_announce_leave_of:
+                self._do_not_announce_leave_of.remove(place)
+            else:
+                announced_leave = True
+                if place.is_road_like:
+                    classification, maybe_road = self._classify_leave_of(place)
+                    if classification == LeaveKind.turn:
+                        speech().speak(_("You crossed {leaves}.").format(leaves=desc))
+                    elif classification == LeaveKind.continuation:
+                        speech().speak(_("{before} changes to {after}.").format(before=desc, after=describe_entity(maybe_road)))
+                    elif classification == LeaveKind.last:
                         speech().speak(_("You are leaving {leaves}").format(leaves=describe_entity(place)))
-            if announced_leave and config().presentation.announce_current_object_after_leaving_other:
-                if not self._point_of_view.is_inside_of:
-                    speech().speak(_("Now, your location is not known."))
                 else:
-                    speech().speak(_("Now, you're on {}.").format(describe_entity(self._point_of_view.is_inside_of[-1])))
+                    speech().speak(_("You are leaving {leaves}").format(leaves=describe_entity(place)))
+        if announced_leave and config().presentation.announce_current_object_after_leaving_other:
+            if not self._point_of_view.is_inside_of:
+                speech().speak(_("Now, your location is not known."))
+            else:
+                speech().speak(_("Now, you're on {}.").format(describe_entity(self._point_of_view.is_inside_of[-1])))
 
     def _on_rotated(self, sender):
         if self._point_of_view is sender:
