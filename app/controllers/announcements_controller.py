@@ -4,9 +4,9 @@ import shapely.wkb as wkb
 from ..services import speech, config
 from ..entities import entity_post_enter, entity_post_leave, entity_rotated
 from ..humanization_utils import describe_entity, format_number, describe_relative_angle, TemplateType, describe_angle_as_turn_instructions
-from ..geometry_utils import bearing_to, get_meaningful_turns, get_smaller_turn
+from ..geometry_utils import bearing_to, get_meaningful_turns, get_smaller_turn, get_crossing_parts
 from ..entity_utils import get_last_important_road, filter_important_roads
-from .interesting_entities_controller import interesting_entity_in_range
+from .interesting_entities_controller import interesting_entity_in_range, request_interesting_entities
 from .sound_controller import interesting_entity_sound_not_found
 
 LARGE_TURN_THRESHOLD = 10
@@ -35,6 +35,14 @@ class AnnouncementsController:
     def _on_post_enter(self, sender, enters):
         if sender is not self._point_of_view:
             return
+        for place in enters:
+            if place.is_road_like:
+                current_roads = [r for r in filter_important_roads(self._point_of_view.inside_of_roads) if r not in enters]
+                if not current_roads:
+                    continue
+                crossing_possibilities = [r for r in request_interesting_entities.send(self)[0][1] if r.is_road_like and r not in enters and r not in self._point_of_view.is_inside_of]
+                candidates = get_crossing_parts(current_roads[-1], place, crossing_possibilities)
+                print([describe_entity(c) for c in candidates])
         entered_road = False
         for place in enters:
             desc = describe_entity(place)

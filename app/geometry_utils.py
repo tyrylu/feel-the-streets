@@ -220,3 +220,20 @@ def get_meaningful_turns(new_road, entity, zero_turn_is_meaningful=False, ignore
         
 def get_smaller_turn(turn_choices):
     return min(turn_choices, key=lambda i: turn_angle_as_diff_from_zero(abs(i[2])))
+
+def get_crossing_parts(base_road, known_crossing_part, candidates):
+    """Returns the candidates which intersect geometrically at the same point as the known_crossing_part with the base_road."""
+    base_geom = wkb.loads(base_road.geometry)
+    part_geom = wkb.loads(known_crossing_part.geometry)
+    intersection = base_geom.intersection(part_geom)
+    if intersection.is_empty:
+        return []
+    print(f"Known intersection: {intersection}")
+    res = []
+    for candidate in candidates:
+        candidate_geom = wkb.loads(candidate.geometry)
+        candidate_intersection = base_geom.intersection(candidate_geom)
+        print(f"Candidate intersection: {candidate_intersection}")
+        if not  candidate_intersection.is_empty and intersection.distance(candidate_intersection) == 0.0:
+            res.append(candidate)
+    return res
