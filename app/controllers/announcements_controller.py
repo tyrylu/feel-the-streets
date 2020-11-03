@@ -1,3 +1,4 @@
+import enum
 import collections
 import shapely.wkb as wkb
 from ..services import speech, config
@@ -7,6 +8,18 @@ from ..geometry_utils import bearing_to, get_meaningful_turns, get_smaller_turn
 from ..entity_utils import get_last_important_road, filter_important_roads
 from .interesting_entities_controller import interesting_entity_in_range
 from .sound_controller import interesting_entity_sound_not_found
+
+LARGE_TURN_THRESHOLD = 10
+
+class EntranceKind(enum.Enum):
+    initial = 0
+    continuation = 1
+    turn = 2
+
+class LeaveKind(enum.Enum):
+    last = 0
+    continuation = 1
+    turn = 2
 
 class AnnouncementsController:
     def __init__(self, pov):
@@ -28,16 +41,13 @@ class AnnouncementsController:
                 if self._description_counts[desc] > 1: # After adding the current entry we find out that we already said it
                     continue
                 if place.is_road_like:
-                    road_diff = get_smaller_turn(get_meaningful_turns(place, self._point_of_view))[2]
-                    if 355 <= road_diff or 0 <= road_diff <= 5:
-                        important_roads = filter_important_roads(self._point_of_view.inside_of_roads)
-                        old_roads = [r for r in important_roads if r not in enters]
-                        if not old_roads:
-                            speech().speak(_("You are entering {enters}.").format(enters=desc))
-                        else:
-                            self._do_not_announce_leave_of.add(old_roads[-1])
-                            speech().speak(_("{before} changes to {after}.").format(before=describe_entity(old_roads[-1]), after=desc))
-                    else:
+                    classification, maybe_road = self._classify_enter_into(place, enters)
+                    if classification == EntranceKind.initial:
+                        speech().speak(_("You are entering {enters}.").format(enters=desc))
+                    elif classification == EntranceKind.continuation:
+                        self._do_not_announce_leave_of.add(maybe_road)
+                        speech().speak(_("{before} changes to {after}.").format(before=describe_entity(maybe_road), after=desc))
+                    elif classification == EntranceKind.turn:
                         speech().speak(_("You are crossing {enters}.").format(enters=desc))
                     entered_road = True
                     self._announce_possible_turn_opportunity(place)
@@ -46,6 +56,31 @@ class AnnouncementsController:
             if entered_road:
                 self._announce_possible_continuation_opportunity(enters)
             
+    def _classify_enter_into(self, place, enters):
+        turns = get_meaningful_turns(place, self._point_of_view, zero_turn_is_meaningful=True, ignore_length=True)
+        road_diff = get_smaller_turn(turns)[2]
+        if 0 <= abs(road_diff) <= LARGE_TURN_THRESHOLD:
+            important_roads = filter_important_roads(self._point_of_view.inside_of_roads)
+            old_roads = [r for r in important_roads if r not in enters]
+            if not old_roads:
+                return EntranceKind.initial, None
+            else:
+                return EntranceKind.continuation, old_roads[-1]
+        else:
+            return EntranceKind.turn, None
+                        
+    def _classify_leave_of(self, place):
+        if not self._point_of_view.inside_of_roads:
+            return LeaveKind.last, None
+        last_important = get_last_important_road(self._point_of_view.inside_of_roads)
+        turns = get_meaningful_turns(place, self._point_of_view, zero_turn_is_meaningful=True, ignore_length=True)
+        road_diff = get_smaller_turn(turns)[2]
+        print(road_diff)
+        if 0 <= abs(road_diff) <= LARGE_TURN_THRESHOLD:
+            return LeaveKind.continuation, last_important
+        else:
+            return LeaveKind.turn, None
+
     def _announce_possible_continuation_opportunity(self, newly_entered):
         roads_before_entering = [r for r in self._point_of_view.inside_of_roads if r not in newly_entered]
         if len(roads_before_entering) < 1:
@@ -89,7 +124,13 @@ class AnnouncementsController:
                 else:
                     announced_leave = True
                     if place.is_road_like:
-                        speech().speak(_("You crossed {leaves}.").format(leaves=desc))
+                        classification, maybe_road = self._classify_leave_of(place)
+                        if classification == LeaveKind.turn:
+                            speech().speak(_("You crossed {leaves}.").format(leaves=desc))
+                        elif classification == LeaveKind.continuation:
+                            speech().speak(_("{before} changes to {after}.").format(before=desc, after=describe_entity(maybe_road)))
+                        elif classification == LeaveKind.last:
+                            speech().speak(_("You are leaving {leaves}").format(leaves=describe_entity(place)))
                     else:
                         speech().speak(_("You are leaving {leaves}").format(leaves=describe_entity(place)))
             if announced_leave and config().presentation.announce_current_object_after_leaving_other:
