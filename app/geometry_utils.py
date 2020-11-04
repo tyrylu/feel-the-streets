@@ -221,19 +221,20 @@ def get_meaningful_turns(new_road, entity, zero_turn_is_meaningful=False, ignore
 def get_smaller_turn(turn_choices):
     return min(turn_choices, key=lambda i: turn_angle_as_diff_from_zero(abs(i[2])))
 
-def get_crossing_parts(base_road, known_crossing_part, candidates):
-    """Returns the candidates which intersect geometrically at the same point as the known_crossing_part with the base_road."""
+def get_crossing_point(base_road, known_crossing_part, candidates):
+    """Returns the point where the base_road intersects with the known_crossing_part. If that intersection is more complex, finds the correct point using the candidates as help."""
     base_geom = wkb.loads(base_road.geometry)
     part_geom = wkb.loads(known_crossing_part.geometry)
     intersection = base_geom.intersection(part_geom)
     if intersection.is_empty:
-        return []
-    print(f"Known intersection: {intersection}")
-    res = []
+        return None
+    if intersection.geom_type == "Point":
+        return intersection
+    # Did not find a point intersection so try to find one from the candidates, they might have simpler ones
     for candidate in candidates:
         candidate_geom = wkb.loads(candidate.geometry)
         candidate_intersection = base_geom.intersection(candidate_geom)
-        print(f"Candidate intersection: {candidate_intersection}")
-        if not  candidate_intersection.is_empty and intersection.distance(candidate_intersection) == 0.0:
-            res.append(candidate)
-    return res
+        if not  candidate_intersection.is_empty and intersection.distance(candidate_intersection) == 0.0 and candidate_intersection.geom_type == "Point":
+            return candidate_intersection
+    log.warn("Did not find a point intersection for base road %s, known crossing part %s and candidates %s.", base_road.id, known_crossing_part.id, [c.id for c in candidates])
+    return None
