@@ -6,4 +6,5 @@ CREATE TABLE entities (
 	effective_width FLOAT);
 SELECT AddGeometryColumn("entities", "geometry", 4326, "GEOMETRY", 2, 1);
 SELECT CreateSpatialIndex('entities', 'geometry');
+CREATE INDEX idx_entity_by_name on entities(json_extract(data, "$.name"));
 CREATE TABLE entity_relationships (parent_id VARCHAR(16) REFERENCES entities(id) ON DELETE CASCADE, child_id VARCHAR(16) REFERENCES entities(id) ON DELETE CASCADE, kind INTEGER CHECK (KIND in (0)), PRIMARY KEY (parent_id, child_id, kind));

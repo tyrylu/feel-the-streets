@@ -139,7 +139,7 @@ fn calculate_effective_width(discriminator: &str, tags: &HashMap<String, String>
             }
         },
 
-        "Road" => {
+        "Road" | "ServiceRoad" | "Track" => {
             if tags.contains_key("width") {
                 match tags["width"].parse() {
                     Ok(val) => Some(val),

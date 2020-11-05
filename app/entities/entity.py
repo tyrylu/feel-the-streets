@@ -1,11 +1,12 @@
 from pydantic import BaseModel, Field
 from ordered_set import OrderedSet
 from typing import ClassVar, Set
-from . import entity_pre_move, entity_post_move, entity_pre_enter, entity_post_enter, entity_pre_leave, entity_post_leave, entity_rotated, entity_move_rejected
+from . import entity_pre_move, entity_post_move, entity_pre_enter, entity_post_enter, entity_pre_leave, entity_post_leave, entity_rotated, entity_move_rejected, MoveValidationResult
 from ..measuring import measure
 from ..map import Map
 from ..geometry_utils import to_shapely_point, to_latlon, closest_point_to
 from pygeodesy.ellipsoidalVincenty import LatLon
+
 
 
 class Entity(BaseModel):
@@ -24,8 +25,10 @@ class Entity(BaseModel):
     def move_to(self, pos, force=False):
         if not force and entity_pre_move.has_receivers_for(self):
             for func, ret in entity_pre_move.send(self, new_pos=pos):
-                if not ret:
+                if ret is MoveValidationResult.reject:
                     entity_move_rejected.send(self)
+                    return False
+                elif ret is MoveValidationResult.cancel:
                     return False
         with measure("Inside of query"):
             new_inside_of = OrderedSet(entity for entity in self.map.intersections_at_position(pos))
@@ -33,15 +36,19 @@ class Entity(BaseModel):
             enters = new_inside_of.difference(self.is_inside_of)
         if enters and not force and entity_pre_enter.has_receivers_for(self):
             for func, ret in entity_pre_enter.send(self, enters=enters):
-                if not ret:
+                if ret is MoveValidationResult.reject:
                     entity_move_rejected.send(self)
+                    return False
+                elif ret is MoveValidationResult.cancel:
                     return False
         if entity_pre_leave.has_receivers_for(self) or entity_post_leave.has_receivers_for(self):
             leaves = self.is_inside_of.difference(new_inside_of)
         if not force and entity_pre_leave.has_receivers_for(self) and leaves:
             for func, ret in entity_pre_leave.send(self, leaves=leaves):
-                if not ret:
+                if ret is MoveValidationResult.reject:
                     entity_move_rejected.send(self)
+                    return False
+                elif ret is MoveValidationResult.cancel:
                     return False
         self.position = pos
         # Note that we unfortunately can not assign the new_inside_of set directly as it has no defined ordering from the database, or rather, it has likely the wrong one.

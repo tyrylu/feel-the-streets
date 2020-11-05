@@ -1,16 +1,31 @@
+import enum
 import collections
 import shapely.wkb as wkb
 from ..services import speech, config
 from ..entities import entity_post_enter, entity_post_leave, entity_rotated
 from ..humanization_utils import describe_entity, format_number, describe_relative_angle, TemplateType, describe_angle_as_turn_instructions
-from ..geometry_utils import bearing_to, get_meaningful_turns
-from ..entity_utils import get_last_important_road
+from ..geometry_utils import bearing_to, get_meaningful_turns, get_smaller_turn
+from ..entity_utils import get_last_important_road, filter_important_roads
 from .interesting_entities_controller import interesting_entity_in_range
 from .sound_controller import interesting_entity_sound_not_found
+
+LARGE_TURN_THRESHOLD = 10
+
+class EntranceKind(enum.Enum):
+    initial = 0
+    continuation = 1
+    turn = 2
+
+class LeaveKind(enum.Enum):
+    last = 0
+    continuation = 1
+    turn = 2
 
 class AnnouncementsController:
     def __init__(self, pov):
         self._point_of_view = pov
+        self._description_counts = collections.Counter()
+        self._do_not_announce_leave_of = set()
         entity_post_enter.connect(self._on_post_enter)
         entity_post_leave.connect(self._on_post_leave)
         entity_rotated.connect(self._on_rotated)
@@ -18,22 +33,54 @@ class AnnouncementsController:
         interesting_entity_sound_not_found.connect(self._interesting_entity_sound_not_found)
     
     def _on_post_enter(self, sender, enters):
-        if sender is self._point_of_view:
-            current_descs = collections.Counter(describe_entity(p) for p in self._point_of_view.is_inside_of)
-            new_descs = collections.Counter(describe_entity(e) for e in enters)
-            entered_road = False
-            for place in enters:
-                desc = describe_entity(place)
-                if current_descs[desc] - new_descs[desc] > 0:
-                    continue # We would repeat a name which we already announced before
-                new_descs[desc] -= 1 # In case of entering an entity with a repeated same name in the same execution, we want to say the name only once.
+        if sender is not self._point_of_view:
+            return
+        entered_road = False
+        for place in enters:
+            desc = describe_entity(place)
+            self._description_counts[desc] += 1
+            if self._description_counts[desc] > 1: # After adding the current entry we find out that we already said it
+                continue
+            if place.is_road_like:
+                classification, maybe_road = self._classify_enter_into(place, enters)
+                if classification == EntranceKind.initial:
+                    speech().speak(_("You are entering {enters}.").format(enters=desc))
+                elif classification == EntranceKind.continuation:
+                    self._do_not_announce_leave_of.add(maybe_road)
+                    speech().speak(_("{before} changes to {after}.").format(before=describe_entity(maybe_road), after=desc))
+                elif classification == EntranceKind.turn:
+                    speech().speak(_("You are crossing {enters}.").format(enters=desc))
+                entered_road = True
+                self._announce_possible_turn_opportunity(place)
+            else:
                 speech().speak(_("You are entering {enters}.").format(enters=desc))
-                if place.is_road_like:
-                    entered_road = True
-                    self._announce_possible_turn_opportunity(place)
-            if entered_road:
-                self._announce_possible_continuation_opportunity(enters)
+        if entered_road:
+            self._announce_possible_continuation_opportunity(enters)
             
+    def _classify_enter_into(self, place, enters):
+        turns = get_meaningful_turns(place, self._point_of_view, zero_turn_is_meaningful=True, ignore_length=True)
+        road_diff = get_smaller_turn(turns)[2]
+        if 0 <= abs(road_diff) <= LARGE_TURN_THRESHOLD:
+            important_roads = filter_important_roads(self._point_of_view.inside_of_roads)
+            old_roads = [r for r in important_roads if r not in enters]
+            if not old_roads:
+                return EntranceKind.initial, None
+            else:
+                return EntranceKind.continuation, old_roads[-1]
+        else:
+            return EntranceKind.turn, None
+                        
+    def _classify_leave_of(self, place):
+        if not self._point_of_view.inside_of_roads:
+            return LeaveKind.last, None
+        last_important = get_last_important_road(self._point_of_view.inside_of_roads)
+        turns = get_meaningful_turns(place, self._point_of_view, zero_turn_is_meaningful=True, ignore_length=True)
+        road_diff = get_smaller_turn(turns)[2]
+        if 0 <= abs(road_diff) <= LARGE_TURN_THRESHOLD:
+            return LeaveKind.continuation, last_important
+        else:
+            return LeaveKind.turn, None
+
     def _announce_possible_continuation_opportunity(self, newly_entered):
         roads_before_entering = [r for r in self._point_of_view.inside_of_roads if r not in newly_entered]
         if len(roads_before_entering) < 1:
@@ -63,22 +110,35 @@ class AnnouncementsController:
 
 
     def _on_post_leave(self, sender, leaves):
-        if sender is self._point_of_view:
-            seen_descs = set()
-            current_descs = collections.Counter(describe_entity(e) for e in self._point_of_view.is_inside_of)
-            announced_leave = False
-            for place in leaves:
-                desc = describe_entity(place)
-                if current_descs[desc] > 0 or desc in seen_descs:
-                    continue # Say the message only if we aren't in an entity with the same name and we're saying it for the first time.
-                seen_descs.add(desc)
+        if sender is not self._point_of_view:
+            return
+        announced_leave = False
+        for place in leaves:
+            desc = describe_entity(place)
+            self._description_counts[desc] -= 1
+            if self._description_counts[desc] == 0:
+                del self._description_counts[desc]
+            if self._description_counts[desc] > 0:
+                continue # Say the message only if we aren't in an entity with the same description because of a different entity
+            if place in self._do_not_announce_leave_of:
+                self._do_not_announce_leave_of.remove(place)
+            else:
                 announced_leave = True
-                speech().speak(_("You are leaving {leaves}").format(leaves=describe_entity(place)))
-            if announced_leave and config().presentation.announce_current_object_after_leaving_other:
-                if not self._point_of_view.is_inside_of:
-                    speech().speak(_("Now, your location is not known."))
+                if place.is_road_like:
+                    classification, maybe_road = self._classify_leave_of(place)
+                    if classification == LeaveKind.turn:
+                        speech().speak(_("You crossed {leaves}.").format(leaves=desc))
+                    elif classification == LeaveKind.continuation:
+                        speech().speak(_("{before} changes to {after}.").format(before=desc, after=describe_entity(maybe_road)))
+                    elif classification == LeaveKind.last:
+                        speech().speak(_("You are leaving {leaves}").format(leaves=describe_entity(place)))
                 else:
-                    speech().speak(_("Now, you're on {}.").format(describe_entity(self._point_of_view.is_inside_of[-1])))
+                    speech().speak(_("You are leaving {leaves}").format(leaves=describe_entity(place)))
+        if announced_leave and config().presentation.announce_current_object_after_leaving_other:
+            if not self._point_of_view.is_inside_of:
+                speech().speak(_("Now, your location is not known."))
+            else:
+                speech().speak(_("Now, you're on {}.").format(describe_entity(self._point_of_view.is_inside_of[-1])))
 
     def _on_rotated(self, sender):
         if self._point_of_view is sender:
