@@ -9,6 +9,7 @@ extern crate lazy_static;
 
 pub mod area_db;
 pub mod entities_query;
+mod entities_query_executor;
 pub mod entities_query_condition;
 pub mod entity;
 pub mod entity_metadata;

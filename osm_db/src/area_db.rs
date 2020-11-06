@@ -1,6 +1,7 @@
 use crate::entities_query::EntitiesQuery;
 use crate::entity::Entity;
 use crate::entity_relationship_kind::EntityRelationshipKind;
+use crate::entities_query_executor::EntitiesQueryExecutor;
 use crate::semantic_change::{ListChange, SemanticChange};
 use crate::{Error, Result};
 use rusqlite::types::ToSql;
@@ -34,7 +35,7 @@ fn classify_db_error(err: &rusqlite::Error, child_id: &str) -> ForeignKeyViolati
     }
 }
 
-fn row_to_entity(row: &Row) -> core::result::Result<Entity, rusqlite::Error> {
+pub(crate) fn row_to_entity(row: &Row) -> core::result::Result<Entity, rusqlite::Error> {
     Ok(Entity {
         id: row.get_unwrap(0),
         geometry: row.get_unwrap(2),
@@ -52,7 +53,7 @@ fn init_extensions(conn: &Connection) -> Result<()> {
 }
 
 pub struct AreaDatabase {
-    conn: Connection,
+    pub(crate) conn: Connection,
     deferred_relationship_additions: HashMap<String, String>,
 }
 
@@ -183,18 +184,11 @@ impl AreaDatabase {
         }
     }
     pub fn get_entities(&self, query: &EntitiesQuery) -> Result<Vec<Entity>> {
-        debug!("About to execute query {}", query.to_query_sql());
-        let mut stmt = self.conn.prepare_cached(&query.to_query_sql())?;
-        let orig_params = query.to_query_params();
-        let mut params = vec![];
-        for (name, value) in &orig_params {
-            params.push((name.as_str(), *value));
-        }
-        let now = Instant::now();
-        let res = stmt.query_map_named(params.as_slice(), row_to_entity)?;
-        debug!("Query_map_named took {:?}", now.elapsed());
-        let results = res.map(|e| e.expect("Failed to retrieve entity")).collect();
-        debug!("Query results retrieval took {:?}", now.elapsed());
+        let mut executor = EntitiesQueryExecutor::new(query);
+        let rows = executor.prepare_execute(&self)?;
+        let start = Instant::now();
+        let results = rows.mapped(row_to_entity).map(|e| e.expect("Failed to retrieve entity")).collect();
+        debug!("Results retrieved in {:?}.", start.elapsed());
         Ok(results)
     }
 
@@ -429,5 +423,11 @@ impl AreaDatabase {
         }
         self.deferred_relationship_additions.clear();
         Ok(())
+    }
+
+    pub fn get_road_ids_with_name(&self, name:&str, ordered_by_distance_to: &str) -> Result<Vec<String>> {
+        let mut stmt = self.conn.prepare_cached("select id, from entities, (select geometry from entities where id = ? limit 1) as wanted where discriminator in ('Road', 'ServiceRoad', 'Track') and json_extract(data, '$.name') = ? order by distance(wanted.geometry, entities.geometry)")?;
+let results = stmt.query_map(params![ordered_by_distance_to, name], |r| -> rusqlite::Result<String> {Ok(r.get_unwrap(0))})?.map(|e| e.expect("Should not happen")).collect();
+Ok(results)
     }
 }
