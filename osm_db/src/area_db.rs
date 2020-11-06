@@ -426,7 +426,7 @@ impl AreaDatabase {
     }
 
     pub fn get_road_ids_with_name(&self, name:&str, ordered_by_distance_to: &str) -> Result<Vec<String>> {
-        let mut stmt = self.conn.prepare_cached("select id, from entities, (select geometry from entities where id = ? limit 1) as wanted where discriminator in ('Road', 'ServiceRoad', 'Track') and json_extract(data, '$.name') = ? order by distance(wanted.geometry, entities.geometry)")?;
+        let mut stmt = self.conn.prepare_cached("select id from entities, (select geometry from entities where id = ? limit 1) as wanted where discriminator in ('Road', 'ServiceRoad', 'Track') and json_extract(data, '$.name') = ? order by distance(wanted.geometry, entities.geometry)")?;
 let results = stmt.query_map(params![ordered_by_distance_to, name], |r| -> rusqlite::Result<String> {Ok(r.get_unwrap(0))})?.map(|e| e.expect("Should not happen")).collect();
 Ok(results)
     }
