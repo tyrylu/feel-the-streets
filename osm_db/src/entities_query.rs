@@ -112,17 +112,17 @@ impl EntitiesQuery {
         for (idx, condition) in self.conditions.iter().enumerate() {
             condition_fragments.push(condition.to_query_fragment(idx));
         }
-        if let Some(limit) = self.limit {
-            format!(
-                "{} WHERE {} LIMIT {}",
-                base_query,
-                condition_fragments.join(" AND "),
-                limit
-            )
-        } else {
-            format!("{} WHERE {}", base_query, condition_fragments.join(" AND "))
+        let mut query_sql = base_query.to_string();
+        if condition_fragments.len() > 0 {
+            query_sql.push_str(&format!(" WHERE {}", condition_fragments.join(" AND ")));
         }
+        if let Some(limit) = self.limit {
+            query_sql.push_str(&format!(" LIMIT {}", self.limit.unwrap()));
     }
+    query_sql
+    }
+
+
 
     pub fn to_query_params(&self) -> Vec<(String, &dyn ToSql)> {
         let mut params: Vec<(String, &dyn ToSql)> = if self.has_interest_rectangle {
