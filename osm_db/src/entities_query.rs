@@ -117,7 +117,7 @@ impl EntitiesQuery {
             query_sql.push_str(&format!(" WHERE {}", condition_fragments.join(" AND ")));
         }
         if let Some(limit) = self.limit {
-            query_sql.push_str(&format!(" LIMIT {}", self.limit.unwrap()));
+            query_sql.push_str(&format!(" LIMIT {}", limit));
     }
     query_sql
     }
