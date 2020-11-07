@@ -3,7 +3,8 @@ use rusqlite::types::ToSqlOutput;
 
 pub enum EntityRelationshipKind {
     OSMChild,
-    Street
+    Street,
+    Address
 }
 
 impl ToSql for EntityRelationshipKind {
@@ -12,6 +13,7 @@ impl ToSql for EntityRelationshipKind {
         match self {
             OSMChild => Ok(ToSqlOutput::from(0)),
             Street => Ok(ToSqlOutput::from(1)),
+            Address => Ok(ToSqlOutput::from(2)),
         }
     }
 }

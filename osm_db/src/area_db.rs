@@ -1,5 +1,5 @@
 use crate::entities_query::EntitiesQuery;
-use crate::entity::Entity;
+use crate::entity::{Entity, BasicEntityInfo};
 use crate::entity_relationship_kind::EntityRelationshipKind;
 use crate::entities_query_executor::EntitiesQueryExecutor;
 use crate::semantic_change::{ListChange, SemanticChange};
@@ -430,4 +430,23 @@ impl AreaDatabase {
 let results = stmt.query_map(params![ordered_by_distance_to, name], |r| -> rusqlite::Result<String> {Ok(r.get_unwrap(0))})?.map(|e| e.expect("Should not happen")).collect();
 Ok(results)
     }
+
+    pub fn get_basic_contained_entities_info(&self, entity_id: &str) -> Result<Vec<BasicEntityInfo>> {
+        let mut stmt = self.conn.prepare_cached("SELECT id, discriminator FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE ND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry)")?;
+        let results = stmt.query_map(params![entity_id], |r| -> rusqlite::Result<BasicEntityInfo> {Ok(BasicEntityInfo{id:r.get_unwrap(0), discriminator:r.get_unwrap(1)})})?.map(|i| i.expect("Should not happen")).collect();
+        Ok(results)
+    }
+
+    pub fn num_addressables_in(&self, entity_id: &str) -> Result<i64> {
+        let mut stmt = self.conn.prepare_cached("SELECT count(*) FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE entities.discriminator = 'Addressable' AND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry)")?;
+let num: i64 =      stmt.query_row(params![entity_id], |row| Ok(row.get_unwrap(0)))?;
+Ok(num)
+    }
+    pub fn get_addressable_ids_in(&self, entity_id: &str) -> Result<Vec<String>> {
+        let mut stmt = self.conn.prepare_cached("SELECT id FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE discriminator = 'Addressable' AND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry)")?;
+        let results = stmt.query_map(params![entity_id], |r| -> rusqlite::Result<String> {Ok(r.get_unwrap(0))})?.map(|i| i.expect("Should not happen")).collect();
+        Ok(results)
+    }
+
 }
+
