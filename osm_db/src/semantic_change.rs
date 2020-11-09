@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use crate::entity_relationship::RootedEntityRelationship;
+
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum EntryChange {
@@ -39,18 +41,18 @@ impl EntryChange {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum ListChange {
-    Add { value: String },
-    Remove { value: String },
+pub enum RelationshipChange {
+    Add { value: RootedEntityRelationship },
+    Remove { value: RootedEntityRelationship },
 }
 
-impl ListChange {
-    pub fn adding(value: String) -> Self {
-        ListChange::Add { value }
+impl RelationshipChange {
+    pub fn adding(value: RootedEntityRelationship) -> Self {
+        RelationshipChange::Add { value }
     }
 
-    pub fn removing(value: String) -> Self {
-        ListChange::Remove { value }
+    pub fn removing(value: RootedEntityRelationship) -> Self {
+        RelationshipChange::Remove { value }
     }
 }
 
@@ -63,7 +65,7 @@ pub enum SemanticChange {
         discriminator: String,
         data: String,
         effective_width: Option<f64>,
-        child_ids: Vec<String>,
+        entity_relationships: Vec<RootedEntityRelationship>,
     },
     Remove {
         osm_id: String,
@@ -72,7 +74,7 @@ pub enum SemanticChange {
         osm_id: String,
         property_changes: Vec<EntryChange>,
         data_changes: Vec<EntryChange>,
-        child_id_changes: Vec<ListChange>,
+        relationship_changes: Vec<RelationshipChange>,
     },
 }
 
@@ -83,7 +85,7 @@ impl SemanticChange {
         discriminator: String,
         data: String,
         effective_width: Option<f64>,
-        child_ids: Vec<String>,
+        relationships: Vec<RootedEntityRelationship>,
     ) -> Self {
         SemanticChange::Create {
             geometry: base64::encode(&geometry),
@@ -91,7 +93,7 @@ impl SemanticChange {
             discriminator,
             data,
             effective_width,
-            child_ids,
+            entity_relationships: relationships,
         }
     }
     pub fn removing(osm_id: &str) -> Self {
@@ -104,12 +106,12 @@ impl SemanticChange {
         osm_id: &str,
         property_changes: Vec<EntryChange>,
         data_changes: Vec<EntryChange>,
-        child_id_changes: Vec<ListChange>,
+        relationship_changes: Vec<RelationshipChange>,
     ) -> Self {
         SemanticChange::Update {
             property_changes,
             data_changes,
-            child_id_changes,
+            relationship_changes,
             osm_id: osm_id.to_string(),
         }
     }

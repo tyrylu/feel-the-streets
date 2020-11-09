@@ -1,6 +1,7 @@
 use rusqlite::ToSql; 
 use rusqlite::types::ToSqlOutput;
 
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq, Serialize, Deserialize)]
 pub enum EntityRelationshipKind {
     OSMChild,
     Street,

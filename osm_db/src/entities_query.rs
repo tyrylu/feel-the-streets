@@ -113,7 +113,7 @@ impl EntitiesQuery {
             condition_fragments.push(condition.to_query_fragment(idx));
         }
         let mut query_sql = base_query.to_string();
-        if condition_fragments.len() > 0 {
+        if !condition_fragments.is_empty() {
             query_sql.push_str(&format!(" WHERE {}", condition_fragments.join(" AND ")));
         }
         if let Some(limit) = self.limit {

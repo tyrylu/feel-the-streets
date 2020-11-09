@@ -8,7 +8,7 @@ use lapin::options::ConfirmSelectOptions;
 use lapin::Channel;
 use osm_api::change::OSMObjectChangeType;
 use osm_api::object_manager::OSMObjectManager;
-use osm_db::area_db::AreaDatabase;
+use osm_db::{area_db::AreaDatabase, entity_relationship_kind::EntityRelationshipKind, entity_relationship::RootedEntityRelationship};
 use osm_db::semantic_change::SemanticChange;
 use osm_db::translation::{record::TranslationRecord, translator};
 use std::fs;
@@ -70,7 +70,7 @@ fn update_area(
                     o.discriminator,
                     o.data,
                     o.effective_width,
-                    ids.collect(),
+                    ids.map(|id| RootedEntityRelationship::new(id.to_string(), EntityRelationshipKind::OSMChild)).collect(),
                 )
             }),
             Delete => {
@@ -103,13 +103,14 @@ fn update_area(
                         new.discriminator,
                         new.data,
                         new.effective_width,
-                        new_ids.collect(),
+                        new_ids.map(|id| RootedEntityRelationship::new(id, EntityRelationshipKind::OSMChild)).collect(),
                     )),
                     (Some(old), Some((new, new_ids))) => {
                         let (data_changes, property_changes) =
                             diff_utils::diff_entities(&old, &new)?;
                         let old_ids = area_db.get_entity_child_ids(&old.id)?;
-                        let child_id_changes = diff_utils::diff_lists(&old_ids, &new_ids.collect());
+                        let old_relationships: Vec<RootedEntityRelationship> = old_ids.iter().map(|id| RootedEntityRelationship::new(id.to_string(), EntityRelationshipKind::OSMChild)).collect();
+                        let child_id_changes = diff_utils::diff_relationship_lists(&old_relationships, &new_ids.map(|id| RootedEntityRelationship::new(id, EntityRelationshipKind::OSMChild)).collect());
                         Some(SemanticChange::updating(
                             &osm_id,
                             property_changes,

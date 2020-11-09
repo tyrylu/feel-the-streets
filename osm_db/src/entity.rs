@@ -17,6 +17,9 @@ pub struct Entity {
 }
 
 impl Entity {
+    pub fn is_road_like(&self) -> bool {
+        self.discriminator == "Road" || self.discriminator == "ServiceRoad" || self.discriminator == "Track" || self.discriminator == "Footway"
+    }
     pub fn value_of_field(&mut self, key: &str) -> &Value {
         if self.parsed_data.is_none() {
             self.parsed_data =

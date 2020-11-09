@@ -16,7 +16,7 @@ if let Some(street) = addr_field.as_object().expect("Street should be always an 
         return Ok(Some(EntityRelationship::new(id.clone(), entity.id.clone(), EntityRelationshipKind::Street)));
     }
 let roads = db.get_road_ids_with_name(&street_str, &entity.id)?;
-if roads.len() == 0 {
+if roads.is_empty() {
             warn!("An address tag references the street {}, but no such street exists in the database.", street_str);
     return Ok(None);
 }

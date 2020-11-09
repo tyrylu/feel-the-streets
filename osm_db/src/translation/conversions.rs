@@ -11,9 +11,9 @@ pub fn convert_address(tags: &HashMap<String, String>) -> (HashMap<String, Strin
     let mut address_field_names = vec![];
     let mut address_fields = HashMap::new();
     for (key, val) in tags.iter() {
-        if key.starts_with("addr:") {
+        if let Some(stripped_key) = key.strip_prefix("addr:") {
             address_field_names.push(key.as_str());
-            address_fields.insert(key[5..].to_string(), val.clone());
+            address_fields.insert(stripped_key.to_string(), val.clone());
         }
     }
     (address_fields, address_field_names)

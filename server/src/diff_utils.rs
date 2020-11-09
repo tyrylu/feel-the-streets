@@ -1,6 +1,6 @@
 use crate::Result;
-use osm_db::entity::Entity;
-use osm_db::semantic_change::{EntryChange, ListChange};
+use osm_db::{entity::Entity, entity_relationship::RootedEntityRelationship};
+use osm_db::semantic_change::{EntryChange, RelationshipChange};
 use serde_json::{Map, Value};
 use std::collections::HashSet;
 
@@ -98,15 +98,15 @@ pub fn diff_entities(old: &Entity, new: &Entity) -> Result<(Vec<EntryChange>, Ve
     Ok((data_changes, property_changes))
 }
 
-pub fn diff_lists(old_ids: &Vec<String>, new_ids: &Vec<String>) -> Vec<ListChange> {
-    let old: HashSet<&String> = old_ids.iter().collect();
-    let new: HashSet<&String> = new_ids.iter().collect();
+pub fn diff_relationship_lists(old_relationships: &Vec<RootedEntityRelationship>, new_relationships: &Vec<RootedEntityRelationship>) -> Vec<RelationshipChange> {
+    let old: HashSet<&RootedEntityRelationship> = old_relationships.iter().collect();
+    let new: HashSet<&RootedEntityRelationship> = new_relationships.iter().collect();
     let mut res = vec![];
     for added in new.difference(&old) {
-        res.push(ListChange::adding(added.to_string()));
+        res.push(RelationshipChange::adding((*added).clone()));
     }
     for removed in old.difference(&new) {
-        res.push(ListChange::removing(removed.to_string()));
+        res.push(RelationshipChange::removing((*removed).clone()));
     }
     res
 }

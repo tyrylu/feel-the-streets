@@ -1,8 +1,9 @@
-use crate::entities_query::EntitiesQuery;
+use crate::{entities_query::EntitiesQuery, entity_relationship::RootedEntityRelationship};
 use crate::entity::{Entity, BasicEntityInfo};
 use crate::entity_relationship_kind::EntityRelationshipKind;
 use crate::entities_query_executor::EntitiesQueryExecutor;
-use crate::semantic_change::{ListChange, SemanticChange};
+use crate::entity_relationship::EntityRelationship;
+use crate::semantic_change::{RelationshipChange, SemanticChange};
 use crate::{Error, Result};
 use rusqlite::types::ToSql;
 use rusqlite::{params, Connection, OpenFlags, Row, NO_PARAMS};
@@ -14,7 +15,7 @@ const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
 const INSERT_ENTITY_SQL: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (?, ?, geomFromWKB(?, 4326), ?, ?)";
 const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (?, ?, Buffer(geomFromWKB(?, 4326), 0), ?, ?)";
 const INSERT_ENTITY_RELATIONSHIP_SQL: &str =
-    "INSERT INTO entity_relationships (parent_id, child_id, kind) VALUES (?, ?, ?)";
+    "INSERT INTO entity_relationships (parent_id, child_id, kind) VALUES (?, ?, ?) ON CONFLICT DO NOTHING";
 
 #[derive(PartialEq)]
 enum ForeignKeyViolationClassification {
@@ -25,7 +26,7 @@ enum ForeignKeyViolationClassification {
 
 fn classify_db_error(err: &rusqlite::Error, child_id: &str) -> ForeignKeyViolationClassification {
     if let rusqlite::Error::SqliteFailure(_, Some(_msg)) = err {
-        if child_id.chars().next().unwrap() == 'r' {
+        if child_id.starts_with('r') {
             ForeignKeyViolationClassification::Retryable // Only relations can have relations as a child, so it is enough to look at the child id.
         } else {
             ForeignKeyViolationClassification::Fatal
@@ -54,7 +55,7 @@ fn init_extensions(conn: &Connection) -> Result<()> {
 
 pub struct AreaDatabase {
     pub(crate) conn: Connection,
-    deferred_relationship_additions: HashMap<String, String>,
+    deferred_relationship_additions: HashMap<String, RootedEntityRelationship>,
 }
 
 impl AreaDatabase {
@@ -158,7 +159,7 @@ impl AreaDatabase {
         }
         // Handle deferred relationship insertions.
         for (parent, child) in deferred_relationship_insertions.iter() {
-            self.insert_deferred_entity_relationship(parent, child)?;
+            self.insert_entity_relationship(&EntityRelationship::new(parent.to_string(), child.to_string(), EntityRelationshipKind::OSMChild))?;
         }
 
         self.commit()?;
@@ -234,7 +235,7 @@ impl AreaDatabase {
         geometry: &[u8],
         effective_width: &Option<f64>,
         data: &str,
-        child_ids: &[String],
+        entity_relationships: &[RootedEntityRelationship],
     ) -> Result<()> {
         let mut stmt = if self.geometry_is_valid(&geometry)? {
             self.conn.prepare_cached(INSERT_ENTITY_SQL)?
@@ -242,13 +243,13 @@ impl AreaDatabase {
             self.conn.prepare_cached(INSERT_ENTITY_SQL_BUFFERED)?
         };
         stmt.execute(params![id, discriminator, geometry, effective_width, data])?;
-        let mut insert_child_id_stmt = self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
-        for child_id in child_ids {
-            if let Err(e) = insert_child_id_stmt.execute(params![id, child_id, EntityRelationshipKind::OSMChild]) {
-                match classify_db_error(&e, &child_id) {
+        let mut insert_relationship_stmt = self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
+        for relationship in entity_relationships {
+            if let Err(e) = insert_relationship_stmt.execute(params![id, relationship.child_id, relationship.kind]) {
+                match classify_db_error(&e, &relationship.child_id) {
                     ForeignKeyViolationClassification::Retryable => {
                         self.deferred_relationship_additions
-                            .insert(id.to_string(), child_id.to_string());
+                            .insert(id.to_string(), relationship.clone());
                     }
                     ForeignKeyViolationClassification::Fatal => {
                         continue;
@@ -296,27 +297,27 @@ impl AreaDatabase {
                 geometry,
                 effective_width,
                 data,
-                child_ids,
+                entity_relationships,
             } => self.insert_entity(
                 &id,
                 &discriminator,
                 &base64::decode(&geometry).expect("Geometry should be base64 encoded"),
                 &effective_width,
                 &data,
-                &child_ids,
+                entity_relationships,
             ),
             Remove { osm_id } => self.remove_entity(&osm_id),
             Update {
                 osm_id,
                 property_changes,
                 data_changes,
-                child_id_changes,
+                relationship_changes,
             } => {
                 if let Some(mut entity) = self.get_entity(&osm_id)? {
                     entity.apply_property_changes(&property_changes);
                     entity.apply_data_changes(&data_changes);
                     self.save_updated_entity(&entity)?;
-                    self.apply_child_id_changes(&entity.id, child_id_changes)
+                    self.apply_child_id_changes(&entity.id, relationship_changes)
                 } else {
                     warn!("Change application requested an update of non-existent entity with osm id {}.", osm_id);
                     Ok(())
@@ -344,19 +345,19 @@ impl AreaDatabase {
         Ok(())
     }
 
-    fn apply_child_id_changes(&mut self, parent_id: &str, changes: &[ListChange]) -> Result<()> {
+    fn apply_child_id_changes(&mut self, parent_id: &str, changes: &[RelationshipChange]) -> Result<()> {
         for change in changes {
             match change {
-                ListChange::Add { value } => {
+                RelationshipChange::Add { value } => {
                     if let Err(e) = self
                         .conn
                         .prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?
-                        .execute(params![parent_id, value, EntityRelationshipKind::OSMChild])
+                        .execute(params![parent_id, value.child_id, value.kind])
                     {
-                        match classify_db_error(&e, &value) {
+                        match classify_db_error(&e, &value.child_id) {
                             ForeignKeyViolationClassification::Retryable => {
                                 self.deferred_relationship_additions
-                                    .insert(parent_id.to_string(), value.to_string());
+                                    .insert(parent_id.to_string(), value.clone());
                             }
                             ForeignKeyViolationClassification::Fatal => {
                                 continue;
@@ -367,12 +368,12 @@ impl AreaDatabase {
                         }
                     }
                 }
-                ListChange::Remove { value } => {
+                RelationshipChange::Remove { value } => {
                     self.conn
                         .prepare_cached(
                             "DELETE FROM entity_relationships where parent_id = ? and child_id = ? AND kind = ?",
                         )?
-                        .execute(params![parent_id, value, EntityRelationshipKind::OSMChild])?;
+                        .execute(params![parent_id, value.child_id, value.kind])?;
                 }
             }
         }
@@ -401,15 +402,15 @@ impl AreaDatabase {
             .query_row(params![parent_id, EntityRelationshipKind::OSMChild], |row| Ok(row.get_unwrap(0)))?)
     }
 
-    fn insert_deferred_entity_relationship(&self, parent: &str, child: &str) -> Result<()> {
+    pub(crate) fn insert_entity_relationship(&self, relationship: &EntityRelationship) -> Result<()> {
         let res = self
             .conn
             .prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?
-            .execute(params![parent, child, EntityRelationshipKind::OSMChild]); // Whatever error there is fatal - the relationships should all be there and nothing else should be inserted to the relationships table at this point.
+            .execute(params![relationship.parent_id, relationship.child_id, relationship.kind]); // Whatever error there is fatal - the relationships should all be there and nothing else should be inserted to the relationships table at this point.
         if let Err(e) = res {
-            match classify_db_error(&e, &child) {
+            match classify_db_error(&e, &relationship.child_id) {
                 ForeignKeyViolationClassification::Retryable => {
-                    warn!("Even after deferring the relationship insertions, the child entity with id {} failed to insert for parent entity {}.", child, parent);
+                    warn!("Failed to insert entity relationship {:?}.", relationship);
                 }
                 _ => return Err(Error::DbError(e)),
             }
@@ -419,7 +420,7 @@ impl AreaDatabase {
 
     pub fn apply_deferred_relationship_additions(&mut self) -> Result<()> {
         for (parent, child) in self.deferred_relationship_additions.iter() {
-            self.insert_deferred_entity_relationship(parent, child)?;
+            self.insert_entity_relationship(&EntityRelationship::new(parent.to_string(), child.child_id.clone(), child.kind))?;
         }
         self.deferred_relationship_additions.clear();
         Ok(())
@@ -432,7 +433,7 @@ Ok(results)
     }
 
     pub fn get_basic_contained_entities_info(&self, entity_id: &str) -> Result<Vec<BasicEntityInfo>> {
-        let mut stmt = self.conn.prepare_cached("SELECT id, discriminator FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE ND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry)")?;
+        let mut stmt = self.conn.prepare_cached("SELECT id, discriminator FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE entities.id not like 'r%' AND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry)")?;
         let results = stmt.query_map(params![entity_id], |r| -> rusqlite::Result<BasicEntityInfo> {Ok(BasicEntityInfo{id:r.get_unwrap(0), discriminator:r.get_unwrap(1)})})?.map(|i| i.expect("Should not happen")).collect();
         Ok(results)
     }

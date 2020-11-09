@@ -48,7 +48,7 @@ impl PyEntity {
 
     #[getter]
     pub fn is_road_like(&self) -> bool {
-        self.inner.discriminator == "Road" || self.inner.discriminator == "ServiceRoad" || self.inner.discriminator == "Track" || self.inner.discriminator == "Footway"
+        self.inner.is_road_like()
     }
 }
 
