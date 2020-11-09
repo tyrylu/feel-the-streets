@@ -3,6 +3,7 @@ use crate::Result;
 use diesel::{Connection, SqliteConnection};
 use osm_api::object_manager::{self, OSMObjectManager};
 use osm_db::area_db::AreaDatabase;
+use osm_db::relationship_inference::infer_additional_relationships_for;
 use osm_db::translation::{record::TranslationRecord, translator};
 
 pub fn create_area_database(area: i64) -> Result<()> {
@@ -17,6 +18,9 @@ pub fn create_area_database(area: i64) -> Result<()> {
             translator::translate(&obj, &manager, &mut record).expect("Translation failure.")
         }),
     )?;
+    db.begin()?;
+    infer_additional_relationships_for(&db)?;
+    db.commit()?;
     let area_db_conn = SqliteConnection::establish("server.db")?;
     area::finalize_area_creation(area, &area_db_conn)?;
     record.save_to_file(&format!("creation_{}.json", area))?;
