@@ -1,12 +1,13 @@
 use crate::entities_query_condition::FieldCondition;
+use crate::entity_relationship_kind::EntityRelationshipKind;
 use rusqlite::types::ToSql;
 use std::f64;
 
 const RECTANGLE_CONDITION_SQL: &str = "(entities.rowid = idx_entities_geometry.pkid) AND (idx_entities_geometry.xmin <= :max_x) AND (idx_entities_geometry.xmax >= :min_x) AND (idx_entities_geometry.ymin <= :max_y) AND (idx_entities_geometry.ymax >= :min_y)";
 const CHILD_ID_FILTER_SQL: &str =
-    "id in (select child_id from entity_relationships where parent_id = :parent_id)";
+    "id in (select child_id from entity_relationships where parent_id = :parent_id";
 const PARENT_ID_FILTER_SQL: &str =
-    "id in (select parent_id from entity_relationships where child_id = :child_id)";
+    "id in (select parent_id from entity_relationships where child_id = :child_id";
 
 pub struct EntitiesQuery {
     included_discriminators: Vec<String>,
@@ -18,6 +19,7 @@ pub struct EntitiesQuery {
     has_interest_rectangle: bool,
     parent_id: Option<String>,
     child_id: Option<String>,
+    relationship_kind: Option<EntityRelationshipKind>,
     conditions: Vec<FieldCondition>,
     limit: Option<usize>,
 }
@@ -34,6 +36,7 @@ impl Default for EntitiesQuery {
             has_interest_rectangle: false,
             child_id: None,
             parent_id: None,
+            relationship_kind: None,
             conditions: Vec::new(),
             limit: None,
         }
@@ -63,6 +66,10 @@ impl EntitiesQuery {
     pub fn set_parent_id(&mut self, id: String) {
         self.parent_id = Some(id);
     }
+
+        pub fn set_relationship_kind(&mut self, kind: EntityRelationshipKind) {
+            self.relationship_kind = Some(kind);
+        }
 
     pub fn add_condition(&mut self, condition: FieldCondition) {
         self.conditions.push(condition);
@@ -104,10 +111,10 @@ impl EntitiesQuery {
             ));
         }
         if self.child_id.is_some() {
-            condition_fragments.push(CHILD_ID_FILTER_SQL.to_string());
+            condition_fragments.push(self.prepare_relationship_id_filter(CHILD_ID_FILTER_SQL));
         }
         if self.parent_id.is_some() {
-            condition_fragments.push(PARENT_ID_FILTER_SQL.to_string());
+            condition_fragments.push(self.prepare_relationship_id_filter(PARENT_ID_FILTER_SQL));
         }
         for (idx, condition) in self.conditions.iter().enumerate() {
             condition_fragments.push(condition.to_query_fragment(idx));
@@ -122,7 +129,15 @@ impl EntitiesQuery {
     query_sql
     }
 
-
+    fn prepare_relationship_id_filter(&self, condition_part: &str) -> String {
+        // Note that for simplicity's sake, we are appending the right parent of the subquery there.
+        if self.relationship_kind.is_some() {
+            format!("{} AND kind = :relationship_kind)", condition_part)
+        }
+        else {
+            format!("{})", condition_part)
+        }
+    }
 
     pub fn to_query_params(&self) -> Vec<(String, &dyn ToSql)> {
         let mut params: Vec<(String, &dyn ToSql)> = if self.has_interest_rectangle {
@@ -147,7 +162,9 @@ impl EntitiesQuery {
         if self.parent_id.is_some() {
             params.push((":child_id".to_string(), self.parent_id.as_ref().unwrap()));
         }
-
+if self.relationship_kind.is_some() {
+    params.push((":relationship_kind".to_string(), self.relationship_kind.as_ref().unwrap()));
+}
         for (idx, condition) in self.conditions.iter().enumerate() {
             if let Some(val) = condition.to_param_value() {
                 params.push((format!(":param{}", idx), val));
