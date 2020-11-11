@@ -83,7 +83,7 @@ pub(crate) fn try_infer_street_for(
     mut cache: &mut HashMap<String, String>,
 ) -> Result<Option<EntityRelationship>> {
     let addr_field = entity.value_of_field("address").clone();
-    if addr_field.is_null() {
+    if addr_field.is_null() | !addr_field.is_object() {
         return try_infer_street_for_non_addressable(&mut entity, &db, &mut cache);
     }
     if let Some(street) = addr_field
