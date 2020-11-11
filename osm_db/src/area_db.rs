@@ -1,5 +1,5 @@
 use crate::{entities_query::EntitiesQuery, entity_relationship::RootedEntityRelationship};
-use crate::entity::{Entity, BasicEntityInfo};
+use crate::entity::Entity;
 use crate::entity_relationship_kind::EntityRelationshipKind;
 use crate::entities_query_executor::EntitiesQueryExecutor;
 use crate::entity_relationship::EntityRelationship;
@@ -432,19 +432,31 @@ let results = stmt.query_map(params![ordered_by_distance_to, name], |r| -> rusql
 Ok(results)
     }
 
-    pub fn get_basic_contained_entities_info(&self, entity_id: &str) -> Result<Vec<BasicEntityInfo>> {
-        let mut stmt = self.conn.prepare_cached("SELECT id, discriminator FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE entities.id not like 'r%' AND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry)")?;
-        let results = stmt.query_map(params![entity_id], |r| -> rusqlite::Result<BasicEntityInfo> {Ok(BasicEntityInfo{id:r.get_unwrap(0), discriminator:r.get_unwrap(1)})})?.map(|i| i.expect("Should not happen")).collect();
+    pub fn get_contained_entity_ids(&self, entity_id: &str) -> Result<Vec<String>> {
+        let mut stmt = self.conn.prepare_cached("SELECT id FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE entities.id not like 'r%' AND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry)")?;
+        let results = stmt.query_map(params![entity_id], |r| -> rusqlite::Result<String> {Ok(r.get_unwrap(0))})?.map(|i| i.expect("Should not happen")).collect();
         Ok(results)
     }
 
-    pub fn num_addressables_in(&self, entity_id: &str) -> Result<i64> {
-        let mut stmt = self.conn.prepare_cached("SELECT count(*) FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE entities.discriminator = 'Addressable' AND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry)")?;
+    pub fn num_addressables_in(&self, entity_id: &str, only_with_streets: bool) -> Result<i64> {
+        let query = if only_with_streets {
+            "SELECT count(*) FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE entities.discriminator = 'Addressable' AND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry) AND json_extract(entities.data, '$.address.street') IS NOT NULL"
+        }
+        else {
+            "SELECT count(*) FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE entities.discriminator = 'Addressable' AND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry)"
+        };
+        let mut stmt = self.conn.prepare_cached(query)?;
 let num: i64 =      stmt.query_row(params![entity_id], |row| Ok(row.get_unwrap(0)))?;
 Ok(num)
     }
-    pub fn get_addressable_ids_in(&self, entity_id: &str) -> Result<Vec<String>> {
-        let mut stmt = self.conn.prepare_cached("SELECT id FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE discriminator = 'Addressable' AND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry)")?;
+    pub fn get_addressable_ids_in(&self, entity_id: &str, only_with_streets: bool) -> Result<Vec<String>> {
+        let query = if only_with_streets {
+            "SELECT id FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE discriminator = 'Addressable' AND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry) AND json_extract(entities.data, '$.address.street') IS NOT NULL"
+        }
+        else {
+            "SELECT id FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE discriminator = 'Addressable' AND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry)"
+        };
+        let mut stmt = self.conn.prepare_cached(query)?;
         let results = stmt.query_map(params![entity_id], |r| -> rusqlite::Result<String> {Ok(r.get_unwrap(0))})?.map(|i| i.expect("Should not happen")).collect();
         Ok(results)
     }

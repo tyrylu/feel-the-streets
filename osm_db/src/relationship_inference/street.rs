@@ -33,10 +33,11 @@ fn try_infer_street_from_address_relationship(entity: &Entity, db: &AreaDatabase
     let mut streets = vec![];
     let mut addressables = db.get_entities(&query)?;
     for addressable in &mut addressables {
+        debug!("Getting street from {:?}", addressable.value_of_field("address"));
         let street_str = addressable.value_of_field("address").as_object().expect("Malformed address object").get("street").expect("Street disappeared?").as_str().expect("Street was not a string");
         streets.push(street_str);
     }
-        if streets.len() == 1 || streets.windows(2).all(|w| w[0] == w[1]) {
+        if !streets.is_empty() && streets.windows(2).all(|w| w[0] == w[1]) {
             get_association_for_street(&streets[0], &entity.id, &mut cache, &db)
         }
 else {

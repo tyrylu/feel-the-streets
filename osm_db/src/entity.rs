@@ -1,11 +1,6 @@
 use crate::semantic_change::EntryChange;
 use serde_json::{Map, Value};
 
-pub struct BasicEntityInfo {
-    pub(crate) id: String,
-    pub(crate) discriminator: String
-}
-
 #[derive(Debug)]
 pub struct Entity {
     pub id: String,
