@@ -1,6 +1,6 @@
 use crate::entity_relationship_kind::EntityRelationshipKind;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct EntityRelationship {
     pub parent_id: String,
     pub child_id: String,

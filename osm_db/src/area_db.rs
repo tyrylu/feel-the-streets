@@ -6,7 +6,7 @@ use crate::entity_relationship::EntityRelationship;
 use crate::semantic_change::{RelationshipChange, SemanticChange};
 use crate::{Error, Result};
 use rusqlite::types::ToSql;
-use rusqlite::{params, Connection, OpenFlags, Row, NO_PARAMS};
+use rusqlite::{params, named_params, Connection, OpenFlags, Row, NO_PARAMS};
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::time::Instant;
@@ -446,6 +446,12 @@ Ok(num)
     pub fn get_addressable_ids_in(&self, entity_id: &str) -> Result<Vec<String>> {
         let mut stmt = self.conn.prepare_cached("SELECT id FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE discriminator = 'Addressable' AND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry)")?;
         let results = stmt.query_map(params![entity_id], |r| -> rusqlite::Result<String> {Ok(r.get_unwrap(0))})?.map(|i| i.expect("Should not happen")).collect();
+        Ok(results)
+    }
+
+    pub fn get_relationships_related_to(&self, entity_id: &str) -> Result<Vec<EntityRelationship>> {
+        let mut stmt = self.conn.prepare_cached("SELECT parent_id, child_id, kind FROM entity_relationships WHERE parent_id = :entity_id OR child_id = :entity_id")?;
+        let results = stmt.query_map_named(named_params!{":entity_id": entity_id}, |row| -> rusqlite::Result<EntityRelationship> {Ok(EntityRelationship::new(row.get_unwrap(0), row.get_unwrap(1), row.get_unwrap(2)))})?.map(|e| e.expect("Should not happen")).collect();
         Ok(results)
     }
 

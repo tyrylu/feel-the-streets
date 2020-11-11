@@ -1,4 +1,4 @@
-use crate::amqp_utils;
+use crate::{diff_utils::ListChange, amqp_utils};
 use crate::area::{Area, AreaState};
 use crate::Result;
 use crate::{area_messaging, diff_utils};
@@ -8,11 +8,20 @@ use lapin::options::ConfirmSelectOptions;
 use lapin::Channel;
 use osm_api::change::OSMObjectChangeType;
 use osm_api::object_manager::OSMObjectManager;
-use osm_db::{area_db::AreaDatabase, entity_relationship_kind::EntityRelationshipKind, entity_relationship::RootedEntityRelationship};
+use osm_db::{area_db::AreaDatabase, entity_relationship::RootedEntityRelationship, entity_relationship_kind::EntityRelationshipKind, semantic_change::RelationshipChange, relationship_inference};
 use osm_db::semantic_change::SemanticChange;
 use osm_db::translation::{record::TranslationRecord, translator};
-use std::fs;
+use std::{collections::HashMap, fs};
 
+fn find_or_create_suitable_change<'a>(changes: &'a mut Vec<SemanticChange>, parent_id: &str, updates_only: bool) -> &'a mut SemanticChange {
+if let Some(pos) = changes.iter().position(|c| c.osm_id().unwrap() == parent_id && !c.is_remove() && (!updates_only || c.is_update())) {
+    &mut changes[pos]
+}   
+else {
+    changes.push(SemanticChange::updating(parent_id, vec![], vec![], vec![]));
+    changes.last_mut().unwrap()
+}
+ }
 fn update_area(
     area: &mut Area,
     conn: &SqliteConnection,
@@ -110,7 +119,11 @@ fn update_area(
                             diff_utils::diff_entities(&old, &new)?;
                         let old_ids = area_db.get_entity_child_ids(&old.id)?;
                         let old_relationships: Vec<RootedEntityRelationship> = old_ids.iter().map(|id| RootedEntityRelationship::new(id.to_string(), EntityRelationshipKind::OSMChild)).collect();
-                        let child_id_changes = diff_utils::diff_relationship_lists(&old_relationships, &new_ids.map(|id| RootedEntityRelationship::new(id, EntityRelationshipKind::OSMChild)).collect());
+                        let new_relationships: Vec<RootedEntityRelationship> = new_ids.map(|id| RootedEntityRelationship::new(id, EntityRelationshipKind::OSMChild)).collect();
+                        let child_id_changes = diff_utils::diff_lists(&old_relationships, &new_relationships).into_iter().map(|c| match c {
+                            ListChange::Add(v) => RelationshipChange::adding(v),
+                            ListChange::Remove(v) => RelationshipChange::removing(v)
+                        }).collect();
                         Some(SemanticChange::updating(
                             &osm_id,
                             property_changes,
@@ -140,6 +153,8 @@ fn update_area(
         semantic_changes.len(),
         osm_change_count
     );
+info!("Inferring additional entity relationships and enriching the semantic changes...");
+infer_additional_relationships(&mut semantic_changes, &area_db)?;
     info!("Publishing the changes...");
     for change in semantic_changes {
         area_messaging::publish_change_on(&publish_channel, &change, area.osm_id)?;
@@ -158,6 +173,45 @@ fn update_area(
     area.state = AreaState::Updated;
     area.save(&conn)?;
     Ok(())
+}
+
+fn infer_additional_relationships(mut changes: &mut Vec<SemanticChange>, area_db: &AreaDatabase) -> Result<()> {
+let mut cache = HashMap::new();
+    for idx in 0..changes.len() {
+                    if changes[idx].is_create() {
+            let mut entity = area_db.get_entity(&changes[idx].osm_id().unwrap())?.expect("Entity disappeared from a database");
+            let relationships = relationship_inference::infer_additional_relationships_for_entity(&mut entity, &area_db, &mut cache)?;
+            for relationship in relationships {
+let target = if relationship.parent_id == changes[idx].osm_id().unwrap() {
+    &mut changes[idx]
+}
+else {
+    find_or_create_suitable_change(&mut changes, &relationship.parent_id, false)
+};
+target.add_rooted_relationship(RootedEntityRelationship::new(relationship.child_id, relationship.kind));
+            }
+ }
+ else if changes[idx].is_update() {
+let current_relationships = area_db.get_relationships_related_to(changes[idx].osm_id().unwrap())?;
+let mut entity = area_db.get_entity(changes[idx].osm_id().unwrap())?.expect("Entity disappeared");
+let new_relationships = relationship_inference::infer_additional_relationships_for_entity(&mut entity, &area_db, &mut cache)?;
+let differences = diff_utils::diff_lists(&current_relationships, &new_relationships);
+for difference in differences {
+    let (parent_id, change) = match difference {
+        ListChange::Add(v) => (v.parent_id, RelationshipChange::adding(RootedEntityRelationship::new(v.child_id, v.kind))),
+        ListChange::Remove(v) => (v.parent_id, RelationshipChange::removing(RootedEntityRelationship::new(v.child_id, v.kind))),
+    };
+    let target = if parent_id == changes[idx].osm_id().unwrap() {
+        &mut changes[idx]
+    }
+    else {
+        find_or_create_suitable_change(&mut changes, &parent_id, true)
+    };
+    target.add_relationship_change(change);
+}
+ }
+}
+Ok(())
 }
 
 pub fn update_area_databases() -> Result<()> {

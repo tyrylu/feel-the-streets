@@ -115,4 +115,51 @@ impl SemanticChange {
             osm_id: osm_id.to_string(),
         }
     }
+
+    pub fn add_rooted_relationship(&mut self, relationship: RootedEntityRelationship) {
+        use SemanticChange::*;
+        match self {
+            Remove{..} | RedownloadDatabase => {}, // Adding a relationship to a removal change makes no sense, same for a redownload request.
+            Create{entity_relationships, ..} => entity_relationships.push(relationship),
+            Update{relationship_changes, ..} => relationship_changes.push(RelationshipChange::adding(relationship)),
+        }
+    }
+
+    pub fn osm_id(&self) -> Option<&str> {
+        use SemanticChange::*;
+        match self {
+            RedownloadDatabase => None,
+            Create {id, ..} => Some(id),
+            Update {osm_id, ..} => Some(osm_id),
+            Remove {osm_id, ..} => Some(osm_id),
+        }
+    }
+
+    pub fn is_remove(&self) -> bool {
+        match self {
+            SemanticChange::Remove {..} => true,
+            _ => false
+        }
+    }
+
+    pub fn is_create(&self) -> bool {
+        match self {
+            SemanticChange::Create{..} => true,
+            _ => false
+        }
+    }
+
+    pub fn is_update(&self) -> bool {
+        match self {
+            SemanticChange::Update{..} => true,
+            _ => false
+        }
+    }
+
+    pub fn add_relationship_change(&mut self, change: RelationshipChange) {
+match self {
+    SemanticChange::Update{relationship_changes, ..} => relationship_changes.push(change),
+    _ => {}
+}
+    }
 }

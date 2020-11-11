@@ -1,5 +1,6 @@
-use rusqlite::ToSql; 
+use rusqlite::{ToSql, types::ValueRef};
 use rusqlite::types::ToSqlOutput;
+use rusqlite::types::{FromSql, FromSqlError, FromSqlResult};
 
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq, Serialize, Deserialize)]
 pub enum EntityRelationshipKind {
@@ -15,6 +16,22 @@ impl ToSql for EntityRelationshipKind {
             OSMChild => Ok(ToSqlOutput::from(0)),
             Street => Ok(ToSqlOutput::from(1)),
             Address => Ok(ToSqlOutput::from(2)),
+        }
+    }
+}
+
+impl FromSql for EntityRelationshipKind {
+    fn column_result(value: ValueRef<'_>) -> FromSqlResult<Self> {
+        if let ValueRef::Integer(val) = value {
+            match val {
+                0 => Ok(EntityRelationshipKind::OSMChild),
+                2 => Ok(EntityRelationshipKind::Address),
+                1 => Ok(EntityRelationshipKind::Street),
+                _ => Err(FromSqlError::OutOfRange(val))
+            }
+        }
+        else {
+            Err(FromSqlError::InvalidType)
         }
     }
 }
