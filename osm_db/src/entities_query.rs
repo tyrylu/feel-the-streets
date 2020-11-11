@@ -67,9 +67,9 @@ impl EntitiesQuery {
         self.parent_id = Some(id);
     }
 
-        pub fn set_relationship_kind(&mut self, kind: EntityRelationshipKind) {
-            self.relationship_kind = Some(kind);
-        }
+    pub fn set_relationship_kind(&mut self, kind: EntityRelationshipKind) {
+        self.relationship_kind = Some(kind);
+    }
 
     pub fn add_condition(&mut self, condition: FieldCondition) {
         self.conditions.push(condition);
@@ -125,16 +125,15 @@ impl EntitiesQuery {
         }
         if let Some(limit) = self.limit {
             query_sql.push_str(&format!(" LIMIT {}", limit));
-    }
-    query_sql
+        }
+        query_sql
     }
 
     fn prepare_relationship_id_filter(&self, condition_part: &str) -> String {
         // Note that for simplicity's sake, we are appending the right parent of the subquery there.
         if self.relationship_kind.is_some() {
             format!("{} AND kind = :relationship_kind)", condition_part)
-        }
-        else {
+        } else {
             format!("{})", condition_part)
         }
     }
@@ -142,12 +141,12 @@ impl EntitiesQuery {
     pub fn to_query_params(&self) -> Vec<(String, &dyn ToSql)> {
         let mut params: Vec<(String, &dyn ToSql)> = if self.has_interest_rectangle {
             vec![
-            (":min_x".to_string(), &self.min_x),
-            (":max_x".to_string(), &self.max_x),
-            (":min_y".to_string(), &self.min_y),
-            (":max_y".to_string(), &self.max_y),
-        ] }
-        else {
+                (":min_x".to_string(), &self.min_x),
+                (":max_x".to_string(), &self.max_x),
+                (":min_y".to_string(), &self.min_y),
+                (":max_y".to_string(), &self.max_y),
+            ]
+        } else {
             vec![]
         };
         for (idx, discriminator) in self.included_discriminators.iter().enumerate() {
@@ -162,9 +161,12 @@ impl EntitiesQuery {
         if self.parent_id.is_some() {
             params.push((":child_id".to_string(), self.parent_id.as_ref().unwrap()));
         }
-if self.relationship_kind.is_some() {
-    params.push((":relationship_kind".to_string(), self.relationship_kind.as_ref().unwrap()));
-}
+        if self.relationship_kind.is_some() {
+            params.push((
+                ":relationship_kind".to_string(),
+                self.relationship_kind.as_ref().unwrap(),
+            ));
+        }
         for (idx, condition) in self.conditions.iter().enumerate() {
             if let Some(val) = condition.to_param_value() {
                 params.push((format!(":param{}", idx), val));

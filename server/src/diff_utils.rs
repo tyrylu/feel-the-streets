@@ -2,11 +2,11 @@ use crate::Result;
 use osm_db::entity::Entity;
 use osm_db::semantic_change::EntryChange;
 use serde_json::{Map, Value};
-use std::{hash::Hash, collections::HashSet};
+use std::{collections::HashSet, hash::Hash};
 
 pub enum ListChange<T> {
-Add(T),
-Remove(T)
+    Add(T),
+    Remove(T),
 }
 
 fn diff_properties(old: &Entity, new: &Entity) -> Vec<EntryChange> {

@@ -1,6 +1,7 @@
 use crate::{amqp_utils, Result};
 use lapin::options::{
-    BasicPublishOptions, ExchangeDeclareOptions, QueueBindOptions, QueueDeclareOptions, QueuePurgeOptions,
+    BasicPublishOptions, ExchangeDeclareOptions, QueueBindOptions, QueueDeclareOptions,
+    QueuePurgeOptions,
 };
 use lapin::types::FieldTable;
 use lapin::{BasicProperties, Channel, ExchangeKind};
@@ -24,8 +25,10 @@ pub fn init_queue(client_id: &str, area_osm_id: i64) -> Result<()> {
     channel
         .queue_declare(&queue_name, opts, FieldTable::default())
         .wait()?;
-    channel.queue_purge(&queue_name, QueuePurgeOptions::default()).wait()?;
-        channel
+    channel
+        .queue_purge(&queue_name, QueuePurgeOptions::default())
+        .wait()?;
+    channel
         .queue_bind(
             &queue_name,
             &area_osm_id.to_string(),

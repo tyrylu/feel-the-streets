@@ -343,9 +343,10 @@ impl OSMObjectManager {
     pub fn get_geometry_as_wkb(&self, object: &OSMObject) -> Result<Option<Vec<u8>>> {
         match self.get_geometry_of(object)? {
             None => Ok(None),
-            Some(geom) => Ok(Some(wkb::geom_to_wkb(&geom).map_err(|e| Error::WKBWriteError(format!("{:?}", e)))?))
+            Some(geom) => Ok(Some(
+                wkb::geom_to_wkb(&geom).map_err(|e| Error::WKBWriteError(format!("{:?}", e)))?,
+            )),
         }
-        
     }
 
     fn get_geometry_of(&self, object: &OSMObject) -> Result<Option<Geometry<f64>>> {

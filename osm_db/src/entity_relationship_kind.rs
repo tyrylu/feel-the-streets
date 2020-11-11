@@ -1,12 +1,12 @@
-use rusqlite::{ToSql, types::ValueRef};
 use rusqlite::types::ToSqlOutput;
 use rusqlite::types::{FromSql, FromSqlError, FromSqlResult};
+use rusqlite::{types::ValueRef, ToSql};
 
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq, Serialize, Deserialize)]
 pub enum EntityRelationshipKind {
     OSMChild,
     Street,
-    Address
+    Address,
 }
 
 impl ToSql for EntityRelationshipKind {
@@ -27,10 +27,9 @@ impl FromSql for EntityRelationshipKind {
                 0 => Ok(EntityRelationshipKind::OSMChild),
                 2 => Ok(EntityRelationshipKind::Address),
                 1 => Ok(EntityRelationshipKind::Street),
-                _ => Err(FromSqlError::OutOfRange(val))
+                _ => Err(FromSqlError::OutOfRange(val)),
             }
-        }
-        else {
+        } else {
             Err(FromSqlError::InvalidType)
         }
     }

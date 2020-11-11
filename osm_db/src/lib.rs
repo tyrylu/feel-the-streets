@@ -9,14 +9,14 @@ extern crate lazy_static;
 
 pub mod area_db;
 pub mod entities_query;
-mod entities_query_executor;
 pub mod entities_query_condition;
+mod entities_query_executor;
 pub mod entity;
 pub mod entity_metadata;
-mod error;
-mod file_finder;
 pub mod entity_relationship;
 pub mod entity_relationship_kind;
+mod error;
+mod file_finder;
 pub mod relationship_inference;
 pub mod semantic_change;
 pub mod translation;

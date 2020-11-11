@@ -1,12 +1,12 @@
-use crate::{entities_query::EntitiesQuery, entity_relationship::RootedEntityRelationship};
-use crate::entity::Entity;
-use crate::entity_relationship_kind::EntityRelationshipKind;
 use crate::entities_query_executor::EntitiesQueryExecutor;
+use crate::entity::Entity;
 use crate::entity_relationship::EntityRelationship;
+use crate::entity_relationship_kind::EntityRelationshipKind;
 use crate::semantic_change::{RelationshipChange, SemanticChange};
+use crate::{entities_query::EntitiesQuery, entity_relationship::RootedEntityRelationship};
 use crate::{Error, Result};
 use rusqlite::types::ToSql;
-use rusqlite::{params, named_params, Connection, OpenFlags, Row, NO_PARAMS};
+use rusqlite::{named_params, params, Connection, OpenFlags, Row, NO_PARAMS};
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::time::Instant;
@@ -127,9 +127,11 @@ impl AreaDatabase {
                     Ok(_) => {
                         count += 1;
                         for related_id in related_ids {
-                            if let Err(e) =
-                                insert_related_stmt.execute(params![entity.id, related_id, EntityRelationshipKind::OSMChild])
-                            {
+                            if let Err(e) = insert_related_stmt.execute(params![
+                                entity.id,
+                                related_id,
+                                EntityRelationshipKind::OSMChild
+                            ]) {
                                 match classify_db_error(&e, &related_id) {
                                     ForeignKeyViolationClassification::Retryable => {
                                         deferred_relationship_insertions
@@ -159,7 +161,11 @@ impl AreaDatabase {
         }
         // Handle deferred relationship insertions.
         for (parent, child) in deferred_relationship_insertions.iter() {
-            self.insert_entity_relationship(&EntityRelationship::new(parent.to_string(), child.to_string(), EntityRelationshipKind::OSMChild))?;
+            self.insert_entity_relationship(&EntityRelationship::new(
+                parent.to_string(),
+                child.to_string(),
+                EntityRelationshipKind::OSMChild,
+            ))?;
         }
 
         self.commit()?;
@@ -188,7 +194,10 @@ impl AreaDatabase {
         let mut executor = EntitiesQueryExecutor::new(query);
         let rows = executor.prepare_execute(&self)?;
         let start = Instant::now();
-        let results = rows.mapped(row_to_entity).map(|e| e.expect("Failed to retrieve entity")).collect();
+        let results = rows
+            .mapped(row_to_entity)
+            .map(|e| e.expect("Failed to retrieve entity"))
+            .collect();
         debug!("Results retrieved in {:?}.", start.elapsed());
         Ok(results)
     }
@@ -243,9 +252,14 @@ impl AreaDatabase {
             self.conn.prepare_cached(INSERT_ENTITY_SQL_BUFFERED)?
         };
         stmt.execute(params![id, discriminator, geometry, effective_width, data])?;
-        let mut insert_relationship_stmt = self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
+        let mut insert_relationship_stmt =
+            self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
         for relationship in entity_relationships {
-            if let Err(e) = insert_relationship_stmt.execute(params![id, relationship.child_id, relationship.kind]) {
+            if let Err(e) = insert_relationship_stmt.execute(params![
+                id,
+                relationship.child_id,
+                relationship.kind
+            ]) {
                 match classify_db_error(&e, &relationship.child_id) {
                     ForeignKeyViolationClassification::Retryable => {
                         self.deferred_relationship_additions
@@ -345,7 +359,11 @@ impl AreaDatabase {
         Ok(())
     }
 
-    fn apply_child_id_changes(&mut self, parent_id: &str, changes: &[RelationshipChange]) -> Result<()> {
+    fn apply_child_id_changes(
+        &mut self,
+        parent_id: &str,
+        changes: &[RelationshipChange],
+    ) -> Result<()> {
         for change in changes {
             match change {
                 RelationshipChange::Add { value } => {
@@ -383,8 +401,13 @@ impl AreaDatabase {
     pub fn get_entity_child_ids(&self, parent_id: &str) -> Result<Vec<String>> {
         Ok(self
             .conn
-            .prepare_cached("SELECT child_id from entity_relationships WHERE parent_id = ? AND kind = ?")?
-            .query_and_then(params![parent_id, EntityRelationshipKind::OSMChild], |row| Ok(row.get_unwrap(0)))?
+            .prepare_cached(
+                "SELECT child_id from entity_relationships WHERE parent_id = ? AND kind = ?",
+            )?
+            .query_and_then(
+                params![parent_id, EntityRelationshipKind::OSMChild],
+                |row| Ok(row.get_unwrap(0)),
+            )?
             .filter_map(Result::ok)
             .collect())
     }
@@ -393,20 +416,34 @@ impl AreaDatabase {
         Ok(self
             .conn
             .prepare_cached("SELECT count(*) from entity_relationships WHERE child_id = ?")?
-            .query_row(params![child_id, EntityRelationshipKind::OSMChild], |row| Ok(row.get_unwrap(0)))?)
+            .query_row(params![child_id, EntityRelationshipKind::OSMChild], |row| {
+                Ok(row.get_unwrap(0))
+            })?)
     }
     pub fn get_child_count(&self, parent_id: &str) -> Result<u32> {
         Ok(self
             .conn
-            .prepare_cached("SELECT count(*) from entity_relationships WHERE parent_id = ? AND kind = ?")?
-            .query_row(params![parent_id, EntityRelationshipKind::OSMChild], |row| Ok(row.get_unwrap(0)))?)
+            .prepare_cached(
+                "SELECT count(*) from entity_relationships WHERE parent_id = ? AND kind = ?",
+            )?
+            .query_row(
+                params![parent_id, EntityRelationshipKind::OSMChild],
+                |row| Ok(row.get_unwrap(0)),
+            )?)
     }
 
-    pub(crate) fn insert_entity_relationship(&self, relationship: &EntityRelationship) -> Result<()> {
+    pub(crate) fn insert_entity_relationship(
+        &self,
+        relationship: &EntityRelationship,
+    ) -> Result<()> {
         let res = self
             .conn
             .prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?
-            .execute(params![relationship.parent_id, relationship.child_id, relationship.kind]); // Whatever error there is fatal - the relationships should all be there and nothing else should be inserted to the relationships table at this point.
+            .execute(params![
+                relationship.parent_id,
+                relationship.child_id,
+                relationship.kind
+            ]); // Whatever error there is fatal - the relationships should all be there and nothing else should be inserted to the relationships table at this point.
         if let Err(e) = res {
             match classify_db_error(&e, &relationship.child_id) {
                 ForeignKeyViolationClassification::Retryable => {
@@ -420,52 +457,88 @@ impl AreaDatabase {
 
     pub fn apply_deferred_relationship_additions(&mut self) -> Result<()> {
         for (parent, child) in self.deferred_relationship_additions.iter() {
-            self.insert_entity_relationship(&EntityRelationship::new(parent.to_string(), child.child_id.clone(), child.kind))?;
+            self.insert_entity_relationship(&EntityRelationship::new(
+                parent.to_string(),
+                child.child_id.clone(),
+                child.kind,
+            ))?;
         }
         self.deferred_relationship_additions.clear();
         Ok(())
     }
 
-    pub fn get_road_ids_with_name(&self, name:&str, ordered_by_distance_to: &str) -> Result<Vec<String>> {
+    pub fn get_road_ids_with_name(
+        &self,
+        name: &str,
+        ordered_by_distance_to: &str,
+    ) -> Result<Vec<String>> {
         let mut stmt = self.conn.prepare_cached("select id from entities, (select geometry from entities where id = ? limit 1) as wanted where discriminator in ('Road', 'ServiceRoad', 'Track') and json_extract(data, '$.name') = ? order by distance(wanted.geometry, entities.geometry)")?;
-let results = stmt.query_map(params![ordered_by_distance_to, name], |r| -> rusqlite::Result<String> {Ok(r.get_unwrap(0))})?.map(|e| e.expect("Should not happen")).collect();
-Ok(results)
+        let results = stmt
+            .query_map(
+                params![ordered_by_distance_to, name],
+                |r| -> rusqlite::Result<String> { Ok(r.get_unwrap(0)) },
+            )?
+            .map(|e| e.expect("Should not happen"))
+            .collect();
+        Ok(results)
     }
 
     pub fn get_contained_entity_ids(&self, entity_id: &str) -> Result<Vec<String>> {
         let mut stmt = self.conn.prepare_cached("SELECT id FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE entities.id not like 'r%' AND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry)")?;
-        let results = stmt.query_map(params![entity_id], |r| -> rusqlite::Result<String> {Ok(r.get_unwrap(0))})?.map(|i| i.expect("Should not happen")).collect();
+        let results = stmt
+            .query_map(params![entity_id], |r| -> rusqlite::Result<String> {
+                Ok(r.get_unwrap(0))
+            })?
+            .map(|i| i.expect("Should not happen"))
+            .collect();
         Ok(results)
     }
 
     pub fn num_addressables_in(&self, entity_id: &str, only_with_streets: bool) -> Result<i64> {
         let query = if only_with_streets {
             "SELECT count(*) FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE entities.discriminator = 'Addressable' AND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry) AND json_extract(entities.data, '$.address.street') IS NOT NULL"
-        }
-        else {
+        } else {
             "SELECT count(*) FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE entities.discriminator = 'Addressable' AND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry)"
         };
         let mut stmt = self.conn.prepare_cached(query)?;
-let num: i64 =      stmt.query_row(params![entity_id], |row| Ok(row.get_unwrap(0)))?;
-Ok(num)
+        let num: i64 = stmt.query_row(params![entity_id], |row| Ok(row.get_unwrap(0)))?;
+        Ok(num)
     }
-    pub fn get_addressable_ids_in(&self, entity_id: &str, only_with_streets: bool) -> Result<Vec<String>> {
+    pub fn get_addressable_ids_in(
+        &self,
+        entity_id: &str,
+        only_with_streets: bool,
+    ) -> Result<Vec<String>> {
         let query = if only_with_streets {
             "SELECT id FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE discriminator = 'Addressable' AND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry) AND json_extract(entities.data, '$.address.street') IS NOT NULL"
-        }
-        else {
+        } else {
             "SELECT id FROM entities, (SELECT geometry FROM entities WHERE id = ?) AS outer WHERE discriminator = 'Addressable' AND entities.rowid IN (SELECT rowid from SpatialIndex WHERE f_table_name = 'entities' AND search_frame = outer.geometry) AND contains(outer.geometry, entities.geometry)"
         };
         let mut stmt = self.conn.prepare_cached(query)?;
-        let results = stmt.query_map(params![entity_id], |r| -> rusqlite::Result<String> {Ok(r.get_unwrap(0))})?.map(|i| i.expect("Should not happen")).collect();
+        let results = stmt
+            .query_map(params![entity_id], |r| -> rusqlite::Result<String> {
+                Ok(r.get_unwrap(0))
+            })?
+            .map(|i| i.expect("Should not happen"))
+            .collect();
         Ok(results)
     }
 
     pub fn get_relationships_related_to(&self, entity_id: &str) -> Result<Vec<EntityRelationship>> {
         let mut stmt = self.conn.prepare_cached("SELECT parent_id, child_id, kind FROM entity_relationships WHERE parent_id = :entity_id OR child_id = :entity_id")?;
-        let results = stmt.query_map_named(named_params!{":entity_id": entity_id}, |row| -> rusqlite::Result<EntityRelationship> {Ok(EntityRelationship::new(row.get_unwrap(0), row.get_unwrap(1), row.get_unwrap(2)))})?.map(|e| e.expect("Should not happen")).collect();
+        let results = stmt
+            .query_map_named(
+                named_params! {":entity_id": entity_id},
+                |row| -> rusqlite::Result<EntityRelationship> {
+                    Ok(EntityRelationship::new(
+                        row.get_unwrap(0),
+                        row.get_unwrap(1),
+                        row.get_unwrap(2),
+                    ))
+                },
+            )?
+            .map(|e| e.expect("Should not happen"))
+            .collect();
         Ok(results)
     }
-
 }
-

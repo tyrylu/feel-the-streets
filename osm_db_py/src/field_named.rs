@@ -23,7 +23,9 @@ impl FieldNamed {
                 Condition::Eq { value: converted },
             )))
         } else {
-            Err(exceptions::PyTypeError::new_err("Unsupported type for query"))
+            Err(exceptions::PyTypeError::new_err(
+                "Unsupported type for query",
+            ))
         }
     }
 
@@ -34,7 +36,9 @@ impl FieldNamed {
                 Condition::Neq { value: converted },
             )))
         } else {
-            Err(exceptions::PyTypeError::new_err("Unsupported type for query"))
+            Err(exceptions::PyTypeError::new_err(
+                "Unsupported type for query",
+            ))
         }
     }
     pub fn lt(&self, val: PyObject, py: Python) -> PyResult<PyFieldCondition> {
@@ -44,7 +48,9 @@ impl FieldNamed {
                 Condition::Lt { value: converted },
             )))
         } else {
-            Err(exceptions::PyTypeError::new_err("Unsupported type for query"))
+            Err(exceptions::PyTypeError::new_err(
+                "Unsupported type for query",
+            ))
         }
     }
 
@@ -55,7 +61,9 @@ impl FieldNamed {
                 Condition::Le { value: converted },
             )))
         } else {
-            Err(exceptions::PyTypeError::new_err("Unsupported type for query"))
+            Err(exceptions::PyTypeError::new_err(
+                "Unsupported type for query",
+            ))
         }
     }
     pub fn gt(&self, val: PyObject, py: Python) -> PyResult<PyFieldCondition> {
@@ -65,7 +73,9 @@ impl FieldNamed {
                 Condition::Gt { value: converted },
             )))
         } else {
-            Err(exceptions::PyTypeError::new_err("Unsupported type for query"))
+            Err(exceptions::PyTypeError::new_err(
+                "Unsupported type for query",
+            ))
         }
     }
     pub fn ge(&self, val: PyObject, py: Python) -> PyResult<PyFieldCondition> {
@@ -75,7 +85,9 @@ impl FieldNamed {
                 Condition::Ge { value: converted },
             )))
         } else {
-            Err(exceptions::PyTypeError::new_err("Unsupported type for query"))
+            Err(exceptions::PyTypeError::new_err(
+                "Unsupported type for query",
+            ))
         }
     }
     pub fn like(&self, val: PyObject, py: Python) -> PyResult<PyFieldCondition> {
@@ -85,7 +97,9 @@ impl FieldNamed {
                 Condition::Like { value: converted },
             )))
         } else {
-            Err(exceptions::PyTypeError::new_err("Unsupported type for query"))
+            Err(exceptions::PyTypeError::new_err(
+                "Unsupported type for query",
+            ))
         }
     }
     pub fn is_null(&self) -> PyFieldCondition {

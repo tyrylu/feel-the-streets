@@ -23,7 +23,9 @@ impl PyAreaDatabase {
     #[staticmethod]
     pub fn open_existing(area_osm_id: i64, server_side: bool) -> PyResult<Self> {
         match AreaDatabase::open_existing(area_osm_id, server_side) {
-            Ok(db) => Ok(Self { inner: Mutex::new(db) }),
+            Ok(db) => Ok(Self {
+                inner: Mutex::new(db),
+            }),
             Err(e) => Err(exceptions::PyValueError::new_err(format!(
                 "Failed to open the database, error: {}",
                 e
@@ -32,13 +34,15 @@ impl PyAreaDatabase {
     }
 
     pub fn get_entities(&self, py: Python, query: &PyEntitiesQuery) -> PyResult<Vec<PyEntity>> {
-        py.allow_threads(move || {match self.inner.lock().unwrap().get_entities(&query.inner) {
-            Ok(res) => Ok(res.into_iter().map(|e| PyEntity { inner: e }).collect()),
-            Err(e) => Err(exceptions::PyValueError::new_err(format!(
-                "Error executing the query: {}",
-                e
-            ))),
-        }})
+        py.allow_threads(
+            move || match self.inner.lock().unwrap().get_entities(&query.inner) {
+                Ok(res) => Ok(res.into_iter().map(|e| PyEntity { inner: e }).collect()),
+                Err(e) => Err(exceptions::PyValueError::new_err(format!(
+                    "Error executing the query: {}",
+                    e
+                ))),
+            },
+        )
     }
     pub fn get_entities_really_intersecting(
         &self,
@@ -47,10 +51,12 @@ impl PyAreaDatabase {
         y: f64,
         fast: bool,
     ) -> PyResult<Vec<PyEntity>> {
-        match self
-            .inner
-            .lock().unwrap().get_entities_really_intersecting(&candidate_ids, x, y, fast)
-        {
+        match self.inner.lock().unwrap().get_entities_really_intersecting(
+            &candidate_ids,
+            x,
+            y,
+            fast,
+        ) {
             Ok(res) => Ok(res.into_iter().map(|e| PyEntity { inner: e }).collect()),
             Err(e) => Err(exceptions::PyValueError::new_err(format!(
                 "Failed to execute the query, error: {}",
@@ -117,7 +123,12 @@ impl PyAreaDatabase {
         }
     }
     pub fn apply_deferred_relationship_additions(&mut self) -> PyResult<()> {
-        match self.inner.lock().unwrap().apply_deferred_relationship_additions() {
+        match self
+            .inner
+            .lock()
+            .unwrap()
+            .apply_deferred_relationship_additions()
+        {
             Ok(_) => Ok(()),
             Err(e) => Err(exceptions::PyRuntimeError::new_err(format!(
                 "Failed to apply deferred relationship additions: {}",
