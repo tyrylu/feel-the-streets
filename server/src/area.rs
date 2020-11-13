@@ -88,6 +88,7 @@ pub fn finalize_area_creation(osm_id: i64, conn: &SqliteConnection) -> Result<us
             areas::state.eq(AreaState::Updated),
             areas::updated_at.eq(now),
             areas::db_size.eq(size as i64),
+            areas::newest_osm_object_timestamp.eq(Option::<String>::None),
         ));
     Ok(query.execute(conn)?)
 }
