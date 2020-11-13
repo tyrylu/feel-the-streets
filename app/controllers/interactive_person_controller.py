@@ -1,5 +1,6 @@
 from PySide2.QtWidgets import QInputDialog, QMessageBox, QApplication
 from pygeodesy.ellipsoidalVincenty import LatLon
+from ..entities import entity_post_enter
 from ..humanization_utils import describe_entity, format_number, describe_angle_as_turn_instructions
 from ..services import speech, map, config, menu_service
 from ..objects_browser import ObjectsBrowserWindow
@@ -254,7 +255,11 @@ class InteractivePersonController:
             nonlocal found_interesting
             if not entity.is_road_like:
                 found_interesting = True
+        def _on_post_enter(sender, enters):
+            nonlocal found_interesting
+            found_interesting = True
         interesting_entity_in_range.connect(on_interesting)
+        entity_post_enter.connect(_on_post_enter)
         while not found_interesting:
             movement_fn()
         distance = distance_between(initial_position, self._person.position)
