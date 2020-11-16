@@ -36,27 +36,38 @@ class AnnouncementsController:
         if sender is not self._point_of_view:
             return
         entered_road = False
+        description_groups = collections.defaultdict(list)
         for place in enters:
-            desc = describe_entity(place)
-            self._description_counts[desc] += 1
-            if self._description_counts[desc] > 1: # After adding the current entry we find out that we already said it
+            description_groups[describe_entity(place)].append(place)
+        for desc, places in description_groups.items():
+            self._description_counts[desc] += len(places)
+            if self._description_counts[desc] > 1 and (not places[0].is_road_like or self._classify_enter_into(places[0], enters)[0] is not EntranceKind.turn): # The place should not be announced if it was announced before and it is not a road which has significantly different direction than the current one
                 continue
-            if place.is_road_like:
-                classification, maybe_road = self._classify_enter_into(place, enters)
+            if places[0].is_road_like:
+                classification, maybe_road = self._select_most_important_classification(places, enters)
                 if classification == EntranceKind.initial:
                     speech().speak(_("You are entering {enters}.").format(enters=desc))
                 elif classification == EntranceKind.continuation:
                     self._do_not_announce_leave_of.add(maybe_road)
-                    speech().speak(_("{before} changes to {after}.").format(before=describe_entity(maybe_road), after=desc))
+                    speech().speak(_("{before} continues as {after}.").format(before=describe_entity(maybe_road), after=desc))
                 elif classification == EntranceKind.turn:
                     speech().speak(_("You are crossing {enters}.").format(enters=desc))
                 entered_road = True
-                self._announce_possible_turn_opportunity(place)
+                self._announce_possible_turn_opportunity(places)
             else:
                 speech().speak(_("You are entering {enters}.").format(enters=desc))
         if entered_road:
             self._announce_possible_continuation_opportunity(enters)
-            
+    
+    def _select_most_important_classification(self, places, enters):
+        classifications = [self._classify_enter_into(p, enters) for p in places]
+        # If we have a turn, we want to know about that
+        if any([cl[0] is EntranceKind.turn for cl in classifications]):
+            return (EntranceKind.turn, None)
+        # Now, we either have all continuations or inital entrances
+        return classifications[0]
+
+
     def _classify_enter_into(self, place, enters):
         turns = get_meaningful_turns(place, self._point_of_view, zero_turn_is_meaningful=True, ignore_length=True)
         road_diff = get_smaller_turn(turns)[2]
@@ -95,8 +106,10 @@ class AnnouncementsController:
 
 
 
-    def _announce_possible_turn_opportunity(self, new_road):
-        meaningful_directions = get_meaningful_turns(new_road, self._point_of_view)
+    def _announce_possible_turn_opportunity(self, new_roads):
+        meaningful_directions = []
+        for new_road in new_roads:
+            meaningful_directions.extend(get_meaningful_turns(new_road, self._point_of_view))
         if len(meaningful_directions) == 1:
             ((dir, dist, _angle_diff, _road),) = meaningful_directions
             speech().speak(_("You could turn {direction} and continue for {distance} meters.").format(direction=dir, distance=dist))
