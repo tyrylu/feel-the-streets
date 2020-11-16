@@ -26,6 +26,7 @@ class AnnouncementsController:
         self._point_of_view = pov
         self._description_counts = collections.Counter()
         self._do_not_announce_leave_of = set()
+        self._announced_turns = False
         entity_post_enter.connect(self._on_post_enter)
         entity_post_leave.connect(self._on_post_leave)
         entity_rotated.connect(self._on_rotated)
@@ -44,6 +45,7 @@ class AnnouncementsController:
             if self._description_counts[desc] > 1 and (not places[0].is_road_like or self._classify_enter_into(places[0], enters)[0] is not EntranceKind.turn): # The place should not be announced if it was announced before and it is not a road which has significantly different direction than the current one
                 continue
             if places[0].is_road_like:
+                self._announced_turns = False
                 classification, maybe_road = self._select_most_important_classification(places, enters)
                 if classification == EntranceKind.initial:
                     speech().speak(_("You are entering {enters}.").format(enters=desc))
@@ -99,11 +101,14 @@ class AnnouncementsController:
         current_road = get_last_important_road(roads_before_entering)
         turns = get_meaningful_turns(current_road, self._point_of_view, zero_turn_is_meaningful=True)
         if not turns:
-            speech().speak(_("The current road ends there."))
+            speech().speak(_("The current road ends here."))
             return
         current_dir_info = min(turns, key=lambda i: abs(i[2]))
         if abs(current_dir_info[2]) < 90:
-            speech().speak(_("Or, you can continue along the current road for another {} meters.").format(current_dir_info[1]))
+            if self._announced_turns:
+                speech().speak(_("Or, you can continue along the current road for another {} meters.").format(current_dir_info[1]))
+            else:
+                speech().speak(_("You can continue along the current road for another {} meters.").format(current_dir_info[1]))
 
 
 
@@ -111,6 +116,8 @@ class AnnouncementsController:
         meaningful_directions = []
         for new_road in new_roads:
             meaningful_directions.extend(get_meaningful_turns(new_road, self._point_of_view))
+        if meaningful_directions:
+            self._announced_turns = True
         if len(meaningful_directions) == 1:
             ((dir, dist, _angle_diff, _road),) = meaningful_directions
             speech().speak(_("You could turn {direction} and continue for {distance} meters.").format(direction=dir, distance=dist))
