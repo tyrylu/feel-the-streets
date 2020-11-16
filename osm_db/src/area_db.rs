@@ -415,7 +415,7 @@ impl AreaDatabase {
     pub fn get_parent_count(&self, child_id: &str) -> Result<u32> {
         Ok(self
             .conn
-            .prepare_cached("SELECT count(*) from entity_relationships WHERE child_id = ?")?
+            .prepare_cached("SELECT count(*) from entity_relationships WHERE child_id = ? AND kind = ?")?
             .query_row(params![child_id, EntityRelationshipKind::OSMChild], |row| {
                 Ok(row.get_unwrap(0))
             })?)
