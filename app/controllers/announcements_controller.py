@@ -99,6 +99,7 @@ class AnnouncementsController:
         current_road = get_last_important_road(roads_before_entering)
         turns = get_meaningful_turns(current_road, self._point_of_view, zero_turn_is_meaningful=True)
         if not turns:
+            speech().speak(_("The current road ends there."))
             return
         current_dir_info = min(turns, key=lambda i: abs(i[2]))
         if abs(current_dir_info[2]) < 90:
