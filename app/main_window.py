@@ -40,6 +40,7 @@ class MainWindow(QMainWindow):
                 self._update_database(dlg.selected_map)
 
     def _on_map_ready(self):
+        self.setWindowTitle(f"{self._selected_map_name} - Feel the streets")
         map.set_call_args(self._selected_map, self._selected_map_name)
         menu_service.set_call_args(self)
         self._app_controller = ApplicationController(self)
