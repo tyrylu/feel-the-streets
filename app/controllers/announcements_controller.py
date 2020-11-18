@@ -150,7 +150,7 @@ class AnnouncementsController:
                     if classification == LeaveKind.turn:
                         speech().speak(_("You crossed {leaves}.").format(leaves=desc))
                     elif classification == LeaveKind.continuation:
-                        speech().speak(_("{before} changes to {after}.").format(before=desc, after=describe_entity(maybe_road)))
+                        speech().speak(_("{before} continues as {after}.").format(before=desc, after=describe_entity(maybe_road)))
                     elif classification == LeaveKind.last:
                         speech().speak(_("You are leaving {leaves}").format(leaves=describe_entity(place)))
                 else:
