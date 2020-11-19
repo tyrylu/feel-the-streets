@@ -27,6 +27,7 @@ impl FromSql for EntityRelationshipKind {
                 0 => Ok(EntityRelationshipKind::OSMChild),
                 2 => Ok(EntityRelationshipKind::Address),
                 1 => Ok(EntityRelationshipKind::Street),
+                2 => Ok(EntityRelationshipKind::Address),
                 _ => Err(FromSqlError::OutOfRange(val)),
             }
         } else {
