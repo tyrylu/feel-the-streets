@@ -57,7 +57,7 @@ class Entity(BaseModel):
         for entering in enters:
             self.is_inside_of.add(entering)
         if leaves and entity_post_leave.has_receivers_for(self):
-            entity_post_leave.send(self, leaves=leaves)
+            entity_post_leave.send(self, leaves=leaves, enters=enters)
         if enters and entity_post_enter.has_receivers_for(self):
             entity_post_enter.send(self, enters=enters)
         entity_post_move.send(self)

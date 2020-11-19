@@ -97,7 +97,7 @@ class SoundController:
             group = DEFAULT_STEPS_GROUP
         self._groups_map[sender][enters] = group
     
-    def post_leave(self, sender, leaves):
+    def post_leave(self, sender, leaves, enters):
         if not sender.use_step_sounds:
             return
         for place in leaves:

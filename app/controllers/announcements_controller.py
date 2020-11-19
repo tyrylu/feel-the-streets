@@ -132,7 +132,7 @@ class AnnouncementsController:
 
 
 
-    def _on_post_leave(self, sender, leaves):
+    def _on_post_leave(self, sender, leaves, enters):
         if sender is not self._point_of_view:
             return
         announced_leave = False
@@ -161,7 +161,13 @@ class AnnouncementsController:
             if not self._point_of_view.is_inside_of:
                 speech().speak(_("Now, your location is not known."))
             else:
-                speech().speak(_("Now, you're on {}.").format(describe_entity(self._point_of_view.is_inside_of[-1])))
+                now_before_enters = [e for e in self._point_of_view.is_inside_of if e not in enters]
+                print(leaves, now_before_enters)
+                if now_before_enters:
+                    is_on = now_before_enters[-1]
+                else:
+                    is_on = self._point_of_view.is_inside_of[-1]
+                speech().speak(_("Now, you're on {}.").format(describe_entity(is_on)))
 
     def _on_rotated(self, sender):
         if self._point_of_view is sender:
