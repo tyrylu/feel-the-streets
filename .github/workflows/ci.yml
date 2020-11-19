@@ -46,7 +46,7 @@ jobs:
       run: 7z.exe x spatialite.7z
     - name: Add spatialite to path
       if: runner.os == 'Windows'
-      run: echo ::add-path::$pwd\spatialite-loadable-modules-5.0.0-win-amd64
+      run: echo "$PWD\spatialite-loadable-modules-5.0.0-win-amd64" >> $GITHUB_PATH
     - name: Build the app executable
       if: runner.os == 'Windows'
       run: pyinstaller run_app.spec
