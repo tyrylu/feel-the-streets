@@ -2311,6 +2311,8 @@ SchoolThing:
     type: SchoolRelatedThingType
 ServiceRoad:
   inherits: Road
+  long_display_template: '{{ class_name_display }}{% if name is defined %} {{ name }}{% endif %}'
+  short_display_template: '{{ class_name_display }}{% if name is defined %} {{ name }}{% endif %}'
   fields:
     delivery: bool
     frequency: int
@@ -2679,6 +2681,8 @@ Tower:
     communication: str
 Track:
   inherits: Road
+  long_display_template: '{{ class_name_display }}{% if name is defined %} {{ name }}{% endif %}'
+  short_display_template: '{{ class_name_display }}{% if name is defined %} {{ name }}{% endif %}'
   fields:
     motorcar_allowed: AccessType
     leisure: LeisureType
