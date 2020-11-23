@@ -141,8 +141,8 @@ class AnnouncementsController:
             self._description_counts[desc] -= 1
             if self._description_counts[desc] == 0:
                 del self._description_counts[desc]
-            if self._description_counts[desc] > 0:
-                continue # Say the message only if we aren't in an entity with the same description because of a different entity
+            if self._description_counts[desc] > 0 and not place.is_road_like or self._classify_leave_of(place)[0] is not LeaveKind.turn:
+                continue # Say the message only if we aren't in an entity with the same description because of a different entity and it is not a significantly different road
             if place in self._do_not_announce_leave_of:
                 self._do_not_announce_leave_of.remove(place)
             else:
