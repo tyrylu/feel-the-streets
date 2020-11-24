@@ -126,9 +126,9 @@ def format_angle_as_turn_sharpiness(angle):
     """Describes an angle as an indication of the sharpiness of a turn. Angle is expected to lie in the range 0 <= angle <= 180."""
     if 0 <= angle < 45:
         return _("slightly")
-    elif 45 <= angle < 135: # Normal turn, if someone finds an usable description, feel free to send a PR.
+    elif 45 <= angle < 100: # Normal turn, if someone finds an usable description, feel free to send a PR.
         return ""
-    elif 135 <= angle <= 180:
+    elif 100 <= angle <= 180:
         return _("sharply")
     else:
         raise ValueError(f"Unsupported angle {angle}.")
