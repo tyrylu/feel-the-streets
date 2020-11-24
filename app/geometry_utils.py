@@ -160,7 +160,7 @@ def effective_width_filter(entities, position):
             closest = closest_point_to(shapely_point, entity.geometry)
             closest_latlon = to_latlon(closest)
             cur_distance = distance_between(closest_latlon, position)
-            if cur_distance <= entity.effective_width:
+            if cur_distance <= entity.effective_width / 2:
                 res_entities.append(entity)
         return res_entities
 
