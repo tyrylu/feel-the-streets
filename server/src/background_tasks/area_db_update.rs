@@ -217,8 +217,10 @@ fn infer_additional_relationships(
     let mut cache = HashMap::new();
     for idx in 0..changes.len() {
         if changes[idx].is_create() {
+            let entity_id = changes[idx].osm_id().unwrap();
+            debug!("Enriching tags after creation of {}.", entity_id);
             let mut entity = area_db
-                .get_entity(&changes[idx].osm_id().unwrap())?
+                .get_entity(entity_id)?
                 .expect("Entity disappeared from a database");
             let relationships = relationship_inference::infer_additional_relationships_for_entity(
                 &mut entity,
