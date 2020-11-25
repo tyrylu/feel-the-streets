@@ -69,6 +69,7 @@ class MainWindow(QMainWindow):
 
     def _download_database(self, area):
         self._downloader = AreaDatabaseDownloader(area, None)
+        self._area = area
         self._downloader.moveToThread(QApplication.instance().thread())
         self._downloader.download_progressed.connect(self._download_progress_callback)
         self._downloader.download_finished.connect(self._on_download_finished)
@@ -78,7 +79,7 @@ class MainWindow(QMainWindow):
         if not res:
             QMessageBox.warning(self, _("Download failure"), _("Download of the selected area had failed."))
             self.close()
-            os.remove(AreaDatabase.path_for(area, server_side=False))
+            os.remove(AreaDatabase.path_for(self._area, server_side=False))
         else:
             self._on_map_ready()
 
