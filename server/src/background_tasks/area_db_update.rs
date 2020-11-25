@@ -237,10 +237,12 @@ fn infer_additional_relationships(
                 ));
             }
         } else if changes[idx].is_update() {
+            let entity_id = changes[idx].osm_id().unwrap();
+            debug!("Enriching relationships after update of {}.", entity_id);
             let current_relationships =
-                area_db.get_relationships_related_to(changes[idx].osm_id().unwrap())?;
+                area_db.get_relationships_related_to(entity_id)?;
             let mut entity = area_db
-                .get_entity(changes[idx].osm_id().unwrap())?
+                .get_entity(entity_id)?
                 .expect("Entity disappeared");
             let new_relationships =
                 relationship_inference::infer_additional_relationships_for_entity(
