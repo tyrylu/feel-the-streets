@@ -61,7 +61,7 @@ class InteractivePersonController:
     
     @menu_command(_("Information"), _("Position - all objects, may be slow"), "ctrl+l")
     def do_position_slow(self, evt):
-        self._position_impl(map().intersections_at_position(self._person.position, fast=False))
+        self._position_impl(map().intersections_at_position(self._person.position, self._person.current_effective_width, fast=False))
     
     def _position_detailed_impl(self, objects):
         window = ObjectsBrowserWindow(self._main_window, title=_("Current position"), unsorted_objects=self._person.is_inside_of, person=self._person)
@@ -73,7 +73,7 @@ class InteractivePersonController:
 
     @menu_command(_("Information"), _("Detailed current position - all objects, may be slow"), "ctrl+shift+l")
     def do_position_detailed_slow(self, evt):
-        self._position_detailed_impl(map().intersections_at_position(self._person.position, fast=False))
+        self._position_detailed_impl(map().intersections_at_position(self._person.position, self._person.current_effective_width, fast=False))
     
     def _show_list_of_objects(self, title, objects):
         if not objects:

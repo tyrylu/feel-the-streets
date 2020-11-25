@@ -17,9 +17,9 @@ class Map:
         self._db = AreaDatabase.open_existing(map_id, False)
         self._rough_distant_cache = None
     
-    def intersections_at_position(self, position, fast=True):
+    def intersections_at_position(self, position, effective_width, fast=True):
         x, y = (position.lon, position.lat)
-        min_x, min_y, max_x, max_y = xy_ranges_bounding_square(position, 0.5)
+        min_x, min_y, max_x, max_y = xy_ranges_bounding_square(position, effective_width or 1.0)
         query = EntitiesQuery()
         query.set_rectangle_of_interest(min_x, max_x, min_y, max_y)
         if fast:

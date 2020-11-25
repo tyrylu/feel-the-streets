@@ -31,7 +31,7 @@ class Entity(BaseModel):
                 elif ret is MoveValidationResult.cancel:
                     return False
         with measure("Inside of query"):
-            new_inside_of = OrderedSet(entity for entity in self.map.intersections_at_position(pos))
+            new_inside_of = OrderedSet(entity for entity in self.map.intersections_at_position(pos, self.current_effective_width))
         if entity_pre_enter.has_receivers_for(self) or entity_post_enter.has_receivers_for(self):
             enters = new_inside_of.difference(self.is_inside_of)
         if enters and not force and entity_pre_enter.has_receivers_for(self):
@@ -99,5 +99,10 @@ class Entity(BaseModel):
         self.move_to(closest, force=True)
         self.use_step_sounds = orig
 
-
+    @property
+    def current_effective_width(self):
+        for candidate in reversed(self.is_inside_of):
+            if candidate.is_road_like:
+                return candidate.effective_width
+        return None
 Entity.update_forward_refs()

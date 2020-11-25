@@ -162,8 +162,7 @@ class AnnouncementsController:
                 speech().speak(_("Now, your location is not known."))
             else:
                 now_before_enters = [e for e in self._point_of_view.is_inside_of if e not in enters]
-                print(leaves, now_before_enters)
-                if now_before_enters:
+                                if now_before_enters:
                     is_on = now_before_enters[-1]
                 else:
                     is_on = self._point_of_view.is_inside_of[-1]

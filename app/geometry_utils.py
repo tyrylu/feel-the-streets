@@ -151,6 +151,7 @@ def distance_filter(entities, position, distance):
                 res_entities.append(entity)
         return res_entities
 def effective_width_filter(entities, position):
+    from .humanization_utils import describe_entity
     with measure("Shapely & pygeodesi effective distance filtering"):
         res_entities = []
         shapely_point = to_shapely_point(position)
