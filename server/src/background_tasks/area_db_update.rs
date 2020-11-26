@@ -182,14 +182,14 @@ fn update_area(
         }
     }
     area_db.apply_deferred_relationship_additions()?;
-    area_db.commit()?;
-    info!(
+        info!(
         "Area updated successfully, applyed {} semantic changes resulting from {} OSM changes.",
         semantic_changes.len(),
         osm_change_count
     );
     info!("Inferring additional entity relationships and enriching the semantic changes...");
     infer_additional_relationships(&mut semantic_changes, &area_db)?;
+    area_db.commit()?;
     info!("Publishing the changes...");
     for change in semantic_changes {
         area_messaging::publish_change_on(&publish_channel, &change, area.osm_id)?;
