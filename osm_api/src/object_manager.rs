@@ -543,6 +543,7 @@ impl Drop for OSMObjectManager {
     fn drop(&mut self) {
         let conn = self.cache_conn.take().unwrap();
         conn.close().expect("Failed to close cache connection.");
+        info!("Before deleting, the cache reached size of {}.", fs::metadata("entity_cache.db").expect("Could not stat").len());
         fs::remove_file("entity_cache.db").expect("Could not remove cache.");
     }
 }
