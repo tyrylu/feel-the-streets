@@ -31,7 +31,7 @@ fn find_or_create_suitable_change<'a>(
         changes.last_mut().unwrap()
     }
 }
-fn update_area(
+pub fn update_area(
     area: &mut Area,
     conn: &SqliteConnection,
     publish_channel: &Channel,
