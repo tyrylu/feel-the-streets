@@ -15,7 +15,7 @@ use osm_db::{
     entity_relationship_kind::EntityRelationshipKind, relationship_inference,
     semantic_change::RelationshipChange,
 };
-use std::{collections::HashMap, fs};
+use std::{collections::{HashSet, HashMap}, fs};
 
 fn find_or_create_suitable_change<'a>(
     changes: &'a mut Vec<SemanticChange>,
@@ -58,6 +58,7 @@ pub fn update_area(
     let mut first = true;
     let mut osm_change_count = 0;
     let mut semantic_changes = vec![];
+    let mut seen_unique_ids = HashSet::new();
     area_db.begin()?;
     for change in manager.lookup_differences_in(area.osm_id, &after)? {
         osm_change_count += 1;
@@ -74,6 +75,15 @@ pub fn update_area(
                     > *area.newest_osm_object_timestamp.as_ref().unwrap())
         {
             area.newest_osm_object_timestamp = Some(change.new.as_ref().unwrap().timestamp.clone());
+        }
+        trace!("Processing OSM change {:?}", change);
+        let id = change.old.as_ref().unwrap_or(change.new.as_ref().expect("No old or new")).unique_id();
+        if seen_unique_ids.contains(&id) {
+            warn!("Phantom change of object with id {}, refusing to process change {:?}.", id, change);
+            continue;
+        }
+        else {
+            seen_unique_ids.insert(id);
         }
         let semantic_change = match change.change_type {
             Create => translator::translate(
@@ -188,6 +198,8 @@ pub fn update_area(
         osm_change_count
     );
     info!("Inferring additional entity relationships and enriching the semantic changes...");
+    //area_db.commit()?;
+    //area_db.begin()?;
     infer_additional_relationships(&mut semantic_changes, &area_db)?;
     area_db.commit()?;
     info!("Publishing the changes...");
