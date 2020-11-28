@@ -218,7 +218,7 @@ fn infer_additional_relationships(
     for idx in 0..changes.len() {
         if changes[idx].is_create() {
             let entity_id = changes[idx].osm_id().unwrap();
-            debug!("Enriching tags after creation resulting from {:?}.", changes[idx]);
+            debug!("Enriching tags after creation resulting from {:?}, entity id {}.", changes[idx], entity_id);
             let mut entity = area_db
                 .get_entity(entity_id)?
                 .expect("Entity disappeared from a database");
@@ -240,7 +240,7 @@ fn infer_additional_relationships(
             }
         } else if changes[idx].is_update() {
             let entity_id = changes[idx].osm_id().unwrap();
-            debug!("Enriching relationships resulting from update {:?}.", changes[idx]);
+            debug!("Enriching relationships resulting from update {:?}, entity id {}.", changes[idx], entity_id);
             let current_relationships =
                 area_db.get_relationships_related_to(entity_id)?;
             let mut entity = area_db
