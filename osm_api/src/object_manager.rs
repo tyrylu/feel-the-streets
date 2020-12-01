@@ -21,6 +21,15 @@ use std::time::Instant;
 use tempfile::tempfile;
 const QUERY_RETRY_COUNT: u8 = 3;
 
+lazy_static! {
+static ref ZSTD_DICT: Vec<u8> = fs::read("fts.dict").expect("Could not read ZSTD dictionary.");
+}
+
+fn deserialize_compressed(compressed: &[u8]) -> OSMObject {
+    let decoder = zstd::Decoder::with_dictionary(compressed, &ZSTD_DICT).expect("Failed to create decoder");
+    bincode::deserialize_from(decoder).expect("Could not deserialize")
+}
+
 fn translate_type_shortcut(shortcut: char) -> &'static str {
     match shortcut {
         'n' => "node",
@@ -86,10 +95,12 @@ impl OSMObjectManager {
     }
 
     fn cache_object_into(&self, cache: &mut SqliteMap<'_>, object: &OSMObject) {
-        let serialized =
-            bincode::serialize(&object).expect("Could not serialize object for caching.");
-        cache
-            .insert::<Vec<u8>>(&object.unique_id(), &serialized)
+        let compressed = Vec::with_capacity(bincode::serialized_size(&object).expect("Could not size object") as usize);
+        let mut encoder = zstd::Encoder::with_dictionary(compressed, 15, &ZSTD_DICT).expect("Could not create ZSTD encoder");
+        bincode::serialize_into(&mut encoder, &object).expect("Could not serialize object for caching.");
+        let compressed = encoder.finish().expect("Could not finish encoding");
+            cache
+            .insert::<Vec<u8>>(&object.unique_id(), &compressed)
             .expect("Could not cache object.");
     }
 
@@ -103,7 +114,7 @@ impl OSMObjectManager {
         cache
             .get::<Vec<u8>>(&id)
             .expect("Cache retrieval failed.")
-            .map(|o| bincode::deserialize(&o).expect("Failed to deserialize cached object."))
+            .map(|o| deserialize_compressed(&o))
     }
 
     fn next_api_url(&self) -> &'static str {
@@ -543,8 +554,6 @@ impl Drop for OSMObjectManager {
     fn drop(&mut self) {
         let conn = self.cache_conn.take().unwrap();
         conn.close().expect("Failed to close cache connection.");
-        info!("Before deleting, the cache reached size of {}.", fs::metadata("entity_cache.db").expect("Could not stat").len());
-        fs::remove_file("entity_cache.db").expect("Could not remove cache.");
     }
 }
 
@@ -556,6 +565,6 @@ pub fn cached_objects_in<'a>(
             .iter::<String, Vec<u8>>()
             .unwrap()
             .filter_map(|pair| pair.ok())
-            .map(|(_k, v)| bincode::deserialize(&v).unwrap()),
+            .map(|(_k, v)| deserialize_compressed(&v)),
     )
 }
