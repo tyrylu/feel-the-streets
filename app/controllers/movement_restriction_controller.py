@@ -1,7 +1,7 @@
 from ..entities import entity_pre_leave, entity_pre_enter, MoveValidationResult
 from ..services import config
 from ..entity_utils import filter_important_roads, is_footway, get_last_important_road
-from ..geometry_utils import get_meaningful_turns, get_smaller_turn
+from ..geometry_utils import get_meaningful_turns, get_smaller_turn, distance_between
 
 class MovementRestrictionController:
 
@@ -21,9 +21,12 @@ class MovementRestrictionController:
     def _should_allow_entrance_to_footway(self, footway):
         if not self._restricted_entity.inside_of_roads:
             return True # In this case, we'll be at least on some road
-        important_rroad = get_last_important_road(self._restricted_entity.inside_of_roads)
+        important_road = get_last_important_road(self._restricted_entity.inside_of_roads)
+        road_distance = distance_between(self._restricted_entity.position, self._restricted_entity.closest_point_to(important_road.geometry))
+        if road_distance < 0.25:
+            return True # You did not stray from the road by much, so you are likely still going basically where the road is, so we'll not disallow entering the sidewalk
         footway_turn = get_smaller_turn(get_meaningful_turns(footway, self._restricted_entity, zero_turn_is_meaningful=True, ignore_length=True))
-        road_turn = get_smaller_turn(get_meaningful_turns(important_rroad, self._restricted_entity, zero_turn_is_meaningful=True, ignore_length=True))
+        road_turn = get_smaller_turn(get_meaningful_turns(important_road, self._restricted_entity, zero_turn_is_meaningful=True, ignore_length=True))
         angle_diff = abs(footway_turn[2] - road_turn[2])
         # Entering sidewalks which lead to somewhere else is allowed - we might want to cross them
         return 5 < angle_diff < 355
