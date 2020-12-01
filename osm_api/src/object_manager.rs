@@ -12,8 +12,9 @@ use rusqlite::NO_PARAMS;
 use serde::Deserialize;
 use serde_json::{self, Deserializer};
 use sqlitemap::SqliteMap;
-use std::cell::RefCell;
+use std::cell::{Ref, RefCell};
 use std::cmp;
+use std::collections::HashSet;
 use std::fs;
 use std::io::{self, BufReader, Read, Seek, SeekFrom};
 use std::iter::FromIterator;
@@ -61,6 +62,7 @@ pub struct OSMObjectManager {
     cache_conn: Option<Connection>,
     http_client: ureq::Agent,
     seen_cache: RefCell<bool>,
+    retrieved_from_network: RefCell<HashSet<String>>,
 }
 
 impl OSMObjectManager {
@@ -78,6 +80,7 @@ impl OSMObjectManager {
             http_client: client,
             geometries_cache: RefCell::new(HashMap::new()),
             seen_cache: RefCell::new(false),
+            retrieved_from_network: RefCell::new(HashSet::new()),
         }
     }
 
@@ -93,6 +96,11 @@ impl OSMObjectManager {
         *self.seen_cache.borrow_mut() = true;
         res
     }
+
+    pub fn get_ids_retrieved_from_network(&self) -> Ref<HashSet<String>> {
+        self.retrieved_from_network.borrow()
+    }
+
 
     fn cache_object_into(&self, cache: &mut SqliteMap<'_>, object: &OSMObject) {
         let compressed = Vec::with_capacity(bincode::serialized_size(&object).expect("Could not size object") as usize);
@@ -216,6 +224,7 @@ impl OSMObjectManager {
                 match OSMObjectFromNetwork::deserialize(&mut de) {
                     Ok(obj) => {
                         let internal_object = obj.into_osm_object();
+                        self.retrieved_from_network.borrow_mut().insert(internal_object.unique_id());
                         self.cache_object_into(&mut cache, &internal_object);
                         if return_objects {
                             objects.push(internal_object);

@@ -12,9 +12,13 @@ pub fn create_area_database(area: i64) -> Result<()> {
     let mut record = TranslationRecord::new();
     manager.lookup_objects_in(area)?;
     let mut cache = manager.get_cache();
+    let from_network_ids = manager.get_ids_retrieved_from_network();
     let mut db = AreaDatabase::create(area)?;
     db.insert_entities(
         object_manager::cached_objects_in(&mut cache).filter_map(|obj| {
+            if !from_network_ids.contains(&obj.unique_id()) {
+                return None;
+            }
             translator::translate(&obj, &manager, &mut record).expect("Translation failure.")
         }),
     )?;
