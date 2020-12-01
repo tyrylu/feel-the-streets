@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-11-18 09:28+0100\n"
+"POT-Creation-Date: 2020-12-01 18:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,8 +27,8 @@ msgstr ""
 #: entities.yml:936 entities.yml:954 entities.yml:1004 entities.yml:1067
 #: entities.yml:1129 entities.yml:1181 entities.yml:1237 entities.yml:1331
 #: entities.yml:1526 entities.yml:1628 entities.yml:1998 entities.yml:2267
-#: entities.yml:2356 entities.yml:2398 entities.yml:2490 entities.yml:2580
-#: entities.yml:2750 entities.yml:2786
+#: entities.yml:2358 entities.yml:2400 entities.yml:2492 entities.yml:2582
+#: entities.yml:2754 entities.yml:2790
 msgid "Wikipedia"
 msgstr ""
 
@@ -37,21 +37,21 @@ msgstr ""
 #: entities.yml:739 entities.yml:766 entities.yml:831 entities.yml:887
 #: entities.yml:935 entities.yml:959 entities.yml:1003 entities.yml:1128
 #: entities.yml:1187 entities.yml:1333 entities.yml:1512 entities.yml:1527
-#: entities.yml:1627 entities.yml:1997 entities.yml:2266 entities.yml:2355
-#: entities.yml:2489 entities.yml:2749 entities.yml:2776
+#: entities.yml:1627 entities.yml:1997 entities.yml:2266 entities.yml:2357
+#: entities.yml:2491 entities.yml:2753 entities.yml:2780
 msgid "Wikidata"
 msgstr ""
 
 #: entities.yml:5 entities.yml:179 entities.yml:289 entities.yml:337
 #: entities.yml:469 entities.yml:522 entities.yml:875 entities.yml:1012
 #: entities.yml:1076 entities.yml:1246 entities.yml:1317 entities.yml:1336
-#: entities.yml:1626 entities.yml:1992 entities.yml:2400 entities.yml:2468
-#: entities.yml:2601 entities.yml:2778
+#: entities.yml:1626 entities.yml:1992 entities.yml:2402 entities.yml:2470
+#: entities.yml:2603 entities.yml:2782
 msgid "Old name"
 msgstr ""
 
-#: entities.yml:6 entities.yml:1519 entities.yml:2242 entities.yml:2562
-#: entities.yml:2760
+#: entities.yml:6 entities.yml:1519 entities.yml:2242 entities.yml:2564
+#: entities.yml:2764
 msgid "Name de"
 msgstr ""
 
@@ -75,7 +75,7 @@ msgstr ""
 #: entities.yml:470 entities.yml:725 entities.yml:857 entities.yml:964
 #: entities.yml:1006 entities.yml:1144 entities.yml:1194 entities.yml:1299
 #: entities.yml:1388 entities.yml:1477 entities.yml:1513 entities.yml:1642
-#: entities.yml:2000 entities.yml:2263 entities.yml:2329 entities.yml:2511
+#: entities.yml:2000 entities.yml:2263 entities.yml:2331 entities.yml:2513
 msgid "Description"
 msgstr ""
 
@@ -89,23 +89,23 @@ msgstr ""
 #: entities.yml:1229 entities.yml:1282 entities.yml:1322 entities.yml:1329
 #: entities.yml:1426 entities.yml:1447 entities.yml:1464 entities.yml:1490
 #: entities.yml:1522 entities.yml:1589 entities.yml:1777 entities.yml:1827
-#: entities.yml:1888 entities.yml:2251 entities.yml:2310 entities.yml:2322
-#: entities.yml:2336 entities.yml:2353 entities.yml:2369 entities.yml:2464
-#: entities.yml:2529 entities.yml:2565 entities.yml:2699 entities.yml:2709
-#: entities.yml:2746 entities.yml:2765
+#: entities.yml:1888 entities.yml:2251 entities.yml:2310 entities.yml:2324
+#: entities.yml:2338 entities.yml:2355 entities.yml:2371 entities.yml:2466
+#: entities.yml:2531 entities.yml:2567 entities.yml:2703 entities.yml:2713
+#: entities.yml:2750 entities.yml:2769
 msgid "Type"
 msgstr ""
 
 #: entities.yml:13 entities.yml:541 entities.yml:1009 entities.yml:1752
-#: entities.yml:2020 entities.yml:2381 enums.yml:1095 enums.yml:1200
+#: entities.yml:2020 entities.yml:2383 enums.yml:1095 enums.yml:1200
 #: enums.yml:1297 enums.yml:1687
 msgid "Abandoned"
 msgstr ""
 
 #: entities.yml:17 entities.yml:279 entities.yml:349 entities.yml:475
 #: entities.yml:781 entities.yml:848 entities.yml:923 entities.yml:1315
-#: entities.yml:1390 entities.yml:1622 entities.yml:2289 entities.yml:2426
-#: entities.yml:2569 entities.yml:2705 enums.yml:4 enums.yml:515 enums.yml:945
+#: entities.yml:1390 entities.yml:1622 entities.yml:2289 entities.yml:2428
+#: entities.yml:2571 entities.yml:2709 enums.yml:4 enums.yml:515 enums.yml:945
 #: enums.yml:1677 enums.yml:1789 enums.yml:2264
 msgid "Bicycle"
 msgstr ""
@@ -118,8 +118,8 @@ msgstr ""
 #: entities.yml:676 entities.yml:762 entities.yml:806 entities.yml:847
 #: entities.yml:1041 entities.yml:1095 entities.yml:1098 entities.yml:1159
 #: entities.yml:1308 entities.yml:1389 entities.yml:1420 entities.yml:1655
-#: entities.yml:2019 entities.yml:2437 entities.yml:2513 entities.yml:2540
-#: entities.yml:2703 enums.yml:1709
+#: entities.yml:2019 entities.yml:2439 entities.yml:2515 entities.yml:2542
+#: entities.yml:2707 enums.yml:1709
 msgid "Level"
 msgstr ""
 
@@ -129,23 +129,24 @@ msgstr ""
 
 #: entities.yml:24 entities.yml:56 entities.yml:282 entities.yml:752
 #: entities.yml:907 entities.yml:1000 entities.yml:1287 entities.yml:1613
-#: entities.yml:2549 enums.yml:1438
+#: entities.yml:2551 enums.yml:1438
 msgid "Address"
 msgstr ""
 
 #: entities.yml:25 entities.yml:53 entities.yml:136 entities.yml:343
 #: entities.yml:947 entities.yml:983 entities.yml:1054 entities.yml:1102
-#: entities.yml:1164 entities.yml:1263 entities.yml:1847 entities.yml:2555
+#: entities.yml:1164 entities.yml:1263 entities.yml:1847 entities.yml:2313
+#: entities.yml:2557 entities.yml:2683
 msgid "Long display template"
 msgstr ""
 
 #: entities.yml:26 entities.yml:137 entities.yml:948 entities.yml:984
 #: entities.yml:1055 entities.yml:1103 entities.yml:1165 entities.yml:1264
-#: entities.yml:1848 entities.yml:2556
+#: entities.yml:1848 entities.yml:2314 entities.yml:2558 entities.yml:2684
 msgid "Short display template"
 msgstr ""
 
-#: entities.yml:28 entities.yml:1324 entities.yml:2114 entities.yml:2637
+#: entities.yml:28 entities.yml:1324 entities.yml:2114 entities.yml:2639
 msgid "Place"
 msgstr ""
 
@@ -177,7 +178,7 @@ msgstr ""
 msgid "Streetnumber"
 msgstr ""
 
-#: entities.yml:38 entities.yml:2522 enums.yml:220 enums.yml:1474
+#: entities.yml:38 entities.yml:2524 enums.yml:220 enums.yml:1474
 #: enums.yml:2060
 msgid "Street"
 msgstr ""
@@ -211,8 +212,8 @@ msgid "Floor"
 msgstr ""
 
 #: entities.yml:48 entities.yml:332 entities.yml:498 entities.yml:1251
-#: entities.yml:1540 entities.yml:1609 entities.yml:2364 entities.yml:2552
-#: entities.yml:2675
+#: entities.yml:1540 entities.yml:1609 entities.yml:2366 entities.yml:2554
+#: entities.yml:2677
 msgid "Flats"
 msgstr ""
 
@@ -239,14 +240,14 @@ msgstr ""
 #: entities.yml:993 entities.yml:1136 entities.yml:1177 entities.yml:1223
 #: entities.yml:1343 entities.yml:1387 entities.yml:1406 entities.yml:1421
 #: entities.yml:1458 entities.yml:1470 entities.yml:1505 entities.yml:1639
-#: entities.yml:1829 entities.yml:1905 entities.yml:2256 entities.yml:2431
-#: entities.yml:2481 entities.yml:2700 entities.yml:2753 entities.yml:2777
+#: entities.yml:1829 entities.yml:1905 entities.yml:2256 entities.yml:2433
+#: entities.yml:2483 entities.yml:2704 entities.yml:2757 entities.yml:2781
 msgid "Note"
 msgstr ""
 
 #: entities.yml:58 entities.yml:103 entities.yml:440 entities.yml:1023
 #: entities.yml:1204 entities.yml:1332 entities.yml:1771 entities.yml:2024
-#: entities.yml:2550
+#: entities.yml:2552
 msgid "Is in"
 msgstr ""
 
@@ -255,8 +256,8 @@ msgstr ""
 #: entities.yml:895 entities.yml:1017 entities.yml:1123 entities.yml:1161
 #: entities.yml:1200 entities.yml:1222 entities.yml:1300 entities.yml:1386
 #: entities.yml:1407 entities.yml:1429 entities.yml:1479 entities.yml:1503
-#: entities.yml:1600 entities.yml:1931 entities.yml:2269 entities.yml:2430
-#: entities.yml:2486 entities.yml:2535 entities.yml:2704 entities.yml:2773
+#: entities.yml:1600 entities.yml:1931 entities.yml:2269 entities.yml:2432
+#: entities.yml:2488 entities.yml:2537 entities.yml:2708 entities.yml:2777
 msgid "Fixme"
 msgstr ""
 
@@ -265,14 +266,14 @@ msgstr ""
 #: entities.yml:890 entities.yml:912 entities.yml:956 entities.yml:988
 #: entities.yml:1117 entities.yml:1180 entities.yml:1290 entities.yml:1340
 #: entities.yml:1523 entities.yml:1765 entities.yml:1779 entities.yml:2217
-#: entities.yml:2272 entities.yml:2354 entities.yml:2503 entities.yml:2541
-#: entities.yml:2755
+#: entities.yml:2272 entities.yml:2356 entities.yml:2505 entities.yml:2543
+#: entities.yml:2759
 msgid "Website"
 msgstr ""
 
 #: entities.yml:61 entities.yml:107 entities.yml:482 entities.yml:836
 #: entities.yml:951 entities.yml:1031 entities.yml:1176 entities.yml:1334
-#: entities.yml:1412 entities.yml:1601 entities.yml:2487 entities.yml:2673
+#: entities.yml:1412 entities.yml:1601 entities.yml:2489 entities.yml:2675
 msgid "Ele"
 msgstr ""
 
@@ -289,26 +290,26 @@ msgstr ""
 #: entities.yml:67 entities.yml:295 entities.yml:386 entities.yml:885
 #: entities.yml:1015 entities.yml:1179 entities.yml:1338 entities.yml:1385
 #: entities.yml:1528 entities.yml:1625 entities.yml:1930 entities.yml:2262
-#: entities.yml:2483 entities.yml:2669 entities.yml:2710 entities.yml:2748
-#: entities.yml:2766
+#: entities.yml:2485 entities.yml:2671 entities.yml:2714 entities.yml:2752
+#: entities.yml:2770
 msgid "Alt name"
 msgstr ""
 
 #: entities.yml:68 entities.yml:128 entities.yml:876 entities.yml:1018
 #: entities.yml:1140 entities.yml:1335 entities.yml:1662 entities.yml:2113
-#: entities.yml:2752
+#: entities.yml:2756
 msgid "Loc name"
 msgstr ""
 
 #: entities.yml:69 entities.yml:409 entities.yml:733 entities.yml:994
-#: entities.yml:1651 entities.yml:1938 entities.yml:2495 entities.yml:2741
+#: entities.yml:1651 entities.yml:1938 entities.yml:2497 entities.yml:2745
 msgid "Comment"
 msgstr ""
 
 #: entities.yml:70 entities.yml:365 entities.yml:756 entities.yml:902
 #: entities.yml:939 entities.yml:1007 entities.yml:1184 entities.yml:1292
-#: entities.yml:1780 entities.yml:2011 entities.yml:2292 entities.yml:2474
-#: entities.yml:2674
+#: entities.yml:1780 entities.yml:2011 entities.yml:2292 entities.yml:2476
+#: entities.yml:2676
 msgid "Opening hours"
 msgstr ""
 
@@ -316,7 +317,7 @@ msgstr ""
 msgid "Disused name"
 msgstr ""
 
-#: entities.yml:72 entities.yml:765 entities.yml:903 entities.yml:2326
+#: entities.yml:72 entities.yml:765 entities.yml:903 entities.yml:2328
 msgid "Internet access"
 msgstr ""
 
@@ -328,20 +329,20 @@ msgstr ""
 #: entities.yml:517 entities.yml:669 entities.yml:685 entities.yml:976
 #: entities.yml:1036 entities.yml:1085 entities.yml:1114 entities.yml:1197
 #: entities.yml:1313 entities.yml:1500 entities.yml:1667 entities.yml:2147
-#: entities.yml:2328 entities.yml:2392 entities.yml:2537 entities.yml:2587
-#: entities.yml:2721
+#: entities.yml:2330 entities.yml:2394 entities.yml:2539 entities.yml:2589
+#: entities.yml:2725
 msgid "Height"
 msgstr ""
 
 #: entities.yml:78 entities.yml:113 entities.yml:196 entities.yml:281
 #: entities.yml:792 entities.yml:879 entities.yml:1086 entities.yml:1298
-#: entities.yml:1370 entities.yml:1929 entities.yml:2379 entities.yml:2418
-#: entities.yml:2631
+#: entities.yml:1370 entities.yml:1929 entities.yml:2381 entities.yml:2420
+#: entities.yml:2633
 msgid "Lit"
 msgstr ""
 
 #: entities.yml:79 entities.yml:212 entities.yml:805 entities.yml:970
-#: entities.yml:2413 entities.yml:2500 entities.yml:2582
+#: entities.yml:2415 entities.yml:2502 entities.yml:2584
 msgid "Direction"
 msgstr ""
 
@@ -350,7 +351,7 @@ msgid "Aerial way"
 msgstr ""
 
 #: entities.yml:84 entities.yml:177 entities.yml:502 entities.yml:1278
-#: entities.yml:2185 entities.yml:2390
+#: entities.yml:2185 entities.yml:2392
 msgid "Capacity"
 msgstr ""
 
@@ -364,7 +365,7 @@ msgstr ""
 
 #: entities.yml:88 entities.yml:493 entities.yml:754 entities.yml:1373
 #: entities.yml:1427 entities.yml:1450 entities.yml:1495 entities.yml:2221
-#: entities.yml:2323 entities.yml:2477 entities.yml:2591 entities.yml:2661
+#: entities.yml:2325 entities.yml:2479 entities.yml:2593 entities.yml:2663
 #: enums.yml:968 enums.yml:1124 enums.yml:1428 enums.yml:1499 enums.yml:1702
 msgid "Building"
 msgstr ""
@@ -374,7 +375,7 @@ msgid "Length"
 msgstr ""
 
 #: entities.yml:90 entities.yml:389 entities.yml:476 entities.yml:893
-#: entities.yml:1392 entities.yml:1918 entities.yml:2416 entities.yml:2772
+#: entities.yml:1392 entities.yml:1918 entities.yml:2418 entities.yml:2776
 msgid "Width"
 msgstr ""
 
@@ -385,8 +386,8 @@ msgstr ""
 #: entities.yml:92 entities.yml:198 entities.yml:278 entities.yml:474
 #: entities.yml:607 entities.yml:800 entities.yml:1020 entities.yml:1060
 #: entities.yml:1185 entities.yml:1286 entities.yml:1369 entities.yml:1607
-#: entities.yml:1917 entities.yml:2372 entities.yml:2415 entities.yml:2638
-#: entities.yml:2701 entities.yml:2780 enums.yml:943 enums.yml:1654
+#: entities.yml:1917 entities.yml:2374 entities.yml:2417 entities.yml:2640
+#: entities.yml:2705 entities.yml:2784 enums.yml:943 enums.yml:1654
 msgid "Surface"
 msgstr ""
 
@@ -399,8 +400,8 @@ msgid "Icao"
 msgstr ""
 
 #: entities.yml:95 entities.yml:268 entities.yml:516 entities.yml:666
-#: entities.yml:915 entities.yml:1248 entities.yml:1498 entities.yml:2597
-#: entities.yml:2667
+#: entities.yml:915 entities.yml:1248 entities.yml:1498 entities.yml:2599
+#: entities.yml:2669
 msgid "Roof shape"
 msgstr ""
 
@@ -414,7 +415,7 @@ msgid "Pedestrian"
 msgstr ""
 
 #: entities.yml:98 entities.yml:486 entities.yml:827 entities.yml:1358
-#: entities.yml:2411 entities.yml:2779 enums.yml:1344 enums.yml:1519
+#: entities.yml:2413 entities.yml:2783 enums.yml:1344 enums.yml:1519
 msgid "Highway"
 msgstr ""
 
@@ -424,8 +425,8 @@ msgid "Bridge structure"
 msgstr ""
 
 #: entities.yml:100 entities.yml:488 entities.yml:600 entities.yml:741
-#: entities.yml:1125 entities.yml:1382 entities.yml:1901 entities.yml:2440
-#: entities.yml:2781 enums.yml:715 enums.yml:1122 enums.yml:1405 enums.yml:2198
+#: entities.yml:1125 entities.yml:1382 entities.yml:1901 entities.yml:2442
+#: entities.yml:2785 enums.yml:715 enums.yml:1122 enums.yml:1405 enums.yml:2198
 msgid "Bridge"
 msgstr ""
 
@@ -436,7 +437,7 @@ msgstr ""
 #: entities.yml:1280 entities.yml:1368 entities.yml:1405 entities.yml:1418
 #: entities.yml:1439 entities.yml:1453 entities.yml:1469 entities.yml:1496
 #: entities.yml:1553 entities.yml:1621 entities.yml:1804 entities.yml:2013
-#: entities.yml:2257 entities.yml:2380 entities.yml:2472 entities.yml:2566
+#: entities.yml:2257 entities.yml:2382 entities.yml:2474 entities.yml:2568
 msgid "Operator"
 msgstr ""
 
@@ -445,7 +446,7 @@ msgid "Maxweight"
 msgstr ""
 
 #: entities.yml:106 entities.yml:272 entities.yml:1376 entities.yml:1438
-#: entities.yml:1744 entities.yml:2048 entities.yml:2478 entities.yml:2785
+#: entities.yml:1744 entities.yml:2048 entities.yml:2480 entities.yml:2789
 #: enums.yml:219 enums.yml:1710
 msgid "Area"
 msgstr ""
@@ -456,8 +457,8 @@ msgstr ""
 #: entities.yml:1122 entities.yml:1259 entities.yml:1293 entities.yml:1349
 #: entities.yml:1440 entities.yml:1454 entities.yml:1462 entities.yml:1504
 #: entities.yml:1524 entities.yml:1543 entities.yml:1640 entities.yml:1995
-#: entities.yml:2297 entities.yml:2447 entities.yml:2510 entities.yml:2577
-#: entities.yml:2722 entities.yml:2738 entities.yml:2784
+#: entities.yml:2297 entities.yml:2449 entities.yml:2512 entities.yml:2579
+#: entities.yml:2726 entities.yml:2742 entities.yml:2788
 msgid "Start date"
 msgstr ""
 
@@ -466,9 +467,9 @@ msgstr ""
 #: entities.yml:742 entities.yml:769 entities.yml:830 entities.yml:883
 #: entities.yml:1010 entities.yml:1066 entities.yml:1111 entities.yml:1195
 #: entities.yml:1289 entities.yml:1378 entities.yml:1428 entities.yml:1456
-#: entities.yml:1472 entities.yml:1597 entities.yml:1903 entities.yml:2357
-#: entities.yml:2373 entities.yml:2419 entities.yml:2476 entities.yml:2608
-#: entities.yml:2768
+#: entities.yml:1472 entities.yml:1597 entities.yml:1903 entities.yml:2359
+#: entities.yml:2375 entities.yml:2421 entities.yml:2478 entities.yml:2610
+#: entities.yml:2772
 msgid "Layer"
 msgstr ""
 
@@ -476,7 +477,7 @@ msgstr ""
 #: entities.yml:322 entities.yml:352 entities.yml:538 entities.yml:854
 #: entities.yml:917 entities.yml:1024 entities.yml:1061 entities.yml:1130
 #: entities.yml:1281 entities.yml:1510 entities.yml:1645 entities.yml:1916
-#: entities.yml:2378 entities.yml:2422 entities.yml:2515 entities.yml:2606
+#: entities.yml:2380 entities.yml:2424 entities.yml:2517 entities.yml:2608
 msgid "Access"
 msgstr ""
 
@@ -486,13 +487,13 @@ msgstr ""
 
 #: entities.yml:115 entities.yml:226 entities.yml:286 entities.yml:370
 #: entities.yml:483 entities.yml:512 entities.yml:990 entities.yml:1100
-#: entities.yml:1174 entities.yml:2012 entities.yml:2403 entities.yml:2532
-#: entities.yml:2588
+#: entities.yml:1174 entities.yml:2012 entities.yml:2405 entities.yml:2534
+#: entities.yml:2590
 msgid "Man made"
 msgstr ""
 
 #: entities.yml:116 entities.yml:1437 entities.yml:1452 entities.yml:1468
-#: entities.yml:1484 entities.yml:1493 entities.yml:1615 entities.yml:2315
+#: entities.yml:1484 entities.yml:1493 entities.yml:1615 entities.yml:2317
 msgid "Frequency"
 msgstr ""
 
@@ -508,7 +509,7 @@ msgstr ""
 msgid "Note cs"
 msgstr ""
 
-#: entities.yml:120 entities.yml:1611 entities.yml:1897 entities.yml:2520
+#: entities.yml:120 entities.yml:1611 entities.yml:1897 entities.yml:2522
 msgid "Oneway"
 msgstr ""
 
@@ -530,15 +531,15 @@ msgstr ""
 #: entities.yml:464 entities.yml:550 entities.yml:808 entities.yml:882
 #: entities.yml:937 entities.yml:992 entities.yml:1077 entities.yml:1189
 #: entities.yml:1238 entities.yml:1295 entities.yml:1457 entities.yml:1494
-#: entities.yml:1759 entities.yml:1801 entities.yml:2188 entities.yml:2374
+#: entities.yml:1759 entities.yml:1801 entities.yml:2188 entities.yml:2376
 msgid "Barrier"
 msgstr ""
 
 #: entities.yml:126 entities.yml:151 entities.yml:270 entities.yml:315
 #: entities.yml:331 entities.yml:532 entities.yml:761 entities.yml:906
 #: entities.yml:1046 entities.yml:1068 entities.yml:1230 entities.yml:1342
-#: entities.yml:1536 entities.yml:1778 entities.yml:2383 entities.yml:2579
-#: entities.yml:2672
+#: entities.yml:1536 entities.yml:1778 entities.yml:2385 entities.yml:2581
+#: entities.yml:2674
 msgid "Phone"
 msgstr ""
 
@@ -546,7 +547,7 @@ msgstr ""
 msgid "Military"
 msgstr ""
 
-#: entities.yml:129 entities.yml:585 entities.yml:2624 entities.yml:2670
+#: entities.yml:129 entities.yml:585 entities.yml:2626 entities.yml:2672
 msgid "Min height"
 msgstr ""
 
@@ -569,7 +570,7 @@ msgstr ""
 
 #: entities.yml:134 entities.yml:276 entities.yml:419 entities.yml:499
 #: entities.yml:1254 entities.yml:1276 entities.yml:1535 entities.yml:1776
-#: entities.yml:2136 entities.yml:2543 entities.yml:2590
+#: entities.yml:2136 entities.yml:2545 entities.yml:2592
 msgid "Amenity"
 msgstr ""
 
@@ -578,8 +579,8 @@ msgid "Payment:visa"
 msgstr ""
 
 #: entities.yml:145 entities.yml:487 entities.yml:1441 entities.yml:1578
-#: entities.yml:1864 entities.yml:2303 entities.yml:2463 entities.yml:2558
-#: entities.yml:2724
+#: entities.yml:1864 entities.yml:2303 entities.yml:2465 entities.yml:2560
+#: entities.yml:2728
 msgid "Ref"
 msgstr ""
 
@@ -587,24 +588,24 @@ msgstr ""
 #: entities.yml:778 entities.yml:1057 entities.yml:1105 entities.yml:1151
 #: entities.yml:1171 entities.yml:1275 entities.yml:1356 entities.yml:1425
 #: entities.yml:1446 entities.yml:1517 entities.yml:1579 entities.yml:1870
-#: entities.yml:2239 entities.yml:2412 entities.yml:2559 entities.yml:2723
-#: entities.yml:2728 entities.yml:2762
+#: entities.yml:2239 entities.yml:2414 entities.yml:2561 entities.yml:2727
+#: entities.yml:2732 entities.yml:2766
 msgid "Source"
 msgstr ""
 
 #: entities.yml:148 entities.yml:500 entities.yml:826 entities.yml:934
-#: entities.yml:953 entities.yml:1002 entities.yml:1240 entities.yml:2614
+#: entities.yml:953 entities.yml:1002 entities.yml:1240 entities.yml:2616
 #: enums.yml:2017
 msgid "Religion"
 msgstr ""
 
-#: entities.yml:150 entities.yml:531 entities.yml:1545 entities.yml:2593
+#: entities.yml:150 entities.yml:531 entities.yml:1545 entities.yml:2595
 msgid "Cuisine"
 msgstr ""
 
 #: entities.yml:152 entities.yml:501 entities.yml:726 entities.yml:738
 #: entities.yml:925 entities.yml:1232 entities.yml:1375 entities.yml:2170
-#: entities.yml:2300 entities.yml:2395 entities.yml:2494 entities.yml:2629
+#: entities.yml:2300 entities.yml:2397 entities.yml:2496 entities.yml:2631
 msgid "Official name"
 msgstr ""
 
@@ -626,7 +627,7 @@ msgid "Outdoor seating"
 msgstr ""
 
 #: entities.yml:158 entities.yml:507 entities.yml:924 entities.yml:1231
-#: entities.yml:1537 entities.yml:2578
+#: entities.yml:1537 entities.yml:2580
 msgid "Smoking"
 msgstr ""
 
@@ -645,8 +646,8 @@ msgstr ""
 
 #: entities.yml:162 entities.yml:359 entities.yml:556 entities.yml:677
 #: entities.yml:889 entities.yml:974 entities.yml:1124 entities.yml:1186
-#: entities.yml:1399 entities.yml:1434 entities.yml:2001 entities.yml:2432
-#: entities.yml:2583
+#: entities.yml:1399 entities.yml:1434 entities.yml:2001 entities.yml:2434
+#: entities.yml:2585
 msgid "Material"
 msgstr ""
 
@@ -663,8 +664,8 @@ msgid "Unisex"
 msgstr ""
 
 #: entities.yml:166 entities.yml:520 entities.yml:1075 entities.yml:1301
-#: entities.yml:1372 entities.yml:1641 entities.yml:1959 entities.yml:2406
-#: entities.yml:2448 entities.yml:2470 entities.yml:2545 entities.yml:2642
+#: entities.yml:1372 entities.yml:1641 entities.yml:1959 entities.yml:2408
+#: entities.yml:2450 entities.yml:2472 entities.yml:2547 entities.yml:2644
 #: enums.yml:1250
 msgid "Covered"
 msgstr ""
@@ -673,18 +674,18 @@ msgstr ""
 #: entities.yml:542 entities.yml:763 entities.yml:794 entities.yml:850
 #: entities.yml:913 entities.yml:969 entities.yml:1079 entities.yml:1241
 #: entities.yml:1294 entities.yml:1371 entities.yml:1544 entities.yml:1619
-#: entities.yml:1945 entities.yml:2278 entities.yml:2376 entities.yml:2435
-#: entities.yml:2480 entities.yml:2605 enums.yml:1689 enums.yml:1790
+#: entities.yml:1945 entities.yml:2278 entities.yml:2378 entities.yml:2437
+#: entities.yml:2482 entities.yml:2607 enums.yml:1689 enums.yml:1790
 msgid "Wheelchair"
 msgstr ""
 
 #: entities.yml:168 entities.yml:589 entities.yml:767 entities.yml:1087
-#: entities.yml:1258 entities.yml:1538 entities.yml:2393 entities.yml:2618
+#: entities.yml:1258 entities.yml:1538 entities.yml:2395 entities.yml:2620
 msgid "Facebook"
 msgstr ""
 
 #: entities.yml:169 entities.yml:1365 entities.yml:1663 entities.yml:2181
-#: entities.yml:2319 enums.yml:1051 enums.yml:1463 enums.yml:2412
+#: entities.yml:2321 enums.yml:1051 enums.yml:1463 enums.yml:2412
 msgid "Shelter"
 msgstr ""
 
@@ -693,7 +694,7 @@ msgid "Hide"
 msgstr ""
 
 #: entities.yml:171 entities.yml:303 entities.yml:1154 entities.yml:1207
-#: entities.yml:1552 entities.yml:2397
+#: entities.yml:1552 entities.yml:2399
 msgid "Url"
 msgstr ""
 
@@ -708,7 +709,7 @@ msgstr ""
 
 #: entities.yml:174 entities.yml:302 entities.yml:374 entities.yml:684
 #: entities.yml:874 entities.yml:945 entities.yml:1109 entities.yml:1152
-#: entities.yml:1203 entities.yml:1766 entities.yml:2041 entities.yml:2589
+#: entities.yml:1203 entities.yml:1766 entities.yml:2041 entities.yml:2591
 #: enums.yml:118 enums.yml:132
 msgid "Historic"
 msgstr ""
@@ -722,7 +723,7 @@ msgstr ""
 msgid "Brewery"
 msgstr ""
 
-#: entities.yml:181 entities.yml:508 entities.yml:2314 enums.yml:286
+#: entities.yml:181 entities.yml:508 entities.yml:2316 enums.yml:286
 msgid "Delivery"
 msgstr ""
 
@@ -736,26 +737,26 @@ msgstr ""
 
 #: entities.yml:184 entities.yml:523 entities.yml:810 entities.yml:1094
 #: entities.yml:1236 entities.yml:1345 entities.yml:1384 entities.yml:2049
-#: entities.yml:2285 entities.yml:2396 entities.yml:2492 entities.yml:2622
+#: entities.yml:2285 entities.yml:2398 entities.yml:2494 entities.yml:2624
 msgid "Short name"
 msgstr ""
 
 #: entities.yml:186 entities.yml:301 entities.yml:543 entities.yml:759
 #: entities.yml:880 entities.yml:922 entities.yml:1188 entities.yml:1235
-#: entities.yml:1303 entities.yml:1348 entities.yml:1529 entities.yml:2377
-#: entities.yml:2539 entities.yml:2648 entities.yml:2751 enums.yml:1433
+#: entities.yml:1303 entities.yml:1348 entities.yml:1529 entities.yml:2379
+#: entities.yml:2541 entities.yml:2650 entities.yml:2755 enums.yml:1433
 msgid "Landuse"
 msgstr ""
 
 #: entities.yml:187 entities.yml:292 entities.yml:999 entities.yml:1052
-#: entities.yml:1347 entities.yml:1560 entities.yml:2371 entities.yml:2610
-#: entities.yml:2683
+#: entities.yml:1347 entities.yml:1560 entities.yml:2373 entities.yml:2612
+#: entities.yml:2687
 msgid "Leisure"
 msgstr ""
 
 #: entities.yml:189 entities.yml:293 entities.yml:519 entities.yml:1059
-#: entities.yml:1201 entities.yml:1547 entities.yml:2103 entities.yml:2366
-#: entities.yml:2756 entities.yml:2796 enums.yml:117 enums.yml:349
+#: entities.yml:1201 entities.yml:1547 entities.yml:2103 entities.yml:2368
+#: entities.yml:2760 entities.yml:2800 enums.yml:117 enums.yml:349
 #: enums.yml:1115
 msgid "Sport"
 msgstr ""
@@ -770,7 +771,7 @@ msgstr ""
 
 #: entities.yml:192 entities.yml:313 entities.yml:385 entities.yml:559
 #: entities.yml:860 entities.yml:863 entities.yml:1083 entities.yml:2143
-#: entities.yml:2294 entities.yml:2385 entities.yml:2600 entities.yml:2663
+#: entities.yml:2294 entities.yml:2387 entities.yml:2602 entities.yml:2665
 msgid "Fee"
 msgstr ""
 
@@ -780,21 +781,21 @@ msgstr ""
 
 #: entities.yml:194 entities.yml:391 entities.yml:528 entities.yml:1047
 #: entities.yml:1476 entities.yml:1652 entities.yml:1964 entities.yml:2274
-#: entities.yml:2504 entities.yml:2630 entities.yml:2666
+#: entities.yml:2506 entities.yml:2632 entities.yml:2668
 msgid "Colour"
 msgstr ""
 
-#: entities.yml:197 entities.yml:1273 entities.yml:2317 enums.yml:407
+#: entities.yml:197 entities.yml:1273 entities.yml:2319 enums.yml:407
 #: enums.yml:1130 enums.yml:1479 enums.yml:1509 enums.yml:1705
 msgid "Parking"
 msgstr ""
 
 #: entities.yml:199 entities.yml:608 entities.yml:1224 entities.yml:1770
-#: entities.yml:2318 entities.yml:2693
+#: entities.yml:2320 entities.yml:2697
 msgid "Todo"
 msgstr ""
 
-#: entities.yml:200 entities.yml:873 entities.yml:1178 entities.yml:2652
+#: entities.yml:200 entities.yml:873 entities.yml:1178 entities.yml:2654
 #: enums.yml:398
 msgid "Drinking water"
 msgstr ""
@@ -811,24 +812,24 @@ msgstr ""
 msgid "Int name"
 msgstr ""
 
-#: entities.yml:204 entities.yml:518 entities.yml:1550 entities.yml:2595
+#: entities.yml:204 entities.yml:518 entities.yml:1550 entities.yml:2597
 msgid "Internet access fee"
 msgstr ""
 
-#: entities.yml:205 entities.yml:584 entities.yml:2327
+#: entities.yml:205 entities.yml:584 entities.yml:2329
 msgid "Internet access ssid"
 msgstr ""
 
 #: entities.yml:206 entities.yml:485 entities.yml:540 entities.yml:1062
 #: entities.yml:1260 entities.yml:1284 entities.yml:1548 entities.yml:1821
-#: entities.yml:2284 entities.yml:2382 entities.yml:2533 entities.yml:2602
-#: entities.yml:2695
+#: entities.yml:2284 entities.yml:2384 entities.yml:2535 entities.yml:2604
+#: entities.yml:2699
 msgid "Designation"
 msgstr ""
 
 #: entities.yml:207 entities.yml:319 entities.yml:525 entities.yml:1112
 #: entities.yml:1430 entities.yml:1473 entities.yml:1491 entities.yml:1620
-#: entities.yml:1810 entities.yml:1969 entities.yml:2434 entities.yml:2625
+#: entities.yml:1810 entities.yml:1969 entities.yml:2436 entities.yml:2627
 msgid "Location"
 msgstr ""
 
@@ -893,12 +894,12 @@ msgstr ""
 msgid "Fast food"
 msgstr ""
 
-#: entities.yml:227 entities.yml:570 entities.yml:1758 entities.yml:2516
+#: entities.yml:227 entities.yml:570 entities.yml:1758 entities.yml:2518
 msgid "Wheelchair toilets"
 msgstr ""
 
 #: entities.yml:228 entities.yml:562 entities.yml:768 entities.yml:1255
-#: entities.yml:2621
+#: entities.yml:2623
 msgid "Fax"
 msgstr ""
 
@@ -928,7 +929,7 @@ msgstr ""
 
 #: entities.yml:235 entities.yml:357 entities.yml:597 entities.yml:1016
 #: entities.yml:1078 entities.yml:1190 entities.yml:1509 entities.yml:1803
-#: entities.yml:2391
+#: entities.yml:2393
 msgid "Fence type"
 msgstr ""
 
@@ -954,15 +955,15 @@ msgstr ""
 
 #: entities.yml:241 entities.yml:388 entities.yml:549 entities.yml:816
 #: entities.yml:894 entities.yml:1008 entities.yml:1121 entities.yml:1411
-#: entities.yml:1647 entities.yml:2120 entities.yml:2401 entities.yml:2497
-#: entities.yml:2607 enums.yml:930 enums.yml:1215 enums.yml:2464
+#: entities.yml:1647 entities.yml:2120 entities.yml:2403 entities.yml:2499
+#: entities.yml:2609 enums.yml:930 enums.yml:1215 enums.yml:2464
 msgid "Disused"
 msgstr ""
 
 #: entities.yml:242 entities.yml:280 entities.yml:348 entities.yml:785
 #: entities.yml:829 entities.yml:849 entities.yml:1312 entities.yml:1377
-#: entities.yml:1657 entities.yml:1906 entities.yml:2290 entities.yml:2420
-#: entities.yml:2585 enums.yml:1682
+#: entities.yml:1657 entities.yml:1906 entities.yml:2290 entities.yml:2422
+#: entities.yml:2587 enums.yml:1682
 msgid "Foot"
 msgstr ""
 
@@ -982,7 +983,7 @@ msgstr ""
 msgid "Studio"
 msgstr ""
 
-#: entities.yml:247 entities.yml:2344 enums.yml:533
+#: entities.yml:247 entities.yml:2346 enums.yml:533
 msgid "Wine"
 msgstr ""
 
@@ -1012,12 +1013,12 @@ msgstr ""
 msgid "Removed name"
 msgstr ""
 
-#: entities.yml:260 entities.yml:662 entities.yml:2594 entities.yml:2660
+#: entities.yml:260 entities.yml:662 entities.yml:2596 entities.yml:2662
 msgid "Building part"
 msgstr ""
 
 #: entities.yml:262 entities.yml:375 entities.yml:728 entities.yml:1478
-#: entities.yml:2016 entities.yml:2252 entities.yml:2496 enums.yml:1515
+#: entities.yml:2016 entities.yml:2252 entities.yml:2498 enums.yml:1515
 msgid "Complete"
 msgstr ""
 
@@ -1046,8 +1047,8 @@ msgid "Removed phone"
 msgstr ""
 
 #: entities.yml:283 entities.yml:484 entities.yml:714 entities.yml:896
-#: entities.yml:1409 entities.yml:2112 entities.yml:2324 entities.yml:2553
-#: entities.yml:2662 enums.yml:2187
+#: entities.yml:1409 entities.yml:2112 entities.yml:2326 entities.yml:2555
+#: entities.yml:2664 enums.yml:2187
 msgid "Tourism"
 msgstr ""
 
@@ -1068,7 +1069,7 @@ msgstr ""
 msgid "Animal"
 msgstr ""
 
-#: entities.yml:299 entities.yml:1346 entities.yml:2216 entities.yml:2613
+#: entities.yml:299 entities.yml:1346 entities.yml:2216 entities.yml:2615
 #: enums.yml:912 enums.yml:964
 msgid "Attraction"
 msgstr ""
@@ -1103,13 +1104,13 @@ msgid "Bank"
 msgstr ""
 
 #: entities.yml:333 entities.yml:497 entities.yml:668 entities.yml:909
-#: entities.yml:1233 entities.yml:1541 entities.yml:1610 entities.yml:2365
-#: entities.yml:2551 entities.yml:2668
+#: entities.yml:1233 entities.yml:1541 entities.yml:1610 entities.yml:2367
+#: entities.yml:2553 entities.yml:2670
 msgid "Levels"
 msgstr ""
 
 #: entities.yml:334 entities.yml:908 entities.yml:1285 entities.yml:1608
-#: entities.yml:2363
+#: entities.yml:2365
 msgid "Building type"
 msgstr ""
 
@@ -1123,16 +1124,16 @@ msgid "Office"
 msgstr ""
 
 #: entities.yml:345 entities.yml:790 entities.yml:1383 entities.yml:2015
-#: entities.yml:2445 entities.yml:2473
+#: entities.yml:2447 entities.yml:2475
 msgid "Tactile paving"
 msgstr ""
 
-#: entities.yml:350 entities.yml:2425
+#: entities.yml:350 entities.yml:2427
 msgid "Vehicle"
 msgstr ""
 
 #: entities.yml:351 entities.yml:786 entities.yml:851 entities.yml:1623
-#: entities.yml:2428 entities.yml:2644 enums.yml:1787
+#: entities.yml:2430 entities.yml:2646 enums.yml:1787
 msgid "Horse"
 msgstr ""
 
@@ -1142,7 +1143,7 @@ msgstr ""
 msgid "Entrance"
 msgstr ""
 
-#: entities.yml:354 entities.yml:2291 entities.yml:2423
+#: entities.yml:354 entities.yml:2291 entities.yml:2425
 msgid "Motor vehicle"
 msgstr ""
 
@@ -1150,7 +1151,7 @@ msgstr ""
 msgid "Maxwidth"
 msgstr ""
 
-#: entities.yml:360 entities.yml:852 entities.yml:1996 entities.yml:2454
+#: entities.yml:360 entities.yml:852 entities.yml:1996 entities.yml:2456
 msgid "Motorcar"
 msgstr ""
 
@@ -1170,12 +1171,12 @@ msgstr ""
 msgid "Bollard"
 msgstr ""
 
-#: entities.yml:367 entities.yml:1963 entities.yml:2299 entities.yml:2518
-#: entities.yml:2775 enums.yml:282 enums.yml:1928
+#: entities.yml:367 entities.yml:1963 entities.yml:2299 entities.yml:2520
+#: entities.yml:2779 enums.yml:282 enums.yml:1928
 msgid "Destination"
 msgstr ""
 
-#: entities.yml:368 entities.yml:1221 entities.yml:1936 entities.yml:2653
+#: entities.yml:368 entities.yml:1221 entities.yml:1936 entities.yml:2655
 msgid "Noexit"
 msgstr ""
 
@@ -1196,7 +1197,7 @@ msgstr ""
 msgid "Stile"
 msgstr ""
 
-#: entities.yml:379 entities.yml:782 entities.yml:1961 entities.yml:2696
+#: entities.yml:379 entities.yml:782 entities.yml:1961 entities.yml:2700
 msgid "Traffic calming"
 msgstr ""
 
@@ -1214,7 +1215,7 @@ msgid "Kerb"
 msgstr ""
 
 #: entities.yml:390 entities.yml:1025 entities.yml:1191 entities.yml:2074
-#: entities.yml:2627
+#: entities.yml:2629
 msgid "Leaf type"
 msgstr ""
 
@@ -1227,7 +1228,7 @@ msgid "Count"
 msgstr ""
 
 #: entities.yml:397 entities.yml:1110 entities.yml:1156 entities.yml:1367
-#: entities.yml:1572 entities.yml:1630 entities.yml:2255 entities.yml:2475
+#: entities.yml:1572 entities.yml:1630 entities.yml:2255 entities.yml:2477
 msgid "Network"
 msgstr ""
 
@@ -1256,7 +1257,7 @@ msgid "Ford"
 msgstr ""
 
 #: entities.yml:407 entities.yml:1596 entities.yml:1943 entities.yml:2275
-#: entities.yml:2342 entities.yml:2451 entities.yml:2771 enums.yml:1056
+#: entities.yml:2344 entities.yml:2453 entities.yml:2775 enums.yml:1056
 #: enums.yml:1264 enums.yml:1358 enums.yml:1518 enums.yml:1718 enums.yml:1933
 msgid "Service"
 msgstr ""
@@ -1273,7 +1274,7 @@ msgstr ""
 msgid "Swing gate type"
 msgstr ""
 
-#: entities.yml:412 entities.yml:1366 entities.yml:2325 entities.yml:2471
+#: entities.yml:412 entities.yml:1366 entities.yml:2327 entities.yml:2473
 #: enums.yml:376
 msgid "Bench"
 msgstr ""
@@ -1286,7 +1287,7 @@ msgstr ""
 msgid "Parking type"
 msgstr ""
 
-#: entities.yml:421 entities.yml:652 entities.yml:1120 entities.yml:2526
+#: entities.yml:421 entities.yml:652 entities.yml:1120 entities.yml:2528
 #: enums.yml:726
 msgid "Surveillance"
 msgstr ""
@@ -1295,7 +1296,7 @@ msgstr ""
 msgid "Surveillance type"
 msgstr ""
 
-#: entities.yml:423 entities.yml:2542
+#: entities.yml:423 entities.yml:2544
 msgid "Surveillance zone"
 msgstr ""
 
@@ -1422,11 +1423,11 @@ msgstr ""
 msgid "Fixname"
 msgstr ""
 
-#: entities.yml:467 entities.yml:1339 entities.yml:2106 entities.yml:2501
+#: entities.yml:467 entities.yml:1339 entities.yml:2106 entities.yml:2503
 msgid "Alt name de"
 msgstr ""
 
-#: entities.yml:468 entities.yml:2502
+#: entities.yml:468 entities.yml:2504
 msgid "Old name de"
 msgstr ""
 
@@ -1443,7 +1444,7 @@ msgid "Track type"
 msgstr ""
 
 #: entities.yml:477 entities.yml:651 entities.yml:715 entities.yml:802
-#: entities.yml:952 entities.yml:1182 entities.yml:2584
+#: entities.yml:952 entities.yml:1182 entities.yml:2586
 msgid "Inscription"
 msgstr ""
 
@@ -1452,7 +1453,7 @@ msgid "Old name cs"
 msgstr ""
 
 #: entities.yml:479 entities.yml:888 entities.yml:1168 entities.yml:1942
-#: entities.yml:2592 entities.yml:2729 entities.yml:2745 enums.yml:2425
+#: entities.yml:2594 entities.yml:2733 entities.yml:2749 enums.yml:2425
 msgid "Natural"
 msgstr ""
 
@@ -1460,7 +1461,7 @@ msgstr ""
 msgid "Vehicle conitional"
 msgstr ""
 
-#: entities.yml:481 entities.yml:1958 entities.yml:2446
+#: entities.yml:481 entities.yml:1958 entities.yml:2448
 msgid "Trail visibility"
 msgstr ""
 
@@ -1476,11 +1477,11 @@ msgstr ""
 msgid "Industrial type"
 msgstr ""
 
-#: entities.yml:515 entities.yml:671 entities.yml:1249 entities.yml:2596
+#: entities.yml:515 entities.yml:671 entities.yml:1249 entities.yml:2598
 msgid "Roof height"
 msgstr ""
 
-#: entities.yml:524 entities.yml:2567
+#: entities.yml:524 entities.yml:2569
 msgid "Information type"
 msgstr ""
 
@@ -1488,15 +1489,15 @@ msgstr ""
 msgid "Product"
 msgstr ""
 
-#: entities.yml:536 entities.yml:960 entities.yml:2598 enums.yml:972
+#: entities.yml:536 entities.yml:960 entities.yml:2600 enums.yml:972
 msgid "Heritage"
 msgstr ""
 
-#: entities.yml:537 entities.yml:961 entities.yml:2599
+#: entities.yml:537 entities.yml:961 entities.yml:2601
 msgid "Heritage operator"
 msgstr ""
 
-#: entities.yml:539 entities.yml:878 entities.yml:2330 entities.yml:2609
+#: entities.yml:539 entities.yml:878 entities.yml:2332 entities.yml:2611
 #: enums.yml:2019
 msgid "Architect"
 msgstr ""
@@ -1518,7 +1519,7 @@ msgid "Service times"
 msgstr ""
 
 #: entities.yml:548 entities.yml:963 entities.yml:1108 entities.yml:1629
-#: entities.yml:2488 entities.yml:2604
+#: entities.yml:2490 entities.yml:2606
 msgid "Image"
 msgstr ""
 
@@ -1542,7 +1543,7 @@ msgstr ""
 msgid "Cladding"
 msgstr ""
 
-#: entities.yml:558 entities.yml:2570
+#: entities.yml:558 entities.yml:2572
 msgid "Stars"
 msgstr ""
 
@@ -1555,7 +1556,7 @@ msgid "Use"
 msgstr ""
 
 #: entities.yml:564 entities.yml:673 entities.yml:916 entities.yml:1250
-#: entities.yml:1502 entities.yml:2671
+#: entities.yml:1502 entities.yml:2673
 msgid "Roof colour"
 msgstr ""
 
@@ -1564,7 +1565,7 @@ msgid "Wheelchair description"
 msgstr ""
 
 #: entities.yml:566 entities.yml:734 entities.yml:1011 entities.yml:1302
-#: entities.yml:1656 entities.yml:1867 entities.yml:2514 enums.yml:477
+#: entities.yml:1656 entities.yml:1867 entities.yml:2516 enums.yml:477
 #: enums.yml:1059 enums.yml:1225 enums.yml:1280 enums.yml:1340 enums.yml:1726
 #: enums.yml:2465
 msgid "Construction"
@@ -1582,11 +1583,11 @@ msgstr ""
 msgid "Ruins"
 msgstr ""
 
-#: entities.yml:572 entities.yml:2388
+#: entities.yml:572 entities.yml:2390
 msgid "Opening hours url"
 msgstr ""
 
-#: entities.yml:573 entities.yml:2389
+#: entities.yml:573 entities.yml:2391
 msgid "Reservation"
 msgstr ""
 
@@ -1606,7 +1607,7 @@ msgstr ""
 msgid "Healthcare speciality"
 msgstr ""
 
-#: entities.yml:579 entities.yml:1091 entities.yml:2402
+#: entities.yml:579 entities.yml:1091 entities.yml:2404
 msgid "Alt name 1"
 msgstr ""
 
@@ -1634,16 +1635,16 @@ msgstr ""
 msgid "Note en"
 msgstr ""
 
-#: entities.yml:592 entities.yml:772 entities.yml:1244 entities.yml:2611
+#: entities.yml:592 entities.yml:772 entities.yml:1244 entities.yml:2613
 msgid "Bitcoin payment"
 msgstr ""
 
 #: entities.yml:593 entities.yml:716 entities.yml:884 entities.yml:968
-#: entities.yml:2575
+#: entities.yml:2577
 msgid "Artist name"
 msgstr ""
 
-#: entities.yml:594 entities.yml:2603
+#: entities.yml:594 entities.yml:2605
 msgid "Rooms"
 msgstr ""
 
@@ -1668,7 +1669,7 @@ msgid "Notes payment"
 msgstr ""
 
 #: entities.yml:609 entities.yml:1090 entities.yml:1099 entities.yml:1253
-#: entities.yml:2086 entities.yml:2640 enums.yml:1400 enums.yml:1639
+#: entities.yml:2086 entities.yml:2642 enums.yml:1400 enums.yml:1639
 msgid "Indoor"
 msgstr ""
 
@@ -1692,7 +1693,7 @@ msgstr ""
 msgid "Bridge support"
 msgstr ""
 
-#: entities.yml:620 entities.yml:1145 entities.yml:2635 enums.yml:952
+#: entities.yml:620 entities.yml:1145 entities.yml:2637 enums.yml:952
 #: enums.yml:1769
 msgid "Memorial"
 msgstr ""
@@ -1712,7 +1713,7 @@ msgid "Residential"
 msgstr ""
 
 #: entities.yml:624 entities.yml:1033 entities.yml:1084 entities.yml:1307
-#: entities.yml:2404
+#: entities.yml:2406
 msgid "Fenced"
 msgstr ""
 
@@ -1728,7 +1729,7 @@ msgstr ""
 msgid "Mooring"
 msgstr ""
 
-#: entities.yml:628 entities.yml:2794
+#: entities.yml:628 entities.yml:2798
 msgid "Seamark type"
 msgstr ""
 
@@ -1764,7 +1765,7 @@ msgstr ""
 msgid "Meal voucher payment"
 msgstr ""
 
-#: entities.yml:638 entities.yml:892 entities.yml:980 entities.yml:2576
+#: entities.yml:638 entities.yml:892 entities.yml:980 entities.yml:2578
 msgid "Artwork type"
 msgstr ""
 
@@ -1836,7 +1837,7 @@ msgstr ""
 msgid "Bunker"
 msgstr ""
 
-#: entities.yml:686 entities.yml:2659
+#: entities.yml:686 entities.yml:2661
 msgid "Tower type"
 msgstr ""
 
@@ -1876,7 +1877,7 @@ msgstr ""
 msgid "Display"
 msgstr ""
 
-#: entities.yml:707 entities.yml:2167 entities.yml:2544 entities.yml:2636
+#: entities.yml:707 entities.yml:2167 entities.yml:2546 entities.yml:2638
 msgid "Support"
 msgstr ""
 
@@ -1954,7 +1955,7 @@ msgid "Sloped curb"
 msgstr ""
 
 #: entities.yml:795 entities.yml:842 entities.yml:1594 entities.yml:1891
-#: entities.yml:2702 entities.yml:2711 entities.yml:2799 enums.yml:1927
+#: entities.yml:2706 entities.yml:2715 entities.yml:2803 enums.yml:1927
 msgid "Maxspeed"
 msgstr ""
 
@@ -1978,7 +1979,7 @@ msgstr ""
 msgid "Sound"
 msgstr ""
 
-#: entities.yml:807 entities.yml:2231 entities.yml:2706
+#: entities.yml:807 entities.yml:2231 entities.yml:2710
 msgid "Traffic sign"
 msgstr ""
 
@@ -2035,7 +2036,7 @@ msgstr ""
 msgid "Internet access paid"
 msgstr ""
 
-#: entities.yml:905 entities.yml:1557 entities.yml:2333 enums.yml:187
+#: entities.yml:905 entities.yml:1557 entities.yml:2335 enums.yml:187
 #: enums.yml:475
 msgid "Shop"
 msgstr ""
@@ -2068,7 +2069,7 @@ msgstr ""
 msgid "Speciality"
 msgstr ""
 
-#: entities.yml:962 entities.yml:2405
+#: entities.yml:962 entities.yml:2407
 msgid "Wikimedia commons"
 msgstr ""
 
@@ -2132,7 +2133,7 @@ msgstr ""
 msgid "Leaf cycle"
 msgstr ""
 
-#: entities.yml:1005 entities.yml:1202 entities.yml:2754
+#: entities.yml:1005 entities.yml:1202 entities.yml:2758
 msgid "Landcover"
 msgstr ""
 
@@ -2182,11 +2183,11 @@ msgstr ""
 msgid "Trees"
 msgstr ""
 
-#: entities.yml:1038 entities.yml:2747
+#: entities.yml:1038 entities.yml:2751
 msgid "Reservoir type"
 msgstr ""
 
-#: entities.yml:1039 entities.yml:2731
+#: entities.yml:1039 entities.yml:2735
 msgid "Genus"
 msgstr ""
 
@@ -2194,7 +2195,7 @@ msgstr ""
 msgid "Finely mown"
 msgstr ""
 
-#: entities.yml:1043 entities.yml:1192 entities.yml:2384 enums.yml:779
+#: entities.yml:1043 entities.yml:1192 entities.yml:2386 enums.yml:779
 msgid "Golf"
 msgstr ""
 
@@ -2254,7 +2255,7 @@ msgstr ""
 msgid "Substance"
 msgstr ""
 
-#: entities.yml:1115 entities.yml:1952 entities.yml:2424 enums.yml:879
+#: entities.yml:1115 entities.yml:1952 entities.yml:2426 enums.yml:879
 msgid "Handrail"
 msgstr ""
 
@@ -2267,7 +2268,7 @@ msgid "Pipeline"
 msgstr ""
 
 #: entities.yml:1127 entities.yml:1380 entities.yml:1599 entities.yml:1925
-#: entities.yml:2421 entities.yml:2767
+#: entities.yml:2423 entities.yml:2771
 msgid "Tunnel"
 msgstr ""
 
@@ -2291,15 +2292,15 @@ msgstr ""
 msgid "Air quality monitoring"
 msgstr ""
 
-#: entities.yml:1148 entities.yml:2561
+#: entities.yml:1148 entities.yml:2563
 msgid "Subject wikidata"
 msgstr ""
 
-#: entities.yml:1149 entities.yml:2560
+#: entities.yml:1149 entities.yml:2562
 msgid "Subject wikipedia"
 msgstr ""
 
-#: entities.yml:1150 entities.yml:2634
+#: entities.yml:1150 entities.yml:2636
 msgid "Artist wikidata"
 msgstr ""
 
@@ -2379,7 +2380,7 @@ msgstr ""
 msgid "Government"
 msgstr ""
 
-#: entities.yml:1245 entities.yml:2538 enums.yml:451
+#: entities.yml:1245 entities.yml:2540 enums.yml:451
 msgid "Authority"
 msgstr ""
 
@@ -2440,7 +2441,7 @@ msgid "Maxstay"
 msgstr ""
 
 #: entities.yml:1310 entities.yml:1362 entities.yml:2031 entities.yml:2249
-#: entities.yml:2465 enums.yml:1684 enums.yml:2104
+#: entities.yml:2467 enums.yml:1684 enums.yml:2104
 msgid "Bus"
 msgstr ""
 
@@ -2452,7 +2453,7 @@ msgstr ""
 msgid "Difficulty"
 msgstr ""
 
-#: entities.yml:1327 entities.yml:2243 entities.yml:2563
+#: entities.yml:1327 entities.yml:2243 entities.yml:2565
 msgid "Name ru"
 msgstr ""
 
@@ -2464,7 +2465,7 @@ msgstr ""
 msgid "Wikipedia cs"
 msgstr ""
 
-#: entities.yml:1352 entities.yml:2210 entities.yml:2655
+#: entities.yml:1352 entities.yml:2210 entities.yml:2657
 msgid "Alt name cs"
 msgstr ""
 
@@ -2473,46 +2474,46 @@ msgstr ""
 msgid "Platform"
 msgstr ""
 
-#: entities.yml:1357 entities.yml:1569 entities.yml:2283 entities.yml:2461
+#: entities.yml:1357 entities.yml:1569 entities.yml:2283 entities.yml:2463
 #: enums.yml:1992 enums.yml:2399 enums.yml:2468
 msgid "Public transport"
 msgstr ""
 
-#: entities.yml:1359 entities.yml:2462
+#: entities.yml:1359 entities.yml:2464
 msgid "Ztm ref"
 msgstr ""
 
-#: entities.yml:1360 entities.yml:2460
+#: entities.yml:1360 entities.yml:2462
 msgid "Bus routes"
 msgstr ""
 
-#: entities.yml:1361 entities.yml:1658 entities.yml:2467 enums.yml:1679
+#: entities.yml:1361 entities.yml:1658 entities.yml:2469 enums.yml:1679
 msgid "Train"
 msgstr ""
 
-#: entities.yml:1363 entities.yml:1750 entities.yml:2213 entities.yml:2466
+#: entities.yml:1363 entities.yml:1750 entities.yml:2213 entities.yml:2468
 #: enums.yml:12 enums.yml:1208 enums.yml:1686 enums.yml:2105
 msgid "Tram"
 msgstr ""
 
-#: entities.yml:1374 entities.yml:2332 entities.yml:2493
+#: entities.yml:1374 entities.yml:2334 entities.yml:2495
 msgid "Bin"
 msgstr ""
 
-#: entities.yml:1379 entities.yml:2482 enums.yml:1685
+#: entities.yml:1379 entities.yml:2484 enums.yml:1685
 msgid "Trolleybus"
 msgstr ""
 
-#: entities.yml:1381 entities.yml:2484
+#: entities.yml:1381 entities.yml:2486
 msgid "Route ref"
 msgstr ""
 
-#: entities.yml:1391 entities.yml:2507 enums.yml:1224 enums.yml:1693
+#: entities.yml:1391 entities.yml:2509 enums.yml:1224 enums.yml:1693
 #: enums.yml:2106 enums.yml:2453 enums.yml:2455
 msgid "Subway"
 msgstr ""
 
-#: entities.yml:1393 entities.yml:2485
+#: entities.yml:1393 entities.yml:2487
 msgid "Local ref"
 msgstr ""
 
@@ -2533,11 +2534,11 @@ msgstr ""
 msgid "Pole"
 msgstr ""
 
-#: entities.yml:1403 entities.yml:2717
+#: entities.yml:1403 entities.yml:2721
 msgid "Transformer type"
 msgstr ""
 
-#: entities.yml:1408 entities.yml:2568 enums.yml:209 enums.yml:1676
+#: entities.yml:1408 entities.yml:2570 enums.yml:209 enums.yml:1676
 msgid "Hiking"
 msgstr ""
 
@@ -2550,7 +2551,7 @@ msgid "Collection times"
 msgstr ""
 
 #: entities.yml:1422 entities.yml:1463 entities.yml:1489 entities.yml:1838
-#: entities.yml:2716 enums.yml:1538 enums.yml:1681 enums.yml:2110
+#: entities.yml:2720 enums.yml:1538 enums.yml:1681 enums.yml:2110
 msgid "Power"
 msgstr ""
 
@@ -2566,7 +2567,7 @@ msgstr ""
 msgid "Transition location"
 msgstr ""
 
-#: entities.yml:1436 entities.yml:2656 enums.yml:719 enums.yml:1060
+#: entities.yml:1436 entities.yml:2658 enums.yml:719 enums.yml:1060
 #: enums.yml:1366 enums.yml:1838 enums.yml:1960 enums.yml:2004
 msgid "Tower"
 msgstr ""
@@ -2636,7 +2637,7 @@ msgstr ""
 msgid "Locate"
 msgstr ""
 
-#: entities.yml:1506 entities.yml:2719
+#: entities.yml:1506 entities.yml:2723
 msgid "Rating"
 msgstr ""
 
@@ -2656,7 +2657,7 @@ msgstr ""
 msgid "Protection title"
 msgstr ""
 
-#: entities.yml:1530 entities.yml:2331 entities.yml:2574 enums.yml:682
+#: entities.yml:1530 entities.yml:2333 entities.yml:2576 enums.yml:682
 msgid "Fireplace"
 msgstr ""
 
@@ -2680,7 +2681,7 @@ msgstr ""
 msgid "Opening date"
 msgstr ""
 
-#: entities.yml:1561 entities.yml:2650
+#: entities.yml:1561 entities.yml:2652
 msgid "Litecoin payment"
 msgstr ""
 
@@ -2688,7 +2689,7 @@ msgstr ""
 msgid "Ethereum payment"
 msgstr ""
 
-#: entities.yml:1565 entities.yml:2349
+#: entities.yml:1565 entities.yml:2351
 msgid "Jcb payment"
 msgstr ""
 
@@ -2776,7 +2777,7 @@ msgstr ""
 msgid "Tram oneway"
 msgstr ""
 
-#: entities.yml:1614 entities.yml:1950 entities.yml:2456 entities.yml:2795
+#: entities.yml:1614 entities.yml:1950 entities.yml:2458 entities.yml:2799
 msgid "Cutting"
 msgstr ""
 
@@ -2836,13 +2837,13 @@ msgstr ""
 msgid "Bridge name"
 msgstr ""
 
-#: entities.yml:1653 entities.yml:2506 enums.yml:483 enums.yml:1085
+#: entities.yml:1653 entities.yml:2508 enums.yml:483 enums.yml:1085
 #: enums.yml:1181 enums.yml:1206 enums.yml:1443 enums.yml:1963 enums.yml:2148
 #: enums.yml:2462
 msgid "Station"
 msgstr ""
 
-#: entities.yml:1654 entities.yml:2508 enums.yml:120
+#: entities.yml:1654 entities.yml:2510 enums.yml:120
 msgid "Transport"
 msgstr ""
 
@@ -2850,7 +2851,7 @@ msgstr ""
 msgid "Switch"
 msgstr ""
 
-#: entities.yml:1664 entities.yml:2200 entities.yml:2519
+#: entities.yml:1664 entities.yml:2200 entities.yml:2521
 msgid "Check date"
 msgstr ""
 
@@ -3162,7 +3163,7 @@ msgstr ""
 msgid "Hot box defect detector"
 msgstr ""
 
-#: entities.yml:1748 entities.yml:2505
+#: entities.yml:1748 entities.yml:2507
 msgid "Network en"
 msgstr ""
 
@@ -3303,7 +3304,7 @@ msgstr ""
 msgid "Tyres"
 msgstr ""
 
-#: entities.yml:1799 entities.yml:2339 enums.yml:565
+#: entities.yml:1799 entities.yml:2341 enums.yml:565
 msgid "Organic"
 msgstr ""
 
@@ -3432,7 +3433,7 @@ msgstr ""
 msgid "Embedded rails"
 msgstr ""
 
-#: entities.yml:1852 entities.yml:2438 entities.yml:2782
+#: entities.yml:1852 entities.yml:2440 entities.yml:2786
 msgid "Mtb scale"
 msgstr ""
 
@@ -3456,7 +3457,7 @@ msgstr ""
 msgid "Width source"
 msgstr ""
 
-#: entities.yml:1871 entities.yml:2763
+#: entities.yml:1871 entities.yml:2767
 msgid "Name source"
 msgstr ""
 
@@ -3552,7 +3553,7 @@ msgstr ""
 msgid "Junction type"
 msgstr ""
 
-#: entities.yml:1904 entities.yml:2450 enums.yml:2058 enums.yml:2311
+#: entities.yml:1904 entities.yml:2452 enums.yml:2058 enums.yml:2311
 msgid "Sidewalk"
 msgstr ""
 
@@ -3576,7 +3577,7 @@ msgstr ""
 msgid "Horse allowed"
 msgstr ""
 
-#: entities.yml:1914 entities.yml:2433
+#: entities.yml:1914 entities.yml:2435
 msgid "Tracktype"
 msgstr ""
 
@@ -3616,7 +3617,7 @@ msgstr ""
 msgid "Owed"
 msgstr ""
 
-#: entities.yml:1947 entities.yml:2612
+#: entities.yml:1947 entities.yml:2614
 msgid "Noname"
 msgstr ""
 
@@ -3632,7 +3633,7 @@ msgstr ""
 msgid "Psv"
 msgstr ""
 
-#: entities.yml:1957 entities.yml:2429 entities.yml:2801
+#: entities.yml:1957 entities.yml:2431 entities.yml:2805
 msgid "Sac scale"
 msgstr ""
 
@@ -3764,7 +3765,7 @@ msgstr ""
 msgid "Snowplowing"
 msgstr ""
 
-#: entities.yml:2008 entities.yml:2455
+#: entities.yml:2008 entities.yml:2457
 msgid "Winter service"
 msgstr ""
 
@@ -3784,7 +3785,7 @@ msgstr ""
 msgid "Snowmobile"
 msgstr ""
 
-#: entities.yml:2021 entities.yml:2491
+#: entities.yml:2021 entities.yml:2493
 msgid "Ref name"
 msgstr ""
 
@@ -3980,7 +3981,7 @@ msgstr ""
 msgid "Technical bicycle class"
 msgstr ""
 
-#: entities.yml:2083 entities.yml:2427 enums.yml:901 enums.yml:1367
+#: entities.yml:2083 entities.yml:2429 enums.yml:901 enums.yml:1367
 msgid "Ramp"
 msgstr ""
 
@@ -4004,7 +4005,7 @@ msgstr ""
 msgid "Advisory maxspeed"
 msgstr ""
 
-#: entities.yml:2090 entities.yml:2654
+#: entities.yml:2090 entities.yml:2656
 msgid "Old ref"
 msgstr ""
 
@@ -4156,7 +4157,7 @@ msgstr ""
 msgid "Hazmat"
 msgstr ""
 
-#: entities.yml:2137 entities.yml:2573 enums.yml:636 enums.yml:1683
+#: entities.yml:2137 entities.yml:2575 enums.yml:636 enums.yml:1683
 #: enums.yml:1788
 msgid "Ski"
 msgstr ""
@@ -4369,7 +4370,7 @@ msgstr ""
 msgid "Both sidewalk surface"
 msgstr ""
 
-#: entities.yml:2206 entities.yml:2436
+#: entities.yml:2206 entities.yml:2438
 msgid "Conveying"
 msgstr ""
 
@@ -4445,7 +4446,7 @@ msgstr ""
 msgid "Maxheight note"
 msgstr ""
 
-#: entities.yml:2235 entities.yml:2408 enums.yml:31 enums.yml:1312
+#: entities.yml:2235 entities.yml:2410 enums.yml:31 enums.yml:1312
 #: enums.yml:1369 enums.yml:1525
 msgid "Steps"
 msgstr ""
@@ -4454,7 +4455,7 @@ msgstr ""
 msgid "Name sk"
 msgstr ""
 
-#: entities.yml:2246 entities.yml:2564
+#: entities.yml:2246 entities.yml:2566
 msgid "Name en"
 msgstr ""
 
@@ -4554,443 +4555,443 @@ msgstr ""
 msgid "Service road"
 msgstr ""
 
-#: entities.yml:2316
+#: entities.yml:2318
 msgid "Vehicle backward"
 msgstr ""
 
-#: entities.yml:2337
+#: entities.yml:2339
 msgid "Vehicle parts"
 msgstr ""
 
-#: entities.yml:2338
+#: entities.yml:2340
 msgid "Vehicle repair"
 msgstr ""
 
-#: entities.yml:2340
+#: entities.yml:2342
 msgid "Coins payment"
 msgstr ""
 
-#: entities.yml:2341 enums.yml:653
+#: entities.yml:2343 enums.yml:653
 msgid "Second hand"
 msgstr ""
 
-#: entities.yml:2343 enums.yml:783
+#: entities.yml:2345 enums.yml:783
 msgid "Skiing"
 msgstr ""
 
-#: entities.yml:2345
+#: entities.yml:2347
 msgid "Tickets"
 msgstr ""
 
-#: entities.yml:2346 enums.yml:611
+#: entities.yml:2348 enums.yml:611
 msgid "Trade"
 msgstr ""
 
-#: entities.yml:2347 enums.yml:593
+#: entities.yml:2349 enums.yml:593
 msgid "Beauty"
 msgstr ""
 
-#: entities.yml:2348 enums.yml:573
+#: entities.yml:2350 enums.yml:573
 msgid "Hobby"
 msgstr ""
 
-#: entities.yml:2350 entities.yml:2525 enums.yml:1145 enums.yml:1237
+#: entities.yml:2352 entities.yml:2527 enums.yml:1145 enums.yml:1237
 #: enums.yml:1872
 msgid "Site"
 msgstr ""
 
-#: entities.yml:2358
+#: entities.yml:2360
 msgid "Social facility"
 msgstr ""
 
-#: entities.yml:2361
+#: entities.yml:2363
 msgid "Facility type"
 msgstr ""
 
-#: entities.yml:2362
+#: entities.yml:2364
 msgid "Expected users"
 msgstr ""
 
-#: entities.yml:2370 enums.yml:782
+#: entities.yml:2372 enums.yml:782
 msgid "Swimming"
 msgstr ""
 
-#: entities.yml:2375 entities.yml:2800
+#: entities.yml:2377 entities.yml:2804
 msgid "Seasonal"
 msgstr ""
 
-#: entities.yml:2386 enums.yml:792
+#: entities.yml:2388 enums.yml:792
 msgid "Shooting"
 msgstr ""
 
-#: entities.yml:2387
+#: entities.yml:2389
 msgid "Sport 1"
 msgstr ""
 
-#: entities.yml:2394
+#: entities.yml:2396
 msgid "Climbing length"
 msgstr ""
 
-#: entities.yml:2399
+#: entities.yml:2401
 msgid "Climbing sport"
 msgstr ""
 
-#: entities.yml:2407
+#: entities.yml:2409
 msgid "Highjump"
 msgstr ""
 
-#: entities.yml:2414
+#: entities.yml:2416
 msgid "Step count"
 msgstr ""
 
-#: entities.yml:2417
+#: entities.yml:2419
 msgid "Bicycles allowed"
 msgstr ""
 
-#: entities.yml:2439 entities.yml:2684
+#: entities.yml:2441 entities.yml:2688
 msgid "Mtb scale uphill"
 msgstr ""
 
-#: entities.yml:2441
+#: entities.yml:2443
 msgid "Left handrail"
 msgstr ""
 
-#: entities.yml:2442
+#: entities.yml:2444
 msgid "Right handrail"
 msgstr ""
 
-#: entities.yml:2443
+#: entities.yml:2445
 msgid "Center handrail"
 msgstr ""
 
-#: entities.yml:2444
+#: entities.yml:2446
 msgid "Step condition"
 msgstr ""
 
-#: entities.yml:2449
+#: entities.yml:2451
 msgid "Escalator"
 msgstr ""
 
-#: entities.yml:2452
+#: entities.yml:2454
 msgid "Step height"
 msgstr ""
 
-#: entities.yml:2453
+#: entities.yml:2455
 msgid "Step length"
 msgstr ""
 
-#: entities.yml:2457 enums.yml:1230 enums.yml:1286 enums.yml:1420
+#: entities.yml:2459 enums.yml:1230 enums.yml:1286 enums.yml:1420
 #: enums.yml:2149 enums.yml:2461
 msgid "Stop"
 msgstr ""
 
-#: entities.yml:2469
+#: entities.yml:2471
 msgid "Has shelter"
 msgstr ""
 
-#: entities.yml:2479 entities.yml:2531 enums.yml:2306
+#: entities.yml:2481 entities.yml:2533 enums.yml:2306
 msgid "Zone"
 msgstr ""
 
-#: entities.yml:2498
+#: entities.yml:2500
 msgid "Uic name"
 msgstr ""
 
-#: entities.yml:2499
+#: entities.yml:2501
 msgid "Uic ref"
 msgstr ""
 
-#: entities.yml:2509
+#: entities.yml:2511
 msgid "Network cs"
 msgstr ""
 
-#: entities.yml:2512 enums.yml:14 enums.yml:1199
+#: entities.yml:2514 enums.yml:14 enums.yml:1199
 msgid "Rail"
 msgstr ""
 
-#: entities.yml:2517
+#: entities.yml:2519
 msgid "Lines"
 msgstr ""
 
-#: entities.yml:2521
+#: entities.yml:2523
 msgid "Shelter type"
 msgstr ""
 
-#: entities.yml:2530
+#: entities.yml:2532
 msgid "Kind"
 msgstr ""
 
-#: entities.yml:2534
+#: entities.yml:2536
 msgid "Camera mount"
 msgstr ""
 
-#: entities.yml:2536
+#: entities.yml:2538
 msgid "Camera direction"
 msgstr ""
 
-#: entities.yml:2546 enums.yml:413
+#: entities.yml:2548 enums.yml:413
 msgid "Theatre"
 msgstr ""
 
-#: entities.yml:2571
+#: entities.yml:2573
 msgid "Map type"
 msgstr ""
 
-#: entities.yml:2572
+#: entities.yml:2574
 msgid "Map size"
 msgstr ""
 
-#: entities.yml:2581
+#: entities.yml:2583
 msgid "Barrier type"
 msgstr ""
 
-#: entities.yml:2586 enums.yml:926
+#: entities.yml:2588 enums.yml:926
 msgid "Zoo"
 msgstr ""
 
-#: entities.yml:2615
+#: entities.yml:2617
 msgid "Caravans"
 msgstr ""
 
-#: entities.yml:2616
+#: entities.yml:2618
 msgid "Tents"
 msgstr ""
 
-#: entities.yml:2617
+#: entities.yml:2619
 msgid "En description"
 msgstr ""
 
-#: entities.yml:2619 entities.yml:2732
+#: entities.yml:2621 entities.yml:2736
 msgid "Species"
 msgstr ""
 
-#: entities.yml:2620 entities.yml:2733
+#: entities.yml:2622 entities.yml:2737
 msgid "Taxon cs"
 msgstr ""
 
-#: entities.yml:2623
+#: entities.yml:2625
 msgid "Ref 1"
 msgstr ""
 
-#: entities.yml:2626 entities.yml:2735
+#: entities.yml:2628 entities.yml:2739
 msgid "Denotation"
 msgstr ""
 
-#: entities.yml:2628 entities.yml:2730
+#: entities.yml:2630 entities.yml:2734
 msgid "Taxon"
 msgstr ""
 
-#: entities.yml:2632
+#: entities.yml:2634
 msgid "Artwork subject"
 msgstr ""
 
-#: entities.yml:2633
+#: entities.yml:2635
 msgid "Author"
 msgstr ""
 
-#: entities.yml:2639
+#: entities.yml:2641
 msgid "Power supply"
 msgstr ""
 
-#: entities.yml:2641
+#: entities.yml:2643
 msgid "Breakfast"
 msgstr ""
 
-#: entities.yml:2643
+#: entities.yml:2645
 msgid "Flood date"
 msgstr ""
 
-#: entities.yml:2645
+#: entities.yml:2647
 msgid "Artist"
 msgstr ""
 
-#: entities.yml:2646
+#: entities.yml:2648
 msgid "En note"
 msgstr ""
 
-#: entities.yml:2647 enums.yml:1744
+#: entities.yml:2649 enums.yml:1744
 msgid "Water slide"
 msgstr ""
 
-#: entities.yml:2649 enums.yml:470
+#: entities.yml:2651 enums.yml:470
 msgid "Shower"
 msgstr ""
 
-#: entities.yml:2651
+#: entities.yml:2653
 msgid "High water height"
 msgstr ""
 
-#: entities.yml:2664
+#: entities.yml:2666
 msgid "Mobile phone communication"
 msgstr ""
 
-#: entities.yml:2665
+#: entities.yml:2667
 msgid "Tower construction"
 msgstr ""
 
-#: entities.yml:2676
+#: entities.yml:2678
 msgid "Microwave communication"
 msgstr ""
 
-#: entities.yml:2677
+#: entities.yml:2679
 msgid "Television communication"
 msgstr ""
 
-#: entities.yml:2678 enums.yml:1978
+#: entities.yml:2680 enums.yml:1978
 msgid "Communication"
 msgstr ""
 
-#: entities.yml:2679 enums.yml:317 enums.yml:1266 enums.yml:1520 enums.yml:1725
+#: entities.yml:2681 enums.yml:317 enums.yml:1266 enums.yml:1520 enums.yml:1725
 #: enums.yml:2292
 msgid "Track"
 msgstr ""
 
-#: entities.yml:2682
+#: entities.yml:2686
 msgid "Motorcar allowed"
 msgstr ""
 
-#: entities.yml:2685 enums.yml:285
+#: entities.yml:2689 enums.yml:285
 msgid "Forestry"
 msgstr ""
 
-#: entities.yml:2686
+#: entities.yml:2690
 msgid "Bicycle class"
 msgstr ""
 
-#: entities.yml:2687
+#: entities.yml:2691
 msgid "Ticks description"
 msgstr ""
 
-#: entities.yml:2688
+#: entities.yml:2692
 msgid "Motor vehicle note"
 msgstr ""
 
-#: entities.yml:2689
+#: entities.yml:2693
 msgid "Proposed segregated"
 msgstr ""
 
-#: entities.yml:2690
+#: entities.yml:2694
 msgid "Steep incline"
 msgstr ""
 
-#: entities.yml:2691
+#: entities.yml:2695
 msgid "Trasa"
 msgstr ""
 
-#: entities.yml:2692
+#: entities.yml:2696
 msgid "Sprint lanes"
 msgstr ""
 
-#: entities.yml:2694
+#: entities.yml:2698
 msgid "Kct barva"
 msgstr ""
 
-#: entities.yml:2712 enums.yml:264 enums.yml:706 enums.yml:1425 enums.yml:1888
+#: entities.yml:2716 enums.yml:264 enums.yml:706 enums.yml:1425 enums.yml:1888
 #: enums.yml:2205 enums.yml:2320 enums.yml:2374
 msgid "Backward"
 msgstr ""
 
-#: entities.yml:2713 enums.yml:1964
+#: entities.yml:2717 enums.yml:1964
 msgid "Transformer"
 msgstr ""
 
-#: entities.yml:2718
+#: entities.yml:2722
 msgid "Phases"
 msgstr ""
 
-#: entities.yml:2720 enums.yml:1430 enums.yml:1961
+#: entities.yml:2724 enums.yml:1430 enums.yml:1961
 msgid "Substation"
 msgstr ""
 
-#: entities.yml:2725 enums.yml:116 enums.yml:1017 enums.yml:1171 enums.yml:2102
+#: entities.yml:2729 enums.yml:116 enums.yml:1017 enums.yml:1171 enums.yml:2102
 msgid "Tree"
 msgstr ""
 
-#: entities.yml:2734
+#: entities.yml:2738
 msgid "Genus cs"
 msgstr ""
 
-#: entities.yml:2736
+#: entities.yml:2740
 msgid "Circumference"
 msgstr ""
 
-#: entities.yml:2737
+#: entities.yml:2741
 msgid "Species cs"
 msgstr ""
 
-#: entities.yml:2739
+#: entities.yml:2743
 msgid "Diameter crown"
 msgstr ""
 
-#: entities.yml:2740
+#: entities.yml:2744
 msgid "Genus en"
 msgstr ""
 
-#: entities.yml:2742
+#: entities.yml:2746
 msgid "Water area"
 msgstr ""
 
-#: entities.yml:2757
+#: entities.yml:2761
 msgid "Water way"
 msgstr ""
 
-#: entities.yml:2761
+#: entities.yml:2765
 msgid "Dibavod id"
 msgstr ""
 
-#: entities.yml:2764
+#: entities.yml:2768
 msgid "Waterway source"
 msgstr ""
 
-#: entities.yml:2769
+#: entities.yml:2773
 msgid "Boats allowed"
 msgstr ""
 
-#: entities.yml:2770
+#: entities.yml:2774
 msgid "Motor boats allowed"
 msgstr ""
 
-#: entities.yml:2774 enums.yml:2493
+#: entities.yml:2778 enums.yml:2493
 msgid "Intermittent"
 msgstr ""
 
-#: entities.yml:2783
+#: entities.yml:2787
 msgid "Life cycle"
 msgstr ""
 
-#: entities.yml:2787
+#: entities.yml:2791
 msgid "Whitewater section grade"
 msgstr ""
 
-#: entities.yml:2788
+#: entities.yml:2792
 msgid "Have riverbank"
 msgstr ""
 
-#: entities.yml:2789
+#: entities.yml:2793
 msgid "Whitewater section name"
 msgstr ""
 
-#: entities.yml:2790
+#: entities.yml:2794
 msgid "Whitewater rapid name"
 msgstr ""
 
-#: entities.yml:2791
+#: entities.yml:2795
 msgid "Whitewater rapid grade"
 msgstr ""
 
-#: entities.yml:2792
+#: entities.yml:2796
 msgid "Cemt"
 msgstr ""
 
-#: entities.yml:2793
+#: entities.yml:2797
 msgid "Seamark notice function"
 msgstr ""
 
-#: entities.yml:2797
+#: entities.yml:2801
 msgid "Seamark notice impact"
 msgstr ""
 
-#: entities.yml:2798
+#: entities.yml:2802
 msgid "Seamark notice category"
 msgstr ""
 
@@ -10370,8 +10371,8 @@ msgstr ""
 msgid "The area with name {name} does not correspond to any OSM areas."
 msgstr ""
 
-#: app/area_selection.py:107 app/area_selection.py:109 app/main_window.py:131
-#: app/main_window.py:136
+#: app/area_selection.py:107 app/area_selection.py:109 app/main_window.py:132
+#: app/main_window.py:137
 msgid "Success"
 msgstr ""
 
@@ -10415,55 +10416,63 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
-#: app/humanization_utils.py:107
+#: app/humanization_utils.py:108
 msgid "On the front right"
 msgstr ""
 
-#: app/humanization_utils.py:109
+#: app/humanization_utils.py:110
 msgid "On the right"
 msgstr ""
 
-#: app/humanization_utils.py:111
+#: app/humanization_utils.py:112
 msgid "On the rear right"
 msgstr ""
 
-#: app/humanization_utils.py:113
+#: app/humanization_utils.py:114
 msgid "Behind"
 msgstr ""
 
-#: app/humanization_utils.py:115
+#: app/humanization_utils.py:116
 msgid "On the rear left"
 msgstr ""
 
-#: app/humanization_utils.py:117
+#: app/humanization_utils.py:118
 msgid "On the left"
 msgstr ""
 
-#: app/humanization_utils.py:119
+#: app/humanization_utils.py:120
 msgid "On the front left"
 msgstr ""
 
-#: app/humanization_utils.py:121
+#: app/humanization_utils.py:122
 msgid "In the front"
 msgstr ""
 
-#: app/humanization_utils.py:128
+#: app/humanization_utils.py:129
 msgid "slightly"
 msgstr ""
 
-#: app/humanization_utils.py:132
+#: app/humanization_utils.py:133
 msgid "sharply"
 msgstr ""
 
-#: app/humanization_utils.py:139
+#: app/humanization_utils.py:135
+msgid "to the opposite direction"
+msgstr ""
+
+#: app/humanization_utils.py:142
 msgid "to the left"
 msgstr ""
 
-#: app/humanization_utils.py:141
+#: app/humanization_utils.py:144
 msgid "to the right"
 msgstr ""
 
-#: app/humanization_utils.py:144
+#: app/humanization_utils.py:148
+msgid "{angle} degrees"
+msgstr ""
+
+#: app/humanization_utils.py:150
 msgid "{angle} degrees {direction}"
 msgstr ""
 
@@ -10479,61 +10488,61 @@ msgstr ""
 msgid "Downloading the selected database. Downloaded {so_far} of {total}."
 msgstr ""
 
-#: app/main_window.py:79
+#: app/main_window.py:80
 msgid "Download failure"
 msgstr ""
 
-#: app/main_window.py:79
+#: app/main_window.py:80
 msgid "Download of the selected area had failed."
 msgstr ""
 
-#: app/main_window.py:94 app/main_window.py:98
+#: app/main_window.py:95 app/main_window.py:99
 msgid "Warning"
 msgstr ""
 
-#: app/main_window.py:94
+#: app/main_window.py:95
 msgid "Could not retrieve changes in the selected area, using the potentially stale local copy."
 msgstr ""
 
-#: app/main_window.py:98
+#: app/main_window.py:99
 msgid "The changes queue for the selected database no longer exists on the server, downloading it as if it was a new area."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:247 app/main_window.py:106
+#: app/controllers/interactive_person_controller.py:247 app/main_window.py:107
 #: app/search/search_conditions.py:146
 msgid "Question"
 msgstr ""
 
-#: app/main_window.py:106
+#: app/main_window.py:107
 #, python-format
 msgid "The server reports %s pending changes. Do you really want to generate the changelog from all of them? It might take a while."
 msgstr ""
 
-#: app/main_window.py:109
+#: app/main_window.py:110
 msgid "Applying changes for the selected database."
 msgstr ""
 
-#: app/main_window.py:110
+#: app/main_window.py:111
 msgid "Change application"
 msgstr ""
 
-#: app/main_window.py:120
+#: app/main_window.py:121
 msgid "Redownload requested"
 msgstr ""
 
-#: app/main_window.py:120
+#: app/main_window.py:121
 msgid "The server has requested a redownload of the selected database, proceeding with the operation."
 msgstr ""
 
-#: app/main_window.py:124
+#: app/main_window.py:125
 msgid "Applying changes for the selected database, change {nth} of {total}"
 msgstr ""
 
-#: app/main_window.py:131
+#: app/main_window.py:132
 msgid "Successfully applied {total} changes. A changelog of size {size} was generated, do you want to view it now?"
 msgstr ""
 
-#: app/main_window.py:136
+#: app/main_window.py:137
 msgid "Successfully applied {total} changes."
 msgstr ""
 
@@ -10604,7 +10613,7 @@ msgid "You are entering {enters}."
 msgstr ""
 
 #: app/controllers/announcements_controller.py:54
-#: app/controllers/announcements_controller.py:153
+#: app/controllers/announcements_controller.py:155
 msgid "{before} continues as {after}."
 msgstr ""
 
@@ -10613,7 +10622,8 @@ msgid "You are crossing {enters}."
 msgstr ""
 
 #: app/controllers/announcements_controller.py:104
-msgid "The current road ends here."
+#: app/controllers/announcements_controller.py:113
+msgid "{0} ends here."
 msgstr ""
 
 #: app/controllers/announcements_controller.py:109
@@ -10624,37 +10634,37 @@ msgstr ""
 msgid "You can continue along the current road for another {} meters."
 msgstr ""
 
-#: app/controllers/announcements_controller.py:123
+#: app/controllers/announcements_controller.py:125
 msgid "You could turn {direction} and continue for {distance} meters."
 msgstr ""
 
-#: app/controllers/announcements_controller.py:126
+#: app/controllers/announcements_controller.py:128
 msgid "You could turn {direction1} and continue for {distance1} meters, or you could turn {direction2} and continue for {distance2} meters."
 msgstr ""
 
-#: app/controllers/announcements_controller.py:151
+#: app/controllers/announcements_controller.py:153
 msgid "You crossed {leaves}."
 msgstr ""
 
-#: app/controllers/announcements_controller.py:155
 #: app/controllers/announcements_controller.py:157
+#: app/controllers/announcements_controller.py:159
 msgid "You are leaving {leaves}"
 msgstr ""
 
-#: app/controllers/announcements_controller.py:160
+#: app/controllers/announcements_controller.py:162
 msgid "Now, your location is not known."
 msgstr ""
 
-#: app/controllers/announcements_controller.py:162
+#: app/controllers/announcements_controller.py:169
 msgid "Now, you're on {}."
 msgstr ""
 
-#: app/controllers/announcements_controller.py:166
+#: app/controllers/announcements_controller.py:173
 #: app/controllers/interactive_person_controller.py:114
 msgid "{degrees} degrees"
 msgstr ""
 
-#: app/controllers/announcements_controller.py:177
+#: app/controllers/announcements_controller.py:184
 msgid "{angle_description} is a {entity_description}"
 msgstr ""
 

@@ -8,6 +8,7 @@ import logging
 from PySide2.QtCore import QLocale
 from .services import config
 
+OPPOSITE_TURN_THRESHOLD = 175
 
 class TemplateType(enum.Enum):
     long = 1
@@ -128,8 +129,10 @@ def format_angle_as_turn_sharpiness(angle):
         return _("slightly")
     elif 45 <= angle < 100: # Normal turn, if someone finds an usable description, feel free to send a PR.
         return ""
-    elif 100 <= angle <= 180:
+    elif 100 <= angle <= OPPOSITE_TURN_THRESHOLD:
         return _("sharply")
+    elif angle <= 180:
+        return _("to the opposite direction")
     else:
         raise ValueError(f"Unsupported angle {angle}.")
 
@@ -141,10 +144,17 @@ def describe_angle_as_turn_instructions(angle, precision):
         direction = _("to the right")
     if config().presentation.use_detailed_turn_directions:
         formatted_angle = format_number(angle, precision)
-        return _("{angle} degrees {direction}").format(angle=formatted_angle, direction=direction)
+        if formatted_angle.startswith("180"):
+            return _("{angle} degrees").format(angle=formatted_angle)
+        else:
+            return _("{angle} degrees {direction}").format(angle=formatted_angle, direction=direction)
     else:
         angle_description = format_angle_as_turn_sharpiness(angle)
         if angle_description:
-            return f"{angle_description} {direction}"
+            # If that's an opposite turn, it is irrelevant whether you turn to the left or to the right
+            if angle >= OPPOSITE_TURN_THRESHOLD: 
+                return angle_description
+            else:
+                return f"{angle_description} {direction}"
         else:
             return direction
