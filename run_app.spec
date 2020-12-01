@@ -3,6 +3,7 @@ import os
 from openal.al_lib import lib
 import platform
 from ctypes.util import find_library
+from ctypes import CDLL, c_void_p, c_int, c_char_p, byref, cast, POINTER, Structure
 import PyInstaller.depend.bindepend as bd
 
 
@@ -11,7 +12,26 @@ block_cipher = None
 
 # Assumes that the libraries under Linux are a system-wide installed ones residing in the system-wide library directory
 if platform.system() == "Linux" and platform.architecture()[0] == "64bit":
-    additional_libs = (f"/usr/lib64/{lib._name}", "/usr/lib64/mod_spatialite.so", "/usr/lib64/libvorbisfile.so")
+    class LINKMAP(Structure):
+        _fields_ = [
+            ("l_addr", c_void_p),
+            ("l_name", c_char_p)
+        ]
+    libdl = CDLL(find_library('dl'))
+    dlinfo = libdl.dlinfo
+    dlinfo.argtypes  = c_void_p, c_int, c_void_p
+    dlinfo.restype = c_int
+
+    def get_full_path(lib_name):
+        if lib_name.endswith(".so"):
+            lib = CDLL(lib_name)
+        else:
+            lib = CDLL(find_library(lib_name))
+        lmptr = c_void_p()
+        #2 equals RTLD_DI_LINKMAP, pass pointer by reference
+        dlinfo(lib._handle, 2, byref(lmptr))
+        return cast(lmptr, POINTER(LINKMAP)).contents.l_name.decode("utf-8")
+    additional_libs = (get_full_path("openal"), get_full_path("mod_spatialite.so"), get_full_path("vorbisfile"))
 elif platform.system() == "Windows":
     additional_libs = (lib._name, find_library("mod_spatialite"), find_library("libvorbisfile"))
 
