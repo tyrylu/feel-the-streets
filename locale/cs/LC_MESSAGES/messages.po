@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-12-01 18:34+0100\n"
-"PO-Revision-Date: 2020-12-01 18:40+0100\n"
+"POT-Creation-Date: 2020-12-02 22:13+0100\n"
+"PO-Revision-Date: 2020-12-02 22:25+0100\n"
 "Last-Translator: \n"
 "Language: cs\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -11116,12 +11116,16 @@ msgid "Which turn you want to perform?"
 msgstr "Jak se chcete otočit?"
 
 #: app/controllers/interactive_person_controller.py:324
-msgid "Because of you settings, you will be turned {}"
-msgstr "Vzhledem k vašemu nastavení bude váš směr změněn {}"
+msgid "your direction was corrected"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:326
+msgid "you will be turned {}"
+msgstr "bude provedeno otočení {}"
 
 #: app/controllers/interactive_person_controller.py:328
-msgid "You will be turned {}"
-msgstr "Bude provedeno otočení {}"
+msgid "Because of your settings, {0}"
+msgstr "Vzhledem k vašemu nastavení {0}"
 
 #: app/controllers/speech_controller.py:9
 #: app/controllers/speech_controller.py:13

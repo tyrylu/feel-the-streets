@@ -320,12 +320,16 @@ class InteractivePersonController:
         if not turn_choices:
             return
         smaller = get_smaller_turn(turn_choices)
+        if smaller[2] < 3:
+            turn_message = _("your direction was corrected")
+        else:
+            turn_message = _("you will be turned {}").format(smaller[0])
         if config().navigation.automatic_direction_corrections < 6:
-            speech().speak(_("Because of you settings, you will be turned {}").format(smaller[0]), interrupt=True)
+            speech().speak(_("Because of your settings, {0}").format(turn_message), interrupt=True)
             config().navigation.automatic_direction_corrections += 1
             config().save_to_user_config()
         else:
-            speech().speak(_("You will be turned {}").format(smaller[0]), interrupt=True)
+            speech().speak(turn_message.capitalize(), interrupt=True)
         because_of.rotate(smaller[2])
         # Move the colliding entity to wards the road so it can continue in its walk.
         because_of.move_to_center_of(last_road)
