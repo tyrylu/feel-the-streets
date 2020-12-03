@@ -20,14 +20,19 @@ use std::io::{self, BufReader, Read, Seek, SeekFrom};
 use std::iter::FromIterator;
 use std::time::Instant;
 use tempfile::tempfile;
+use zstd::dict::{EncoderDictionary, DecoderDictionary};
+
 const QUERY_RETRY_COUNT: u8 = 3;
+const COMPRESSION_LEVEL: i32 = 15;
 
 lazy_static! {
 static ref ZSTD_DICT: Vec<u8> = fs::read("fts.dict").expect("Could not read ZSTD dictionary.");
+static ref ENCODER_DICT: EncoderDictionary<'static> = EncoderDictionary::new(&ZSTD_DICT, COMPRESSION_LEVEL);
+static ref DECODER_DICT: DecoderDictionary<'static> = DecoderDictionary::new(&ZSTD_DICT);
 }
 
 fn deserialize_compressed(compressed: &[u8]) -> OSMObject {
-    let decoder = zstd::Decoder::with_dictionary(compressed, &ZSTD_DICT).expect("Failed to create decoder");
+    let decoder = zstd::Decoder::with_prepared_dictionary(compressed, &DECODER_DICT).expect("Failed to create decoder");
     bincode::deserialize_from(decoder).expect("Could not deserialize")
 }
 
@@ -64,8 +69,7 @@ pub struct OSMObjectManager {
     seen_cache: RefCell<bool>,
     retrieved_from_network: RefCell<HashSet<String>>,
 }
-
-impl OSMObjectManager {
+    impl OSMObjectManager {
     pub fn new() -> Self {
         let conn = Connection::open("entity_cache.db").expect("Could not create connection.");
         conn.execute("PRAGMA SYNCHRONOUS=off", NO_PARAMS).unwrap();
@@ -104,7 +108,7 @@ impl OSMObjectManager {
 
     fn cache_object_into(&self, cache: &mut SqliteMap<'_>, object: &OSMObject) {
         let compressed = Vec::with_capacity(bincode::serialized_size(&object).expect("Could not size object") as usize);
-        let mut encoder = zstd::Encoder::with_dictionary(compressed, 15, &ZSTD_DICT).expect("Could not create ZSTD encoder");
+        let mut encoder = zstd::Encoder::with_prepared_dictionary(compressed, &ENCODER_DICT).expect("Could not create ZSTD encoder");
         bincode::serialize_into(&mut encoder, &object).expect("Could not serialize object for caching.");
         let compressed = encoder.finish().expect("Could not finish encoding");
             cache
