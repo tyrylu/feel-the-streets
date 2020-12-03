@@ -16,7 +16,7 @@ use std::cell::{Ref, RefCell};
 use std::cmp;
 use std::collections::HashSet;
 use std::fs;
-use std::io::{self, BufReader, Read, Seek, SeekFrom};
+use std::io::{self, BufReader, Read, Write, Seek, SeekFrom};
 use std::iter::FromIterator;
 use std::time::Instant;
 use tempfile::tempfile;
@@ -109,7 +109,8 @@ pub struct OSMObjectManager {
     fn cache_object_into(&self, cache: &mut SqliteMap<'_>, object: &OSMObject) {
         let compressed = Vec::with_capacity(bincode::serialized_size(&object).expect("Could not size object") as usize);
         let mut encoder = zstd::Encoder::with_prepared_dictionary(compressed, &ENCODER_DICT).expect("Could not create ZSTD encoder");
-        bincode::serialize_into(&mut encoder, &object).expect("Could not serialize object for caching.");
+        let serialized = bincode::serialize(&object).expect("Failed to serialize object");
+        encoder.write_all(&serialized).expect("Could not compress");
         let compressed = encoder.finish().expect("Could not finish encoding");
             cache
             .insert::<Vec<u8>>(&object.unique_id(), &compressed)
