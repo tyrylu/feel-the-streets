@@ -18,7 +18,7 @@ chrono = {version="*", default_features=false, features=["std", "clock"]}
 xml-rs = "*"
 tempfile = "*"
 bincode = "*"
-zstd = "*"
+zstd-safe = "*"
 hashbrown = {version="*", features=["serde"]}
 wkb = "*"
 geo-types = "*"

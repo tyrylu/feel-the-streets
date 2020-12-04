@@ -1298,7 +1298,7 @@ dependencies = [
  "ureq",
  "wkb",
  "xml-rs",
- "zstd",
+ "zstd-safe",
 ]
 
 [[package]]
@@ -2548,15 +2548,6 @@ name = "yansi"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9fc79f4a1e39857fc00c3f662cbf2651c771f00e9c15fe2abc341806bd46bd71"
-
-[[package]]
-name = "zstd"
-version = "0.5.3+zstd.1.4.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "01b32eaf771efa709e8308605bbf9319bf485dc1503179ec0469b611937c0cd8"
-dependencies = [
- "zstd-safe",
-]
 
 [[package]]
 name = "zstd-safe"

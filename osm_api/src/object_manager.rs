@@ -16,36 +16,49 @@ use std::cell::{Ref, RefCell};
 use std::cmp;
 use std::collections::HashSet;
 use std::fs;
-use std::io::{self, BufReader, Read, Write, Seek, SeekFrom};
+use std::io::{self, BufReader, Read, Seek, SeekFrom};
 use std::iter::FromIterator;
 use std::time::Instant;
+use std::sync::Mutex;
 use tempfile::tempfile;
-use zstd::dict::{EncoderDictionary, DecoderDictionary};
 
 const QUERY_RETRY_COUNT: u8 = 3;
 const COMPRESSION_LEVEL: i32 = 10;
 
 lazy_static! {
 static ref ZSTD_DICT: Vec<u8> = fs::read("fts.dict").expect("Could not read ZSTD dictionary.");
-static ref ENCODER_DICT: EncoderDictionary<'static> = EncoderDictionary::new(&ZSTD_DICT, COMPRESSION_LEVEL);
-static ref DECODER_DICT: DecoderDictionary<'static> = DecoderDictionary::new(&ZSTD_DICT);
+static ref COMPRESSOR_DICT: zstd_safe::CDict<'static> = zstd_safe::create_cdict(&ZSTD_DICT, COMPRESSION_LEVEL);
+static ref DECOMPRESSOR_DICT: zstd_safe::DDict<'static> = zstd_safe::create_ddict(&ZSTD_DICT);
+static ref COMPRESS_CTX: Mutex<zstd_safe::CCtx<'static>> = {
+    let mut ctx = zstd_safe::create_cctx();
+    zstd_safe::cctx_ref_cdict(&mut ctx, &COMPRESSOR_DICT).expect("Failed to set dictionary");
+    Mutex::new(ctx)
+};
+static ref DECOMPRESS_CTX: Mutex<zstd_safe::DCtx<'static>> = {
+    let mut ctx = zstd_safe::create_dctx();
+    zstd_safe::dctx_ref_ddict(&mut ctx, &DECOMPRESSOR_DICT).expect("Failed to associate decompression dict");
+    Mutex::new(ctx)
+};
 }
 
 fn serialize_and_compress(object: &OSMObject) -> Result<Vec<u8>> {
-                let serialized = bincode::serialize(&object).expect("Could not serialize");
-                return Ok(serialized);
-        let compressed = Vec::with_capacity(serialized.len());
-        let mut encoder = zstd::Encoder::with_prepared_dictionary(compressed, &ENCODER_DICT)?;
+    let serialized = bincode::serialize(&object).expect("Could not serialize");
+    let mut compressed = Vec::new();
+    compressed.resize(serialized.len(), 0);
         let start = Instant::now();
-        encoder.write_all(&serialized)?;
-        let result = encoder.finish()?;
-        trace!("Serialized and compressed {} to {} bytes in {:?}.", serialized.len(), result.len(), start.elapsed());
-        Ok(result)
+    let mut cctx = COMPRESS_CTX.lock().unwrap();
+        let compressed_size = zstd_safe::compress2(&mut cctx, &mut compressed, &serialized).expect("Failed to compress");
+        compressed.resize(compressed_size as usize, 0);
+        trace!("Serialized and compressed {} to {} bytes in {:?}.", serialized.len(), compressed.len(), start.elapsed());
+        Ok(compressed)
 }
 
 fn deserialize_compressed(compressed: &[u8]) -> OSMObject {
-    //let decoder = zstd::Decoder::with_prepared_dictionary(compressed, &DECODER_DICT).expect("Failed to create decoder");
-    bincode::deserialize_from(compressed).expect("Could not deserialize")
+    let mut serialized = Vec::new();
+    serialized.resize(zstd_safe::get_frame_content_size(&compressed) as usize, 0);
+    let mut dctx = DECOMPRESS_CTX.lock().unwrap();
+    zstd_safe::decompress_dctx(&mut dctx, &mut serialized, &compressed).expect("Failed to decompress");
+    bincode::deserialize(&serialized).expect("Could not deserialize")
 }
 
 fn translate_type_shortcut(shortcut: char) -> &'static str {
