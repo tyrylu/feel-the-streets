@@ -122,17 +122,12 @@ pub fn update_area(
                 }
             }
             Modify => {
-                let osm_id = change
-                    .old
-                    .as_ref()
-                    .unwrap_or_else(|| change.new.as_ref().expect("No old or new"))
-                    .unique_id();
-
                 let mut cache = manager.get_cache();
                 let new_object = change.new.expect("No new during a modify");
                 manager.cache_object_into(&mut cache, &new_object);
                 drop(cache);
-                    let old = area_db.get_entity(&osm_id)?;
+                let osm_id = new_object.unique_id();
+                let old = area_db.get_entity(&osm_id)?;
                 let new = translator::translate(
                     &new_object,
                     &manager,
