@@ -135,7 +135,7 @@ pub struct OSMObjectManager {
     }
 
 
-    fn cache_object_into(&self, cache: &mut SqliteMap<'_>, object: &OSMObject) {
+    pub fn cache_object_into(&self, cache: &mut SqliteMap<'_>, object: &OSMObject) {
             let compressed = serialize_and_compress(&object).expect("Could not serialize object");
         cache
             .insert::<Vec<u8>>(&object.unique_id(), &compressed)

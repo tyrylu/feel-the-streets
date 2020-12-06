@@ -86,11 +86,16 @@ pub fn update_area(
             seen_unique_ids.insert(id);
         }
         let semantic_change = match change.change_type {
-            Create => translator::translate(
-                &change.new.expect("No new object for a create change"),
+            Create => {
+                let new = change.new.expect("No new for a create change");
+                let mut cache = manager.get_cache();
+                manager.cache_object_into(&mut cache, &new);
+                drop(cache); // So we don't end up in a locked state for the cache db
+                translator::translate(
+                &new,
                 &manager,
                 &mut record,
-            )?
+            )?}
             .map(|(o, ids)| {
                 SemanticChange::creating(
                     o.id,
@@ -109,6 +114,7 @@ pub fn update_area(
             }),
             Delete => {
                 let osm_id = change.old.expect("No old in a deletion change").unique_id();
+                manager.get_cache().remove::<String>(&osm_id).expect("Could not removed cached entity");
                 if area_db.has_entity(&osm_id)? {
                     Some(SemanticChange::removing(&osm_id))
                 } else {
@@ -122,9 +128,13 @@ pub fn update_area(
                     .unwrap_or_else(|| change.new.as_ref().expect("No old or new"))
                     .unique_id();
 
-                let old = area_db.get_entity(&osm_id)?;
+                let mut cache = manager.get_cache();
+                let new_object = change.new.expect("No new during a modify");
+                manager.cache_object_into(&mut cache, &new_object);
+                drop(cache);
+                    let old = area_db.get_entity(&osm_id)?;
                 let new = translator::translate(
-                    &change.new.expect("No new entity during a modify"),
+                    &new_object,
                     &manager,
                     &mut record,
                 )?;
