@@ -93,6 +93,8 @@ pub struct OSMObjectManager {
     http_client: ureq::Agent,
     seen_cache: RefCell<bool>,
     retrieved_from_network: RefCell<HashSet<String>>,
+    cache_queries: RefCell<u32>,
+    cache_hits: RefCell<u32>,
 }
     impl OSMObjectManager {
     pub fn new() -> Self {
@@ -110,6 +112,8 @@ pub struct OSMObjectManager {
             geometries_cache: RefCell::new(HashMap::new()),
             seen_cache: RefCell::new(false),
             retrieved_from_network: RefCell::new(HashSet::new()),
+            cache_queries: RefCell::new(0),
+            cache_hits: RefCell::new(0),
         }
     }
 
@@ -139,8 +143,13 @@ pub struct OSMObjectManager {
     }
 
     fn has_object(&self, id: &str) -> bool {
+        *self.cache_queries.borrow_mut() += 1;
         let mut cache = self.get_cache();
-        cache.contains_key(&id).expect("Cache query failed.")
+        let exists = cache.contains_key(&id).expect("Cache query failed.");
+        if exists {
+            *self.cache_hits.borrow_mut() += 1;
+        }
+        exists
     }
 
     fn get_cached_object(&self, id: &str) -> Option<OSMObject> {
@@ -589,6 +598,7 @@ impl Drop for OSMObjectManager {
     fn drop(&mut self) {
         let conn = self.cache_conn.take().unwrap();
         conn.close().expect("Failed to close cache connection.");
+        info!("Out of {} entity cache queries {} were cache hits.", self.cache_queries.borrow(), self.cache_hits.borrow());
     }
 }
 
