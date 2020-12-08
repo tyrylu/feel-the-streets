@@ -114,7 +114,7 @@ pub fn update_area(
             }),
             Delete => {
                 let osm_id = change.old.expect("No old in a deletion change").unique_id();
-                manager.get_cache().remove::<String>(&osm_id).expect("Could not removed cached entity");
+                manager.get_cache().remove::<Vec<u8>>(&osm_id).expect("Could not remove cached entity");
                 if area_db.has_entity(&osm_id)? {
                     Some(SemanticChange::removing(&osm_id))
                 } else {
