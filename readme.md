@@ -43,6 +43,21 @@ AMQP_BROKER_URL="amqp://user:password@rabbitmq_host/%2f"
 Note that the used Rabbitmq user needs privileges to declare queues and exchanges, along with the needed bindings. In addition to the plaintext amqp protocol, you can use TLS encryption if you specify amqps in the protocol in the URI.
 To run it, after cargo build, just run target/debug/server.
 
+
+## Runtime clientrequirements
+- The application is accessing the network for area downloads at the following DNS names: mail.trycht.cz
+- The network access is needed for the first time, afterwards the access is not required, the currently downloaded copies will be used
+### Windows
+- The application was tested on Windows 10 64-bit
+- It is assumed that the user has a speech synthesizer of the correct language installed
+- The speech subsystem first tries to use a running screen reader (NVDA, JAWS or Window Eyes), then it falls back to SAPI 5
+- To set the used voice, if a screen reader is used, see the specific screen reader configuration
+- If using Sapi 5, the configuration is reachable by opening the Run dialog and executing the following file: C:\Windows\System32\Speech\SpeechUX\sapi.cpl
+### Linux
+- The application was tested on Fedora 33 64-bit
+- The current packaged version requires usage of the X server, e. g. no Wayland support as of yet
+- The application requires a running Speech dispatcher
+
 ## Running the client
 If you want to use the default server, just run run_app.py with a Python interpreter. If you want to use a different server, you can set the API_ENDPOINT environment variable to the URL of the server, e. g. http://localhost:5000 or similar. Don't forget the path, if the server endpoints are under one.
 Also, if you're doing this, AMQP_BROKER_URL environment variable should be set to the URL of the AMQP broker, see the example in the server execution section for an example. Note that in this case, no .env file is being loaded and the environment variables must be real ones.
