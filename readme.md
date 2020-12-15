@@ -61,3 +61,19 @@ To run it, after cargo build, just run target/debug/server.
 ## Running the client
 If you want to use the default server, just run run_app.py with a Python interpreter. If you want to use a different server, you can set the API_ENDPOINT environment variable to the URL of the server, e. g. http://localhost:5000 or similar. Don't forget the path, if the server endpoints are under one.
 Also, if you're doing this, AMQP_BROKER_URL environment variable should be set to the URL of the AMQP broker, see the example in the server execution section for an example. Note that in this case, no .env file is being loaded and the environment variables must be real ones.
+## Getting started with the client, e. g. the basic thoughts about it so you don't get completely lost
+Because as of now there's no comprehensive documentation, this section of the readme describes the basic concepts of the client application.
+
+### Area selection
+After starting up, the area selection dialog is displayed. The list contains all the areas which were requested by previous users and are ready for download.
+If you can't find your favourite place, you can request the creation of a new area. If there are multiple matches, e. g. areas with the exact same name, you'll have to select the correct one, the parent's name and the area's tags have to suffice for that.
+### The main window
+After selecting an area and some download/update operations, the main window is displayed.
+
+The main window is empty except for the menubar at the top, e. g. the area is not represented graphically. At first, you start somewhere near the area's center, so there should be plenty things around you. You start looking northwise. You can move by pressing up and down arrow. To look around, the n key should be good enough in the beginnings, but note that this command ignores some objects (bus and tram lines for example) for performance reasons.
+
+To know where you are, use the current location command invoked by the l key. If you need some more details, the detailed location command should be of help.
+### Moving by bigger distances
+Moving by the small steps is not always convenient, however. Because of this, you can press enter on an object in the near by objects dialog and you'll move to it.
+
+You can also search by name using the ctrl+f shortcut, much more advanced search is available using the advanced search (shortcut ctrl+shift+f).
