@@ -3,7 +3,7 @@ use pyo3::exceptions;
 use pyo3::prelude::*;
 use pyo3::types::PyDict;
 
-#[pyclass(name=EntityMetadata)]
+#[pyclass(name="EntityMetadata")]
 pub struct PyEntityMetadata {
     inner: EntityMetadata,
 }
@@ -58,7 +58,7 @@ impl PyEntityMetadata {
     }
 }
 
-#[pyclass(name=Field)]
+#[pyclass(name="Field")]
 pub struct PyField {
     inner: Field,
 }
@@ -76,7 +76,7 @@ impl PyField {
     }
 }
 
-#[pyclass(name=Enum)]
+#[pyclass(name="Enum")]
 pub struct PyEnum {
     inner: Enum,
 }

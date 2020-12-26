@@ -6,7 +6,7 @@ use pyo3::exceptions;
 use pyo3::prelude::*;
 use std::sync::Mutex;
 
-#[pyclass(name=AreaDatabase)]
+#[pyclass(name="AreaDatabase")]
 pub struct PyAreaDatabase {
     inner: Mutex<AreaDatabase>,
 }

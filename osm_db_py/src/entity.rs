@@ -7,7 +7,7 @@ use pyo3::types::PyBytes;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 
-#[pyclass(name=Entity)]
+#[pyclass(name="Entity")]
 pub struct PyEntity {
     pub(crate) inner: Entity,
 }
