@@ -42,12 +42,12 @@ static ref DECOMPRESS_CTX: Mutex<zstd_safe::DCtx<'static>> = {
 }
 
 fn serialize_and_compress(object: &OSMObject) -> Result<Vec<u8>> {
-    let serialized = bincode::serialize(&object).expect("Could not serialize");
+    let serialized = bincode::serialize(&object)?;
     let mut compressed = Vec::new();
     compressed.resize(serialized.len(), 0);
         let start = Instant::now();
     let mut cctx = COMPRESS_CTX.lock().unwrap();
-        let compressed_size = zstd_safe::compress2(&mut cctx, &mut compressed, &serialized).expect("Failed to compress");
+        let compressed_size = zstd_safe::compress2(&mut cctx, &mut compressed, &serialized)?;
         compressed.resize(compressed_size as usize, 0);
         trace!("Serialized and compressed {} to {} bytes in {:?}.", serialized.len(), compressed.len(), start.elapsed());
         Ok(compressed)
@@ -106,7 +106,7 @@ pub struct OSMObjectManager {
                 "https://z.overpass-api.de/api",
                 "https://lz4.overpass-api.de/api",
             ],
-            current_api_url_idx: RefCell::new(0 as usize),
+            current_api_url_idx: RefCell::new(0),
             cache_conn: Some(conn),
             http_client: client,
             geometries_cache: RefCell::new(HashMap::new()),
@@ -162,9 +162,9 @@ pub struct OSMObjectManager {
 
     fn next_api_url(&self) -> &'static str {
         if *self.current_api_url_idx.borrow() == self.api_urls.len() - 1 {
-            *self.current_api_url_idx.borrow_mut() = 0 as usize;
+            *self.current_api_url_idx.borrow_mut() = 0;
         } else {
-            *self.current_api_url_idx.borrow_mut() += 1 as usize;
+            *self.current_api_url_idx.borrow_mut() += 1;
         }
         self.api_urls[*self.current_api_url_idx.borrow()]
     }

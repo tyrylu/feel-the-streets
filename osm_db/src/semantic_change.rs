@@ -141,33 +141,22 @@ impl SemanticChange {
     }
 
     pub fn is_remove(&self) -> bool {
-        match self {
-            SemanticChange::Remove { .. } => true,
-            _ => false,
-        }
+        matches!(self, SemanticChange::Remove { .. })
     }
 
     pub fn is_create(&self) -> bool {
-        match self {
-            SemanticChange::Create { .. } => true,
-            _ => false,
-        }
+        matches!(self, SemanticChange::Create { .. })
     }
 
     pub fn is_update(&self) -> bool {
-        match self {
-            SemanticChange::Update { .. } => true,
-            _ => false,
-        }
+        matches!(self, SemanticChange::Update { .. })
     }
 
     pub fn add_relationship_change(&mut self, change: RelationshipChange) {
-        match self {
-            SemanticChange::Update {
-                relationship_changes,
-                ..
-            } => relationship_changes.push(change),
-            _ => {}
+        if let SemanticChange::Update {
+            relationship_changes,
+            ..
+            } = self {relationship_changes.push(change)
         }
     }
 }

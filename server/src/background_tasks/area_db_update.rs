@@ -77,7 +77,7 @@ pub fn update_area(
             area.newest_osm_object_timestamp = Some(change.new.as_ref().unwrap().timestamp.clone());
         }
         trace!("Processing OSM change {:?}", change);
-        let id = change.old.as_ref().unwrap_or(change.new.as_ref().expect("No old or new")).unique_id();
+        let id = change.old.as_ref().unwrap_or_else(|| change.new.as_ref().expect("No old or new")).unique_id();
         if seen_unique_ids.contains(&id) {
             warn!("Phantom change of object with id {}, refusing to process change {:?}.", id, change);
             continue;
@@ -105,7 +105,7 @@ pub fn update_area(
                     o.effective_width,
                     ids.map(|id| {
                         RootedEntityRelationship::new(
-                            id.to_string(),
+                            id,
                             EntityRelationshipKind::OSMChild,
                         )
                     })

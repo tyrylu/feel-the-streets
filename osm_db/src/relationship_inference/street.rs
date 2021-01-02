@@ -24,16 +24,16 @@ fn get_association_for_street(
             "An address tag references the street {}, but no such street exists in the database.",
             street_name
         );
-        return Ok(None);
+        Ok(None)
     } else {
         if roads.len() == 1 {
             cache.insert(street_name.to_string(), roads[0].clone());
         }
-        return Ok(Some(EntityRelationship::new(
+        Ok(Some(EntityRelationship::new(
             roads[0].clone(),
             target_id.to_string(),
             EntityRelationshipKind::Street,
-        )));
+        )))
     }
 }
 
