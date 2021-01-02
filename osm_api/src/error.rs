@@ -15,7 +15,7 @@ pub enum Error {
     #[error("Serialization error: {0}")]
     SerializationError(#[from] bincode::Error),
     #[error("Invalid return code from the ZSTD library: {0}")]
-    ZSTDError(usize)
+    ZSTDError(usize),
 }
 
 impl From<usize> for Error {

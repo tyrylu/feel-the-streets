@@ -18,46 +18,54 @@ use std::collections::HashSet;
 use std::fs;
 use std::io::{self, BufReader, Read, Seek, SeekFrom};
 use std::iter::FromIterator;
-use std::time::Instant;
 use std::sync::Mutex;
+use std::time::Instant;
 use tempfile::tempfile;
 
 const QUERY_RETRY_COUNT: u8 = 3;
 const COMPRESSION_LEVEL: i32 = 10;
 
 lazy_static! {
-static ref ZSTD_DICT: Vec<u8> = fs::read("fts.dict").expect("Could not read ZSTD dictionary.");
-static ref COMPRESSOR_DICT: zstd_safe::CDict<'static> = zstd_safe::create_cdict(&ZSTD_DICT, COMPRESSION_LEVEL);
-static ref DECOMPRESSOR_DICT: zstd_safe::DDict<'static> = zstd_safe::create_ddict(&ZSTD_DICT);
-static ref COMPRESS_CTX: Mutex<zstd_safe::CCtx<'static>> = {
-    let mut ctx = zstd_safe::create_cctx();
-    zstd_safe::cctx_ref_cdict(&mut ctx, &COMPRESSOR_DICT).expect("Failed to set dictionary");
-    Mutex::new(ctx)
-};
-static ref DECOMPRESS_CTX: Mutex<zstd_safe::DCtx<'static>> = {
-    let mut ctx = zstd_safe::create_dctx();
-    zstd_safe::dctx_ref_ddict(&mut ctx, &DECOMPRESSOR_DICT).expect("Failed to associate decompression dict");
-    Mutex::new(ctx)
-};
+    static ref ZSTD_DICT: Vec<u8> = fs::read("fts.dict").expect("Could not read ZSTD dictionary.");
+    static ref COMPRESSOR_DICT: zstd_safe::CDict<'static> =
+        zstd_safe::create_cdict(&ZSTD_DICT, COMPRESSION_LEVEL);
+    static ref DECOMPRESSOR_DICT: zstd_safe::DDict<'static> = zstd_safe::create_ddict(&ZSTD_DICT);
+    static ref COMPRESS_CTX: Mutex<zstd_safe::CCtx<'static>> = {
+        let mut ctx = zstd_safe::create_cctx();
+        zstd_safe::cctx_ref_cdict(&mut ctx, &COMPRESSOR_DICT).expect("Failed to set dictionary");
+        Mutex::new(ctx)
+    };
+    static ref DECOMPRESS_CTX: Mutex<zstd_safe::DCtx<'static>> = {
+        let mut ctx = zstd_safe::create_dctx();
+        zstd_safe::dctx_ref_ddict(&mut ctx, &DECOMPRESSOR_DICT)
+            .expect("Failed to associate decompression dict");
+        Mutex::new(ctx)
+    };
 }
 
 fn serialize_and_compress(object: &OSMObject) -> Result<Vec<u8>> {
     let serialized = bincode::serialize(&object)?;
     let mut compressed = Vec::new();
     compressed.resize(serialized.len(), 0);
-        let start = Instant::now();
+    let start = Instant::now();
     let mut cctx = COMPRESS_CTX.lock().unwrap();
-        let compressed_size = zstd_safe::compress2(&mut cctx, &mut compressed, &serialized)?;
-        compressed.resize(compressed_size as usize, 0);
-        trace!("Serialized and compressed {} to {} bytes in {:?}.", serialized.len(), compressed.len(), start.elapsed());
-        Ok(compressed)
+    let compressed_size = zstd_safe::compress2(&mut cctx, &mut compressed, &serialized)?;
+    compressed.resize(compressed_size as usize, 0);
+    trace!(
+        "Serialized and compressed {} to {} bytes in {:?}.",
+        serialized.len(),
+        compressed.len(),
+        start.elapsed()
+    );
+    Ok(compressed)
 }
 
 fn deserialize_compressed(compressed: &[u8]) -> OSMObject {
     let mut serialized = Vec::new();
     serialized.resize(zstd_safe::get_frame_content_size(&compressed) as usize, 0);
     let mut dctx = DECOMPRESS_CTX.lock().unwrap();
-    zstd_safe::decompress_dctx(&mut dctx, &mut serialized, &compressed).expect("Failed to decompress");
+    zstd_safe::decompress_dctx(&mut dctx, &mut serialized, &compressed)
+        .expect("Failed to decompress");
     bincode::deserialize(&serialized).expect("Could not deserialize")
 }
 
@@ -96,7 +104,7 @@ pub struct OSMObjectManager {
     cache_queries: RefCell<u32>,
     cache_hits: RefCell<u32>,
 }
-    impl OSMObjectManager {
+impl OSMObjectManager {
     pub fn new() -> Self {
         let conn = Connection::open("entity_cache.db").expect("Could not create connection.");
         conn.execute("PRAGMA SYNCHRONOUS=off", NO_PARAMS).unwrap();
@@ -134,9 +142,8 @@ pub struct OSMObjectManager {
         self.retrieved_from_network.borrow()
     }
 
-
     pub fn cache_object_into(&self, cache: &mut SqliteMap<'_>, object: &OSMObject) {
-            let compressed = serialize_and_compress(&object).expect("Could not serialize object");
+        let compressed = serialize_and_compress(&object).expect("Could not serialize object");
         cache
             .insert::<Vec<u8>>(&object.unique_id(), &compressed)
             .expect("Could not cache object.");
@@ -259,7 +266,9 @@ pub struct OSMObjectManager {
                 match OSMObjectFromNetwork::deserialize(&mut de) {
                     Ok(obj) => {
                         let internal_object = obj.into_osm_object();
-                        self.retrieved_from_network.borrow_mut().insert(internal_object.unique_id());
+                        self.retrieved_from_network
+                            .borrow_mut()
+                            .insert(internal_object.unique_id());
                         self.cache_object_into(&mut cache, &internal_object);
                         if return_objects {
                             objects.push(internal_object);
@@ -598,7 +607,11 @@ impl Drop for OSMObjectManager {
     fn drop(&mut self) {
         let conn = self.cache_conn.take().unwrap();
         conn.close().expect("Failed to close cache connection.");
-        info!("Out of {} entity cache queries {} were cache hits.", self.cache_queries.borrow(), self.cache_hits.borrow());
+        info!(
+            "Out of {} entity cache queries {} were cache hits.",
+            self.cache_queries.borrow(),
+            self.cache_hits.borrow()
+        );
     }
 }
 

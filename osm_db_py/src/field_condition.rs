@@ -1,7 +1,7 @@
 use osm_db::entities_query_condition::FieldCondition;
 use pyo3::prelude::*;
 
-#[pyclass(name="FieldCondition")]
+#[pyclass(name = "FieldCondition")]
 pub struct PyFieldCondition {
     pub inner: FieldCondition,
 }

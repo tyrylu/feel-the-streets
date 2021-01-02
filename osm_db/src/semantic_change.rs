@@ -156,7 +156,9 @@ impl SemanticChange {
         if let SemanticChange::Update {
             relationship_changes,
             ..
-            } = self {relationship_changes.push(change)
+        } = self
+        {
+            relationship_changes.push(change)
         }
     }
 }

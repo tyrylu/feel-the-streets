@@ -15,7 +15,10 @@ use osm_db::{
     entity_relationship_kind::EntityRelationshipKind, relationship_inference,
     semantic_change::RelationshipChange,
 };
-use std::{collections::{HashSet, HashMap}, fs};
+use std::{
+    collections::{HashMap, HashSet},
+    fs,
+};
 
 fn find_or_create_suitable_change<'a>(
     changes: &'a mut Vec<SemanticChange>,
@@ -77,12 +80,18 @@ pub fn update_area(
             area.newest_osm_object_timestamp = Some(change.new.as_ref().unwrap().timestamp.clone());
         }
         trace!("Processing OSM change {:?}", change);
-        let id = change.old.as_ref().unwrap_or_else(|| change.new.as_ref().expect("No old or new")).unique_id();
+        let id = change
+            .old
+            .as_ref()
+            .unwrap_or_else(|| change.new.as_ref().expect("No old or new"))
+            .unique_id();
         if seen_unique_ids.contains(&id) {
-            warn!("Phantom change of object with id {}, refusing to process change {:?}.", id, change);
+            warn!(
+                "Phantom change of object with id {}, refusing to process change {:?}.",
+                id, change
+            );
             continue;
-        }
-        else {
+        } else {
             seen_unique_ids.insert(id);
         }
         let semantic_change = match change.change_type {
@@ -91,11 +100,8 @@ pub fn update_area(
                 let mut cache = manager.get_cache();
                 manager.cache_object_into(&mut cache, &new);
                 drop(cache); // So we don't end up in a locked state for the cache db
-                translator::translate(
-                &new,
-                &manager,
-                &mut record,
-            )?}
+                translator::translate(&new, &manager, &mut record)?
+            }
             .map(|(o, ids)| {
                 SemanticChange::creating(
                     o.id,
@@ -104,17 +110,17 @@ pub fn update_area(
                     o.data,
                     o.effective_width,
                     ids.map(|id| {
-                        RootedEntityRelationship::new(
-                            id,
-                            EntityRelationshipKind::OSMChild,
-                        )
+                        RootedEntityRelationship::new(id, EntityRelationshipKind::OSMChild)
                     })
                     .collect(),
                 )
             }),
             Delete => {
                 let osm_id = change.old.expect("No old in a deletion change").unique_id();
-                manager.get_cache().remove::<Vec<u8>>(&osm_id).expect("Could not remove cached entity");
+                manager
+                    .get_cache()
+                    .remove::<Vec<u8>>(&osm_id)
+                    .expect("Could not remove cached entity");
                 if area_db.has_entity(&osm_id)? {
                     Some(SemanticChange::removing(&osm_id))
                 } else {
@@ -128,11 +134,7 @@ pub fn update_area(
                 drop(cache);
                 let osm_id = new_object.unique_id();
                 let old = area_db.get_entity(&osm_id)?;
-                let new = translator::translate(
-                    &new_object,
-                    &manager,
-                    &mut record,
-                )?;
+                let new = translator::translate(&new_object, &manager, &mut record)?;
                 match (old, new) {
                     (None, None) => None,
                     (Some(_), None) => Some(SemanticChange::removing(&osm_id)),
@@ -197,7 +199,7 @@ pub fn update_area(
         }
     }
     area_db.apply_deferred_relationship_additions()?;
-        info!(
+    info!(
         "Area updated successfully, applyed {} semantic changes resulting from {} OSM changes.",
         semantic_changes.len(),
         osm_change_count
@@ -235,7 +237,10 @@ fn infer_additional_relationships(
     for idx in 0..changes.len() {
         if changes[idx].is_create() {
             let entity_id = changes[idx].osm_id().unwrap();
-            debug!("Enriching tags after creation resulting from {:?}, entity id {}.", changes[idx], entity_id);
+            debug!(
+                "Enriching tags after creation resulting from {:?}, entity id {}.",
+                changes[idx], entity_id
+            );
             let mut entity = area_db
                 .get_entity(entity_id)?
                 .expect("Entity disappeared from a database");
@@ -257,12 +262,12 @@ fn infer_additional_relationships(
             }
         } else if changes[idx].is_update() {
             let entity_id = changes[idx].osm_id().unwrap();
-            debug!("Enriching relationships resulting from update {:?}, entity id {}.", changes[idx], entity_id);
-            let current_relationships =
-                area_db.get_relationships_related_to(entity_id)?;
-            let mut entity = area_db
-                .get_entity(entity_id)?
-                .expect("Entity disappeared");
+            debug!(
+                "Enriching relationships resulting from update {:?}, entity id {}.",
+                changes[idx], entity_id
+            );
+            let current_relationships = area_db.get_relationships_related_to(entity_id)?;
+            let mut entity = area_db.get_entity(entity_id)?.expect("Entity disappeared");
             let new_relationships =
                 relationship_inference::infer_additional_relationships_for_entity(
                     &mut entity,

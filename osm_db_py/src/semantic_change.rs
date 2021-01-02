@@ -4,7 +4,7 @@ use pyo3::exceptions;
 use pyo3::prelude::*;
 use serde_json::Value;
 
-#[pyclass(name="SemanticChange")]
+#[pyclass(name = "SemanticChange")]
 pub struct PySemanticChange {
     pub(crate) inner: SemanticChange,
 }
