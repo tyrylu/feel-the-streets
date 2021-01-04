@@ -9,7 +9,7 @@ pub enum Error {
     #[error("XML reading error: {0}")]
     XmlReaderError(#[from] xml::reader::Error),
     #[error("HTTP related error: {0}")]
-    HttpError(String),
+    HttpError(#[from] ureq::Error),
     #[error("WKB write error: {0}")]
     WKBWriteError(String),
     #[error("Serialization error: {0}")]

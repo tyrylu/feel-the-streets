@@ -203,22 +203,15 @@ impl OSMObjectManager {
         let resp = self
             .http_client
             .post(&final_url)
-            .send_form(&[("data", query)]);
-        if let Some(e) = resp.synthetic_error() {
-            return Err(Error::HttpError(e.body_text()));
-        }
+            .send_form(&[("data", query)])?;
         match resp.status() {
             429 => {
                 warn!("Multiple requests, killing them and going to a different api host.");
 
-                if let Some(e) = self
+                self
                     .http_client
                     .get(&format!("{0}/kill_my_queries", &url))
-                    .call()
-                    .synthetic_error()
-                {
-                    return Err(Error::HttpError(e.body_text()));
-                }
+                    .call()?;
                 self.run_query(&query, result_to_tempfile)
             }
             200 => {
