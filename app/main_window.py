@@ -12,6 +12,7 @@ from .changes_applier import ChangesApplier
 from osm_db import AreaDatabase, EntitiesQuery
 from .size_utils import format_size
 
+FROZEN_AREA_OSM_ID_OFFSET = 20000000000
 
 class MainWindow(QMainWindow):
     
@@ -85,7 +86,7 @@ class MainWindow(QMainWindow):
 
 
     def _update_database(self, area):
-        if not has_api_connectivity():
+        if area > FROZEN_AREA_OSM_ID_OFFSET or not has_api_connectivity():
             self._on_map_ready()
             return
         try:
