@@ -37,4 +37,11 @@ pub enum Command {
         #[structopt(long, conflicts_with = "all")]
         area: Option<i64>,
     },
+    /// Creates a frozen copy of the current state of an area.
+    CreateFrozenCopy {
+        /// The id of the original area.
+        area_id: i64,
+        /// The human readable name of the new copy.
+        new_name: String
+    }
 }

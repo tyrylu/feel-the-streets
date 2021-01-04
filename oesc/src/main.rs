@@ -3,6 +3,7 @@ use structopt::StructOpt;
 
 mod change_field_type;
 mod command;
+mod create_frozen_copy;
 mod rabbitmq_admin_api;
 mod remove_field;
 mod request_redownload;
@@ -29,5 +30,6 @@ fn main() -> Result<()> {
         Command::RequestRedownload { all, area } => {
             request_redownload::request_redownload(all, area)
         }
+        Command::CreateFrozenCopy { area_id, new_name } => create_frozen_copy::create_frozen_copy(area_id, new_name)
     }
 }
