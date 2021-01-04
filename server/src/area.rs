@@ -16,6 +16,7 @@ pub enum AreaState {
     ApplyingChanges,
     GettingChanges,
     Updated,
+    Frozen,
 }
 
 #[derive(Serialize, Queryable, AsChangeset)]

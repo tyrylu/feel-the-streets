@@ -45,10 +45,12 @@ pub fn maybe_create_area(
 #[get("/areas/<area_osm_id>/download?<client_id>")]
 pub fn download_area(area_osm_id: i64, client_id: String, conn: DbConn) -> Result<File> {
     let area = Area::find_by_osm_id(area_osm_id, &*conn)?;
-    if area.state != AreaState::Updated {
+    if area.state != AreaState::Updated || area.state != AreaState::Frozen {
         Err(Error::DatabaseIntegrityError)
     } else {
+        if area.state == AreaState::Updated {
         area_messaging::init_queue(&client_id, area_osm_id)?;
+        }
         Ok(File::open(AreaDatabase::path_for(area_osm_id, true))?)
     }
 }
