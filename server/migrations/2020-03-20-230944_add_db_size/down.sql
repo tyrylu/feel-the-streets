@@ -1,4 +1,3 @@
-BEGIN;
 CREATE TABLE "new_areas" (
         id INTEGER NOT NULL,
         name TEXT NOT NULL,
@@ -14,4 +13,3 @@ CREATE TABLE "new_areas" (
 INSERT INTO new_areas SELECT id, name, state, created_at, updated_at, newest_osm_object_timestamp, osm_id FROM areas;
 DROP TABLE areas;
 ALTER TABLE new_areas RENAME TO areas;
-COMMIT;

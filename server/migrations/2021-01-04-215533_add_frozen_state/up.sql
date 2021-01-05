@@ -1,4 +1,3 @@
-BEGIN;
 CREATE TABLE "new_areas" (
         id INTEGER NOT NULL,
         name TEXT NOT NULL,
@@ -12,4 +11,3 @@ CREATE TABLE "new_areas" (
 INSERT INTO new_areas SELECT * from AREAS;
 DROP TABLE areas;
 ALTER TABLE new_areas RENAME TO areas;
-COMMIT;
