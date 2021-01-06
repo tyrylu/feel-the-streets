@@ -46,6 +46,7 @@ pub fn maybe_create_area(
 pub fn download_area(area_osm_id: i64, client_id: String, conn: DbConn) -> Result<File> {
     let area = Area::find_by_osm_id(area_osm_id, &*conn)?;
     if area.state != AreaState::Updated || area.state != AreaState::Frozen {
+        warn!("Refusing to allow download of area {} in state {:?}.", area.osm_id, area.state);
         Err(Error::DatabaseIntegrityError)
     } else {
         if area.state == AreaState::Updated {
