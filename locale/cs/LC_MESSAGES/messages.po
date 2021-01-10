@@ -873,7 +873,7 @@ msgstr "Muž"
 #: entities.yml:218 entities.yml:1141 entities.yml:1404 entities.yml:1432
 #: entities.yml:1466 entities.yml:1492 entities.yml:1616 entities.yml:2124
 msgid "Voltage"
-msgstr "Voltáž"
+msgstr "Napětí"
 
 #: entities.yml:219 entities.yml:598
 msgid "Toilets disposal"
@@ -1374,7 +1374,7 @@ msgstr "Typ státní hranice"
 
 #: entities.yml:441
 msgid "Left country"
-msgstr "Země na levo"
+msgstr "Země nalevo"
 
 #: entities.yml:442
 msgid "Right country"
@@ -1643,7 +1643,7 @@ msgstr "Nejvyšší úroveň"
 
 #: entities.yml:588 entities.yml:1555
 msgid "Cash payment"
-msgstr "Platba mincemi"
+msgstr "Platba v hotovosti"
 
 #: entities.yml:591 entities.yml:1142
 msgid "Note en"
@@ -1689,11 +1689,11 @@ msgstr "Vnitřní"
 
 #: entities.yml:613
 msgid "Credit cards payment"
-msgstr "Platba kreditnímy kartamy"
+msgstr "Platba kreditními kartami"
 
 #: entities.yml:614
 msgid "Debit cards payment"
-msgstr "Platba debetnímy kartamy"
+msgstr "Platba debetními kartami"
 
 #: entities.yml:615 entities.yml:674
 #, fuzzy
@@ -1802,7 +1802,7 @@ msgstr ""
 
 #: entities.yml:645 entities.yml:1567
 msgid "Cryptocurrencies payment"
-msgstr "Platba kryptoměnamy"
+msgstr "Platba kryptoměnami"
 
 #: entities.yml:647 entities.yml:1968
 msgid "Name 1"
@@ -1834,7 +1834,7 @@ msgstr "Vlastník"
 
 #: entities.yml:656 entities.yml:1563
 msgid "Meal vouchers payment"
-msgstr "Platba stravenkamy"
+msgstr "Platba stravenkami"
 
 #: entities.yml:659
 msgid "Ruian type"
@@ -2066,11 +2066,11 @@ msgstr "Zahrada"
 
 #: entities.yml:926 enums.yml:326
 msgid "Golf course"
-msgstr "Golfový kurz"
+msgstr "Golfové hřiště"
 
 #: entities.yml:929
 msgid "Golf course type"
-msgstr "Typ golfového kurzu"
+msgstr "Typ golfového hřiště"
 
 #: entities.yml:930
 msgid "Par"
@@ -2098,7 +2098,7 @@ msgstr "Typ pomníku"
 
 #: entities.yml:966
 msgid "Memorial name"
-msgstr "Jméno pomník"
+msgstr "Jméno pomníku"
 
 #: entities.yml:971 enums.yml:959
 msgid "Tomb"
@@ -2118,7 +2118,7 @@ msgstr "Adresa"
 
 #: entities.yml:979
 msgid "Person date of birth"
-msgstr "Jméno narození osoby"
+msgstr "Datum narození osoby"
 
 #: entities.yml:981
 msgid "Land"
@@ -2335,7 +2335,7 @@ msgstr "Text"
 
 #: entities.yml:1157
 msgid "Person date of death"
-msgstr "Jméno úmrtí osoby"
+msgstr "Datum úmrtí osoby"
 
 #: entities.yml:1158
 msgid "Wikipedia en"
@@ -2396,7 +2396,7 @@ msgstr "Orientace"
 
 #: entities.yml:1218 enums.yml:1674
 msgid "No exit"
-msgstr "Bez východu"
+msgstr "Východ zakázán"
 
 #: entities.yml:1234 enums.yml:1149 enums.yml:2012
 msgid "Government"
@@ -6161,7 +6161,7 @@ msgstr "Klášter"
 
 #: enums.yml:409
 msgid "Nursing home"
-msgstr "Důms pečovatelskou službou"
+msgstr "Dům s pečovatelskou službou"
 
 #: enums.yml:410
 msgid "Public building"
@@ -6473,7 +6473,7 @@ msgstr "Udělej si sám"
 
 #: enums.yml:512 enums.yml:1083 enums.yml:1402 enums.yml:2175
 msgid "Kiosk"
-msgstr "Kiose"
+msgstr "Kiosek"
 
 #: enums.yml:514
 msgid "Funeral directors"
@@ -6955,7 +6955,7 @@ msgstr "Farma"
 
 #: enums.yml:665 enums.yml:2032
 msgid "Money lender"
-msgstr "Pučování peněz"
+msgstr "Půjčování peněz"
 
 #: enums.yml:666 enums.yml:2010
 msgid "Insurance"
@@ -7191,7 +7191,7 @@ msgstr "Anténa"
 
 #: enums.yml:751 enums.yml:1159
 msgid "Storage tank"
-msgstr "Úložný tank"
+msgstr "Skladovací nádrž"
 
 #: enums.yml:752 enums.yml:1179
 msgid "Windsock"
@@ -7639,7 +7639,7 @@ msgstr "Živý plot"
 
 #: enums.yml:881
 msgid "Toll booth"
-msgstr "Mítné"
+msgstr "Mýtnice"
 
 #: enums.yml:883
 msgid "Portcullis"
@@ -7815,7 +7815,7 @@ msgstr "Archeologické naleziště"
 
 #: enums.yml:963
 msgid "City gate"
-msgstr "|Městská brána"
+msgstr "Městská brána"
 
 #: enums.yml:965
 msgid "Battlefield"
@@ -7832,7 +7832,7 @@ msgstr "Banka"
 
 #: enums.yml:970
 msgid "Highwater mark"
-msgstr "Označení vvýšky vody při povodni"
+msgstr "Označení výšky vody při povodni"
 
 #: enums.yml:975
 msgid "Palace"
@@ -7937,7 +7937,7 @@ msgstr "Voda"
 
 #: enums.yml:1023
 msgid "Tree row"
-msgstr "Řda stromů"
+msgstr "Řada stromů"
 
 #: enums.yml:1024
 msgid "Bare rock"
@@ -8442,7 +8442,7 @@ msgstr "Chodník"
 
 #: enums.yml:1269 enums.yml:1530 enums.yml:1723
 msgid "Living street"
-msgstr "Ulice k bydlení"
+msgstr "Obytná ulice"
 
 #: enums.yml:1271 enums.yml:1514
 msgid "Secondary link"
@@ -8591,7 +8591,7 @@ msgstr ""
 
 #: enums.yml:1329
 msgid "Village green"
-msgstr "Vesnická zeleň"
+msgstr "Náves"
 
 #: enums.yml:1333
 msgid "Brownfield"
@@ -8985,7 +8985,7 @@ msgstr ""
 
 #: enums.yml:1551
 msgid "Artificial grass"
-msgstr "Umělý tráva"
+msgstr "Umělá tráva"
 
 #: enums.yml:1552
 msgid "Tartan"
@@ -9244,7 +9244,7 @@ msgstr ""
 
 #: enums.yml:1667
 msgid "Only right turn"
-msgstr "Pouze otočení do prava"
+msgstr "Pouze otočení doprava"
 
 #: enums.yml:1668
 msgid "Only straight on"
@@ -9264,7 +9264,7 @@ msgstr ""
 
 #: enums.yml:1673
 msgid "Only left turn"
-msgstr "Pouze otočení do leva"
+msgstr "Pouze otočení doleva"
 
 #: enums.yml:1694
 msgid "Tourist train"
@@ -9511,11 +9511,11 @@ msgstr ""
 
 #: enums.yml:1855
 msgid "No passage left"
-msgstr "Není průchod do leva"
+msgstr "Není průchod doleva"
 
 #: enums.yml:1856
 msgid "No passage right"
-msgstr "Není průchod do prava"
+msgstr "Není průchod doprava"
 
 #: enums.yml:1857
 msgid "No anchoring"
@@ -10131,7 +10131,7 @@ msgstr "Semafor"
 
 #: enums.yml:2222
 msgid "Entry"
-msgstr "Vsup"
+msgstr "Vstup"
 
 #: enums.yml:2225
 msgid "Between"
@@ -10334,7 +10334,7 @@ msgstr ""
 
 #: enums.yml:2405
 msgid "Nails"
-msgstr "Nechty"
+msgstr "Nehty"
 
 #: enums.yml:2410
 msgid "Group home"
@@ -10564,15 +10564,15 @@ msgstr "Možnosti"
 
 #: app/humanization_utils.py:108
 msgid "On the front right"
-msgstr "V předu v pravo"
+msgstr "Vpředu vpravo"
 
 #: app/humanization_utils.py:110
 msgid "On the right"
-msgstr "V pravo"
+msgstr "Vpravo"
 
 #: app/humanization_utils.py:112
 msgid "On the rear right"
-msgstr "V zadu v pravo"
+msgstr "Vzadu vpravo"
 
 #: app/humanization_utils.py:114
 msgid "Behind"
@@ -10580,19 +10580,19 @@ msgstr "Vzadu"
 
 #: app/humanization_utils.py:116
 msgid "On the rear left"
-msgstr "V zadu v levo"
+msgstr "Vzadu vlevo"
 
 #: app/humanization_utils.py:118
 msgid "On the left"
-msgstr "V levo"
+msgstr "Vlevo"
 
 #: app/humanization_utils.py:120
 msgid "On the front left"
-msgstr "V předu v levo"
+msgstr "Vpředu vlevo"
 
 #: app/humanization_utils.py:122
 msgid "In the front"
-msgstr "Ve předu"
+msgstr "Vpředu"
 
 #: app/humanization_utils.py:129
 msgid "slightly"
@@ -10608,11 +10608,11 @@ msgstr "opačným směrem"
 
 #: app/humanization_utils.py:142
 msgid "to the left"
-msgstr "do leva"
+msgstr "doleva"
 
 #: app/humanization_utils.py:144
 msgid "to the right"
-msgstr "do prava"
+msgstr "doprava"
 
 #: app/humanization_utils.py:148
 msgid "{angle} degrees"
@@ -10652,7 +10652,7 @@ msgstr "Nepodařilo se získat změny z vybrané oblasti, bude použita potenci�
 
 #: app/main_window.py:99
 msgid "The changes queue for the selected database no longer exists on the server, downloading it as if it was a new area."
-msgstr "Fronta změn vybrané oblasti již na serveru neexistuje, oblast bude stažena, jako by se jednalo o novou oblast."
+msgstr "Fronta změn vybrané oblasti již na serveru neexistuje, oblast bude stažena, jakoby se jednalo o novou oblast."
 
 #: app/controllers/interactive_person_controller.py:247 app/main_window.py:107
 #: app/search/search_conditions.py:146
@@ -10848,7 +10848,7 @@ msgstr "Přehrávat zvuky křižovatek"
 
 #: app/controllers/interactive_person_controller.py:36
 msgid "Announce interesting objects"
-msgstr "Oznavmovat zajímavé objekty"
+msgstr "Oznamovat zajímavé objekty"
 
 #: app/controllers/interactive_person_controller.py:37
 msgid "Use detailed turn instructions"
@@ -10933,11 +10933,11 @@ msgstr "Krok vzad"
 
 #: app/controllers/interactive_person_controller.py:104
 msgid "Turn 5 degrees to the right"
-msgstr "Otočit se o 5 stupňů do prava"
+msgstr "Otočit se o 5 stupňů doprava"
 
 #: app/controllers/interactive_person_controller.py:108
 msgid "Turn 5 degrees to the left"
-msgstr "Otočit se o 5 stupňů do leva"
+msgstr "Otočit se o 5 stupňů doleva"
 
 #: app/controllers/interactive_person_controller.py:112
 msgid "Current direction"
@@ -10945,11 +10945,11 @@ msgstr "Aktuální směr"
 
 #: app/controllers/interactive_person_controller.py:116
 msgid "Turn 90 degrees to the right"
-msgstr "Otočit se o 90 stupňů do prava"
+msgstr "Otočit se o 90 stupňů doprava"
 
 #: app/controllers/interactive_person_controller.py:120
 msgid "Turn 90 degrees to the left"
-msgstr "Otočit se o 90 stupňů do leva"
+msgstr "Otočit se o 90 stupňů doleva"
 
 #: app/controllers/interactive_person_controller.py:124
 msgid "Coordinate jump..."
