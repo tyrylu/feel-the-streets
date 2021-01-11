@@ -219,7 +219,7 @@ class InteractivePersonController:
         name, ok = QInputDialog.getText(self._main_window, _("Data entry"), _("Enter a name for the new bookmark"),)
         if not ok or not name:
             return
-        self._person.map.add_bookmark(name, lon=self._person.position.lon, lat=self._person.position.lat)
+        self._person.map.add_bookmark(name, lon=self._person.position.lon, lat=self._person.position.lat, direction=self._person.direction)
     
     @menu_command(_("Bookmarks"), _("Go to bookmark..."), "b")
     def go_to_bookmark(self, evt):
@@ -235,6 +235,7 @@ class InteractivePersonController:
             return
         bookmark = bookmarks[reprs.index(name)]
         self._person.move_to(LatLon(bookmark.latitude, bookmark.longitude), force=True)
+        self._person.set_direction(bookmark.direction)
 
     @menu_command(_("Bookmarks"), _("Remove bookmark..."), "ctrl+shift+b")
     def remove_bookmark(self, evt):

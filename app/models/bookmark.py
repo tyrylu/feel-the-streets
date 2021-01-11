@@ -7,3 +7,4 @@ class Bookmark(BaseModel):
     name: str
     latitude: float
     longitude: float
+    direction: float

@@ -5,3 +5,4 @@ class LastLocation(BaseModel):
     area: str
     latitude: float
     longitude: float
+    direction: float

@@ -52,8 +52,8 @@ class Map:
         log.debug("The distance filter decreased the count of entities from %s to %s.", len(rough_distant), len(entities))
         return entities
 
-    def add_bookmark(self, name, lat, lon):
-        bookmark = Bookmark(name=name, longitude=lon, latitude=lat, area=self._id, id=0)
+    def add_bookmark(self, name, lat, lon, direction):
+        bookmark = Bookmark(name=name, longitude=lon, latitude=lat, direction=direction, area=self._id, id=0)
         services.app_db().add_bookmark(bookmark)
 
     @property
@@ -71,13 +71,13 @@ class Map:
     def last_location(self):
         loc = self._last_location_entity
         if loc:
-            return LatLon(loc.latitude, loc.longitude)
+            return LatLon(loc.latitude, loc.longitude), loc.direction
         else:
             return None
 
     @last_location.setter
     def last_location(self, val):
-        services.app_db().update_last_location_for(str(self._id), val.lat, val.lon)
+        services.app_db().update_last_location_for(str(self._id), val[0].lat, val[0].lon, val[1])
 
     @property
     def default_start_location(self):
