@@ -33,7 +33,7 @@ if platform.system() == "Linux" and platform.architecture()[0] == "64bit":
         return cast(lmptr, POINTER(LINKMAP)).contents.l_name.decode("utf-8")
     additional_libs = (get_full_path("openal"), get_full_path("mod_spatialite.so"), get_full_path("vorbisfile"))
 elif platform.system() == "Windows":
-    additional_libs = (lib._name, find_library("mod_spatialite"), find_library("libvorbisfile"))
+    additional_libs = (lib._name, find_library("mod_spatialite"), find_library("libvorbisfile"), find_library("libvorbis"), find_library("libogg"))
 
 toc = [(os.path.basename(name), name, "BINARY") for name in additional_libs]
 toc_with_deps = bd.Dependencies(toc)
