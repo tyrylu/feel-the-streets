@@ -16,7 +16,7 @@ class SpeechService:
         if platform.system() == "Windows":
             # This hack ensures that win32com does not end up crashing because of some weird corruptions of the gen_py folder.
             gen_py_path = os.path.join(os.environ["TEMP"], "gen_py")
-            shutil.rmtree(gen_py_path)
+            shutil.rmtree(gen_py_path, ignore_errors=True)
         self._speech_history = []
         self._speech_history_position = 0
 
