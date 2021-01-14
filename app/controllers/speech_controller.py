@@ -8,6 +8,7 @@ class SpeechController:
 
     @menu_command(_("Speech"), _("Silence"), "s")
     def silence_speech(self, evt):
+        print("Gotit")
         speech().silence()
 
     @menu_command(_("Speech"), _("Move to and speak the first speech history item"), "home")

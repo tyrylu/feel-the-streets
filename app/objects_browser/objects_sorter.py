@@ -13,6 +13,9 @@ class ObjectsSorter(QThread):
         self._person = person
 
     def run(self):
+        self.objects_sorted.emit(self.perform_sorting())
+    
+    def perform_sorting(self):
         objects = []
         items_data = []
         for obj in self._unsorted_objects:
@@ -26,5 +29,5 @@ class ObjectsSorter(QThread):
             rel_bearing = format_number(rel_bearing, config().presentation.angle_decimal_places)
             dist = format_number(dist, config().presentation.distance_decimal_places)
             items_data.append((describe_entity(obj), dist, rel_bearing))
-        self.objects_sorted.emit((objects, items_data))
+        return objects, items_data
         

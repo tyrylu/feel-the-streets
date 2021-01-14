@@ -3,7 +3,7 @@ from pygeodesy.ellipsoidalVincenty import LatLon
 from ..entities import entity_post_enter
 from ..humanization_utils import describe_entity, format_number, describe_angle_as_turn_instructions
 from ..services import speech, map, config, menu_service
-from ..objects_browser import ObjectsBrowserWindow
+from ..objects_browser import ObjectsBrowserWindow, ObjectsSorter
 from ..road_segments_browser import RoadSegmentsBrowserDialog
 from ..geometry_utils import get_road_section_angle, distance_filter, distance_between, get_meaningful_turns, bearing_to, get_smaller_turn
 from ..search import get_query_from_user, QueryExecutor, SearchIndicator, create_query_for_name_search
@@ -313,6 +313,36 @@ class InteractivePersonController:
         if not ok: return
         return mapping[angle_desc]
             
+    @menu_command(_("Information"), _("Nearest address"), "a")
+    def _nearest_address(self):
+        found = None
+        unsorted = map().within_distance(self._person.position, config().presentation.near_by_radius, fast=True)
+        sorter = ObjectsSorter(unsorted, self._person)
+        entities, data = sorter.perform_sorting()
+        for (idx, (_dist, entity, _closest)) in enumerate(entities):
+            if entity.value_of_field("address"):
+                found = idx
+                break
+        self._report_single_entity(data[idx])
+    
+    @menu_command(_("Information"), _("Nearest named road"), "d")
+    def _nearest_named_road(self):
+        found = None
+        unsorted = map().within_distance(self._person.position, config().presentation.near_by_radius, fast=True)
+        sorter = ObjectsSorter(unsorted, self._person)
+        entities, data = sorter.perform_sorting()
+        for (idx, (_dist, entity, _closest)) in enumerate(entities):
+            if entity.is_road_like and entity.value_of_field("name"):
+                found = idx
+                break
+        self._report_single_entity(data[idx])
+    
+    def _report_single_entity(self, item_data):
+        if not item_data:
+            speech().speak(_("Not found."), add_to_history=False)
+        else:
+            desc, dist, rel_bearing = item_data
+            speech().speak(_("{object}: distance {distance} meters, {rel_bearing}° relatively").format(object=desc, distance=dist, rel_bearing=rel_bearing), add_to_history=False)
 
     def _leave_disalloved_sound_played(self, sender, because_of):
         if not config().navigation.correct_direction_after_leave_disallowed: return
