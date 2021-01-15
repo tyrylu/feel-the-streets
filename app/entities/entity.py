@@ -14,6 +14,7 @@ class Entity(BaseModel):
     map: Map
     position: LatLon
     is_inside_of: "OrderedSet[Entity]" = Field(default_factory=OrderedSet)
+    was_inside_of: "OrderedSet[Entity]" = Field(default_factory=OrderedSet)
     direction: float = 0.0
 
     class Config:
@@ -51,6 +52,7 @@ class Entity(BaseModel):
                 elif ret is MoveValidationResult.cancel:
                     return False
         self.position = pos
+        self.was_inside_of = OrderedSet(self.is_inside_of)
         # Note that we unfortunately can not assign the new_inside_of set directly as it has no defined ordering from the database, or rather, it has likely the wrong one.
         for leaving in leaves:
             self.is_inside_of.remove(leaving)

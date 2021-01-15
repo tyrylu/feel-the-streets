@@ -285,7 +285,11 @@ class InteractivePersonController:
         if len(roads) > 2: # A current road and two new - likely a crossing of more roads
             describe_roads_in_turns = True
         turns = []
-        for road in roads[1:]:
+        stayed_on_roads = [e for e in self._person.was_inside_of if e in roads]
+        if stayed_on_roads:
+            # Assume that the first road is the one which the user is on, e. g. does not want to be taken into account when getting new turn possibilities
+            roads.remove(stayed_on_roads[0])
+        for road in roads:
             current_turns = get_meaningful_turns(road, self._person)
             turns.extend(current_turns)
         self._maybe_perform_turn(turns, describe_roads_in_turns, _("There is no meaningful turn to perform, you aren't on a new road."))
