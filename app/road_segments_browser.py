@@ -1,6 +1,6 @@
 from PySide2.QtWidgets import QDialog, QListWidget, QPushButton, QLabel, QVBoxLayout
 import shapely.wkb as wkb
-from .geometry_utils import get_line_segments, find_closest_line_segment_of, to_latlon, distance_between, merge_similar_line_segments
+from .geometry_utils import get_line_segments, find_closest_line_segment_of, to_latlon, distance_between, merge_similar_line_segments, get_complete_road_line
 from .humanization_utils import format_number
 from .services import map, config
 
@@ -20,7 +20,7 @@ class RoadSegmentsBrowserDialog(QDialog):
         close_button.clicked.connect(self.accept)
         layout.addWidget(close_button)
         self.setLayout(layout)
-        line = wkb.loads(road.geometry)
+        line = get_complete_road_line(road)
         segments = get_line_segments(line)
         segments = merge_similar_line_segments(segments, config().presentation.angle_decimal_places)
         closest = find_closest_line_segment_of(segments, person.position_point)

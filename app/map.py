@@ -115,5 +115,9 @@ class Map:
         return self._db.get_parent_count(child_id)
 
     def get_entities(self, query):
-        #db = AreaDatabase.open_existing(self._id, server_side=False)
         return self._db.get_entities(query)
+
+    def get_entities_named(self, name):
+        query = EntitiesQuery()
+        query.add_condition(FieldNamed("name").eq(name))
+        return self.get_entities(query)

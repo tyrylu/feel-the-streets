@@ -66,7 +66,7 @@ class AnnouncementsController:
         # If we have a turn, we want to know about that
         if any([cl[0] is EntranceKind.turn for cl in classifications]):
             return (EntranceKind.turn, None)
-        # Now, we either have all continuations or inital entrances
+        # Now, we either have all continuations or initial entrances
         return classifications[0]
 
 
@@ -117,7 +117,9 @@ class AnnouncementsController:
     def _announce_possible_turn_opportunity(self, new_roads):
         meaningful_directions = []
         for new_road in new_roads:
-            meaningful_directions.extend(get_meaningful_turns(new_road, self._point_of_view))
+            for direction in get_meaningful_turns(new_road, self._point_of_view): # If/when we'll use the canonical geometry for the is inside of check and related queries, we can return to the extend way.
+                if direction not in meaningful_directions:
+                    meaningful_directions.append(direction)
         if meaningful_directions:
             self._announced_turns = True
         if len(meaningful_directions) == 1:

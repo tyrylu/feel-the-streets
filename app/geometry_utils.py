@@ -165,6 +165,63 @@ def effective_width_filter(entities, position):
                 res_entities.append(entity)
         return res_entities
 
+def canonicalize_line(line):
+    """Ensures a consistent order of a line's coordinates."""
+    coord1 = LatLon(line.coords[0][1], line.coords[0][0])
+    coord2 = LatLon(line.coords[1][1], line.coords[1][0])
+    if bearing_to(coord1, coord2) > 180:
+        return LineString(reversed(line.coords))
+    else:
+        return line
+
+def get_complete_road_line(road):
+    from .services import map
+    road_line = wkb.loads(road.geometry)
+    road_name = road.value_of_field("name")
+    if not road_name:
+        return road_line
+    other_road_parts = map().get_entities_named(road_name)
+    other_road_parts = [part for part in other_road_parts if part.id != road.id and part.is_road_like]
+    lines = [wkb.loads(part.geometry) for part in other_road_parts]
+    lines = [l for l in lines if l.geom_type == "LineString"]
+    if not lines:
+        return road_line
+    lines.append(road_line)
+    start_points = {}
+    end_points = {}
+    to_check = []
+    results = []
+    for line in lines:
+        line = canonicalize_line(line)
+        start_points[line.coords[0]] = line
+        end_points[line.coords[-1]] = line
+        to_check.append(line)
+    while to_check:
+        candidate = to_check.pop()
+        begins_with = end_points.get(candidate.coords[0])
+        continues_with = start_points.get(candidate.coords[-1])
+        if begins_with:
+            to_check.remove(begins_with)
+            del end_points[begins_with.coords[-1]]
+            del start_points[candidate.coords[0]]
+            merged = LineString(list(begins_with.coords) + list(candidate.coords[1:]))
+            start_points[merged.coords[0]] = merged
+            end_points[merged.coords[-1]] = merged
+            to_check.append(merged)
+        elif continues_with:
+            to_check.remove(continues_with)
+            del start_points[continues_with.coords[0]]
+            del end_points[candidate.coords[-1]]
+            merged = LineString(list(candidate.coords[:-1]) + list(continues_with.coords))
+            start_points[merged.coords[0]] = merged
+            end_points[merged.coords[-1]] = merged
+            to_check.append(merged)
+        else:
+            results.append(candidate)
+    for result in results:
+        if result.contains(road_line):
+            return result
+    
 def calculate_absolute_distances(segments, entity):
     """Calculates how far could the entity based on its position trawel along the line represented by the segments in both directions, e. g. to the start or the end points of the whole line. Assumes that the closest segment calculation has already been done, e. g. that the LineSegment.current property is set correctly."""
     from_start = 0
@@ -207,7 +264,7 @@ def get_meaningful_turns(new_road, entity, zero_turn_is_meaningful=False, ignore
     # These two imports are only needed in this function, so no point of doing them globally and complicating everything.
     from .humanization_utils import format_number, describe_angle_as_turn_instructions
     from .services import config
-    new_segments = merge_similar_line_segments(get_line_segments(wkb.loads(new_road.geometry)), config().presentation.angle_decimal_places)
+    new_segments = merge_similar_line_segments(get_line_segments(get_complete_road_line(new_road)), config().presentation.angle_decimal_places)
     closest_new_segment = find_closest_line_segment_of(new_segments, entity.position_point)
     closest_new_segment.calculate_angle()
     required_angle_difference = closest_new_segment.angle - entity.direction
