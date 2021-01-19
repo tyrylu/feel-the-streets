@@ -13,6 +13,10 @@ jobs:
       fail-fast: false
     steps:
     - uses: actions/checkout@v2
+    - name: Install recent enough python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
     - name: Install latest nightly
       uses: actions-rs/toolchain@v1
       with:
