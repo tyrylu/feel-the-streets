@@ -1,6 +1,16 @@
 use crate::entity_relationship::RootedEntityRelationship;
+use crate::Result;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use zstd_util::ZstdContext;
+use std::sync::Mutex;
+
+lazy_static::lazy_static! {
+    static ref ZSTD_CONTEXT: Mutex<ZstdContext<'static>> = {
+Mutex::new(ZstdContext::new(10, Some(include_bytes!("../../changes.dict"))))
+    };
+}
+
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum EntryChange {
@@ -160,5 +170,15 @@ impl SemanticChange {
         {
             relationship_changes.push(change)
         }
+    }
+
+    pub fn serialize(&self) -> Result<Vec<u8>> {
+        let encoded = serde_json::to_string(&self)?;
+        Ok(ZSTD_CONTEXT.lock().unwrap().compress(&encoded.into_bytes())?)
+    }
+
+    pub fn from_serialized(data: &[u8]) -> Result<Self> {
+        let decompressed = ZSTD_CONTEXT.lock().unwrap().decompress(&data)?;
+        Ok(serde_json::from_slice(&decompressed)?)
     }
 }

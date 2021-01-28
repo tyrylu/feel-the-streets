@@ -45,14 +45,14 @@ pub fn publish_change_on(
     change: &SemanticChange,
     area_osm_id: i64,
 ) -> Result<()> {
-    let serialized = serde_json::to_string(&change)?;
+    let compressed = change.serialize()?;
     let props = BasicProperties::default().with_delivery_mode(2);
     channel
         .basic_publish(
             &area_osm_id.to_string(),
             "",
             BasicPublishOptions::default(),
-            serialized.into_bytes(),
+            compressed,
             props,
         )
         .wait()?;

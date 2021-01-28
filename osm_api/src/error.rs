@@ -14,12 +14,6 @@ pub enum Error {
     WKBWriteError(String),
     #[error("Serialization error: {0}")]
     SerializationError(#[from] bincode::Error),
-    #[error("Invalid return code from the ZSTD library: {0}")]
-    ZSTDError(usize),
-}
-
-impl From<usize> for Error {
-    fn from(val: usize) -> Error {
-        Error::ZSTDError(val)
-    }
+    #[error("Zstd operation error: {0}")]
+    ZstdError(#[from] zstd_util::Error)
 }

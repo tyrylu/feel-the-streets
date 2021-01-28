@@ -1277,7 +1277,7 @@ dependencies = [
  "ureq",
  "wkb",
  "xml-rs",
- "zstd-safe",
+ "zstd_util",
 ]
 
 [[package]]
@@ -1297,6 +1297,7 @@ dependencies = [
  "serde_yaml",
  "thiserror",
  "uom",
+ "zstd_util",
 ]
 
 [[package]]
@@ -2518,4 +2519,13 @@ dependencies = [
  "glob",
  "itertools 0.9.0",
  "libc",
+]
+
+[[package]]
+name = "zstd_util"
+version = "0.1.0"
+dependencies = [
+ "log 0.3.9",
+ "thiserror",
+ "zstd-safe",
 ]

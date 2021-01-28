@@ -21,52 +21,26 @@ use std::iter::FromIterator;
 use std::sync::Mutex;
 use std::time::Instant;
 use tempfile::tempfile;
+use zstd_util::ZstdContext;
 
 const QUERY_RETRY_COUNT: u8 = 3;
 const COMPRESSION_LEVEL: i32 = 10;
 
 lazy_static! {
-    static ref ZSTD_DICT: Vec<u8> = fs::read("fts.dict").expect("Could not read ZSTD dictionary.");
-    static ref COMPRESSOR_DICT: zstd_safe::CDict<'static> =
-        zstd_safe::create_cdict(&ZSTD_DICT, COMPRESSION_LEVEL);
-    static ref DECOMPRESSOR_DICT: zstd_safe::DDict<'static> = zstd_safe::create_ddict(&ZSTD_DICT);
-    static ref COMPRESS_CTX: Mutex<zstd_safe::CCtx<'static>> = {
-        let mut ctx = zstd_safe::create_cctx();
-        zstd_safe::cctx_ref_cdict(&mut ctx, &COMPRESSOR_DICT).expect("Failed to set dictionary");
-        Mutex::new(ctx)
-    };
-    static ref DECOMPRESS_CTX: Mutex<zstd_safe::DCtx<'static>> = {
-        let mut ctx = zstd_safe::create_dctx();
-        zstd_safe::dctx_ref_ddict(&mut ctx, &DECOMPRESSOR_DICT)
-            .expect("Failed to associate decompression dict");
-        Mutex::new(ctx)
+    static ref ZSTD_CONTEXT: Mutex<ZstdContext<'static>> = {
+        let dict = fs::read("fts.dict").expect("Could not read ZSTD dictionary.");
+        Mutex::new(ZstdContext::new(COMPRESSION_LEVEL, Some(&dict)))
     };
 }
 
 fn serialize_and_compress(object: &OSMObject) -> Result<Vec<u8>> {
     let serialized = bincode::serialize(&object)?;
-    let mut compressed = Vec::new();
-    compressed.resize(serialized.len(), 0);
-    let start = Instant::now();
-    let mut cctx = COMPRESS_CTX.lock().unwrap();
-    let compressed_size = zstd_safe::compress2(&mut cctx, &mut compressed, &serialized)?;
-    compressed.resize(compressed_size as usize, 0);
-    trace!(
-        "Serialized and compressed {} to {} bytes in {:?}.",
-        serialized.len(),
-        compressed.len(),
-        start.elapsed()
-    );
-    Ok(compressed)
+    Ok(ZSTD_CONTEXT.lock().unwrap().compress(&serialized)?)
 }
 
-fn deserialize_compressed(compressed: &[u8]) -> OSMObject {
-    let mut serialized = Vec::new();
-    serialized.resize(zstd_safe::get_frame_content_size(&compressed) as usize, 0);
-    let mut dctx = DECOMPRESS_CTX.lock().unwrap();
-    zstd_safe::decompress_dctx(&mut dctx, &mut serialized, &compressed)
-        .expect("Failed to decompress");
-    bincode::deserialize(&serialized).expect("Could not deserialize")
+fn deserialize_compressed(compressed: &[u8]) -> Result<OSMObject> {
+    let serialized = ZSTD_CONTEXT.lock().unwrap().decompress(&compressed)?;
+    Ok(bincode::deserialize(&serialized)?)
 }
 
 fn translate_type_shortcut(shortcut: char) -> &'static str {
@@ -159,12 +133,16 @@ impl OSMObjectManager {
         exists
     }
 
-    fn get_cached_object(&self, id: &str) -> Option<OSMObject> {
+    fn get_cached_object(&self, id: &str) -> Result<Option<OSMObject>> {
         let mut cache = self.get_cache();
-        cache
-            .get::<Vec<u8>>(&id)
-            .expect("Cache retrieval failed.")
-            .map(|o| deserialize_compressed(&o))
+        if let Some(data) = cache
+            .get::<Vec<u8>>(&id)? {
+                Ok(Some(deserialize_compressed(&data)?))
+            }
+            else {
+                Ok(None)
+            }
+
     }
 
     fn next_api_url(&self) -> &'static str {
@@ -351,9 +329,9 @@ impl OSMObjectManager {
         Ok(object.related_ids().filter_map(move |(id, maybe_role)| {
             let obj = self.get_cached_object(&id);
             match obj {
-                Some(o) => Some((o, maybe_role)),
-                None => {
-                    error!("The OSM API did not return the object with id {}. Assuming that it was not specified as a dependency for some other object.", id);
+                Ok(Some(o)) => Some((o, maybe_role)),
+                _ => {
+                    error!("The OSM API did not return the object with id {}, or its retrieval failed. Assuming that it was not specified as a dependency for some other object.", id);
                     None
             }
         }
@@ -370,7 +348,7 @@ impl OSMObjectManager {
         if !self.has_object(&id) {
             self.lookup_objects(&mut [id.to_string()])?;
         }
-        Ok(self.get_cached_object(&id))
+        self.get_cached_object(&id)
     }
 
     fn enrich_tags(parent: &OSMObject, child: &mut OSMObject) {
@@ -616,6 +594,6 @@ pub fn cached_objects_in<'a>(
             .iter::<String, Vec<u8>>()
             .unwrap()
             .filter_map(|pair| pair.ok())
-            .map(|(_k, v)| deserialize_compressed(&v)),
+            .map(|(_k, v)| deserialize_compressed(&v).expect("Could not deserialize object")),
     )
 }

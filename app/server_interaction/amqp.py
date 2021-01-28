@@ -31,7 +31,7 @@ class SemanticChangeRetriever:
             if not method:
                 break
             self._max_delivery_tags[area] = method.delivery_tag
-            yield SemanticChange.from_json(body.decode("utf-8"))
+            yield SemanticChange.from_serialized(body)
 
     def acknowledge_changes_for(self, area):
         if area not in self._max_delivery_tags:

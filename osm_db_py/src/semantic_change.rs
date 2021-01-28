@@ -12,8 +12,8 @@ pub struct PySemanticChange {
 #[pymethods]
 impl PySemanticChange {
     #[staticmethod]
-    fn from_json(json: &str) -> PyResult<PySemanticChange> {
-        match serde_json::from_str::<SemanticChange>(json) {
+    fn from_serialized(data: &[u8]) -> PyResult<PySemanticChange> {
+        match SemanticChange::from_serialized(&data) {
             Ok(change) => Ok(PySemanticChange { inner: change }),
             Err(e) => Err(exceptions::PyValueError::new_err(format!(
                 "Could not parse json, error: {}",
