@@ -28,7 +28,8 @@ fn main() -> Result<()> {
                 routes::areas,
                 routes::maybe_create_area,
                 routes::download_area,
-                routes::ping
+                routes::ping,
+                routes::motd,
             ],
         )
         .launch();

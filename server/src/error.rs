@@ -1,3 +1,5 @@
+use std::time::SystemTimeError;
+
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("Migrations execution error: {0}")]
@@ -24,4 +26,6 @@ pub enum Error {
     DatabaseIntegrityError,
     #[error("Dotenv error: {0}")]
     DotenvError(#[from] dotenv::Error),
+    #[error("The system time is before the unix epoch: {0}")]
+    SystemTimeError(#[from] SystemTimeError)
 }

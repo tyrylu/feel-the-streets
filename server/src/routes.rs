@@ -7,7 +7,10 @@ use rocket::http::Status;
 use rocket::response::status;
 use rocket_contrib::json::Json;
 use serde::{Deserialize, Serialize};
-use std::fs::File;
+use std::collections::HashMap;
+use std::fs::{self, File};
+use std::path::Path;
+use std::time::SystemTime;
 
 #[derive(Deserialize)]
 pub struct MaybeCreateAreaRequest {
@@ -18,6 +21,12 @@ pub struct MaybeCreateAreaRequest {
 #[derive(Serialize)]
 pub struct PingResponse {
     response: String,
+}
+
+#[derive(Serialize)]
+pub struct MotdEntry {
+    timestamp: u64,
+    message: String
 }
 
 #[get("/areas")]
@@ -60,4 +69,22 @@ pub fn ping() -> Json<PingResponse> {
     Json(PingResponse {
         response: "pong".to_string(),
     })
+}
+
+#[get("/motd")]
+pub fn motd() -> Result<Json<HashMap<String, MotdEntry>>> {
+    let mut messages = HashMap::new();
+    let motd_dir = Path::new("motd");
+    if motd_dir.is_dir() {
+        for maybe_entry in motd_dir.read_dir()? {
+            let entry = maybe_entry?;
+            if entry.file_type()?.is_file() {
+                let message = fs::read_to_string(entry.path())?;
+                let timestamp = entry.metadata()?.modified()?.duration_since(SystemTime::UNIX_EPOCH)?.as_secs();
+                messages.insert(entry.file_name().to_string_lossy().to_string(), MotdEntry{timestamp, message});
+            }
+
+        }
+    }
+    Ok(Json(messages))
 }
