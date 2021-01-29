@@ -33,6 +33,13 @@ lazy_static! {
     };
 }
 
+fn getting_non_200_response_is_ok(err: ureq::Error) -> std::result::Result<ureq::Response, ureq::Error> {
+    match err {
+        ureq::Error::Status(_, resp) => Ok(resp),
+        _ => Err(err)
+    }
+}
+
 fn serialize_and_compress(object: &OSMObject) -> Result<Vec<u8>> {
     let serialized = bincode::serialize(&object)?;
     Ok(ZSTD_CONTEXT.lock().unwrap().compress(&serialized)?)
@@ -181,11 +188,10 @@ impl OSMObjectManager {
         let resp = self
             .http_client
             .post(&final_url)
-            .send_form(&[("data", query)])?;
+            .send_form(&[("data", query)]).or_else(getting_non_200_response_is_ok)?;
         match resp.status() {
             429 => {
                 warn!("Multiple requests, killing them and going to a different api host.");
-
                 self
                     .http_client
                     .get(&format!("{0}/kill_my_queries", &url))
