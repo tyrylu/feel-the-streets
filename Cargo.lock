@@ -2525,6 +2525,7 @@ dependencies = [
 name = "zstd_util"
 version = "0.1.0"
 dependencies = [
+ "env_logger",
  "log 0.3.9",
  "thiserror",
  "zstd-safe",

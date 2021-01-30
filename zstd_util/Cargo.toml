@@ -10,3 +10,6 @@ edition = "2018"
 log = "*"
 zstd-safe = "*"
 thiserror = "*"
+
+[dev_dependencies]
+env_logger = "*"
