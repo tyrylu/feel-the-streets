@@ -7,8 +7,9 @@ from .entities import Person
 from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController, LastLocationController, MovementRestrictionController, InterestingEntitiesController, SpeechController, PositionAdjustmentController
 from .area_selection import AreaSelectionDialog
 from .services import map, menu_service, config
-from .server_interaction import AreaDatabaseDownloader, SemanticChangeRetriever, has_api_connectivity, ConnectionError, UnknownQueueError
+from .server_interaction import AreaDatabaseDownloader, SemanticChangeRetriever, has_api_connectivity, ConnectionError, UnknownQueueError, get_motd
 from .changes_applier import ChangesApplier
+from .message_dialog import MessageDialog
 from osm_db import AreaDatabase, EntitiesQuery
 from .size_utils import format_size
 
@@ -25,7 +26,19 @@ class MainWindow(QMainWindow):
         self._progress = None
         self._pending_count = 0
         self._applier = None
+        self._maybe_show_message()
         self._do_select_db()
+
+    def _maybe_show_message(self):
+        motd = get_motd()
+        if motd and motd.is_newer_than_last_local:
+            message_dialog = MessageDialog(self, motd)
+            res = message_dialog.exec_()
+            if res == MessageDialog.DialogCode.Rejected:
+                sys.exit(0)
+            elif res == MessageDialog.DialogCode.Accepted:
+                motd.mark_as_seen()
+
 
     def _do_select_db(self):
         dlg = AreaSelectionDialog(self)

@@ -5,9 +5,11 @@ import xml.etree.ElementTree as et
 import requests
 import atomicwrites
 from ..services import config
+from .motd import Motd
 from osm_db import AreaDatabase
 
 API_ENDPOINT = os.environ.get("API_ENDPOINT", "https://fts.trycht.cz/api")
+HAS_API_CONNECTIVITY = None
 
 log = logging.getLogger(__name__)
 
@@ -71,15 +73,20 @@ class AreaDatabaseDownloader(QThread):
             self.download_finished.emit(False)
 
 def has_api_connectivity():
+    global HAS_API_CONNECTIVITY
+    if HAS_API_CONNECTIVITY is not None:
+        return HAS_API_CONNECTIVITY
+    result = None
     try:
         resp = session.get(url_for("ping"))
-        resp.content
-        if not resp.status_code == 200:
-            return False
+        if resp.status_code != 200:
+            result = False
         else:
-            return True
+            result = True
     except requests.ConnectionError:
-        return False
+        result = False
+    HAS_API_CONNECTIVITY = result
+    return result
 
 def get_area_parents(area_id):
     if area_id > 3600000000:
@@ -97,3 +104,15 @@ def get_area_parents(area_id):
             tags[tag.attrib["k"]] = tag.attrib["v"]
         res[rel.attrib["id"]] = tags
     return res
+
+def get_motd():
+    if not has_api_connectivity():
+        return None
+    resp = session.get(url_for("motd"))
+    if resp.status_code != 200:
+        log.warn("Motd request returned with status %s.", resp.status_code)
+        return None
+    data = resp.json()
+    if not data: # No motd has been published yet
+        return None
+    return Motd(data)
