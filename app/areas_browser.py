@@ -15,7 +15,10 @@ class AreasBrowserDialog(BaseDialog):
             parents = get_area_parents(id)
             if len(parents) > 1:
                 log.warning("Area with id %s has multiple parents, falling back on the first.", id)
-            parent_name = next(iter(parents.values()))["name"]
+            if parents:
+                parent_name = next(iter(parents.values()))["name"]
+            else:
+                parent_name = _("not known")
             self._areas_list.addItem(_("{area_name}, {parent_name}").format(area_name=area_name, parent_name=parent_name))
         self._areas_list.setCurrentRow(0)
 
