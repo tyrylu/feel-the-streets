@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-01-14 22:20+0100\n"
+"POT-Creation-Date: 2021-02-01 00:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1330,8 +1330,8 @@ msgstr ""
 #: app/controllers/interactive_person_controller.py:184
 #: app/controllers/interactive_person_controller.py:193
 #: app/controllers/interactive_person_controller.py:215
-#: app/controllers/interactive_person_controller.py:316
-#: app/controllers/interactive_person_controller.py:328 entities.yml:430
+#: app/controllers/interactive_person_controller.py:320
+#: app/controllers/interactive_person_controller.py:332 entities.yml:430
 #: entities.yml:1413 enums.yml:914 enums.yml:1441 enums.yml:1496 enums.yml:1802
 msgid "Information"
 msgstr ""
@@ -10337,7 +10337,7 @@ msgstr ""
 msgid "&Select"
 msgstr ""
 
-#: app/area_selection.py:49
+#: app/area_selection.py:49 app/message_dialog.py:9
 msgid "&Exit"
 msgstr ""
 
@@ -10373,8 +10373,8 @@ msgstr ""
 msgid "The area with name {name} does not correspond to any OSM areas."
 msgstr ""
 
-#: app/area_selection.py:107 app/area_selection.py:109 app/main_window.py:133
-#: app/main_window.py:138
+#: app/area_selection.py:107 app/area_selection.py:109 app/main_window.py:146
+#: app/main_window.py:151
 msgid "Success"
 msgstr ""
 
@@ -10402,15 +10402,19 @@ msgstr ""
 msgid "&Close"
 msgstr ""
 
-#: app/areas_browser.py:19
+#: app/areas_browser.py:21
+msgid "not known"
+msgstr ""
+
+#: app/areas_browser.py:22
 msgid "{area_name}, {parent_name}"
 msgstr ""
 
-#: app/areas_browser.py:23
+#: app/areas_browser.py:26
 msgid "Areas"
 msgstr ""
 
-#: app/areas_browser.py:29
+#: app/areas_browser.py:32
 msgid "Area properties"
 msgstr ""
 
@@ -10478,74 +10482,86 @@ msgstr ""
 msgid "{angle} degrees {direction}"
 msgstr ""
 
-#: app/main_window.py:65
+#: app/main_window.py:78
 msgid "Downloading the selected database."
 msgstr ""
 
-#: app/main_window.py:66
+#: app/main_window.py:79
 msgid "Download in progress"
 msgstr ""
 
-#: app/main_window.py:68
+#: app/main_window.py:81
 msgid "Downloading the selected database. Downloaded {so_far} of {total}."
 msgstr ""
 
-#: app/main_window.py:81
+#: app/main_window.py:94
 msgid "Download failure"
 msgstr ""
 
-#: app/main_window.py:81
+#: app/main_window.py:94
 msgid "Download of the selected area had failed."
 msgstr ""
 
-#: app/main_window.py:96 app/main_window.py:100
+#: app/main_window.py:109 app/main_window.py:113
 msgid "Warning"
 msgstr ""
 
-#: app/main_window.py:96
+#: app/main_window.py:109
 msgid "Could not retrieve changes in the selected area, using the potentially stale local copy."
 msgstr ""
 
-#: app/main_window.py:100
+#: app/main_window.py:113
 msgid "The changes queue for the selected database no longer exists on the server, downloading it as if it was a new area."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:248 app/main_window.py:108
+#: app/controllers/interactive_person_controller.py:248 app/main_window.py:121
 #: app/search/search_conditions.py:146
 msgid "Question"
 msgstr ""
 
-#: app/main_window.py:108
+#: app/main_window.py:121
 #, python-format
 msgid "The server reports %s pending changes. Do you really want to generate the changelog from all of them? It might take a while."
 msgstr ""
 
-#: app/main_window.py:111
+#: app/main_window.py:124
 msgid "Applying changes for the selected database."
 msgstr ""
 
-#: app/main_window.py:112
+#: app/main_window.py:125
 msgid "Change application"
 msgstr ""
 
-#: app/main_window.py:122
+#: app/main_window.py:135
 msgid "Redownload requested"
 msgstr ""
 
-#: app/main_window.py:122
+#: app/main_window.py:135
 msgid "The server has requested a redownload of the selected database, proceeding with the operation."
 msgstr ""
 
-#: app/main_window.py:126
+#: app/main_window.py:139
 msgid "Applying changes for the selected database, change {nth} of {total}"
 msgstr ""
 
-#: app/main_window.py:133
+#: app/main_window.py:146
 msgid "Successfully applied {total} changes. A changelog of size {size} was generated, do you want to view it now?"
 msgstr ""
 
-#: app/main_window.py:138
+#: app/main_window.py:151
 msgid "Successfully applied {total} changes."
+msgstr ""
+
+#: app/message_dialog.py:9
+msgid "Message from the developer"
+msgstr ""
+
+#: app/message_dialog.py:9
+msgid "&Continue"
+msgstr ""
+
+#: app/message_dialog.py:12
+msgid "The developer sent a message on {}"
 msgstr ""
 
 #: app/preferences_dialog.py:6
@@ -10615,7 +10631,7 @@ msgid "You are entering {enters}."
 msgstr ""
 
 #: app/controllers/announcements_controller.py:54
-#: app/controllers/announcements_controller.py:155
+#: app/controllers/announcements_controller.py:157
 msgid "{before} continues as {after}."
 msgstr ""
 
@@ -10636,37 +10652,37 @@ msgstr ""
 msgid "You can continue along the current road for another {} meters."
 msgstr ""
 
-#: app/controllers/announcements_controller.py:125
+#: app/controllers/announcements_controller.py:127
 msgid "You could turn {direction} and continue for {distance} meters."
 msgstr ""
 
-#: app/controllers/announcements_controller.py:128
+#: app/controllers/announcements_controller.py:130
 msgid "You could turn {direction1} and continue for {distance1} meters, or you could turn {direction2} and continue for {distance2} meters."
 msgstr ""
 
-#: app/controllers/announcements_controller.py:153
+#: app/controllers/announcements_controller.py:155
 msgid "You crossed {leaves}."
 msgstr ""
 
-#: app/controllers/announcements_controller.py:157
 #: app/controllers/announcements_controller.py:159
+#: app/controllers/announcements_controller.py:161
 msgid "You are leaving {leaves}"
 msgstr ""
 
-#: app/controllers/announcements_controller.py:162
+#: app/controllers/announcements_controller.py:164
 msgid "Now, your location is not known."
 msgstr ""
 
-#: app/controllers/announcements_controller.py:169
+#: app/controllers/announcements_controller.py:171
 msgid "Now, you're on {}."
 msgstr ""
 
-#: app/controllers/announcements_controller.py:173
+#: app/controllers/announcements_controller.py:175
 #: app/controllers/interactive_person_controller.py:114
 msgid "{degrees} degrees"
 msgstr ""
 
-#: app/controllers/announcements_controller.py:184
+#: app/controllers/announcements_controller.py:186
 msgid "{angle_description} is a {entity_description}"
 msgstr ""
 
@@ -10858,7 +10874,7 @@ msgid "Enter the angle"
 msgstr ""
 
 #: app/controllers/interactive_person_controller.py:179
-#: app/controllers/interactive_person_controller.py:312
+#: app/controllers/interactive_person_controller.py:316
 msgid "Request"
 msgstr ""
 
@@ -10955,48 +10971,48 @@ msgstr ""
 msgid "There is no meaningful turn to perform, you are not on a road."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:291
+#: app/controllers/interactive_person_controller.py:295
 msgid "There is no meaningful turn to perform, you aren't on a new road."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:299
+#: app/controllers/interactive_person_controller.py:303
 msgid "There is only a single meaningful turn, so you've been rotated {}"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:306
+#: app/controllers/interactive_person_controller.py:310
 msgid "You've been rotated {}."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:312
+#: app/controllers/interactive_person_controller.py:316
 msgid "Which turn you want to perform?"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:316
+#: app/controllers/interactive_person_controller.py:320
 msgid "Nearest address"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:328
+#: app/controllers/interactive_person_controller.py:332
 msgid "Nearest named road"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:342
+#: app/controllers/interactive_person_controller.py:346
 msgid "Not found."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:345
+#: app/controllers/interactive_person_controller.py:349
 #: app/objects_browser/window.py:70
 msgid "{object}: distance {distance} meters, {rel_bearing}° relatively"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:355
+#: app/controllers/interactive_person_controller.py:359
 msgid "your direction was corrected"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:357
+#: app/controllers/interactive_person_controller.py:361
 msgid "you will be turned {}"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:359
+#: app/controllers/interactive_person_controller.py:363
 msgid "Because of your settings, {0}"
 msgstr ""
 

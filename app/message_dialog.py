@@ -6,7 +6,7 @@ class MessageDialog(BaseDialog):
 
     def __init__(self, parent, motd):
         self._motd = motd
-        super().__init__(parent, _("Message from the developer"), _("Continue"), _("Exit"))
+        super().__init__(parent, _("Message from the developer"), _("&Continue"), _("&Exit"))
 
     def create_ui(self):
         label = QLabel(_("The developer sent a message on {}").format(self._motd.timestamp_string))
