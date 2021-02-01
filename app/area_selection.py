@@ -5,11 +5,13 @@ from PySide2.QtWidgets import QPushButton, QListWidget, QLabel, QMessageBox, QIn
 import pendulum
 from osm_db import AreaDatabase
 from .base_dialog import BaseDialog
-from .server_interaction import has_api_connectivity, get_areas, request_area_creation, get_areas_with_name
+from .server_interaction import has_api_connectivity, get_areas, request_area_creation
 from .time_utils import rfc_3339_to_local_string
 from .size_utils import format_size
 from .areas_browser import AreasBrowserDialog
 from .services import config
+from.area_candidates_searcher import AreaCandidatesSearcher
+from .search_indicator import SearchIndicator
 
 log = logging.getLogger(__name__)
 
@@ -88,7 +90,15 @@ class AreaSelectionDialog(BaseDialog):
         name, ok = QInputDialog.getText(self, _("Enter the name of the requested area"), _("Area name requested"))
         if not ok or not name:
             return
-        candidates = get_areas_with_name(name)
+        self._searched_name = name
+        self._searcher = AreaCandidatesSearcher(name)
+        self._searcher.results_ready.connect(self._on_area_candidates)
+        self._indicator = SearchIndicator()
+        self._indicator.show()
+        self._searcher.start()
+    
+    def _on_area_candidates(self, candidates):
+        self._indicator.hide()
         if not candidates:
             QMessageBox.warning(self, _("Area not found"), _("The area with name {name} does not correspond to any OSM areas.").format(name=name))
             return
@@ -96,7 +106,7 @@ class AreaSelectionDialog(BaseDialog):
             area_id = next(iter(candidates.keys()))
             log.info("Only one candidate with an admin level of %s and id %s.", next(iter(candidates.values()))["admin_level"], area_id)
         else:
-            dialog = AreasBrowserDialog(self, area_name=name, areas=candidates)
+            dialog = AreasBrowserDialog(self, area_name=self._searched_name, areas=candidates)
             res = dialog.exec_()
             if res == QDialog.DialogCode.Accepted:
                 area_id = dialog.selected_area_id

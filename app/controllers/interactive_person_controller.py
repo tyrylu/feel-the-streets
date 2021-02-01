@@ -6,7 +6,8 @@ from ..services import speech, map, config, menu_service
 from ..objects_browser import ObjectsBrowserWindow, ObjectsSorter
 from ..road_segments_browser import RoadSegmentsBrowserDialog
 from ..geometry_utils import get_road_section_angle, distance_filter, distance_between, get_meaningful_turns, bearing_to, get_smaller_turn
-from ..search import get_query_from_user, QueryExecutor, SearchIndicator, create_query_for_name_search
+from ..search import get_query_from_user, QueryExecutor, create_query_for_name_search
+from ..search_indicator import SearchIndicator
 from ..config_utils import make_config_option_switchable
 from ..entity_utils import get_last_important_road, filter_important_roads
 from ..menu_service import menu_command
@@ -203,7 +204,7 @@ class InteractivePersonController:
         self._search_executor = QueryExecutor(query, self._person.position, distance)
         self._search_executor.results_ready.connect(self._search_results_ready)
         self._search_executor.start()
-        self._search_progress = SearchIndicator(self._main_window)
+        self._search_progress = SearchIndicator()
         self._search_progress.show()
     
     def _search_results_ready(self, results):
