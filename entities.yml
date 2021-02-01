@@ -44,6 +44,7 @@ Address:
     'housename:ru': str
     country: str
     province: str
+    state: str
     unit: str
     floor: str
     flats: int
