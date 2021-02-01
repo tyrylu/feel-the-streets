@@ -100,7 +100,7 @@ class AreaSelectionDialog(BaseDialog):
     def _on_area_candidates(self, candidates):
         self._indicator.hide()
         if not candidates:
-            QMessageBox.warning(self, _("Area not found"), _("The area with name {name} does not correspond to any OSM areas.").format(name=name))
+            QMessageBox.warning(self, _("Area not found"), _("The area with name {name} does not correspond to any OSM areas.").format(name=self._searched_name))
             return
         if len(candidates) == 1:
             area_id = next(iter(candidates.keys()))
@@ -112,7 +112,7 @@ class AreaSelectionDialog(BaseDialog):
                 area_id = dialog.selected_area_id
             else:
                 return
-        reply = request_area_creation(area_id, name)
+        reply = request_area_creation(area_id, self._searched_name)
         if reply and isinstance(reply, dict) and "state" in reply and reply["state"] == "Creating":
             QMessageBox.information(self, _("Success"), _("The area creation request has been sent successfully. The area will become updated in a few minutes."))
         elif reply and isinstance(reply, dict) and "state" in reply and reply["state"] in {"Creating", "Updated", "ApplyingChanges", "GettingChanges"}:
