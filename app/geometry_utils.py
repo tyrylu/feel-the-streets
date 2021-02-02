@@ -1,3 +1,4 @@
+from collections import defaultdict
 import logging
 import shapely.wkb as wkb
 import shapely.geometry as geometry
@@ -174,47 +175,78 @@ def canonicalize_line(line):
     else:
         return line
 
+def xy_tuple_to_latlon(xy_tuple):
+    return LatLon(xy_tuple[1], xy_tuple[0])
+
+def line_segment_part_bearing(linestring, starting_segment_index):
+    return bearing_to(xy_tuple_to_latlon(linestring.coords[starting_segment_index]), xy_tuple_to_latlon(linestring.coords[starting_segment_index + 1]))
+
+def select_mergeable_line(merge_with, merge_candidates, merge_at_end):
+    if len(merge_candidates) == 1:
+        return merge_candidates[0]
+    if merge_at_end:
+        base_index = -2
+        candidate_index = 0
+    else:
+        base_index = 0
+        candidate_index = -2
+    base_bearing = line_segment_part_bearing(merge_with, base_index)
+    closest_diff = abs(base_bearing -line_segment_part_bearing(merge_candidates[0], candidate_index))
+    closest_candidate = merge_candidates[0]
+    for candidate in merge_candidates[1:]:
+        bearing = line_segment_part_bearing(candidate, candidate_index)
+        diff = abs(base_bearing -bearing)
+        if diff < closest_diff:
+            closest_diff = diff
+            closest_candidate = candidate
+    return closest_candidate
+
 def get_complete_road_line(road):
     from .services import map
     road_line = wkb.loads(road.geometry)
     road_name = road.value_of_field("name")
     if not road_name:
         return road_line
+    if road_line.is_closed:
+        return road_line
     other_road_parts = map().get_entities_named(road_name)
     other_road_parts = [part for part in other_road_parts if part.id != road.id and part.is_road_like]
     lines = [wkb.loads(part.geometry) for part in other_road_parts]
-    lines = [l for l in lines if l.geom_type == "LineString"]
+    lines = [l for l in lines if l.geom_type == "LineString" and not l.is_closed]
     if not lines:
         return road_line
     lines.append(road_line)
-    start_points = {}
-    end_points = {}
+    start_points = defaultdict(list)
+    end_points = defaultdict(list)
     to_check = []
     results = []
     for line in lines:
         line = canonicalize_line(line)
-        start_points[line.coords[0]] = line
-        end_points[line.coords[-1]] = line
+        start_points[line.coords[0]].append(line)
+        end_points[line.coords[-1]].append(line)
         to_check.append(line)
     while to_check:
+        #breakpoint()
         candidate = to_check.pop()
-        begins_with = end_points.get(candidate.coords[0])
-        continues_with = start_points.get(candidate.coords[-1])
-        if begins_with:
+        begins_with_lines = end_points.get(candidate.coords[0])
+        continues_with_lines = start_points.get(candidate.coords[-1])
+        if begins_with_lines:
+            begins_with = select_mergeable_line(candidate, begins_with_lines, merge_at_end=False)
             to_check.remove(begins_with)
-            del end_points[begins_with.coords[-1]]
-            del start_points[candidate.coords[0]]
+            end_points[begins_with.coords[-1]].remove(begins_with)
+            start_points[candidate.coords[0]].remove(candidate)
             merged = LineString(list(begins_with.coords) + list(candidate.coords[1:]))
-            start_points[merged.coords[0]] = merged
-            end_points[merged.coords[-1]] = merged
+            start_points[merged.coords[0]].append(merged)
+            end_points[merged.coords[-1]].append(merged)
             to_check.append(merged)
-        elif continues_with:
+        elif continues_with_lines:
+            continues_with = select_mergeable_line(candidate, continues_with_lines, merge_at_end=True)
             to_check.remove(continues_with)
-            del start_points[continues_with.coords[0]]
-            del end_points[candidate.coords[-1]]
+            start_points[continues_with.coords[0]].remove(continues_with)
+            end_points[candidate.coords[-1]].remove(candidate)
             merged = LineString(list(candidate.coords[:-1]) + list(continues_with.coords))
-            start_points[merged.coords[0]] = merged
-            end_points[merged.coords[-1]] = merged
+            start_points[merged.coords[0]].append(merged)
+            end_points[merged.coords[-1]].append(merged)
             to_check.append(merged)
         else:
             results.append(candidate)
