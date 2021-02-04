@@ -47,7 +47,7 @@ class InterestingEntitiesController:
 
     def _entity_post_move(self, sender):
         if sender is not self._point_of_view: return
-        rough_distant = map().roughly_within_distance(sender.position, config().presentation.near_by_radius) # We're not using the interesting minimum distance because we want to reuse the near by objects cache when we display the near by objects window and if we increase the rough distance filtering beyond the near by distance in the future, we'll use the higher value there as well.
+        rough_distant = map().roughly_within_distance(sender.position, config().presentation.near_by_radius) # We're not using the interesting minimum distance because we want to reuse the nearby objects cache when we display the nearby objects window and if we increase the rough distance filtering beyond the nearby distance in the future, we'll use the higher value there as well.
         interesting = filter_interesting_entities(rough_distant)
         within_distance = set(distance_filter(interesting, self._point_of_view.position, config().presentation.interesting_objects_minimum_radius))
         in_range = within_distance.difference(self._interesting_entities)
