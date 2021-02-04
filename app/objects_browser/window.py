@@ -18,7 +18,7 @@ class ObjectsBrowserWindow(QWidget):
     def __init__(self, parent, title, person, unsorted_objects, autoshow=True, progress_indicator=None):
         super().__init__(None)
         act = QAction("close", self)
-        act.triggered.connect(self.close)
+        act.triggered.connect(self._do_close)
         act.setShortcut(QKeySequence("escape"))
         self.addAction(act)
         layout = QGridLayout()
@@ -82,8 +82,15 @@ class ObjectsBrowserWindow(QWidget):
 
     def on_goto_clicked(self, evt):
         self._person.move_to(self.selected_object[2], force=True)
+        
+    def _do_close(self):
         self.close()
-        menu_service().ensure_key_capturer_focus()
+        windows = QApplication.topLevelWidgets()
+        other_browsers = [w for w in windows if w is not self and isinstance(w, self.__class__)]
+        if other_browsers:
+            other_browsers[-1].activateWindow()
+        else:
+            menu_service().ensure_key_capturer_focus()
     
     def on_objects_listbox(self, current_index):
         selected = self._objects[current_index][1]

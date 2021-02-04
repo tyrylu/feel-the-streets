@@ -83,6 +83,7 @@ class MenuService:
         return self._menu_items_by_name[name]
 
     def ensure_key_capturer_focus(self):
+        self._window.activateWindow()
         self._key_capturer.setFocus()
 
 def menu_command(menu, label, shortcut=None, name=None, checkable=False):
