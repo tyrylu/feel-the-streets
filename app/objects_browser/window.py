@@ -1,9 +1,9 @@
-
 import inspect
 from PySide2.QtGui import QKeySequence
 from PySide2.QtWidgets import QWidget, QListWidget, QTreeWidget, QTreeWidgetItem, QPushButton, QLabel, QGridLayout, QMenuBar, QApplication, QAction
 from osm_db import EntityMetadata
 from ..humanization_utils import format_field_value, underscored_to_words
+from ..services import menu_service
 from . import object_actions
 from .object_actions.action import ObjectAction
 from .objects_sorter import ObjectsSorter
@@ -83,6 +83,7 @@ class ObjectsBrowserWindow(QWidget):
     def on_goto_clicked(self, evt):
         self._person.move_to(self.selected_object[2], force=True)
         self.close()
+        menu_service().ensure_key_capturer_focus()
     
     def on_objects_listbox(self, current_index):
         selected = self._objects[current_index][1]
