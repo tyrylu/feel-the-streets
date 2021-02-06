@@ -275,7 +275,7 @@ impl OSMObjectManager {
         ids.sort_unstable_by_key(|oid| oid.chars().next());
         for (entity_type, entity_ids) in &ids.iter().group_by(|oid| oid.chars().next().unwrap()) {
             for chunk in &entity_ids.chunks(MAX_SIMULTANEOUSLY_QUERYED) {
-                let ids_str = chunk.map(|c| c[1..].to_string()).join(",");
+                let ids_str = chunk.map(|c| &c[1..]).join(",");
                 let query = format_query(
                     900,
                     &format!("{}(id:{})", translate_type_shortcut(entity_type), ids_str),
