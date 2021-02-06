@@ -288,12 +288,12 @@ impl OSMObjectManager {
         Ok(())
     }
 
-    fn ensure_has_cached_dependencies_for(&self, objects: &[OSMObject]) -> Result<()> {
+    fn ensure_has_cached_dependencies_for<O: AsRef<OSMObject>>(&self, objects: &[O]) -> Result<()> {
         use self::OSMObjectSpecifics::*;
         let mut missing = vec![];
         let mut total_examined = 0;
         for object in objects {
-            match object.specifics {
+            match object.as_ref().specifics {
                 Node { .. } => continue, // Nodes have no dependencies
                 Way { ref nodes, .. } => {
                     for node in nodes {
@@ -331,7 +331,7 @@ impl OSMObjectManager {
         &'a self,
         object: &'a OSMObject,
     ) -> Result<impl Iterator<Item = OSMObject> + 'a> {
-        self.ensure_has_cached_dependencies_for(&[object.clone()])?;
+        self.ensure_has_cached_dependencies_for(&[object])?;
         Ok(object.related_ids().filter_map(move |(id, maybe_role)| {
             let obj = self.get_cached_object(&id);
             match obj {
