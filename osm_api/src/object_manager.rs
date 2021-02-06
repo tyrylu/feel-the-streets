@@ -423,16 +423,14 @@ impl OSMObjectManager {
                 }
             }
             Relation { .. } => {
-                let empty = "".to_string();
-                let geom_type = object.tags.get(&"type".to_string()).unwrap_or(&empty);
-                if geom_type == &"multipolygon".to_string() {
+                let geom_type = object.tags.get("type").map(|t| t.as_str()).unwrap_or("");
+                if geom_type == "multipolygon" {
                     let first_related = self.related_objects_of(&object)?.next().unwrap();
                     let multi;
                     match first_related
                         .tags
-                        .get("role")
-                        .unwrap_or(&"".to_string())
-                        .as_ref()
+                        .get("role").map(|r| r.as_str())
+                        .unwrap_or("")
                     {
                         "inner" | "outer" => {
                             multi = self.construct_multipolygon_from_complex_polygons(&object)?;
@@ -491,7 +489,7 @@ impl OSMObjectManager {
         let mut inners = vec![];
         let mut outers = vec![];
         for related in self.related_objects_of(&object)? {
-            if !related.tags.contains_key(&"role".to_string()) {
+            if !related.tags.contains_key("role") {
                 warn!(
                     "Missing role specifier for object {} as part of geometry of object {}",
                     related.unique_id(),
