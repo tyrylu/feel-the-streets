@@ -3,7 +3,7 @@ use indexmap::IndexMap;
 use std::collections::HashMap;
 use std::fs::File;
 
-type EnumMap = HashMap<String, HashMap<String, i32>>;
+type EnumMap = HashMap<String, IndexMap<String, i32>>;
 type RawEntityMetadataMap = HashMap<String, RawEntityMetadata>;
 
 lazy_static! {
@@ -91,7 +91,7 @@ impl EntityMetadata {
 
 pub struct Enum {
     pub name: String,
-    members: &'static HashMap<String, i32>,
+    pub members: &'static IndexMap<String, i32>,
     reverse_members: HashMap<&'static i32, &'static String>,
 }
 

@@ -11,12 +11,8 @@ class Choice:
     def get_value_widget(parent, column):
         choice = QComboBox(parent, editable=False)
         enum = Enum.with_name(column.type_name)
-        name = enum.name_for_value(0)
-        index = 1
-        while name:
+        for name in enum.members.keys():
             choice.addItem(underscored_to_words(name))
-            index += 1
-            name = enum.name_for_value(index)
         return choice
 
     @staticmethod

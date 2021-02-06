@@ -104,4 +104,13 @@ impl PyEnum {
     pub fn name_for_value(&self, value: i32) -> Option<&'static String> {
         self.inner.name_for_value(value)
     }
+
+    #[getter]
+    pub fn members(&self, py: Python) -> PyResult<PyObject> {
+        let dict = PyDict::new(py);
+        for (k, v) in self.inner.members.iter() {
+            dict.set_item(k, v)?;
+        }
+    Ok(dict.into())
+    }
 }
