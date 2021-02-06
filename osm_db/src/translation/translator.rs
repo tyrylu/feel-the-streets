@@ -128,7 +128,7 @@ pub fn translate(
 fn calculate_effective_width(discriminator: &str, tags: &HashMap<String, String>) -> Option<f64> {
     match discriminator {
         "PowerLine" => Some(f64::from(0)),
-        "WaterWay" => match tags.get("width").unwrap_or(&"0".to_string()).parse() {
+        "WaterWay" => match tags.get("width").map(|w| w.as_str()).unwrap_or("0").parse() {
             Ok(val) => Some(val),
             Err(e) => {
                 warn!(
@@ -168,7 +168,7 @@ fn calculate_effective_width(discriminator: &str, tags: &HashMap<String, String>
                     }
                 }
             } else {
-                let lanes: u32 = match tags.get("lanes").unwrap_or(&"2".to_string()).parse() {
+                let lanes: u32 = match tags.get("lanes").map(|l| l.as_str()).unwrap_or("2").parse() {
                     Ok(val) => val,
                     Err(e) => {
                         warn!("Failed to parse lane count, error: {}", e);
@@ -177,7 +177,8 @@ fn calculate_effective_width(discriminator: &str, tags: &HashMap<String, String>
                 };
                 let width: u32 = match tags
                     .get("lanes_maxwidth")
-                    .unwrap_or(&"2".to_string())
+                    .map(|l| l.as_str())
+                    .unwrap_or("2")
                     .parse()
                 {
                     Ok(val) => val,

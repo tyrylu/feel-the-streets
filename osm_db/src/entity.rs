@@ -145,13 +145,13 @@ fn get_target_of_key<'a>(
         if subkeys_iter.peek().is_some() {
             // It's a key leading to the target
             if current_map.contains_key(subkey) {
-                let val = &mut current_map[&subkey.to_string()];
+                let val = &mut current_map[subkey];
                 if val.is_object() {
                     current_map = val.as_object_mut().unwrap();
                 } else {
                     warn!(
                         "The subkey {} was found in the parent object, but it was not a map.",
-                        &subkey
+                        subkey
                     );
                     return None;
                 }
