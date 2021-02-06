@@ -269,13 +269,13 @@ impl OSMObjectManager {
         Ok(())
     }
 
-    fn lookup_objects(&self, ids: &mut [String]) -> Result<()> {
+    fn lookup_objects<S: AsRef<str>>(&self, ids: &mut [S]) -> Result<()> {
         const MAX_SIMULTANEOUSLY_QUERYED: usize = 1_000_000;
         let mut objects: Vec<OSMObject> = Vec::with_capacity(ids.len());
-        ids.sort_unstable_by_key(|oid| oid.chars().next());
-        for (entity_type, entity_ids) in &ids.iter().group_by(|oid| oid.chars().next().unwrap()) {
+        ids.sort_unstable_by_key(|oid| oid.as_ref().chars().next());
+        for (entity_type, entity_ids) in &ids.iter().group_by(|oid| oid.as_ref().chars().next().unwrap()) {
             for chunk in &entity_ids.chunks(MAX_SIMULTANEOUSLY_QUERYED) {
-                let ids_str = chunk.map(|c| &c[1..]).join(",");
+                let ids_str = chunk.map(|c| &(c.as_ref())[1..]).join(",");
                 let query = format_query(
                     900,
                     &format!("{}(id:{})", translate_type_shortcut(entity_type), ids_str),
@@ -352,7 +352,7 @@ impl OSMObjectManager {
 
     pub fn get_object(&self, id: &str) -> Result<Option<OSMObject>> {
         if !self.has_object(&id) {
-            self.lookup_objects(&mut [id.to_string()])?;
+            self.lookup_objects(&mut [id])?;
         }
         self.get_cached_object(&id)
     }
