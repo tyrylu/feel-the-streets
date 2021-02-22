@@ -1,5 +1,6 @@
 use crate::semantic_change::EntryChange;
 use serde_json::{Map, Value};
+use std::convert::TryInto;
 
 #[derive(Debug)]
 pub struct Entity {
@@ -13,10 +14,11 @@ pub struct Entity {
 
 impl Entity {
     pub fn is_road_like(&self) -> bool {
-        self.discriminator == "Road"
+        u32::from_le_bytes(self.geometry[1..5].try_into().expect("Incorrect slice length")) == 2 &&
+        (self.discriminator == "Road"
             || self.discriminator == "ServiceRoad"
             || self.discriminator == "Track"
-            || self.discriminator == "Footway"
+            || self.discriminator == "Footway")
     }
     pub fn value_of_field(&mut self, key: &str) -> &Value {
         if self.parsed_data.is_none() {
