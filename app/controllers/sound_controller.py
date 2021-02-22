@@ -131,7 +131,7 @@ class SoundController:
         elif entity.is_road_like:
             self._interesting_roads.add(entity)
             if config().presentation.play_crossing_sounds:
-                self    ._spawn_crossing_sound_for(entity)
+                self._spawn_crossing_sound_for(entity)
 
     
     def _spawn_crossing_sound_for(self, road):
@@ -141,10 +141,13 @@ class SoundController:
     
     def _maybe_spawn_crossing_sound_for_road(self, current_road, interesting_road):
         if describe_entity(current_road) == describe_entity(interesting_road):
-            return # We entered a part of a split road which intersects with the old one, but we're pretending that those part differences don't exist, so don't a sound for it.
+            return # We entered a part of a split road which intersects with the old one, but we're pretending that those part differences don't exist, so don't play a sound for it.
         sounds = self._interesting_sounds.get(interesting_road, {})
         if current_road in sounds:
             return # We will not spawn a sound for a crossing of roads b and a if we already have one for a and b
+        current_sounds = self._interesting_sounds.get(current_road, {})
+        if interesting_road in current_sounds:
+            return # We already spawned this one
         current_road_geom = wkb.loads(current_road.geometry)
         interesting_road_geom = wkb.loads(interesting_road.geometry)
         intersection = current_road_geom.intersection(interesting_road_geom)
