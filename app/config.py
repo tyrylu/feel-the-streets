@@ -30,12 +30,16 @@ class PresentationConfig(BaseModel):
 class ChangelogsConfig(BaseModel):
     enabled: bool = False
 
+class SoundsConfig(BaseModel):
+    enable_hrtf: bool = True
+
 class Config(BaseModel):
     config_path: ClassVar[str] = appdirs.user_config_dir("feel-the-streets", appauthor=False, roaming=True)
     _config_file: ClassVar[str] = os.path.join(config_path, "config.ini")
     general: GeneralConfig = GeneralConfig()
     navigation: NavigationConfig = NavigationConfig()
     presentation: PresentationConfig = PresentationConfig()
+    sounds: SoundsConfig = SoundsConfig()
     changelogs: ChangelogsConfig = ChangelogsConfig()
 
     @classmethod
