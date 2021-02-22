@@ -85,8 +85,9 @@ class ObjectsBrowserWindow(QWidget):
         
     def _do_close(self):
         self.close()
+        self.destroy()
         windows = QApplication.topLevelWidgets()
-        other_browsers = [w for w in windows if w is not self and isinstance(w, self.__class__)]
+        other_browsers = [w for w in windows if w is not self and isinstance(w, self.__class__) and w.isVisible()]
         if other_browsers:
             other_browsers[-1].activateWindow()
         else:
