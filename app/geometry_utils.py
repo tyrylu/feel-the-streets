@@ -225,16 +225,19 @@ def get_complete_road_line(road):
         start_points[line.coords[0]].append(line)
         end_points[line.coords[-1]].append(line)
         to_check.append(line)
+    i = 0
     while to_check:
-        #breakpoint()
         candidate = to_check.pop()
         begins_with_lines = end_points.get(candidate.coords[0])
         continues_with_lines = start_points.get(candidate.coords[-1])
+        if begins_with_lines or continues_with_lines:
+            start_points[candidate.coords[0]].remove(candidate)
+            end_points[candidate.coords[-1]].remove(candidate)
         if begins_with_lines:
             begins_with = select_mergeable_line(candidate, begins_with_lines, merge_at_end=False)
             to_check.remove(begins_with)
             end_points[begins_with.coords[-1]].remove(begins_with)
-            start_points[candidate.coords[0]].remove(candidate)
+            start_points[begins_with.coords[0]].remove(begins_with)
             merged = LineString(list(begins_with.coords) + list(candidate.coords[1:]))
             start_points[merged.coords[0]].append(merged)
             end_points[merged.coords[-1]].append(merged)
@@ -243,12 +246,14 @@ def get_complete_road_line(road):
             continues_with = select_mergeable_line(candidate, continues_with_lines, merge_at_end=True)
             to_check.remove(continues_with)
             start_points[continues_with.coords[0]].remove(continues_with)
-            end_points[candidate.coords[-1]].remove(candidate)
+            end_points[continues_with.coords[-1]].remove(continues_with)
             merged = LineString(list(candidate.coords[:-1]) + list(continues_with.coords))
             start_points[merged.coords[0]].append(merged)
             end_points[merged.coords[-1]].append(merged)
             to_check.append(merged)
         else:
+            start_points[candidate.coords[0]].remove(candidate)
+            end_points[candidate.coords[-1]].remove(candidate)
             results.append(candidate)
     for result in results:
         if result.contains(road_line):
