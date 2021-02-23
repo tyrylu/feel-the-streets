@@ -51,7 +51,7 @@ fn try_infer_street_from_address_relationship(
     mut cache: &mut HashMap<String, String>,
 ) -> Result<Option<EntityRelationship>> {
     let mut query = EntitiesQuery::default();
-    query.set_child_id(entity.id.clone());
+    query.set_parent_id(entity.id.clone());
     query.set_relationship_kind(EntityRelationshipKind::Address);
     let mut streets = vec![];
     let mut addressables = db.get_entities(&query)?;
