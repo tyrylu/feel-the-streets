@@ -58,7 +58,8 @@ class SoundManager(object):
         fname = self._sound_files[name]
         if os.path.splitext(fname)[1] != ".ogg":
             raise ValueError("Not an Ogg file.")
-        fp = VorbisFile(fname)
+        relpath = os.path.relpath(fname, os.getcwd())
+        fp = VorbisFile(relpath)
         sound = openal.Buffer(fp)
         self._sounds[name] = sound
         return sound
