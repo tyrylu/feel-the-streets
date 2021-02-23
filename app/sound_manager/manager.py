@@ -84,7 +84,8 @@ class SoundManager(object):
             ch.set_reference_distance(props.min_distance)
         ch.set_looping(set_loop)
         if x is not None:
-            ch.set_position([x, z, -y])
+            ch.set_position([x/10, z/10, -y/10])
+            ch.set_rolloff_factor(10)
         if pan is not None:
             ch.set_source_relative(True)
             ch.set_position([pan, 0, 0])
