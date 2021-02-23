@@ -22,6 +22,8 @@ def get_sound(entity):
         return "shop"
     elif entity.discriminator == "Land":
         return "land"
+    elif entity.discriminator == "Amenity" and entity.value_of_field("type") == Enum.with_name("AmenityType").value_for_name("waste_basket"):
+        return "trashcan"
     else:
         return None
 
