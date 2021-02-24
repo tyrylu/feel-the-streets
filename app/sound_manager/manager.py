@@ -92,7 +92,7 @@ class SoundManager(object):
         ch.set_looping(set_loop)
         if x is not None:
             ch.set_position([x, y, z])
-            ch.set_rolloff_factor(self._coordinates_divider)
+            #ch.set_rolloff_factor(self._coordinates_divider)
         if pan is not None:
             ch.set_source_relative(True)
             ch.set_position([pan, 0, 0])
