@@ -83,15 +83,6 @@ class SoundManager(object):
                     return candidate_source
             raise RuntimeError("Can not create audio source.")
 
-    def _maybe_round(self, val):
-        if self._coordinate_decimal_places:
-            return round(val, self._coordinate_decimal_places)
-        else:
-            return val
-
-    def _to_openal_coords(self, x, y, z):
-        return self._maybe_round(x)/self._coordinates_divider, self._maybe_round(y)/self._coordinates_divider, self._maybe_round(z)/self._coordinates_divider
-
     def get_channel(self, name, set_loop=False, x=None, y=None, z=None, pan=None):
         buffer = self.get(name)
         ch = self._create_or_find_usable_source(buffer)
@@ -100,7 +91,7 @@ class SoundManager(object):
             ch.set_reference_distance(props.min_distance)
         ch.set_looping(set_loop)
         if x is not None:
-            ch.set_position(self._to_openal_coords(x, y, z))
+            ch.set_position([x, y, z])
             ch.set_rolloff_factor(self._coordinates_divider)
         if pan is not None:
             ch.set_source_relative(True)

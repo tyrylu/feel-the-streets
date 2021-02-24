@@ -15,4 +15,5 @@ class Source(openal.Source):
         return [self._transform_coordinate(coord) for coord in coords]
 
     def set_position(self, pos):
-        super().set_position(self._transform_coords(pos))
+        x, y, z = self._transform_coords(pos)
+        super().set_position([x, z, -y])
