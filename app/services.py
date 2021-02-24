@@ -15,9 +15,10 @@ def create_app_db():
 
 def create_sound():
     if getattr(sys, "frozen", False):
-        mgr = SoundManager(sounds_dir=os.path.join(sys._MEIPASS, "sounds"), init_hrtf=config().sounds.enable_hrtf)
+        sounds_dir = os.path.join(sys._MEIPASS, "sounds")
     else:
-        mgr = SoundManager(sounds_dir=os.path.join(os.path.dirname(__file__), "sounds"), init_hrtf=config().sounds.enable_hrtf)
+        sounds_dir = os.path.join(os.path.dirname(__file__), "sounds")
+    mgr = SoundManager(sounds_dir=sounds_dir, init_hrtf=config().sounds.enable_hrtf, coordinates_divider=10, coordinate_decimal_places=2)
     mgr.add_property_pattern("*", SoundProperties(is_3d=True, min_distance=1))
     return mgr
 

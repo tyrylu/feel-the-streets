@@ -54,13 +54,13 @@ class SoundController:
         cartesian = sender.position.toCartesian()
         x, y, z = (cartesian.x, cartesian.y, cartesian.z)
         if self._point_of_view is sender:
-            sound().listener.set_position([x/10, z/10, -y/10])
+            sound().listener.set_position([x, z, -y])
             for entity, source in self._interesting_sounds.items():
                 if entity.is_road_like: continue # We're not moving the road crossing sounds with the listener
                 cartesian = self._point_of_view.closest_point_to(entity.geometry).toCartesian()
                 # For classic interesting object sounds, we'll always get only one sound source without a specifying entity.
                 source = source[None]
-                source.set_position([cartesian.x/10, cartesian.z/10, -cartesian.y/10])
+                source.set_position([cartesian.x, cartesian.z, -cartesian.y])
         if not sender.use_step_sounds:
             return
         group_stack = self._groups_map[sender]
