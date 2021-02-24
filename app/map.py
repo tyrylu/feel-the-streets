@@ -1,6 +1,7 @@
 import logging
 from osm_db import EntitiesQuery, FieldNamed, AreaDatabase
 from pygeodesy.ellipsoidalVincenty import LatLon
+from pygeodesy.etm import ExactTransverseMercator
 import shapely.wkb as wkb
 from shapely.geometry.point import Point
 from .geometry_utils import distance_filter, effective_width_filter, xy_ranges_bounding_square
@@ -16,6 +17,7 @@ class Map:
         self._name = map_name
         self._db = AreaDatabase.open_existing(map_id, False)
         self._rough_distant_cache = None
+        self._projection = ExactTransverseMercator(lon0=self.default_start_location.lon)
     
     def intersections_at_position(self, position, effective_width, fast=True):
         x, y = (position.lon, position.lat)
@@ -121,3 +123,7 @@ class Map:
         query = EntitiesQuery()
         query.add_condition(FieldNamed("name").eq(name))
         return self.get_entities(query)
+
+    def project_latlon(self, latlon):
+        coords = self._projection.forward(latlon.lat, latlon.lon)
+        return coords.easting, coords.northing

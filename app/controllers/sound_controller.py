@@ -6,7 +6,7 @@ import anglr
 from blinker import Signal
 import shapely.wkb as wkb
 from osm_db import Enum
-from ..services import sound, config, menu_service
+from ..services import sound, config, menu_service, map
 from ..geometry_utils import to_latlon
 from ..entities import entity_post_move, entity_post_enter, entity_post_leave, entity_rotated, entity_move_rejected, Entity
 from ..humanization_utils import describe_entity
@@ -51,16 +51,15 @@ class SoundController:
         if not self._load_sound_played:
             sound().play("loaded")
             self._load_sound_played = True
-        cartesian = sender.position.toCartesian()
-        x, y, z = (cartesian.x, cartesian.y, cartesian.z)
+        x, y = sender.cartesian_position
         if self._point_of_view is sender:
-            sound().listener.set_position([x, y, z])
+            sound().listener.set_position([x, y, 0])
             for entity, source in self._interesting_sounds.items():
                 if entity.is_road_like: continue # We're not moving the road crossing sounds with the listener
-                cartesian = self._point_of_view.closest_point_to(entity.geometry).toCartesian()
+                x, y = map().project_latlon(self._point_of_view.closest_point_to(entity.geometry))
                 # For classic interesting object sounds, we'll always get only one sound source without a specifying entity.
                 source = source[None]
-                source.set_position([cartesian.x, cartesian.y, cartesian.z])
+                source.set_position([x, y, 0])
         if not sender.use_step_sounds:
             return
         group_stack = self._groups_map[sender]
@@ -74,7 +73,7 @@ class SoundController:
         else:
             group = None
         if group:
-            sound().play_random_from_group(group, x=x, y=y, z=z)
+            sound().play_random_from_group(group, x=x, y=y, z=0)
 
     def post_enter(self, sender, enters):
         if not sender.use_step_sounds:
@@ -120,13 +119,14 @@ class SoundController:
     def _rotated(self, sender):
         if self._point_of_view is sender:
             anti_clockwise_angle = (360 - sender.direction) +90
-            angle = anglr.Angle(anti_clockwise_angle + 90, "degrees") # I have no idea why we need the additional +90, so, if anyone knows, tell me.
+            angle = anglr.Angle(anti_clockwise_angle, "degrees")
             print(f"For direction {sender.direction} we got vector {angle.vector}")
+            print(f"We're at {self._point_of_view.cartesian_position}")
             sound().listener.set_orientation([angle.x, 0, -angle.y, 0, 1, 0]) # The mapping to the mathematical cartesian coordinate system is x,z,y
 
     def _entity_move_rejected(self, sender):
-        cartesian = sender.position.toCartesian()
-        sound().play("leave_disallowed", x=cartesian.x, y=cartesian.y, z=cartesian.z)
+        x, y = sender.cartesian_position
+        sound().play("leave_disallowed", x=x, y=y, z=0)
         leave_disallowed_sound_played.send(self, because_of=sender)
 
     def _interesting_entity_in_range(self, sender, entity):
@@ -163,8 +163,8 @@ class SoundController:
         else:
             log.warning("No way how to determine the point to spawn the sound at for intersection %s.", intersection)
         if dest_latlon:
-            cartesian = dest_latlon.toCartesian()
-            snd = sound().play("road_turn", x=cartesian.x, y=cartesian.y, z=cartesian.z, set_loop=True)
+            x, y = map().project_latlon(dest_latlon)
+            snd = sound().play("road_turn", x=x, y=y, z=0, set_loop=True)
             self._interesting_sounds[current_road][interesting_road] = snd
 
 
@@ -174,8 +174,8 @@ class SoundController:
             log.warning("Could not determine sound for %s", describe_entity(entity))
             interesting_entity_sound_not_found.send(self, entity=entity)
             return
-        cartesian = self._point_of_view.closest_point_to(entity.geometry).toCartesian()
-        self._interesting_sounds[entity][None] = sound().play(sound_name, set_loop=True, x=cartesian.x, y=cartesian.y, z=cartesian.z)
+        x, y = map().project_latlon(self._point_of_view.closest_point_to(entity.geometry))
+        self._interesting_sounds[entity][None] = sound().play(sound_name, set_loop=True, x=x, y=y, z=0)
 
     def _interesting_entity_out_of_range(self, sender, entity):
         if config().presentation.play_crossing_sounds:

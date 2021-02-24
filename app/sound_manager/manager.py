@@ -92,14 +92,12 @@ class SoundManager(object):
         ch.set_looping(set_loop)
         if x is not None:
             ch.set_position([x, y, z])
-            #ch.set_rolloff_factor(self._coordinates_divider)
         if pan is not None:
             ch.set_source_relative(True)
             ch.set_position([pan, 0, 0])
         return ch
 
     def play(self, name, set_loop=False, x=None, y=None, z=None, pan=None):
-        print(f"Play {name} at x={x}, y={y}, z={z}")
         ch = self.get_channel(name, set_loop, x, y, z, pan)
         ch.play()
         return ch

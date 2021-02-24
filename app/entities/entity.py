@@ -78,7 +78,7 @@ class Entity(BaseModel):
     
     @property
     def cartesian_position(self):
-        cartesian = self.position.toCartesian()
+        return self.map.project_latlon(self.position)
         return cartesian.x, cartesian.y, cartesian.z
 
     def closest_point_to(self, geometry, convert_geometry=True):
