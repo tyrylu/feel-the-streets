@@ -1,10 +1,11 @@
 import openal
 
 class Listener(openal.Listener):
-    def __init__(self, coordinates_divider, coordinate_decimal_places):
+    def __init__(self, coordinates_divider, coordinate_decimal_places, coordinate_system):
         super().__init__()
         self._coordinate_decimal_places = coordinate_decimal_places
         self._coordinates_divider = coordinates_divider
+        self._coordinate_system = coordinate_system
 
     def _transform_coordinate(self, coordinate):
         if self._coordinate_decimal_places:
@@ -16,4 +17,5 @@ class Listener(openal.Listener):
 
     def set_position(self, pos):
         x, y, z = self._transform_coords(pos)
-        super().set_position([x, z, -y])
+        x, y, z = self._coordinate_system.translate_coordinates(x, y, z)
+        super().set_position([x, y, z])
