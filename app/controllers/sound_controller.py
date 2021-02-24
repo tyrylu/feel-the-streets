@@ -120,7 +120,7 @@ class SoundController:
     def _rotated(self, sender):
         if self._point_of_view is sender:
             anti_clockwise_angle = (360 - sender.direction) +90
-            angle = anglr.Angle(anti_clockwise_angle, "degrees")
+            angle = anglr.Angle(anti_clockwise_angle + 90, "degrees") # I have no idea why we need the additional +90, so, if anyone knows, tell me.
             print(f"For direction {sender.direction} we got vector {angle.vector}")
             sound().listener.set_orientation([angle.x, 0, -angle.y, 0, 1, 0]) # The mapping to the mathematical cartesian coordinate system is x,z,y
 

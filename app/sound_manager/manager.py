@@ -88,7 +88,7 @@ class SoundManager(object):
         ch = self._create_or_find_usable_source(buffer)
         props = self._lookup_properties(name)
         if props.min_distance is not None:
-            ch.set_reference_distance(props.min_distance)
+            ch.set_reference_distance(props.min_distance/self._coordinates_divider)
         ch.set_looping(set_loop)
         if x is not None:
             ch.set_position([x, y, z])
