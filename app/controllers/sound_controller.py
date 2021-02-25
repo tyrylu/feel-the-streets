@@ -118,10 +118,11 @@ class SoundController:
 
     def _rotated(self, sender):
         if self._point_of_view is sender:
-            anti_clockwise_angle = (360 - sender.direction) +90
+            rounded_direction = int(sender.direction)
+            anti_clockwise_angle = (360 - rounded_direction) +90
             angle = anglr.Angle(anti_clockwise_angle, "degrees")
-            print(f"For direction {sender.direction} we got vector {angle.vector}")
-            print(f"We're at {self._point_of_view.cartesian_position}")
+            print(f"For direction {rounded_direction} we got vector {angle.vector}")
+            
             sound().listener.set_orientation([angle.x, 0, -angle.y, 0, 1, 0]) # The mapping to the mathematical cartesian coordinate system is x,z,y
 
     def _entity_move_rejected(self, sender):

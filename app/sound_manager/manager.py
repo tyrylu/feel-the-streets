@@ -94,9 +94,10 @@ class SoundManager(object):
         ch.set_looping(set_loop)
         if x is not None:
             ch.set_position([x, y, z])
-        if pan is not None:
+        else:
             ch.set_source_relative(True)
-            ch.set_position([pan, 0, 0])
+            if pan is not None:
+                ch.set_position([pan, 0, 0])
         return ch
 
     def play(self, name, set_loop=False, x=None, y=None, z=None, pan=None):
