@@ -1,4 +1,4 @@
-import collections
+import collections, math
 import logging
 import random
 from typing import DefaultDict, Dict
@@ -56,8 +56,7 @@ class SoundController:
             sound().listener.set_position([x, y, 0])
             for entity, source in self._interesting_sounds.items():
                 if entity.is_road_like: continue # We're not moving the road crossing sounds with the listener
-                x, y = map().project_latlon(self._point_of_view.closest_point_to(entity.geometry))
-                # For classic interesting object sounds, we'll always get only one sound source without a specifying entity.
+                # For classic interesting object sounds, we'll always get only one sound sou        rce without a specifying entity.
                 source = source[None]
                 source.set_position([x, y, 0])
         if not sender.use_step_sounds:
@@ -121,9 +120,7 @@ class SoundController:
             rounded_direction = int(sender.direction)
             anti_clockwise_angle = (360 - rounded_direction) +90
             angle = anglr.Angle(anti_clockwise_angle, "degrees")
-            print(f"For direction {rounded_direction} we got vector {angle.vector}")
-            
-            sound().listener.set_orientation([angle.x, 0, -angle.y, 0, 1, 0]) # The mapping to the mathematical cartesian coordinate system is x,z,y
+            sound().listener.set_orientation([angle.x, 0, -angle.y, 0, 1, 0]) # The mapping to the mathematical cartesian coordinate system is x,z,-y
 
     def _entity_move_rejected(self, sender):
         x, y = sender.cartesian_position
