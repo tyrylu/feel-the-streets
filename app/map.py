@@ -12,9 +12,9 @@ from . import services
 log = logging.getLogger(__name__)
 
 class Map:
-    def __init__(self, map_id, map_name):
+    def __init__(self, map_id, area_name):
         self._id = map_id
-        self._name = map_name
+        self._name = area_name
         self._db = AreaDatabase.open_existing(map_id, False)
         self._rough_distant_cache = None
         self._projection = ExactTransverseMercator(lon0=self.default_start_location.lon)
