@@ -8,5 +8,4 @@ class Source(openal.Source):
         
     def set_position(self, pos):
         transformed_pos = self._transformer.transform_coordinates(pos)
-        print(f"Set source pos to {transformed_pos}")
         super().set_position(transformed_pos)

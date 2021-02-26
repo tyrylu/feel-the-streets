@@ -8,5 +8,4 @@ class Listener(openal.Listener):
         
     def set_position(self, pos):
         transformed_coords = self._transformer.transform_coordinates(pos)
-        print(f"Set listener pos to {transformed_coords}")
         super().set_position(transformed_coords)
