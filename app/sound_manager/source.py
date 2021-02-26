@@ -18,6 +18,6 @@ class Source(openal.Source):
     def set_position(self, pos):
         x, y, z = self._transform_coords(pos)
         x, y, z = self._coordinate_system.translate_coordinates(x, y, z)
-        #z += 500000
+        z += 550000
         print(f"Set source pos to {(x, y, z)}")
         super().set_position([x, y, z])
