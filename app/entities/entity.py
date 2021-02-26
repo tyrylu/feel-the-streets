@@ -96,10 +96,10 @@ class Entity(BaseModel):
     def move_to_center_of(self, road):
         closest = self.closest_point_to(road.geometry)
         # Don't play the step sound for this movement command
-        orig = self.use_step_sounds
-        self.use_step_sounds = False
+        orig = self.__class__.use_step_sounds
+        self.__class__.use_step_sounds = False
         self.move_to(closest, force=True)
-        self.use_step_sounds = orig
+        self.__class__.use_step_sounds = orig
 
     @property
     def current_effective_width(self):

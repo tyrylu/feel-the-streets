@@ -13,3 +13,5 @@ class Person(Entity):
     def step_backward(self, force=False):
         self.move_by(-config().navigation.step_length, force)
     
+    def __hash__(self):
+        return id(self)
