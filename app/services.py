@@ -18,7 +18,8 @@ def create_sound():
         sounds_dir = os.path.join(sys._MEIPASS, "sounds")
     else:
         sounds_dir = os.path.join(os.path.dirname(__file__), "sounds")
-    mgr = SoundManager(sounds_dir=sounds_dir, init_hrtf=config().sounds.enable_hrtf, coordinates_divider=10, coordinate_decimal_places=2)
+    x, y = map().project_latlon(map().default_start_location)
+    mgr = SoundManager(sounds_dir=sounds_dir, init_hrtf=config().sounds.enable_hrtf, coordinates_divider=10, coordinate_decimal_places=2, origin=(x, y, 0))
     mgr.add_property_pattern("*", SoundProperties(is_3d=True, min_distance=1))
     return mgr
 

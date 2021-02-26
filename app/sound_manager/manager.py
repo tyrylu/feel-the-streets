@@ -15,7 +15,7 @@ AL_SOURCE_RADIUS = 0x1031
 sndmgr = None
 
 class SoundManager(object):
-    def __init__(self, sounds_dir="sounds", sound_extensions=["wav", "mp3", "ogg", "flac"], recursive_search=True, init_hrtf=True, coordinates_divider=1, coordinate_decimal_places=None, coordinate_system=CoordinateSystem.cartesian_right_handed):
+    def __init__(self, sounds_dir="sounds", sound_extensions=["wav", "mp3", "ogg", "flac"], recursive_search=True, init_hrtf=True, coordinates_divider=1, coordinate_decimal_places=None, coordinate_system=CoordinateSystem.cartesian_right_handed, origin=None):
         global sndmgr
         self._sounds = {}
         self._sound_files = {}
@@ -26,13 +26,14 @@ class SoundManager(object):
         self._coordinates_divider = coordinates_divider
         self._coordinate_decimal_places = coordinate_decimal_places
         self._coordinate_system = coordinate_system
+        self._origin = origin
         openal.oalInit()
         if init_hrtf:
             oalInitHRTF(None)
         self._recursive = recursive_search
         self._sounds_dir = sounds_dir
         self._index_dir(sounds_dir)
-        self.listener = Listener(self._coordinates_divider, self._coordinate_decimal_places, self._coordinate_system)
+        self.listener = Listener(self._coordinates_divider, self._coordinate_decimal_places, self._coordinate_system, self._origin)
         sndmgr = self
 
     def _index_dir(self, path):
@@ -75,7 +76,7 @@ class SoundManager(object):
     
     def _create_or_find_usable_source(self, buffer):
         try:
-            source = Source(buffer, False, self._coordinates_divider, self._coordinate_decimal_places, self._coordinate_system)
+            source = Source(buffer, False, self._coordinates_divider, self._coordinate_decimal_places, self._coordinate_system, self._origin)
             self._sources.append(source)
             return source
         except openal.ALError:
