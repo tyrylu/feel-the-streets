@@ -38,7 +38,7 @@ jobs:
       run: "$env:SKIP_CYTHON = '1';pip install -r app_requirements.txt --no-binary pydantic"
     - name: Install Pyinstaller
       if: runner.os == 'Windows'
-      run: pip install pyinstaller
+      run: pip install pyinstaller==4.1
     - name: Move osm_db extension to the right place
       if: runner.os == 'Windows'
       run: mv target/release/osm_db.dll osm_db.pyd
