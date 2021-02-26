@@ -139,6 +139,8 @@ class InteractivePersonController:
             if obj.is_road_like and not obj.value_of_field("area"):
                 seen_road = True
                 angle = get_road_section_angle(self._person, obj)
+                if abs((angle - self._person.direction)%360) > 180:
+                    angle = 360 - angle
                 angle = format_number(angle, config().presentation.angle_decimal_places)
                 speech().speak(_("{road}: {angle}°").format(road=describe_entity(obj), angle=angle), interrupt=True, add_to_history=False)
         if not seen_road:
