@@ -60,15 +60,19 @@ fn try_infer_street_from_address_relationship(
             "Getting street from {:?}",
             addressable.value_of_field("address")
         );
-        let street_str = addressable
-            .value_of_field("address")
-            .as_object()
-            .expect("Malformed address object")
-            .get("street")
+        let maybe_addr_object = addressable
+        .value_of_field("address");
+        if let Some(addr) = 
+            maybe_addr_object.as_object() {
+            let street_str = addr.get("street")
             .expect("Street disappeared?")
             .as_str()
             .expect("Street was not a string");
         streets.push(street_str);
+            }
+            else {
+                warn!("Address property was not an object, it was {} instead.", maybe_addr_object);
+            }
     }
     if !streets.is_empty() && streets.windows(2).all(|w| w[0] == w[1]) {
         get_association_for_street(&streets[0], &entity.id, &mut cache, &db)
