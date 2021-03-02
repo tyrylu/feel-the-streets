@@ -111,6 +111,6 @@ impl PyEnum {
         for (k, v) in self.inner.members.iter() {
             dict.set_item(k, v)?;
         }
-    Ok(dict.into())
+        Ok(dict.into())
     }
 }

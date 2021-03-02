@@ -14,11 +14,15 @@ pub struct Entity {
 
 impl Entity {
     pub fn is_road_like(&self) -> bool {
-        u32::from_le_bytes(self.geometry[1..5].try_into().expect("Incorrect slice length")) == 2 &&
-        (self.discriminator == "Road"
-            || self.discriminator == "ServiceRoad"
-            || self.discriminator == "Track"
-            || self.discriminator == "Footway")
+        u32::from_le_bytes(
+            self.geometry[1..5]
+                .try_into()
+                .expect("Incorrect slice length"),
+        ) == 2
+            && (self.discriminator == "Road"
+                || self.discriminator == "ServiceRoad"
+                || self.discriminator == "Track"
+                || self.discriminator == "Footway")
     }
     pub fn value_of_field(&mut self, key: &str) -> &Value {
         if self.parsed_data.is_none() {

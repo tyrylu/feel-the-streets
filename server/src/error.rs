@@ -27,5 +27,5 @@ pub enum Error {
     #[error("Dotenv error: {0}")]
     DotenvError(#[from] dotenv::Error),
     #[error("The system time is before the unix epoch: {0}")]
-    SystemTimeError(#[from] SystemTimeError)
+    SystemTimeError(#[from] SystemTimeError),
 }

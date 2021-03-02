@@ -168,7 +168,8 @@ fn calculate_effective_width(discriminator: &str, tags: &HashMap<String, String>
                     }
                 }
             } else {
-                let lanes: u32 = match tags.get("lanes").map(|l| l.as_str()).unwrap_or("2").parse() {
+                let lanes: u32 = match tags.get("lanes").map(|l| l.as_str()).unwrap_or("2").parse()
+                {
                     Ok(val) => val,
                     Err(e) => {
                         warn!("Failed to parse lane count, error: {}", e);

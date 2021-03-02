@@ -30,6 +30,8 @@ fn main() -> Result<()> {
         Command::RequestRedownload { all, area } => {
             request_redownload::request_redownload(all, area)
         }
-        Command::CreateFrozenCopy { area_id, new_name } => create_frozen_copy::create_frozen_copy(area_id, new_name)
+        Command::CreateFrozenCopy { area_id, new_name } => {
+            create_frozen_copy::create_frozen_copy(area_id, new_name)
+        }
     }
 }

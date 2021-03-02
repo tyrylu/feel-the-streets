@@ -33,8 +33,6 @@ impl Client {
         let final_url = self
             .rabbitmq_http_api_base
             .join(&format!("exchanges/{}/{}/bindings/source", vhost, exchange))?;
-        Ok(ureq::get(final_url.as_str())
-            .call()?
-            .into_json()?)
+        Ok(ureq::get(final_url.as_str()).call()?.into_json()?)
     }
 }

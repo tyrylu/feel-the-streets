@@ -26,7 +26,7 @@ pub struct PingResponse {
 #[derive(Serialize)]
 pub struct MotdEntry {
     timestamp: u64,
-    message: String
+    message: String,
 }
 
 #[get("/areas")]
@@ -58,7 +58,7 @@ pub fn download_area(area_osm_id: i64, client_id: String, conn: DbConn) -> Resul
         Err(Error::DatabaseIntegrityError)
     } else {
         if area.state == AreaState::Updated {
-        area_messaging::init_queue(&client_id, area_osm_id)?;
+            area_messaging::init_queue(&client_id, area_osm_id)?;
         }
         Ok(File::open(AreaDatabase::path_for(area_osm_id, true))?)
     }
@@ -80,10 +80,16 @@ pub fn motd() -> Result<Json<HashMap<String, MotdEntry>>> {
             let entry = maybe_entry?;
             if entry.file_type()?.is_file() {
                 let message = fs::read_to_string(entry.path())?;
-                let timestamp = entry.metadata()?.modified()?.duration_since(SystemTime::UNIX_EPOCH)?.as_secs();
-                messages.insert(entry.file_name().to_string_lossy().to_string(), MotdEntry{timestamp, message});
+                let timestamp = entry
+                    .metadata()?
+                    .modified()?
+                    .duration_since(SystemTime::UNIX_EPOCH)?
+                    .as_secs();
+                messages.insert(
+                    entry.file_name().to_string_lossy().to_string(),
+                    MotdEntry { timestamp, message },
+                );
             }
-
         }
     }
     Ok(Json(messages))

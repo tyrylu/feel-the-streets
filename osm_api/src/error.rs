@@ -15,5 +15,5 @@ pub enum Error {
     #[error("Serialization error: {0}")]
     SerializationError(#[from] bincode::Error),
     #[error("Zstd operation error: {0}")]
-    ZstdError(#[from] zstd_util::Error)
+    ZstdError(#[from] zstd_util::Error),
 }

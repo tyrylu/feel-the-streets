@@ -33,10 +33,12 @@ lazy_static! {
     };
 }
 
-fn getting_non_200_response_is_ok(err: ureq::Error) -> std::result::Result<ureq::Response, ureq::Error> {
+fn getting_non_200_response_is_ok(
+    err: ureq::Error,
+) -> std::result::Result<ureq::Response, ureq::Error> {
     match err {
         ureq::Error::Status(_, resp) => Ok(resp),
-        _ => Err(err)
+        _ => Err(err),
     }
 }
 
@@ -142,14 +144,11 @@ impl OSMObjectManager {
 
     fn get_cached_object(&self, id: &str) -> Result<Option<OSMObject>> {
         let mut cache = self.get_cache();
-        if let Some(data) = cache
-            .get::<Vec<u8>>(&id)? {
-                Ok(Some(deserialize_compressed(&data)?))
-            }
-            else {
-                Ok(None)
-            }
-
+        if let Some(data) = cache.get::<Vec<u8>>(&id)? {
+            Ok(Some(deserialize_compressed(&data)?))
+        } else {
+            Ok(None)
+        }
     }
 
     fn next_api_url(&self) -> &'static str {
@@ -188,12 +187,12 @@ impl OSMObjectManager {
         let resp = self
             .http_client
             .post(&final_url)
-            .send_form(&[("data", query)]).or_else(getting_non_200_response_is_ok)?;
+            .send_form(&[("data", query)])
+            .or_else(getting_non_200_response_is_ok)?;
         match resp.status() {
             429 => {
                 warn!("Multiple requests, killing them and going to a different api host.");
-                self
-                    .http_client
+                self.http_client
                     .get(&format!("{0}/kill_my_queries", &url))
                     .call()?;
                 self.run_query(&query, result_to_tempfile)
@@ -273,7 +272,10 @@ impl OSMObjectManager {
         const MAX_SIMULTANEOUSLY_QUERYED: usize = 1_000_000;
         let mut objects: Vec<OSMObject> = Vec::with_capacity(ids.len());
         ids.sort_unstable_by_key(|oid| oid.as_ref().chars().next());
-        for (entity_type, entity_ids) in &ids.iter().group_by(|oid| oid.as_ref().chars().next().unwrap()) {
+        for (entity_type, entity_ids) in &ids
+            .iter()
+            .group_by(|oid| oid.as_ref().chars().next().unwrap())
+        {
             for chunk in &entity_ids.chunks(MAX_SIMULTANEOUSLY_QUERYED) {
                 let ids_str = chunk.map(|c| &(c.as_ref())[1..]).join(",");
                 let query = format_query(
@@ -429,7 +431,8 @@ impl OSMObjectManager {
                     let multi;
                     match first_related
                         .tags
-                        .get("role").map(|r| r.as_str())
+                        .get("role")
+                        .map(|r| r.as_str())
                         .unwrap_or("")
                     {
                         "inner" | "outer" => {

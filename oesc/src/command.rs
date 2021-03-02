@@ -42,6 +42,6 @@ pub enum Command {
         /// The id of the original area.
         area_id: i64,
         /// The human readable name of the new copy.
-        new_name: String
-    }
+        new_name: String,
+    },
 }
