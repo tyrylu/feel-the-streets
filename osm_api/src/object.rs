@@ -2,6 +2,7 @@ use crate::Error;
 use hashbrown::HashMap;
 use std::iter;
 use std::str::FromStr;
+use smol_str::SmolStr;
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
 pub enum OSMObjectType {
@@ -205,11 +206,11 @@ impl OSMObject {
         }
     }
 
-    pub fn unique_id(&self) -> String {
+    pub fn unique_id(&self) -> SmolStr {
         match self.object_type() {
-            OSMObjectType::Node => format!("n{}", self.id),
-            OSMObjectType::Way => format!("w{}", self.id),
-            OSMObjectType::Relation => format!("r{}", self.id),
+            OSMObjectType::Node => SmolStr::new_inline(&format!("n{}", self.id)),
+            OSMObjectType::Way => SmolStr::new_inline(&format!("w{}", self.id)),
+            OSMObjectType::Relation => SmolStr::new_inline(&format!("r{}", self.id)),
         }
     }
 

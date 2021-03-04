@@ -7,6 +7,7 @@ use crate::Error;
 use hashbrown::HashMap;
 use osm_api::object::OSMObject;
 use osm_api::object_manager::OSMObjectManager;
+use osm_api::SmolStr;
 use serde_json::Value;
 
 pub fn translate(
@@ -107,8 +108,8 @@ pub fn translate(
                     let effective_width = calculate_effective_width(&discriminator, &entity_data);
                     Ok(Some((
                         Entity {
-                            id: object.unique_id(),
-                            discriminator,
+                            id: object.unique_id().clone(),
+                            discriminator: SmolStr::new_inline(&discriminator),
                             effective_width,
                             geometry: geom,
                             data: raw_data,

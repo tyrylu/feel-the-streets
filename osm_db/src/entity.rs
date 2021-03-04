@@ -1,12 +1,13 @@
 use crate::semantic_change::EntryChange;
+use osm_api::SmolStr;
 use serde_json::{Map, Value};
 use std::convert::TryInto;
 
 #[derive(Debug)]
 pub struct Entity {
-    pub id: String,
+    pub id: SmolStr,
     pub geometry: Vec<u8>,
-    pub discriminator: String,
+    pub discriminator: SmolStr,
     pub data: String,
     pub parsed_data: Option<Value>,
     pub effective_width: Option<f64>,
@@ -65,10 +66,9 @@ impl Entity {
                         .expect("The string was not a base64-encoded geometry")
                     }
                     "discriminator" => {
-                        self.discriminator = new_value
+                        self.discriminator = SmolStr::new_inline(&new_value
                             .as_str()
-                            .expect("Non-string attempted to be set as a discriminator")
-                            .to_string()
+                            .expect("Non-string attempted to be set as a discriminator"))
                     }
                     "data" => {
                         self.data = new_value

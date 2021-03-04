@@ -21,4 +21,5 @@ bincode = "*"
 hashbrown = {version="*", features=["serde"]}
 wkb = "*"
 geo-types = "*"
+smol_str = "*"
 zstd_util = {path="../zstd_util"}

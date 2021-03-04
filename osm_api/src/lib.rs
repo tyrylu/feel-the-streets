@@ -14,3 +14,4 @@ pub mod object;
 pub mod object_manager;
 mod utils;
 pub use error::Error;
+pub use smol_str::SmolStr;

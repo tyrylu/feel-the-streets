@@ -7,6 +7,7 @@ use crate::{entities_query::EntitiesQuery, entity_relationship::RootedEntityRela
 use crate::{Error, Result};
 use rusqlite::types::ToSql;
 use rusqlite::{named_params, params, Connection, OpenFlags, Row, NO_PARAMS};
+use osm_api::SmolStr;
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::time::Instant;
@@ -38,9 +39,9 @@ fn classify_db_error(err: &rusqlite::Error, child_id: &str) -> ForeignKeyViolati
 
 pub(crate) fn row_to_entity(row: &Row) -> core::result::Result<Entity, rusqlite::Error> {
     Ok(Entity {
-        id: row.get_unwrap(0),
+        id: SmolStr::new_inline(&row.get_unwrap::<_, String>(0)),
         geometry: row.get_unwrap(2),
-        discriminator: row.get_unwrap(1),
+        discriminator: SmolStr::new_inline(&row.get_unwrap::<_, String>(1)),
         data: row.get_unwrap(3),
         effective_width: row.get_unwrap(4),
         parsed_data: None,
@@ -118,8 +119,8 @@ impl AreaDatabase {
                 };
                 trace!("Inserting {:?}", entity);
                 match insert_stmt.execute(params![
-                    entity.id,
-                    entity.discriminator,
+                    entity.id.as_str(),
+                    entity.discriminator.as_str(),
                     entity.geometry,
                     entity.effective_width,
                     entity.data,
@@ -128,7 +129,7 @@ impl AreaDatabase {
                         count += 1;
                         for related_id in related_ids {
                             if let Err(e) = insert_related_stmt.execute(params![
-                                entity.id,
+                                entity.id.as_str(),
                                 related_id,
                                 EntityRelationshipKind::OSMChild
                             ]) {
@@ -162,8 +163,8 @@ impl AreaDatabase {
         // Handle deferred relationship insertions.
         for (parent, child) in deferred_relationship_insertions.iter() {
             self.insert_entity_relationship(&EntityRelationship::new(
-                parent.to_string(),
-                child.to_string(),
+                &parent,
+                &child,
                 EntityRelationshipKind::OSMChild,
             ))?;
         }
@@ -292,11 +293,11 @@ impl AreaDatabase {
             self.conn.prepare_cached("update entities set discriminator = ?, geometry = Buffer(GeomFromWKB(?, 4326), 0), effective_width = ?, data = ? where id = ?;")?
         };
         stmt.execute(params![
-            entity.discriminator,
+            entity.discriminator.as_str(),
             entity.geometry,
             entity.effective_width,
             entity.data,
-            entity.id,
+            entity.id.as_str(),
         ])?;
         Ok(())
     }
@@ -442,8 +443,8 @@ impl AreaDatabase {
             .conn
             .prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?
             .execute(params![
-                relationship.parent_id,
-                relationship.child_id,
+                relationship.parent_id.as_str(),
+                relationship.child_id.as_str(),
                 relationship.kind
             ]); // Whatever error there is fatal - the relationships should all be there and nothing else should be inserted to the relationships table at this point.
         if let Err(e) = res {
@@ -460,8 +461,8 @@ impl AreaDatabase {
     pub fn apply_deferred_relationship_additions(&mut self) -> Result<()> {
         for (parent, child) in self.deferred_relationship_additions.iter() {
             self.insert_entity_relationship(&EntityRelationship::new(
-                parent.to_string(),
-                child.child_id.clone(),
+                &parent,
+                &child.child_id,
                 child.kind,
             ))?;
         }
@@ -533,8 +534,8 @@ impl AreaDatabase {
                 named_params! {":entity_id": entity_id},
                 |row| -> rusqlite::Result<EntityRelationship> {
                     Ok(EntityRelationship::new(
-                        row.get_unwrap(0),
-                        row.get_unwrap(1),
+                        &row.get_unwrap::<_, String>(0),
+                        &row.get_unwrap::<_, String>(1),
                         row.get_unwrap(2),
                     ))
                 },

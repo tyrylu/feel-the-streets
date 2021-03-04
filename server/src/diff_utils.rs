@@ -21,8 +21,8 @@ fn diff_properties(old: &Entity, new: &Entity) -> Vec<EntryChange> {
     if old.discriminator != new.discriminator {
         changes.push(EntryChange::updating(
             "discriminator",
-            Value::from(old.discriminator.clone()),
-            Value::from(new.discriminator.clone()),
+            Value::from(old.discriminator.as_str()),
+            Value::from(new.discriminator.as_str()),
         ));
     }
     if old.effective_width != new.effective_width {

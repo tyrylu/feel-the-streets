@@ -15,8 +15,8 @@ pub struct PyEntity {
 #[pymethods]
 impl PyEntity {
     #[getter]
-    pub fn id(&self) -> &String {
-        &self.inner.id
+    pub fn id(&self) -> &str {
+        &self.inner.id.as_str()
     }
 
     #[getter]

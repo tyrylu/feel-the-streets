@@ -11,6 +11,7 @@ use rusqlite::Connection;
 use rusqlite::NO_PARAMS;
 use serde::Deserialize;
 use serde_json::{self, Deserializer};
+use smol_str::SmolStr;
 use sqlitemap::SqliteMap;
 use std::cell::{Ref, RefCell};
 use std::cmp;
@@ -78,12 +79,12 @@ fn format_data_retrieval(area: i64) -> String {
 
 pub struct OSMObjectManager {
     current_api_url_idx: RefCell<usize>,
-    geometries_cache: RefCell<HashMap<String, Option<Geometry<f64>>>>,
+    geometries_cache: RefCell<HashMap<SmolStr, Option<Geometry<f64>>>>,
     api_urls: Vec<&'static str>,
     cache_conn: Option<Connection>,
     http_client: ureq::Agent,
     seen_cache: RefCell<bool>,
-    retrieved_from_network: RefCell<HashSet<String>>,
+    retrieved_from_network: RefCell<HashSet<SmolStr>>,
     cache_queries: RefCell<u32>,
     cache_hits: RefCell<u32>,
 }
@@ -121,14 +122,14 @@ impl OSMObjectManager {
         res
     }
 
-    pub fn get_ids_retrieved_from_network(&self) -> Ref<HashSet<String>> {
+    pub fn get_ids_retrieved_from_network(&self) -> Ref<HashSet<SmolStr>> {
         self.retrieved_from_network.borrow()
     }
 
     pub fn cache_object_into(&self, cache: &mut SqliteMap<'_>, object: &OSMObject) {
         let compressed = serialize_and_compress(&object).expect("Could not serialize object");
         cache
-            .insert::<Vec<u8>>(&object.unique_id(), &compressed)
+            .insert::<Vec<u8>>(&object.unique_id().as_str(), &compressed)
             .expect("Could not cache object.");
     }
 
@@ -362,7 +363,7 @@ impl OSMObjectManager {
     fn enrich_tags(parent: &OSMObject, child: &mut OSMObject) {
         child
             .tags
-            .insert("parent_id".to_string(), parent.unique_id());
+            .insert("parent_id".to_string(), parent.unique_id().to_string());
     }
 
     fn get_way_coords(&self, way: &OSMObject) -> Result<LineString<f64>> {

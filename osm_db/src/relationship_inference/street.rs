@@ -13,8 +13,8 @@ fn get_association_for_street(
 ) -> Result<Option<EntityRelationship>> {
     if let Some(id) = cache.get(street_name) {
         return Ok(Some(EntityRelationship::new(
-            id.clone(),
-            target_id.to_string(),
+            &id,
+            &target_id,
             EntityRelationshipKind::Street,
         )));
     }
@@ -30,8 +30,8 @@ fn get_association_for_street(
             cache.insert(street_name.to_string(), roads[0].clone());
         }
         Ok(Some(EntityRelationship::new(
-            roads[0].clone(),
-            target_id.to_string(),
+            &roads[0],
+            &target_id,
             EntityRelationshipKind::Street,
         )))
     }
@@ -51,7 +51,7 @@ fn try_infer_street_from_address_relationship(
     mut cache: &mut HashMap<String, String>,
 ) -> Result<Option<EntityRelationship>> {
     let mut query = EntitiesQuery::default();
-    query.set_parent_id(entity.id.clone());
+    query.set_parent_id(entity.id.to_string());
     query.set_relationship_kind(EntityRelationshipKind::Address);
     let mut streets = vec![];
     let mut addressables = db.get_entities(&query)?;

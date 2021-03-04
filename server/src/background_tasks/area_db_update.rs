@@ -104,13 +104,13 @@ pub fn update_area(
             }
             .map(|(o, ids)| {
                 SemanticChange::creating(
-                    o.id,
+                    o.id.to_string(),
                     o.geometry,
-                    o.discriminator,
+                    o.discriminator.to_string(),
                     o.data,
                     o.effective_width,
                     ids.map(|id| {
-                        RootedEntityRelationship::new(id, EntityRelationshipKind::OSMChild)
+                        RootedEntityRelationship::new(&id, EntityRelationshipKind::OSMChild)
                     })
                     .collect(),
                 )
@@ -119,7 +119,7 @@ pub fn update_area(
                 let osm_id = change.old.expect("No old in a deletion change").unique_id();
                 manager
                     .get_cache()
-                    .remove::<Vec<u8>>(&osm_id)
+                    .remove::<Vec<u8>>(&osm_id.as_str())
                     .expect("Could not remove cached entity");
                 if area_db.has_entity(&osm_id)? {
                     Some(SemanticChange::removing(&osm_id))
@@ -139,14 +139,14 @@ pub fn update_area(
                     (None, None) => None,
                     (Some(_), None) => Some(SemanticChange::removing(&osm_id)),
                     (None, Some((new, new_ids))) => Some(SemanticChange::creating(
-                        new.id,
+                        new.id.to_string(),
                         new.geometry,
-                        new.discriminator,
+                        new.discriminator.to_string(),
                         new.data,
                         new.effective_width,
                         new_ids
                             .map(|id| {
-                                RootedEntityRelationship::new(id, EntityRelationshipKind::OSMChild)
+                                RootedEntityRelationship::new(&id, EntityRelationshipKind::OSMChild)
                             })
                             .collect(),
                     )),
@@ -158,14 +158,14 @@ pub fn update_area(
                             .iter()
                             .map(|id| {
                                 RootedEntityRelationship::new(
-                                    id.to_string(),
+                                    &id,
                                     EntityRelationshipKind::OSMChild,
                                 )
                             })
                             .collect();
                         let new_relationships: Vec<RootedEntityRelationship> = new_ids
                             .map(|id| {
-                                RootedEntityRelationship::new(id, EntityRelationshipKind::OSMChild)
+                                RootedEntityRelationship::new(&id, EntityRelationshipKind::OSMChild)
                             })
                             .collect();
                         let child_id_changes =
@@ -256,7 +256,7 @@ fn infer_additional_relationships(
                     find_or_create_suitable_change(&mut changes, &relationship.parent_id, false)
                 };
                 target.add_rooted_relationship(RootedEntityRelationship::new(
-                    relationship.child_id,
+                    &relationship.child_id.as_str(),
                     relationship.kind,
                 ));
             }
@@ -280,13 +280,13 @@ fn infer_additional_relationships(
                     ListChange::Add(v) => (
                         v.parent_id,
                         RelationshipChange::adding(RootedEntityRelationship::new(
-                            v.child_id, v.kind,
+                            v.child_id.as_str(), v.kind,
                         )),
                     ),
                     ListChange::Remove(v) => (
                         v.parent_id,
                         RelationshipChange::removing(RootedEntityRelationship::new(
-                            v.child_id, v.kind,
+                            v.child_id.as_str(), v.kind,
                         )),
                     ),
                 };
