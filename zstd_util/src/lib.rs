@@ -1,5 +1,3 @@
-#[macro_use]
-extern crate log;
 mod context;
 mod error;
 pub use context::ZstdContext;
