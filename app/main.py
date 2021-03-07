@@ -1,14 +1,30 @@
 import sys
 import os
+import threading
 import logging
-from PySide2.QtWidgets import QApplication
+from PySide2.QtWidgets import QApplication, QMessageBox
 import osm_db
 from . import locale_setup
 from .services import speech
 
+log = logging.getLogger(__name__)
+
+def handle_error(exc, thread=None):
+    if not QApplication.instance():
+        app = QApplication()
+    if not thread:
+        log.exception("Unhandled exception in main thread", exc_info=exc)
+    else:
+        log.exception("Unhandled exception in thread %s", thread, exc_info=exc)
+    QMessageBox.critical(None, _("Unexpected error"), _("The application encountered an unexpected error, please contact the developer and provide the contents of fts.log which is located in the folder with the executable."))
+    sys.exit(1)
+
+
 def main():
+    threading.excepthook = lambda args: handle_error(args.exception, args.thread)
+    sys.excepthook = lambda type, value, traceback: handle_error(value)
     level = logging._nameToLevel[os.environ.get("FTS_LOG", "info").upper()]
-    logging.basicConfig(level=level)
+    logging.basicConfig(level=level, filename="fts.log", filemode="w")
     osm_db.init_logging()
     # We need the QT application before setting up the locale stuff...
     app = QApplication(sys.argv)
