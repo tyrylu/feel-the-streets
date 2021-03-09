@@ -17,5 +17,5 @@ uom = "*"
 rusqlite = {"version" = "*", "features" = ["bundled-windows", "load_extension"]}
 thiserror = "*"
 hashbrown = {version="*", features=["serde"]}
-dirs = "*"
+dirs-next = "*"
 base64 = "*"
