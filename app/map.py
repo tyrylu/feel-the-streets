@@ -21,7 +21,7 @@ class Map:
     
     def intersections_at_position(self, position, effective_width, fast=True):
         x, y = (position.lon, position.lat)
-        min_x, min_y, max_x, max_y = xy_ranges_bounding_square(position, effective_width or 1.0)
+        min_x, min_y, max_x, max_y = xy_ranges_bounding_square(position, effective_width or 10.0)
         query = EntitiesQuery()
         query.set_rectangle_of_interest(min_x, max_x, min_y, max_y)
         if fast:
