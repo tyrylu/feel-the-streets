@@ -21,7 +21,7 @@ def is_interesting(entity):
     if entity.discriminator in not_interesting_discriminators:
         return False
     # Filter out uninteresting buildings
-    if entity.discriminator == "Building" and entity_has_none_of_these_fields(entity, "amenity", "education", "artwork_type", "garden_type", "seamark_type", "diplomatic", "landuse", "historic_type", "industrial_type", "man_made", "leisure_type", "emergency"):
+    if entity.discriminator == "Building" and entity_has_none_of_these_fields(entity, "name", "amenity", "education", "artwork_type", "garden_type", "seamark_type", "diplomatic", "landuse", "historic_type", "industrial_type", "man_made", "leisure_type", "emergency"):
         return False
     # Filter out house gardens - we might consider making them at least sound in the future, though
     if entity.discriminator == "Garden" and entity.value_of_field("garden_type") == Enum.with_name("GardenType").value_for_name("residential"):
