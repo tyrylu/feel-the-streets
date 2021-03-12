@@ -140,7 +140,6 @@ class InteractivePersonController:
                 seen_road = True
                 angle = get_road_section_angle(self._person, obj)
                 diff = (angle - self._person.direction)%360
-                print(diff)
                 if 90 < diff < 270:
                     angle = (angle + 180) % 360
                 angle = format_number(angle, config().presentation.angle_decimal_places)
