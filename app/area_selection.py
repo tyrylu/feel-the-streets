@@ -71,7 +71,7 @@ class AreaSelectionDialog(BaseDialog):
             return
         if len(candidates) == 1:
             area_id = next(iter(candidates.keys()))
-            log.info("Only one candidate with an admin level of %s and id %s.", next(iter(candidates.values()))["admin_level"], area_id)
+            log.info("Only one candidate with an admin level of %s and id %s.", next(iter(candidates.values()))[1]["admin_level"], area_id)
         else:
             dialog = AreasBrowserDialog(self, area_name=self._searched_name, areas=candidates)
             res = dialog.exec_()
