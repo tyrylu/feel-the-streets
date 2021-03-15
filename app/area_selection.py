@@ -60,10 +60,16 @@ class AreaSelectionDialog(BaseDialog):
         self._searched_name = name
         self._searcher = AreaCandidatesSearcher(name)
         self._searcher.results_ready.connect(self._on_area_candidates)
+        self._searcher.rate_limited.connect(self._on_rate_limited)
         self._indicator = SearchIndicator()
         self._indicator.show()
         self._searcher.start()
     
+    def _on_rate_limited(self):
+        self._indicator.hide()
+        QMessageBox.warning(self, _("Query limit reached"), _("You've reached the query limit for the overpass API, which is used for area searches. Try to request the area in a few minutes."))
+
+
     def _on_area_candidates(self, candidates):
         self._indicator.hide()
         if not candidates:

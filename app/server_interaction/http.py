@@ -15,12 +15,16 @@ log = logging.getLogger(__name__)
 
 session = requests.Session()
 
+class RateLimitedError(Exception): pass
+
 def url_for(path):
     return "{0}/{1}".format(API_ENDPOINT, path)
 
 def get_areas_with_name(name):
     query = f'[out:json];area["name"="{name}"];out meta;'
     resp = requests.get("https://overpass-api.de/api/interpreter", params={"data": query})
+    if resp.status_code == 429:
+        raise RateLimitedError()
     results = {}
     for area in resp.json()["elements"]:
         if "admin_level" not in area["tags"]:
