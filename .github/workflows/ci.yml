@@ -16,7 +16,7 @@ jobs:
     - name: Install recent enough python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.9'
+        python-version: '3.8'
     - name: Install latest nightly
       uses: actions-rs/toolchain@v1
       with:
