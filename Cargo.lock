@@ -2523,8 +2523,9 @@ dependencies = [
 [[package]]
 name = "zstd_util"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7765388cb93a1c6587ab0ea7729c917a018bd94061b212e567a97cfaa25f9249"
 dependencies = [
- "env_logger",
  "log 0.4.14",
  "thiserror",
  "zstd-safe",
