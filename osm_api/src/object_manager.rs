@@ -64,7 +64,7 @@ fn translate_type_shortcut(shortcut: char) -> &'static str {
 
 fn format_query(timeout: u32, query: &str) -> String {
     format!(
-        "[out:json][timeout:{timeout}];{query};out meta;",
+        "[out:json][timeout:{timeout}][maxsize:1073741824];{query};out meta;",
         timeout = timeout,
         query = query
     )

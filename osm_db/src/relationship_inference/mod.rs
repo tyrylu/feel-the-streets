@@ -12,7 +12,7 @@ mod street;
 pub fn infer_additional_relationships_for_entity(
     mut entity: &mut Entity,
     db: &AreaDatabase,
-    mut street_names_cache: &mut HashMap<String, String>,
+    mut street_names_cache: &mut HashMap<String, Option<String>>,
 ) -> Result<Vec<EntityRelationship>> {
     trace!(
         "Inferring address relationships for {} {}",

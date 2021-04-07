@@ -28,6 +28,7 @@ class AreasBrowserDialog(BaseDialog):
         self._area_props.clear()
         for key, value in self._areas[index][1][1].items():
             self._area_props.addItem(f"{underscored_to_words(key)}: {value}")
+        self._area_props.addItem(_("Area id: {}").format(self._areas[index][0]))
 
     @property
     def selected_area_id(self):

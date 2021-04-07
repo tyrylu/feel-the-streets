@@ -8,15 +8,20 @@ use std::collections::HashMap;
 fn get_association_for_street(
     street_name: &str,
     target_id: &str,
-    cache: &mut HashMap<String, String>,
+    cache: &mut HashMap<String, Option<String>>,
     db: &AreaDatabase,
 ) -> Result<Option<EntityRelationship>> {
-    if let Some(id) = cache.get(street_name) {
+    if let Some(record) = cache.get(street_name) {
+        if let Some(id) = record {
         return Ok(Some(EntityRelationship::new(
             &id,
             &target_id,
             EntityRelationshipKind::Street,
         )));
+    }
+    else {
+        return Ok(None);
+    }
     }
     let roads = db.get_road_ids_with_name(&street_name, target_id)?;
     if roads.is_empty() {
@@ -24,10 +29,11 @@ fn get_association_for_street(
             "An address tag references the street {}, but no such street exists in the database.",
             street_name
         );
+        cache.insert(street_name.to_string(), None);
         Ok(None)
     } else {
         if roads.len() == 1 {
-            cache.insert(street_name.to_string(), roads[0].clone());
+            cache.insert(street_name.to_string(), Some(roads[0].clone()));
         }
         Ok(Some(EntityRelationship::new(
             &roads[0],
@@ -40,7 +46,7 @@ fn get_association_for_street(
 fn try_infer_street_for_non_addressable(
     entity: &mut Entity,
     db: &AreaDatabase,
-    mut cache: &mut HashMap<String, String>,
+    mut cache: &mut HashMap<String, Option<String>>,
 ) -> Result<Option<EntityRelationship>> {
     try_infer_street_from_address_relationship(&entity, &db, &mut cache)
 }
@@ -48,7 +54,7 @@ fn try_infer_street_for_non_addressable(
 fn try_infer_street_from_address_relationship(
     entity: &Entity,
     db: &AreaDatabase,
-    mut cache: &mut HashMap<String, String>,
+    mut cache: &mut HashMap<String, Option<String>>,
 ) -> Result<Option<EntityRelationship>> {
     let mut query = EntitiesQuery::default();
     query.set_parent_id(entity.id.to_string());
@@ -85,7 +91,7 @@ fn try_infer_street_from_address_relationship(
 pub(crate) fn try_infer_street_for(
     mut entity: &mut Entity,
     db: &AreaDatabase,
-    mut cache: &mut HashMap<String, String>,
+    mut cache: &mut HashMap<String, Option<String>>,
 ) -> Result<Option<EntityRelationship>> {
     let addr_field = entity.value_of_field("address").clone();
     if addr_field.is_null() | !addr_field.is_object() {
