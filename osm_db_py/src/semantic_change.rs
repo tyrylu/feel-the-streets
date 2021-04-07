@@ -71,18 +71,14 @@ impl PySemanticChange {
                 effective_width,
                 ..
             } => {
-                let mut ret = vec![];
-                ret.push(DictChange::creating("id", Value::from(id.as_str())));
-                ret.push(DictChange::creating(
+                let mut ret = vec![DictChange::creating("id", Value::from(id.as_str())), DictChange::creating(
                     "discriminator",
                     Value::from(discriminator.clone()),
-                ));
-                ret.push(DictChange::creating(
+                ), DictChange::creating(
                     "geometry",
                     Value::from(geometry.clone()),
-                ));
-                ret.push(DictChange::creating("data", Value::from(data.clone())));
-                if let Some(val) = effective_width {
+                ), DictChange::creating("data", Value::from(data.clone()))];
+                                if let Some(val) = effective_width {
                     ret.push(DictChange::creating("effective_width", Value::from(*val)))
                 }
                 ret

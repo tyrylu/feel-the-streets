@@ -461,7 +461,7 @@ impl OSMObjectManager {
                 self.related_objects_of(&object)?
                     .map(|o| self.get_geometry_of(&o))
                     .filter_map(|g| g.ok())
-                    .filter_map(|g| g),
+                    .flatten(),
             ),
         )))
     }

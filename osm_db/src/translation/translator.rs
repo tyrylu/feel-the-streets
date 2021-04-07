@@ -108,7 +108,7 @@ pub fn translate(
                     let effective_width = calculate_effective_width(&discriminator, &entity_data);
                     Ok(Some((
                         Entity {
-                            id: object.unique_id().clone(),
+                            id: object.unique_id(),
                             discriminator: SmolStr::new_inline(&discriminator),
                             effective_width,
                             geometry: geom,

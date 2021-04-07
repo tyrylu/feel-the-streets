@@ -32,10 +32,10 @@ pub fn convert_field_value(
         "tons" => convert_to_tons(&raw_value, &mut record),
         "meters" => convert_to_meters(&raw_value, &mut record),
         _ => {
-            if let Some(enum_spec) = Enum::with_name(&value_type) {
+        if let Some(enum_spec) = Enum::with_name(&value_type) {
                 convert_value_of_enum(&raw_value, &enum_spec, &mut record)
             } else {
-                panic!(format!("Failed to handle type specifier {}.", value_type))
+                panic!("Failed to handle type specifier {}.", value_type)
             }
         }
     }

@@ -196,7 +196,7 @@ impl<T: Read> OSMObjectChangeIterator<T> {
                 self.finished = true;
                 return Err(Error::from(e));
             }
-            event => panic!(format!("Unexpected event during parsing: {:?}", event)),
+            event => panic!("Unexpected event during parsing: {:?}", event),
         }
         Ok(())
     }
