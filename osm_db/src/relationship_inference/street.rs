@@ -13,15 +13,14 @@ fn get_association_for_street(
 ) -> Result<Option<EntityRelationship>> {
     if let Some(record) = cache.get(street_name) {
         if let Some(id) = record {
-        return Ok(Some(EntityRelationship::new(
-            &id,
-            &target_id,
-            EntityRelationshipKind::Street,
-        )));
-    }
-    else {
-        return Ok(None);
-    }
+            return Ok(Some(EntityRelationship::new(
+                &id,
+                &target_id,
+                EntityRelationshipKind::Street,
+            )));
+        } else {
+            return Ok(None);
+        }
     }
     let roads = db.get_road_ids_with_name(&street_name, target_id)?;
     if roads.is_empty() {

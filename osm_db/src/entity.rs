@@ -66,9 +66,11 @@ impl Entity {
                         .expect("The string was not a base64-encoded geometry")
                     }
                     "discriminator" => {
-                        self.discriminator = SmolStr::new_inline(&new_value
-                            .as_str()
-                            .expect("Non-string attempted to be set as a discriminator"))
+                        self.discriminator = SmolStr::new_inline(
+                            &new_value
+                                .as_str()
+                                .expect("Non-string attempted to be set as a discriminator"),
+                        )
                     }
                     "data" => {
                         self.data = new_value

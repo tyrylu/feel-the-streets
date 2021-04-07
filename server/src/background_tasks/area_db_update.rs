@@ -157,10 +157,7 @@ pub fn update_area(
                         let old_relationships: Vec<RootedEntityRelationship> = old_ids
                             .iter()
                             .map(|id| {
-                                RootedEntityRelationship::new(
-                                    &id,
-                                    EntityRelationshipKind::OSMChild,
-                                )
+                                RootedEntityRelationship::new(&id, EntityRelationshipKind::OSMChild)
                             })
                             .collect();
                         let new_relationships: Vec<RootedEntityRelationship> = new_ids
@@ -280,13 +277,15 @@ fn infer_additional_relationships(
                     ListChange::Add(v) => (
                         v.parent_id,
                         RelationshipChange::adding(RootedEntityRelationship::new(
-                            v.child_id.as_str(), v.kind,
+                            v.child_id.as_str(),
+                            v.kind,
                         )),
                     ),
                     ListChange::Remove(v) => (
                         v.parent_id,
                         RelationshipChange::removing(RootedEntityRelationship::new(
-                            v.child_id.as_str(), v.kind,
+                            v.child_id.as_str(),
+                            v.kind,
                         )),
                     ),
                 };

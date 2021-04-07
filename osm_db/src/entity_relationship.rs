@@ -26,6 +26,9 @@ pub struct RootedEntityRelationship {
 
 impl RootedEntityRelationship {
     pub fn new(child_id: &str, kind: EntityRelationshipKind) -> Self {
-        RootedEntityRelationship { child_id: child_id.to_string(), kind }
+        RootedEntityRelationship {
+            child_id: child_id.to_string(),
+            kind,
+        }
     }
 }
