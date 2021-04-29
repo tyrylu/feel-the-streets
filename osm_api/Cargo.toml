@@ -20,6 +20,6 @@ tempfile = "*"
 bincode = "*"
 hashbrown = {version="*", features=["serde"]}
 wkb = "*"
-geo-types = "0.6"
+geo-types = "*"
 smol_str = "*"
 zstd_util = "*"

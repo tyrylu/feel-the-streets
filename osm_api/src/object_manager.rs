@@ -4,7 +4,7 @@ use crate::object::{OSMObject, OSMObjectFromNetwork, OSMObjectSpecifics, OSMObje
 use crate::utils;
 use crate::{Error, Result};
 use chrono::{DateTime, Utc};
-use geo_types::{Geometry, GeometryCollection, LineString, Point, Polygon};
+use geo_types::{Geometry, LineString, Point, Polygon};
 use hashbrown::HashMap;
 use itertools::Itertools;
 use rusqlite::Connection;
@@ -18,7 +18,6 @@ use std::cmp;
 use std::collections::HashSet;
 use std::fs;
 use std::io::{self, BufReader, Read, Seek, SeekFrom};
-use std::iter::FromIterator;
 use std::sync::Mutex;
 use std::time::Instant;
 use tempfile::tempfile;
@@ -457,12 +456,11 @@ impl OSMObjectManager {
 
     fn create_geometry_collection(&self, object: &OSMObject) -> Result<Option<Geometry<f64>>> {
         Ok(Some(Geometry::GeometryCollection(
-            GeometryCollection::from_iter(
-                self.related_objects_of(&object)?
+                            self.related_objects_of(&object)?
                     .map(|o| self.get_geometry_of(&o))
                     .filter_map(|g| g.ok())
-                    .flatten(),
-            ),
+                    .flatten()
+                    .collect(),
         )))
     }
 
