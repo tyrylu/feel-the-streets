@@ -414,11 +414,11 @@ impl OSMObjectManager {
             Node { lon, lat } => Ok(Some(Geometry::Point(Point::new(lon, lat)))),
             Way { .. } => {
                 let coords = self.get_way_coords(&object)?;
-                if coords.num_coords() <= 1 {
+                if coords.0.len() <= 1 {
                     warn!("One or zero nodes for object {}", object.unique_id());
                     return Ok(None);
                 }
-                if utils::object_should_have_closed_geometry(&object) && coords.num_coords() > 2 {
+                if utils::object_should_have_closed_geometry(&object) && coords.0.len() > 2 {
                     Ok(Some(Geometry::Polygon(Polygon::new(coords, vec![]))))
                 } else {
                     Ok(Some(Geometry::LineString(coords)))
@@ -526,7 +526,7 @@ impl OSMObjectManager {
         // Because i could not manage to convince the loop that references are enough, the check must be done there
         let inners_is_empty = inners.is_empty();
         for inner in &inners {
-            if inner.num_coords() < 4 {
+            if inner.0.len() < 4 {
                 warn!("One of the inner polygons for object {} did not have enough points, falling back to a geometry collection.", object.unique_id());
                 return Ok(None);
             }
@@ -534,7 +534,7 @@ impl OSMObjectManager {
         }
         if inners_is_empty {
             for outer in outers {
-                if outer.num_coords() < 4 {
+                if outer.0.len() < 4 {
                     warn!("One of the outer rings of object {} did not have enough points, falling back to a geometry collection.", object.unique_id());
                     return Ok(None);
                 }

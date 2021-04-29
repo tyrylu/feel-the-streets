@@ -50,8 +50,8 @@ fn find_connectable_segments(
         starts.insert((segment.0[0].x.to_bits(), segment[0].y.to_bits()), segment);
         ends.insert(
             (
-                segment.0[segment.num_coords() - 1].x.to_bits(),
-                segment.0[segment.num_coords() - 1].y.to_bits(),
+                segment.0[segment.0.len() - 1].x.to_bits(),
+                segment.0[segment.0.len() - 1].y.to_bits(),
             ),
             segment,
         );
