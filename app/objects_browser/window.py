@@ -1,5 +1,5 @@
 import inspect
-from PySide2.QtGui import QKeySequence
+from PySide2.QtGui import QKeySequence, Qt
 from PySide2.QtWidgets import QWidget, QListWidget, QTreeWidget, QTreeWidgetItem, QPushButton, QLabel, QGridLayout, QMenuBar, QApplication, QAction
 from osm_db import EntityMetadata
 from ..humanization_utils import format_field_value, underscored_to_words
@@ -32,7 +32,9 @@ class ObjectsBrowserWindow(QWidget):
         layout.addWidget(objects_label, 0, 0)
         self._objects_list = QListWidget(self)
         self._objects_list.setAccessibleName(objects_label.text())
+        self._objects_list.setContextMenuPolicy(Qt.CustomContextMenu)
         self._objects_list.currentRowChanged.connect(self.on_objects_listbox)
+        self._objects_list.customContextMenuRequested.connect(self._on_objects_list_menu)
         objects_label.setBuddy(self._objects_list)
         layout.addWidget(self._objects_list, 1, 0)
         props_label = QLabel(_("Object properties"), self)
@@ -149,3 +151,6 @@ class ObjectsBrowserWindow(QWidget):
     def on_copypropline_selected(self, evt):
         prop = self._props.currentItem().text(0)
         QApplication.clipboard().setText(prop)
+
+    def _on_objects_list_menu(self, point):
+        self._object_actions.exec_(point)
