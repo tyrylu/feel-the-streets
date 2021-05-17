@@ -1,4 +1,6 @@
+import functools
 import logging
+from PySide2.QtCore import QCollator
 from PySide2.QtWidgets import QPushButton, QListWidget, QLabel, QMessageBox, QInputDialog, QDialog
 import pendulum
 from osm_db import AreaDatabase
@@ -41,6 +43,8 @@ class AreaSelectionDialog(BaseDialog):
         self.request_button.clicked.connect(self.on_request_clicked)
 
     def _fill_areas(self, areas):
+        collator = QCollator()
+        areas.sort(key=functools.cmp_to_key(lambda a, b: collator.compare(a["name"], b["name"])))
         for area in areas:
             area["created_at"] = rfc_3339_to_local_string(area["created_at"])
             area["updated_at"] = rfc_3339_to_local_string(area["updated_at"])
