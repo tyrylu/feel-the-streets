@@ -7,7 +7,7 @@ use crate::{entities_query::EntitiesQuery, entity_relationship::RootedEntityRela
 use crate::{Error, Result};
 use osm_api::SmolStr;
 use rusqlite::types::ToSql;
-use rusqlite::{named_params, params, Connection, OpenFlags, Row, NO_PARAMS};
+use rusqlite::{named_params, params, Connection, OpenFlags, Row};
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::time::Instant;
@@ -233,7 +233,7 @@ impl AreaDatabase {
         );
         let mut stmt = self.conn.prepare_cached(&query)?;
         let res = stmt
-            .query_map_named(params.as_slice(), row_to_entity)
+            .query_map(params.as_slice(), row_to_entity)
             .map_err(Error::from)?;
         Ok(res.map(|e| e.expect("Failed to retrieve entity")).collect())
     }
@@ -351,12 +351,12 @@ impl AreaDatabase {
 
     pub fn begin(&self) -> Result<()> {
         let mut stmt = self.conn.prepare_cached("BEGIN")?;
-        stmt.execute(NO_PARAMS)?;
+        stmt.execute([])?;
         Ok(())
     }
     pub fn commit(&self) -> Result<()> {
         let mut stmt = self.conn.prepare_cached("COMMIT")?;
-        stmt.execute(NO_PARAMS)?;
+        stmt.execute([])?;
         Ok(())
     }
 
@@ -530,7 +530,7 @@ impl AreaDatabase {
     pub fn get_relationships_related_to(&self, entity_id: &str) -> Result<Vec<EntityRelationship>> {
         let mut stmt = self.conn.prepare_cached("SELECT parent_id, child_id, kind FROM entity_relationships WHERE parent_id = :entity_id OR child_id = :entity_id")?;
         let results = stmt
-            .query_map_named(
+            .query_map(
                 named_params! {":entity_id": entity_id},
                 |row| -> rusqlite::Result<EntityRelationship> {
                     Ok(EntityRelationship::new(

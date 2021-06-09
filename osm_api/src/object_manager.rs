@@ -8,7 +8,6 @@ use geo_types::{Geometry, LineString, Point, Polygon};
 use hashbrown::HashMap;
 use itertools::Itertools;
 use rusqlite::Connection;
-use rusqlite::NO_PARAMS;
 use serde::Deserialize;
 use serde_json::{self, Deserializer};
 use smol_str::SmolStr;
@@ -90,7 +89,7 @@ pub struct OSMObjectManager {
 impl OSMObjectManager {
     pub fn new() -> Self {
         let conn = Connection::open("entity_cache.db").expect("Could not create connection.");
-        conn.execute("PRAGMA SYNCHRONOUS=off", NO_PARAMS).unwrap();
+        conn.execute("PRAGMA SYNCHRONOUS=off", []).unwrap();
         let client = ureq::agent();
         OSMObjectManager {
             api_urls: vec![
@@ -223,7 +222,7 @@ impl OSMObjectManager {
         self.cache_conn
             .as_ref()
             .unwrap()
-            .execute("BEGIN", NO_PARAMS)?;
+            .execute("BEGIN", [])?;
         let start = Instant::now();
         let mut cache = self.get_cache();
         let mut objects = Vec::new();
@@ -552,7 +551,7 @@ impl OSMObjectManager {
         self.cache_conn
             .as_ref()
             .unwrap()
-            .execute("COMMIT", NO_PARAMS)
+            .execute("COMMIT", [])
             .expect("Commit failed.");
     }
     pub fn lookup_differences_in(

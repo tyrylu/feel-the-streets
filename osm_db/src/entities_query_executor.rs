@@ -28,8 +28,8 @@ impl<'a> EntitiesQueryExecutor<'a> {
             .statement
             .as_deref_mut()
             .unwrap()
-            .query_named(params.as_slice())?;
-        debug!("Query_named took {:?}", now.elapsed());
+            .query(params.as_slice())?;
+        debug!("Query took {:?}", now.elapsed());
         Ok(res)
     }
 }
