@@ -16,7 +16,7 @@ pub struct PyEntity {
 impl PyEntity {
     #[getter]
     pub fn id(&self) -> &str {
-        &self.inner.id.as_str()
+        self.inner.id.as_str()
     }
 
     #[getter]

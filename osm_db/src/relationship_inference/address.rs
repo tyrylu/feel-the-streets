@@ -23,7 +23,7 @@ pub(crate) fn try_infer_address_for(
                     continue;
                 }
                 res.push(EntityRelationship::new(
-                    &entity_id,
+                    entity_id,
                     &addressable_ids[0],
                     EntityRelationshipKind::Address,
                 ));
@@ -33,7 +33,7 @@ pub(crate) fn try_infer_address_for(
             // They belong all to the outer entity, but inferring internal relationships would be tricky - hopefully, we already inferred them or will in a short while.
             for id in addressable_ids {
                 res.push(EntityRelationship::new(
-                    &entity.id.as_str(),
+                    entity.id.as_str(),
                     &id,
                     EntityRelationshipKind::Address,
                 ));

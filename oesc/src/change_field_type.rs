@@ -55,7 +55,7 @@ pub fn change_field_type(
             };
 
             if let Some(new_val) =
-                conversions::convert_field_value(&old_val_str, &new_type, &mut record)
+                conversions::convert_field_value(old_val_str, &new_type, &mut record)
             {
                 changes.push(SemanticChange::updating(
                     entity

@@ -31,13 +31,13 @@ fn check_entity_data_consistency_against_metadata(
     let _known_field_names: HashSet<&String> = all_fields.iter().map(|(n, _)| n).collect();
     for (name, field) in all_fields.iter() {
         if field.required && !data.contains_key(name) {
-            record.record_missing_required_field(&metadata.discriminator, &name);
+            record.record_missing_required_field(&metadata.discriminator, name);
             return false;
         }
     }
     for (name, value) in data.iter() {
         if !_known_field_names.contains(name) {
-            record.record_unknown_field(&metadata.discriminator, &name, &value.to_string());
+            record.record_unknown_field(&metadata.discriminator, name, &value.to_string());
         }
     }
     true

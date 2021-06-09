@@ -15,7 +15,7 @@ pub fn translate(
     manager: &OSMObjectManager,
     mut record: &mut TranslationRecord,
 ) -> Result<Option<(Entity, Box<dyn Iterator<Item = String>>)>, Error> {
-    let lookup_res = TranslationSpec::primary_discriminator_for_object(&object);
+    let lookup_res = TranslationSpec::primary_discriminator_for_object(object);
     match lookup_res {
         None => {
             let mut interesting_len = object.tags.len();
@@ -102,7 +102,7 @@ pub fn translate(
             }
             let raw_data =
                 serde_json::to_string(&converted_data).expect("Could not serialize entity data.");
-            let geometry = manager.get_geometry_as_wkb(&object)?;
+            let geometry = manager.get_geometry_as_wkb(object)?;
             match geometry {
                 Some(geom) => {
                     let effective_width = calculate_effective_width(&discriminator, &entity_data);

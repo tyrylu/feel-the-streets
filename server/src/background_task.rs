@@ -13,11 +13,11 @@ pub enum BackgroundTask {
 
 impl BackgroundTask {
     pub fn deliver(&self) -> Result<()> {
-        background_task_delivery::deliver(&self, None)
+        background_task_delivery::deliver(self, None)
     }
 
     fn deliver_after(&self, msecs: u32) -> Result<()> {
-        background_task_delivery::deliver(&self, Some(msecs))
+        background_task_delivery::deliver(self, Some(msecs))
     }
 
     pub fn deliver_at_time(&self, hour: u32, minute: u32, second: u32) -> Result<()> {

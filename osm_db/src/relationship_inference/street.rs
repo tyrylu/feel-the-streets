@@ -14,15 +14,15 @@ fn get_association_for_street(
     if let Some(record) = cache.get(street_name) {
         if let Some(id) = record {
             return Ok(Some(EntityRelationship::new(
-                &id,
-                &target_id,
+                id,
+                target_id,
                 EntityRelationshipKind::Street,
             )));
         } else {
             return Ok(None);
         }
     }
-    let roads = db.get_road_ids_with_name(&street_name, target_id)?;
+    let roads = db.get_road_ids_with_name(street_name, target_id)?;
     if roads.is_empty() {
         warn!(
             "An address tag references the street {}, but no such street exists in the database.",
@@ -36,7 +36,7 @@ fn get_association_for_street(
         }
         Ok(Some(EntityRelationship::new(
             &roads[0],
-            &target_id,
+            target_id,
             EntityRelationshipKind::Street,
         )))
     }
@@ -47,7 +47,7 @@ fn try_infer_street_for_non_addressable(
     db: &AreaDatabase,
     mut cache: &mut HashMap<String, Option<String>>,
 ) -> Result<Option<EntityRelationship>> {
-    try_infer_street_from_address_relationship(&entity, &db, &mut cache)
+    try_infer_street_from_address_relationship(entity, db, &mut cache)
 }
 
 fn try_infer_street_from_address_relationship(
@@ -81,7 +81,7 @@ fn try_infer_street_from_address_relationship(
         }
     }
     if !streets.is_empty() && streets.windows(2).all(|w| w[0] == w[1]) {
-        get_association_for_street(&streets[0], &entity.id, &mut cache, &db)
+        get_association_for_street(streets[0], &entity.id, &mut cache, db)
     } else {
         Ok(None)
     }
@@ -94,7 +94,7 @@ pub(crate) fn try_infer_street_for(
 ) -> Result<Option<EntityRelationship>> {
     let addr_field = entity.value_of_field("address").clone();
     if addr_field.is_null() | !addr_field.is_object() {
-        return try_infer_street_for_non_addressable(&mut entity, &db, &mut cache);
+        return try_infer_street_for_non_addressable(&mut entity, db, &mut cache);
     }
     if let Some(street) = addr_field
         .as_object()
@@ -102,8 +102,8 @@ pub(crate) fn try_infer_street_for(
         .get("street")
     {
         let street_str = street.as_str().expect("Street should be a string.");
-        return get_association_for_street(street_str, &entity.id, &mut cache, &db);
+        return get_association_for_street(street_str, &entity.id, &mut cache, db);
     }
     // Try inferring for entity which had an address without a street
-    try_infer_street_for_non_addressable(&mut entity, &db, &mut cache)
+    try_infer_street_for_non_addressable(&mut entity, db, &mut cache)
 }

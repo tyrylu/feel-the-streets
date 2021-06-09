@@ -17,13 +17,13 @@ pub fn convert_value(val: &Value, py: &Python) -> PyObject {
         }
         Value::Array(vals) => vals
             .iter()
-            .map(|v| convert_value(v, &py))
+            .map(|v| convert_value(v, py))
             .collect::<Vec<PyObject>>()
             .into_py(*py),
         Value::Object(o) => {
             let mut ret = HashMap::new();
             for (k, v) in o.iter() {
-                ret.insert(k, convert_value(v, &py));
+                ret.insert(k, convert_value(v, py));
             }
             ret.into_py(*py)
         }

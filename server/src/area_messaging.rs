@@ -21,7 +21,7 @@ pub fn init_queue(client_id: &str, area_osm_id: i64) -> Result<()> {
         durable: true,
         ..Default::default()
     };
-    let queue_name = queue_name_for(&client_id, area_osm_id);
+    let queue_name = queue_name_for(client_id, area_osm_id);
     channel
         .queue_declare(&queue_name, opts, FieldTable::default())
         .wait()?;

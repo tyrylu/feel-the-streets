@@ -20,13 +20,13 @@ pub fn infer_additional_relationships_for_entity(
         entity.id
     );
     let mut relationships = vec![];
-    for relationship in address::try_infer_address_for(&mut entity, &db)? {
+    for relationship in address::try_infer_address_for(&mut entity, db)? {
         // Note that we must insert the address relationships there because otherwise we would not be able to use them when identifying the street relationships.
         db.insert_entity_relationship(&relationship)?;
         relationships.push(relationship);
     }
     if let Some(relationship) =
-        street::try_infer_street_for(&mut entity, &db, &mut street_names_cache)?
+        street::try_infer_street_for(&mut entity, db, &mut street_names_cache)?
     {
         // And for consistency, we'll insert this one as well.
         db.insert_entity_relationship(&relationship)?;
@@ -38,7 +38,7 @@ pub fn infer_additional_relationships_for_entity(
 pub fn infer_additional_relationships_for(db: &AreaDatabase) -> Result<Vec<EntityRelationship>> {
     let query = EntitiesQuery::default();
     let mut executor = EntitiesQueryExecutor::new(&query);
-    let rows = executor.prepare_execute(&db)?;
+    let rows = executor.prepare_execute(db)?;
     let results = rows
         .mapped(row_to_entity)
         .map(|e| e.expect("Failed to retrieve entity"));
@@ -46,7 +46,7 @@ pub fn infer_additional_relationships_for(db: &AreaDatabase) -> Result<Vec<Entit
     let mut relationships = vec![];
     for mut entity in results {
         let mut new_relationships =
-            infer_additional_relationships_for_entity(&mut entity, &db, &mut street_names_cache)?;
+            infer_additional_relationships_for_entity(&mut entity, db, &mut street_names_cache)?;
         relationships.append(&mut new_relationships);
     }
     info!("Inferred {} relationships.", relationships.len());

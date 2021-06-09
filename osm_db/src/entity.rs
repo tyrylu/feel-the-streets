@@ -67,7 +67,7 @@ impl Entity {
                     }
                     "discriminator" => {
                         self.discriminator = SmolStr::new_inline(
-                            &new_value
+                            new_value
                                 .as_str()
                                 .expect("Non-string attempted to be set as a discriminator"),
                         )
@@ -108,12 +108,12 @@ impl Entity {
                 match change {
                     Create { key, value } => {
                         let (target, final_key_part) =
-                            get_target_of_key(&key, &mut data_map, true).unwrap();
+                            get_target_of_key(key, &mut data_map, true).unwrap();
                         target.insert(final_key_part, value.clone());
                     }
                     Remove { key } => {
                         if let Some((target, final_key_part)) =
-                            get_target_of_key(&key, &mut data_map, false)
+                            get_target_of_key(key, &mut data_map, false)
                         {
                             target.remove(&final_key_part);
                         } else {
@@ -122,7 +122,7 @@ impl Entity {
                     }
                     Update { key, new_value, .. } => {
                         if let Some((target, final_key_part)) =
-                            get_target_of_key(&key, &mut data_map, false)
+                            get_target_of_key(key, &mut data_map, false)
                         {
                             match target.get_mut(&final_key_part) {
                                 Some(val) => *val = new_value.clone(),

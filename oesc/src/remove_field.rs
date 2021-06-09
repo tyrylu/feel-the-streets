@@ -32,7 +32,7 @@ pub fn remove_field(entity: String, field: String, new_name: Option<String>) -> 
             let val = entity.value_of_field(&field).clone();
             let mut entry_changes = vec![EntryChange::removing(&field)];
             if let Some(new_name) = &new_name {
-                entry_changes.push(EntryChange::creating(&new_name, val));
+                entry_changes.push(EntryChange::creating(new_name, val));
             }
             changes.push(SemanticChange::updating(
                 entity

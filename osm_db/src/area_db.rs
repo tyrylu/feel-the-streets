@@ -163,8 +163,8 @@ impl AreaDatabase {
         // Handle deferred relationship insertions.
         for (parent, child) in deferred_relationship_insertions.iter() {
             self.insert_entity_relationship(&EntityRelationship::new(
-                &parent,
-                &child,
+                parent,
+                child,
                 EntityRelationshipKind::OSMChild,
             ))?;
         }
@@ -193,7 +193,7 @@ impl AreaDatabase {
     }
     pub fn get_entities(&self, query: &EntitiesQuery) -> Result<Vec<Entity>> {
         let mut executor = EntitiesQueryExecutor::new(query);
-        let rows = executor.prepare_execute(&self)?;
+        let rows = executor.prepare_execute(self)?;
         let start = Instant::now();
         let results = rows
             .mapped(row_to_entity)
@@ -247,7 +247,7 @@ impl AreaDatabase {
         data: &str,
         entity_relationships: &[RootedEntityRelationship],
     ) -> Result<()> {
-        let mut stmt = if self.geometry_is_valid(&geometry)? {
+        let mut stmt = if self.geometry_is_valid(geometry)? {
             self.conn.prepare_cached(INSERT_ENTITY_SQL)?
         } else {
             self.conn.prepare_cached(INSERT_ENTITY_SQL_BUFFERED)?
@@ -314,23 +314,23 @@ impl AreaDatabase {
                 data,
                 entity_relationships,
             } => self.insert_entity(
-                &id,
-                &discriminator,
+                id,
+                discriminator,
                 &base64::decode(&geometry).expect("Geometry should be base64 encoded"),
-                &effective_width,
-                &data,
+                effective_width,
+                data,
                 entity_relationships,
             ),
-            Remove { osm_id } => self.remove_entity(&osm_id),
+            Remove { osm_id } => self.remove_entity(osm_id),
             Update {
                 osm_id,
                 property_changes,
                 data_changes,
                 relationship_changes,
             } => {
-                if let Some(mut entity) = self.get_entity(&osm_id)? {
-                    entity.apply_property_changes(&property_changes);
-                    entity.apply_data_changes(&data_changes);
+                if let Some(mut entity) = self.get_entity(osm_id)? {
+                    entity.apply_property_changes(property_changes);
+                    entity.apply_data_changes(data_changes);
                     self.save_updated_entity(&entity)?;
                     self.apply_child_id_changes(&entity.id, relationship_changes)
                 } else {
@@ -461,7 +461,7 @@ impl AreaDatabase {
     pub fn apply_deferred_relationship_additions(&mut self) -> Result<()> {
         for (parent, child) in self.deferred_relationship_additions.iter() {
             self.insert_entity_relationship(&EntityRelationship::new(
-                &parent,
+                parent,
                 &child.child_id,
                 child.kind,
             ))?;

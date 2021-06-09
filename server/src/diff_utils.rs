@@ -36,8 +36,8 @@ fn diff_properties(old: &Entity, new: &Entity) -> Vec<EntryChange> {
 }
 
 fn diff_json_maps(old: &str, new: &str) -> Result<Vec<EntryChange>> {
-    let old_map: Map<String, Value> = serde_json::from_str(&old)?;
-    let new_map: Map<String, Value> = serde_json::from_str(&new)?;
+    let old_map: Map<String, Value> = serde_json::from_str(old)?;
+    let new_map: Map<String, Value> = serde_json::from_str(new)?;
     Ok(diff_json_maps_internal(&old_map, &new_map, None))
 }
 
@@ -54,14 +54,14 @@ fn diff_json_maps_internal(
     let stayed = old_keys.intersection(&new_keys);
     for added_key in added {
         changes.push(EntryChange::creating(
-            &to_composite_key(&key_prefix, &added_key),
+            &to_composite_key(&key_prefix, added_key),
             new[*added_key].clone(),
         ));
     }
     for removed_key in removed {
         changes.push(EntryChange::removing(&to_composite_key(
             &key_prefix,
-            &removed_key,
+            removed_key,
         )));
     }
     for stayed_key in stayed {
@@ -70,13 +70,13 @@ fn diff_json_maps_internal(
         if old_val != new_val {
             if old_val.is_object() && new_val.is_object() {
                 changes.extend(diff_json_maps_internal(
-                    &old_val.as_object().unwrap(),
-                    &new_val.as_object().unwrap(),
-                    Some(to_composite_key(&key_prefix, &stayed_key)),
+                    old_val.as_object().unwrap(),
+                    new_val.as_object().unwrap(),
+                    Some(to_composite_key(&key_prefix, stayed_key)),
                 ));
             } else {
                 changes.push(EntryChange::updating(
-                    &to_composite_key(&key_prefix, &stayed_key),
+                    &to_composite_key(&key_prefix, stayed_key),
                     old_val.clone(),
                     new_val.clone(),
                 ));
@@ -94,7 +94,7 @@ fn to_composite_key(prefix: &Option<String>, subkey: &str) -> String {
 }
 
 pub fn diff_entities(old: &Entity, new: &Entity) -> Result<(Vec<EntryChange>, Vec<EntryChange>)> {
-    let property_changes = diff_properties(&old, &new);
+    let property_changes = diff_properties(old, new);
     let data_changes = if old.data != new.data {
         diff_json_maps(&old.data, &new.data)?
     } else {

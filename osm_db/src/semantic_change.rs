@@ -180,7 +180,7 @@ impl SemanticChange {
     }
 
     pub fn from_serialized(data: &[u8]) -> Result<Self> {
-        let decompressed = ZSTD_CONTEXT.lock().unwrap().decompress(&data)?;
+        let decompressed = ZSTD_CONTEXT.lock().unwrap().decompress(data)?;
         Ok(serde_json::from_slice(&decompressed)?)
     }
 }

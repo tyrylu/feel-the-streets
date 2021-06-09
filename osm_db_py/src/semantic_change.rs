@@ -13,7 +13,7 @@ pub struct PySemanticChange {
 impl PySemanticChange {
     #[staticmethod]
     fn from_serialized(data: &[u8]) -> PyResult<PySemanticChange> {
-        match SemanticChange::from_serialized(&data) {
+        match SemanticChange::from_serialized(data) {
             Ok(change) => Ok(PySemanticChange { inner: change }),
             Err(e) => Err(exceptions::PyValueError::new_err(format!(
                 "Could not parse json, error: {}",

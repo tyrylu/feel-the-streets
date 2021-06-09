@@ -47,7 +47,7 @@ fn serialize_and_compress(object: &OSMObject) -> Result<Vec<u8>> {
 }
 
 fn deserialize_compressed(compressed: &[u8]) -> Result<OSMObject> {
-    let serialized = ZSTD_CONTEXT.lock().unwrap().decompress(&compressed)?;
+    let serialized = ZSTD_CONTEXT.lock().unwrap().decompress(compressed)?;
     Ok(bincode::deserialize(&serialized)?)
 }
 
@@ -109,7 +109,7 @@ impl OSMObjectManager {
 
     pub fn get_cache(&self) -> SqliteMap<'_> {
         let res = SqliteMap::new(
-            &self.cache_conn.as_ref().unwrap(),
+            self.cache_conn.as_ref().unwrap(),
             "raw_entities",
             "text",
             "blob",
@@ -125,7 +125,7 @@ impl OSMObjectManager {
     }
 
     pub fn cache_object_into(&self, cache: &mut SqliteMap<'_>, object: &OSMObject) {
-        let compressed = serialize_and_compress(&object).expect("Could not serialize object");
+        let compressed = serialize_and_compress(object).expect("Could not serialize object");
         cache
             .insert::<Vec<u8>>(&object.unique_id().as_str(), &compressed)
             .expect("Could not cache object.");
@@ -194,7 +194,7 @@ impl OSMObjectManager {
                 self.http_client
                     .get(&format!("{0}/kill_my_queries", &url))
                     .call()?;
-                self.run_query(&query, result_to_tempfile)
+                self.run_query(query, result_to_tempfile)
             }
             200 => {
                 debug!("Request successfully finished after {:?}.", start.elapsed());
@@ -209,7 +209,7 @@ impl OSMObjectManager {
             }
             _ => {
                 warn!("Unexpected status code {} from the server.", resp.status());
-                self.run_query(&query, result_to_tempfile)
+                self.run_query(query, result_to_tempfile)
             }
         }
     }
@@ -343,7 +343,7 @@ impl OSMObjectManager {
             }
         }
             }).map(move |(mut related, maybe_role)| {
-                OSMObjectManager::enrich_tags(&object, &mut related);
+                OSMObjectManager::enrich_tags(object, &mut related);
             if let Some(role) = maybe_role {
                 related.tags.insert("role".to_string(), role);
             }
@@ -352,10 +352,10 @@ impl OSMObjectManager {
     }
 
     pub fn get_object(&self, id: &str) -> Result<Option<OSMObject>> {
-        if !self.has_object(&id) {
+        if !self.has_object(id) {
             self.lookup_objects(&mut [id])?;
         }
-        self.get_cached_object(&id)
+        self.get_cached_object(id)
     }
 
     fn enrich_tags(parent: &OSMObject, child: &mut OSMObject) {
@@ -371,7 +371,7 @@ impl OSMObjectManager {
             _ => unreachable!(),
         };
         let mut coords = Vec::with_capacity(node_count);
-        for obj in self.related_objects_of(&way)? {
+        for obj in self.related_objects_of(way)? {
             match obj.specifics {
                 Node { lon, lat } => {
                     coords.push((lon, lat));
@@ -399,7 +399,7 @@ impl OSMObjectManager {
         if exists {
             Ok(self.geometries_cache.borrow()[&object.unique_id()].clone())
         } else {
-            let res = self.get_geometry_of_uncached(&object)?;
+            let res = self.get_geometry_of_uncached(object)?;
             self.geometries_cache
                 .borrow_mut()
                 .insert(object.unique_id(), res.clone());
@@ -412,12 +412,12 @@ impl OSMObjectManager {
         match object.specifics {
             Node { lon, lat } => Ok(Some(Geometry::Point(Point::new(lon, lat)))),
             Way { .. } => {
-                let coords = self.get_way_coords(&object)?;
+                let coords = self.get_way_coords(object)?;
                 if coords.0.len() <= 1 {
                     warn!("One or zero nodes for object {}", object.unique_id());
                     return Ok(None);
                 }
-                if utils::object_should_have_closed_geometry(&object) && coords.0.len() > 2 {
+                if utils::object_should_have_closed_geometry(object) && coords.0.len() > 2 {
                     Ok(Some(Geometry::Polygon(Polygon::new(coords, vec![]))))
                 } else {
                     Ok(Some(Geometry::LineString(coords)))
@@ -426,7 +426,7 @@ impl OSMObjectManager {
             Relation { .. } => {
                 let geom_type = object.tags.get("type").map(|t| t.as_str()).unwrap_or("");
                 if geom_type == "multipolygon" {
-                    let first_related = self.related_objects_of(&object)?.next().unwrap();
+                    let first_related = self.related_objects_of(object)?.next().unwrap();
                     let multi;
                     match first_related
                         .tags
@@ -435,19 +435,19 @@ impl OSMObjectManager {
                         .unwrap_or("")
                     {
                         "inner" | "outer" => {
-                            multi = self.construct_multipolygon_from_complex_polygons(&object)?;
+                            multi = self.construct_multipolygon_from_complex_polygons(object)?;
                         }
                         _ => {
-                            multi = self.construct_multipolygon_from_polygons(&object)?;
+                            multi = self.construct_multipolygon_from_polygons(object)?;
                         }
                     }
                     if let Some(geom) = multi {
                         Ok(Some(geom))
                     } else {
-                        self.create_geometry_collection(&object)
+                        self.create_geometry_collection(object)
                     }
                 } else {
-                    self.create_geometry_collection(&object)
+                    self.create_geometry_collection(object)
                 }
             }
         }
@@ -455,7 +455,7 @@ impl OSMObjectManager {
 
     fn create_geometry_collection(&self, object: &OSMObject) -> Result<Option<Geometry<f64>>> {
         Ok(Some(Geometry::GeometryCollection(
-                            self.related_objects_of(&object)?
+                            self.related_objects_of(object)?
                     .map(|o| self.get_geometry_of(&o))
                     .filter_map(|g| g.ok())
                     .flatten()
@@ -468,7 +468,7 @@ impl OSMObjectManager {
         object: &OSMObject,
     ) -> Result<Option<Geometry<f64>>> {
         let mut parts = vec![];
-        for related in self.related_objects_of(&object)? {
+        for related in self.related_objects_of(object)? {
             let rel_geom = self.get_geometry_of(&related)?.unwrap();
             if let Geometry::Polygon(poly) = rel_geom {
                 parts.push(poly);
@@ -489,7 +489,7 @@ impl OSMObjectManager {
     ) -> Result<Option<Geometry<f64>>> {
         let mut inners = vec![];
         let mut outers = vec![];
-        for related in self.related_objects_of(&object)? {
+        for related in self.related_objects_of(object)? {
             if !related.tags.contains_key("role") {
                 warn!(
                     "Missing role specifier for object {} as part of geometry of object {}",

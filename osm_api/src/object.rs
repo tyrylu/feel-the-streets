@@ -243,6 +243,6 @@ impl OSMRelationMember {
 
 impl AsRef<OSMObject> for OSMObject {
     fn as_ref(&self) -> &OSMObject {
-        &self
+        self
     }
 }

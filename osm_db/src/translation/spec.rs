@@ -24,7 +24,7 @@ fn compare_values<F: Fn(&str, &str) -> bool>(
             continue;
         }
         for val in values {
-            if values_comparer(&tags[prop], &val) {
+            if values_comparer(&tags[prop], val) {
                 trace!(
                     "Value comparison succeeded for value of key {} with value {}.",
                     prop,
@@ -64,12 +64,12 @@ impl AcceptanceCondition {
                 }
             }
             PropertyEquals { property_equals } => {
-                return compare_values(&property_equals, &object.tags, |x, y| x == y);
+                return compare_values(property_equals, &object.tags, |x, y| x == y);
             }
             PropertyDoesNotEqual {
                 property_does_not_equal,
             } => {
-                return compare_values(&property_does_not_equal, &object.tags, |x, y| x != y);
+                return compare_values(property_does_not_equal, &object.tags, |x, y| x != y);
             }
         }
         false
@@ -89,7 +89,7 @@ impl TranslationSpec {
     fn is_applycable_for(&self, object: &OSMObject) -> bool {
         for condition in &self.accepts_when {
             trace!("Trying condition {:?} on object {:?}", condition, object);
-            if condition.evaluate_on(&object) {
+            if condition.evaluate_on(object) {
                 return true;
             }
         }
@@ -103,14 +103,14 @@ impl TranslationSpec {
     pub fn all_relevant_for(discriminator: &str) -> Vec<Self> {
         let mut specs = vec![];
         let mut current_metadata =
-            EntityMetadata::for_discriminator(&discriminator).expect("No metadata of an entity.");
+            EntityMetadata::for_discriminator(discriminator).expect("No metadata of an entity.");
         loop {
             let discriminator = &current_metadata.discriminator;
             if discriminator == "OSMEntity" {
                 break; // It has no parent and no translation spec
             }
             specs.push(
-                TranslationSpec::for_discriminator(&discriminator)
+                TranslationSpec::for_discriminator(discriminator)
                     .unwrap_or_else(|| {
                         panic!(
                             "No translation spec for {} found.",
@@ -131,7 +131,7 @@ impl TranslationSpec {
     pub fn primary_discriminator_for_object(object: &OSMObject) -> Option<String> {
         trace!("Looking translation spec for object {:?}", object);
         for (generates, spec) in TRANSLATION_SPECS.iter() {
-            if spec.is_applycable_for(&object) {
+            if spec.is_applycable_for(object) {
                 trace!("{} matched.", generates);
                 return Some(generates.clone());
             }

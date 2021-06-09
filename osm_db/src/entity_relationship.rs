@@ -11,8 +11,8 @@ pub struct EntityRelationship {
 impl EntityRelationship {
     pub fn new(parent_id: &str, child_id: &str, kind: EntityRelationshipKind) -> Self {
         EntityRelationship {
-            parent_id: SmolStr::new_inline(&parent_id),
-            child_id: SmolStr::new_inline(&child_id),
+            parent_id: SmolStr::new_inline(parent_id),
+            child_id: SmolStr::new_inline(child_id),
             kind,
         }
     }

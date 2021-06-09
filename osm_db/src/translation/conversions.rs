@@ -26,14 +26,14 @@ pub fn convert_field_value(
 ) -> Option<Value> {
     match value_type {
         "str" | "Address" => Some(Value::String(raw_value.to_string())),
-        "int" => convert_int(&raw_value, &mut record),
-        "bool" => convert_bool(&raw_value, &mut record),
-        "float" => convert_float(&raw_value, &mut record),
-        "tons" => convert_to_tons(&raw_value, &mut record),
-        "meters" => convert_to_meters(&raw_value, &mut record),
+        "int" => convert_int(raw_value, &mut record),
+        "bool" => convert_bool(raw_value, &mut record),
+        "float" => convert_float(raw_value, &mut record),
+        "tons" => convert_to_tons(raw_value, &mut record),
+        "meters" => convert_to_meters(raw_value, &mut record),
         _ => {
-            if let Some(enum_spec) = Enum::with_name(&value_type) {
-                convert_value_of_enum(&raw_value, &enum_spec, &mut record)
+            if let Some(enum_spec) = Enum::with_name(value_type) {
+                convert_value_of_enum(raw_value, &enum_spec, &mut record)
             } else {
                 panic!("Failed to handle type specifier {}.", value_type)
             }
@@ -57,7 +57,7 @@ pub fn convert_entity_data(
             .get(key)
             .map(|f| f.type_name.as_str())
             .unwrap_or("str");
-        if let Some(converted) = convert_field_value(&value, &type_name, &mut record) {
+        if let Some(converted) = convert_field_value(value, type_name, &mut record) {
             converted_data.insert(key.clone(), converted);
         }
     }
@@ -69,10 +69,10 @@ fn convert_value_of_enum(
     enum_spec: &Enum,
     record: &mut TranslationRecord,
 ) -> Option<Value> {
-    if let Some(num) = enum_spec.value_for_name(&value) {
+    if let Some(num) = enum_spec.value_for_name(value) {
         Some(Value::Number(Number::from(*num)))
     } else {
-        record.record_missing_enum_member(&enum_spec.name, &value);
+        record.record_missing_enum_member(&enum_spec.name, value);
         None
     }
 }
@@ -81,7 +81,7 @@ fn convert_int(value: &str, record: &mut TranslationRecord) -> Option<Value> {
     match value.parse::<i64>() {
         Ok(val) => Some(Value::Number(Number::from(val))),
         Err(_) => {
-            record.record_type_violation(&value);
+            record.record_type_violation(value);
             None
         }
     }
@@ -108,7 +108,7 @@ fn convert_float(value: &str, record: &mut TranslationRecord) -> Option<Value> {
     match value.parse::<f64>() {
         Ok(val) => construct_json_f64(val),
         Err(_) => {
-            record.record_type_violation(&value);
+            record.record_type_violation(value);
             None
         }
     }
@@ -120,24 +120,24 @@ fn split_unit_spec<'a>(
 ) -> Option<(f64, Option<&'a str>)> {
     let parts: Vec<&str> = spec.split(' ').collect();
     if parts.len() > 2 {
-        record.record_type_violation(&spec);
+        record.record_type_violation(spec);
         None
     } else if let Ok(num) = parts[0].parse::<f64>() {
         Some((num, parts.get(1).cloned()))
     } else {
-        record.record_type_violation(&spec);
+        record.record_type_violation(spec);
         None
     }
 }
 
 fn convert_to_tons(value: &str, mut record: &mut TranslationRecord) -> Option<Value> {
-    let (magnitude, unit_str) = split_unit_spec(&value, &mut record)?;
+    let (magnitude, unit_str) = split_unit_spec(value, &mut record)?;
     match unit_str {
         None => construct_json_f64(magnitude),
         Some(unit) => match unit {
             "t" => construct_json_f64(Mass::new::<ton>(magnitude).get::<ton>()),
             _ => {
-                record.record_type_violation(&value);
+                record.record_type_violation(value);
                 None
             }
         },
@@ -145,13 +145,13 @@ fn convert_to_tons(value: &str, mut record: &mut TranslationRecord) -> Option<Va
 }
 
 fn convert_to_meters(value: &str, mut record: &mut TranslationRecord) -> Option<Value> {
-    let (magnitude, unit_str) = split_unit_spec(&value, &mut record)?;
+    let (magnitude, unit_str) = split_unit_spec(value, &mut record)?;
     match unit_str {
         None => construct_json_f64(magnitude),
         Some(unit) => match unit {
             "m" => construct_json_f64(Length::new::<meter>(magnitude).get::<meter>()),
             _ => {
-                record.record_type_violation(&value);
+                record.record_type_violation(value);
                 None
             }
         },

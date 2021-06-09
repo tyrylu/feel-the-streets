@@ -42,13 +42,13 @@ pub fn update_area(
 ) -> Result<()> {
     info!("Updating area {} (id {}).", area.name, area.osm_id);
     area.state = AreaState::GettingChanges;
-    area.save(&conn)?;
+    area.save(conn)?;
     let after = if let Some(timestamp) = &area.newest_osm_object_timestamp {
         info!(
             "Looking differences after the latest known OSM object timestamp {}",
             timestamp
         );
-        DateTime::parse_from_rfc3339(&timestamp)?.with_timezone(&Utc)
+        DateTime::parse_from_rfc3339(timestamp)?.with_timezone(&Utc)
     } else {
         info!(
             "Looking differences after the area update time of {}",
@@ -68,7 +68,7 @@ pub fn update_area(
         use OSMObjectChangeType::*;
         if first {
             area.state = AreaState::ApplyingChanges;
-            area.save(&conn)?;
+            area.save(conn)?;
             first = false;
         }
         let change = change?;
@@ -157,7 +157,7 @@ pub fn update_area(
                         let old_relationships: Vec<RootedEntityRelationship> = old_ids
                             .iter()
                             .map(|id| {
-                                RootedEntityRelationship::new(&id, EntityRelationshipKind::OSMChild)
+                                RootedEntityRelationship::new(id, EntityRelationshipKind::OSMChild)
                             })
                             .collect();
                         let new_relationships: Vec<RootedEntityRelationship> = new_ids
@@ -208,7 +208,7 @@ pub fn update_area(
     area_db.commit()?;
     info!("Publishing the changes...");
     for change in semantic_changes {
-        area_messaging::publish_change_on(&publish_channel, &change, area.osm_id)?;
+        area_messaging::publish_change_on(publish_channel, &change, area.osm_id)?;
         for confirmation in publish_channel.wait_for_confirms().wait()? {
             if confirmation.reply_code != 200 {
                 warn!(
@@ -222,7 +222,7 @@ pub fn update_area(
     let size = fs::metadata(AreaDatabase::path_for(area.osm_id, true))?.len() as i64;
     area.db_size = size;
     area.state = AreaState::Updated;
-    area.save(&conn)?;
+    area.save(conn)?;
     Ok(())
 }
 
@@ -243,7 +243,7 @@ fn infer_additional_relationships(
                 .expect("Entity disappeared from a database");
             let relationships = relationship_inference::infer_additional_relationships_for_entity(
                 &mut entity,
-                &area_db,
+                area_db,
                 &mut cache,
             )?;
             for relationship in relationships {
@@ -253,7 +253,7 @@ fn infer_additional_relationships(
                     find_or_create_suitable_change(&mut changes, &relationship.parent_id, false)
                 };
                 target.add_rooted_relationship(RootedEntityRelationship::new(
-                    &relationship.child_id.as_str(),
+                    relationship.child_id.as_str(),
                     relationship.kind,
                 ));
             }
@@ -268,7 +268,7 @@ fn infer_additional_relationships(
             let new_relationships =
                 relationship_inference::infer_additional_relationships_for_entity(
                     &mut entity,
-                    &area_db,
+                    area_db,
                     &mut cache,
                 )?;
             let differences = diff_utils::diff_lists(&current_relationships, &new_relationships);
