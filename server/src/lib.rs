@@ -1,10 +1,7 @@
-// Rocket related stuff
-#![feature(proc_macro_hygiene, decl_macro)]
-// We want to use the await syntax
 #[macro_use]
 extern crate rocket;
 #[macro_use]
-extern crate rocket_contrib;
+extern crate rocket_sync_db_pools;
 #[macro_use]
 extern crate log;
 #[macro_use]

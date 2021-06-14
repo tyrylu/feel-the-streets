@@ -29,3 +29,10 @@ pub enum Error {
     #[error("The system time is before the unix epoch: {0}")]
     SystemTimeError(#[from] SystemTimeError),
 }
+
+impl<'r, 'o> rocket::response::Responder<'r, 'o> for Error where 'o: 'r {
+    fn respond_to(self, request: &'r rocket::Request<'_>) -> rocket::response::Result<'o> {
+        let msg = format!("{}", self);
+        rocket::response::status::Custom(rocket::http::Status::InternalServerError, rocket::response::content::Plain(msg)).respond_to(request)
+    }
+}

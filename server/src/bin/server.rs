@@ -1,24 +1,20 @@
-// Rocket related stuff
-#![feature(proc_macro_hygiene, decl_macro)]
-
-use log::error;
 use rocket::fairing::AdHoc;
 use rocket::routes;
 use server::routes;
-use server::{DbConn, Result};
+use server::DbConn;
 
-fn main() -> Result<()> {
+#[rocket::launch]
+fn rocket() -> _ {
     server::init_logging();
-    let _dotenv_path = dotenv::dotenv()?;
-    rocket::ignite()
+    let _dotenv_path = dotenv::dotenv().expect("Failed to setup logging from environment");
+    rocket::build()
         .attach(DbConn::fairing())
-        .attach(AdHoc::on_attach("Database Migrations", |rocket| {
-            let conn = DbConn::get_one(&rocket).expect("database connection");
-            match server::run_migrations(&*conn) {
-                Ok(()) => Ok(rocket),
+        .attach(AdHoc::on_ignite("Database Migrations", |rocket| async {
+            let conn = DbConn::get_one(&rocket).await.expect("database connection");
+            match conn.run(|c| {server::run_migrations(&c)}).await {
+                Ok(()) => rocket,
                 Err(e) => {
-                    error!("Failed to run database migrations: {:?}", e);
-                    Err(rocket)
+                    panic!("Failed to run database migrations: {:?}", e);
                 }
             }
         }))
@@ -32,6 +28,4 @@ fn main() -> Result<()> {
                 routes::motd,
             ],
         )
-        .launch();
-    Ok(())
-}
+    }
