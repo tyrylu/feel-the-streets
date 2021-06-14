@@ -24,7 +24,7 @@ There are basically two ways how to do that:
   * Install the resulting wheel: pip install ../target/wheels/*.whl
 ### Rust components
 The Rust components handle dependencies as any Rust project, so a cargo build in the root should do the trick. A release build should be performed in production, however.
-Note that because of Rocket a nightly rust compiler is necessary, see the Rustup installation instructions and choose nightly during the initial Rustup install, or, if you already have Rustup installed, rustup toolchain add nightly should suffice to get one, then you either set is as a default or add a per project override (see the Rustup docs for the details).
+Because of Rocket, you need at least Rust 1.45, but the latest stable is preferred. You can use a distribution package, if it is new eough, or you can use rustup to install a recent stable version.
 In addition, it requires the development files for Openssl.
 
 ## Components
