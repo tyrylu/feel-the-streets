@@ -1,4 +1,4 @@
-[production]
+[release]
 address = "localhost"
 [global.databases.serverdb]
 url = "server.db"
