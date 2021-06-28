@@ -102,6 +102,16 @@ class InteractivePersonController:
     def do_backward(self, evt):
         self._person.step_backward() 
     
+    @menu_command(_("Movement"), _("Step left"), "alt+left")
+    def do_left(self, evt):
+        self._person.step_left() 
+    
+    @menu_command(_("Movement"), _("Step right"), "alt+right")
+    def do_right(self, evt):
+        self._person.step_right() 
+    
+
+
     @menu_command(_("Movement"), _("Turn 5 degrees to the right"), "right")
     def turn_right(self, evt):
         self._person.rotate(5)

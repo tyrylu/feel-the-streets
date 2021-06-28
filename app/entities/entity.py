@@ -64,8 +64,10 @@ class Entity(BaseModel):
             entity_post_enter.send(self, enters=enters)
         entity_post_move.send(self)
     
-    def move_by(self, pos_delta, force=False):
-        pos, new_dir = self.position.destination2(pos_delta, self.direction)
+    def move_by(self, pos_delta, force=False, direction=None):
+        if not direction:
+            direction = self.direction
+        pos, new_dir = self.position.destination2(pos_delta, direction)
         if self.move_to(pos, force):
             self.set_direction(new_dir)
     
