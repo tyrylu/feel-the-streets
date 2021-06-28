@@ -122,6 +122,11 @@ class InteractivePersonController:
     def turn_left90(self, evt):
         self._person.rotate(-90)
     
+    @menu_command(_("Movement"), _("Turn 180 degrees"), "alt+down")
+    def turn_180(self, evt):
+        self._person.rotate(180)
+    
+
     @menu_command(_("Movement"), _("Coordinate jump..."), "j")
     def do_jump(self, evt):
         x, ok = QInputDialog.getDouble(self._main_window, _("Coordinate"), _("Enter the longitude"), decimals=config().presentation.coordinate_decimal_places, minValue=-180, maxValue=180, value=self._person.position.lon)
