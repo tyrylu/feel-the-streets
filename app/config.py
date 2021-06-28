@@ -26,6 +26,7 @@ class PresentationConfig(BaseModel):
     use_detailed_turn_directions: bool = False
     play_crossing_sounds: bool = True
     announce_current_object_after_leaving_other: bool = True
+    represent_bearings_as_clock_position: bool = True
 
 class ChangelogsConfig(BaseModel):
     enabled: bool = False

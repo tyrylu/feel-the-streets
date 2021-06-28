@@ -1,6 +1,6 @@
 from PySide2.QtCore import QThread, Signal
 from ..services import config
-from ..humanization_utils import format_number, describe_entity
+from ..humanization_utils import format_number, format_rel_bearing, describe_entity
 from ..geometry_utils import distance_between, bearing_to
 
 
@@ -26,7 +26,7 @@ class ObjectsSorter(QThread):
         for dist, obj, closest in objects:
             bearing = bearing_to(self._person.position, closest)
             rel_bearing = (bearing - self._person.direction) % 360
-            rel_bearing = format_number(rel_bearing, config().presentation.angle_decimal_places)
+            rel_bearing = format_rel_bearing(rel_bearing)
             dist = format_number(dist, config().presentation.distance_decimal_places)
             items_data.append((describe_entity(obj), dist, rel_bearing))
         return objects, items_data

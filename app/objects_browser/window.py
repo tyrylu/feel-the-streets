@@ -69,7 +69,7 @@ class ObjectsBrowserWindow(QWidget):
         objects, item_data = data
         self._objects = objects
         for (desc, dist, rel_bearing) in item_data:
-            self._objects_list.addItem(_("{object}: distance {distance} meters, {rel_bearing}° relatively").format(object=desc, distance=dist, rel_bearing=rel_bearing))
+            self._objects_list.addItem(_("{object}: distance {distance} meters, {rel_bearing}").format(object=desc, distance=dist, rel_bearing=rel_bearing))
         if self._progress_indicator:
             self._progress_indicator.hide()
             self._progress_indicator.deleteLater()

@@ -158,3 +158,10 @@ def describe_angle_as_turn_instructions(angle, precision):
                 return f"{angle_description} {direction}"
         else:
             return direction
+
+def format_rel_bearing(bearing):
+    if config().presentation.represent_bearings_as_clock_position:
+        clock_position = round(bearing/30)
+        return _("on {} o'clock").format(clock_position)
+    else:
+        return _("{}° relatively").format(format_number(bearing, config().presentation.angle_decimal_places))
