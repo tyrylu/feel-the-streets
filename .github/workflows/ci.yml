@@ -58,8 +58,10 @@ jobs:
       run: mkdir to_deploy
     - name: Copy common artifacts, part 1
       run: cp *.yml to_deploy
-    - name: Copy common artifacts, part 2 
+    - name: Copy common artifacts, part 2
       run: cp fts.dict to_deploy
+    - name: Copy common artifacts, part 23
+      run: cp Rocket.toml to_deploy
     - name: Copy Linux artifacts
       if: runner.os == 'Linux'
       run: cp target/release/{oesc,server,worker,create_area,recreate_all_areas,update_area,libosm_db\.so} to_deploy
