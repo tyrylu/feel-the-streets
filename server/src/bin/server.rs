@@ -9,15 +9,15 @@ fn rocket() -> _ {
     let _dotenv_path = dotenv::dotenv().expect("Failed to setup logging from environment");
     rocket::build()
         .attach(DbConn::fairing())
-        .attach(AdHoc::on_ignite("Database Migrations", |rocket| async {
+        .attach(AdHoc::on_liftoff("Database Migrations", |rocket| Box::pin(async move {
             let conn = DbConn::get_one(&rocket).await.expect("database connection");
             match conn.run(|c| {server::run_migrations(&c)}).await {
-                Ok(()) => rocket,
+                Ok(()) => (),
                 Err(e) => {
                     panic!("Failed to run database migrations: {:?}", e);
                 }
             }
-        }))
+        })))
         .mount(
             "/api",
             routes![
