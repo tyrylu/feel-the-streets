@@ -5,6 +5,7 @@ use osm_api::object_manager::{self, OSMObjectManager};
 use osm_db::area_db::AreaDatabase;
 use osm_db::relationship_inference::infer_additional_relationships_for;
 use osm_db::translation::{record::TranslationRecord, translator};
+use serde::{Deserialize, Serialize};
 
 pub fn create_area_database(area: i64) -> Result<()> {
     info!("Starting to create area with id {}.", area);
@@ -30,4 +31,22 @@ pub fn create_area_database(area: i64) -> Result<()> {
     record.save_to_file(&format!("creation_{}.json", area))?;
     info!("Area created successfully.");
     Ok(())
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct CreateAreaDatabaseTask {
+    area_id: i64,
+}
+
+impl CreateAreaDatabaseTask {
+    pub fn new(area_id: i64) -> Self {
+        Self { area_id }
+    }
+}
+
+#[typetag::serde]
+impl doitlater::Executable for CreateAreaDatabaseTask {
+    fn execute(&self) -> std::result::Result<(), Box<dyn std::error::Error>> {
+        create_area_database(self.area_id).map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
+    }
 }

@@ -5,6 +5,7 @@ use std::fs;
 use std::time::Instant;
 
 fn main() -> Result<()> {
+    let _dotenv_path = dotenv::dotenv()?;
     server::init_logging();
     let server_conn = SqliteConnection::establish("server.db")?;
     for area in Area::all(&server_conn)? {

@@ -18,8 +18,8 @@ serde = {version="*", features=["derive"]}
 serde_json = "*"
 chrono = {version = "*", default_features=false, features = ["serde", "clock", "std"]}
 thiserror = "*"
-lapin = "*"
 dotenv = "*"
-sha3 = "*"
-hex = "*"
 base64 = "*"
+typetag = "*"
+doitlater = {path="../../doitlater"}
+redis_api = {path = "../redis_api"}

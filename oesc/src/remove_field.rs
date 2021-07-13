@@ -1,26 +1,15 @@
 use anyhow::Result;
 use diesel::{Connection, SqliteConnection};
-use lapin::options::ConfirmSelectOptions;
 use osm_db::area_db::AreaDatabase;
 use osm_db::entities_query::EntitiesQuery;
 use osm_db::entities_query_condition::{Condition, FieldCondition};
 use osm_db::semantic_change::{EntryChange, SemanticChange};
-use server::amqp_utils;
+use redis_api::ChangesStream;
 use server::area::Area;
-use server::area_messaging;
 
 pub fn remove_field(entity: String, field: String, new_name: Option<String>) -> Result<()> {
     let _dotenv_path = dotenv::dotenv()?;
     let server_conn = SqliteConnection::establish("server.db")?;
-    let amq_conn = amqp_utils::connect_to_broker().expect("Amqp connect fail");
-    let channel = amq_conn
-        .create_channel()
-        .wait()
-        .expect("Create channel fail");
-    channel
-        .confirm_select(ConfirmSelectOptions::default())
-        .wait()
-        .expect("Confirm select fail");
     for area in Area::all_updated(&server_conn)? {
         println!("Processing area {} (id {})...", area.name, area.osm_id);
         let mut area_db = AreaDatabase::open_existing(area.osm_id, true)?;
@@ -56,22 +45,11 @@ pub fn remove_field(entity: String, field: String, new_name: Option<String>) -> 
             );
         }
         area_db.begin()?;
+        let mut stream = ChangesStream::new_from_env(area.osm_id)?;
+        let mut batch = stream.begin_batch();
         for change in &changes {
             area_db.apply_change(change)?;
-            area_messaging::publish_change_on(&channel, change, area.osm_id)
-                .expect("Publish change fail");
-            for confirmation in channel
-                .wait_for_confirms()
-                .wait()
-                .expect("Wait for confirms fail")
-            {
-                if confirmation.reply_code != 200 {
-                    eprintln!(
-                        "Non 200 reply code from delivery: {:?}, code: {}, message: {}",
-                        confirmation.delivery, confirmation.reply_code, confirmation.reply_text
-                    );
-                }
-            }
+            batch.add_change(change)?;
         }
         area_db.commit()?;
         println!("Area processed successfully.");

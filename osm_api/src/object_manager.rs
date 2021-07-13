@@ -219,10 +219,7 @@ impl OSMObjectManager {
         readable: Box<dyn Read>,
         return_objects: bool,
     ) -> Result<Vec<OSMObject>> {
-        self.cache_conn
-            .as_ref()
-            .unwrap()
-            .execute("BEGIN", [])?;
+        self.cache_conn.as_ref().unwrap().execute("BEGIN", [])?;
         let start = Instant::now();
         let mut cache = self.get_cache();
         let mut objects = Vec::new();
@@ -455,11 +452,11 @@ impl OSMObjectManager {
 
     fn create_geometry_collection(&self, object: &OSMObject) -> Result<Option<Geometry<f64>>> {
         Ok(Some(Geometry::GeometryCollection(
-                            self.related_objects_of(object)?
-                    .map(|o| self.get_geometry_of(&o))
-                    .filter_map(|g| g.ok())
-                    .flatten()
-                    .collect(),
+            self.related_objects_of(object)?
+                .map(|o| self.get_geometry_of(&o))
+                .filter_map(|g| g.ok())
+                .flatten()
+                .collect(),
         )))
     }
 

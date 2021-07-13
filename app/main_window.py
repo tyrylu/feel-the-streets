@@ -7,7 +7,7 @@ from .entities import Person
 from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController, LastLocationController, MovementRestrictionController, InterestingEntitiesController, SpeechController, PositionAdjustmentController
 from .area_selection import AreaSelectionDialog
 from .services import map, menu_service, config
-from .server_interaction import AreaDatabaseDownloader, SemanticChangeRetriever, has_api_connectivity, ConnectionError, UnknownQueueError, get_motd
+from .server_interaction import AreaDatabaseDownloader, SemanticChangeRetriever, has_api_connectivity, ConnectionError, get_motd, create_client
 from .changes_applier import ChangesApplier
 from .message_dialog import MessageDialog
 from .local_areas_utils import get_area_names_cache
@@ -111,16 +111,18 @@ class MainWindow(QMainWindow):
         if area > FROZEN_AREA_OSM_ID_OFFSET or not has_api_connectivity():
             self._on_map_ready()
             return
+        if not config().general.client_secret:
+            secret = create_client(config().general.client_id)
+            if not secret:
+                raise RuntimeError("Failed to create the server-side client record.")
+            config().general.client_secret = secret
+            config().save_to_user_config()
         try:
             retriever = SemanticChangeRetriever()
             self._pending_count = retriever.new_change_count_in(area)
         except ConnectionError:
             QMessageBox.warning(self, _("Warning"), _("Could not retrieve changes in the selected area, using the potentially stale local copy."))
             self._on_map_ready()
-            return
-        except UnknownQueueError:
-            QMessageBox.warning(self, _("Warning"), _("The changes queue for the selected database no longer exists on the server, downloading it as if it was a new area."))
-            self._download_database(area)
             return
         if not self._pending_count:
             self._on_map_ready()

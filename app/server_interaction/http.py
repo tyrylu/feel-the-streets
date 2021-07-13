@@ -121,3 +121,8 @@ def get_motd():
     if not data: # No motd has been published yet
         return None
     return Motd(data)
+
+def create_client(client_id):
+    resp = session.post(url_for("create_client"), json={"client_id":client_id})
+    if resp.status_code == 200:
+        return resp.json()["password"]

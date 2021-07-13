@@ -7,6 +7,7 @@ from . import ini_utils
 
 class GeneralConfig(BaseModel):
     client_id: str = ""
+    client_secret: str = ""
 
 class NavigationConfig(BaseModel):
     disallow_leaving_roads: bool = True
@@ -56,5 +57,11 @@ class Config(BaseModel):
         ini_utils.dict_to_ini_file(self.dict(), self._config_file)
 
     @property
-    def amqp_broker_url(self):
-        return os.environ.get("AMQP_BROKER_URL", "amqps://app:FeelTheStreets@fts.trycht.cz?socket_timeout=2.0") # Maybe store the value in the config too?
+    def redis_url(self):
+        from_env = os.environ.get("REDIS_URL", None)
+        if from_env:
+            return from_env
+        if not self.general.client_secret:
+            raise RuntimeError("Can not create redis connection URL, the client is not created on the server and the REDIS_URL environment variable is not set.")
+        return f"rediss://{self.general.client_id}:{self.general.client_secret}@fts.trycht.cz"
+        

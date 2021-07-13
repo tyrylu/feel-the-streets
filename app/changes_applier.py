@@ -20,6 +20,9 @@ class ChangesApplier(QThread):
         self._generate_changelog = generate_changelog
 
     def run(self):
+        if self._retriever.redownload_requested_for(self._area):
+            self.redownload_requested.emit()
+            return
         db = AreaDatabase.open_existing(self._area, server_side=False)
         db.begin()
         if self._generate_changelog:
@@ -30,9 +33,6 @@ class ChangesApplier(QThread):
             changelog_path = None
         changes_applyed = False
         for nth, change in enumerate(self._retriever.new_changes_in(self._area)):
-            if change.type is CHANGE_REDOWNLOAD_DATABASE:
-                self.redownload_requested.emit()
-                break
             self.will_process_change.emit(nth + 1)
             entity = None
             # We must retrieve the entity before deleting it so we can produce the display representation of it.

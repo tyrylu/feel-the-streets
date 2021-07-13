@@ -1,8 +1,9 @@
 use crate::area::{Area, AreaState};
-use crate::area_messaging;
-use crate::background_task::BackgroundTask;
+use crate::background_tasks::CreateAreaDatabaseTask;
 use crate::{DbConn, Error, Result};
+use doitlater::{ExecutableExt, Queue};
 use osm_db::AreaDatabase;
+use redis_api::ChangesStream;
 use rocket::http::Status;
 use rocket::response::status;
 use rocket::serde::json::Json;
@@ -29,6 +30,16 @@ pub struct MotdEntry {
     message: String,
 }
 
+#[derive(Deserialize)]
+pub struct CreateClientRequest {
+    client_id: String,
+}
+
+#[derive(Serialize)]
+pub struct CreateClientResponse {
+    password: String,
+}
+
 #[get("/areas")]
 pub async fn areas(conn: DbConn) -> Result<Json<Vec<Area>>> {
     let areas = conn.run(|conn| Area::all(&conn)).await?;
@@ -42,12 +53,15 @@ pub async fn maybe_create_area(
 ) -> Result<status::Custom<Json<Area>>> {
     let area = request.into_inner();
     let area_id = area.osm_id;
-    match conn.run(move |c| {Area::find_by_osm_id(area_id, &c)}).await {
+    match conn.run(move |c| Area::find_by_osm_id(area_id, &c)).await {
         Ok(a) => Ok(status::Custom(Status::Ok, Json(a))),
         Err(_e) => {
-                        let area = conn.run(move |c| {Area::create(area.osm_id, &area.name, &c)}).await?;
-            area_messaging::init_exchange(area.osm_id)?;
-            BackgroundTask::CreateAreaDatabase(area.osm_id).deliver()?;
+            let area = conn
+                .run(move |c| Area::create(area.osm_id, &area.name, &c))
+                .await?;
+            let mut queue = Queue::new_from_env()?;
+            CreateAreaDatabaseTask::new(area.osm_id)
+                .enqueue_into(&mut queue, &format!("create_area_{}", area.osm_id))?;
             Ok(status::Custom(Status::Created, Json(area)))
         }
     }
@@ -55,12 +69,19 @@ pub async fn maybe_create_area(
 
 #[get("/areas/<area_osm_id>/download?<client_id>")]
 pub async fn download_area(area_osm_id: i64, client_id: String, conn: DbConn) -> Result<File> {
-    let area = conn.run(move |c| {Area::find_by_osm_id(area_osm_id, &c)}).await?;
+    let area = conn
+        .run(move |c| Area::find_by_osm_id(area_osm_id, &c))
+        .await?;
     if area.state != AreaState::Updated && area.state != AreaState::Frozen {
         Err(Error::DatabaseIntegrityError)
     } else {
         if area.state == AreaState::Updated {
-            area_messaging::init_queue(&client_id, area_osm_id)?;
+            let mut stream = ChangesStream::new_from_env(area_osm_id)?;
+            if stream.has_client(&client_id)? {
+                stream.redownload_finished_for(&client_id)?;
+            } else {
+                stream.register_client(&client_id)?;
+            }
         }
         Ok(File::open(AreaDatabase::path_for(area_osm_id, true))?)
     }
@@ -95,4 +116,16 @@ pub fn motd() -> Result<Json<HashMap<String, MotdEntry>>> {
         }
     }
     Ok(Json(messages))
+}
+
+#[post("/create_client", data = "<req>")]
+pub async fn create_client(req: Json<CreateClientRequest>) -> Result<Json<CreateClientResponse>> {
+    let mut stream = ChangesStream::new_from_env(0)?;
+    let client_id = req.into_inner().client_id;
+    if stream.has_client(&client_id)? {
+        Err(Error::ClientAlreadyExists)
+    } else {
+        let password = stream.create_client(&client_id)?;
+        Ok(Json(CreateClientResponse { password }))
+    }
 }

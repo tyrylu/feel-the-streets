@@ -8,12 +8,12 @@ edition = "2018"
 
 [dependencies]
 osm_db = {path="../osm_db"}
+redis_api = {path = "../redis_api"}
 server={path="../server"}
 structopt="*"
 anyhow = "*"
 dotenv = "*"
 diesel = {version = "*", features = ["sqlite", "chrono"]}
-lapin = "*"
 url = "*"
 ureq = {version="*", default_features=false, features=["tls", "json"]}
 serde = {version="*", features=["derive"]}

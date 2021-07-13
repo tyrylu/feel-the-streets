@@ -1,11 +1,9 @@
 use crate::area::{Area, AreaState};
+use crate::diff_utils;
+use crate::diff_utils::ListChange;
 use crate::Result;
-use crate::{amqp_utils, diff_utils::ListChange};
-use crate::{area_messaging, diff_utils};
 use chrono::{DateTime, Utc};
 use diesel::{Connection, SqliteConnection};
-use lapin::options::ConfirmSelectOptions;
-use lapin::Channel;
 use osm_api::change::OSMObjectChangeType;
 use osm_api::object_manager::OSMObjectManager;
 use osm_db::semantic_change::SemanticChange;
@@ -15,6 +13,8 @@ use osm_db::{
     entity_relationship_kind::EntityRelationshipKind, relationship_inference,
     semantic_change::RelationshipChange,
 };
+use redis_api::ChangesStream;
+use serde::{Deserialize, Serialize};
 use std::{
     collections::{HashMap, HashSet},
     fs,
@@ -37,7 +37,6 @@ fn find_or_create_suitable_change<'a>(
 pub fn update_area(
     area: &mut Area,
     conn: &SqliteConnection,
-    publish_channel: &Channel,
     mut record: &mut TranslationRecord,
 ) -> Result<()> {
     info!("Updating area {} (id {}).", area.name, area.osm_id);
@@ -206,19 +205,22 @@ pub fn update_area(
     //area_db.begin()?;
     infer_additional_relationships(&mut semantic_changes, &area_db)?;
     area_db.commit()?;
-    info!("Publishing the changes...");
-    for change in semantic_changes {
-        area_messaging::publish_change_on(publish_channel, &change, area.osm_id)?;
-        for confirmation in publish_channel.wait_for_confirms().wait()? {
-            if confirmation.reply_code != 200 {
-                warn!(
-                    "Non 200 reply code from delivery: {:?}, code: {}, message: {}",
-                    confirmation.delivery, confirmation.reply_code, confirmation.reply_text
-                );
-            }
+    let mut stream = ChangesStream::new_from_env(area.osm_id)?;
+    if !stream.exists()? || !stream.should_publish_changes()? {
+        info!("Not publishing the changes, because there is either no client to receive them, or all the clients have to redownload the area anyway.");
+    } else {
+        info!("Doing a garbage collection for the stream...");
+        let prev_usage = stream.memory_usage()?;
+        let collected = stream.garbage_collect()?;
+        let current_usage = stream.memory_usage()?;
+        info!("Garbage collection removed {} changes decreasing the memory usage of the stream from {} to {} bytes.", collected, prev_usage, current_usage);
+        info!("Publishing the changes...");
+        let mut batch = stream.begin_batch();
+        for change in semantic_changes {
+            batch.add_change(&change)?;
         }
+        info!("Changes published and replies checked.");
     }
-    info!("Changes published and replies checked.");
     let size = fs::metadata(AreaDatabase::path_for(area.osm_id, true))?.len() as i64;
     area.db_size = size;
     area.state = AreaState::Updated;
@@ -306,16 +308,21 @@ pub fn update_area_databases() -> Result<()> {
     let area_db_conn = SqliteConnection::establish("server.db")?;
     let mut record = TranslationRecord::new();
     let areas = Area::all_updated(&area_db_conn)?;
-    let rabbitmq_conn = amqp_utils::connect_to_broker()?;
-    let channel = rabbitmq_conn.create_channel().wait()?;
-    channel
-        .confirm_select(ConfirmSelectOptions::default())
-        .wait()?;
     let now = Utc::now();
     for mut area in areas {
-        update_area(&mut area, &area_db_conn, &channel, &mut record)?;
+        update_area(&mut area, &area_db_conn, &mut record)?;
     }
     record.save_to_file(&format!("area_updates_{}.json", now.to_rfc3339()))?;
     info!("Area updates finished successfully.");
     Ok(())
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct UpdateAreaDatabasesTask;
+
+#[typetag::serde]
+impl doitlater::Executable for UpdateAreaDatabasesTask {
+    fn execute(&self) -> std::result::Result<(), Box<dyn std::error::Error>> {
+        update_area_databases().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
+    }
 }

@@ -1,64 +1,18 @@
-use lapin::options::{BasicAckOptions, BasicConsumeOptions, BasicQosOptions};
-use lapin::types::FieldTable;
-use log::{info, trace};
-use server::{
-    amqp_utils, background_task::BackgroundTask, background_task_constants,
-    background_task_delivery, datetime_utils, Result,
-};
-
-fn consume_tasks() -> Result<()> {
-    use background_task_constants::*;
-    let client = amqp_utils::connect_to_broker()?;
-    let channel = client.create_channel().wait()?;
-    let channel2 = client.create_channel().wait()?;
-    let (tasks_queue, future_tasks_queue) = amqp_utils::init_background_job_queues(&channel)?;
-    let count = future_tasks_queue.message_count();
-    if count == 0 {
-        info!("Initially scheduling the databases update task...");
-        let ttl = datetime_utils::compute_ttl_for_time(
-            DATABASES_UPDATE_HOUR,
-            DATABASES_UPDATE_MINUTE,
-            DATABASES_UPDATE_SECOND,
-        );
-        background_task_delivery::perform_delivery_on(
-            &channel2,
-            &BackgroundTask::UpdateAreaDatabases,
-            Some(ttl),
-        )?;
-    }
-    let opts = BasicQosOptions {
-        ..Default::default()
-    };
-    channel.basic_qos(1, opts).wait()?;
-    let consumer = channel
-        .basic_consume(
-            tasks_queue.name().as_str(),
-            "tasks_consumer",
-            BasicConsumeOptions::default(),
-            FieldTable::default(),
-        )
-        .wait()?;
-    info!("Starting tasks consumption...");
-    for delivery_data in consumer {
-        let (chan, delivery) = delivery_data?;
-        trace!("Received message: {:?}", delivery);
-        let task: BackgroundTask = serde_json::from_slice(&delivery.data)?;
-        task.execute()?;
-        info!("Task executed successfully.");
-        chan.basic_ack(delivery.delivery_tag, BasicAckOptions::default())
-            .wait()?;
-        info!("Task acknowledged.");
-        if let Some((hour, minute, second)) = task.get_next_schedule_time() {
-            let ttl = datetime_utils::compute_ttl_for_time(hour, minute, second);
-            background_task_delivery::perform_delivery_on(&channel2, &task, Some(ttl))?;
-        }
-    }
-    client.run()?;
-    Ok(())
-}
+use doitlater::Worker;
+use log::info;
+use server::{background_tasks::UpdateAreaDatabasesTask, Result};
 
 fn main() -> Result<()> {
-    server::init_logging();
     let _dotenv_path = dotenv::dotenv()?;
-    consume_tasks()
+    server::init_logging();
+    let mut worker = Worker::new_from_env()?;
+    info!("The worker is ready.");
+    let mut scheduler = worker.create_scheduler()?;
+    scheduler.register_job("update_area_databases", "57 23 * * *", || {
+        Box::new(UpdateAreaDatabasesTask)
+    })?;
+    worker.use_scheduler(scheduler);
+    info!("Scheduled jobs registered and scheduler set, about to run worker.");
+    worker.run()?;
+    Ok(())
 }

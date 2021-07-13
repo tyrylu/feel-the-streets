@@ -1,2 +1,2 @@
-from .http import get_areas, request_area_creation, AreaDatabaseDownloader, has_api_connectivity, get_areas_with_name, get_area_parents, get_motd, RateLimitedError
-from .amqp import SemanticChangeRetriever, ConnectionError, UnknownQueueError
+from .http import get_areas, request_area_creation, AreaDatabaseDownloader, has_api_connectivity, get_areas_with_name, get_area_parents, get_motd, create_client, RateLimitedError
+from .changes import SemanticChangeRetriever, ConnectionError

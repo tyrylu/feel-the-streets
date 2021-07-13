@@ -8,20 +8,12 @@ extern crate log;
 extern crate diesel;
 #[macro_use]
 extern crate diesel_migrations;
-
-pub mod amqp_utils;
 pub mod area;
-pub mod area_messaging;
-pub mod background_task;
-pub mod background_task_constants;
-pub mod background_task_delivery;
 pub mod background_tasks;
-pub mod datetime_utils;
 mod diff_utils;
 mod error;
 pub mod routes;
 mod schema;
-
 use diesel::SqliteConnection;
 pub use error::Error;
 pub type Result<T> = core::result::Result<T, Error>;

@@ -1,9 +1,9 @@
 use diesel::{Connection, SqliteConnection};
-use lapin::options::ConfirmSelectOptions;
 use osm_db::translation::record::TranslationRecord;
-use server::{amqp_utils, area::Area, Result};
+use server::{area::Area, Result};
 
 fn main() -> Result<()> {
+    let _dotenv_path = dotenv::dotenv()?;
     server::init_logging();
     let area_db_conn = SqliteConnection::establish("server.db")?;
     let mut record = TranslationRecord::new();
@@ -13,16 +13,6 @@ fn main() -> Result<()> {
         .parse()
         .expect("Area id not an int");
     let mut area = Area::find_by_osm_id(area_id, &area_db_conn)?;
-    let rabbitmq_conn = amqp_utils::connect_to_broker()?;
-    let channel = rabbitmq_conn.create_channel().wait()?;
-    channel
-        .confirm_select(ConfirmSelectOptions::default())
-        .wait()?;
-    server::background_tasks::area_db_update::update_area(
-        &mut area,
-        &area_db_conn,
-        &channel,
-        &mut record,
-    )?;
+    server::background_tasks::area_db_update::update_area(&mut area, &area_db_conn, &mut record)?;
     Ok(())
 }

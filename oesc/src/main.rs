@@ -4,7 +4,6 @@ use structopt::StructOpt;
 mod change_field_type;
 mod command;
 mod create_frozen_copy;
-mod rabbitmq_admin_api;
 mod remove_field;
 mod request_redownload;
 mod view_field_usage;

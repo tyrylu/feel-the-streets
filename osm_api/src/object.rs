@@ -39,8 +39,8 @@ pub struct OSMRelationMember {
 impl OSMRelationMember {
     pub fn new(reference: u64, referenced_type: OSMObjectType, role: String) -> Self {
         OSMRelationMember {
-            reference,
             referenced_type,
+            reference,
             role,
         }
     }
