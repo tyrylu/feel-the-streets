@@ -38,11 +38,10 @@ They might be split in the future, however.
 
 ## Running the server
 
-The server expects a Rabbitmq server running. The credentials should be in a file named .env, which should be placed in the project root directory. It should look something like the following:
-AMQP_BROKER_URL="amqp://user:password@rabbitmq_host/%2f"
-Note that the used Rabbitmq user needs privileges to declare queues and exchanges, along with the needed bindings. In addition to the plaintext amqp protocol, you can use TLS encryption if you specify amqps in the protocol in the URI.
+The server expects a Redis server running. The credentials should be in a file named .env, which should be placed in the project root directory. It should look something like the following:
+REDIS_URL="redis://user:password@redis_host"
+Note that the used Redis user needs privileges to modify ACLs for application users, so it is basically an admin. In addition to the plaintext redis protocol, you can use TLS encryption if you specify rediss in the protocol in the URI. It is also possible to use an unix socket using the redis+unix or unix protocols in the connection URL, these two protocols are interchangeable.
 To run it, after cargo build, just run target/debug/server.
-
 
 ## Runtime clientrequirements
 - The application is accessing the network for area downloads at the following DNS names: mail.trycht.cz
