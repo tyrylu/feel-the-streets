@@ -20,7 +20,7 @@ class SemanticChangeRetriever:
         self._message_ids = defaultdict(list)
 
     def new_changes_in(self, area):
-        messages = self._conn.xreadgroup(config().general.client_id, "fts_app", {f"fts.{area}.changes": "$"})
+        messages = self._conn.xreadgroup(config().general.client_id, "fts_app", {f"fts.{area}.changes": ">"})
         for (message_id, data) in messages[0]:
             self._message_ids[area].append(message_id)
             yield SemanticChange.from_serialized(data)
@@ -41,8 +41,11 @@ class SemanticChangeRetriever:
     
     def new_change_count_in(self, area):
         num = self._conn.hget(f"fts.{area}.change_counts", config().general.client_id)
-        if not num:
+        if num is None:
             return 0
         return int(num)
+    
     def redownload_requested_for(self, area):
-        return bool(self._conn.sismember(f"fts.{area}.redownload_requests", config().general.client_id))
+        changes_stream_exists = bool(self._conn.exists(f"fts.{area}.changes"))
+        redownload_request_exists = bool(self._conn.sismember(f"fts.{area}.redownload_requests", config().general.client_id))
+        return (not changes_stream_exists) or redownload_request_exists

@@ -119,12 +119,15 @@ class MainWindow(QMainWindow):
             config().save_to_user_config()
         try:
             retriever = SemanticChangeRetriever()
+            if retriever.redownload_requested_for(area):
+                self._on_redownload_requested(has_progress_dialog=False)
+                return
             self._pending_count = retriever.new_change_count_in(area)
         except ConnectionError:
             QMessageBox.warning(self, _("Warning"), _("Could not retrieve changes in the selected area, using the potentially stale local copy."))
             self._on_map_ready()
             return
-        if not self._pending_count:
+        if self._pending_count == 0:
             self._on_map_ready()
             return
         generate_changelog = config().changelogs.enabled
@@ -140,9 +143,10 @@ class MainWindow(QMainWindow):
         self._applier.redownload_requested.connect(self._on_redownload_requested)
         self._applier.start()
         
-    def _on_redownload_requested(self):
-        self._progress.close()
-        self._progress = None
+    def _on_redownload_requested(self, has_progress_dialog=True):
+        if has_progress_dialog:
+            self._progress.close()
+            self._progress = None
         QMessageBox.information(self, _("Redownload requested"), _("The server has requested a redownload of the selected database, proceeding with the operation."))
         self._download_database(self._selected_map)
         
