@@ -140,7 +140,6 @@ class MainWindow(QMainWindow):
         self._applier = ChangesApplier(area, retriever, generate_changelog)
         self._applier.will_process_change.connect(self._on_will_process_change)
         self._applier.changes_applied.connect(self._on_changes_applied)
-        self._applier.redownload_requested.connect(self._on_redownload_requested)
         self._applier.start()
         
     def _on_redownload_requested(self, has_progress_dialog=True):

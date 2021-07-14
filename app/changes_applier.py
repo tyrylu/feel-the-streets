@@ -9,7 +9,6 @@ from .semantic_changelog_generator import get_change_description
 log = logging.getLogger(__name__)
 
 class ChangesApplier(QThread):
-    redownload_requested = Signal()
     will_process_change = Signal(int)
     changes_applied = Signal(str)
 
@@ -20,9 +19,6 @@ class ChangesApplier(QThread):
         self._generate_changelog = generate_changelog
 
     def run(self):
-        if self._retriever.redownload_requested_for(self._area):
-            self.redownload_requested.emit()
-            return
         db = AreaDatabase.open_existing(self._area, server_side=False)
         db.begin()
         if self._generate_changelog:
