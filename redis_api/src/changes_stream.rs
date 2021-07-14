@@ -67,6 +67,7 @@ impl ChangesStream {
                 Rule::AddCommand("sismember".to_string()),
                 Rule::AddCommand("hget".to_string()),
                 Rule::AddCommand("hincrby".to_string()),
+                Rule::AddCommand("exists".to_string()),
             ],
         )?;
         Ok(password)
