@@ -1,7 +1,10 @@
 from osm_db import SemanticChange
 from collections import defaultdict
+import logging
 import redis
 from ..services import config
+
+log = logging.getLogger(__name__)
 
 class ConnectionError(RuntimeError):
     pass
@@ -16,6 +19,7 @@ class SemanticChangeRetriever:
             self._conn.ping()
             self._needs_closing = True
         except redis.RedisError as e:
+            log.warning("Failed to connect to redis: %s", e)
             raise ConnectionError() from e
         self._message_ids = defaultdict(list)
 

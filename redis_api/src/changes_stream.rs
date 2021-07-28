@@ -62,6 +62,7 @@ impl ChangesStream {
             &[
                 Rule::On,
                 Rule::AddPass(password.clone()),
+                Rule::AddCommand("ping".to_string()),
                 Rule::AddCommand("xreadgroup".to_string()),
                 Rule::AddCommand("xack".to_string()),
                 Rule::AddCommand("sismember".to_string()),
@@ -70,6 +71,7 @@ impl ChangesStream {
                 Rule::AddCommand("exists".to_string()),
             ],
         )?;
+        self.redis_connection.acl_save()?;
         Ok(password)
     }
 
