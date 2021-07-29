@@ -50,6 +50,9 @@ class SemanticChangeRetriever:
         return int(num)
     
     def redownload_requested_for(self, area):
-        changes_stream_exists = bool(self._conn.exists(f"fts.{area}.changes"))
+        try:
+            changes_stream_exists = bool(self._conn.exists(f"fts.{area}.changes"))
+        except redis.exceptions.NoPermissionError:
+            return True # We do not have the server side permissions yet, but we have a local copy, e. g. we are migrating from the old storage mechanism
         redownload_request_exists = bool(self._conn.sismember(f"fts.{area}.redownload_requests", config().general.client_id))
         return (not changes_stream_exists) or redownload_request_exists
