@@ -136,7 +136,7 @@ impl ChangesStream {
             .smembers(self.redownload_requests_key())?;
         registered.sort();
         should_redownload.sort();
-        Ok(registered == should_redownload)
+        Ok(registered != should_redownload)
     }
 
     pub fn has_client(&mut self, client_id: &str) -> Result<bool> {
