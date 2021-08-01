@@ -13,6 +13,7 @@ class NavigationConfig(BaseModel):
     disallow_leaving_roads: bool = True
     try_avoid_sidewalks: bool = True
     step_length: float = 0.7874 # Meters
+    stop_interesting_object_search_after: float = 500.0 # meters
     correct_direction_after_leave_disallowed: bool = True
     automatic_direction_corrections: int = 0
 

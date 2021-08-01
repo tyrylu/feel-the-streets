@@ -271,7 +271,9 @@ class InteractivePersonController:
 
     def _go_looking_for_interesting(self, movement_fn):
         found_interesting = False
-        initial_position = self._person.position
+        step_length = config().navigation.step_length
+        stop_after = config().navigation.stop_interesting_object_search_after
+        distance = 0
         def on_interesting(sender, entity):
             nonlocal found_interesting
             if not entity.is_road_like:
@@ -281,10 +283,13 @@ class InteractivePersonController:
             found_interesting = True
         interesting_entity_in_range.connect(on_interesting)
         entity_post_enter.connect(_on_post_enter)
-        while not found_interesting:
+        while (not found_interesting) and (distance < stop_after):
             movement_fn()
-        distance = distance_between(initial_position, self._person.position)
-        speech().speak(_("Interesting object found after {} meters.").format(format_number(distance, config().presentation.distance_decimal_places)))
+            distance += step_length
+        if found_interesting:
+            speech().speak(_("Interesting object found after {} meters.").format(format_number(distance, config().presentation.distance_decimal_places)))
+        else:
+            speech().speak(_("No interesting object found after {} meters.").format(config().navigation.stop_interesting_object_search_after))
 
     @menu_command(_("Movement"), _("Go forward looking for an interesting object"), "ctrl+up")
     def do_forward_until_no_interesting(self, evt):
