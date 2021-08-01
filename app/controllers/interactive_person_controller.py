@@ -270,6 +270,7 @@ class InteractivePersonController:
 
 
     def _go_looking_for_interesting(self, movement_fn):
+        self._search_for_interesting = True
         found_interesting = False
         step_length = config().navigation.step_length
         stop_after = config().navigation.stop_interesting_object_search_after
@@ -283,13 +284,14 @@ class InteractivePersonController:
             found_interesting = True
         interesting_entity_in_range.connect(on_interesting)
         entity_post_enter.connect(_on_post_enter)
-        while (not found_interesting) and (distance < stop_after):
+        while self._search_for_interesting and (not found_interesting) and (distance < stop_after):
             movement_fn()
             distance += step_length
+            QApplication.processEvents()
         if found_interesting:
             speech().speak(_("Interesting object found after {} meters.").format(format_number(distance, config().presentation.distance_decimal_places)))
         else:
-            speech().speak(_("No interesting object found after {} meters.").format(config().navigation.stop_interesting_object_search_after))
+            speech().speak(_("No interesting object found after {} meters.").format(format_number(distance, config().presentation.distance_decimal_places)))
 
     @menu_command(_("Movement"), _("Go forward looking for an interesting object"), "ctrl+up")
     def do_forward_until_no_interesting(self, evt):
@@ -298,6 +300,10 @@ class InteractivePersonController:
     @menu_command(_("Movement"), _("Go backward looking for an interesting object"), "ctrl+down")
     def do_backward_until_no_interesting(self, evt):
         self._go_looking_for_interesting(self._person.step_backward)
+
+    @menu_command(_("Movement"), _("Stop looking for an interesting object"), "ctrl+s")
+    def stop_search_for_interesting(self, evt):
+        self._search_for_interesting = False
 
     @menu_command(_("Movement"), _("Turn to a new road"), "t")
     def _turn_to_a_new_road(self, evt):
