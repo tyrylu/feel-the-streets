@@ -85,9 +85,9 @@ pub fn update_area(
             .unwrap_or_else(|| change.new.as_ref().expect("No old or new"))
             .unique_id();
         if seen_unique_ids.contains(&id) {
-            warn!(
-                "Phantom change of object with id {}, refusing to process change {:?}.",
-                id, change
+            trace!(
+                "We already saw a change of object with id {}, will not process it again.",
+                id
             );
             continue;
         } else {

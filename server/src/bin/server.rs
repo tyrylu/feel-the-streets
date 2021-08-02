@@ -7,7 +7,7 @@ use server::DbConn;
 fn rocket() -> _ {
     let _dotenv_path = dotenv::dotenv().expect("Failed to setup environment from env file");
     server::init_logging();
-        rocket::build()
+    rocket::build()
         .attach(DbConn::fairing())
         .attach(AdHoc::on_liftoff("Database Migrations", |rocket| {
             Box::pin(async move {

@@ -119,13 +119,12 @@ impl ChangesStream {
     pub fn request_redownload(&mut self) -> Result<()> {
         let client_ids = self.registered_clients()?;
         if client_ids.is_empty() {
-            // This stream has no clients, so we have to notify nobody about the redownload request.            
+            // This stream has no clients, so we have to notify nobody about the redownload request.
             Ok(())
-        }
-        else {
-        let client_id_refs: Vec<&str> = client_ids.iter().map(|s| s.as_ref()).collect();
-        self.request_redownload_for(&client_id_refs)?;
-        Ok(())
+        } else {
+            let client_id_refs: Vec<&str> = client_ids.iter().map(|s| s.as_ref()).collect();
+            self.request_redownload_for(&client_id_refs)?;
+            Ok(())
         }
     }
 

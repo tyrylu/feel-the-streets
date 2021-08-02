@@ -39,7 +39,7 @@ impl<T: Read> OSMObjectChangeIterator<T> {
     }
 
     fn parse_object(&mut self) -> Result<OSMObject> {
-        trace!("Parse object.");
+        trace!("Parse object called.");
         let mut tags: HashMap<String, String> = HashMap::new();
         let mut members = Vec::new();
         let mut nodes = Vec::new();
@@ -67,10 +67,17 @@ impl<T: Read> OSMObjectChangeIterator<T> {
             let event = self.reader.next();
             let event = event?;
             match event {
-                XmlEvent::Whitespace(..) => {}
+                XmlEvent::Whitespace(..) => {
+                    trace!("Whitespace during object parsing.")
+                }
                 XmlEvent::StartElement {
                     name, attributes, ..
                 } => {
+                    trace!(
+                        "Start of element {} with attributes {:?} during object parsing.",
+                        name.local_name,
+                        attributes
+                    );
                     let mut attrs = convert_to_map(attributes);
                     match name.local_name.as_ref() {
                         "node" | "way" | "relation" => {
@@ -113,25 +120,28 @@ impl<T: Read> OSMObjectChangeIterator<T> {
                         _ => panic!("Unexpected start of element {}.", name.local_name),
                     }
                 }
-                XmlEvent::EndElement { name, .. } => match name.local_name.as_ref() {
-                    "node" => {
-                        return Ok(OSMObject::new_node(
-                            id, timestamp, version, changeset, user, uid, tags, lat, lon,
-                        ));
+                XmlEvent::EndElement { name, .. } => {
+                    trace!("End of {} element during object parsing.", name.local_name);
+                    match name.local_name.as_ref() {
+                        "node" => {
+                            return Ok(OSMObject::new_node(
+                                id, timestamp, version, changeset, user, uid, tags, lat, lon,
+                            ));
+                        }
+                        "way" => {
+                            return Ok(OSMObject::new_way(
+                                id, timestamp, version, changeset, user, uid, tags, nodes,
+                            ));
+                        }
+                        "relation" => {
+                            return Ok(OSMObject::new_rel(
+                                id, timestamp, version, changeset, user, uid, tags, members,
+                            ));
+                        }
+                        "tag" | "nd" | "member" => {}
+                        _ => panic!("Unexpected end of element {}.", name.local_name),
                     }
-                    "way" => {
-                        return Ok(OSMObject::new_way(
-                            id, timestamp, version, changeset, user, uid, tags, nodes,
-                        ));
-                    }
-                    "relation" => {
-                        return Ok(OSMObject::new_rel(
-                            id, timestamp, version, changeset, user, uid, tags, members,
-                        ));
-                    }
-                    "tag" | "nd" | "member" => {}
-                    _ => panic!("Unexpected end of element {}.", name.local_name),
-                },
+                }
                 _ => panic!("Unexpected event during xml parsing."),
             }
         }
@@ -154,44 +164,54 @@ impl<T: Read> OSMObjectChangeIterator<T> {
             }
             Ok(XmlEvent::StartElement {
                 name, attributes, ..
-            }) => match name.local_name.as_ref() {
-                "action" => {
-                    self.current_change = None;
-                    let attrs = convert_to_map(attributes);
-                    self.old = None;
-                    self.new = None;
-                    self.current_change_type = match attrs["type"].as_ref() {
-                        "create" => Some(OSMObjectChangeType::Create),
-                        "modify" => Some(OSMObjectChangeType::Modify),
-                        "delete" => Some(OSMObjectChangeType::Delete),
-                        _ => panic!("Unknown change type {}.", attrs["type"]),
-                    };
-                    if let Some(OSMObjectChangeType::Create) = self.current_change_type {
-                        self.new = Some(self.parse_object()?);
+            }) => {
+                trace!(
+                    "Start of an element with name {} and attributes {:?}.",
+                    name.local_name,
+                    attributes
+                );
+                match name.local_name.as_ref() {
+                    "action" => {
+                        self.current_change = None;
+                        let attrs = convert_to_map(attributes);
+                        self.old = None;
+                        self.new = None;
+                        self.current_change_type = match attrs["type"].as_ref() {
+                            "create" => Some(OSMObjectChangeType::Create),
+                            "modify" => Some(OSMObjectChangeType::Modify),
+                            "delete" => Some(OSMObjectChangeType::Delete),
+                            _ => panic!("Unknown change type {}.", attrs["type"]),
+                        };
+                        if let Some(OSMObjectChangeType::Create) = self.current_change_type {
+                            self.new = Some(self.parse_object()?);
+                        }
                     }
+                    "new" => self.new = Some(self.parse_object()?),
+                    "old" => self.old = Some(self.parse_object()?),
+                    "remark" => self.in_remark = true,
+                    "osm" | "note" | "meta" => {}
+                    _ => panic!("Start of unexpected tag {}.", name.local_name),
                 }
-                "new" => self.new = Some(self.parse_object()?),
-                "old" => self.old = Some(self.parse_object()?),
-                "remark" => self.in_remark = true,
-                "osm" | "note" | "meta" => {}
-                _ => panic!("Start of unexpected tag {}.", name.local_name),
-            },
-            Ok(XmlEvent::EndElement { name, .. }) => match name.local_name.as_ref() {
-                "action" => {
-                    self.current_change = Some(OSMObjectChange {
-                        change_type: self
-                            .current_change_type
-                            .take()
-                            .expect("Did not set change type?"),
-                        old: self.old.take(),
-                        new: self.new.take(),
-                    })
+            }
+            Ok(XmlEvent::EndElement { name, .. }) => {
+                trace!("End of element with name {}.", name.local_name);
+                match name.local_name.as_ref() {
+                    "action" => {
+                        self.current_change = Some(OSMObjectChange {
+                            change_type: self
+                                .current_change_type
+                                .take()
+                                .expect("Did not set change type?"),
+                            old: self.old.take(),
+                            new: self.new.take(),
+                        })
+                    }
+                    "osm3response" => self.finished = true,
+                    "remark" => self.in_remark = false,
+                    "note" | "osm" | "meta" | "old" | "new" => {}
+                    _ => panic!("Unexpected end of {}.", name.local_name),
                 }
-                "osm3response" => self.finished = true,
-                "remark" => self.in_remark = false,
-                "note" | "osm" | "meta" | "old" | "new" => {}
-                _ => panic!("Unexpected end of {}.", name.local_name),
-            },
+            }
             Err(e) => {
                 self.finished = true;
                 return Err(Error::from(e));
