@@ -5,7 +5,7 @@ import logging
 from PySide2.QtWidgets import QApplication, QMessageBox
 import osm_db
 from . import locale_setup
-from .services import speech
+from .services import speech, config
 
 log = logging.getLogger(__name__)
 
@@ -19,7 +19,6 @@ def handle_error(exc, thread=None):
     QMessageBox.critical(None, _("Unexpected error"), _("The application encountered an unexpected error, please contact the developer and provide the contents of fts.log which is located in the folder with the executable."))
     sys.exit(1)
 
-
 def main():
     threading.excepthook = lambda args: handle_error(args.exception, args.thread)
     sys.excepthook = lambda type, value, traceback: handle_error(value)
@@ -28,7 +27,7 @@ def main():
     osm_db.init_logging()
     # We need the QT application before setting up the locale stuff...
     app = QApplication(sys.argv)
-    locale_setup.setup_locale()
+    locale_setup.setup_locale(config().general.language)
     # Now we can import the application window - we have the translation function.
     from .main_window import MainWindow
     mw = MainWindow()

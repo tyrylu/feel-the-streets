@@ -8,6 +8,7 @@ from . import ini_utils
 class GeneralConfig(BaseModel):
     client_id: str = ""
     client_secret: str = ""
+    language: str = "system"
 
 class NavigationConfig(BaseModel):
     disallow_leaving_roads: bool = True
