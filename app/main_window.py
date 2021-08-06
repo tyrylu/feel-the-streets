@@ -137,7 +137,7 @@ class MainWindow(QMainWindow):
                 generate_changelog = False
         self._progress = QProgressDialog(_("Applying changes for the selected database."), None, 0, self._pending_count, self)
         self._progress.setWindowTitle(_("Change application"))
-        self._progress.minimumDuration = 0
+        self._progress.setMinimumDuration(0)
         self._applier = ChangesApplier(area, retriever, generate_changelog)
         self._applier.will_process_change.connect(self._on_will_process_change)
         self._applier.changes_applied.connect(self._on_changes_applied)
