@@ -1,9 +1,10 @@
 import inspect
 from PySide2.QtGui import QKeySequence, Qt
-from PySide2.QtWidgets import QWidget, QListWidget, QTreeWidget, QTreeWidgetItem, QPushButton, QLabel, QGridLayout, QMenuBar, QApplication, QAction
+from PySide2.QtWidgets import QWidget, QListWidget, QTreeWidgetItem, QPushButton, QLabel, QGridLayout, QMenuBar, QApplication, QAction
 from osm_db import EntityMetadata
 from ..humanization_utils import format_field_value, underscored_to_words
 from ..services import menu_service
+from ..more_accessible_tree_widget import MoreAccessibleTreeWidget
 from . import object_actions
 from .object_actions.action import ObjectAction
 from .objects_sorter import ObjectsSorter
@@ -39,7 +40,7 @@ class ObjectsBrowserWindow(QWidget):
         layout.addWidget(self._objects_list, 1, 0)
         props_label = QLabel(_("Object properties"), self)
         layout.addWidget(props_label, 0, 1)
-        self._props = QTreeWidget(self)
+        self._props = MoreAccessibleTreeWidget(self)
         self._props.setAccessibleName(props_label.text())
         props_label.setBuddy(self._props)
         layout.addWidget(self._props, 1, 1)
@@ -101,6 +102,7 @@ class ObjectsBrowserWindow(QWidget):
         common_item = QTreeWidgetItem([_("Common properties")])
         specific_item = QTreeWidgetItem([_("Specific properties")])
         other_item = QTreeWidgetItem([_("Other properties - they can not be searched and are not processed in any way")])
+        other_item.setData(0, Qt.AccessibleTextRole, "Override")
         common_fields = list(EntityMetadata.for_discriminator("OSMEntity").fields.keys())
         selected_metadata = EntityMetadata.for_discriminator(selected.discriminator)
         known_fields = selected_metadata.all_fields

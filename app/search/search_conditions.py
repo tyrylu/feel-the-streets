@@ -1,8 +1,9 @@
 from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QPushButton, QLabel, QSpinBox, QTreeWidget, QTreeWidgetItem, QListWidget, QWidget, QMessageBox
+from PySide2.QtWidgets import QPushButton, QLabel, QSpinBox, QTreeWidgetItem, QListWidget, QWidget, QMessageBox
 from osm_db import EntityMetadata, FieldNamed
 from ..base_dialog import BaseDialog
 from ..humanization_utils import underscored_to_words, get_class_display_name
+from ..more_accessible_tree_widget import MoreAccessibleTreeWidget
 from .operators import operators_for_column_class
 
 class SpecifySearchConditionsDialog(BaseDialog):
@@ -19,7 +20,7 @@ class SpecifySearchConditionsDialog(BaseDialog):
     def create_ui(self):
         fields_label = QLabel(_("Class fields"), self)
         self.layout.addWidget(fields_label, 0, 0)
-        self._fields_tree = QTreeWidget(self)
+        self._fields_tree = MoreAccessibleTreeWidget(self)
         fields_label.setBuddy(self._fields_tree)
         self._fields_tree.currentItemChanged.connect(self.on_fields_tree_sel_changed)
         self.layout.addWidget(self._fields_tree, 1, 0)
