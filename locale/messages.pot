@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-06-28 22:54+0200\n"
+"POT-Creation-Date: 2021-08-09 16:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -434,7 +434,7 @@ msgstr ""
 msgid "Bridge"
 msgstr ""
 
-#: app/search/search_conditions.py:26 entities.yml:103 entities.yml:150
+#: app/search/search_conditions.py:27 entities.yml:103 entities.yml:150
 #: entities.yml:312 entities.yml:328 entities.yml:364 entities.yml:514
 #: entities.yml:754 entities.yml:829 entities.yml:901 entities.yml:998
 #: entities.yml:1070 entities.yml:1120 entities.yml:1226 entities.yml:1243
@@ -1330,8 +1330,8 @@ msgstr ""
 #: app/controllers/interactive_person_controller.py:204
 #: app/controllers/interactive_person_controller.py:213
 #: app/controllers/interactive_person_controller.py:235
-#: app/controllers/interactive_person_controller.py:340
-#: app/controllers/interactive_person_controller.py:352 entities.yml:431
+#: app/controllers/interactive_person_controller.py:351
+#: app/controllers/interactive_person_controller.py:363 entities.yml:431
 #: entities.yml:1414 enums.yml:914 enums.yml:1441 enums.yml:1496 enums.yml:1802
 msgid "Information"
 msgstr ""
@@ -10385,8 +10385,8 @@ msgstr ""
 msgid "The area with name {name} does not correspond to any OSM areas."
 msgstr ""
 
-#: app/area_selection.py:97 app/area_selection.py:101 app/main_window.py:155
-#: app/main_window.py:160
+#: app/area_selection.py:97 app/area_selection.py:101 app/main_window.py:163
+#: app/main_window.py:168
 msgid "Success"
 msgstr ""
 
@@ -10530,53 +10530,49 @@ msgstr ""
 msgid "Download of the selected area had failed."
 msgstr ""
 
-#: app/main_window.py:118 app/main_window.py:122
+#: app/main_window.py:127
 msgid "Warning"
 msgstr ""
 
-#: app/main_window.py:118
+#: app/main_window.py:127
 msgid "Could not retrieve changes in the selected area, using the potentially stale local copy."
 msgstr ""
 
-#: app/main_window.py:122
-msgid "The changes queue for the selected database no longer exists on the server, downloading it as if it was a new area."
-msgstr ""
-
-#: app/controllers/interactive_person_controller.py:268 app/main_window.py:130
-#: app/search/search_conditions.py:146
+#: app/controllers/interactive_person_controller.py:268 app/main_window.py:135
+#: app/search/search_conditions.py:147
 msgid "Question"
 msgstr ""
 
-#: app/main_window.py:130
+#: app/main_window.py:135
 #, python-format
 msgid "The server reports %s pending changes. Do you really want to generate the changelog from all of them? It might take a while."
 msgstr ""
 
-#: app/main_window.py:133
+#: app/main_window.py:138
 msgid "Applying changes for the selected database."
 msgstr ""
 
-#: app/main_window.py:134
+#: app/main_window.py:139
 msgid "Change application"
 msgstr ""
 
-#: app/main_window.py:144
+#: app/main_window.py:152
 msgid "Redownload requested"
 msgstr ""
 
-#: app/main_window.py:144
+#: app/main_window.py:152
 msgid "The server has requested a redownload of the selected database, proceeding with the operation."
 msgstr ""
 
-#: app/main_window.py:148
+#: app/main_window.py:156
 msgid "Applying changes for the selected database, change {nth} of {total}"
 msgstr ""
 
-#: app/main_window.py:155
+#: app/main_window.py:163
 msgid "Successfully applied {total} changes. A changelog of size {size} was generated, do you want to view it now?"
 msgstr ""
 
-#: app/main_window.py:160
+#: app/main_window.py:168
 msgid "Successfully applied {total} changes."
 msgstr ""
 
@@ -10592,16 +10588,12 @@ msgstr ""
 msgid "The developer sent a message on {}"
 msgstr ""
 
-#: app/preferences_dialog.py:6
-msgid "Preferences"
+#: app/more_accessible_tree_widget.py:6
+msgid "expanded"
 msgstr ""
 
-#: app/preferences_dialog.py:6
-msgid "&Save changes"
-msgstr ""
-
-#: app/preferences_dialog.py:6
-msgid "&Discard changes"
+#: app/more_accessible_tree_widget.py:8
+msgid "collapsed"
 msgstr ""
 
 #: app/controllers/interactive_person_controller.py:166
@@ -10613,7 +10605,7 @@ msgstr ""
 msgid "Road segments"
 msgstr ""
 
-#: app/objects_browser/window.py:51 app/road_segments_browser.py:19
+#: app/objects_browser/window.py:52 app/road_segments_browser.py:19
 msgid "Close"
 msgstr ""
 
@@ -10832,9 +10824,10 @@ msgstr ""
 #: app/controllers/interactive_person_controller.py:141
 #: app/controllers/interactive_person_controller.py:174
 #: app/controllers/interactive_person_controller.py:183
-#: app/controllers/interactive_person_controller.py:289
-#: app/controllers/interactive_person_controller.py:293
-#: app/controllers/interactive_person_controller.py:297
+#: app/controllers/interactive_person_controller.py:296
+#: app/controllers/interactive_person_controller.py:300
+#: app/controllers/interactive_person_controller.py:304
+#: app/controllers/interactive_person_controller.py:308
 msgid "Movement"
 msgstr ""
 
@@ -10929,7 +10922,7 @@ msgid "Enter the angle"
 msgstr ""
 
 #: app/controllers/interactive_person_controller.py:199
-#: app/controllers/interactive_person_controller.py:336
+#: app/controllers/interactive_person_controller.py:347
 msgid "Request"
 msgstr ""
 
@@ -11006,67 +10999,75 @@ msgstr ""
 msgid "Do you really want to delete the bookmark {name}?"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:287
+#: app/controllers/interactive_person_controller.py:292
 msgid "Interesting object found after {} meters."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:289
+#: app/controllers/interactive_person_controller.py:294
+msgid "No interesting object found after {} meters."
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:296
 msgid "Go forward looking for an interesting object"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:293
+#: app/controllers/interactive_person_controller.py:300
 msgid "Go backward looking for an interesting object"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:297
+#: app/controllers/interactive_person_controller.py:304
+msgid "Stop looking for an interesting object"
+msgstr ""
+
+#: app/controllers/interactive_person_controller.py:308
 msgid "Turn to a new road"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:301
+#: app/controllers/interactive_person_controller.py:312
 msgid "There is no meaningful turn to perform, you are not on a road."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:315
+#: app/controllers/interactive_person_controller.py:326
 msgid "There is no meaningful turn to perform, you aren't on a new road."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:323
+#: app/controllers/interactive_person_controller.py:334
 msgid "There is only a single meaningful turn, so you've been rotated {}"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:330
+#: app/controllers/interactive_person_controller.py:341
 msgid "You've been rotated {}."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:336
+#: app/controllers/interactive_person_controller.py:347
 msgid "Which turn you want to perform?"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:340
+#: app/controllers/interactive_person_controller.py:351
 msgid "Nearest address"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:352
+#: app/controllers/interactive_person_controller.py:363
 msgid "Nearest named road"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:366
+#: app/controllers/interactive_person_controller.py:377
 msgid "Not found."
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:369
+#: app/controllers/interactive_person_controller.py:380
 msgid "{object}: distance {distance} meters, {rel_bearing}° relatively"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:379
+#: app/controllers/interactive_person_controller.py:390
 msgid "your direction was corrected"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:381
+#: app/controllers/interactive_person_controller.py:392
 msgid "you will be turned {}"
 msgstr ""
 
-#: app/controllers/interactive_person_controller.py:383
+#: app/controllers/interactive_person_controller.py:394
 msgid "Because of your settings, {0}"
 msgstr ""
 
@@ -11122,59 +11123,59 @@ msgstr ""
 msgid "Repeat the current speech history item"
 msgstr ""
 
-#: app/objects_browser/window.py:26
+#: app/objects_browser/window.py:27
 msgid "Object actions"
 msgstr ""
 
-#: app/objects_browser/window.py:27
+#: app/objects_browser/window.py:28
 msgid "Property actions"
 msgstr ""
 
-#: app/objects_browser/window.py:28
+#: app/objects_browser/window.py:29
 msgid "Copy property value"
 msgstr ""
 
-#: app/objects_browser/window.py:29
+#: app/objects_browser/window.py:30
 msgid "Copy property name"
 msgstr ""
 
-#: app/objects_browser/window.py:30
+#: app/objects_browser/window.py:31
 msgid "Copy property name and value"
 msgstr ""
 
-#: app/objects_browser/window.py:31
+#: app/objects_browser/window.py:32
 msgid "Objects"
 msgstr ""
 
-#: app/objects_browser/window.py:40
+#: app/objects_browser/window.py:41
 msgid "Object properties"
 msgstr ""
 
-#: app/objects_browser/window.py:46
+#: app/objects_browser/window.py:47
 msgid "Go to"
 msgstr ""
 
-#: app/objects_browser/window.py:55
+#: app/objects_browser/window.py:56
 msgid " ({num_objects} objects shown)"
 msgstr ""
 
-#: app/objects_browser/window.py:72
+#: app/objects_browser/window.py:73
 msgid "{object}: distance {distance} meters, {rel_bearing}"
 msgstr ""
 
-#: app/objects_browser/window.py:101
+#: app/objects_browser/window.py:102
 msgid "Common properties"
 msgstr ""
 
-#: app/objects_browser/window.py:102
+#: app/objects_browser/window.py:103
 msgid "Specific properties"
 msgstr ""
 
-#: app/objects_browser/window.py:103
+#: app/objects_browser/window.py:104
 msgid "Other properties - they can not be searched and are not processed in any way"
 msgstr ""
 
-#: app/objects_browser/window.py:123
+#: app/objects_browser/window.py:125
 msgid "Object id: {}"
 msgstr ""
 
@@ -11218,47 +11219,47 @@ msgstr ""
 msgid "Select the class to search"
 msgstr ""
 
-#: app/search/search_conditions.py:11
+#: app/search/search_conditions.py:12
 msgid "Search criteria"
 msgstr ""
 
-#: app/search/search_conditions.py:11
+#: app/search/search_conditions.py:12
 msgid "&Start search"
 msgstr ""
 
-#: app/search/search_conditions.py:11
+#: app/search/search_conditions.py:12
 msgid "&Cancel"
 msgstr ""
 
-#: app/search/search_conditions.py:20
+#: app/search/search_conditions.py:21
 msgid "Class fields"
 msgstr ""
 
-#: app/search/search_conditions.py:33
+#: app/search/search_conditions.py:34
 msgid "&Add condition"
 msgstr ""
 
-#: app/search/search_conditions.py:36
+#: app/search/search_conditions.py:37
 msgid "Current search criteria"
 msgstr ""
 
-#: app/search/search_conditions.py:41
+#: app/search/search_conditions.py:42
 msgid "&Remove condition"
 msgstr ""
 
-#: app/search/search_conditions.py:44
+#: app/search/search_conditions.py:45
 msgid "Search objects to distance"
 msgstr ""
 
-#: app/search/search_conditions.py:48
+#: app/search/search_conditions.py:49
 msgid "meters"
 msgstr ""
 
-#: app/search/search_conditions.py:49
+#: app/search/search_conditions.py:50
 msgid "No limit"
 msgstr ""
 
-#: app/search/search_conditions.py:146
+#: app/search/search_conditions.py:147
 msgid "It appears that you forgot to add the current condition to the conditions list. Do you want to add it before starting the search?"
 msgstr ""
 
