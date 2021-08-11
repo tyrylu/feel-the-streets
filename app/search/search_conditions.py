@@ -144,6 +144,6 @@ class SpecifySearchConditionsDialog(BaseDialog):
 
     def ok_clicked(self):
         if not self._added_condition:
-            if QMessageBox.question(self, _("Question"), _("It appears that you forgot to add the current condition to the conditions list. Do you want to add it before starting the search?")):
+            if QMessageBox.question(self, _("Question"), _("It appears that you forgot to add the current condition to the conditions list. Do you want to add it before starting the search?")) == QMessageBox.StandardButton.Yes:
                 self.on_add_clicked(None)
         super().ok_clicked()
