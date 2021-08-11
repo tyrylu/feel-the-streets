@@ -50,6 +50,7 @@ Address:
     flats: int
     district: str
     red: str
+    parentstreet: str
 Addressable:
   inherits: Named
   long_display_template: '{{ parent_display }}{% if address is defined %}, {{ address }}{% endif %}'
