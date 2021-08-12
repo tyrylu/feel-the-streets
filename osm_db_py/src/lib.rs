@@ -17,12 +17,12 @@ const CHANGE_REDOWNLOAD_DATABASE: i32 = 3;
 
 #[pymodule]
 fn osm_db(_py: Python, m: &PyModule) -> PyResult<()> {
-    #[pyfn(m, "all_known_discriminators")]
+    #[pyfn(m)]
     pub fn all_known_discriminators() -> Vec<&'static String> {
         osm_db::entity_metadata::all_known_discriminators()
     }
 
-    #[pyfn(m, "init_logging")]
+    #[pyfn(m)]
     fn init_logging() {
         env_logger::Builder::from_env("FTS_LOG")
             .format_timestamp(None)
