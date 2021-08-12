@@ -9,7 +9,6 @@ osm_db = {"path" = "../osm_db"}
 pyo3 = "*"
 serde_json = "*"
 env_logger = "*"
-indexmap = "*"
 
 [lib]
 name = "osm_db"
