@@ -13,6 +13,13 @@ from.area_candidates_searcher import AreaCandidatesSearcher
 from .search_indicator import SearchIndicator
 from .local_areas_utils import get_area_names_cache, cache_area_names, get_local_area_infos
 
+def mark_areas_as_also_local(areas):
+    local_infos = get_local_area_infos()
+    local_ids = [a["osm_id"] for a in local_infos]
+    for area in areas:
+        if area["osm_id"] in local_ids:
+            area["state"] += ",HasLocalCopy"
+
 log = logging.getLogger(__name__)
 
 class AreaSelectionDialog(BaseDialog):
@@ -23,6 +30,7 @@ class AreaSelectionDialog(BaseDialog):
     def _initialize_areas(self):
         if has_api_connectivity():
             available = get_areas()
+            mark_areas_as_also_local(available)
             cache_area_names(available)
         else:
             available = get_local_area_infos()
