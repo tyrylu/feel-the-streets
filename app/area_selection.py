@@ -13,12 +13,16 @@ from.area_candidates_searcher import AreaCandidatesSearcher
 from .search_indicator import SearchIndicator
 from .local_areas_utils import get_area_names_cache, cache_area_names, get_local_area_infos
 
+def translate_area_state(state):
+    translations = {"Updated": _("updated"), "Creating": _("creating"), "GettingChanges": _("getting changes"), "ApplyingChanges": _("applying changes"), "Frozen": _("frozen"), "LocalCopyExists": _("local copy exists"), "Local": _("local")}
+    return ", ".join(translations[s] for s in state.split(","))
+
 def mark_areas_as_also_local(areas):
     local_infos = get_local_area_infos()
     local_ids = [a["osm_id"] for a in local_infos]
     for area in areas:
         if area["osm_id"] in local_ids:
-            area["state"] += ",HasLocalCopy"
+            area["state"] += ",LocalCopyExists"
 
 log = logging.getLogger(__name__)
 
@@ -57,6 +61,7 @@ class AreaSelectionDialog(BaseDialog):
             area["created_at"] = rfc_3339_to_local_string(area["created_at"])
             area["updated_at"] = rfc_3339_to_local_string(area["updated_at"])
             area["db_size"] = format_size(area["db_size"])
+            area["state"] = translate_area_state(area["state"])
             self._areas.addItem(_("{name}: {state}, last updated {updated_at}, file size {db_size}, created {created_at}").format(**area))
 
     @property

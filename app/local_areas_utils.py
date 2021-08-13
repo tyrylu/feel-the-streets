@@ -32,5 +32,5 @@ def get_local_area_infos():
         name = cache.get(osm_id, str(osm_id))
         mtime = pendulum.from_timestamp(info.st_mtime).to_rfc3339_string()
         ctime = pendulum.from_timestamp(info.st_ctime).to_rfc3339_string()
-        results.append({"osm_id": osm_id, "name":name, "updated_at": mtime, "state": "local", "created_at": ctime, "db_size": info.st_size})
+        results.append({"osm_id": osm_id, "name":name, "updated_at": mtime, "state": "Local", "created_at": ctime, "db_size": info.st_size})
     return results
