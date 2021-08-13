@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-08-09 16:31+0200\n"
-"PO-Revision-Date: 2021-08-09 16:48+0200\n"
+"POT-Creation-Date: 2021-08-13 16:42+0200\n"
+"PO-Revision-Date: 2021-08-13 16:46+0200\n"
 "Last-Translator: \n"
 "Language: cs\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -24,45 +24,45 @@ msgstr ""
 msgid "Region"
 msgstr "Oblast"
 
-#: entities.yml:3 entities.yml:88 entities.yml:186 entities.yml:292
-#: entities.yml:339 entities.yml:394 entities.yml:457 entities.yml:522
-#: entities.yml:728 entities.yml:741 entities.yml:826 entities.yml:882
-#: entities.yml:937 entities.yml:955 entities.yml:1005 entities.yml:1068
-#: entities.yml:1130 entities.yml:1182 entities.yml:1238 entities.yml:1332
-#: entities.yml:1527 entities.yml:1629 entities.yml:1999 entities.yml:2268
-#: entities.yml:2359 entities.yml:2401 entities.yml:2493 entities.yml:2583
-#: entities.yml:2755 entities.yml:2791
+#: entities.yml:3 entities.yml:89 entities.yml:187 entities.yml:293
+#: entities.yml:340 entities.yml:395 entities.yml:458 entities.yml:523
+#: entities.yml:729 entities.yml:742 entities.yml:827 entities.yml:883
+#: entities.yml:938 entities.yml:956 entities.yml:1006 entities.yml:1069
+#: entities.yml:1131 entities.yml:1183 entities.yml:1239 entities.yml:1333
+#: entities.yml:1528 entities.yml:1630 entities.yml:2000 entities.yml:2269
+#: entities.yml:2360 entities.yml:2402 entities.yml:2494 entities.yml:2584
+#: entities.yml:2756 entities.yml:2792
 msgid "Wikipedia"
 msgstr "Wikipedie"
 
-#: entities.yml:4 entities.yml:67 entities.yml:102 entities.yml:291
-#: entities.yml:385 entities.yml:460 entities.yml:492 entities.yml:725
-#: entities.yml:740 entities.yml:767 entities.yml:832 entities.yml:888
-#: entities.yml:936 entities.yml:960 entities.yml:1004 entities.yml:1129
-#: entities.yml:1188 entities.yml:1334 entities.yml:1513 entities.yml:1528
-#: entities.yml:1628 entities.yml:1998 entities.yml:2267 entities.yml:2358
-#: entities.yml:2492 entities.yml:2754 entities.yml:2781
+#: entities.yml:4 entities.yml:68 entities.yml:103 entities.yml:292
+#: entities.yml:386 entities.yml:461 entities.yml:493 entities.yml:726
+#: entities.yml:741 entities.yml:768 entities.yml:833 entities.yml:889
+#: entities.yml:937 entities.yml:961 entities.yml:1005 entities.yml:1130
+#: entities.yml:1189 entities.yml:1335 entities.yml:1514 entities.yml:1529
+#: entities.yml:1629 entities.yml:1999 entities.yml:2268 entities.yml:2359
+#: entities.yml:2493 entities.yml:2755 entities.yml:2782
 msgid "Wikidata"
 msgstr "Wikidata"
 
-#: entities.yml:5 entities.yml:180 entities.yml:290 entities.yml:338
-#: entities.yml:470 entities.yml:523 entities.yml:876 entities.yml:1013
-#: entities.yml:1077 entities.yml:1247 entities.yml:1318 entities.yml:1337
-#: entities.yml:1627 entities.yml:1993 entities.yml:2403 entities.yml:2471
-#: entities.yml:2604 entities.yml:2783
+#: entities.yml:5 entities.yml:181 entities.yml:291 entities.yml:339
+#: entities.yml:471 entities.yml:524 entities.yml:877 entities.yml:1014
+#: entities.yml:1078 entities.yml:1248 entities.yml:1319 entities.yml:1338
+#: entities.yml:1628 entities.yml:1994 entities.yml:2404 entities.yml:2472
+#: entities.yml:2605 entities.yml:2784
 msgid "Old name"
 msgstr "Staré jméno"
 
-#: entities.yml:6 entities.yml:1520 entities.yml:2243 entities.yml:2565
-#: entities.yml:2765
+#: entities.yml:6 entities.yml:1521 entities.yml:2244 entities.yml:2566
+#: entities.yml:2766
 msgid "Name de"
 msgstr "Jméno německy"
 
-#: entities.yml:7 entities.yml:2245
+#: entities.yml:7 entities.yml:2246
 msgid "Name pl"
 msgstr "Jméno polsky"
 
-#: entities.yml:8 entities.yml:1861 entities.yml:2249
+#: entities.yml:8 entities.yml:1862 entities.yml:2250
 msgid "Name nl"
 msgstr ""
 
@@ -74,41 +74,41 @@ msgstr "Kategorie oblasti"
 msgid "Region type"
 msgstr "Typ oblasti"
 
-#: entities.yml:11 entities.yml:64 entities.yml:106 entities.yml:372
-#: entities.yml:471 entities.yml:726 entities.yml:858 entities.yml:965
-#: entities.yml:1007 entities.yml:1145 entities.yml:1195 entities.yml:1300
-#: entities.yml:1389 entities.yml:1478 entities.yml:1514 entities.yml:1643
-#: entities.yml:2001 entities.yml:2264 entities.yml:2332 entities.yml:2514
+#: entities.yml:11 entities.yml:65 entities.yml:107 entities.yml:373
+#: entities.yml:472 entities.yml:727 entities.yml:859 entities.yml:966
+#: entities.yml:1008 entities.yml:1146 entities.yml:1196 entities.yml:1301
+#: entities.yml:1390 entities.yml:1479 entities.yml:1515 entities.yml:1644
+#: entities.yml:2002 entities.yml:2265 entities.yml:2333 entities.yml:2515
 msgid "Description"
 msgstr "Popis"
 
-#: entities.yml:12 entities.yml:16 entities.yml:21 entities.yml:77
-#: entities.yml:84 entities.yml:148 entities.yml:276 entities.yml:348
-#: entities.yml:452 entities.yml:662 entities.yml:666 entities.yml:684
-#: entities.yml:695 entities.yml:700 entities.yml:722 entities.yml:738
-#: entities.yml:752 entities.yml:780 entities.yml:820 entities.yml:847
-#: entities.yml:868 entities.yml:944 entities.yml:951 entities.yml:987
-#: entities.yml:1059 entities.yml:1107 entities.yml:1173 entities.yml:1218
-#: entities.yml:1230 entities.yml:1283 entities.yml:1323 entities.yml:1330
-#: entities.yml:1427 entities.yml:1448 entities.yml:1465 entities.yml:1491
-#: entities.yml:1523 entities.yml:1590 entities.yml:1778 entities.yml:1828
-#: entities.yml:1889 entities.yml:2252 entities.yml:2311 entities.yml:2325
-#: entities.yml:2339 entities.yml:2356 entities.yml:2372 entities.yml:2467
-#: entities.yml:2532 entities.yml:2568 entities.yml:2704 entities.yml:2714
-#: entities.yml:2751 entities.yml:2770
+#: entities.yml:12 entities.yml:16 entities.yml:21 entities.yml:78
+#: entities.yml:85 entities.yml:149 entities.yml:277 entities.yml:349
+#: entities.yml:453 entities.yml:663 entities.yml:667 entities.yml:685
+#: entities.yml:696 entities.yml:701 entities.yml:723 entities.yml:739
+#: entities.yml:753 entities.yml:781 entities.yml:821 entities.yml:848
+#: entities.yml:869 entities.yml:945 entities.yml:952 entities.yml:988
+#: entities.yml:1060 entities.yml:1108 entities.yml:1174 entities.yml:1219
+#: entities.yml:1231 entities.yml:1284 entities.yml:1324 entities.yml:1331
+#: entities.yml:1428 entities.yml:1449 entities.yml:1466 entities.yml:1492
+#: entities.yml:1524 entities.yml:1591 entities.yml:1779 entities.yml:1829
+#: entities.yml:1890 entities.yml:2253 entities.yml:2312 entities.yml:2326
+#: entities.yml:2340 entities.yml:2357 entities.yml:2373 entities.yml:2468
+#: entities.yml:2533 entities.yml:2569 entities.yml:2705 entities.yml:2715
+#: entities.yml:2752 entities.yml:2771
 msgid "Type"
 msgstr "Typ"
 
-#: entities.yml:13 entities.yml:542 entities.yml:1010 entities.yml:1753
-#: entities.yml:2021 entities.yml:2384 enums.yml:1095 enums.yml:1200
+#: entities.yml:13 entities.yml:543 entities.yml:1011 entities.yml:1754
+#: entities.yml:2022 entities.yml:2385 enums.yml:1095 enums.yml:1200
 #: enums.yml:1297 enums.yml:1687
 msgid "Abandoned"
 msgstr "Opuštěné"
 
-#: entities.yml:17 entities.yml:280 entities.yml:350 entities.yml:476
-#: entities.yml:782 entities.yml:849 entities.yml:924 entities.yml:1316
-#: entities.yml:1391 entities.yml:1623 entities.yml:2290 entities.yml:2429
-#: entities.yml:2572 entities.yml:2710 enums.yml:4 enums.yml:515 enums.yml:945
+#: entities.yml:17 entities.yml:281 entities.yml:351 entities.yml:477
+#: entities.yml:783 entities.yml:850 entities.yml:925 entities.yml:1317
+#: entities.yml:1392 entities.yml:1624 entities.yml:2291 entities.yml:2430
+#: entities.yml:2573 entities.yml:2711 enums.yml:4 enums.yml:515 enums.yml:945
 #: enums.yml:1677 enums.yml:1789 enums.yml:2264
 msgid "Bicycle"
 msgstr "Jízdní kolo"
@@ -117,39 +117,39 @@ msgstr "Jízdní kolo"
 msgid "Accessible"
 msgstr "Přístupné"
 
-#: entities.yml:22 entities.yml:65 entities.yml:259 entities.yml:381
-#: entities.yml:677 entities.yml:763 entities.yml:807 entities.yml:848
-#: entities.yml:1042 entities.yml:1096 entities.yml:1099 entities.yml:1160
-#: entities.yml:1309 entities.yml:1390 entities.yml:1421 entities.yml:1656
-#: entities.yml:2020 entities.yml:2440 entities.yml:2516 entities.yml:2543
-#: entities.yml:2708 enums.yml:1709
+#: entities.yml:22 entities.yml:66 entities.yml:260 entities.yml:382
+#: entities.yml:678 entities.yml:764 entities.yml:808 entities.yml:849
+#: entities.yml:1043 entities.yml:1097 entities.yml:1100 entities.yml:1161
+#: entities.yml:1310 entities.yml:1391 entities.yml:1422 entities.yml:1657
+#: entities.yml:2021 entities.yml:2441 entities.yml:2517 entities.yml:2544
+#: entities.yml:2709 enums.yml:1709
 msgid "Level"
 msgstr "Úroveň"
 
-#: entities.yml:23 entities.yml:856
+#: entities.yml:23 entities.yml:857
 msgid "Door"
 msgstr "Dveře"
 
-#: entities.yml:24 entities.yml:57 entities.yml:283 entities.yml:753
-#: entities.yml:908 entities.yml:1001 entities.yml:1288 entities.yml:1614
-#: entities.yml:2552 enums.yml:1438
+#: entities.yml:24 entities.yml:58 entities.yml:284 entities.yml:754
+#: entities.yml:909 entities.yml:1002 entities.yml:1289 entities.yml:1615
+#: entities.yml:2553 enums.yml:1438
 msgid "Address"
 msgstr "Adresa"
 
-#: entities.yml:25 entities.yml:54 entities.yml:137 entities.yml:344
-#: entities.yml:948 entities.yml:984 entities.yml:1055 entities.yml:1103
-#: entities.yml:1165 entities.yml:1264 entities.yml:1848 entities.yml:2314
-#: entities.yml:2558 entities.yml:2684
+#: entities.yml:25 entities.yml:55 entities.yml:138 entities.yml:345
+#: entities.yml:949 entities.yml:985 entities.yml:1056 entities.yml:1104
+#: entities.yml:1166 entities.yml:1265 entities.yml:1849 entities.yml:2315
+#: entities.yml:2559 entities.yml:2685
 msgid "Long display template"
 msgstr ""
 
-#: entities.yml:26 entities.yml:138 entities.yml:949 entities.yml:985
-#: entities.yml:1056 entities.yml:1104 entities.yml:1166 entities.yml:1265
-#: entities.yml:1849 entities.yml:2315 entities.yml:2559 entities.yml:2685
+#: entities.yml:26 entities.yml:139 entities.yml:950 entities.yml:986
+#: entities.yml:1057 entities.yml:1105 entities.yml:1167 entities.yml:1266
+#: entities.yml:1850 entities.yml:2316 entities.yml:2560 entities.yml:2686
 msgid "Short display template"
 msgstr ""
 
-#: entities.yml:28 entities.yml:1325 entities.yml:2115 entities.yml:2640
+#: entities.yml:28 entities.yml:1326 entities.yml:2116 entities.yml:2641
 msgid "Place"
 msgstr "Místo"
 
@@ -181,7 +181,7 @@ msgstr ""
 msgid "Streetnumber"
 msgstr "Číslo ulice"
 
-#: entities.yml:38 entities.yml:2525 enums.yml:220 enums.yml:1474
+#: entities.yml:38 entities.yml:2526 enums.yml:220 enums.yml:1474
 #: enums.yml:2060
 msgid "Street"
 msgstr "Ulice"
@@ -198,7 +198,7 @@ msgstr "Část obce"
 msgid "Housename"
 msgstr "Jméno domu"
 
-#: entities.yml:44 entities.yml:221 entities.yml:636 enums.yml:1741
+#: entities.yml:44 entities.yml:222 entities.yml:637 enums.yml:1741
 msgid "Country"
 msgstr "Země"
 
@@ -206,7 +206,7 @@ msgstr "Země"
 msgid "Province"
 msgstr ""
 
-#: entities.yml:46 entities.yml:399 entities.yml:2272
+#: entities.yml:46 entities.yml:400 entities.yml:2273
 msgid "State"
 msgstr "Stav"
 
@@ -218,9 +218,9 @@ msgstr "Byt"
 msgid "Floor"
 msgstr "Podlaží"
 
-#: entities.yml:49 entities.yml:333 entities.yml:499 entities.yml:1252
-#: entities.yml:1541 entities.yml:1610 entities.yml:2367 entities.yml:2555
-#: entities.yml:2678
+#: entities.yml:49 entities.yml:334 entities.yml:500 entities.yml:1253
+#: entities.yml:1542 entities.yml:1611 entities.yml:2368 entities.yml:2556
+#: entities.yml:2679
 msgid "Flats"
 msgstr "Byty"
 
@@ -233,1096 +233,1101 @@ msgid "Red"
 msgstr ""
 
 #: entities.yml:52
+#, fuzzy
+msgid "Parentstreet"
+msgstr "Obchodní dům"
+
+#: entities.yml:53
 msgid "Addressable"
 msgstr "Adresovatelné"
 
-#: entities.yml:56
+#: entities.yml:57
 msgid "Ruian addr ref"
 msgstr ""
 
-#: entities.yml:58 entities.yml:112 entities.yml:256 entities.yml:295
-#: entities.yml:356 entities.yml:458 entities.yml:702 entities.yml:723
-#: entities.yml:747 entities.yml:765 entities.yml:792 entities.yml:833
-#: entities.yml:857 entities.yml:878 entities.yml:911 entities.yml:968
-#: entities.yml:994 entities.yml:1137 entities.yml:1178 entities.yml:1224
-#: entities.yml:1344 entities.yml:1388 entities.yml:1407 entities.yml:1422
-#: entities.yml:1459 entities.yml:1471 entities.yml:1506 entities.yml:1640
-#: entities.yml:1830 entities.yml:1906 entities.yml:2257 entities.yml:2434
-#: entities.yml:2484 entities.yml:2705 entities.yml:2758 entities.yml:2782
+#: entities.yml:59 entities.yml:113 entities.yml:257 entities.yml:296
+#: entities.yml:357 entities.yml:459 entities.yml:703 entities.yml:724
+#: entities.yml:748 entities.yml:766 entities.yml:793 entities.yml:834
+#: entities.yml:858 entities.yml:879 entities.yml:912 entities.yml:969
+#: entities.yml:995 entities.yml:1138 entities.yml:1179 entities.yml:1225
+#: entities.yml:1345 entities.yml:1389 entities.yml:1408 entities.yml:1423
+#: entities.yml:1460 entities.yml:1472 entities.yml:1507 entities.yml:1641
+#: entities.yml:1831 entities.yml:1907 entities.yml:2258 entities.yml:2435
+#: entities.yml:2485 entities.yml:2706 entities.yml:2759 entities.yml:2783
 msgid "Note"
 msgstr "Poznámka"
 
-#: entities.yml:59 entities.yml:104 entities.yml:441 entities.yml:1024
-#: entities.yml:1205 entities.yml:1333 entities.yml:1772 entities.yml:2025
-#: entities.yml:2553
+#: entities.yml:60 entities.yml:105 entities.yml:442 entities.yml:1025
+#: entities.yml:1206 entities.yml:1334 entities.yml:1773 entities.yml:2026
+#: entities.yml:2554
 msgid "Is in"
 msgstr "Je v"
 
-#: entities.yml:60 entities.yml:257 entities.yml:373 entities.yml:679
-#: entities.yml:730 entities.yml:802 entities.yml:816 entities.yml:860
-#: entities.yml:896 entities.yml:1018 entities.yml:1124 entities.yml:1162
-#: entities.yml:1201 entities.yml:1223 entities.yml:1301 entities.yml:1387
-#: entities.yml:1408 entities.yml:1430 entities.yml:1480 entities.yml:1504
-#: entities.yml:1601 entities.yml:1932 entities.yml:2270 entities.yml:2433
-#: entities.yml:2489 entities.yml:2538 entities.yml:2709 entities.yml:2778
+#: entities.yml:61 entities.yml:258 entities.yml:374 entities.yml:680
+#: entities.yml:731 entities.yml:803 entities.yml:817 entities.yml:861
+#: entities.yml:897 entities.yml:1019 entities.yml:1125 entities.yml:1163
+#: entities.yml:1202 entities.yml:1224 entities.yml:1302 entities.yml:1388
+#: entities.yml:1409 entities.yml:1431 entities.yml:1481 entities.yml:1505
+#: entities.yml:1602 entities.yml:1933 entities.yml:2271 entities.yml:2434
+#: entities.yml:2490 entities.yml:2539 entities.yml:2710 entities.yml:2779
 msgid "Fixme"
 msgstr "Opravit"
 
-#: entities.yml:61 entities.yml:258 entities.yml:297 entities.yml:396
-#: entities.yml:464 entities.yml:683 entities.yml:724 entities.yml:759
-#: entities.yml:891 entities.yml:913 entities.yml:957 entities.yml:989
-#: entities.yml:1118 entities.yml:1181 entities.yml:1291 entities.yml:1341
-#: entities.yml:1524 entities.yml:1766 entities.yml:1780 entities.yml:2218
-#: entities.yml:2273 entities.yml:2357 entities.yml:2506 entities.yml:2544
-#: entities.yml:2760
+#: entities.yml:62 entities.yml:259 entities.yml:298 entities.yml:397
+#: entities.yml:465 entities.yml:684 entities.yml:725 entities.yml:760
+#: entities.yml:892 entities.yml:914 entities.yml:958 entities.yml:990
+#: entities.yml:1119 entities.yml:1182 entities.yml:1292 entities.yml:1342
+#: entities.yml:1525 entities.yml:1767 entities.yml:1781 entities.yml:2219
+#: entities.yml:2274 entities.yml:2358 entities.yml:2507 entities.yml:2545
+#: entities.yml:2761
 msgid "Website"
 msgstr "Webová stránka"
 
-#: entities.yml:62 entities.yml:108 entities.yml:483 entities.yml:837
-#: entities.yml:952 entities.yml:1032 entities.yml:1177 entities.yml:1335
-#: entities.yml:1413 entities.yml:1602 entities.yml:2490 entities.yml:2676
+#: entities.yml:63 entities.yml:109 entities.yml:484 entities.yml:838
+#: entities.yml:953 entities.yml:1033 entities.yml:1178 entities.yml:1336
+#: entities.yml:1414 entities.yml:1603 entities.yml:2491 entities.yml:2677
 msgid "Ele"
 msgstr "Nadmořská výška"
 
-#: entities.yml:63
+#: entities.yml:64
 msgid "Club"
 msgstr "Klub"
 
-#: entities.yml:66 entities.yml:126 entities.yml:305 entities.yml:761
-#: entities.yml:915 entities.yml:1046 entities.yml:1117 entities.yml:1310
-#: entities.yml:1342 entities.yml:1823
+#: entities.yml:67 entities.yml:127 entities.yml:306 entities.yml:762
+#: entities.yml:916 entities.yml:1047 entities.yml:1118 entities.yml:1311
+#: entities.yml:1343 entities.yml:1824
 msgid "Email"
 msgstr "E-mail"
 
-#: entities.yml:68 entities.yml:296 entities.yml:387 entities.yml:886
-#: entities.yml:1016 entities.yml:1180 entities.yml:1339 entities.yml:1386
-#: entities.yml:1529 entities.yml:1626 entities.yml:1931 entities.yml:2263
-#: entities.yml:2486 entities.yml:2672 entities.yml:2715 entities.yml:2753
-#: entities.yml:2771
+#: entities.yml:69 entities.yml:297 entities.yml:388 entities.yml:887
+#: entities.yml:1017 entities.yml:1181 entities.yml:1340 entities.yml:1387
+#: entities.yml:1530 entities.yml:1627 entities.yml:1932 entities.yml:2264
+#: entities.yml:2487 entities.yml:2673 entities.yml:2716 entities.yml:2754
+#: entities.yml:2772
 msgid "Alt name"
 msgstr "Alternativní jméno"
 
-#: entities.yml:69 entities.yml:129 entities.yml:877 entities.yml:1019
-#: entities.yml:1141 entities.yml:1336 entities.yml:1663 entities.yml:2114
-#: entities.yml:2757
+#: entities.yml:70 entities.yml:130 entities.yml:878 entities.yml:1020
+#: entities.yml:1142 entities.yml:1337 entities.yml:1664 entities.yml:2115
+#: entities.yml:2758
 msgid "Loc name"
 msgstr "Místní jméno"
 
-#: entities.yml:70 entities.yml:410 entities.yml:734 entities.yml:995
-#: entities.yml:1652 entities.yml:1939 entities.yml:2498 entities.yml:2746
+#: entities.yml:71 entities.yml:411 entities.yml:735 entities.yml:996
+#: entities.yml:1653 entities.yml:1940 entities.yml:2499 entities.yml:2747
 msgid "Comment"
 msgstr "Komentář"
 
-#: entities.yml:71 entities.yml:366 entities.yml:757 entities.yml:903
-#: entities.yml:940 entities.yml:1008 entities.yml:1185 entities.yml:1293
-#: entities.yml:1781 entities.yml:2012 entities.yml:2293 entities.yml:2477
-#: entities.yml:2677
+#: entities.yml:72 entities.yml:367 entities.yml:758 entities.yml:904
+#: entities.yml:941 entities.yml:1009 entities.yml:1186 entities.yml:1294
+#: entities.yml:1782 entities.yml:2013 entities.yml:2294 entities.yml:2478
+#: entities.yml:2678
 msgid "Opening hours"
 msgstr "Otevírací hodiny"
 
-#: entities.yml:72
+#: entities.yml:73
 msgid "Disused name"
 msgstr "Nepoužívané jméno"
 
-#: entities.yml:73 entities.yml:766 entities.yml:904 entities.yml:2329
+#: entities.yml:74 entities.yml:767 entities.yml:905 entities.yml:2330
 msgid "Internet access"
 msgstr "Přístup k internetu"
 
-#: entities.yml:74 entities.yml:644 enums.yml:742
+#: entities.yml:75 entities.yml:645 enums.yml:742
 msgid "Advertising"
 msgstr "Reklama"
 
-#: entities.yml:78 entities.yml:110 entities.yml:196 entities.yml:359
-#: entities.yml:518 entities.yml:670 entities.yml:686 entities.yml:977
-#: entities.yml:1037 entities.yml:1086 entities.yml:1115 entities.yml:1198
-#: entities.yml:1314 entities.yml:1501 entities.yml:1668 entities.yml:2148
-#: entities.yml:2331 entities.yml:2395 entities.yml:2540 entities.yml:2590
-#: entities.yml:2726
+#: entities.yml:79 entities.yml:111 entities.yml:197 entities.yml:360
+#: entities.yml:519 entities.yml:671 entities.yml:687 entities.yml:978
+#: entities.yml:1038 entities.yml:1087 entities.yml:1116 entities.yml:1199
+#: entities.yml:1315 entities.yml:1502 entities.yml:1669 entities.yml:2149
+#: entities.yml:2332 entities.yml:2396 entities.yml:2541 entities.yml:2591
+#: entities.yml:2727
 msgid "Height"
 msgstr "Výška"
 
-#: entities.yml:79 entities.yml:114 entities.yml:197 entities.yml:282
-#: entities.yml:793 entities.yml:880 entities.yml:1087 entities.yml:1299
-#: entities.yml:1371 entities.yml:1930 entities.yml:2382 entities.yml:2421
-#: entities.yml:2634
+#: entities.yml:80 entities.yml:115 entities.yml:198 entities.yml:283
+#: entities.yml:794 entities.yml:881 entities.yml:1088 entities.yml:1300
+#: entities.yml:1372 entities.yml:1931 entities.yml:2383 entities.yml:2422
+#: entities.yml:2635
 msgid "Lit"
 msgstr "Osvětlené"
 
-#: entities.yml:80 entities.yml:213 entities.yml:806 entities.yml:971
-#: entities.yml:2416 entities.yml:2503 entities.yml:2585
+#: entities.yml:81 entities.yml:214 entities.yml:807 entities.yml:972
+#: entities.yml:2417 entities.yml:2504 entities.yml:2586
 msgid "Direction"
 msgstr "Směr"
 
-#: entities.yml:81
+#: entities.yml:82
 msgid "Aerial way"
 msgstr ""
 
-#: entities.yml:85 entities.yml:178 entities.yml:503 entities.yml:1279
-#: entities.yml:2186 entities.yml:2393
+#: entities.yml:86 entities.yml:179 entities.yml:504 entities.yml:1280
+#: entities.yml:2187 entities.yml:2394
 msgid "Capacity"
 msgstr "Kapacita"
 
-#: entities.yml:86
+#: entities.yml:87
 msgid "Occupancy"
 msgstr ""
 
-#: entities.yml:87 entities.yml:2294
+#: entities.yml:88 entities.yml:2295
 msgid "Duration"
 msgstr "Délka"
 
-#: entities.yml:89 entities.yml:494 entities.yml:755 entities.yml:1374
-#: entities.yml:1428 entities.yml:1451 entities.yml:1496 entities.yml:2222
-#: entities.yml:2326 entities.yml:2480 entities.yml:2594 entities.yml:2664
+#: entities.yml:90 entities.yml:495 entities.yml:756 entities.yml:1375
+#: entities.yml:1429 entities.yml:1452 entities.yml:1497 entities.yml:2223
+#: entities.yml:2327 entities.yml:2481 entities.yml:2595 entities.yml:2665
 #: enums.yml:968 enums.yml:1124 enums.yml:1428 enums.yml:1499 enums.yml:1702
 msgid "Building"
 msgstr "Budova"
 
-#: entities.yml:90 entities.yml:1669 entities.yml:2216
+#: entities.yml:91 entities.yml:1670 entities.yml:2217
 msgid "Length"
 msgstr "Délka"
 
-#: entities.yml:91 entities.yml:390 entities.yml:477 entities.yml:894
-#: entities.yml:1393 entities.yml:1919 entities.yml:2419 entities.yml:2777
+#: entities.yml:92 entities.yml:391 entities.yml:478 entities.yml:895
+#: entities.yml:1394 entities.yml:1920 entities.yml:2420 entities.yml:2778
 msgid "Width"
 msgstr "Šířka"
 
-#: entities.yml:92
+#: entities.yml:93
 msgid "Heading"
 msgstr "Směr"
 
-#: entities.yml:93 entities.yml:199 entities.yml:279 entities.yml:475
-#: entities.yml:608 entities.yml:801 entities.yml:1021 entities.yml:1061
-#: entities.yml:1186 entities.yml:1287 entities.yml:1370 entities.yml:1608
-#: entities.yml:1918 entities.yml:2375 entities.yml:2418 entities.yml:2641
-#: entities.yml:2706 entities.yml:2785 enums.yml:943 enums.yml:1654
+#: entities.yml:94 entities.yml:200 entities.yml:280 entities.yml:476
+#: entities.yml:609 entities.yml:802 entities.yml:1022 entities.yml:1062
+#: entities.yml:1187 entities.yml:1288 entities.yml:1371 entities.yml:1609
+#: entities.yml:1919 entities.yml:2376 entities.yml:2419 entities.yml:2642
+#: entities.yml:2707 entities.yml:2786 enums.yml:943 enums.yml:1654
 msgid "Surface"
 msgstr "Povrch"
 
-#: entities.yml:94
+#: entities.yml:95
 msgid "Aerodrome type"
 msgstr ""
 
-#: entities.yml:95
+#: entities.yml:96
 msgid "Icao"
 msgstr "Icao"
 
-#: entities.yml:96 entities.yml:269 entities.yml:517 entities.yml:667
-#: entities.yml:916 entities.yml:1249 entities.yml:1499 entities.yml:2600
-#: entities.yml:2670
+#: entities.yml:97 entities.yml:270 entities.yml:518 entities.yml:668
+#: entities.yml:917 entities.yml:1250 entities.yml:1500 entities.yml:2601
+#: entities.yml:2671
 msgid "Roof shape"
 msgstr "Tvar střechy"
 
-#: entities.yml:97
+#: entities.yml:98
 msgid "Heating"
 msgstr "Vytápění"
 
-#: entities.yml:98 entities.yml:1945 enums.yml:258 enums.yml:1270
+#: entities.yml:99 entities.yml:1946 enums.yml:258 enums.yml:1270
 #: enums.yml:1524 enums.yml:1716
 msgid "Pedestrian"
 msgstr ""
 
-#: entities.yml:99 entities.yml:487 entities.yml:828 entities.yml:1359
-#: entities.yml:2414 entities.yml:2784 enums.yml:1344 enums.yml:1519
+#: entities.yml:100 entities.yml:488 entities.yml:829 entities.yml:1360
+#: entities.yml:2415 entities.yml:2785 enums.yml:1344 enums.yml:1519
 msgid "Highway"
 msgstr "Dálnice"
 
-#: entities.yml:100 entities.yml:402 entities.yml:1041 entities.yml:1661
-#: entities.yml:1903
+#: entities.yml:101 entities.yml:403 entities.yml:1042 entities.yml:1662
+#: entities.yml:1904
 msgid "Bridge structure"
 msgstr "Struktura mostu"
 
-#: entities.yml:101 entities.yml:489 entities.yml:601 entities.yml:742
-#: entities.yml:1126 entities.yml:1383 entities.yml:1902 entities.yml:2443
-#: entities.yml:2786 enums.yml:715 enums.yml:1122 enums.yml:1405 enums.yml:2198
+#: entities.yml:102 entities.yml:490 entities.yml:602 entities.yml:743
+#: entities.yml:1127 entities.yml:1384 entities.yml:1903 entities.yml:2444
+#: entities.yml:2787 enums.yml:715 enums.yml:1122 enums.yml:1405 enums.yml:2198
 msgid "Bridge"
 msgstr "Most"
 
-#: app/search/search_conditions.py:27 entities.yml:103 entities.yml:150
-#: entities.yml:312 entities.yml:328 entities.yml:364 entities.yml:514
-#: entities.yml:754 entities.yml:829 entities.yml:901 entities.yml:998
-#: entities.yml:1070 entities.yml:1120 entities.yml:1226 entities.yml:1243
-#: entities.yml:1281 entities.yml:1369 entities.yml:1406 entities.yml:1419
-#: entities.yml:1440 entities.yml:1454 entities.yml:1470 entities.yml:1497
-#: entities.yml:1554 entities.yml:1622 entities.yml:1805 entities.yml:2014
-#: entities.yml:2258 entities.yml:2383 entities.yml:2475 entities.yml:2569
+#: app/search/search_conditions.py:27 entities.yml:104 entities.yml:151
+#: entities.yml:313 entities.yml:329 entities.yml:365 entities.yml:515
+#: entities.yml:755 entities.yml:830 entities.yml:902 entities.yml:999
+#: entities.yml:1071 entities.yml:1121 entities.yml:1227 entities.yml:1244
+#: entities.yml:1282 entities.yml:1370 entities.yml:1407 entities.yml:1420
+#: entities.yml:1441 entities.yml:1455 entities.yml:1471 entities.yml:1498
+#: entities.yml:1555 entities.yml:1623 entities.yml:1806 entities.yml:2015
+#: entities.yml:2259 entities.yml:2384 entities.yml:2476 entities.yml:2570
 msgid "Operator"
 msgstr "Operátor"
 
-#: entities.yml:105 entities.yml:1916
+#: entities.yml:106 entities.yml:1917
 msgid "Maxweight"
 msgstr "Nejvyšší váha"
 
-#: entities.yml:107 entities.yml:273 entities.yml:1377 entities.yml:1439
-#: entities.yml:1745 entities.yml:2049 entities.yml:2481 entities.yml:2790
+#: entities.yml:108 entities.yml:274 entities.yml:1378 entities.yml:1440
+#: entities.yml:1746 entities.yml:2050 entities.yml:2482 entities.yml:2791
 #: enums.yml:219 enums.yml:1710
 msgid "Area"
 msgstr "Oblast"
 
-#: entities.yml:109 entities.yml:189 entities.yml:336 entities.yml:459
-#: entities.yml:504 entities.yml:772 entities.yml:825 entities.yml:892
-#: entities.yml:912 entities.yml:958 entities.yml:1027 entities.yml:1093
-#: entities.yml:1123 entities.yml:1260 entities.yml:1294 entities.yml:1350
-#: entities.yml:1441 entities.yml:1455 entities.yml:1463 entities.yml:1505
-#: entities.yml:1525 entities.yml:1544 entities.yml:1641 entities.yml:1996
-#: entities.yml:2298 entities.yml:2450 entities.yml:2513 entities.yml:2580
-#: entities.yml:2727 entities.yml:2743 entities.yml:2789
+#: entities.yml:110 entities.yml:190 entities.yml:337 entities.yml:460
+#: entities.yml:505 entities.yml:773 entities.yml:826 entities.yml:893
+#: entities.yml:913 entities.yml:959 entities.yml:1028 entities.yml:1094
+#: entities.yml:1124 entities.yml:1261 entities.yml:1295 entities.yml:1351
+#: entities.yml:1442 entities.yml:1456 entities.yml:1464 entities.yml:1506
+#: entities.yml:1526 entities.yml:1545 entities.yml:1642 entities.yml:1997
+#: entities.yml:2299 entities.yml:2451 entities.yml:2514 entities.yml:2581
+#: entities.yml:2728 entities.yml:2744 entities.yml:2790
 msgid "Start date"
 msgstr "Datum zahájení"
 
-#: entities.yml:111 entities.yml:215 entities.yml:278 entities.yml:319
-#: entities.yml:337 entities.yml:377 entities.yml:447 entities.yml:506
-#: entities.yml:743 entities.yml:770 entities.yml:831 entities.yml:884
-#: entities.yml:1011 entities.yml:1067 entities.yml:1112 entities.yml:1196
-#: entities.yml:1290 entities.yml:1379 entities.yml:1429 entities.yml:1457
-#: entities.yml:1473 entities.yml:1598 entities.yml:1904 entities.yml:2360
-#: entities.yml:2376 entities.yml:2422 entities.yml:2479 entities.yml:2611
-#: entities.yml:2773
+#: entities.yml:112 entities.yml:216 entities.yml:279 entities.yml:320
+#: entities.yml:338 entities.yml:378 entities.yml:448 entities.yml:507
+#: entities.yml:744 entities.yml:771 entities.yml:832 entities.yml:885
+#: entities.yml:1012 entities.yml:1068 entities.yml:1113 entities.yml:1197
+#: entities.yml:1291 entities.yml:1380 entities.yml:1430 entities.yml:1458
+#: entities.yml:1474 entities.yml:1599 entities.yml:1905 entities.yml:2361
+#: entities.yml:2377 entities.yml:2423 entities.yml:2480 entities.yml:2612
+#: entities.yml:2774
 msgid "Layer"
 msgstr "Vrstva"
 
-#: entities.yml:113 entities.yml:158 entities.yml:262 entities.yml:289
-#: entities.yml:323 entities.yml:353 entities.yml:539 entities.yml:855
-#: entities.yml:918 entities.yml:1025 entities.yml:1062 entities.yml:1131
-#: entities.yml:1282 entities.yml:1511 entities.yml:1646 entities.yml:1917
-#: entities.yml:2381 entities.yml:2425 entities.yml:2518 entities.yml:2609
+#: entities.yml:114 entities.yml:159 entities.yml:263 entities.yml:290
+#: entities.yml:324 entities.yml:354 entities.yml:540 entities.yml:856
+#: entities.yml:919 entities.yml:1026 entities.yml:1063 entities.yml:1132
+#: entities.yml:1283 entities.yml:1512 entities.yml:1647 entities.yml:1918
+#: entities.yml:2382 entities.yml:2426 entities.yml:2519 entities.yml:2610
 msgid "Access"
 msgstr "Přístup"
 
-#: entities.yml:115 enums.yml:1192
+#: entities.yml:116 enums.yml:1192
 msgid "Navigationaid"
 msgstr ""
 
-#: entities.yml:116 entities.yml:227 entities.yml:287 entities.yml:371
-#: entities.yml:484 entities.yml:513 entities.yml:991 entities.yml:1101
-#: entities.yml:1175 entities.yml:2013 entities.yml:2406 entities.yml:2535
-#: entities.yml:2591
+#: entities.yml:117 entities.yml:228 entities.yml:288 entities.yml:372
+#: entities.yml:485 entities.yml:514 entities.yml:992 entities.yml:1102
+#: entities.yml:1176 entities.yml:2014 entities.yml:2407 entities.yml:2536
+#: entities.yml:2592
 msgid "Man made"
 msgstr "Vytvořeno člověkem"
 
-#: entities.yml:117 entities.yml:1438 entities.yml:1453 entities.yml:1469
-#: entities.yml:1485 entities.yml:1494 entities.yml:1616 entities.yml:2318
+#: entities.yml:118 entities.yml:1439 entities.yml:1454 entities.yml:1470
+#: entities.yml:1486 entities.yml:1495 entities.yml:1617 entities.yml:2319
 msgid "Frequency"
 msgstr "Frekvence"
 
-#: entities.yml:118
+#: entities.yml:119
 msgid "Disused aeroway"
 msgstr ""
 
-#: entities.yml:119
+#: entities.yml:120
 msgid "Subtype"
 msgstr "Podtyp"
 
-#: entities.yml:120
+#: entities.yml:121
 msgid "Note cs"
 msgstr "Poznámka (česky)"
 
-#: entities.yml:121 entities.yml:1612 entities.yml:1898 entities.yml:2523
+#: entities.yml:122 entities.yml:1613 entities.yml:1899 entities.yml:2524
 msgid "Oneway"
 msgstr "Jednosměrné"
 
-#: entities.yml:122 entities.yml:267 entities.yml:1645 entities.yml:1947
+#: entities.yml:123 entities.yml:268 entities.yml:1646 entities.yml:1948
 #: enums.yml:446 enums.yml:1196 enums.yml:1217 enums.yml:1284 enums.yml:1343
 #: enums.yml:1459 enums.yml:2381
 msgid "Proposed"
 msgstr "Navrhované"
 
-#: entities.yml:123
+#: entities.yml:124
 msgid "Beacon type"
 msgstr "Typ majáku"
 
-#: entities.yml:124 enums.yml:1185
+#: entities.yml:125 enums.yml:1185
 msgid "Runway"
 msgstr "Ranvej"
 
-#: entities.yml:125 entities.yml:177 entities.yml:298 entities.yml:342
-#: entities.yml:465 entities.yml:551 entities.yml:809 entities.yml:883
-#: entities.yml:938 entities.yml:993 entities.yml:1078 entities.yml:1190
-#: entities.yml:1239 entities.yml:1296 entities.yml:1458 entities.yml:1495
-#: entities.yml:1760 entities.yml:1802 entities.yml:2189 entities.yml:2377
+#: entities.yml:126 entities.yml:178 entities.yml:299 entities.yml:343
+#: entities.yml:466 entities.yml:552 entities.yml:810 entities.yml:884
+#: entities.yml:939 entities.yml:994 entities.yml:1079 entities.yml:1191
+#: entities.yml:1240 entities.yml:1297 entities.yml:1459 entities.yml:1496
+#: entities.yml:1761 entities.yml:1803 entities.yml:2190 entities.yml:2378
 msgid "Barrier"
 msgstr "Překážka"
 
-#: entities.yml:127 entities.yml:152 entities.yml:271 entities.yml:316
-#: entities.yml:332 entities.yml:533 entities.yml:762 entities.yml:907
-#: entities.yml:1047 entities.yml:1069 entities.yml:1231 entities.yml:1343
-#: entities.yml:1537 entities.yml:1779 entities.yml:2386 entities.yml:2582
-#: entities.yml:2675
+#: entities.yml:128 entities.yml:153 entities.yml:272 entities.yml:317
+#: entities.yml:333 entities.yml:534 entities.yml:763 entities.yml:908
+#: entities.yml:1048 entities.yml:1070 entities.yml:1232 entities.yml:1344
+#: entities.yml:1538 entities.yml:1780 entities.yml:2387 entities.yml:2583
+#: entities.yml:2676
 msgid "Phone"
 msgstr "Telefon"
 
-#: entities.yml:128 entities.yml:859 enums.yml:632 enums.yml:1332
+#: entities.yml:129 entities.yml:860 enums.yml:632 enums.yml:1332
 msgid "Military"
 msgstr "Vojenské"
 
-#: entities.yml:130 entities.yml:586 entities.yml:2627 entities.yml:2673
+#: entities.yml:131 entities.yml:587 entities.yml:2628 entities.yml:2674
 msgid "Min height"
 msgstr "Nejmenší výška"
 
-#: entities.yml:131 entities.yml:179 entities.yml:510 entities.yml:2162
+#: entities.yml:132 entities.yml:180 entities.yml:511 entities.yml:2163
 #: enums.yml:259 enums.yml:298 enums.yml:1934 enums.yml:2076
 msgid "Emergency"
 msgstr "Nouze"
 
-#: entities.yml:132 entities.yml:1292 entities.yml:1498
+#: entities.yml:133 entities.yml:1293 entities.yml:1499
 msgid "Building levels"
 msgstr "Patra budovy"
 
-#: entities.yml:133
+#: entities.yml:134
 msgid "Airmark"
 msgstr ""
 
-#: entities.yml:134
+#: entities.yml:135
 msgid "Iata"
 msgstr "Iata"
 
-#: entities.yml:135 entities.yml:277 entities.yml:420 entities.yml:500
-#: entities.yml:1255 entities.yml:1277 entities.yml:1536 entities.yml:1777
-#: entities.yml:2137 entities.yml:2546 entities.yml:2593
+#: entities.yml:136 entities.yml:278 entities.yml:421 entities.yml:501
+#: entities.yml:1256 entities.yml:1278 entities.yml:1537 entities.yml:1778
+#: entities.yml:2138 entities.yml:2547 entities.yml:2594
 msgid "Amenity"
 msgstr "Vymoženost"
 
-#: entities.yml:145
+#: entities.yml:146
 msgid "Payment:visa"
 msgstr ""
 
-#: entities.yml:146 entities.yml:488 entities.yml:1442 entities.yml:1579
-#: entities.yml:1865 entities.yml:2304 entities.yml:2466 entities.yml:2561
-#: entities.yml:2729
+#: entities.yml:147 entities.yml:489 entities.yml:1443 entities.yml:1580
+#: entities.yml:1866 entities.yml:2305 entities.yml:2467 entities.yml:2562
+#: entities.yml:2730
 msgid "Ref"
 msgstr "Reference"
 
-#: entities.yml:147 entities.yml:347 entities.yml:451 entities.yml:497
-#: entities.yml:779 entities.yml:1058 entities.yml:1106 entities.yml:1152
-#: entities.yml:1172 entities.yml:1276 entities.yml:1357 entities.yml:1426
-#: entities.yml:1447 entities.yml:1518 entities.yml:1580 entities.yml:1871
-#: entities.yml:2240 entities.yml:2415 entities.yml:2562 entities.yml:2728
-#: entities.yml:2733 entities.yml:2767
+#: entities.yml:148 entities.yml:348 entities.yml:452 entities.yml:498
+#: entities.yml:780 entities.yml:1059 entities.yml:1107 entities.yml:1153
+#: entities.yml:1173 entities.yml:1277 entities.yml:1358 entities.yml:1427
+#: entities.yml:1448 entities.yml:1519 entities.yml:1581 entities.yml:1872
+#: entities.yml:2241 entities.yml:2416 entities.yml:2563 entities.yml:2729
+#: entities.yml:2734 entities.yml:2768
 msgid "Source"
 msgstr "Zdroj"
 
-#: entities.yml:149 entities.yml:501 entities.yml:827 entities.yml:935
-#: entities.yml:954 entities.yml:1003 entities.yml:1241 entities.yml:2617
+#: entities.yml:150 entities.yml:502 entities.yml:828 entities.yml:936
+#: entities.yml:955 entities.yml:1004 entities.yml:1242 entities.yml:2618
 #: enums.yml:2017
 msgid "Religion"
 msgstr "Náboženství"
 
-#: entities.yml:151 entities.yml:532 entities.yml:1546 entities.yml:2596
+#: entities.yml:152 entities.yml:533 entities.yml:1547 entities.yml:2597
 msgid "Cuisine"
 msgstr ""
 
-#: entities.yml:153 entities.yml:502 entities.yml:727 entities.yml:739
-#: entities.yml:926 entities.yml:1233 entities.yml:1376 entities.yml:2171
-#: entities.yml:2301 entities.yml:2398 entities.yml:2497 entities.yml:2632
+#: entities.yml:154 entities.yml:503 entities.yml:728 entities.yml:740
+#: entities.yml:927 entities.yml:1234 entities.yml:1377 entities.yml:2172
+#: entities.yml:2302 entities.yml:2399 entities.yml:2498 entities.yml:2633
 msgid "Official name"
 msgstr "Oficiální název"
 
-#: entities.yml:154 entities.yml:530
+#: entities.yml:155 entities.yml:531
 msgid "Community centre for"
 msgstr "Komunitní centrum pro"
 
-#: entities.yml:155 entities.yml:507 entities.yml:1550
+#: entities.yml:156 entities.yml:508 entities.yml:1551
 msgid "Takeaway"
 msgstr ""
 
-#: entities.yml:156
+#: entities.yml:157
 msgid "Vending"
 msgstr ""
 
-#: entities.yml:157 entities.yml:534 entities.yml:756 entities.yml:1543
+#: entities.yml:158 entities.yml:535 entities.yml:757 entities.yml:1544
 #: enums.yml:351
 msgid "Outdoor seating"
 msgstr "Venkovní sezení"
 
-#: entities.yml:159 entities.yml:508 entities.yml:925 entities.yml:1232
-#: entities.yml:1538 entities.yml:2581
+#: entities.yml:160 entities.yml:509 entities.yml:926 entities.yml:1233
+#: entities.yml:1539 entities.yml:2582
 msgid "Smoking"
 msgstr "Kouření"
 
-#: entities.yml:160 entities.yml:658
+#: entities.yml:161 entities.yml:659
 msgid "Amenity 1"
 msgstr "Vymoženost 1"
 
-#: entities.yml:161 entities.yml:315 entities.yml:331 entities.yml:588
-#: entities.yml:1420
+#: entities.yml:162 entities.yml:316 entities.yml:332 entities.yml:589
+#: entities.yml:1421
 msgid "Drive through"
 msgstr "Průjezd"
 
-#: entities.yml:162 entities.yml:416 entities.yml:1065
+#: entities.yml:163 entities.yml:417 entities.yml:1066
 msgid "Backrest"
 msgstr "Opěradlo"
 
-#: entities.yml:163 entities.yml:360 entities.yml:557 entities.yml:678
-#: entities.yml:890 entities.yml:975 entities.yml:1125 entities.yml:1187
-#: entities.yml:1400 entities.yml:1435 entities.yml:2002 entities.yml:2435
-#: entities.yml:2586
+#: entities.yml:164 entities.yml:361 entities.yml:558 entities.yml:679
+#: entities.yml:891 entities.yml:976 entities.yml:1126 entities.yml:1188
+#: entities.yml:1401 entities.yml:1436 entities.yml:2003 entities.yml:2436
+#: entities.yml:2587
 msgid "Material"
 msgstr "Materiál"
 
-#: entities.yml:164
+#: entities.yml:165
 msgid "Place type"
 msgstr "Typ místa"
 
-#: entities.yml:165
+#: entities.yml:166
 msgid "Seats"
 msgstr "Sedadla"
 
-#: entities.yml:166
+#: entities.yml:167
 msgid "Unisex"
 msgstr ""
 
-#: entities.yml:167 entities.yml:521 entities.yml:1076 entities.yml:1302
-#: entities.yml:1373 entities.yml:1642 entities.yml:1960 entities.yml:2409
-#: entities.yml:2451 entities.yml:2473 entities.yml:2548 entities.yml:2645
+#: entities.yml:168 entities.yml:522 entities.yml:1077 entities.yml:1303
+#: entities.yml:1374 entities.yml:1643 entities.yml:1961 entities.yml:2410
+#: entities.yml:2452 entities.yml:2474 entities.yml:2549 entities.yml:2646
 #: enums.yml:1250
 msgid "Covered"
 msgstr "Zastřešené"
 
-#: entities.yml:168 entities.yml:317 entities.yml:330 entities.yml:382
-#: entities.yml:543 entities.yml:764 entities.yml:795 entities.yml:851
-#: entities.yml:914 entities.yml:970 entities.yml:1080 entities.yml:1242
-#: entities.yml:1295 entities.yml:1372 entities.yml:1545 entities.yml:1620
-#: entities.yml:1946 entities.yml:2279 entities.yml:2379 entities.yml:2438
-#: entities.yml:2483 entities.yml:2608 enums.yml:1689 enums.yml:1790
+#: entities.yml:169 entities.yml:318 entities.yml:331 entities.yml:383
+#: entities.yml:544 entities.yml:765 entities.yml:796 entities.yml:852
+#: entities.yml:915 entities.yml:971 entities.yml:1081 entities.yml:1243
+#: entities.yml:1296 entities.yml:1373 entities.yml:1546 entities.yml:1621
+#: entities.yml:1947 entities.yml:2280 entities.yml:2380 entities.yml:2439
+#: entities.yml:2484 entities.yml:2609 enums.yml:1689 enums.yml:1790
 msgid "Wheelchair"
 msgstr "Vozík"
 
-#: entities.yml:169 entities.yml:590 entities.yml:768 entities.yml:1088
-#: entities.yml:1259 entities.yml:1539 entities.yml:2396 entities.yml:2621
+#: entities.yml:170 entities.yml:591 entities.yml:769 entities.yml:1089
+#: entities.yml:1260 entities.yml:1540 entities.yml:2397 entities.yml:2622
 msgid "Facebook"
 msgstr "Facebook"
 
-#: entities.yml:170 entities.yml:1366 entities.yml:1664 entities.yml:2182
-#: entities.yml:2322 enums.yml:1051 enums.yml:1463 enums.yml:2412
+#: entities.yml:171 entities.yml:1367 entities.yml:1665 entities.yml:2183
+#: entities.yml:2323 enums.yml:1051 enums.yml:1463 enums.yml:2412
 msgid "Shelter"
 msgstr "Přístřešek"
 
-#: entities.yml:171 entities.yml:2081
+#: entities.yml:172 entities.yml:2082
 #, fuzzy
 msgid "Hide"
 msgstr "Most"
 
-#: entities.yml:172 entities.yml:304 entities.yml:1155 entities.yml:1208
-#: entities.yml:1553 entities.yml:2400
+#: entities.yml:173 entities.yml:305 entities.yml:1156 entities.yml:1209
+#: entities.yml:1554 entities.yml:2401
 msgid "Url"
 msgstr "Url"
 
-#: entities.yml:173 entities.yml:505 entities.yml:821 entities.yml:939
-#: entities.yml:956 entities.yml:1050 entities.yml:1240
+#: entities.yml:174 entities.yml:506 entities.yml:822 entities.yml:940
+#: entities.yml:957 entities.yml:1051 entities.yml:1241
 #, fuzzy
 msgid "Denomination"
 msgstr "Informace"
 
-#: entities.yml:174 entities.yml:536
+#: entities.yml:175 entities.yml:537
 msgid "Vegetarian diet"
 msgstr ""
 
-#: entities.yml:175 entities.yml:303 entities.yml:375 entities.yml:685
-#: entities.yml:875 entities.yml:946 entities.yml:1110 entities.yml:1153
-#: entities.yml:1204 entities.yml:1767 entities.yml:2042 entities.yml:2592
+#: entities.yml:176 entities.yml:304 entities.yml:376 entities.yml:686
+#: entities.yml:876 entities.yml:947 entities.yml:1111 entities.yml:1154
+#: entities.yml:1205 entities.yml:1768 entities.yml:2043 entities.yml:2593
 #: enums.yml:118 enums.yml:132
 msgid "Historic"
 msgstr "Historické"
 
-#: entities.yml:176 entities.yml:528
+#: entities.yml:177 entities.yml:529
 msgid "Dispensing"
 msgstr ""
 
-#: entities.yml:181 entities.yml:535 entities.yml:1540 enums.yml:227
+#: entities.yml:182 entities.yml:536 entities.yml:1541 enums.yml:227
 #: enums.yml:501 enums.yml:1540
 msgid "Brewery"
 msgstr "Pivovar"
 
-#: entities.yml:182 entities.yml:509 entities.yml:2317 enums.yml:286
+#: entities.yml:183 entities.yml:510 entities.yml:2318 enums.yml:286
 msgid "Delivery"
 msgstr "Doručování"
 
-#: entities.yml:183 entities.yml:1338
+#: entities.yml:184 entities.yml:1339
 msgid "Postal code"
 msgstr "Poštovní směrovací číslo"
 
-#: entities.yml:184
+#: entities.yml:185
 msgid "Open air"
 msgstr ""
 
-#: entities.yml:185 entities.yml:524 entities.yml:811 entities.yml:1095
-#: entities.yml:1237 entities.yml:1346 entities.yml:1385 entities.yml:2050
-#: entities.yml:2286 entities.yml:2399 entities.yml:2495 entities.yml:2625
+#: entities.yml:186 entities.yml:525 entities.yml:812 entities.yml:1096
+#: entities.yml:1238 entities.yml:1347 entities.yml:1386 entities.yml:2051
+#: entities.yml:2287 entities.yml:2400 entities.yml:2496 entities.yml:2626
 msgid "Short name"
 msgstr "Krátké jméno"
 
-#: entities.yml:187 entities.yml:302 entities.yml:544 entities.yml:760
-#: entities.yml:881 entities.yml:923 entities.yml:1189 entities.yml:1236
-#: entities.yml:1304 entities.yml:1349 entities.yml:1530 entities.yml:2380
-#: entities.yml:2542 entities.yml:2651 entities.yml:2756 enums.yml:1433
+#: entities.yml:188 entities.yml:303 entities.yml:545 entities.yml:761
+#: entities.yml:882 entities.yml:924 entities.yml:1190 entities.yml:1237
+#: entities.yml:1305 entities.yml:1350 entities.yml:1531 entities.yml:2381
+#: entities.yml:2543 entities.yml:2652 entities.yml:2757 enums.yml:1433
 msgid "Landuse"
 msgstr "Využití pozemku"
 
-#: entities.yml:188 entities.yml:293 entities.yml:1000 entities.yml:1053
-#: entities.yml:1348 entities.yml:1561 entities.yml:2374 entities.yml:2613
-#: entities.yml:2688
+#: entities.yml:189 entities.yml:294 entities.yml:1001 entities.yml:1054
+#: entities.yml:1349 entities.yml:1562 entities.yml:2375 entities.yml:2614
+#: entities.yml:2689
 msgid "Leisure"
 msgstr "Volnočasová aktivita"
 
-#: entities.yml:190 entities.yml:294 entities.yml:520 entities.yml:1060
-#: entities.yml:1202 entities.yml:1548 entities.yml:2104 entities.yml:2369
-#: entities.yml:2761 entities.yml:2801 enums.yml:117 enums.yml:349
+#: entities.yml:191 entities.yml:295 entities.yml:521 entities.yml:1061
+#: entities.yml:1203 entities.yml:1549 entities.yml:2105 entities.yml:2370
+#: entities.yml:2762 entities.yml:2802 enums.yml:117 enums.yml:349
 #: enums.yml:1115
 msgid "Sport"
 msgstr "Sport"
 
-#: entities.yml:191 entities.yml:572 entities.yml:1547
+#: entities.yml:192 entities.yml:573 entities.yml:1548
 msgid "Wifi"
 msgstr "Wifi"
 
-#: entities.yml:192
+#: entities.yml:193
 msgid "Bottle"
 msgstr "Láhev"
 
-#: entities.yml:193 entities.yml:314 entities.yml:386 entities.yml:560
-#: entities.yml:861 entities.yml:864 entities.yml:1084 entities.yml:2144
-#: entities.yml:2295 entities.yml:2388 entities.yml:2603 entities.yml:2666
+#: entities.yml:194 entities.yml:315 entities.yml:387 entities.yml:561
+#: entities.yml:862 entities.yml:865 entities.yml:1085 entities.yml:2145
+#: entities.yml:2296 entities.yml:2389 entities.yml:2604 entities.yml:2667
 msgid "Fee"
 msgstr "Mající vlastnost platby"
 
-#: entities.yml:194
+#: entities.yml:195
 msgid "Lockable"
 msgstr "Uzamykatelné"
 
-#: entities.yml:195 entities.yml:392 entities.yml:529 entities.yml:1048
-#: entities.yml:1477 entities.yml:1653 entities.yml:1965 entities.yml:2275
-#: entities.yml:2507 entities.yml:2633 entities.yml:2669
+#: entities.yml:196 entities.yml:393 entities.yml:530 entities.yml:1049
+#: entities.yml:1478 entities.yml:1654 entities.yml:1966 entities.yml:2276
+#: entities.yml:2508 entities.yml:2634 entities.yml:2670
 msgid "Colour"
 msgstr "Barva"
 
-#: entities.yml:198 entities.yml:1274 entities.yml:2320 enums.yml:407
+#: entities.yml:199 entities.yml:1275 entities.yml:2321 enums.yml:407
 #: enums.yml:1130 enums.yml:1479 enums.yml:1509 enums.yml:1705
 msgid "Parking"
 msgstr "Parkoviště"
 
-#: entities.yml:200 entities.yml:609 entities.yml:1225 entities.yml:1771
-#: entities.yml:2321 entities.yml:2698
+#: entities.yml:201 entities.yml:610 entities.yml:1226 entities.yml:1772
+#: entities.yml:2322 entities.yml:2699
 msgid "Todo"
 msgstr "Udělat"
 
-#: entities.yml:201 entities.yml:874 entities.yml:1179 entities.yml:2655
+#: entities.yml:202 entities.yml:875 entities.yml:1180 entities.yml:2656
 #: enums.yml:398
 msgid "Drinking water"
 msgstr "Pitná voda"
 
-#: entities.yml:202
+#: entities.yml:203
 msgid "Cargo"
 msgstr "Náklad"
 
-#: entities.yml:203
+#: entities.yml:204
 msgid "Charge"
 msgstr ""
 
-#: entities.yml:204 entities.yml:562 entities.yml:1351 entities.yml:2066
+#: entities.yml:205 entities.yml:563 entities.yml:1352 entities.yml:2067
 msgid "Int name"
 msgstr "Mezinárodní jméno"
 
-#: entities.yml:205 entities.yml:519 entities.yml:1551 entities.yml:2598
+#: entities.yml:206 entities.yml:520 entities.yml:1552 entities.yml:2599
 msgid "Internet access fee"
 msgstr "Platba za přístup k internetu"
 
-#: entities.yml:206 entities.yml:585 entities.yml:2330
+#: entities.yml:207 entities.yml:586 entities.yml:2331
 msgid "Internet access ssid"
 msgstr "SSID pro přístup k internetu"
 
-#: entities.yml:207 entities.yml:486 entities.yml:541 entities.yml:1063
-#: entities.yml:1261 entities.yml:1285 entities.yml:1549 entities.yml:1822
-#: entities.yml:2285 entities.yml:2385 entities.yml:2536 entities.yml:2605
-#: entities.yml:2700
+#: entities.yml:208 entities.yml:487 entities.yml:542 entities.yml:1064
+#: entities.yml:1262 entities.yml:1286 entities.yml:1550 entities.yml:1823
+#: entities.yml:2286 entities.yml:2386 entities.yml:2537 entities.yml:2606
+#: entities.yml:2701
 msgid "Designation"
 msgstr "Označení"
 
-#: entities.yml:208 entities.yml:320 entities.yml:526 entities.yml:1113
-#: entities.yml:1431 entities.yml:1474 entities.yml:1492 entities.yml:1621
-#: entities.yml:1811 entities.yml:1970 entities.yml:2437 entities.yml:2628
+#: entities.yml:209 entities.yml:321 entities.yml:527 entities.yml:1114
+#: entities.yml:1432 entities.yml:1475 entities.yml:1493 entities.yml:1622
+#: entities.yml:1812 entities.yml:1971 entities.yml:2438 entities.yml:2629
 msgid "Location"
 msgstr "Umístění"
 
-#: entities.yml:209
+#: entities.yml:210
 msgid "Valves"
 msgstr ""
 
-#: entities.yml:210 entities.yml:799 entities.yml:1284 entities.yml:1607
+#: entities.yml:211 entities.yml:800 entities.yml:1285 entities.yml:1608
 msgid "Supervised"
 msgstr "Hlídané"
 
-#: entities.yml:211 enums.yml:513
+#: entities.yml:212 enums.yml:513
 msgid "Car"
 msgstr "Auto"
 
-#: entities.yml:212
+#: entities.yml:213
 msgid "Car capacity"
 msgstr "Kapacita aut"
 
-#: entities.yml:214
+#: entities.yml:215
 msgid "Nfc authentication"
 msgstr "Autentizace pomocí NFC"
 
-#: entities.yml:216
+#: entities.yml:217
 msgid "Dog"
 msgstr "Pes"
 
-#: entities.yml:217 entities.yml:606
+#: entities.yml:218 entities.yml:607
 msgid "Female"
 msgstr "Žena"
 
-#: entities.yml:218 entities.yml:605
+#: entities.yml:219 entities.yml:606
 msgid "Male"
 msgstr "Muž"
 
-#: entities.yml:219 entities.yml:1142 entities.yml:1405 entities.yml:1433
-#: entities.yml:1467 entities.yml:1493 entities.yml:1617 entities.yml:2125
+#: entities.yml:220 entities.yml:1143 entities.yml:1406 entities.yml:1434
+#: entities.yml:1468 entities.yml:1494 entities.yml:1618 entities.yml:2126
 msgid "Voltage"
 msgstr "Napětí"
 
-#: entities.yml:220 entities.yml:599
+#: entities.yml:221 entities.yml:600
 msgid "Toilets disposal"
 msgstr "Splachování na toaletách"
 
-#: entities.yml:222
+#: entities.yml:223
 msgid "Schuko socket"
 msgstr ""
 
-#: entities.yml:223
+#: entities.yml:224
 msgid "Schuko socket voltage"
 msgstr ""
 
-#: entities.yml:224
+#: entities.yml:225
 msgid "Type2 socket voltage"
 msgstr ""
 
-#: entities.yml:225 entities.yml:1806
+#: entities.yml:226 entities.yml:1807
 msgid "Waste"
 msgstr "Odpad"
 
-#: entities.yml:226 entities.yml:613 enums.yml:373
+#: entities.yml:227 entities.yml:614 enums.yml:373
 msgid "Fast food"
 msgstr "Rychlé občerstvení"
 
-#: entities.yml:228 entities.yml:571 entities.yml:1759 entities.yml:2519
+#: entities.yml:229 entities.yml:572 entities.yml:1760 entities.yml:2520
 msgid "Wheelchair toilets"
 msgstr "Toalety pro vozíčkáře"
 
-#: entities.yml:229 entities.yml:563 entities.yml:769 entities.yml:1256
-#: entities.yml:2624
+#: entities.yml:230 entities.yml:564 entities.yml:770 entities.yml:1257
+#: entities.yml:2625
 msgid "Fax"
 msgstr "Fax"
 
-#: entities.yml:230 entities.yml:591
+#: entities.yml:231 entities.yml:592
 msgid "Diplomatic"
 msgstr "Diplomatické"
 
-#: entities.yml:231 entities.yml:611
+#: entities.yml:232 entities.yml:612
 msgid "Automated"
 msgstr "Automatické"
 
-#: entities.yml:232 entities.yml:600 enums.yml:370
+#: entities.yml:233 entities.yml:601 enums.yml:370
 msgid "Toilets"
 msgstr "Toalety"
 
-#: entities.yml:233 entities.yml:612
+#: entities.yml:234 entities.yml:613
 msgid "Vegan diet"
 msgstr ""
 
-#: entities.yml:234
+#: entities.yml:235
 msgid "Indoor seating"
 msgstr "Vnitřní sezení"
 
-#: entities.yml:235
+#: entities.yml:236
 msgid "Short name en"
 msgstr "Krátký název (anglicky)"
 
-#: entities.yml:236 entities.yml:358 entities.yml:598 entities.yml:1017
-#: entities.yml:1079 entities.yml:1191 entities.yml:1510 entities.yml:1804
-#: entities.yml:2394
+#: entities.yml:237 entities.yml:359 entities.yml:599 entities.yml:1018
+#: entities.yml:1080 entities.yml:1192 entities.yml:1511 entities.yml:1805
+#: entities.yml:2395
 msgid "Fence type"
 msgstr "Typ plotu"
 
-#: entities.yml:237 entities.yml:607 enums.yml:603
+#: entities.yml:238 entities.yml:608 enums.yml:603
 msgid "Beer"
 msgstr "Pivo"
 
-#: entities.yml:238 entities.yml:329
+#: entities.yml:239 entities.yml:330
 msgid "Atm"
 msgstr "Bankomat"
 
-#: entities.yml:239
+#: entities.yml:240
 msgid "Chademo socket"
 msgstr ""
 
-#: entities.yml:240
+#: entities.yml:241
 msgid "Community"
 msgstr "Komunita"
 
-#: entities.yml:241 entities.yml:1565 enums.yml:455
+#: entities.yml:242 entities.yml:1566 enums.yml:455
 msgid "Gambling"
 msgstr "Gambling"
 
-#: entities.yml:242 entities.yml:389 entities.yml:550 entities.yml:817
-#: entities.yml:895 entities.yml:1009 entities.yml:1122 entities.yml:1412
-#: entities.yml:1648 entities.yml:2121 entities.yml:2404 entities.yml:2500
-#: entities.yml:2610 enums.yml:930 enums.yml:1215 enums.yml:2464
+#: entities.yml:243 entities.yml:390 entities.yml:551 entities.yml:818
+#: entities.yml:896 entities.yml:1010 entities.yml:1123 entities.yml:1413
+#: entities.yml:1649 entities.yml:2122 entities.yml:2405 entities.yml:2501
+#: entities.yml:2611 enums.yml:930 enums.yml:1215 enums.yml:2464
 msgid "Disused"
 msgstr "Nepoužívané"
 
-#: entities.yml:243 entities.yml:281 entities.yml:349 entities.yml:786
-#: entities.yml:830 entities.yml:850 entities.yml:1313 entities.yml:1378
-#: entities.yml:1658 entities.yml:1907 entities.yml:2291 entities.yml:2423
-#: entities.yml:2588 enums.yml:1682
+#: entities.yml:244 entities.yml:282 entities.yml:350 entities.yml:787
+#: entities.yml:831 entities.yml:851 entities.yml:1314 entities.yml:1379
+#: entities.yml:1659 entities.yml:1908 entities.yml:2292 entities.yml:2424
+#: entities.yml:2589 enums.yml:1682
 msgid "Foot"
 msgstr "Jídlo"
 
-#: entities.yml:244
+#: entities.yml:245
 msgid "Genre"
 msgstr "Žánr"
 
-#: entities.yml:245 entities.yml:1569
+#: entities.yml:246 entities.yml:1570
 msgid "Beer garden"
 msgstr ""
 
-#: entities.yml:246
+#: entities.yml:247
 msgid "Chademo socket power"
 msgstr ""
 
-#: entities.yml:247 enums.yml:466
+#: entities.yml:248 enums.yml:466
 msgid "Studio"
 msgstr "Studio"
 
-#: entities.yml:248 entities.yml:2347 enums.yml:533
+#: entities.yml:249 entities.yml:2348 enums.yml:533
 msgid "Wine"
 msgstr "Víno"
 
-#: entities.yml:249 entities.yml:301 entities.yml:400 entities.yml:493
-#: entities.yml:579 entities.yml:887 entities.yml:1036 entities.yml:1083
-#: entities.yml:1140 entities.yml:1345 entities.yml:2041
+#: entities.yml:250 entities.yml:302 entities.yml:401 entities.yml:494
+#: entities.yml:580 entities.yml:888 entities.yml:1037 entities.yml:1084
+#: entities.yml:1141 entities.yml:1346 entities.yml:2042
 msgid "Sorting name"
 msgstr "Jméno pro řazení"
 
-#: entities.yml:250 entities.yml:619 enums.yml:1708
+#: entities.yml:251 entities.yml:620 enums.yml:1708
 msgid "Room"
 msgstr "Pokoj"
 
-#: entities.yml:251
+#: entities.yml:252
 msgid "Type2 socket"
 msgstr ""
 
-#: entities.yml:252
+#: entities.yml:253
 msgid "Schuko socket current"
 msgstr ""
 
-#: entities.yml:253
+#: entities.yml:254
 msgid "Annotated"
 msgstr "S poznámkou"
 
-#: entities.yml:260
+#: entities.yml:261
 msgid "Removed name"
 msgstr "Odstraněné jméno"
 
-#: entities.yml:261 entities.yml:663 entities.yml:2597 entities.yml:2663
+#: entities.yml:262 entities.yml:664 entities.yml:2598 entities.yml:2664
 msgid "Building part"
 msgstr "Část budovy"
 
-#: entities.yml:263 entities.yml:376 entities.yml:729 entities.yml:1479
-#: entities.yml:2017 entities.yml:2253 entities.yml:2499 enums.yml:1515
+#: entities.yml:264 entities.yml:377 entities.yml:730 entities.yml:1480
+#: entities.yml:2018 entities.yml:2254 entities.yml:2500 enums.yml:1515
 msgid "Complete"
 msgstr "Kompletní"
 
-#: entities.yml:264 entities.yml:2289
+#: entities.yml:265 entities.yml:2290
 msgid "Route master"
 msgstr ""
 
-#: entities.yml:265 enums.yml:1006 enums.yml:2489
+#: entities.yml:266 enums.yml:1006 enums.yml:2489
 msgid "Lock"
 msgstr "Zámek"
 
-#: entities.yml:266
+#: entities.yml:267
 msgid "Historic building"
 msgstr "Historická budova"
 
-#: entities.yml:268 entities.yml:393 entities.yml:1500
+#: entities.yml:269 entities.yml:394 entities.yml:1501
 msgid "Building colour"
 msgstr "Barva budovy"
 
-#: entities.yml:270 entities.yml:407 entities.yml:1662
+#: entities.yml:271 entities.yml:408 entities.yml:1663
 msgid "Disused railway"
 msgstr "Nepoužívané koleje"
 
-#: entities.yml:272
+#: entities.yml:273
 msgid "Removed phone"
 msgstr "Odstraněný telefon"
 
-#: entities.yml:284 entities.yml:485 entities.yml:715 entities.yml:897
-#: entities.yml:1410 entities.yml:2113 entities.yml:2327 entities.yml:2556
-#: entities.yml:2665 enums.yml:2187
+#: entities.yml:285 entities.yml:486 entities.yml:716 entities.yml:898
+#: entities.yml:1411 entities.yml:2114 entities.yml:2328 entities.yml:2557
+#: entities.yml:2666 enums.yml:2187
 msgid "Tourism"
 msgstr "Turismus"
 
-#: entities.yml:285
+#: entities.yml:286
 #, fuzzy
 msgid "Aeroway"
 msgstr "Vodní tok"
 
-#: entities.yml:286 entities.yml:784 entities.yml:1365 entities.yml:1890
+#: entities.yml:287 entities.yml:785 entities.yml:1366 entities.yml:1891
 #: enums.yml:974 enums.yml:1220 enums.yml:1327 enums.yml:1492 enums.yml:1688
 msgid "Railway"
 msgstr "Koleje"
 
-#: entities.yml:288 entities.yml:620 entities.yml:1136
+#: entities.yml:289 entities.yml:621 entities.yml:1137
 msgid "Floating"
 msgstr "Plovoucí"
 
-#: entities.yml:299 enums.yml:1743
+#: entities.yml:300 enums.yml:1743
 msgid "Animal"
 msgstr "Zvíře"
 
-#: entities.yml:300 entities.yml:1347 entities.yml:2217 entities.yml:2616
+#: entities.yml:301 entities.yml:1348 entities.yml:2218 entities.yml:2617
 #: enums.yml:912 enums.yml:964
 msgid "Attraction"
 msgstr "Atrakce"
 
-#: entities.yml:306
+#: entities.yml:307
 msgid "Associated street"
 msgstr ""
 
-#: entities.yml:309
+#: entities.yml:310
 msgid "ATM"
 msgstr "Bankomat"
 
-#: entities.yml:313
+#: entities.yml:314
 msgid "Contact website"
 msgstr "Kontaktní webová stránka"
 
-#: entities.yml:318 entities.yml:327 entities.yml:558 entities.yml:902
-#: entities.yml:1244
+#: entities.yml:319 entities.yml:328 entities.yml:559 entities.yml:903
+#: entities.yml:1245
 msgid "Brand"
 msgstr "Značka"
 
-#: entities.yml:321
+#: entities.yml:322
 msgid "Cash in"
 msgstr ""
 
-#: entities.yml:322
+#: entities.yml:323
 msgid "Bitcoin"
 msgstr "Bitcoin"
 
-#: entities.yml:324
+#: entities.yml:325
 msgid "Bank"
 msgstr "Banka"
 
-#: entities.yml:334 entities.yml:498 entities.yml:669 entities.yml:910
-#: entities.yml:1234 entities.yml:1542 entities.yml:1611 entities.yml:2368
-#: entities.yml:2554 entities.yml:2671
+#: entities.yml:335 entities.yml:499 entities.yml:670 entities.yml:911
+#: entities.yml:1235 entities.yml:1543 entities.yml:1612 entities.yml:2369
+#: entities.yml:2555 entities.yml:2672
 msgid "Levels"
 msgstr "Úrovně"
 
-#: entities.yml:335 entities.yml:909 entities.yml:1286 entities.yml:1609
-#: entities.yml:2366
+#: entities.yml:336 entities.yml:910 entities.yml:1287 entities.yml:1610
+#: entities.yml:2367
 msgid "Building type"
 msgstr "Typ budovy"
 
-#: entities.yml:340
+#: entities.yml:341
 msgid "Contactless payment"
 msgstr "Bezkontaktní platba"
 
-#: entities.yml:341 entities.yml:1227 enums.yml:500 enums.yml:1061
+#: entities.yml:342 entities.yml:1228 enums.yml:500 enums.yml:1061
 #: enums.yml:1165 enums.yml:1505
 msgid "Office"
 msgstr "Kancelář"
 
-#: entities.yml:346 entities.yml:791 entities.yml:1384 entities.yml:2016
-#: entities.yml:2448 entities.yml:2476
+#: entities.yml:347 entities.yml:792 entities.yml:1385 entities.yml:2017
+#: entities.yml:2449 entities.yml:2477
 msgid "Tactile paving"
 msgstr ""
 
-#: entities.yml:351 entities.yml:2428
+#: entities.yml:352 entities.yml:2429
 msgid "Vehicle"
 msgstr "Vozidlo"
 
-#: entities.yml:352 entities.yml:787 entities.yml:852 entities.yml:1624
-#: entities.yml:2431 entities.yml:2647 enums.yml:1787
+#: entities.yml:353 entities.yml:788 entities.yml:853 entities.yml:1625
+#: entities.yml:2432 entities.yml:2648 enums.yml:1787
 msgid "Horse"
 msgstr "Kůň"
 
-#: entities.yml:354 entities.yml:647 entities.yml:718 entities.yml:844
-#: entities.yml:1081 entities.yml:1752 enums.yml:872 enums.yml:1155
+#: entities.yml:355 entities.yml:648 entities.yml:719 entities.yml:845
+#: entities.yml:1082 entities.yml:1753 enums.yml:872 enums.yml:1155
 #: enums.yml:1440 enums.yml:1939 enums.yml:2390
 msgid "Entrance"
 msgstr "Vchod"
 
-#: entities.yml:355 entities.yml:2292 entities.yml:2426
+#: entities.yml:356 entities.yml:2293 entities.yml:2427
 msgid "Motor vehicle"
 msgstr "Motorové vozidlo"
 
-#: entities.yml:357 entities.yml:2005
+#: entities.yml:358 entities.yml:2006
 msgid "Maxwidth"
 msgstr "Maximální šířka"
 
-#: entities.yml:361 entities.yml:853 entities.yml:1997 entities.yml:2457
+#: entities.yml:362 entities.yml:854 entities.yml:1998 entities.yml:2458
 msgid "Motorcar"
 msgstr ""
 
-#: entities.yml:362 entities.yml:854 entities.yml:1317 enums.yml:531
+#: entities.yml:363 entities.yml:855 entities.yml:1318 enums.yml:531
 msgid "Motorcycle"
 msgstr "Motocykl"
 
-#: entities.yml:363 entities.yml:1933
+#: entities.yml:364 entities.yml:1934
 msgid "Toll"
 msgstr "Poplatek"
 
-#: entities.yml:365
+#: entities.yml:366
 msgid "Toll hgv"
 msgstr ""
 
-#: entities.yml:367 enums.yml:866
+#: entities.yml:368 enums.yml:866
 #, fuzzy
 msgid "Bollard"
 msgstr "Cedule"
 
-#: entities.yml:368 entities.yml:1964 entities.yml:2300 entities.yml:2521
-#: entities.yml:2780 enums.yml:282 enums.yml:1928
+#: entities.yml:369 entities.yml:1965 entities.yml:2301 entities.yml:2522
+#: entities.yml:2781 enums.yml:282 enums.yml:1928
 msgid "Destination"
 msgstr "Cíl"
 
-#: entities.yml:369 entities.yml:1222 entities.yml:1937 entities.yml:2656
+#: entities.yml:370 entities.yml:1223 entities.yml:1938 entities.yml:2657
 msgid "Noexit"
 msgstr "Bez východu"
 
-#: entities.yml:370 entities.yml:1978
+#: entities.yml:371 entities.yml:1979
 msgid "Ticks"
 msgstr ""
 
-#: entities.yml:374
+#: entities.yml:375
 msgid "Two sided"
 msgstr ""
 
-#: entities.yml:378 enums.yml:863 enums.yml:1373 enums.yml:2005 enums.yml:2055
+#: entities.yml:379 enums.yml:863 enums.yml:1373 enums.yml:2005 enums.yml:2055
 #: enums.yml:2474
 msgid "Wall"
 msgstr "Zeď"
 
-#: entities.yml:379 enums.yml:885
+#: entities.yml:380 enums.yml:885
 #, fuzzy
 msgid "Stile"
 msgstr "Hrad"
 
-#: entities.yml:380 entities.yml:783 entities.yml:1962 entities.yml:2701
+#: entities.yml:381 entities.yml:784 entities.yml:1963 entities.yml:2702
 msgid "Traffic calming"
 msgstr ""
 
-#: entities.yml:383
+#: entities.yml:384
 msgid "Liftgate type"
 msgstr ""
 
-#: entities.yml:384 entities.yml:785 entities.yml:1306 entities.yml:1647
-#: entities.yml:1913
+#: entities.yml:385 entities.yml:786 entities.yml:1307 entities.yml:1648
+#: entities.yml:1914
 msgid "Maxheight"
 msgstr "Nejvyšší možná výška"
 
-#: entities.yml:388 entities.yml:788 entities.yml:2015 enums.yml:882
+#: entities.yml:389 entities.yml:789 entities.yml:2016 enums.yml:882
 msgid "Kerb"
 msgstr "Obrubník"
 
-#: entities.yml:391 entities.yml:1026 entities.yml:1192 entities.yml:2075
-#: entities.yml:2630
+#: entities.yml:392 entities.yml:1027 entities.yml:1193 entities.yml:2076
+#: entities.yml:2631
 msgid "Leaf type"
 msgstr "Typ listu"
 
-#: entities.yml:395 entities.yml:1896 enums.yml:294
+#: entities.yml:396 entities.yml:1897 enums.yml:294
 msgid "Hgv"
 msgstr ""
 
-#: entities.yml:397 entities.yml:870 entities.yml:1134
+#: entities.yml:398 entities.yml:871 entities.yml:1135
 msgid "Count"
 msgstr "Počet"
 
-#: entities.yml:398 entities.yml:1111 entities.yml:1157 entities.yml:1368
-#: entities.yml:1573 entities.yml:1631 entities.yml:2256 entities.yml:2478
+#: entities.yml:399 entities.yml:1112 entities.yml:1158 entities.yml:1369
+#: entities.yml:1574 entities.yml:1632 entities.yml:2257 entities.yml:2479
 msgid "Network"
 msgstr "Síť"
 
-#: entities.yml:401 entities.yml:744 entities.yml:2230
+#: entities.yml:402 entities.yml:745 entities.yml:2231
 msgid "Abandoned highway"
 msgstr "Opuštěná dálnice"
 
-#: entities.yml:403 entities.yml:2150
+#: entities.yml:404 entities.yml:2151
 msgid "Stroller"
 msgstr ""
 
-#: entities.yml:404 entities.yml:2140 enums.yml:2356
+#: entities.yml:405 entities.yml:2141 enums.yml:2356
 msgid "Pedestrians"
 msgstr "Chodci"
 
-#: entities.yml:405
+#: entities.yml:406
 msgid "Mofa"
 msgstr ""
 
-#: entities.yml:406 entities.yml:1961 enums.yml:1276
+#: entities.yml:407 entities.yml:1962 enums.yml:1276
 msgid "Ford"
 msgstr "Pevnost"
 
-#: entities.yml:408 entities.yml:1597 entities.yml:1944 entities.yml:2276
-#: entities.yml:2345 entities.yml:2454 entities.yml:2776 enums.yml:1056
+#: entities.yml:409 entities.yml:1598 entities.yml:1945 entities.yml:2277
+#: entities.yml:2346 entities.yml:2455 entities.yml:2777 enums.yml:1056
 #: enums.yml:1264 enums.yml:1358 enums.yml:1518 enums.yml:1718 enums.yml:1933
 #, fuzzy
 msgid "Service"
 msgstr "Servisní silnice"
 
-#: entities.yml:409 entities.yml:1942
+#: entities.yml:410 entities.yml:1943
 msgid "Goods"
 msgstr ""
 
-#: entities.yml:411 entities.yml:2026 enums.yml:293 enums.yml:2094
+#: entities.yml:412 entities.yml:2027 enums.yml:293 enums.yml:2094
 msgid "Agricultural"
 msgstr "Zemědělský"
 
-#: entities.yml:412
+#: entities.yml:413
 msgid "Swing gate type"
 msgstr ""
 
-#: entities.yml:413 entities.yml:1367 entities.yml:2328 entities.yml:2474
+#: entities.yml:414 entities.yml:1368 entities.yml:2329 entities.yml:2475
 #: enums.yml:376
 msgid "Bench"
 msgstr "Lavička"
 
-#: entities.yml:417 enums.yml:394
+#: entities.yml:418 enums.yml:394
 msgid "Bicycle parking"
 msgstr "Parkování jízdních kol"
 
-#: entities.yml:421
+#: entities.yml:422
 msgid "Parking type"
 msgstr "Typ parkování"
 
-#: entities.yml:422 entities.yml:653 entities.yml:1121 entities.yml:2529
+#: entities.yml:423 entities.yml:654 entities.yml:1122 entities.yml:2530
 #: enums.yml:726
 msgid "Surveillance"
 msgstr "Sledování"
 
-#: entities.yml:423
+#: entities.yml:424
 msgid "Surveillance type"
 msgstr "Typ sledování"
 
-#: entities.yml:424 entities.yml:2545
+#: entities.yml:425 entities.yml:2546
 msgid "Surveillance zone"
 msgstr "Zóna sledování"
 
-#: entities.yml:425 entities.yml:1552 enums.yml:596
+#: entities.yml:426 entities.yml:1553 enums.yml:596
 msgid "Food"
 msgstr "Jídlo"
 
-#: entities.yml:426 entities.yml:642
+#: entities.yml:427 entities.yml:643
 #, fuzzy
 msgid "Real ale"
 msgstr "Péče o zdraví"
 
-#: entities.yml:427
+#: entities.yml:428
 msgid "Service chain tool"
 msgstr ""
 
-#: entities.yml:428 enums.yml:109 enums.yml:1167 enums.yml:1456
+#: entities.yml:429 enums.yml:109 enums.yml:1167 enums.yml:1456
 msgid "Board"
 msgstr "Cedule"
 
@@ -1341,3721 +1346,3721 @@ msgstr "Cedule"
 #: app/controllers/interactive_person_controller.py:213
 #: app/controllers/interactive_person_controller.py:235
 #: app/controllers/interactive_person_controller.py:351
-#: app/controllers/interactive_person_controller.py:363 entities.yml:431
-#: entities.yml:1414 enums.yml:914 enums.yml:1441 enums.yml:1496 enums.yml:1802
+#: app/controllers/interactive_person_controller.py:363 entities.yml:432
+#: entities.yml:1415 enums.yml:914 enums.yml:1441 enums.yml:1496 enums.yml:1802
 msgid "Information"
 msgstr "Informace"
 
-#: entities.yml:432
+#: entities.yml:433
 msgid "Board type"
 msgstr "Typ cedule"
 
-#: entities.yml:433
+#: entities.yml:434
 msgid "Board number"
 msgstr "Číslo cedule"
 
-#: entities.yml:434
+#: entities.yml:435
 msgid "Board ref"
 msgstr ""
 
-#: entities.yml:435 entities.yml:659
+#: entities.yml:436 entities.yml:660
 msgid "Education"
 msgstr "Vzdělávání"
 
-#: entities.yml:436
+#: entities.yml:437
 msgid "Language cs"
 msgstr "Čeština"
 
-#: entities.yml:437 enums.yml:1232
+#: entities.yml:438 enums.yml:1232
 msgid "Border"
 msgstr "Státní hranice"
 
-#: entities.yml:440
+#: entities.yml:441
 msgid "Border type"
 msgstr "Typ státní hranice"
 
-#: entities.yml:442
+#: entities.yml:443
 msgid "Left country"
 msgstr "Země nalevo"
 
-#: entities.yml:443
+#: entities.yml:444
 msgid "Right country"
 msgstr "Země vpravo"
 
-#: entities.yml:444
+#: entities.yml:445
 msgid "Uploaded by"
 msgstr "Nahráno"
 
-#: entities.yml:445 entities.yml:1940 enums.yml:1008
+#: entities.yml:446 entities.yml:1941 enums.yml:1008
 msgid "Waterway"
 msgstr "Vodní tok"
 
-#: entities.yml:446
+#: entities.yml:447
 msgid "Boat"
 msgstr "Člun"
 
-#: entities.yml:448 entities.yml:1519 enums.yml:138 enums.yml:2179
+#: entities.yml:449 entities.yml:1520 enums.yml:138 enums.yml:2179
 msgid "Boundary"
 msgstr "Hranice"
 
-#: entities.yml:453 entities.yml:2242
+#: entities.yml:454 entities.yml:2243
 msgid "Name cs"
 msgstr "Jméno česky"
 
-#: entities.yml:454
+#: entities.yml:455
 msgid "Admin level"
 msgstr "Administrativní úroveň"
 
-#: entities.yml:455 entities.yml:531
+#: entities.yml:456 entities.yml:532
 #, fuzzy
 msgid "Historic type"
 msgstr "Historické"
 
-#: entities.yml:456
+#: entities.yml:457
 msgid "Marker type"
 msgstr ""
 
-#: entities.yml:461 entities.yml:1331
+#: entities.yml:462 entities.yml:1332
 msgid "Population"
 msgstr "Populace"
 
-#: entities.yml:462
+#: entities.yml:463
 msgid "Iso3166 2"
 msgstr "Iso3166 2"
 
-#: entities.yml:463 entities.yml:582 entities.yml:824 entities.yml:973
-#: entities.yml:1650 entities.yml:1954
+#: entities.yml:464 entities.yml:583 entities.yml:825 entities.yml:974
+#: entities.yml:1651 entities.yml:1955
 msgid "End date"
 msgstr "Koncové datum"
 
-#: entities.yml:466 entities.yml:1522
+#: entities.yml:467 entities.yml:1523
 msgid "Protect class"
 msgstr "Třída ochrany"
 
-#: entities.yml:467
+#: entities.yml:468
 msgid "Fixname"
 msgstr "Opravit jméno"
 
-#: entities.yml:468 entities.yml:1340 entities.yml:2107 entities.yml:2504
+#: entities.yml:469 entities.yml:1341 entities.yml:2108 entities.yml:2505
 msgid "Alt name de"
 msgstr "Alternativní jméno (německy)"
 
-#: entities.yml:469 entities.yml:2505
+#: entities.yml:470 entities.yml:2506
 msgid "Old name de"
 msgstr "Staré jméno (německy)"
 
-#: entities.yml:472
+#: entities.yml:473
 msgid "Year"
 msgstr "Rok"
 
-#: entities.yml:473
+#: entities.yml:474
 msgid "Odl name de"
 msgstr "Staré jméno německy"
 
-#: entities.yml:474
+#: entities.yml:475
 msgid "Track type"
 msgstr "Typ stezky"
 
-#: entities.yml:478 entities.yml:652 entities.yml:716 entities.yml:803
-#: entities.yml:953 entities.yml:1183 entities.yml:2587
+#: entities.yml:479 entities.yml:653 entities.yml:717 entities.yml:804
+#: entities.yml:954 entities.yml:1184 entities.yml:2588
 #, fuzzy
 msgid "Inscription"
 msgstr "Omezení"
 
-#: entities.yml:479
+#: entities.yml:480
 msgid "Old name cs"
 msgstr "Staré jméno (česky)"
 
-#: entities.yml:480 entities.yml:889 entities.yml:1169 entities.yml:1943
-#: entities.yml:2595 entities.yml:2734 entities.yml:2750 enums.yml:2425
+#: entities.yml:481 entities.yml:890 entities.yml:1170 entities.yml:1944
+#: entities.yml:2596 entities.yml:2735 entities.yml:2751 enums.yml:2425
 msgid "Natural"
 msgstr "Přírodní"
 
-#: entities.yml:481
+#: entities.yml:482
 msgid "Vehicle conitional"
 msgstr ""
 
-#: entities.yml:482 entities.yml:1959 entities.yml:2449
+#: entities.yml:483 entities.yml:1960 entities.yml:2450
 msgid "Trail visibility"
 msgstr "Viditelnost pěšiny"
 
-#: entities.yml:511
+#: entities.yml:512
 msgid "Leisure type"
 msgstr "Typ volnočasové aktivity"
 
-#: entities.yml:512 entities.yml:1184
+#: entities.yml:513 entities.yml:1185
 msgid "Tourism type"
 msgstr "Typ turismu"
 
-#: entities.yml:515
+#: entities.yml:516
 msgid "Industrial type"
 msgstr "Typ průmyslu"
 
-#: entities.yml:516 entities.yml:672 entities.yml:1250 entities.yml:2599
+#: entities.yml:517 entities.yml:673 entities.yml:1251 entities.yml:2600
 msgid "Roof height"
 msgstr "Výška střechy"
 
-#: entities.yml:525 entities.yml:2570
+#: entities.yml:526 entities.yml:2571
 msgid "Information type"
 msgstr "Typ informace"
 
-#: entities.yml:527
+#: entities.yml:528
 msgid "Product"
 msgstr "Produkt"
 
-#: entities.yml:537 entities.yml:961 entities.yml:2601 enums.yml:972
+#: entities.yml:538 entities.yml:962 entities.yml:2602 enums.yml:972
 msgid "Heritage"
 msgstr ""
 
-#: entities.yml:538 entities.yml:962 entities.yml:2602
+#: entities.yml:539 entities.yml:963 entities.yml:2603
 #, fuzzy
 msgid "Heritage operator"
 msgstr "Elektrický generátor"
 
-#: entities.yml:540 entities.yml:879 entities.yml:2333 entities.yml:2612
+#: entities.yml:541 entities.yml:880 entities.yml:2334 entities.yml:2613
 #: enums.yml:2019
 msgid "Architect"
 msgstr "Architekt"
 
-#: entities.yml:545 entities.yml:1508
+#: entities.yml:546 entities.yml:1509
 msgid "Roof levels"
 msgstr "Úrovně střechy"
 
-#: entities.yml:546 entities.yml:673 entities.yml:1248
+#: entities.yml:547 entities.yml:674 entities.yml:1249
 msgid "Roof material"
 msgstr "Materiál střechy"
 
-#: entities.yml:547 enums.yml:1432
+#: entities.yml:548 enums.yml:1432
 msgid "Part"
 msgstr "Část"
 
-#: entities.yml:548
+#: entities.yml:549
 msgid "Service times"
 msgstr "Časy obsluhy"
 
-#: entities.yml:549 entities.yml:964 entities.yml:1109 entities.yml:1630
-#: entities.yml:2491 entities.yml:2607
+#: entities.yml:550 entities.yml:965 entities.yml:1110 entities.yml:1631
+#: entities.yml:2492 entities.yml:2608
 msgid "Image"
 msgstr "Obrázek"
 
-#: entities.yml:552
+#: entities.yml:553
 msgid "Underground levels"
 msgstr "Podzemní podlaží"
 
-#: entities.yml:553
+#: entities.yml:554
 msgid "Roof angle"
 msgstr "Úhel střechy"
 
-#: entities.yml:554 entities.yml:668
+#: entities.yml:555 entities.yml:669
 msgid "Roof orientation"
 msgstr "Orientace střechy"
 
-#: entities.yml:555
+#: entities.yml:556
 msgid "Min level"
 msgstr "Nejnižší úroveň"
 
-#: entities.yml:556
+#: entities.yml:557
 #, fuzzy
 msgid "Cladding"
 msgstr "Budova"
 
-#: entities.yml:559 entities.yml:2573
+#: entities.yml:560 entities.yml:2574
 msgid "Stars"
 msgstr "Hvězdičky"
 
-#: entities.yml:561 entities.yml:712 entities.yml:976
+#: entities.yml:562 entities.yml:713 entities.yml:977
 msgid "Date"
 msgstr "Datum"
 
-#: entities.yml:564
+#: entities.yml:565
 msgid "Use"
 msgstr "Použití"
 
-#: entities.yml:565 entities.yml:674 entities.yml:917 entities.yml:1251
-#: entities.yml:1503 entities.yml:2674
+#: entities.yml:566 entities.yml:675 entities.yml:918 entities.yml:1252
+#: entities.yml:1504 entities.yml:2675
 msgid "Roof colour"
 msgstr "Barva střecky"
 
-#: entities.yml:566
+#: entities.yml:567
 msgid "Wheelchair description"
 msgstr "Popis pro vozíčkáře"
 
-#: entities.yml:567 entities.yml:735 entities.yml:1012 entities.yml:1303
-#: entities.yml:1657 entities.yml:1868 entities.yml:2517 enums.yml:477
+#: entities.yml:568 entities.yml:736 entities.yml:1013 entities.yml:1304
+#: entities.yml:1658 entities.yml:1869 entities.yml:2518 enums.yml:477
 #: enums.yml:1059 enums.yml:1225 enums.yml:1280 enums.yml:1340 enums.yml:1726
 #: enums.yml:2465
 msgid "Construction"
 msgstr "Konstrukce"
 
-#: entities.yml:568
+#: entities.yml:569
 msgid "Self service"
 msgstr "Samoobslužné"
 
-#: entities.yml:569 entities.yml:758
+#: entities.yml:570 entities.yml:759
 msgid "Microbrewery"
 msgstr "Mikropivovar"
 
-#: entities.yml:570 entities.yml:959 enums.yml:954 enums.yml:1058
+#: entities.yml:571 entities.yml:960 enums.yml:954 enums.yml:1058
 msgid "Ruins"
 msgstr "Ruiny"
 
-#: entities.yml:573 entities.yml:2391
+#: entities.yml:574 entities.yml:2392
 msgid "Opening hours url"
 msgstr "URL otvírací doby"
 
-#: entities.yml:574 entities.yml:2392
+#: entities.yml:575 entities.yml:2393
 msgid "Reservation"
 msgstr "Rezervace"
 
-#: entities.yml:575 entities.yml:1567
+#: entities.yml:576 entities.yml:1568
 msgid "Visa payment"
 msgstr "Platba kartami Visa"
 
-#: entities.yml:576
+#: entities.yml:577
 msgid "Visa debit payment"
 msgstr "Platba debetními kartami Visa"
 
-#: entities.yml:577
+#: entities.yml:578
 msgid "Visa electron payment"
 msgstr "Platba kartami Visa electron"
 
-#: entities.yml:578
+#: entities.yml:579
 msgid "Healthcare speciality"
 msgstr "Specializace péče o zdraví"
 
-#: entities.yml:580 entities.yml:1092 entities.yml:2405
+#: entities.yml:581 entities.yml:1093 entities.yml:2406
 msgid "Alt name 1"
 msgstr "Alternativní jméno 1"
 
-#: entities.yml:581 entities.yml:1094
+#: entities.yml:582 entities.yml:1095
 msgid "Alt name 2"
 msgstr "Alternativní jméno 2"
 
-#: entities.yml:583
+#: entities.yml:584
 msgid "Cvut id"
 msgstr "Identifikace čvut"
 
-#: entities.yml:584 entities.yml:1262
+#: entities.yml:585 entities.yml:1263
 msgid "Description en"
 msgstr "Popis anglicky"
 
-#: entities.yml:587
+#: entities.yml:588
 msgid "Max level"
 msgstr "Nejvyšší úroveň"
 
-#: entities.yml:589 entities.yml:1556
+#: entities.yml:590 entities.yml:1557
 msgid "Cash payment"
 msgstr "Platba v hotovosti"
 
-#: entities.yml:592 entities.yml:1143
+#: entities.yml:593 entities.yml:1144
 msgid "Note en"
 msgstr "Poznámka (anglicky)"
 
-#: entities.yml:593 entities.yml:773 entities.yml:1245 entities.yml:2614
+#: entities.yml:594 entities.yml:774 entities.yml:1246 entities.yml:2615
 msgid "Bitcoin payment"
 msgstr "Platba bitcoiny"
 
-#: entities.yml:594 entities.yml:717 entities.yml:885 entities.yml:969
-#: entities.yml:2578
+#: entities.yml:595 entities.yml:718 entities.yml:886 entities.yml:970
+#: entities.yml:2579
 msgid "Artist name"
 msgstr "Jméno umělce"
 
-#: entities.yml:595 entities.yml:2606
+#: entities.yml:596 entities.yml:2607
 msgid "Rooms"
 msgstr "Pokoje"
 
-#: entities.yml:596 entities.yml:1090
+#: entities.yml:597 entities.yml:1091
 msgid "Google plus"
 msgstr "Google plus"
 
-#: entities.yml:597
+#: entities.yml:598
 msgid "Twitter"
 msgstr "Twitter"
 
-#: entities.yml:602
+#: entities.yml:603
 msgid "Maestro payment"
 msgstr "Platba kartami Maestro"
 
-#: entities.yml:603
+#: entities.yml:604
 msgid "Mastercard payment"
 msgstr "Platba kartami Mastercard"
 
-#: entities.yml:604
+#: entities.yml:605
 msgid "Notes payment"
 msgstr "Platba bankovkami"
 
-#: entities.yml:610 entities.yml:1091 entities.yml:1100 entities.yml:1254
-#: entities.yml:2087 entities.yml:2643 enums.yml:1400 enums.yml:1639
+#: entities.yml:611 entities.yml:1092 entities.yml:1101 entities.yml:1255
+#: entities.yml:2088 entities.yml:2644 enums.yml:1400 enums.yml:1639
 msgid "Indoor"
 msgstr "Vnitřní"
 
-#: entities.yml:614
+#: entities.yml:615
 msgid "Credit cards payment"
 msgstr "Platba kreditními kartami"
 
-#: entities.yml:615
+#: entities.yml:616
 msgid "Debit cards payment"
 msgstr "Platba debetními kartami"
 
-#: entities.yml:616 entities.yml:675
+#: entities.yml:617 entities.yml:676
 #, fuzzy
 msgid "Roof slope direction"
 msgstr "Aktuální směr"
 
-#: entities.yml:617 entities.yml:671
+#: entities.yml:618 entities.yml:672
 msgid "Roof direction"
 msgstr "Směr střechy"
 
-#: entities.yml:618
+#: entities.yml:619
 msgid "Bridge support"
 msgstr "Podpora mostu"
 
-#: entities.yml:621 entities.yml:1146 entities.yml:2638 enums.yml:952
+#: entities.yml:622 entities.yml:1147 entities.yml:2639 enums.yml:952
 #: enums.yml:1769
 msgid "Memorial"
 msgstr "Pomník"
 
-#: entities.yml:622
+#: entities.yml:623
 msgid "Gluten free diet"
 msgstr ""
 
-#: entities.yml:623
+#: entities.yml:624
 msgid "Ethnicity"
 msgstr "Etnicita"
 
-#: entities.yml:624 entities.yml:1020 enums.yml:185 enums.yml:495
+#: entities.yml:625 entities.yml:1021 enums.yml:185 enums.yml:495
 #: enums.yml:1041 enums.yml:1263 enums.yml:1319 enums.yml:1365 enums.yml:1497
 #: enums.yml:1526 enums.yml:1724 enums.yml:1772 enums.yml:2342
 msgid "Residential"
 msgstr "K bydlení"
 
-#: entities.yml:625 entities.yml:1034 entities.yml:1085 entities.yml:1308
-#: entities.yml:2407
+#: entities.yml:626 entities.yml:1035 entities.yml:1086 entities.yml:1309
+#: entities.yml:2408
 msgid "Fenced"
 msgstr "Oploceno"
 
-#: entities.yml:626
+#: entities.yml:627
 msgid "Disused man made"
 msgstr "Nepoužíváno vyrobeno člověkem"
 
-#: entities.yml:627
+#: entities.yml:628
 msgid "Vertical part"
 msgstr "Vertikální část"
 
-#: entities.yml:628
+#: entities.yml:629
 msgid "Mooring"
 msgstr "Ukotvení"
 
-#: entities.yml:629 entities.yml:2799
+#: entities.yml:630 entities.yml:2800
 msgid "Seamark type"
 msgstr ""
 
-#: entities.yml:630 enums.yml:1378 enums.yml:2442
+#: entities.yml:631 enums.yml:1378 enums.yml:2442
 msgid "Flat"
 msgstr ""
 
-#: entities.yml:631
+#: entities.yml:632
 msgid "Raw diet"
 msgstr ""
 
-#: entities.yml:632
+#: entities.yml:633
 msgid "En wheelchair description"
 msgstr "Popis pro vozíčkáře (anglicky)"
 
-#: entities.yml:633
+#: entities.yml:634
 msgid "Electronic purses payment"
 msgstr ""
 
-#: entities.yml:634
+#: entities.yml:635
 msgid "Kids area"
 msgstr "Oblast pro děti"
 
-#: entities.yml:635
+#: entities.yml:636
 msgid "Beer 1"
 msgstr "Pivo 1"
 
-#: entities.yml:637 entities.yml:922 entities.yml:1200 entities.yml:1312
+#: entities.yml:638 entities.yml:923 entities.yml:1201 entities.yml:1313
 msgid "Garden type"
 msgstr "Typ zahrady"
 
-#: entities.yml:638
+#: entities.yml:639
 msgid "Meal voucher payment"
 msgstr ""
 
-#: entities.yml:639 entities.yml:893 entities.yml:981 entities.yml:2579
+#: entities.yml:640 entities.yml:894 entities.yml:982 entities.yml:2580
 msgid "Artwork type"
 msgstr "Typ výtvarného díla"
 
-#: entities.yml:640 enums.yml:1834
+#: entities.yml:641 enums.yml:1834
 msgid "Architecture"
 msgstr "Architektura"
 
-#: entities.yml:641
+#: entities.yml:642
 msgid "Currency czk"
 msgstr "Měna czk"
 
-#: entities.yml:643 enums.yml:913
+#: entities.yml:644 enums.yml:913
 msgid "Camp site"
 msgstr "Místo pro kempování"
 
-#: entities.yml:645
+#: entities.yml:646
 msgid "American express payment"
 msgstr ""
 
-#: entities.yml:646 entities.yml:1568
+#: entities.yml:647 entities.yml:1569
 msgid "Cryptocurrencies payment"
 msgstr "Platba kryptoměnami"
 
-#: entities.yml:648 entities.yml:1969
+#: entities.yml:649 entities.yml:1970
 msgid "Name 1"
 msgstr "Jméno 1"
 
-#: entities.yml:649 entities.yml:1744 entities.yml:2146
+#: entities.yml:650 entities.yml:1745 entities.yml:2147
 msgid "Reg name"
 msgstr "Registrované jméno"
 
-#: entities.yml:650
+#: entities.yml:651
 msgid "Secondary use"
 msgstr "Sekundární použití"
 
-#: entities.yml:651
+#: entities.yml:652
 msgid "Building 1"
 msgstr "Budova 1"
 
-#: entities.yml:654
+#: entities.yml:655
 msgid "Roof access"
 msgstr "Přístup na střechu"
 
-#: entities.yml:655
+#: entities.yml:656
 msgid "Hei"
 msgstr ""
 
-#: entities.yml:656 entities.yml:1844
+#: entities.yml:657 entities.yml:1845
 msgid "Owner"
 msgstr "Vlastník"
 
-#: entities.yml:657 entities.yml:1564
+#: entities.yml:658 entities.yml:1565
 msgid "Meal vouchers payment"
 msgstr "Platba stravenkami"
 
-#: entities.yml:660
+#: entities.yml:661
 msgid "Ruian type"
 msgstr "Typ podle Ruian"
 
-#: entities.yml:661
+#: entities.yml:662
 msgid "Ruian building ref"
 msgstr "Reference podle Ruian"
 
-#: entities.yml:676 entities.yml:1139
+#: entities.yml:677 entities.yml:1140
 msgid "Building material"
 msgstr "Materiál budovy"
 
-#: entities.yml:680 enums.yml:1114 enums.yml:1597
+#: entities.yml:681 enums.yml:1114 enums.yml:1597
 msgid "Bunker"
 msgstr "Bunkr"
 
-#: entities.yml:687 entities.yml:2662
+#: entities.yml:688 entities.yml:2663
 msgid "Tower type"
 msgstr "Typ věže"
 
-#: entities.yml:688 enums.yml:381
+#: entities.yml:689 enums.yml:381
 msgid "Cafe"
 msgstr "Kavárna"
 
-#: entities.yml:691
+#: entities.yml:692
 msgid "Cafe type"
 msgstr "Typ kavárny"
 
-#: entities.yml:692 enums.yml:957 enums.yml:1094 enums.yml:1775
+#: entities.yml:693 enums.yml:957 enums.yml:1094 enums.yml:1775
 msgid "Castle"
 msgstr "Hrad"
 
-#: entities.yml:696
+#: entities.yml:697
 msgid "Alt name 3"
 msgstr "Další jméno 3"
 
-#: entities.yml:697 enums.yml:1958
+#: entities.yml:698 enums.yml:1958
 msgid "Checkpoint"
 msgstr "Kontrolní bod"
 
-#: entities.yml:701
+#: entities.yml:702
 msgid "Checkpoint type"
 msgstr "Typ kontrolního bodu"
 
-#: entities.yml:703
+#: entities.yml:704
 msgid "Checkpoint name"
 msgstr "Jméno kontrolního bodu"
 
-#: entities.yml:704 enums.yml:392
+#: entities.yml:705 enums.yml:392
 msgid "Clock"
 msgstr "Hodiny"
 
-#: entities.yml:707
+#: entities.yml:708
 msgid "Display"
 msgstr "Displej"
 
-#: entities.yml:708 entities.yml:2168 entities.yml:2547 entities.yml:2639
+#: entities.yml:709 entities.yml:2169 entities.yml:2548 entities.yml:2640
 msgid "Support"
 msgstr "Podpora"
 
-#: entities.yml:709
+#: entities.yml:710
 #, fuzzy
 msgid "Faces"
 msgstr "Místo"
 
-#: entities.yml:710
+#: entities.yml:711
 msgid "Visibility"
 msgstr "Viditelnost"
 
-#: entities.yml:711
+#: entities.yml:712
 msgid "Barometer"
 msgstr "Barometr"
 
-#: entities.yml:713
+#: entities.yml:714
 msgid "Hygrometer"
 msgstr "Vlhkoměr"
 
-#: entities.yml:714
+#: entities.yml:715
 msgid "Thermometer"
 msgstr "Teploměr"
 
-#: entities.yml:719 enums.yml:223
+#: entities.yml:720 enums.yml:223
 msgid "Collection"
 msgstr "Kolekce"
 
-#: entities.yml:731
+#: entities.yml:732
 msgid "Commented"
 msgstr "Okomentované"
 
-#: entities.yml:745
+#: entities.yml:746
 #, fuzzy
 msgid "Abandoned ref"
 msgstr "Opuštěné"
 
-#: entities.yml:746
+#: entities.yml:747
 msgid "Official en name"
 msgstr "Oficiální jméno (anglicky)"
 
-#: entities.yml:748
+#: entities.yml:749
 msgid "Official name 1"
 msgstr "Oficiální jméno 1"
 
-#: entities.yml:749 enums.yml:629
+#: entities.yml:750 enums.yml:629
 msgid "Craft"
 msgstr "Řemeslo"
 
-#: entities.yml:771
+#: entities.yml:772
 msgid "Databox"
 msgstr "Datová schránka"
 
-#: entities.yml:774 entities.yml:1957 enums.yml:940 enums.yml:1205
+#: entities.yml:775 entities.yml:1958 enums.yml:940 enums.yml:1205
 #: enums.yml:1523 enums.yml:2294 enums.yml:2312
 msgid "Crossing"
 msgstr "Křižovatka"
 
-#: entities.yml:777 entities.yml:2070
+#: entities.yml:778 entities.yml:2071
 msgid "Crossing ref"
 msgstr "Reference křižovatky"
 
-#: entities.yml:781
+#: entities.yml:782
 msgid "Button operated"
 msgstr "Ovládán tlačítkem"
 
-#: entities.yml:789 entities.yml:1914 enums.yml:2299
+#: entities.yml:790 entities.yml:1915 enums.yml:2299
 msgid "Segregated"
 msgstr "Oddělené"
 
-#: entities.yml:790 enums.yml:938 enums.yml:1273 enums.yml:2357
+#: entities.yml:791 enums.yml:938 enums.yml:1273 enums.yml:2357
 msgid "Traffic signals"
 msgstr "Semafory"
 
-#: entities.yml:794 entities.yml:2219
+#: entities.yml:795 entities.yml:2220
 msgid "Sloped curb"
 msgstr ""
 
-#: entities.yml:796 entities.yml:843 entities.yml:1595 entities.yml:1892
-#: entities.yml:2707 entities.yml:2716 entities.yml:2804 enums.yml:1927
+#: entities.yml:797 entities.yml:844 entities.yml:1596 entities.yml:1893
+#: entities.yml:2708 entities.yml:2717 entities.yml:2805 enums.yml:1927
 msgid "Maxspeed"
 msgstr "Nejvyšší rychlost"
 
-#: entities.yml:797
+#: entities.yml:798
 msgid "Traffic signals direction"
 msgstr ""
 
-#: entities.yml:798
+#: entities.yml:799
 #, fuzzy
 msgid "Traffic signals sound"
 msgstr "Dopravní značka"
 
-#: entities.yml:800 entities.yml:1307 entities.yml:1920
+#: entities.yml:801 entities.yml:1308 entities.yml:1921
 msgid "Smoothness"
 msgstr "Hladkost"
 
-#: entities.yml:804 entities.yml:1921 enums.yml:1268 enums.yml:1528
+#: entities.yml:805 entities.yml:1922 enums.yml:1268 enums.yml:1528
 msgid "Cycleway"
 msgstr "Cyklostezka"
 
-#: entities.yml:805
+#: entities.yml:806
 msgid "Sound"
 msgstr "Zvuk"
 
-#: entities.yml:808 entities.yml:2232 entities.yml:2711
+#: entities.yml:809 entities.yml:2233 entities.yml:2712
 msgid "Traffic sign"
 msgstr "Dopravní značka"
 
-#: entities.yml:810
+#: entities.yml:811
 msgid "Both parking lane"
 msgstr ""
 
-#: entities.yml:812
+#: entities.yml:813
 msgid "Highway 2"
 msgstr ""
 
-#: entities.yml:813 entities.yml:1315
+#: entities.yml:814 entities.yml:1316
 msgid "Demolished building"
 msgstr "Zbouraná budova"
 
-#: entities.yml:822
+#: entities.yml:823
 msgid "Destroyed amenity"
 msgstr "Zničená vymoženost"
 
-#: entities.yml:823
+#: entities.yml:824
 msgid "Destroyed name"
 msgstr ""
 
-#: entities.yml:834
+#: entities.yml:835
 msgid "Elevated"
 msgstr "Označené údajem o nadmořské výšce"
 
-#: entities.yml:838
+#: entities.yml:839
 #, fuzzy
 msgid "Mountain pass"
 msgstr "Fontána"
 
-#: entities.yml:839 entities.yml:842
+#: entities.yml:840 entities.yml:843
 msgid "Enforcement"
 msgstr "Vynucení"
 
-#: entities.yml:865
+#: entities.yml:866
 msgid "Fire hydrant"
 msgstr "Požární hydrant"
 
-#: app/controllers/interactive_person_controller.py:60 entities.yml:869
-#: entities.yml:1714
+#: app/controllers/interactive_person_controller.py:60 entities.yml:870
+#: entities.yml:1715
 msgid "Position"
 msgstr "Pozice"
 
-#: entities.yml:871
+#: entities.yml:872
 msgid "Fountain"
 msgstr "Fontána"
 
-#: entities.yml:898 enums.yml:412 enums.yml:2333
+#: entities.yml:899 enums.yml:412 enums.yml:2333
 msgid "Fuel"
 msgstr "Čerpací stanice"
 
-#: entities.yml:905
+#: entities.yml:906
 msgid "Internet access paid"
 msgstr "Přístup k internetu je placený"
 
-#: entities.yml:906 entities.yml:1558 entities.yml:2336 enums.yml:187
+#: entities.yml:907 entities.yml:1559 entities.yml:2337 enums.yml:187
 #: enums.yml:475
 msgid "Shop"
 msgstr "Obchod"
 
-#: entities.yml:919 enums.yml:329 enums.yml:1348
+#: entities.yml:920 enums.yml:329 enums.yml:1348
 msgid "Garden"
 msgstr "Zahrada"
 
-#: entities.yml:927 enums.yml:326
+#: entities.yml:928 enums.yml:326
 msgid "Golf course"
 msgstr "Golfové hřiště"
 
-#: entities.yml:930
+#: entities.yml:931
 msgid "Golf course type"
 msgstr "Typ golfového hřiště"
 
-#: entities.yml:931
+#: entities.yml:932
 msgid "Par"
 msgstr ""
 
-#: entities.yml:932
+#: entities.yml:933
 msgid "Graveyard"
 msgstr "Hřbitov"
 
-#: entities.yml:941
+#: entities.yml:942
 msgid "Health care"
 msgstr "Péče o zdraví"
 
-#: entities.yml:945
+#: entities.yml:946
 msgid "Speciality"
 msgstr "Specialita"
 
-#: entities.yml:963 entities.yml:2408
+#: entities.yml:964 entities.yml:2409
 msgid "Wikimedia commons"
 msgstr "Wikimedia commons"
 
-#: entities.yml:966
+#: entities.yml:967
 msgid "Memorial type"
 msgstr "Typ pomníku"
 
-#: entities.yml:967
+#: entities.yml:968
 msgid "Memorial name"
 msgstr "Jméno pomníku"
 
-#: entities.yml:972 enums.yml:959
+#: entities.yml:973 enums.yml:959
 msgid "Tomb"
 msgstr "Hrobka"
 
-#: entities.yml:974 entities.yml:1052
+#: entities.yml:975 entities.yml:1053
 msgid "Site type"
 msgstr ""
 
-#: entities.yml:978 enums.yml:955 enums.yml:1110
+#: entities.yml:979 enums.yml:955 enums.yml:1110
 msgid "Monument"
 msgstr "Monument"
 
-#: entities.yml:979
+#: entities.yml:980
 msgid "Addr"
 msgstr "Adresa"
 
-#: entities.yml:980
+#: entities.yml:981
 msgid "Person date of birth"
 msgstr "Datum narození osoby"
 
-#: entities.yml:982
+#: entities.yml:983
 msgid "Land"
 msgstr "Pozemek"
 
-#: entities.yml:988
+#: entities.yml:989
 msgid "Shop type"
 msgstr "Typ obchodu"
 
-#: entities.yml:990
+#: entities.yml:991
 msgid "Meadow type"
 msgstr "Typ louky"
 
-#: entities.yml:992
+#: entities.yml:993
 msgid "Crop"
 msgstr ""
 
-#: entities.yml:996
+#: entities.yml:997
 msgid "Natural type"
 msgstr "Typ přírodního"
 
-#: entities.yml:997
+#: entities.yml:998
 msgid "Military type"
 msgstr "Vojenský typ"
 
-#: entities.yml:999
+#: entities.yml:1000
 msgid "Resource"
 msgstr "Zdroj"
 
-#: entities.yml:1002 entities.yml:1207
+#: entities.yml:1003 entities.yml:1208
 msgid "Leaf cycle"
 msgstr ""
 
-#: entities.yml:1006 entities.yml:1203 entities.yml:2759
+#: entities.yml:1007 entities.yml:1204 entities.yml:2760
 msgid "Landcover"
 msgstr ""
 
-#: entities.yml:1014 enums.yml:1049 enums.yml:1320 enums.yml:1362
+#: entities.yml:1015 enums.yml:1049 enums.yml:1320 enums.yml:1362
 #: enums.yml:1944 enums.yml:2186 enums.yml:2329
 msgid "Industrial"
 msgstr "Průmyslový"
 
-#: entities.yml:1015 enums.yml:1339 enums.yml:2492
+#: entities.yml:1016 enums.yml:1339 enums.yml:2492
 msgid "Basin"
 msgstr ""
 
-#: entities.yml:1022
+#: entities.yml:1023
 msgid "Plant"
 msgstr "Květina"
 
-#: entities.yml:1023 entities.yml:1199
+#: entities.yml:1024 entities.yml:1200
 msgid "Uhul slt"
 msgstr ""
 
-#: entities.yml:1028 entities.yml:1197
+#: entities.yml:1029 entities.yml:1198
 msgid "Uhul area"
 msgstr ""
 
-#: entities.yml:1029
+#: entities.yml:1030
 msgid "Uhul id"
 msgstr ""
 
-#: entities.yml:1030 entities.yml:1210 entities.yml:1814 enums.yml:1013
+#: entities.yml:1031 entities.yml:1211 entities.yml:1815 enums.yml:1013
 #: enums.yml:1562 enums.yml:1631 enums.yml:1647 enums.yml:1820
 msgid "Wood"
 msgstr "Dřevo"
 
-#: entities.yml:1031
+#: entities.yml:1032
 msgid "Landuse 1"
 msgstr ""
 
-#: entities.yml:1033
+#: entities.yml:1034
 msgid "Id fb"
 msgstr ""
 
-#: entities.yml:1035 enums.yml:1539
+#: entities.yml:1036 enums.yml:1539
 #, fuzzy
 msgid "Depot"
 msgstr "Sport"
 
-#: entities.yml:1038
+#: entities.yml:1039
 msgid "Trees"
 msgstr "Stromy"
 
-#: entities.yml:1039 entities.yml:2752
+#: entities.yml:1040 entities.yml:2753
 msgid "Reservoir type"
 msgstr "Typ rezervoáru"
 
-#: entities.yml:1040 entities.yml:2736
+#: entities.yml:1041 entities.yml:2737
 msgid "Genus"
 msgstr ""
 
-#: entities.yml:1043
+#: entities.yml:1044
 msgid "Finely mown"
 msgstr ""
 
-#: entities.yml:1044 entities.yml:1193 entities.yml:2387 enums.yml:779
+#: entities.yml:1045 entities.yml:1194 entities.yml:2388 enums.yml:779
 msgid "Golf"
 msgstr "Golf"
 
-#: entities.yml:1045
+#: entities.yml:1046
 msgid "Mown"
 msgstr ""
 
-#: entities.yml:1049
+#: entities.yml:1050
 msgid "Barrier height"
 msgstr "Výška bariéry"
 
-#: entities.yml:1051
+#: entities.yml:1052
 msgid "Clc code"
 msgstr "CLC kód"
 
-#: entities.yml:1064
+#: entities.yml:1065
 msgid "Openfire"
 msgstr "Otevřený oheň"
 
-#: entities.yml:1066 entities.yml:1941
+#: entities.yml:1067 entities.yml:1942
 msgid "Dogs allowed"
 msgstr "Dovoleni psi"
 
-#: entities.yml:1071
+#: entities.yml:1072
 #, fuzzy
 msgid "Hoops"
 msgstr "Obchod"
 
-#: entities.yml:1072
+#: entities.yml:1073
 msgid "High jump"
 msgstr ""
 
-#: entities.yml:1073
+#: entities.yml:1074
 msgid "Pole vault"
 msgstr ""
 
-#: entities.yml:1074 enums.yml:352 enums.yml:856
+#: entities.yml:1075 enums.yml:352 enums.yml:856
 msgid "Long jump"
 msgstr ""
 
-#: entities.yml:1075
+#: entities.yml:1076
 msgid "Shot put"
 msgstr ""
 
-#: entities.yml:1082
+#: entities.yml:1083
 msgid "Baby"
 msgstr ""
 
-#: entities.yml:1089
+#: entities.yml:1090
 msgid "Small boats"
 msgstr "Malé čluny"
 
-#: entities.yml:1108
+#: entities.yml:1109
 msgid "Classification"
 msgstr "Klasifikace"
 
-#: entities.yml:1114
+#: entities.yml:1115
 msgid "Substance"
 msgstr "Látka"
 
-#: entities.yml:1116 entities.yml:1953 entities.yml:2427 enums.yml:879
+#: entities.yml:1117 entities.yml:1954 entities.yml:2428 enums.yml:879
 msgid "Handrail"
 msgstr "Zábradlí"
 
-#: entities.yml:1119 enums.yml:378
+#: entities.yml:1120 enums.yml:378
 msgid "Telephone"
 msgstr "Telefon"
 
-#: entities.yml:1127 enums.yml:720 enums.yml:2303
+#: entities.yml:1128 enums.yml:720 enums.yml:2303
 msgid "Pipeline"
 msgstr "Potrubí"
 
-#: entities.yml:1128 entities.yml:1381 entities.yml:1600 entities.yml:1926
-#: entities.yml:2424 entities.yml:2772
+#: entities.yml:1129 entities.yml:1382 entities.yml:1601 entities.yml:1927
+#: entities.yml:2425 entities.yml:2773
 msgid "Tunnel"
 msgstr "Tunel"
 
-#: entities.yml:1132
+#: entities.yml:1133
 msgid "Pump"
 msgstr "Pumpa"
 
-#: entities.yml:1133 enums.yml:738
+#: entities.yml:1134 enums.yml:738
 msgid "Street cabinet"
 msgstr ""
 
-#: entities.yml:1135 entities.yml:1592
+#: entities.yml:1136 entities.yml:1593
 msgid "Usage"
 msgstr "Použití"
 
-#: entities.yml:1138
+#: entities.yml:1139
 msgid "Wifi ssid"
 msgstr "SSID Wi-Fi"
 
-#: entities.yml:1144
+#: entities.yml:1145
 msgid "Air quality monitoring"
 msgstr "Sledování kvality ovzduší"
 
-#: entities.yml:1149 entities.yml:2564
+#: entities.yml:1150 entities.yml:2565
 msgid "Subject wikidata"
 msgstr ""
 
-#: entities.yml:1150 entities.yml:2563
+#: entities.yml:1151 entities.yml:2564
 msgid "Subject wikipedia"
 msgstr ""
 
-#: entities.yml:1151 entities.yml:2637
+#: entities.yml:1152 entities.yml:2638
 msgid "Artist wikidata"
 msgstr "Wikidata umělce"
 
-#: entities.yml:1154
+#: entities.yml:1155
 msgid "Memorial kind"
 msgstr "Druh pomníku"
 
-#: entities.yml:1156
+#: entities.yml:1157
 msgid "Text"
 msgstr "Text"
 
-#: entities.yml:1158
+#: entities.yml:1159
 msgid "Person date of death"
 msgstr "Datum úmrtí osoby"
 
-#: entities.yml:1159
+#: entities.yml:1160
 msgid "Wikipedia en"
 msgstr "Wikipedie anglicky"
 
-#: entities.yml:1161
+#: entities.yml:1162
 msgid "Inscription cs"
 msgstr "Nápis česky"
 
-#: entities.yml:1163
+#: entities.yml:1164
 msgid "Named"
 msgstr "Pojmenované"
 
-#: entities.yml:1168
+#: entities.yml:1169
 msgid "Name"
 msgstr "Jméno"
 
-#: entities.yml:1174
+#: entities.yml:1175
 msgid "Lining"
 msgstr ""
 
-#: entities.yml:1176 entities.yml:2204
+#: entities.yml:1177 entities.yml:2205
 msgid "Depth"
 msgstr "Hloubka"
 
-#: entities.yml:1194
+#: entities.yml:1195
 #, fuzzy
 msgid "Natural 1"
 msgstr "Přírodní"
 
-#: entities.yml:1206 enums.yml:1011
+#: entities.yml:1207 enums.yml:1011
 msgid "Wetland"
 msgstr ""
 
-#: entities.yml:1209
+#: entities.yml:1210
 msgid "Import ref"
 msgstr "Reference importu"
 
-#: entities.yml:1211 enums.yml:108 enums.yml:1805
+#: entities.yml:1212 enums.yml:108 enums.yml:1805
 msgid "Notice"
 msgstr "Oznámení"
 
-#: entities.yml:1214 entities.yml:1837
+#: entities.yml:1215 entities.yml:1838
 msgid "Category"
 msgstr "Kategorie"
 
-#: entities.yml:1215 entities.yml:1253
+#: entities.yml:1216 entities.yml:1254
 msgid "Function"
 msgstr "Funkce"
 
-#: entities.yml:1216
+#: entities.yml:1217
 msgid "Impact"
 msgstr "Dopad"
 
-#: entities.yml:1217
+#: entities.yml:1218
 msgid "Orientation"
 msgstr "Orientace"
 
-#: entities.yml:1219 enums.yml:1674
+#: entities.yml:1220 enums.yml:1674
 msgid "No exit"
 msgstr "Východ zakázán"
 
-#: entities.yml:1235 enums.yml:1149 enums.yml:2012
+#: entities.yml:1236 enums.yml:1149 enums.yml:2012
 msgid "Government"
 msgstr "Státní správa"
 
-#: entities.yml:1246 entities.yml:2541 enums.yml:451
+#: entities.yml:1247 entities.yml:2542 enums.yml:451
 msgid "Authority"
 msgstr "Autorita"
 
-#: entities.yml:1257 enums.yml:2023
+#: entities.yml:1258 enums.yml:2023
 msgid "Lawyer"
 msgstr "Právník"
 
-#: entities.yml:1258 entities.yml:1559
+#: entities.yml:1259 entities.yml:1560
 msgid "Phone 1"
 msgstr "Telefon 1"
 
-#: entities.yml:1263
+#: entities.yml:1264
 msgid "OSMEntity"
 msgstr "Entita OSM"
 
-#: entities.yml:1267
+#: entities.yml:1268
 msgid "Timestamp"
 msgstr "Časová známka"
 
-#: entities.yml:1268
+#: entities.yml:1269
 msgid "Version"
 msgstr "Verze"
 
-#: entities.yml:1269
+#: entities.yml:1270
 msgid "Changeset"
 msgstr "Sada změn"
 
-#: entities.yml:1270
+#: entities.yml:1271
 msgid "User"
 msgstr "Uživatel"
 
-#: entities.yml:1271
+#: entities.yml:1272
 msgid "Uid"
 msgstr "Id uživatele"
 
-#: entities.yml:1278
+#: entities.yml:1279
 msgid "Paid"
 msgstr "Placené"
 
-#: entities.yml:1280
+#: entities.yml:1281
 msgid "Capacity for disabled"
 msgstr "Kapacita pro postižené"
 
-#: entities.yml:1289
+#: entities.yml:1290
 #, fuzzy
 msgid "Park ride"
 msgstr "Překážka"
 
-#: entities.yml:1297
+#: entities.yml:1298
 msgid "Capacity for parents"
 msgstr "Kapacita pro rodiče"
 
-#: entities.yml:1298
+#: entities.yml:1299
 msgid "Capacity for women"
 msgstr "Kapacita pro ženy"
 
-#: entities.yml:1305
+#: entities.yml:1306
 msgid "Maxstay"
 msgstr "Nejdelší doba pobytu"
 
-#: entities.yml:1311 entities.yml:1363 entities.yml:2032 entities.yml:2250
-#: entities.yml:2468 enums.yml:1684 enums.yml:2104
+#: entities.yml:1312 entities.yml:1364 entities.yml:2033 entities.yml:2251
+#: entities.yml:2469 enums.yml:1684 enums.yml:2104
 msgid "Bus"
 msgstr "Autobus"
 
-#: entities.yml:1320
+#: entities.yml:1321
 msgid "Piste"
 msgstr "Sjezdovka"
 
-#: entities.yml:1324
+#: entities.yml:1325
 msgid "Difficulty"
 msgstr "Obtížnost"
 
-#: entities.yml:1328 entities.yml:2244 entities.yml:2566
+#: entities.yml:1329 entities.yml:2245 entities.yml:2567
 msgid "Name ru"
 msgstr ""
 
-#: entities.yml:1329
+#: entities.yml:1330
 msgid "Name mk"
 msgstr ""
 
-#: entities.yml:1352
+#: entities.yml:1353
 msgid "Wikipedia cs"
 msgstr "Wikipedie česky"
 
-#: entities.yml:1353 entities.yml:2211 entities.yml:2658
+#: entities.yml:1354 entities.yml:2212 entities.yml:2659
 msgid "Alt name cs"
 msgstr "Alternativní české jméno"
 
-#: entities.yml:1354 enums.yml:1210 enums.yml:1294 enums.yml:1419
+#: entities.yml:1355 enums.yml:1210 enums.yml:1294 enums.yml:1419
 #: enums.yml:1717 enums.yml:2144
 msgid "Platform"
 msgstr "Nástupiště"
 
-#: entities.yml:1358 entities.yml:1570 entities.yml:2284 entities.yml:2464
+#: entities.yml:1359 entities.yml:1571 entities.yml:2285 entities.yml:2465
 #: enums.yml:1992 enums.yml:2399 enums.yml:2468
 msgid "Public transport"
 msgstr "Veřejná doprava"
 
-#: entities.yml:1360 entities.yml:2465
+#: entities.yml:1361 entities.yml:2466
 msgid "Ztm ref"
 msgstr ""
 
-#: entities.yml:1361 entities.yml:2463
+#: entities.yml:1362 entities.yml:2464
 msgid "Bus routes"
 msgstr ""
 
-#: entities.yml:1362 entities.yml:1659 entities.yml:2470 enums.yml:1679
+#: entities.yml:1363 entities.yml:1660 entities.yml:2471 enums.yml:1679
 msgid "Train"
 msgstr "Vlak"
 
-#: entities.yml:1364 entities.yml:1751 entities.yml:2214 entities.yml:2469
+#: entities.yml:1365 entities.yml:1752 entities.yml:2215 entities.yml:2470
 #: enums.yml:12 enums.yml:1208 enums.yml:1686 enums.yml:2105
 msgid "Tram"
 msgstr "Tramvaj"
 
-#: entities.yml:1375 entities.yml:2335 entities.yml:2496
+#: entities.yml:1376 entities.yml:2336 entities.yml:2497
 msgid "Bin"
 msgstr "Koš"
 
-#: entities.yml:1380 entities.yml:2485 enums.yml:1685
+#: entities.yml:1381 entities.yml:2486 enums.yml:1685
 msgid "Trolleybus"
 msgstr "Trolejbus"
 
-#: entities.yml:1382 entities.yml:2487
+#: entities.yml:1383 entities.yml:2488
 msgid "Route ref"
 msgstr "Reference trasy"
 
-#: entities.yml:1392 entities.yml:2510 enums.yml:1224 enums.yml:1693
+#: entities.yml:1393 entities.yml:2511 enums.yml:1224 enums.yml:1693
 #: enums.yml:2106 enums.yml:2453 enums.yml:2455
 msgid "Subway"
 msgstr "Metro"
 
-#: entities.yml:1394 entities.yml:2488
+#: entities.yml:1395 entities.yml:2489
 msgid "Local ref"
 msgstr "Místní reference"
 
-#: entities.yml:1395 entities.yml:1670 entities.yml:2183
+#: entities.yml:1396 entities.yml:1671 entities.yml:2184
 msgid "Indoor level"
 msgstr ""
 
-#: entities.yml:1396 enums.yml:318 enums.yml:1353
+#: entities.yml:1397 enums.yml:318 enums.yml:1353
 msgid "Playground"
 msgstr "Dětské hřiště"
 
-#: entities.yml:1399
+#: entities.yml:1400
 msgid "Playground type"
 msgstr "Typ Dětského hřiště"
 
-#: entities.yml:1401 entities.yml:1411 enums.yml:1799 enums.yml:1974
+#: entities.yml:1402 entities.yml:1412 enums.yml:1799 enums.yml:1974
 #: enums.yml:2002 enums.yml:2473
 msgid "Pole"
 msgstr "Sloup"
 
-#: entities.yml:1404 entities.yml:2722
+#: entities.yml:1405 entities.yml:2723
 msgid "Transformer type"
 msgstr "Typ transformátoru"
 
-#: entities.yml:1409 entities.yml:2571 enums.yml:209 enums.yml:1676
+#: entities.yml:1410 entities.yml:2572 enums.yml:209 enums.yml:1676
 #, fuzzy
 msgid "Hiking"
 msgstr "Parkoviště"
 
-#: entities.yml:1415
+#: entities.yml:1416
 msgid "Post box"
 msgstr "Poštovní schránka"
 
-#: entities.yml:1418
+#: entities.yml:1419
 msgid "Collection times"
 msgstr "Časy výběru"
 
-#: entities.yml:1423 entities.yml:1464 entities.yml:1490 entities.yml:1839
-#: entities.yml:2721 enums.yml:1538 enums.yml:1681 enums.yml:2110
+#: entities.yml:1424 entities.yml:1465 entities.yml:1491 entities.yml:1840
+#: entities.yml:2722 enums.yml:1538 enums.yml:1681 enums.yml:2110
 msgid "Power"
 msgstr "Energie"
 
-#: entities.yml:1432
+#: entities.yml:1433
 msgid "High voltage"
 msgstr ""
 
-#: entities.yml:1434 entities.yml:1512
+#: entities.yml:1435 entities.yml:1513
 msgid "Low voltage"
 msgstr ""
 
-#: entities.yml:1436
+#: entities.yml:1437
 msgid "Transition location"
 msgstr "Místo přechodu"
 
-#: entities.yml:1437 entities.yml:2659 enums.yml:719 enums.yml:1060
+#: entities.yml:1438 entities.yml:2660 enums.yml:719 enums.yml:1060
 #: enums.yml:1366 enums.yml:1838 enums.yml:1960 enums.yml:2004
 msgid "Tower"
 msgstr "Věž"
 
-#: entities.yml:1443 enums.yml:695
+#: entities.yml:1444 enums.yml:695
 msgid "Design"
 msgstr "Design"
 
-#: entities.yml:1444
+#: entities.yml:1445
 msgid "Power generator"
 msgstr "Elektrický generátor"
 
-#: entities.yml:1449 entities.yml:1484
+#: entities.yml:1450 entities.yml:1485
 msgid "Electricity output"
 msgstr ""
 
-#: entities.yml:1450
+#: entities.yml:1451
 msgid "Method"
 msgstr "Metoda"
 
-#: entities.yml:1452
+#: entities.yml:1453
 msgid "Hot water output"
 msgstr "Výstup horké vody"
 
-#: entities.yml:1456
+#: entities.yml:1457
 msgid "Steam output"
 msgstr "Výstup páry"
 
-#: entities.yml:1460
+#: entities.yml:1461
 msgid "Power line"
 msgstr "Elektrické vedení"
 
-#: entities.yml:1466
+#: entities.yml:1467
 msgid "Cables"
 msgstr "Kabely"
 
-#: entities.yml:1468
+#: entities.yml:1469
 msgid "Wires"
 msgstr "Dráty"
 
-#: entities.yml:1472 entities.yml:1936 entities.yml:2237 enums.yml:1418
+#: entities.yml:1473 entities.yml:1937 entities.yml:2238 enums.yml:1418
 #: enums.yml:1692 enums.yml:1929 enums.yml:2173
 msgid "Route"
 msgstr "Trasa"
 
-#: entities.yml:1475
+#: entities.yml:1476
 msgid "Circuits"
 msgstr "Okruhy"
 
-#: entities.yml:1476
+#: entities.yml:1477
 msgid "Line colour"
 msgstr ""
 
-#: entities.yml:1481
+#: entities.yml:1482
 msgid "Power plant"
 msgstr "Elektrárna"
 
-#: entities.yml:1486
+#: entities.yml:1487
 msgid "Plant source"
 msgstr ""
 
-#: entities.yml:1487
+#: entities.yml:1488
 msgid "Power substation"
 msgstr "Napájecí podstanice"
 
-#: entities.yml:1502
+#: entities.yml:1503
 msgid "Locate"
 msgstr ""
 
-#: entities.yml:1507 entities.yml:2724
+#: entities.yml:1508 entities.yml:2725
 msgid "Rating"
 msgstr "Hodnocení"
 
-#: entities.yml:1509
+#: entities.yml:1510
 msgid "Gas insulated"
 msgstr ""
 
-#: entities.yml:1515 enums.yml:131
+#: entities.yml:1516 enums.yml:131
 msgid "Protected area"
 msgstr "Chráněná oblast"
 
-#: entities.yml:1521
+#: entities.yml:1522
 msgid "Iucn level"
 msgstr ""
 
-#: entities.yml:1526
+#: entities.yml:1527
 msgid "Protection title"
 msgstr "Titulek ochrany"
 
-#: entities.yml:1531 entities.yml:2334 entities.yml:2577 enums.yml:682
+#: entities.yml:1532 entities.yml:2335 entities.yml:2578 enums.yml:682
 msgid "Fireplace"
 msgstr "Ohniště"
 
-#: entities.yml:1532
+#: entities.yml:1533
 msgid "Description cz"
 msgstr "Popis česky"
 
-#: entities.yml:1533 entities.yml:1574 enums.yml:428
+#: entities.yml:1534 entities.yml:1575 enums.yml:428
 msgid "Pub"
 msgstr "Hospoda"
 
-#: entities.yml:1555
+#: entities.yml:1556
 msgid "Other payment"
 msgstr "Ostatní platba"
 
-#: entities.yml:1557
+#: entities.yml:1558
 msgid "Debitcards payment"
 msgstr ""
 
-#: entities.yml:1560 entities.yml:1935 entities.yml:2302
+#: entities.yml:1561 entities.yml:1936 entities.yml:2303
 msgid "Opening date"
 msgstr "Datum otevření"
 
-#: entities.yml:1562 entities.yml:2653
+#: entities.yml:1563 entities.yml:2654
 msgid "Litecoin payment"
 msgstr ""
 
-#: entities.yml:1563
+#: entities.yml:1564
 msgid "Ethereum payment"
 msgstr ""
 
-#: entities.yml:1566 entities.yml:2352
+#: entities.yml:1567 entities.yml:2353
 msgid "Jcb payment"
 msgstr ""
 
-#: entities.yml:1575
+#: entities.yml:1576
 msgid "Rail way"
 msgstr "Koleje"
 
-#: entities.yml:1578 entities.yml:2124
+#: entities.yml:1579 entities.yml:2125
 msgid "Maxspeed source"
 msgstr ""
 
-#: entities.yml:1581
+#: entities.yml:1582
 msgid "Atb-ng"
 msgstr ""
 
-#: entities.yml:1582
+#: entities.yml:1583
 msgid "Date source"
 msgstr ""
 
-#: entities.yml:1583
+#: entities.yml:1584
 msgid "Pro rail spoortak_ref"
 msgstr ""
 
-#: entities.yml:1584
+#: entities.yml:1585
 msgid "Loading gauge"
 msgstr ""
 
-#: entities.yml:1585
+#: entities.yml:1586
 msgid "Pro railID_ref"
 msgstr ""
 
-#: entities.yml:1586
+#: entities.yml:1587
 msgid "Atb"
 msgstr ""
 
-#: entities.yml:1587
+#: entities.yml:1588
 msgid "Atb-eg"
 msgstr ""
 
-#: entities.yml:1588
+#: entities.yml:1589
 msgid "Cutting name"
 msgstr ""
 
-#: entities.yml:1589
+#: entities.yml:1590
 msgid "Note nl"
 msgstr ""
 
-#: entities.yml:1591 entities.yml:1949
+#: entities.yml:1592 entities.yml:1950
 #, fuzzy
 msgid "Gauge"
 msgstr "Hodnota"
 
-#: entities.yml:1593 entities.yml:2165
+#: entities.yml:1594 entities.yml:2166
 msgid "Electrified"
 msgstr ""
 
-#: entities.yml:1594 entities.yml:1950 enums.yml:1678
+#: entities.yml:1595 entities.yml:1951 enums.yml:1678
 #, fuzzy
 msgid "Tracks"
 msgstr "Stezka"
 
-#: entities.yml:1596
+#: entities.yml:1597
 msgid "Passenger lines"
 msgstr ""
 
-#: entities.yml:1599
+#: entities.yml:1600
 msgid "Is bridge"
 msgstr "Je most"
 
-#: entities.yml:1603
+#: entities.yml:1604
 msgid "Crossing light"
 msgstr "Přechodové světlo"
 
-#: entities.yml:1604
+#: entities.yml:1605
 msgid "Crossing bell"
 msgstr "Přechodový zvon"
 
-#: entities.yml:1605
+#: entities.yml:1606
 msgid "Crossing barrier"
 msgstr ""
 
-#: entities.yml:1606
+#: entities.yml:1607
 msgid "Crossing type"
 msgstr "Typ křižovatky"
 
-#: entities.yml:1613 entities.yml:1899
+#: entities.yml:1614 entities.yml:1900
 msgid "Tram oneway"
 msgstr ""
 
-#: entities.yml:1615 entities.yml:1951 entities.yml:2459 entities.yml:2800
+#: entities.yml:1616 entities.yml:1952 entities.yml:2460 entities.yml:2801
 msgid "Cutting"
 msgstr ""
 
-#: entities.yml:1618
+#: entities.yml:1619
 msgid "Traffic mode"
 msgstr ""
 
-#: entities.yml:1619
+#: entities.yml:1620
 msgid "Preferred direction"
 msgstr "Upřednostňovaný směr"
 
-#: entities.yml:1625 entities.yml:2154
+#: entities.yml:1626 entities.yml:2155
 msgid "Hazard"
 msgstr ""
 
-#: entities.yml:1632
+#: entities.yml:1633
 msgid "Etcs"
 msgstr ""
 
-#: entities.yml:1633 enums.yml:2272
+#: entities.yml:1634 enums.yml:2272
 msgid "Radio"
 msgstr ""
 
-#: entities.yml:1634
+#: entities.yml:1635
 #, fuzzy
 msgid "Track class"
 msgstr "Třída k prohledání"
 
-#: entities.yml:1635
+#: entities.yml:1636
 msgid "Tilting maxspeed"
 msgstr ""
 
-#: entities.yml:1636
+#: entities.yml:1637
 msgid "Structure gauge"
 msgstr ""
 
-#: entities.yml:1637
+#: entities.yml:1638
 msgid "Bidirectional"
 msgstr "Obousměrná"
 
-#: entities.yml:1638
+#: entities.yml:1639
 msgid "Ls"
 msgstr ""
 
-#: entities.yml:1639
+#: entities.yml:1640
 msgid "Track ref"
 msgstr ""
 
-#: entities.yml:1644 entities.yml:1975 enums.yml:745
+#: entities.yml:1645 entities.yml:1976 enums.yml:745
 msgid "Embankment"
 msgstr "Nábřeží"
 
-#: entities.yml:1649 entities.yml:2212
+#: entities.yml:1650 entities.yml:2213
 msgid "Abandoned railway"
 msgstr "Opuštěné koleje"
 
-#: entities.yml:1651 entities.yml:2039
+#: entities.yml:1652 entities.yml:2040
 msgid "Bridge name"
 msgstr "Jméno mostu"
 
-#: entities.yml:1654 entities.yml:2509 enums.yml:483 enums.yml:1085
+#: entities.yml:1655 entities.yml:2510 enums.yml:483 enums.yml:1085
 #: enums.yml:1181 enums.yml:1206 enums.yml:1443 enums.yml:1963 enums.yml:2148
 #: enums.yml:2462
 msgid "Station"
 msgstr "Stanice"
 
-#: entities.yml:1655 entities.yml:2511 enums.yml:120
+#: entities.yml:1656 entities.yml:2512 enums.yml:120
 msgid "Transport"
 msgstr "Přeprava"
 
-#: entities.yml:1660 enums.yml:1207 enums.yml:1970
+#: entities.yml:1661 enums.yml:1207 enums.yml:1970
 #, fuzzy
 msgid "Switch"
 msgstr "Končí na"
 
-#: entities.yml:1665 entities.yml:2201 entities.yml:2522
+#: entities.yml:1666 entities.yml:2202 entities.yml:2523
 msgid "Check date"
 msgstr "Datum kontroly"
 
-#: entities.yml:1666
+#: entities.yml:1667
 msgid "Pzb"
 msgstr ""
 
-#: entities.yml:1667
+#: entities.yml:1668
 msgid "Tunnel name"
 msgstr "Jméno tunelu"
 
-#: entities.yml:1671
+#: entities.yml:1672
 msgid "Highspeed"
 msgstr ""
 
-#: entities.yml:1672
+#: entities.yml:1673
 msgid "Gnt"
 msgstr ""
 
-#: entities.yml:1673
+#: entities.yml:1674
 msgid "Lzb"
 msgstr ""
 
-#: entities.yml:1674
+#: entities.yml:1675
 #, fuzzy
 msgid "Tilting"
 msgstr "Budova"
 
-#: entities.yml:1675
+#: entities.yml:1676
 #, fuzzy
 msgid "Traces"
 msgstr "Vchod"
 
-#: entities.yml:1676
+#: entities.yml:1677
 msgid "Forward maxspeed"
 msgstr ""
 
-#: entities.yml:1677
+#: entities.yml:1678
 msgid "Backward maxspeed"
 msgstr ""
 
-#: entities.yml:1678
+#: entities.yml:1679
 msgid "Main switch off"
 msgstr ""
 
-#: entities.yml:1679
+#: entities.yml:1680
 msgid "Exact position"
 msgstr "Přesná pozice"
 
-#: entities.yml:1680
+#: entities.yml:1681
 msgid "Local operated"
 msgstr ""
 
-#: entities.yml:1681
+#: entities.yml:1682
 msgid "Signal direction"
 msgstr "Směr signálu"
 
-#: entities.yml:1682
+#: entities.yml:1683
 msgid "Signal position"
 msgstr "Pozice signálu"
 
-#: entities.yml:1683
+#: entities.yml:1684
 msgid "Shunting signal"
 msgstr ""
 
-#: entities.yml:1684
+#: entities.yml:1685
 msgid "Shunting signal form"
 msgstr ""
 
-#: entities.yml:1685
+#: entities.yml:1686
 msgid "Shunting signal height"
 msgstr ""
 
-#: entities.yml:1686
+#: entities.yml:1687
 msgid "Shunting signal states"
 msgstr ""
 
-#: entities.yml:1687
+#: entities.yml:1688
 msgid "Main repeated signal"
 msgstr ""
 
-#: entities.yml:1688
+#: entities.yml:1689
 msgid "Main repeated signal form"
 msgstr ""
 
-#: entities.yml:1689
+#: entities.yml:1690
 msgid "Main repeated signal states"
 msgstr ""
 
-#: entities.yml:1690
+#: entities.yml:1691
 msgid "Distant signal"
 msgstr ""
 
-#: entities.yml:1691
+#: entities.yml:1692
 msgid "Distant signal form"
 msgstr ""
 
-#: entities.yml:1692
+#: entities.yml:1693
 msgid "Distant signal height"
 msgstr ""
 
-#: entities.yml:1693
+#: entities.yml:1694
 msgid "Distant signal states"
 msgstr ""
 
-#: entities.yml:1694
+#: entities.yml:1695
 #, fuzzy
 msgid "Main signal"
 msgstr "Dopravní značka"
 
-#: entities.yml:1695
+#: entities.yml:1696
 msgid "Main signal form"
 msgstr ""
 
-#: entities.yml:1696
+#: entities.yml:1697
 msgid "Main signal function"
 msgstr ""
 
-#: entities.yml:1697
+#: entities.yml:1698
 msgid "Main signal height"
 msgstr ""
 
-#: entities.yml:1698
+#: entities.yml:1699
 msgid "Main signal states"
 msgstr ""
 
-#: entities.yml:1699
+#: entities.yml:1700
 msgid "Main signal substitute signal"
 msgstr ""
 
-#: entities.yml:1700
+#: entities.yml:1701
 msgid "Distant speed limit signal"
 msgstr ""
 
-#: entities.yml:1701
+#: entities.yml:1702
 msgid "Distant speed limit signal form"
 msgstr ""
 
-#: entities.yml:1702
+#: entities.yml:1703
 msgid "Distant speed limit signal height"
 msgstr ""
 
-#: entities.yml:1703
+#: entities.yml:1704
 msgid "Distant speed limit signal speed"
 msgstr ""
 
-#: entities.yml:1704
+#: entities.yml:1705
 msgid "Electricity signal"
 msgstr ""
 
-#: entities.yml:1705
+#: entities.yml:1706
 msgid "Electricity signal form"
 msgstr ""
 
-#: entities.yml:1706
+#: entities.yml:1707
 msgid "Electricity signal height"
 msgstr ""
 
-#: entities.yml:1707
+#: entities.yml:1708
 msgid "Electricity signal type"
 msgstr ""
 
-#: entities.yml:1708
+#: entities.yml:1709
 msgid "Speed limit signal"
 msgstr ""
 
-#: entities.yml:1709
+#: entities.yml:1710
 msgid "Speed limit signal form"
 msgstr ""
 
-#: entities.yml:1710
+#: entities.yml:1711
 msgid "Speed limit signal height"
 msgstr ""
 
-#: entities.yml:1711
+#: entities.yml:1712
 msgid "Speed limit signal speed"
 msgstr ""
 
-#: entities.yml:1712
+#: entities.yml:1713
 msgid "Crossing activation"
 msgstr ""
 
-#: entities.yml:1713
+#: entities.yml:1714
 msgid "Crossing saltire"
 msgstr ""
 
-#: entities.yml:1715
+#: entities.yml:1716
 msgid "Distant signal deactivated"
 msgstr ""
 
-#: entities.yml:1716
+#: entities.yml:1717
 msgid "Main signal deactivated"
 msgstr ""
 
-#: entities.yml:1717
+#: entities.yml:1718
 msgid "Shunting signal deactivated"
 msgstr ""
 
-#: entities.yml:1718
+#: entities.yml:1719
 msgid "Main repeated signal deactivated"
 msgstr ""
 
-#: entities.yml:1719
+#: entities.yml:1720
 msgid "Distant station signal"
 msgstr ""
 
-#: entities.yml:1720
+#: entities.yml:1721
 msgid "Distant station signal form"
 msgstr ""
 
-#: entities.yml:1721
+#: entities.yml:1722
 msgid "Snowplow signal"
 msgstr ""
 
-#: entities.yml:1722
+#: entities.yml:1723
 msgid "Snowplow signal form"
 msgstr ""
 
-#: entities.yml:1723
+#: entities.yml:1724
 msgid "Snowplow signal type"
 msgstr ""
 
-#: entities.yml:1724
+#: entities.yml:1725
 msgid "Diverging maxspeed"
 msgstr ""
 
-#: entities.yml:1725
+#: entities.yml:1726
 msgid "Straight maxspeed"
 msgstr ""
 
-#: entities.yml:1726
+#: entities.yml:1727
 msgid "Distant crossing signal"
 msgstr ""
 
-#: entities.yml:1727
+#: entities.yml:1728
 msgid "Distant crossing signal form"
 msgstr ""
 
-#: entities.yml:1728
+#: entities.yml:1729
 msgid "Main repeated signal substitute signal"
 msgstr ""
 
-#: entities.yml:1729
+#: entities.yml:1730
 msgid "Distant crossing signal deactivated"
 msgstr ""
 
-#: entities.yml:1730
+#: entities.yml:1731
 msgid "Turnout side"
 msgstr ""
 
-#: entities.yml:1731
+#: entities.yml:1732
 msgid "Distant crossing signal caption"
 msgstr ""
 
-#: entities.yml:1732
+#: entities.yml:1733
 msgid "Snowplow signal deactivated"
 msgstr ""
 
-#: entities.yml:1733
+#: entities.yml:1734
 #, fuzzy
 msgid "Minor signal"
 msgstr "Pomník"
 
-#: entities.yml:1734
+#: entities.yml:1735
 msgid "Minor signal form"
 msgstr ""
 
-#: entities.yml:1735
+#: entities.yml:1736
 msgid "Minor signal deactivated"
 msgstr ""
 
-#: entities.yml:1736
+#: entities.yml:1737
 msgid "Minor signal height"
 msgstr ""
 
-#: entities.yml:1737
+#: entities.yml:1738
 msgid "Minor signal states"
 msgstr ""
 
-#: entities.yml:1738
+#: entities.yml:1739
 msgid "Electric switch"
 msgstr ""
 
-#: entities.yml:1739
+#: entities.yml:1740
 msgid "Minor signal substitute signal"
 msgstr ""
 
-#: entities.yml:1740
+#: entities.yml:1741
 msgid "Speed limit signal deactivated"
 msgstr ""
 
-#: entities.yml:1741
+#: entities.yml:1742
 msgid "Electricity signal deactivated"
 msgstr ""
 
-#: entities.yml:1742
+#: entities.yml:1743
 msgid "Distant station signal deactivated"
 msgstr ""
 
-#: entities.yml:1743
+#: entities.yml:1744
 msgid "Left avalanche protector"
 msgstr ""
 
-#: entities.yml:1746
+#: entities.yml:1747
 msgid "Catenary mast milestone"
 msgstr ""
 
-#: entities.yml:1747
+#: entities.yml:1748
 msgid "Emergency brake override milestone"
 msgstr ""
 
-#: entities.yml:1748
+#: entities.yml:1749
 msgid "Hot box defect detector"
 msgstr ""
 
-#: entities.yml:1749 entities.yml:2508
+#: entities.yml:1750 entities.yml:2509
 msgid "Network en"
 msgstr ""
 
-#: entities.yml:1750
+#: entities.yml:1751
 msgid "Speed limit signal deactivatedd"
 msgstr ""
 
-#: entities.yml:1754
+#: entities.yml:1755
 msgid "Switch configuration"
 msgstr ""
 
-#: entities.yml:1755
+#: entities.yml:1756
 msgid "Crossing on demand"
 msgstr ""
 
-#: entities.yml:1756
+#: entities.yml:1757
 msgid "Distant signal repeated"
 msgstr ""
 
-#: entities.yml:1757
+#: entities.yml:1758
 msgid "Workrules"
 msgstr ""
 
-#: entities.yml:1758
+#: entities.yml:1759
 msgid "Switch resetting"
 msgstr ""
 
-#: entities.yml:1761
+#: entities.yml:1762
 msgid "Combined signal"
 msgstr ""
 
-#: entities.yml:1762
+#: entities.yml:1763
 msgid "Combined signal function"
 msgstr ""
 
-#: entities.yml:1763
+#: entities.yml:1764
 #, fuzzy
 msgid "Wrong road signal"
 msgstr "Úhel aktuální části cesty"
 
-#: entities.yml:1764
+#: entities.yml:1765
 msgid "Electricity signal turn direction"
 msgstr ""
 
-#: entities.yml:1765
+#: entities.yml:1766
 msgid "Oneway 1"
 msgstr ""
 
-#: entities.yml:1768
+#: entities.yml:1769
 msgid "Combined signal states"
 msgstr ""
 
-#: entities.yml:1769
+#: entities.yml:1770
 msgid "Route signal"
 msgstr ""
 
-#: entities.yml:1770
+#: entities.yml:1771
 msgid "Route signal states"
 msgstr ""
 
-#: entities.yml:1773
+#: entities.yml:1774
 msgid "Platforms"
 msgstr "Nástupiště"
 
-#: entities.yml:1774 enums.yml:504
+#: entities.yml:1775 enums.yml:504
 msgid "Recycling"
 msgstr "Recyklace"
 
-#: entities.yml:1782 enums.yml:190 enums.yml:631 enums.yml:897 enums.yml:1620
+#: entities.yml:1783 enums.yml:190 enums.yml:631 enums.yml:897 enums.yml:1620
 #: enums.yml:1815
 msgid "Glass"
 msgstr "Sklo"
 
-#: entities.yml:1783
+#: entities.yml:1784
 msgid "Glass bottles"
 msgstr "Skleněné láhve"
 
-#: entities.yml:1784
+#: entities.yml:1785
 msgid "Plastic bottles"
 msgstr "Plastové láhve"
 
-#: entities.yml:1785
+#: entities.yml:1786
 msgid "Plastic packaging"
 msgstr "Plastové obaly"
 
-#: entities.yml:1786 enums.yml:522
+#: entities.yml:1787 enums.yml:522
 msgid "Clothes"
 msgstr "Oblečení"
 
-#: entities.yml:1787
+#: entities.yml:1788
 msgid "Paper"
 msgstr "Papír"
 
-#: entities.yml:1788 enums.yml:1555 enums.yml:1632 enums.yml:1827
+#: entities.yml:1789 enums.yml:1555 enums.yml:1632 enums.yml:1827
 msgid "Plastic"
 msgstr "Plastik"
 
-#: entities.yml:1789
+#: entities.yml:1790
 msgid "Electrical appliances"
 msgstr "Elektrické spotřebiče"
 
-#: entities.yml:1790
+#: entities.yml:1791
 msgid "Batteries"
 msgstr "Baterie"
 
-#: entities.yml:1791
+#: entities.yml:1792
 msgid "Cartons"
 msgstr "Kartony"
 
-#: entities.yml:1792
+#: entities.yml:1793
 msgid "Beverage cartons"
 msgstr ""
 
-#: entities.yml:1793
+#: entities.yml:1794
 msgid "Small appliances"
 msgstr "Malé spotřebiče"
 
-#: entities.yml:1794
+#: entities.yml:1795
 msgid "Cans"
 msgstr "Plechovky"
 
-#: entities.yml:1795 enums.yml:560
+#: entities.yml:1796 enums.yml:560
 msgid "Pet"
 msgstr "Domácí miláček"
 
-#: entities.yml:1796
+#: entities.yml:1797
 msgid "Electrical items"
 msgstr ""
 
-#: entities.yml:1797 enums.yml:532
+#: entities.yml:1798 enums.yml:532
 msgid "Furniture"
 msgstr "Nábytek"
 
-#: entities.yml:1798
+#: entities.yml:1799
 msgid "Hazardous waste"
 msgstr "Nebezpečný odpad"
 
-#: entities.yml:1799 enums.yml:534
+#: entities.yml:1800 enums.yml:534
 msgid "Tyres"
 msgstr "Gumy"
 
-#: entities.yml:1800 entities.yml:2342 enums.yml:565
+#: entities.yml:1801 entities.yml:2343 enums.yml:565
 msgid "Organic"
 msgstr "Organické"
 
-#: entities.yml:1801
+#: entities.yml:1802
 msgid "Aluminium"
 msgstr "Hliník"
 
-#: entities.yml:1803
+#: entities.yml:1804
 msgid "Scrap metal"
 msgstr ""
 
-#: entities.yml:1807
+#: entities.yml:1808
 msgid "Cardboard"
 msgstr ""
 
-#: entities.yml:1808
+#: entities.yml:1809
 msgid "Magazines"
 msgstr ""
 
-#: entities.yml:1809
+#: entities.yml:1810
 msgid "Newspaper"
 msgstr "Noviny"
 
-#: entities.yml:1810
+#: entities.yml:1811
 msgid "Paper packaging"
 msgstr ""
 
-#: entities.yml:1812 enums.yml:535
+#: entities.yml:1813 enums.yml:535
 msgid "Books"
 msgstr "Knihy"
 
-#: entities.yml:1813
+#: entities.yml:1814
 msgid "Green waste"
 msgstr "Přírodní odpad"
 
-#: entities.yml:1815
+#: entities.yml:1816
 msgid "Glass green"
 msgstr ""
 
-#: entities.yml:1816
+#: entities.yml:1817
 #, fuzzy
 msgid "Glass white"
 msgstr "Pole třídy"
 
-#: entities.yml:1817 enums.yml:543
+#: entities.yml:1818 enums.yml:543
 msgid "Shoes"
 msgstr "Boty"
 
-#: entities.yml:1818
+#: entities.yml:1819
 msgid "Drinking cartons"
 msgstr ""
 
-#: entities.yml:1819
+#: entities.yml:1820
 msgid "Mobile phones"
 msgstr "Mobilní telefony"
 
-#: entities.yml:1820
+#: entities.yml:1821
 msgid "Plastic bags"
 msgstr "Plastové tašky"
 
-#: entities.yml:1821 enums.yml:524
+#: entities.yml:1822 enums.yml:524
 msgid "Electronics"
 msgstr "Elektronika"
 
-#: entities.yml:1824 enums.yml:1401 enums.yml:1656 enums.yml:2056
+#: entities.yml:1825 enums.yml:1401 enums.yml:1656 enums.yml:2056
 #: enums.yml:2261
 msgid "Underground"
 msgstr "Podzemní"
 
-#: entities.yml:1825 entities.yml:2079 enums.yml:1671 enums.yml:1803
+#: entities.yml:1826 entities.yml:2080 enums.yml:1671 enums.yml:1803
 msgid "Restriction"
 msgstr "Omezení"
 
-#: entities.yml:1829
+#: entities.yml:1830
 msgid "Except "
 msgstr "Kromě "
 
-#: entities.yml:1831
+#: entities.yml:1832
 #, fuzzy
 msgid "Hgv restriction"
 msgstr "Omezení"
 
-#: entities.yml:1832
+#: entities.yml:1833
 msgid "Conditional"
 msgstr "Podmíněný"
 
-#: entities.yml:1833
+#: entities.yml:1834
 msgid "RF"
 msgstr "Vysílač"
 
-#: entities.yml:1836
+#: entities.yml:1837
 msgid "Ant"
 msgstr ""
 
-#: entities.yml:1838
+#: entities.yml:1839
 msgid "Modulation"
 msgstr "Modulace"
 
-#: entities.yml:1840
+#: entities.yml:1841
 msgid "Content"
 msgstr "Obsah"
 
-#: entities.yml:1841
+#: entities.yml:1842
 msgid "Stereo"
 msgstr "Stereo"
 
-#: entities.yml:1842
+#: entities.yml:1843
 msgid "Pi"
 msgstr ""
 
-#: entities.yml:1843
+#: entities.yml:1844
 msgid "Dvbt parameters"
 msgstr ""
 
-#: entities.yml:1845
+#: entities.yml:1846
 msgid "Callsign"
 msgstr "Volací znak"
 
-#: entities.yml:1846 enums.yml:979 enums.yml:1283 enums.yml:1680
+#: entities.yml:1847 enums.yml:979 enums.yml:1283 enums.yml:1680
 msgid "Road"
 msgstr "Silnice"
 
-#: entities.yml:1851
+#: entities.yml:1852
 msgid "Ruian street ref"
 msgstr ""
 
-#: entities.yml:1852
+#: entities.yml:1853
 msgid "Embedded rails"
 msgstr ""
 
-#: entities.yml:1853 entities.yml:2441 entities.yml:2787
+#: entities.yml:1854 entities.yml:2442 entities.yml:2788
 msgid "Mtb scale"
 msgstr ""
 
-#: entities.yml:1854
+#: entities.yml:1855
 msgid "Footway surface"
 msgstr "Povrch chodníku"
 
-#: entities.yml:1855
+#: entities.yml:1856
 msgid "Cycleway surface"
 msgstr "Povrch cyklostezky"
 
-#: entities.yml:1862 entities.yml:2248
+#: entities.yml:1863 entities.yml:2249
 msgid "Name fr"
 msgstr "Jméno francouzsky"
 
-#: entities.yml:1863 enums.yml:2335
+#: entities.yml:1864 enums.yml:2335
 msgid "Motorroad"
 msgstr "Dálnice"
 
-#: entities.yml:1864
+#: entities.yml:1865
 msgid "Width source"
 msgstr "Zdroj šířky"
 
-#: entities.yml:1872 entities.yml:2768
+#: entities.yml:1873 entities.yml:2769
 msgid "Name source"
 msgstr "Zdroj jména"
 
-#: entities.yml:1873
+#: entities.yml:1874
 msgid "Vehicle conditional"
 msgstr ""
 
-#: entities.yml:1874
+#: entities.yml:1875
 msgid "TMC_cid_58_tabcd_1_LCLversion"
 msgstr ""
 
-#: entities.yml:1875
+#: entities.yml:1876
 msgid "TMC_cid_58_tabcd_1_Location code"
 msgstr ""
 
-#: entities.yml:1876
+#: entities.yml:1877
 msgid "TMC_cid_58_tabcd_1_Next location code"
 msgstr ""
 
-#: entities.yml:1877
+#: entities.yml:1878
 msgid "TMC_cid_58_tabcd_1_Prev location code"
 msgstr ""
 
-#: entities.yml:1878
+#: entities.yml:1879
 msgid "TMC_cid_58_tabcd_1_Class"
 msgstr ""
 
-#: entities.yml:1879 enums.yml:1231 enums.yml:1300
+#: entities.yml:1880 enums.yml:1231 enums.yml:1300
 msgid "Milestone"
 msgstr ""
 
-#: entities.yml:1880
+#: entities.yml:1881
 msgid "Note ref"
 msgstr ""
 
-#: entities.yml:1881
+#: entities.yml:1882
 msgid "Proposed lanes"
 msgstr ""
 
-#: entities.yml:1882
+#: entities.yml:1883
 msgid "Bus toll"
 msgstr ""
 
-#: entities.yml:1883
+#: entities.yml:1884
 msgid "Hgv toll"
 msgstr ""
 
-#: entities.yml:1884
+#: entities.yml:1885
 msgid "Maxaxleload source"
 msgstr ""
 
-#: entities.yml:1885
+#: entities.yml:1886
 msgid "Conditional hgv maxspeed"
 msgstr ""
 
-#: entities.yml:1886
+#: entities.yml:1887
 msgid "Maxspeed note"
 msgstr ""
 
-#: entities.yml:1887
+#: entities.yml:1888
 msgid "Construction end date"
 msgstr ""
 
-#: entities.yml:1888
+#: entities.yml:1889
 msgid "Turn lanes forward"
 msgstr ""
 
-#: entities.yml:1891
+#: entities.yml:1892
 msgid "Int ref"
 msgstr "Mezinárodní reference"
 
-#: entities.yml:1893
+#: entities.yml:1894
 msgid "Maxspeed hgv"
 msgstr ""
 
-#: entities.yml:1894
+#: entities.yml:1895
 #, fuzzy
 msgid "Maxspeed forward"
 msgstr "Krok vpřed"
 
-#: entities.yml:1895
+#: entities.yml:1896
 #, fuzzy
 msgid "Maxspeed backward"
 msgstr "Krok vzad"
 
-#: entities.yml:1897
+#: entities.yml:1898
 msgid "Lanes"
 msgstr "Jízdní pruhy"
 
-#: entities.yml:1900
+#: entities.yml:1901
 msgid "Bicycle oneway"
 msgstr ""
 
-#: entities.yml:1901
+#: entities.yml:1902
 msgid "Junction type"
 msgstr "Typ křižovatky"
 
-#: entities.yml:1905 entities.yml:2453 enums.yml:2058 enums.yml:2311
+#: entities.yml:1906 entities.yml:2454 enums.yml:2058 enums.yml:2311
 msgid "Sidewalk"
 msgstr "Chodník"
 
-#: entities.yml:1908
+#: entities.yml:1909
 msgid "Bicycle allowed"
 msgstr ""
 
-#: entities.yml:1909
+#: entities.yml:1910
 msgid "Motor vehicle allowed"
 msgstr ""
 
-#: entities.yml:1910
+#: entities.yml:1911
 msgid "Motorcycle allowed"
 msgstr ""
 
-#: entities.yml:1911
+#: entities.yml:1912
 msgid "Vehicle allowed"
 msgstr ""
 
-#: entities.yml:1912
+#: entities.yml:1913
 msgid "Horse allowed"
 msgstr ""
 
-#: entities.yml:1915 entities.yml:2436
+#: entities.yml:1916 entities.yml:2437
 msgid "Tracktype"
 msgstr ""
 
-#: entities.yml:1922
+#: entities.yml:1923
 msgid "Right cycleway"
 msgstr ""
 
-#: entities.yml:1923
+#: entities.yml:1924
 msgid "Left cycleway"
 msgstr ""
 
-#: entities.yml:1924
+#: entities.yml:1925
 msgid "Backward lanes"
 msgstr ""
 
-#: entities.yml:1925
+#: entities.yml:1926
 msgid "Forward lanes"
 msgstr ""
 
-#: entities.yml:1927
+#: entities.yml:1928
 msgid "Footway type"
 msgstr ""
 
-#: entities.yml:1928
+#: entities.yml:1929
 msgid "Inline skates allowed"
 msgstr ""
 
-#: entities.yml:1929
+#: entities.yml:1930
 msgid "Exit to"
 msgstr ""
 
-#: entities.yml:1934
+#: entities.yml:1935
 msgid "Maxlength"
 msgstr ""
 
-#: entities.yml:1938
+#: entities.yml:1939
 #, fuzzy
 msgid "Owed"
 msgstr "Věž"
 
-#: entities.yml:1948 entities.yml:2615
+#: entities.yml:1949 entities.yml:2616
 msgid "Noname"
 msgstr ""
 
-#: entities.yml:1952
+#: entities.yml:1953
 msgid "Incline"
 msgstr "Úhel stoupání"
 
-#: entities.yml:1955
+#: entities.yml:1956
 msgid "Maxaxleload"
 msgstr ""
 
-#: entities.yml:1956 enums.yml:292 enums.yml:2263
+#: entities.yml:1957 enums.yml:292 enums.yml:2263
 msgid "Psv"
 msgstr ""
 
-#: entities.yml:1958 entities.yml:2432 entities.yml:2806
+#: entities.yml:1959 entities.yml:2433 entities.yml:2807
 msgid "Sac scale"
 msgstr ""
 
-#: entities.yml:1963
+#: entities.yml:1964
 msgid "Roller ski"
 msgstr ""
 
-#: entities.yml:1966
+#: entities.yml:1967
 msgid "Destination symbol"
 msgstr ""
 
-#: entities.yml:1967 entities.yml:2259
+#: entities.yml:1968 entities.yml:2260
 msgid "Symbol"
 msgstr "Symbol"
 
-#: entities.yml:1968 entities.yml:2262
+#: entities.yml:1969 entities.yml:2263
 msgid "Kct blue"
 msgstr ""
 
-#: entities.yml:1971
+#: entities.yml:1972
 msgid "Lane destinations"
 msgstr ""
 
-#: entities.yml:1972
+#: entities.yml:1973
 msgid "Trolley wire"
 msgstr ""
 
-#: entities.yml:1973
+#: entities.yml:1974
 msgid "Proposed bridge"
 msgstr "Navrhovaný most"
 
-#: entities.yml:1974
+#: entities.yml:1975
 msgid "Abutters"
 msgstr ""
 
-#: entities.yml:1976
+#: entities.yml:1977
 msgid "Railway lanes backward"
 msgstr ""
 
-#: entities.yml:1977
+#: entities.yml:1978
 msgid "Railway lanes forward"
 msgstr ""
 
-#: entities.yml:1979
+#: entities.yml:1980
 msgid "Change lanes backward"
 msgstr ""
 
-#: entities.yml:1980
+#: entities.yml:1981
 msgid "Change lanes forward"
 msgstr ""
 
-#: entities.yml:1981
+#: entities.yml:1982
 #, fuzzy
 msgid "Psv lanes backward"
 msgstr "Krok vzad"
 
-#: entities.yml:1982
+#: entities.yml:1983
 #, fuzzy
 msgid "Psv lanes forward"
 msgstr "Krok vpřed"
 
-#: entities.yml:1983
+#: entities.yml:1984
 msgid "Parking lane left"
 msgstr ""
 
-#: entities.yml:1984
+#: entities.yml:1985
 msgid "Parking lane both"
 msgstr ""
 
-#: entities.yml:1985
+#: entities.yml:1986
 msgid "Parking lane right"
 msgstr ""
 
-#: entities.yml:1986
+#: entities.yml:1987
 #, fuzzy
 msgid "Bus lanes backward"
 msgstr "Krok vzad"
 
-#: entities.yml:1987
+#: entities.yml:1988
 #, fuzzy
 msgid "Bus lanes forward"
 msgstr "Krok vpřed"
 
-#: entities.yml:1988
+#: entities.yml:1989
 msgid "Busway"
 msgstr ""
 
-#: entities.yml:1989
+#: entities.yml:1990
 msgid "Vehicle lanes backward"
 msgstr ""
 
-#: entities.yml:1990
+#: entities.yml:1991
 msgid "Vehicle lanes forward"
 msgstr ""
 
-#: entities.yml:1991
+#: entities.yml:1992
 msgid "Railway lanes"
 msgstr ""
 
-#: entities.yml:1992
+#: entities.yml:1993
 msgid "Busway right"
 msgstr ""
 
-#: entities.yml:1994
+#: entities.yml:1995
 msgid "Destination lanes colours"
 msgstr ""
 
-#: entities.yml:1995
+#: entities.yml:1996
 msgid "Forward destination"
 msgstr ""
 
-#: entities.yml:2000
+#: entities.yml:2001
 msgid "Tube"
 msgstr ""
 
-#: entities.yml:2003
+#: entities.yml:2004
 msgid "Change lanes"
 msgstr ""
 
-#: entities.yml:2004
+#: entities.yml:2005
 msgid "Traffic zone"
 msgstr "Zóna provozu"
 
-#: entities.yml:2006
+#: entities.yml:2007
 msgid "Mtb bicycle class"
 msgstr ""
 
-#: entities.yml:2007
+#: entities.yml:2008
 msgid "Backward destination"
 msgstr ""
 
-#: entities.yml:2008
+#: entities.yml:2009
 msgid "Snowplowing"
 msgstr ""
 
-#: entities.yml:2009 entities.yml:2458
+#: entities.yml:2010 entities.yml:2459
 msgid "Winter service"
 msgstr ""
 
-#: entities.yml:2010
+#: entities.yml:2011
 msgid "Technical mtb bicycle class"
 msgstr ""
 
-#: entities.yml:2011
+#: entities.yml:2012
 msgid "Narrow"
 msgstr "Úzký"
 
-#: entities.yml:2018
+#: entities.yml:2019
 msgid "Est width"
 msgstr "Odhadovaná šířka"
 
-#: entities.yml:2019
+#: entities.yml:2020
 msgid "Snowmobile"
 msgstr ""
 
-#: entities.yml:2022 entities.yml:2494
+#: entities.yml:2023 entities.yml:2495
 msgid "Ref name"
 msgstr "Referenční jméno"
 
-#: entities.yml:2023
+#: entities.yml:2024
 #, fuzzy
 msgid "Ref name note"
 msgstr "Požadováno jméno oblasti"
 
-#: entities.yml:2024
+#: entities.yml:2025
 msgid "Placement"
 msgstr "Umístění"
 
-#: entities.yml:2027
+#: entities.yml:2028
 #, fuzzy
 msgid "Carriage"
 msgstr "Překážka"
 
-#: entities.yml:2028
+#: entities.yml:2029
 msgid "Lanes maxwidth"
 msgstr "Maximální šířka pruhů"
 
-#: entities.yml:2029
+#: entities.yml:2030
 msgid "Priority road"
 msgstr "Prioritní silnice"
 
-#: entities.yml:2030
+#: entities.yml:2031
 msgid "Lcn"
 msgstr ""
 
-#: entities.yml:2031
+#: entities.yml:2032
 msgid "Overtaking"
 msgstr "Předjíždění"
 
-#: entities.yml:2033
+#: entities.yml:2034
 msgid "Pl highway class"
 msgstr ""
 
-#: entities.yml:2034
+#: entities.yml:2035
 msgid "Pl highway category"
 msgstr ""
 
-#: entities.yml:2035
+#: entities.yml:2036
 msgid "Bus maxspeed"
 msgstr ""
 
-#: entities.yml:2036
+#: entities.yml:2037
 msgid "Trailer maxspeed"
 msgstr ""
 
-#: entities.yml:2037
+#: entities.yml:2038
 msgid "Carriageway width"
 msgstr ""
 
-#: entities.yml:2038
+#: entities.yml:2039
 msgid "Wet maxspeed"
 msgstr ""
 
-#: entities.yml:2040
+#: entities.yml:2041
 msgid "Variable maxspeed"
 msgstr "Proměnná nejvyšší povolená rychlost"
 
-#: entities.yml:2043
+#: entities.yml:2044
 msgid "Bus overtaking"
 msgstr ""
 
-#: entities.yml:2044
+#: entities.yml:2045
 msgid "Hgv overtaking"
 msgstr ""
 
-#: entities.yml:2045
+#: entities.yml:2046
 msgid "Trailer overtaking"
 msgstr ""
 
-#: entities.yml:2046
+#: entities.yml:2047
 msgid "Minspeed"
 msgstr ""
 
-#: entities.yml:2047
+#: entities.yml:2048
 msgid "Ncn"
 msgstr ""
 
-#: entities.yml:2048
+#: entities.yml:2049
 msgid "Destination sign"
 msgstr ""
 
-#: entities.yml:2051
+#: entities.yml:2052
 msgid "Hgv 6 5t"
 msgstr ""
 
-#: entities.yml:2052
+#: entities.yml:2053
 msgid "Destination int ref lanes"
 msgstr ""
 
-#: entities.yml:2053
+#: entities.yml:2054
 msgid "Destination ref lanes"
 msgstr ""
 
-#: entities.yml:2054
+#: entities.yml:2055
 msgid "Destination symbol lanes"
 msgstr ""
 
-#: entities.yml:2055
+#: entities.yml:2056
 msgid "Left parking condition"
 msgstr ""
 
-#: entities.yml:2056
+#: entities.yml:2057
 msgid "Right parking condition"
 msgstr ""
 
-#: entities.yml:2057
+#: entities.yml:2058
 msgid "Parking lane both parallel"
 msgstr ""
 
-#: entities.yml:2058
+#: entities.yml:2059
 msgid "Destination int ref"
 msgstr ""
 
-#: entities.yml:2059
+#: entities.yml:2060
 msgid "Destination ref"
 msgstr "Reference cíle"
 
-#: entities.yml:2060
+#: entities.yml:2061
 msgid "Maxspeed type"
 msgstr ""
 
-#: entities.yml:2061
+#: entities.yml:2062
 msgid "Motor vehicle conditional"
 msgstr ""
 
-#: entities.yml:2062
+#: entities.yml:2063
 msgid "Motor vehicle forward conditional"
 msgstr ""
 
-#: entities.yml:2063 enums.yml:722
+#: entities.yml:2064 enums.yml:722
 msgid "Cutline"
 msgstr ""
 
-#: entities.yml:2064
+#: entities.yml:2065
 msgid "Hgv hour off"
 msgstr ""
 
-#: entities.yml:2065
+#: entities.yml:2066
 msgid "Hgv hour on"
 msgstr ""
 
-#: entities.yml:2067
+#: entities.yml:2068
 msgid "Parking lane left diagonal"
 msgstr ""
 
-#: entities.yml:2068
+#: entities.yml:2069
 msgid "Maxspeed conditional"
 msgstr "Podmíněná nejvyšší povolená rychlost"
 
-#: entities.yml:2069
+#: entities.yml:2070
 msgid "Forward maxspeed conditional"
 msgstr ""
 
-#: entities.yml:2071
+#: entities.yml:2072
 #, fuzzy
 msgid "Motor vehicle backward"
 msgstr "Krok vzad"
 
-#: entities.yml:2072
+#: entities.yml:2073
 #, fuzzy
 msgid "Vehicle forward"
 msgstr "Krok vpřed"
 
-#: entities.yml:2073
+#: entities.yml:2074
 msgid "Both sidewalk kerb"
 msgstr ""
 
-#: entities.yml:2074
+#: entities.yml:2075
 msgid "Parking lane left parallel"
 msgstr ""
 
-#: entities.yml:2076
+#: entities.yml:2077
 msgid "Vehicle forward conditional"
 msgstr ""
 
-#: entities.yml:2077
+#: entities.yml:2078
 msgid "Transit lanes"
 msgstr ""
 
-#: entities.yml:2078
+#: entities.yml:2079
 msgid "Bicycle forward lanes"
 msgstr ""
 
-#: entities.yml:2080
+#: entities.yml:2081
 msgid "Wheelchair ramp"
 msgstr ""
 
-#: entities.yml:2082
+#: entities.yml:2083
 msgid "Forward maxheight"
 msgstr ""
 
-#: entities.yml:2083
+#: entities.yml:2084
 msgid "Technical bicycle class"
 msgstr ""
 
-#: entities.yml:2084 entities.yml:2430 enums.yml:901 enums.yml:1367
+#: entities.yml:2085 entities.yml:2431 enums.yml:901 enums.yml:1367
 msgid "Ramp"
 msgstr "Rampa"
 
-#: entities.yml:2085
+#: entities.yml:2086
 msgid "Survey date"
 msgstr ""
 
-#: entities.yml:2086
+#: entities.yml:2087
 msgid "Abandoned higway"
 msgstr "Opuštěná silnice"
 
-#: entities.yml:2088 enums.yml:95
+#: entities.yml:2089 enums.yml:95
 msgid "Informal"
 msgstr "Neformální"
 
-#: entities.yml:2089
+#: entities.yml:2090
 msgid "Hgv 6t"
 msgstr ""
 
-#: entities.yml:2090
+#: entities.yml:2091
 msgid "Advisory maxspeed"
 msgstr ""
 
-#: entities.yml:2091 entities.yml:2657
+#: entities.yml:2092 entities.yml:2658
 msgid "Old ref"
 msgstr ""
 
-#: entities.yml:2092
+#: entities.yml:2093
 msgid "Bridge ref"
 msgstr "Reference mostu"
 
-#: entities.yml:2093
+#: entities.yml:2094
 msgid "Hgv conditional maxspeed"
 msgstr ""
 
-#: entities.yml:2094
+#: entities.yml:2095
 #, fuzzy
 msgid "Lane marking"
 msgstr "Parkoviště"
 
-#: entities.yml:2095
+#: entities.yml:2096
 msgid "Turn"
 msgstr ""
 
-#: entities.yml:2096
+#: entities.yml:2097
 msgid "Destination country"
 msgstr "Cílová země"
 
-#: entities.yml:2097
+#: entities.yml:2098
 msgid "Dual carriageway"
 msgstr ""
 
-#: entities.yml:2098
+#: entities.yml:2099
 msgid "Access note"
 msgstr "Poznámka k přístupu"
 
-#: entities.yml:2099 entities.yml:2305
+#: entities.yml:2100 entities.yml:2306
 msgid "Nat ref"
 msgstr ""
 
-#: entities.yml:2100
+#: entities.yml:2101
 msgid "Left footway width"
 msgstr ""
 
-#: entities.yml:2101
+#: entities.yml:2102
 msgid "Hazmat water"
 msgstr ""
 
-#: entities.yml:2102
+#: entities.yml:2103
 msgid "Hgv 12t"
 msgstr ""
 
-#: entities.yml:2103
+#: entities.yml:2104
 msgid "Passing places"
 msgstr ""
 
-#: entities.yml:2105
+#: entities.yml:2106
 msgid "Hgv 3 5t"
 msgstr ""
 
-#: entities.yml:2106
+#: entities.yml:2107
 msgid "Maxweight note"
 msgstr ""
 
-#: entities.yml:2108
+#: entities.yml:2109
 msgid "Alt name en"
 msgstr "Alternativní jméno anglicky"
 
-#: entities.yml:2109
+#: entities.yml:2110
 msgid "Rcn"
 msgstr ""
 
-#: entities.yml:2110
+#: entities.yml:2111
 msgid "Rcn ref"
 msgstr ""
 
-#: entities.yml:2111 entities.yml:2271
+#: entities.yml:2112 entities.yml:2272
 msgid "Distance"
 msgstr "Vzdálenost"
 
-#: entities.yml:2112
+#: entities.yml:2113
 msgid "Highway area"
 msgstr ""
 
-#: entities.yml:2116
+#: entities.yml:2117
 msgid "Hazmat e"
 msgstr ""
 
-#: entities.yml:2117
+#: entities.yml:2118
 msgid "Destination name"
 msgstr "Cílové jméno"
 
-#: entities.yml:2118
+#: entities.yml:2119
 msgid "Psv lanes"
 msgstr ""
 
-#: entities.yml:2119
+#: entities.yml:2120
 msgid "Name note"
 msgstr "Poznámka ke jménu"
 
-#: entities.yml:2120
+#: entities.yml:2121
 msgid "Taxi lanes"
 msgstr ""
 
-#: entities.yml:2122
+#: entities.yml:2123
 #, fuzzy
 msgid "Vehicle lanes"
 msgstr "Sledování"
 
-#: entities.yml:2123
+#: entities.yml:2124
 msgid "Both ways lanes"
 msgstr ""
 
-#: entities.yml:2126
+#: entities.yml:2127
 msgid "Both cycleway"
 msgstr ""
 
-#: entities.yml:2127
+#: entities.yml:2128
 msgid "Vorh parking condition"
 msgstr ""
 
-#: entities.yml:2128
+#: entities.yml:2129
 msgid "Both default parking condition"
 msgstr ""
 
-#: entities.yml:2129
+#: entities.yml:2130
 msgid "Both residents parking condition"
 msgstr ""
 
-#: entities.yml:2130
+#: entities.yml:2131
 msgid "Both parking condition time interval"
 msgstr ""
 
-#: entities.yml:2131
+#: entities.yml:2132
 msgid "Zone maxspeed"
 msgstr ""
 
-#: entities.yml:2132
+#: entities.yml:2133
 msgid "Psv oneway"
 msgstr ""
 
-#: entities.yml:2133
+#: entities.yml:2134
 msgid "Removed cycleway"
 msgstr ""
 
-#: entities.yml:2134 enums.yml:1287
+#: entities.yml:2135 enums.yml:1287
 msgid "Incline steep"
 msgstr ""
 
-#: entities.yml:2135
+#: entities.yml:2136
 msgid "Bicycle lanes"
 msgstr ""
 
-#: entities.yml:2136
+#: entities.yml:2137
 msgid "Hazmat"
 msgstr ""
 
-#: entities.yml:2138 entities.yml:2576 enums.yml:636 enums.yml:1683
+#: entities.yml:2139 entities.yml:2577 enums.yml:636 enums.yml:1683
 #: enums.yml:1788
 msgid "Ski"
 msgstr "Lyžování"
 
-#: entities.yml:2139
+#: entities.yml:2140
 msgid "Tourist bus"
 msgstr ""
 
-#: entities.yml:2141
+#: entities.yml:2142
 msgid "Hgv maxweight"
 msgstr ""
 
-#: entities.yml:2142
+#: entities.yml:2143
 msgid "Priority"
 msgstr "Priorita"
 
-#: entities.yml:2143
+#: entities.yml:2144
 msgid "Hgv lanes"
 msgstr ""
 
-#: entities.yml:2145
+#: entities.yml:2146
 #, fuzzy
 msgid "Reg name note"
 msgstr "Požadováno jméno oblasti"
 
-#: entities.yml:2147
+#: entities.yml:2148
 msgid "Cs note"
 msgstr "Poznámka česky"
 
-#: entities.yml:2149
+#: entities.yml:2150
 msgid "Repeat on"
 msgstr ""
 
-#: entities.yml:2151 entities.yml:2241
+#: entities.yml:2152 entities.yml:2242
 msgid "Bdouble"
 msgstr ""
 
-#: entities.yml:2152
+#: entities.yml:2153
 msgid "Shoulder"
 msgstr ""
 
-#: entities.yml:2153
+#: entities.yml:2154
 msgid "Both parking condition"
 msgstr ""
 
-#: entities.yml:2155
+#: entities.yml:2156
 msgid "Divider"
 msgstr "Oddělovač"
 
-#: entities.yml:2156 entities.yml:2261
+#: entities.yml:2157 entities.yml:2262
 msgid "Kct green"
 msgstr ""
 
-#: entities.yml:2157
+#: entities.yml:2158
 msgid "Bus lanes"
 msgstr ""
 
-#: entities.yml:2158
+#: entities.yml:2159
 msgid "His 1991 name"
 msgstr ""
 
-#: entities.yml:2159
+#: entities.yml:2160
 msgid "Conditional overtaking"
 msgstr ""
 
-#: entities.yml:2160
+#: entities.yml:2161
 msgid "Horse suitable"
 msgstr ""
 
-#: entities.yml:2161
+#: entities.yml:2162
 msgid "Veh ban from"
 msgstr ""
 
-#: entities.yml:2163
+#: entities.yml:2164
 msgid "Hgv backward conditional maxspeed"
 msgstr ""
 
-#: entities.yml:2164
+#: entities.yml:2165
 #, fuzzy
 msgid "Hgv backward"
 msgstr "Krok vzad"
 
-#: entities.yml:2166
+#: entities.yml:2167
 msgid "Forward overtaking"
 msgstr ""
 
-#: entities.yml:2167
+#: entities.yml:2168
 msgid "Hgv backward maxspeed"
 msgstr ""
 
-#: entities.yml:2169
+#: entities.yml:2170
 msgid "Right parking condition time interval"
 msgstr ""
 
-#: entities.yml:2170
+#: entities.yml:2171
 #, fuzzy
 msgid "Parking lane"
 msgstr "Parkoviště"
 
-#: entities.yml:2172
+#: entities.yml:2173
 msgid "His 1945 name"
 msgstr ""
 
-#: entities.yml:2173
+#: entities.yml:2174
 msgid "Both residents parking condition time interval"
 msgstr ""
 
-#: entities.yml:2174
+#: entities.yml:2175
 msgid "Odbl"
 msgstr ""
 
-#: entities.yml:2175
+#: entities.yml:2176
 #, fuzzy
 msgid "Forward placement"
 msgstr "Elektrárna"
 
-#: entities.yml:2176
+#: entities.yml:2177
 msgid "Backward overtaking"
 msgstr ""
 
-#: entities.yml:2177
+#: entities.yml:2178
 msgid "His 1896 name"
 msgstr ""
 
-#: entities.yml:2178
+#: entities.yml:2179
 #, fuzzy
 msgid "Both parking"
 msgstr "Parkoviště"
 
-#: entities.yml:2179
+#: entities.yml:2180
 msgid "His 1400 1800 name"
 msgstr ""
 
-#: entities.yml:2180
+#: entities.yml:2181
 msgid "His 1870 1940 name"
 msgstr ""
 
-#: entities.yml:2181
+#: entities.yml:2182
 #, fuzzy
 msgid "Backward bus"
 msgstr "Krok vzad"
 
-#: entities.yml:2184
+#: entities.yml:2185
 msgid "Backward change"
 msgstr ""
 
-#: entities.yml:2185
+#: entities.yml:2186
 msgid "Junction ref"
 msgstr ""
 
-#: entities.yml:2187
+#: entities.yml:2188
 msgid "Right parking condition maxstay"
 msgstr ""
 
-#: entities.yml:2188
+#: entities.yml:2189
 msgid "Destination note"
 msgstr "Poznámka k cíli"
 
-#: entities.yml:2190
+#: entities.yml:2191
 msgid "Right residents parking condition"
 msgstr ""
 
-#: entities.yml:2191
+#: entities.yml:2192
 msgid "Destination street"
 msgstr "Cílová ulice"
 
-#: entities.yml:2192
+#: entities.yml:2193
 msgid "Left arcade"
 msgstr ""
 
-#: entities.yml:2193
+#: entities.yml:2194
 msgid "Conditional maxwidth"
 msgstr ""
 
-#: entities.yml:2194
+#: entities.yml:2195
 msgid "His 1930 name"
 msgstr ""
 
-#: entities.yml:2195
+#: entities.yml:2196
 msgid "Tmc cid 58 tabcd 1 class"
 msgstr ""
 
-#: entities.yml:2196
+#: entities.yml:2197
 msgid "Tmc cid 58 tabcd 1 lclversion"
 msgstr ""
 
-#: entities.yml:2197
+#: entities.yml:2198
 msgid "Tmc cid 58 tabcd 1 nextlocationcode"
 msgstr ""
 
-#: entities.yml:2198
+#: entities.yml:2199
 msgid "Hgv conditional overtaking"
 msgstr ""
 
-#: entities.yml:2199
+#: entities.yml:2200
 msgid "Psv lanes times"
 msgstr ""
 
-#: entities.yml:2200
+#: entities.yml:2201
 msgid "His 1990 name"
 msgstr ""
 
-#: entities.yml:2202
+#: entities.yml:2203
 msgid "His 1962 name"
 msgstr ""
 
-#: entities.yml:2203
+#: entities.yml:2204
 msgid "Stroller ramp"
 msgstr ""
 
-#: entities.yml:2205
+#: entities.yml:2206
 msgid "Forward hazard"
 msgstr ""
 
-#: entities.yml:2206
+#: entities.yml:2207
 msgid "Both sidewalk surface"
 msgstr "Povrch obou chodníků"
 
-#: entities.yml:2207 entities.yml:2439
+#: entities.yml:2208 entities.yml:2440
 msgid "Conveying"
 msgstr ""
 
-#: entities.yml:2208
+#: entities.yml:2209
 msgid "His 1940 1945 name"
 msgstr ""
 
-#: entities.yml:2209
+#: entities.yml:2210
 msgid "Right parking default condition"
 msgstr ""
 
-#: entities.yml:2210
+#: entities.yml:2211
 msgid "Hgv 12"
 msgstr ""
 
-#: entities.yml:2213
+#: entities.yml:2214
 msgid "His 1840 1870 name"
 msgstr ""
 
-#: entities.yml:2215
+#: entities.yml:2216
 msgid "His 1951 1990 name"
 msgstr ""
 
-#: entities.yml:2220
+#: entities.yml:2221
 msgid "Bridge height"
 msgstr "Výška mostu"
 
-#: entities.yml:2221
+#: entities.yml:2222
 msgid "Oneway railway"
 msgstr ""
 
-#: entities.yml:2223
+#: entities.yml:2224
 msgid "Proposed highway"
 msgstr "Navrhované koleje"
 
-#: entities.yml:2224
+#: entities.yml:2225
 #, fuzzy
 msgid "Taxi lanes forward"
 msgstr "Krok vpřed"
 
-#: entities.yml:2225
+#: entities.yml:2226
 msgid "Destination colour tx lanes"
 msgstr ""
 
-#: entities.yml:2226
+#: entities.yml:2227
 msgid "Max"
 msgstr ""
 
-#: entities.yml:2227
+#: entities.yml:2228
 msgid "Surface 1"
 msgstr "Povrch 1"
 
-#: entities.yml:2228
+#: entities.yml:2229
 msgid "Right bicycle sidewalk"
 msgstr ""
 
-#: entities.yml:2229
+#: entities.yml:2230
 msgid "Left bicycle sidewalk"
 msgstr ""
 
-#: entities.yml:2231
+#: entities.yml:2232
 msgid "Backward conditional maxspeed"
 msgstr ""
 
-#: entities.yml:2233
+#: entities.yml:2234
 msgid "Description ref"
 msgstr "Reference popisu"
 
-#: entities.yml:2234
+#: entities.yml:2235
 msgid "Hgv tolltype"
 msgstr ""
 
-#: entities.yml:2235
+#: entities.yml:2236
 msgid "Maxheight note"
 msgstr ""
 
-#: entities.yml:2236 entities.yml:2411 enums.yml:31 enums.yml:1312
+#: entities.yml:2237 entities.yml:2412 enums.yml:31 enums.yml:1312
 #: enums.yml:1369 enums.yml:1525
 msgid "Steps"
 msgstr "Schody"
 
-#: entities.yml:2246
+#: entities.yml:2247
 msgid "Name sk"
 msgstr ""
 
-#: entities.yml:2247 entities.yml:2567
+#: entities.yml:2248 entities.yml:2568
 msgid "Name en"
 msgstr ""
 
-#: entities.yml:2251
+#: entities.yml:2252
 msgid "Network type"
 msgstr ""
 
-#: entities.yml:2254
+#: entities.yml:2255
 msgid "Destinations"
 msgstr "Cíle"
 
-#: entities.yml:2255
+#: entities.yml:2256
 msgid "Kct red"
 msgstr ""
 
-#: entities.yml:2260
+#: entities.yml:2261
 msgid "Kct yellow"
 msgstr ""
 
-#: entities.yml:2265 enums.yml:1431
+#: entities.yml:2266 enums.yml:1431
 msgid "From "
 msgstr "Z "
 
-#: entities.yml:2266
+#: entities.yml:2267
 msgid "Kct none"
 msgstr ""
 
-#: entities.yml:2269 enums.yml:1426
+#: entities.yml:2270 enums.yml:1426
 msgid "To"
 msgstr "Do"
 
-#: entities.yml:2274
+#: entities.yml:2275
 #, fuzzy
 msgid "Lcn description"
 msgstr "Omezení"
 
-#: entities.yml:2277 enums.yml:1436
+#: entities.yml:2278 enums.yml:1436
 msgid "Via"
 msgstr "Přez"
 
-#: entities.yml:2278
+#: entities.yml:2279
 msgid "Public transport version"
 msgstr "Verze hromadné dopravy"
 
-#: entities.yml:2280
+#: entities.yml:2281
 msgid "Text colour"
 msgstr "Barva textu"
 
-#: entities.yml:2281
+#: entities.yml:2282
 msgid "Note 1"
 msgstr "Poznámka 1"
 
-#: entities.yml:2282
+#: entities.yml:2283
 msgid "Note 2"
 msgstr "Poznámka 2"
 
-#: entities.yml:2283
+#: entities.yml:2284
 msgid "Trail type"
 msgstr ""
 
-#: entities.yml:2287
+#: entities.yml:2288
 msgid "Section"
 msgstr "Sekce"
 
-#: entities.yml:2288
+#: entities.yml:2289
 msgid "Icn ref"
 msgstr ""
 
-#: entities.yml:2296
+#: entities.yml:2297
 msgid "Road components"
 msgstr "Komponenty silnice"
 
-#: entities.yml:2297 enums.yml:1691
+#: entities.yml:2298 enums.yml:1691
 msgid "Ferry"
 msgstr "Trajekt"
 
-#: entities.yml:2299
+#: entities.yml:2300
 msgid "A"
 msgstr ""
 
-#: entities.yml:2303
+#: entities.yml:2304
 msgid "Roundtrip"
 msgstr ""
 
-#: entities.yml:2306
+#: entities.yml:2307
 msgid "Kct white"
 msgstr ""
 
-#: entities.yml:2307
+#: entities.yml:2308
 msgid "Note cz"
 msgstr "Poznámka česky"
 
-#: entities.yml:2308
+#: entities.yml:2309
 msgid "School thing"
 msgstr "Se školou související"
 
-#: entities.yml:2312
+#: entities.yml:2313
 msgid "Service road"
 msgstr "Servisní silnice"
 
-#: entities.yml:2319
+#: entities.yml:2320
 #, fuzzy
 msgid "Vehicle backward"
 msgstr "Krok vzad"
 
-#: entities.yml:2340
+#: entities.yml:2341
 msgid "Vehicle parts"
 msgstr ""
 
-#: entities.yml:2341
+#: entities.yml:2342
 msgid "Vehicle repair"
 msgstr ""
 
-#: entities.yml:2343
+#: entities.yml:2344
 msgid "Coins payment"
 msgstr "Platba mincemi"
 
-#: entities.yml:2344 enums.yml:653
+#: entities.yml:2345 enums.yml:653
 msgid "Second hand"
 msgstr "Second hand"
 
-#: entities.yml:2346 enums.yml:783
+#: entities.yml:2347 enums.yml:783
 msgid "Skiing"
 msgstr "Lyžování"
 
-#: entities.yml:2348
+#: entities.yml:2349
 msgid "Tickets"
 msgstr "Lístky"
 
-#: entities.yml:2349 enums.yml:611
+#: entities.yml:2350 enums.yml:611
 msgid "Trade"
 msgstr "Obchod"
 
-#: entities.yml:2350 enums.yml:593
+#: entities.yml:2351 enums.yml:593
 msgid "Beauty"
 msgstr "Krása"
 
-#: entities.yml:2351 enums.yml:573
+#: entities.yml:2352 enums.yml:573
 msgid "Hobby"
 msgstr "Koníček"
 
-#: entities.yml:2353 entities.yml:2528 enums.yml:1145 enums.yml:1237
+#: entities.yml:2354 entities.yml:2529 enums.yml:1145 enums.yml:1237
 #: enums.yml:1872
 msgid "Site"
 msgstr "Areál"
 
-#: entities.yml:2361
+#: entities.yml:2362
 msgid "Social facility"
 msgstr ""
 
-#: entities.yml:2364
+#: entities.yml:2365
 msgid "Facility type"
 msgstr ""
 
-#: entities.yml:2365
+#: entities.yml:2366
 msgid "Expected users"
 msgstr "Očekávaní uživatelé"
 
-#: entities.yml:2373 enums.yml:782
+#: entities.yml:2374 enums.yml:782
 msgid "Swimming"
 msgstr "Plavání"
 
-#: entities.yml:2378 entities.yml:2805
+#: entities.yml:2379 entities.yml:2806
 msgid "Seasonal"
 msgstr "Sezónní"
 
-#: entities.yml:2389 enums.yml:792
+#: entities.yml:2390 enums.yml:792
 #, fuzzy
 msgid "Shooting"
 msgstr "Se školou související"
 
-#: entities.yml:2390
+#: entities.yml:2391
 msgid "Sport 1"
 msgstr "Sport 1"
 
-#: entities.yml:2397
+#: entities.yml:2398
 msgid "Climbing length"
 msgstr ""
 
-#: entities.yml:2402
+#: entities.yml:2403
 msgid "Climbing sport"
 msgstr ""
 
-#: entities.yml:2410
+#: entities.yml:2411
 msgid "Highjump"
 msgstr ""
 
-#: entities.yml:2417
+#: entities.yml:2418
 msgid "Step count"
 msgstr "Počet schodů"
 
-#: entities.yml:2420
+#: entities.yml:2421
 msgid "Bicycles allowed"
 msgstr ""
 
-#: entities.yml:2442 entities.yml:2689
+#: entities.yml:2443 entities.yml:2690
 msgid "Mtb scale uphill"
 msgstr ""
 
-#: entities.yml:2444
+#: entities.yml:2445
 msgid "Left handrail"
 msgstr "Levé zábradlí"
 
-#: entities.yml:2445
+#: entities.yml:2446
 msgid "Right handrail"
 msgstr "Pravé zábradlí"
 
-#: entities.yml:2446
+#: entities.yml:2447
 msgid "Center handrail"
 msgstr "Zábradlí uprostřed"
 
-#: entities.yml:2447
+#: entities.yml:2448
 msgid "Step condition"
 msgstr "Stav schodů"
 
-#: entities.yml:2452
+#: entities.yml:2453
 msgid "Escalator"
 msgstr "Eskalátor"
 
-#: entities.yml:2455
+#: entities.yml:2456
 msgid "Step height"
 msgstr "Výška schodu"
 
-#: entities.yml:2456
+#: entities.yml:2457
 msgid "Step length"
 msgstr "Délka schodu"
 
-#: entities.yml:2460 enums.yml:1230 enums.yml:1286 enums.yml:1420
+#: entities.yml:2461 enums.yml:1230 enums.yml:1286 enums.yml:1420
 #: enums.yml:2149 enums.yml:2461
 msgid "Stop"
 msgstr "Zastávka"
 
-#: entities.yml:2472
+#: entities.yml:2473
 msgid "Has shelter"
 msgstr "Má přístřešek"
 
-#: entities.yml:2482 entities.yml:2534 enums.yml:2306
+#: entities.yml:2483 entities.yml:2535 enums.yml:2306
 msgid "Zone"
 msgstr "Zóna"
 
-#: entities.yml:2501
+#: entities.yml:2502
 msgid "Uic name"
 msgstr ""
 
-#: entities.yml:2502
+#: entities.yml:2503
 msgid "Uic ref"
 msgstr ""
 
-#: entities.yml:2512
+#: entities.yml:2513
 msgid "Network cs"
 msgstr "Síť česky"
 
-#: entities.yml:2515 enums.yml:14 enums.yml:1199
+#: entities.yml:2516 enums.yml:14 enums.yml:1199
 msgid "Rail"
 msgstr "Kolej"
 
-#: entities.yml:2520
+#: entities.yml:2521
 msgid "Lines"
 msgstr ""
 
-#: entities.yml:2524
+#: entities.yml:2525
 msgid "Shelter type"
 msgstr "Typ přístřešku"
 
-#: entities.yml:2533
+#: entities.yml:2534
 msgid "Kind"
 msgstr "Druh"
 
-#: entities.yml:2537
+#: entities.yml:2538
 msgid "Camera mount"
 msgstr ""
 
-#: entities.yml:2539
+#: entities.yml:2540
 msgid "Camera direction"
 msgstr "Směr kamery"
 
-#: entities.yml:2549 enums.yml:413
+#: entities.yml:2550 enums.yml:413
 msgid "Theatre"
 msgstr "Divadlo"
 
-#: entities.yml:2574
+#: entities.yml:2575
 msgid "Map type"
 msgstr "Typ mapy"
 
-#: entities.yml:2575
+#: entities.yml:2576
 msgid "Map size"
 msgstr "Velikost mapy"
 
-#: entities.yml:2584
+#: entities.yml:2585
 msgid "Barrier type"
 msgstr "Typ překážky"
 
-#: entities.yml:2589 enums.yml:926
+#: entities.yml:2590 enums.yml:926
 msgid "Zoo"
 msgstr "Zoo"
 
-#: entities.yml:2618
+#: entities.yml:2619
 msgid "Caravans"
 msgstr "Karavany"
 
-#: entities.yml:2619
+#: entities.yml:2620
 msgid "Tents"
 msgstr "Stany"
 
-#: entities.yml:2620
+#: entities.yml:2621
 msgid "En description"
 msgstr "Popis anglicky"
 
-#: entities.yml:2622 entities.yml:2737
+#: entities.yml:2623 entities.yml:2738
 msgid "Species"
 msgstr "Druh"
 
-#: entities.yml:2623 entities.yml:2738
+#: entities.yml:2624 entities.yml:2739
 msgid "Taxon cs"
 msgstr ""
 
-#: entities.yml:2626
+#: entities.yml:2627
 msgid "Ref 1"
 msgstr "Reference 1"
 
-#: entities.yml:2629 entities.yml:2740
+#: entities.yml:2630 entities.yml:2741
 #, fuzzy
 msgid "Denotation"
 msgstr "Informace"
 
-#: entities.yml:2631 entities.yml:2735
+#: entities.yml:2632 entities.yml:2736
 msgid "Taxon"
 msgstr ""
 
-#: entities.yml:2635
+#: entities.yml:2636
 msgid "Artwork subject"
 msgstr ""
 
-#: entities.yml:2636
+#: entities.yml:2637
 msgid "Author"
 msgstr "Autor"
 
-#: entities.yml:2642
+#: entities.yml:2643
 #, fuzzy
 msgid "Power supply"
 msgstr "Elektrárna"
 
-#: entities.yml:2644
+#: entities.yml:2645
 msgid "Breakfast"
 msgstr "Snídaně"
 
-#: entities.yml:2646
+#: entities.yml:2647
 msgid "Flood date"
 msgstr "Datum zatopení"
 
-#: entities.yml:2648
+#: entities.yml:2649
 msgid "Artist"
 msgstr "Umělec"
 
-#: entities.yml:2649
+#: entities.yml:2650
 msgid "En note"
 msgstr "Poznámka anglicky"
 
-#: entities.yml:2650 enums.yml:1744
+#: entities.yml:2651 enums.yml:1744
 msgid "Water slide"
 msgstr "Vodní skluzavka"
 
-#: entities.yml:2652 enums.yml:470
+#: entities.yml:2653 enums.yml:470
 msgid "Shower"
 msgstr "Sprcha"
 
-#: entities.yml:2654
+#: entities.yml:2655
 msgid "High water height"
 msgstr ""
 
-#: entities.yml:2667
+#: entities.yml:2668
 msgid "Mobile phone communication"
 msgstr "Mobilní komunikace"
 
-#: entities.yml:2668
+#: entities.yml:2669
 #, fuzzy
 msgid "Tower construction"
 msgstr "Konstrukce"
 
-#: entities.yml:2679
+#: entities.yml:2680
 msgid "Microwave communication"
 msgstr "Mikrovlnná komunikace"
 
-#: entities.yml:2680
+#: entities.yml:2681
 msgid "Television communication"
 msgstr "Televizní komunikace"
 
-#: entities.yml:2681 enums.yml:1978
+#: entities.yml:2682 enums.yml:1978
 msgid "Communication"
 msgstr "Komunikace"
 
-#: entities.yml:2682 enums.yml:317 enums.yml:1266 enums.yml:1520 enums.yml:1725
+#: entities.yml:2683 enums.yml:317 enums.yml:1266 enums.yml:1520 enums.yml:1725
 #: enums.yml:2292
 msgid "Track"
 msgstr "Stezka"
 
-#: entities.yml:2687
+#: entities.yml:2688
 msgid "Motorcar allowed"
 msgstr ""
 
-#: entities.yml:2690 enums.yml:285
+#: entities.yml:2691 enums.yml:285
 msgid "Forestry"
 msgstr "Lesnictví"
 
-#: entities.yml:2691
+#: entities.yml:2692
 msgid "Bicycle class"
 msgstr ""
 
-#: entities.yml:2692
+#: entities.yml:2693
 msgid "Ticks description"
 msgstr ""
 
-#: entities.yml:2693
+#: entities.yml:2694
 msgid "Motor vehicle note"
 msgstr ""
 
-#: entities.yml:2694
+#: entities.yml:2695
 msgid "Proposed segregated"
 msgstr ""
 
-#: entities.yml:2695
+#: entities.yml:2696
 msgid "Steep incline"
 msgstr ""
 
-#: entities.yml:2696
+#: entities.yml:2697
 msgid "Trasa"
 msgstr "Trasa"
 
-#: entities.yml:2697
+#: entities.yml:2698
 msgid "Sprint lanes"
 msgstr ""
 
-#: entities.yml:2699
+#: entities.yml:2700
 msgid "Kct barva"
 msgstr ""
 
-#: entities.yml:2717 enums.yml:264 enums.yml:706 enums.yml:1425 enums.yml:1888
+#: entities.yml:2718 enums.yml:264 enums.yml:706 enums.yml:1425 enums.yml:1888
 #: enums.yml:2205 enums.yml:2320 enums.yml:2374
 #, fuzzy
 msgid "Backward"
 msgstr "Krok vzad"
 
-#: entities.yml:2718 enums.yml:1964
+#: entities.yml:2719 enums.yml:1964
 msgid "Transformer"
 msgstr "Transformátor"
 
-#: entities.yml:2723
+#: entities.yml:2724
 msgid "Phases"
 msgstr ""
 
-#: entities.yml:2725 enums.yml:1430 enums.yml:1961
+#: entities.yml:2726 enums.yml:1430 enums.yml:1961
 msgid "Substation"
 msgstr "Podstanice"
 
-#: entities.yml:2730 enums.yml:116 enums.yml:1017 enums.yml:1171 enums.yml:2102
+#: entities.yml:2731 enums.yml:116 enums.yml:1017 enums.yml:1171 enums.yml:2102
 msgid "Tree"
 msgstr "Strom"
 
-#: entities.yml:2739
+#: entities.yml:2740
 msgid "Genus cs"
 msgstr ""
 
-#: entities.yml:2741
+#: entities.yml:2742
 msgid "Circumference"
 msgstr ""
 
-#: entities.yml:2742
+#: entities.yml:2743
 msgid "Species cs"
 msgstr ""
 
-#: entities.yml:2744
+#: entities.yml:2745
 msgid "Diameter crown"
 msgstr ""
 
-#: entities.yml:2745
+#: entities.yml:2746
 msgid "Genus en"
 msgstr ""
 
-#: entities.yml:2747
+#: entities.yml:2748
 msgid "Water area"
 msgstr "Vodní oblast"
 
-#: entities.yml:2762
+#: entities.yml:2763
 msgid "Water way"
 msgstr "Vodní tok"
 
-#: entities.yml:2766
+#: entities.yml:2767
 msgid "Dibavod id"
 msgstr ""
 
-#: entities.yml:2769
+#: entities.yml:2770
 msgid "Waterway source"
 msgstr ""
 
-#: entities.yml:2774
+#: entities.yml:2775
 msgid "Boats allowed"
 msgstr ""
 
-#: entities.yml:2775
+#: entities.yml:2776
 msgid "Motor boats allowed"
 msgstr ""
 
-#: entities.yml:2779 enums.yml:2493
+#: entities.yml:2780 enums.yml:2493
 msgid "Intermittent"
 msgstr ""
 
-#: entities.yml:2788
+#: entities.yml:2789
 msgid "Life cycle"
 msgstr ""
 
-#: entities.yml:2792
+#: entities.yml:2793
 msgid "Whitewater section grade"
 msgstr ""
 
-#: entities.yml:2793
+#: entities.yml:2794
 msgid "Have riverbank"
 msgstr ""
 
-#: entities.yml:2794
+#: entities.yml:2795
 msgid "Whitewater section name"
 msgstr ""
 
-#: entities.yml:2795
+#: entities.yml:2796
 msgid "Whitewater rapid name"
 msgstr ""
 
-#: entities.yml:2796
+#: entities.yml:2797
 msgid "Whitewater rapid grade"
 msgstr ""
 
-#: entities.yml:2797
+#: entities.yml:2798
 msgid "Cemt"
 msgstr ""
 
-#: entities.yml:2798
+#: entities.yml:2799
 msgid "Seamark notice function"
 msgstr ""
 
-#: entities.yml:2802
+#: entities.yml:2803
 msgid "Seamark notice impact"
 msgstr ""
 
-#: entities.yml:2803
+#: entities.yml:2804
 msgid "Seamark notice category"
 msgstr ""
 
@@ -10479,76 +10484,104 @@ msgstr ""
 msgid "not known"
 msgstr "není známo."
 
-#: app/area_selection.py:20
+#: app/area_selection.py:17
+msgid "updated"
+msgstr "aktuální"
+
+#: app/area_selection.py:17
+msgid "creating"
+msgstr "vytváření"
+
+#: app/area_selection.py:17
+msgid "getting changes"
+msgstr "získávání změn"
+
+#: app/area_selection.py:17
+msgid "applying changes"
+msgstr "provádění změn"
+
+#: app/area_selection.py:17
+msgid "frozen"
+msgstr "neměnný"
+
+#: app/area_selection.py:17
+msgid "local copy exists"
+msgstr "existuje místní kopie"
+
+#: app/area_selection.py:17
+msgid "local"
+msgstr "místní"
+
+#: app/area_selection.py:31
 msgid "Select an area"
 msgstr "Zvolte oblast"
 
-#: app/area_selection.py:20 app/areas_browser.py:8
+#: app/area_selection.py:31 app/areas_browser.py:8
 msgid "&Select"
 msgstr "&Vybrat"
 
-#: app/area_selection.py:20 app/message_dialog.py:9
+#: app/area_selection.py:31 app/message_dialog.py:9
 msgid "&Exit"
 msgstr "&Konec"
 
-#: app/area_selection.py:37
+#: app/area_selection.py:49
 msgid "&Available areas"
 msgstr "&Dostupné oblasti"
 
-#: app/area_selection.py:40
+#: app/area_selection.py:52
 msgid "Available areas"
 msgstr "Dostupné oblasti"
 
-#: app/area_selection.py:43
+#: app/area_selection.py:55
 msgid "&Request a new area"
 msgstr "&Vyžádat novou oblast"
 
-#: app/area_selection.py:52
+#: app/area_selection.py:65
 msgid "{name}: {state}, last updated {updated_at}, file size {db_size}, created {created_at}"
 msgstr "{name}: {state}, poslední změna {updated_at}, velikost souboru {db_size}, vznik {created_at}"
 
-#: app/area_selection.py:64
+#: app/area_selection.py:77
 msgid "Enter the name of the requested area"
 msgstr "Zadejte název požadované oblasti"
 
-#: app/area_selection.py:64
+#: app/area_selection.py:77
 msgid "Area name requested"
 msgstr "Požadováno jméno oblasti"
 
-#: app/area_selection.py:77
+#: app/area_selection.py:90
 msgid "Query limit reached"
 msgstr "Bylo dosaženo limitu dotazů"
 
-#: app/area_selection.py:77
+#: app/area_selection.py:90
 msgid "You've reached the query limit for the overpass API, which is used for area searches. Try to request the area in a few minutes."
 msgstr "Podařilo se vám dosáhnout limitu požadavků na overpass API, které se používá pro dotazy vyhledávající určitou oblast. Zkuste vaši žádost zopakovat za několik minut."
 
-#: app/area_selection.py:83
+#: app/area_selection.py:96
 msgid "Area not found"
 msgstr "Oblast nenalezena"
 
-#: app/area_selection.py:83
+#: app/area_selection.py:96
 msgid "The area with name {name} does not correspond to any OSM areas."
 msgstr "Oblast se jménem {name} neodpovídá žádným oblastem v OSM."
 
-#: app/area_selection.py:97 app/area_selection.py:101 app/main_window.py:163
+#: app/area_selection.py:110 app/area_selection.py:114 app/main_window.py:163
 #: app/main_window.py:168
 msgid "Success"
 msgstr "Úspěch"
 
-#: app/area_selection.py:97
+#: app/area_selection.py:110
 msgid "The area creation request has been sent successfully. The area will become updated in a few minutes."
 msgstr "Požadavek na vytvoření oblasti byl úspěšně odeslán. Oblast bude aktualizována během několika minut, záleží na její velikosti."
 
-#: app/area_selection.py:101
+#: app/area_selection.py:114
 msgid "The area creation request has already been sent."
 msgstr "Požadavek na vytvoření oblasti byl již odeslán."
 
-#: app/area_selection.py:103
+#: app/area_selection.py:116
 msgid "The area creation request failed. Response from server: {reply}"
 msgstr "Požadavek na vytvoření oblasti neuspěl. Odpověď serveru: {reply}"
 
-#: app/area_selection.py:103
+#: app/area_selection.py:116
 msgid "Failure"
 msgstr "Selhání"
 
@@ -11357,11 +11390,11 @@ msgstr "Zobrazit rodiče"
 msgid "Parents of {}"
 msgstr "Rodiče {}"
 
-#: app/search/__init__.py:39
+#: app/search/__init__.py:40
 msgid "Search class"
 msgstr "Třída k prohledání"
 
-#: app/search/__init__.py:39
+#: app/search/__init__.py:40
 msgid "Select the class to search"
 msgstr "Zvolte třídu k prohledání"
 
