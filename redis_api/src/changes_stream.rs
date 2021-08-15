@@ -106,7 +106,7 @@ impl ChangesStream {
         Ok(())
     }
 
-    fn registered_clients(&mut self) -> Result<Vec<String>> {
+    pub fn registered_clients(&mut self) -> Result<Vec<String>> {
         if !self.exists()? {
             Ok(vec![])
         } else {
@@ -179,13 +179,13 @@ impl ChangesStream {
     }
 
     pub fn memory_usage(&mut self) -> Result<u64> {
-        if !self.exists()? {
-            Ok(0)
-        } else {
+        if self.exists()? {
             Ok(redis::cmd("memory")
                 .arg("usage")
                 .arg(self.changes_key())
                 .query(&mut self.redis_connection)?)
+        } else {
+            Ok(0)
         }
     }
 
@@ -210,5 +210,18 @@ impl ChangesStream {
         }
         pipe.query(&mut self.redis_connection)?;
         Ok(())
+    }
+
+    pub fn len(&mut self) -> Result<usize> {
+        if self.exists()? {
+        Ok(self.redis_connection.xlen(self.changes_key())?)
+        }
+        else {
+            Ok(0)
+        }
+    }
+
+    pub fn connect_to_stream(&mut self, area_id: i64) {
+        self.area_id = area_id;
     }
 }

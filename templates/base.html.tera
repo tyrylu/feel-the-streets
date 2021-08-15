@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}{% endblock %} - Feel the Streets</title>
+    {% block extra_head %}{% endblock %}
+    </head>
+    <body>
+        <main>
+            <h1>{% block section_title %}{% endblock %}</h1>
+            {% block content %}{% endblock %}
+        </main>
+    </body>
+</html>

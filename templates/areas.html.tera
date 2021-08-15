@@ -1,0 +1,35 @@
+{% extends "base" %}
+{% block title %}Available areas{% endblock %}
+{% block extra_head %}
+<script src="/js/sortable.js"></script>
+<link rel="stylesheet" href="/css/sortable.css" type="text/css">
+{% endblock %}
+{% block section_title %}Available areas{% endblock %}
+{% block content %}
+<table class="sortable">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>State</th>
+            <th>Updated at</th>
+            <th>Database size</th>
+            <th>Changes stream length</th>
+            <th>Changes stream memory usage</th>
+            <th>Number of registered clients</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for area in areas %}
+        <tr>
+            <td><a href="areas/{{ area.id }}">{{ area.name }}</a></td>
+            <td>{{ area.state }}</td>
+            <td>{{ area.updated_at }}</td>
+            <td>{{ area.db_size | filesizeformat }}</td>
+            <td>{{ stream_infos[area.id].len }}</td>
+            <td>{{ stream_infos[area.id].memory_usage }}</td>
+            <td>{{ stream_infos[area.id].number_of_clients }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

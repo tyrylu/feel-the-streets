@@ -1,6 +1,9 @@
 use rocket::fairing::AdHoc;
+use rocket::fs::FileServer;
 use rocket::routes;
-use server::routes;
+use rocket_dyn_templates::Template;
+use server::api_routes;
+use server::ui_routes;
 use server::DbConn;
 
 #[rocket::launch]
@@ -23,12 +26,15 @@ fn rocket() -> _ {
         .mount(
             "/api",
             routes![
-                routes::areas,
-                routes::maybe_create_area,
-                routes::download_area,
-                routes::ping,
-                routes::motd,
-                routes::create_client,
+                api_routes::areas,
+                api_routes::maybe_create_area,
+                api_routes::download_area,
+                api_routes::ping,
+                api_routes::motd,
+                api_routes::create_client,
             ],
         )
+        .mount("/", routes![ui_routes::areas])
+        .mount("/", FileServer::from("static"))
+        .attach(Template::fairing())
 }

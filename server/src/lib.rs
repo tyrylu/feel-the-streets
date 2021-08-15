@@ -12,8 +12,10 @@ pub mod area;
 pub mod background_tasks;
 mod diff_utils;
 mod error;
-pub mod routes;
+pub mod api_routes;
 mod schema;
+pub mod ui_routes;
+
 use diesel::SqliteConnection;
 pub use error::Error;
 pub type Result<T> = core::result::Result<T, Error>;
