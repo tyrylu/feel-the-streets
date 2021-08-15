@@ -24,9 +24,9 @@
             <td><a href="areas/{{ area.id }}">{{ area.name }}</a></td>
             <td>{{ area.state }}</td>
             <td>{{ area.updated_at }}</td>
-            <td>{{ area.db_size | filesizeformat }}</td>
+            <td data-sort="{{ area.db_size }}">{{ area.db_size | filesizeformat }}</td>
             <td>{{ stream_infos[area.id].len }}</td>
-            <td>{{ stream_infos[area.id].memory_usage }}</td>
+            <td data-sort="{{ stream_infos[area.id].memory_usage }}">{{ stream_infos[area.id].memory_usage | filesizeformat }}</td>
             <td>{{ stream_infos[area.id].number_of_clients }}</td>
         </tr>
         {% endfor %}
