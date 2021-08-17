@@ -30,7 +30,7 @@ pub async fn areas(conn: DbConn) -> Result<Template> {
     Ok(Template::render("areas", ctx))
 }
 
-#[get("/area/<area_id>")]
+#[get("/areas/<area_id>")]
 pub async fn area_detail(area_id: i32, conn: DbConn) -> Result<Template> {
     #[derive(serde::Serialize)]
     struct Tctxt {

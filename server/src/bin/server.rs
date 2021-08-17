@@ -34,7 +34,7 @@ fn rocket() -> _ {
                 api_routes::create_client,
             ],
         )
-        .mount("/", routes![ui_routes::areas])
+        .mount("/", routes![ui_routes::areas, ui_routes::area_detail])
         .mount("/", FileServer::from("static"))
         .attach(Template::fairing())
 }
