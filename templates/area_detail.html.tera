@@ -4,7 +4,7 @@
 {% block content %}
 <p>Area created at: {{ area.created_at }}</p>
 <h2>Registered clients</h2>
-table>
+<table>
 <thead>
     <tr>
         <th>Client</th>
