@@ -1,0 +1,25 @@
+{% extends "base" %}
+{% block title %}Details of area {{ area.name }}{% endblock %}
+{% block section_title %}Details of area {{ area.name }}{% endblock %}
+{% block content %}
+<p>Area created at: {{ area.created_at }}</p>
+<h2>Registered clients</h2>
+table>
+<thead>
+    <tr>
+        <th>Client</th>
+        <th>Pending messages</th>
+        <th>Redownload request present</th>
+    </tr>
+</thead>
+<tbody>
+    {% for client, num_changes in change_counts %}
+    <tr>
+        <td>{{ client }}</td>
+        <td>{{ num_changes }}</td>
+        <td>{{ client in redownload_requests }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+{% endblock %}

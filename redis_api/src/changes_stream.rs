@@ -5,6 +5,7 @@ use redis::acl::Rule;
 use redis::streams::{StreamInfoGroupsReply, StreamMaxlen};
 use redis::{Client, Commands, Connection};
 use std::env;
+use std::collections::HashMap;
 
 pub struct ChangesStream {
     area_id: i64,
@@ -223,5 +224,13 @@ impl ChangesStream {
 
     pub fn connect_to_stream(&mut self, area_id: i64) {
         self.area_id = area_id;
+    }
+
+    pub fn all_change_counts(&mut self) -> Result<HashMap<String, u64>> {
+        Ok(self.redis_connection.hgetall(self.change_counts_key())?)
+    }
+
+    pub fn all_redownload_requests(&mut self) -> Result<Vec<String>> {
+        Ok(self.redis_connection.smembers(self.redownload_requests_key())?)
     }
 }

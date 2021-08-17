@@ -29,3 +29,22 @@ pub async fn areas(conn: DbConn) -> Result<Template> {
     }
     Ok(Template::render("areas", ctx))
 }
+
+#[get("/area/<area_id>")]
+pub async fn area_detail(area_id: i32, conn: DbConn) -> Result<Template> {
+    #[derive(serde::Serialize)]
+    struct Tctxt {
+        area: Area,
+        change_counts: HashMap<String, u64>,
+        redownload_requests: Vec<String>
+    }
+    let area = conn
+    .run(move |c| Area::find_by_id(area_id, &c))
+    .await?;
+    let mut stream = ChangesStream::new_from_env(area.osm_id)?;
+    let redownload_requests = stream.all_redownload_requests()?;
+    let change_counts = stream.all_change_counts()?;
+    Ok(Template::render("area_detail", Tctxt {area, change_counts, redownload_requests}))
+
+
+}
