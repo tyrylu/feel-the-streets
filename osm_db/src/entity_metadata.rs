@@ -3,6 +3,7 @@ use indexmap::IndexMap;
 use std::collections::HashMap;
 use std::fs::File;
 use once_cell::sync::Lazy;
+use serde::Deserialize;
 
 type EnumMap = HashMap<String, IndexMap<String, i32>>;
 type RawEntityMetadataMap = HashMap<String, RawEntityMetadata>;

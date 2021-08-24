@@ -1,5 +1,6 @@
 use crate::entity_relationship_kind::EntityRelationshipKind;
 use osm_api::SmolStr;
+use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct EntityRelationship {

@@ -1,9 +1,3 @@
-#[macro_use]
-extern crate log;
-
-#[macro_use]
-extern crate serde;
-
 pub mod area_db;
 pub mod entities_query;
 pub mod entities_query_condition;

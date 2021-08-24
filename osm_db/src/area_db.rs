@@ -11,6 +11,7 @@ use rusqlite::{named_params, params, Connection, OpenFlags, Row};
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::time::Instant;
+use log::{trace, debug, info, warn, error};
 
 const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
 const INSERT_ENTITY_SQL: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (?, ?, geomFromWKB(?, 4326), ?, ?)";

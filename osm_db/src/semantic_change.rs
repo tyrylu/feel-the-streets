@@ -6,7 +6,6 @@ use std::sync::Mutex;
 use zstd_util::ZstdContext;
 use once_cell::sync::Lazy;
 
-
     static ZSTD_CONTEXT: Lazy<Mutex<ZstdContext>> = Lazy::new(||{
 Mutex::new(ZstdContext::new(10, Some(include_bytes!("../../changes.dict"))))
     });

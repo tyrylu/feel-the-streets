@@ -4,6 +4,7 @@ use crate::AreaDatabase;
 use crate::Result;
 use crate::{entities_query::EntitiesQuery, entity_relationship_kind::EntityRelationshipKind};
 use std::collections::HashMap;
+use log::{debug, warn};
 
 fn get_association_for_street(
     street_name: &str,

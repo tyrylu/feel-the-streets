@@ -2,6 +2,7 @@ use crate::semantic_change::EntryChange;
 use osm_api::SmolStr;
 use serde_json::{Map, Value};
 use std::convert::TryInto;
+use log::warn;
 
 #[derive(Debug)]
 pub struct Entity {

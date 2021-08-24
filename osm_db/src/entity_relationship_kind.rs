@@ -1,6 +1,7 @@
 use rusqlite::types::ToSqlOutput;
 use rusqlite::types::{FromSql, FromSqlError, FromSqlResult};
 use rusqlite::{types::ValueRef, ToSql};
+use serde::{Serialize, Deserialize};
 
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq, Serialize, Deserialize)]
 pub enum EntityRelationshipKind {

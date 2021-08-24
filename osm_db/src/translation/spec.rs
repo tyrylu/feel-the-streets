@@ -5,7 +5,8 @@ use indexmap::IndexMap;
 use osm_api::object::OSMObject;
 use std::fs::File;
 use once_cell::sync::Lazy;
-
+use serde::Deserialize;
+use log::trace;
 
     static TRANSLATION_SPECS: Lazy<IndexMap<String, TranslationSpec>> = Lazy::new(||{
         let specs_file = file_finder::find_file_in_current_or_exe_dir("translation_specs.yml")

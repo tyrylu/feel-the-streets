@@ -5,6 +5,7 @@ use crate::entity::Entity;
 use crate::entity_relationship::EntityRelationship;
 use crate::Result;
 use std::collections::HashMap;
+use log::{trace, info};
 
 mod address;
 mod street;
