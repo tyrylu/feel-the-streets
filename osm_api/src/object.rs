@@ -3,6 +3,7 @@ use hashbrown::HashMap;
 use smol_str::SmolStr;
 use std::iter;
 use std::str::FromStr;
+use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
 pub enum OSMObjectType {

@@ -3,6 +3,7 @@ use crate::object::*;
 use crate::Error;
 use crate::Result;
 use hashbrown::HashMap;
+use log::{trace, warn};
 use std::io::Read;
 use std::str::FromStr;
 use xml::{attribute::OwnedAttribute, reader::XmlEvent, EventReader};

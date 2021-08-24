@@ -7,7 +7,7 @@ const POLYGON_CRITERIA_STR: &str = include_str!("polygon_criteria.json");
     static POLYGON_CRITERIA: Lazy<Vec<PolygonCreationCriterion>> =
         Lazy::new(|| {serde_json::from_str::<Vec<PolygonCreationCriterion>>(POLYGON_CRITERIA_STR).unwrap()});
 
-#[derive(Deserialize)]
+#[derive(serde::Deserialize)]
 struct PolygonCreationCriterion {
     key: String,
     polygon: String,

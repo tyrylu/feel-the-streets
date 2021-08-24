@@ -11,7 +11,7 @@ serde = {version="*", features=["derive"]}
 serde_json = "*"
 serde_yaml = "*"
 indexmap = {version = "*", features = ["serde-1"]}
-lazy_static = "*"
+once_cell = "*"
 log = "*"
 uom = "*"
 rusqlite = {"version" = "*", "features" = ["bundled-windows", "load_extension"]}

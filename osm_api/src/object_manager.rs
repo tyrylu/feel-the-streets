@@ -8,6 +8,7 @@ use chrono::{DateTime, Utc};
 use geo_types::{Geometry, LineString, Point, Polygon};
 use hashbrown::HashMap;
 use itertools::Itertools;
+use log::{debug, info, warn, error};
 use rusqlite::Connection;
 use serde::Deserialize;
 use serde_json::{self, Deserializer};

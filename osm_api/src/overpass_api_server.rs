@@ -6,6 +6,7 @@ use std::io::{self, Read, Seek, SeekFrom};
 use std::cell::RefCell;
 use std::time::Instant;
 use tempfile::tempfile;
+use log::{warn, debug};
 
 const QUERY_RETRY_COUNT: u8 = 3;
 

@@ -4,9 +4,6 @@ extern crate log;
 #[macro_use]
 extern crate serde;
 
-#[macro_use]
-extern crate lazy_static;
-
 pub mod area_db;
 pub mod entities_query;
 pub mod entities_query_condition;
