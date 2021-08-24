@@ -22,15 +22,14 @@ use std::sync::Mutex;
 use std::time::Instant;
 use std::thread;
 use zstd_util::ZstdContext;
+use once_cell::sync::Lazy;
 
 const COMPRESSION_LEVEL: i32 = 10;
 
-lazy_static! {
-    static ref ZSTD_CONTEXT: Mutex<ZstdContext<'static>> = {
+    static ZSTD_CONTEXT: Lazy<Mutex<ZstdContext>> = Lazy::new(||{
         let dict = fs::read("fts.dict").expect("Could not read ZSTD dictionary.");
         Mutex::new(ZstdContext::new(COMPRESSION_LEVEL, Some(&dict)))
-    };
-}
+    });
 
 fn serialize_and_compress(object: &OSMObject) -> Result<Vec<u8>> {
     let serialized = bincode::serialize(&object)?;

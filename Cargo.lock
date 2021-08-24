@@ -1407,7 +1407,6 @@ dependencies = [
  "geo-types",
  "hashbrown",
  "itertools",
- "lazy_static",
  "log",
  "once_cell",
  "regex",

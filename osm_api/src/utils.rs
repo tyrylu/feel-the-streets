@@ -1,12 +1,11 @@
 use crate::object::OSMObject;
 use geo_types::LineString;
 use std::collections::HashMap;
+use once_cell::sync::Lazy;
 
 const POLYGON_CRITERIA_STR: &str = include_str!("polygon_criteria.json");
-lazy_static! {
-    static ref POLYGON_CRITERIA: Vec<PolygonCreationCriterion> =
-        serde_json::from_str::<Vec<PolygonCreationCriterion>>(POLYGON_CRITERIA_STR).unwrap();
-}
+    static POLYGON_CRITERIA: Lazy<Vec<PolygonCreationCriterion>> =
+        Lazy::new(|| {serde_json::from_str::<Vec<PolygonCreationCriterion>>(POLYGON_CRITERIA_STR).unwrap()});
 
 #[derive(Deserialize)]
 struct PolygonCreationCriterion {
