@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 
 pub fn create_area_database(area: i64) -> Result<()> {
     info!("Starting to create area with id {}.", area);
-    let manager = OSMObjectManager::new();
+    let manager = OSMObjectManager::new()?;
     let mut record = TranslationRecord::new();
     manager.lookup_objects_in(area)?;
     let mut cache = manager.get_cache();

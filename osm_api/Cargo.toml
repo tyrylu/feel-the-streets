@@ -13,6 +13,8 @@ rusqlite = {"version" = "*", "features" = ["bundled-windows"]}
 sqlitemap = {path="../sqlitemap"}
 log = "*"
 itertools = "*"
+regex = "*"
+once_cell = "*"
 lazy_static = "*"
 chrono = {version="*", default_features=false, features=["std", "clock"]}
 xml-rs = "*"

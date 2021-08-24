@@ -14,7 +14,7 @@ fn main() {
         DateTime::parse_from_rfc3339(&env::args().nth(2).expect("The after time is required"))
             .expect("It must be an RFC 3339 datetime")
             .with_timezone(&Utc);
-    let manager = OSMObjectManager::new();
+    let manager = OSMObjectManager::new().expect("Could not create OSMObjectManager");
     for change in manager
         .lookup_differences_in(id, &after)
         .expect("Could not lookup changes")

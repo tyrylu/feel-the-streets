@@ -1409,6 +1409,8 @@ dependencies = [
  "itertools",
  "lazy_static",
  "log",
+ "once_cell",
+ "regex",
  "rusqlite",
  "serde",
  "serde_json",

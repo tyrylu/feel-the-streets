@@ -1,6 +1,7 @@
 use crate::change::OSMObjectChange;
 use crate::change_iterator::OSMObjectChangeIterator;
 use crate::object::{OSMObject, OSMObjectFromNetwork, OSMObjectSpecifics, OSMObjectType};
+use crate::overpass_api_server::{OverpassApiServer};
 use crate::utils;
 use crate::{Error, Result};
 use chrono::{DateTime, Utc};
@@ -16,13 +17,12 @@ use std::cell::{Ref, RefCell};
 use std::cmp;
 use std::collections::HashSet;
 use std::fs;
-use std::io::{self, BufReader, Read, Seek, SeekFrom};
+use std::io::{BufReader, Read};
 use std::sync::Mutex;
 use std::time::Instant;
-use tempfile::tempfile;
+use std::thread;
 use zstd_util::ZstdContext;
 
-const QUERY_RETRY_COUNT: u8 = 3;
 const COMPRESSION_LEVEL: i32 = 10;
 
 lazy_static! {
@@ -30,15 +30,6 @@ lazy_static! {
         let dict = fs::read("fts.dict").expect("Could not read ZSTD dictionary.");
         Mutex::new(ZstdContext::new(COMPRESSION_LEVEL, Some(&dict)))
     };
-}
-
-fn getting_non_200_response_is_ok(
-    err: ureq::Error,
-) -> std::result::Result<ureq::Response, ureq::Error> {
-    match err {
-        ureq::Error::Status(_, resp) => Ok(resp),
-        _ => Err(err),
-    }
 }
 
 fn serialize_and_compress(object: &OSMObject) -> Result<Vec<u8>> {
@@ -76,37 +67,30 @@ fn format_data_retrieval(area: i64) -> String {
 }
 
 pub struct OSMObjectManager {
-    current_api_url_idx: RefCell<usize>,
     geometries_cache: RefCell<HashMap<SmolStr, Option<Geometry<f64>>>>,
-    api_urls: Vec<&'static str>,
+    api_servers: Vec<OverpassApiServer>,
     cache_conn: Option<Connection>,
-    http_client: ureq::Agent,
     seen_cache: RefCell<bool>,
     retrieved_from_network: RefCell<HashSet<SmolStr>>,
     cache_queries: RefCell<u32>,
     cache_hits: RefCell<u32>,
 }
 impl OSMObjectManager {
-    pub fn new() -> Self {
+    pub fn new() -> Result<Self> {
         let conn = Connection::open("entity_cache.db").expect("Could not create connection.");
         conn.execute("PRAGMA SYNCHRONOUS=off", []).unwrap();
-        let client = ureq::agent();
-        OSMObjectManager {
-            api_urls: vec![
-                "https://z.overpass-api.de/api",
-                "https://lz4.overpass-api.de/api",
-            ],
-            current_api_url_idx: RefCell::new(0),
+        Ok(OSMObjectManager {
+            api_servers: vec![OverpassApiServer::new("https://z.overpass-api.de")?, OverpassApiServer::new("https://lz4.overpass-api.de")?],
             cache_conn: Some(conn),
-            http_client: client,
-            geometries_cache: RefCell::new(HashMap::new()),
+                        geometries_cache: RefCell::new(HashMap::new()),
             seen_cache: RefCell::new(false),
             retrieved_from_network: RefCell::new(HashSet::new()),
             cache_queries: RefCell::new(0),
             cache_hits: RefCell::new(0),
-        }
+        })
     }
 
+    
     pub fn get_cache(&self) -> SqliteMap<'_> {
         let res = SqliteMap::new(
             self.cache_conn.as_ref().unwrap(),
@@ -150,68 +134,21 @@ impl OSMObjectManager {
         }
     }
 
-    fn next_api_url(&self) -> &'static str {
-        if *self.current_api_url_idx.borrow() == self.api_urls.len() - 1 {
-            *self.current_api_url_idx.borrow_mut() = 0;
-        } else {
-            *self.current_api_url_idx.borrow_mut() += 1;
+    fn select_api_server(&self) -> &OverpassApiServer {
+        if let Some(server) = self.api_servers.iter().find(|s| s.has_available_slot()) {
+            server
         }
-        self.api_urls[*self.current_api_url_idx.borrow()]
-    }
+        else {
+            let least_duration_server = self.api_servers.iter().min_by_key(|s| {s.slot_available_after()}).unwrap();
+            let duration = least_duration_server.slot_available_after();
+            warn!("No available API server, going to sleep for {} to make a slot available.", duration);
+            thread::sleep(duration.to_std().unwrap());
+            least_duration_server
+        }
+        }
 
     fn run_query(&self, query: &str, result_to_tempfile: bool) -> Result<Box<dyn Read>> {
-        let mut res = None;
-        for retry in 0..QUERY_RETRY_COUNT {
-            res = match self.run_query_internal(query, result_to_tempfile) {
-                Ok(r) => Some(Ok(r)),
-                Err(e) => {
-                    warn!("Query failed during retry {}, error: {:?}", retry, e);
-                    Some(Err(e))
-                }
-            };
-            match res {
-                Some(Ok(_)) => break,
-                Some(Err(_)) => {}
-                None => panic!("What? That should not have happened..."),
-            }
-        }
-        res.unwrap()
-    }
-
-    fn run_query_internal(&self, query: &str, result_to_tempfile: bool) -> Result<Box<dyn Read>> {
-        let start = Instant::now();
-        let url = self.next_api_url();
-        let final_url = format!("{}/interpreter", url);
-        debug!("Requesting resource {}", final_url);
-        let resp = self
-            .http_client
-            .post(&final_url)
-            .send_form(&[("data", query)])
-            .or_else(getting_non_200_response_is_ok)?;
-        match resp.status() {
-            429 => {
-                warn!("Multiple requests, killing them and going to a different api host.");
-                self.http_client
-                    .get(&format!("{0}/kill_my_queries", &url))
-                    .call()?;
-                self.run_query(query, result_to_tempfile)
-            }
-            200 => {
-                debug!("Request successfully finished after {:?}.", start.elapsed());
-                if !result_to_tempfile {
-                    Ok(Box::new(resp.into_reader()))
-                } else {
-                    let mut file = tempfile()?;
-                    io::copy(&mut resp.into_reader(), &mut file)?;
-                    file.seek(SeekFrom::Start(0))?;
-                    Ok(Box::new(file))
-                }
-            }
-            _ => {
-                warn!("Unexpected status code {} from the server.", resp.status());
-                self.run_query(query, result_to_tempfile)
-            }
-        }
+        self.select_api_server().run_query(query, result_to_tempfile)
     }
 
     fn cache_objects_from(

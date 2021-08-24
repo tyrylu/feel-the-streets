@@ -55,7 +55,7 @@ pub fn update_area(
         );
         DateTime::from_utc(area.updated_at, Utc)
     };
-    let manager = OSMObjectManager::new();
+    let manager = OSMObjectManager::new()?;
     let mut area_db = AreaDatabase::open_existing(area.osm_id, true)?;
     let mut first = true;
     let mut osm_change_count = 0;
