@@ -42,7 +42,7 @@ pub struct CreateClientResponse {
 
 #[get("/areas")]
 pub async fn areas(conn: DbConn) -> Result<Json<Vec<Area>>> {
-    let areas = conn.run(|conn| Area::all(&conn)).await?;
+    let areas = conn.run(|conn| Area::all(conn)).await?;
     Ok(Json(areas))
 }
 
@@ -53,11 +53,11 @@ pub async fn maybe_create_area(
 ) -> Result<status::Custom<Json<Area>>> {
     let area = request.into_inner();
     let area_id = area.osm_id;
-    match conn.run(move |c| Area::find_by_osm_id(area_id, &c)).await {
+    match conn.run(move |c| Area::find_by_osm_id(area_id, c)).await {
         Ok(a) => Ok(status::Custom(Status::Ok, Json(a))),
         Err(_e) => {
             let area = conn
-                .run(move |c| Area::create(area.osm_id, &area.name, &c))
+                .run(move |c| Area::create(area.osm_id, &area.name, c))
                 .await?;
             let mut queue = Queue::new_from_env()?;
             CreateAreaDatabaseTask::new(area.osm_id)
@@ -70,7 +70,7 @@ pub async fn maybe_create_area(
 #[get("/areas/<area_osm_id>/download?<client_id>")]
 pub async fn download_area(area_osm_id: i64, client_id: String, conn: DbConn) -> Result<File> {
     let area = conn
-        .run(move |c| Area::find_by_osm_id(area_osm_id, &c))
+        .run(move |c| Area::find_by_osm_id(area_osm_id, c))
         .await?;
     if area.state != AreaState::Updated && area.state != AreaState::Frozen {
         Err(Error::DatabaseIntegrityError)

@@ -14,8 +14,8 @@ fn rocket() -> _ {
         .attach(DbConn::fairing())
         .attach(AdHoc::on_liftoff("Database Migrations", |rocket| {
             Box::pin(async move {
-                let conn = DbConn::get_one(&rocket).await.expect("database connection");
-                match conn.run(|c| server::run_migrations(&c)).await {
+                let conn = DbConn::get_one(rocket).await.expect("database connection");
+                match conn.run(|c| server::run_migrations(c)).await {
                     Ok(()) => (),
                     Err(e) => {
                         panic!("Failed to run database migrations: {:?}", e);

@@ -20,8 +20,8 @@ pub async fn areas(conn: DbConn) -> Result<Template> {
         areas: Vec<Area>,
         stream_infos: HashMap<i32, StreamInfo>
     }
-    let areas = conn.run(|conn| Area::all(&conn)).await?;
-    let mut ctx = TCtxt { areas: areas, stream_infos: HashMap::new()};
+    let areas = conn.run(|conn| Area::all(conn)).await?;
+    let mut ctx = TCtxt { areas, stream_infos: HashMap::new()};
     let mut stream = ChangesStream::new_from_env(0)?;
     for area in &ctx.areas {
         stream.connect_to_stream(area.osm_id);
@@ -39,7 +39,7 @@ pub async fn area_detail(area_id: i32, conn: DbConn) -> Result<Template> {
         redownload_requests: Vec<String>
     }
     let area = conn
-    .run(move |c| Area::find_by_id(area_id, &c))
+    .run(move |c| Area::find_by_id(area_id, c))
     .await?;
     let mut stream = ChangesStream::new_from_env(area.osm_id)?;
     let redownload_requests = stream.all_redownload_requests()?;

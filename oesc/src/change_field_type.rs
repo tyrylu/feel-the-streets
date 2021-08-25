@@ -71,7 +71,7 @@ pub fn change_field_type(
         let mut batch = stream.begin_batch();
         for change in &changes {
             area_db.apply_change(change)?;
-            batch.add_change(&change)?;
+            batch.add_change(change)?;
         }
         area_db.commit()?;
         println!("Area processed successfully.");
