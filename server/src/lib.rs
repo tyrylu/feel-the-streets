@@ -8,11 +8,11 @@ extern crate log;
 extern crate diesel;
 #[macro_use]
 extern crate diesel_migrations;
+pub mod api_routes;
 pub mod area;
 pub mod background_tasks;
 mod diff_utils;
 mod error;
-pub mod api_routes;
 mod schema;
 pub mod ui_routes;
 

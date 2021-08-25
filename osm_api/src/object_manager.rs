@@ -1,14 +1,15 @@
 use crate::change::OSMObjectChange;
 use crate::change_iterator::OSMObjectChangeIterator;
 use crate::object::{OSMObject, OSMObjectFromNetwork, OSMObjectSpecifics, OSMObjectType};
-use crate::overpass_api_server::{OverpassApiServer};
+use crate::overpass_api_server::OverpassApiServer;
 use crate::utils;
 use crate::{Error, Result};
 use chrono::{DateTime, Utc};
 use geo_types::{Geometry, LineString, Point, Polygon};
 use hashbrown::HashMap;
 use itertools::Itertools;
-use log::{debug, info, warn, error};
+use log::{debug, error, info, warn};
+use once_cell::sync::Lazy;
 use rusqlite::Connection;
 use serde::Deserialize;
 use serde_json::{self, Deserializer};
@@ -20,17 +21,16 @@ use std::collections::HashSet;
 use std::fs;
 use std::io::{BufReader, Read};
 use std::sync::Mutex;
-use std::time::Instant;
 use std::thread;
+use std::time::Instant;
 use zstd_util::ZstdContext;
-use once_cell::sync::Lazy;
 
 const COMPRESSION_LEVEL: i32 = 10;
 
-    static ZSTD_CONTEXT: Lazy<Mutex<ZstdContext>> = Lazy::new(||{
-        let dict = fs::read("fts.dict").expect("Could not read ZSTD dictionary.");
-        Mutex::new(ZstdContext::new(COMPRESSION_LEVEL, Some(&dict)))
-    });
+static ZSTD_CONTEXT: Lazy<Mutex<ZstdContext>> = Lazy::new(|| {
+    let dict = fs::read("fts.dict").expect("Could not read ZSTD dictionary.");
+    Mutex::new(ZstdContext::new(COMPRESSION_LEVEL, Some(&dict)))
+});
 
 fn serialize_and_compress(object: &OSMObject) -> Result<Vec<u8>> {
     let serialized = bincode::serialize(&object)?;
@@ -80,9 +80,12 @@ impl OSMObjectManager {
         let conn = Connection::open("entity_cache.db").expect("Could not create connection.");
         conn.execute("PRAGMA SYNCHRONOUS=off", []).unwrap();
         Ok(OSMObjectManager {
-            api_servers: vec![OverpassApiServer::new("https://z.overpass-api.de")?, OverpassApiServer::new("https://lz4.overpass-api.de")?],
+            api_servers: vec![
+                OverpassApiServer::new("https://z.overpass-api.de")?,
+                OverpassApiServer::new("https://lz4.overpass-api.de")?,
+            ],
             cache_conn: Some(conn),
-                        geometries_cache: RefCell::new(HashMap::new()),
+            geometries_cache: RefCell::new(HashMap::new()),
             seen_cache: RefCell::new(false),
             retrieved_from_network: RefCell::new(HashSet::new()),
             cache_queries: RefCell::new(0),
@@ -90,7 +93,6 @@ impl OSMObjectManager {
         })
     }
 
-    
     pub fn get_cache(&self) -> SqliteMap<'_> {
         let res = SqliteMap::new(
             self.cache_conn.as_ref().unwrap(),
@@ -137,18 +139,25 @@ impl OSMObjectManager {
     fn select_api_server(&self) -> &OverpassApiServer {
         if let Some(server) = self.api_servers.iter().find(|s| s.has_available_slot()) {
             server
-        }
-        else {
-            let least_duration_server = self.api_servers.iter().min_by_key(|s| {s.slot_available_after()}).unwrap();
+        } else {
+            let least_duration_server = self
+                .api_servers
+                .iter()
+                .min_by_key(|s| s.slot_available_after())
+                .unwrap();
             let duration = least_duration_server.slot_available_after();
-            warn!("No available API server, going to sleep for {} to make a slot available.", duration);
+            warn!(
+                "No available API server, going to sleep for {} to make a slot available.",
+                duration
+            );
             thread::sleep(duration.to_std().unwrap());
             least_duration_server
         }
-        }
+    }
 
     fn run_query(&self, query: &str, result_to_tempfile: bool) -> Result<Box<dyn Read>> {
-        self.select_api_server().run_query(query, result_to_tempfile)
+        self.select_api_server()
+            .run_query(query, result_to_tempfile)
     }
 
     fn cache_objects_from(

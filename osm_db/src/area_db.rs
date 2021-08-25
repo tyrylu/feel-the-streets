@@ -5,13 +5,13 @@ use crate::entity_relationship_kind::EntityRelationshipKind;
 use crate::semantic_change::{RelationshipChange, SemanticChange};
 use crate::{entities_query::EntitiesQuery, entity_relationship::RootedEntityRelationship};
 use crate::{Error, Result};
+use log::{debug, error, info, trace, warn};
 use osm_api::SmolStr;
 use rusqlite::types::ToSql;
 use rusqlite::{named_params, params, Connection, OpenFlags, Row};
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::time::Instant;
-use log::{trace, debug, info, warn, error};
 
 const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
 const INSERT_ENTITY_SQL: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (?, ?, geomFromWKB(?, 4326), ?, ?)";

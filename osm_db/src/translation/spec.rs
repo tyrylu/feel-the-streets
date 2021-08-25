@@ -2,18 +2,18 @@ use crate::entity_metadata::EntityMetadata;
 use crate::file_finder;
 use hashbrown::HashMap;
 use indexmap::IndexMap;
-use osm_api::object::OSMObject;
-use std::fs::File;
-use once_cell::sync::Lazy;
-use serde::Deserialize;
 use log::trace;
+use once_cell::sync::Lazy;
+use osm_api::object::OSMObject;
+use serde::Deserialize;
+use std::fs::File;
 
-    static TRANSLATION_SPECS: Lazy<IndexMap<String, TranslationSpec>> = Lazy::new(||{
-        let specs_file = file_finder::find_file_in_current_or_exe_dir("translation_specs.yml")
-            .expect("Could not find translation_specs.yml");
-        let fp = File::open(specs_file).expect("Failed to open the translation specs file");
-        serde_yaml::from_reader::<_, _>(fp).expect("Failed to deserialize the specs.")
-    });
+static TRANSLATION_SPECS: Lazy<IndexMap<String, TranslationSpec>> = Lazy::new(|| {
+    let specs_file = file_finder::find_file_in_current_or_exe_dir("translation_specs.yml")
+        .expect("Could not find translation_specs.yml");
+    let fp = File::open(specs_file).expect("Failed to open the translation specs file");
+    serde_yaml::from_reader::<_, _>(fp).expect("Failed to deserialize the specs.")
+});
 
 fn compare_values<F: Fn(&str, &str) -> bool>(
     candidates: &HashMap<String, Vec<String>>,

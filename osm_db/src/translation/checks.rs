@@ -1,8 +1,8 @@
 use super::record::TranslationRecord;
 use crate::entity_metadata::EntityMetadata;
 use hashbrown::{HashMap, HashSet};
-use serde_json::Value;
 use log::warn;
+use serde_json::Value;
 
 pub fn check_entity_data_consistency(
     discriminator: &str,

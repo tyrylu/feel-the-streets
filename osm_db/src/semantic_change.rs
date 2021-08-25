@@ -1,15 +1,17 @@
 use crate::entity_relationship::RootedEntityRelationship;
 use crate::Result;
+use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::sync::Mutex;
 use zstd_util::ZstdContext;
-use once_cell::sync::Lazy;
 
-    static ZSTD_CONTEXT: Lazy<Mutex<ZstdContext>> = Lazy::new(||{
-Mutex::new(ZstdContext::new(10, Some(include_bytes!("../../changes.dict"))))
-    });
-
+static ZSTD_CONTEXT: Lazy<Mutex<ZstdContext>> = Lazy::new(|| {
+    Mutex::new(ZstdContext::new(
+        10,
+        Some(include_bytes!("../../changes.dict")),
+    ))
+});
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum EntryChange {

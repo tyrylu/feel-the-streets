@@ -1,26 +1,25 @@
 use crate::file_finder;
 use indexmap::IndexMap;
-use std::collections::HashMap;
-use std::fs::File;
 use once_cell::sync::Lazy;
 use serde::Deserialize;
+use std::collections::HashMap;
+use std::fs::File;
 
 type EnumMap = HashMap<String, IndexMap<String, i32>>;
 type RawEntityMetadataMap = HashMap<String, RawEntityMetadata>;
 
-
-    static RAW_METADATA_MAP: Lazy<RawEntityMetadataMap> = Lazy::new(||{
-        let entities_file = file_finder::find_file_in_current_or_exe_dir("entities.yml")
-            .expect("Could not find entities.yml");
-        let fp = File::open(entities_file).expect("Could not open entity definition file.");
-        serde_yaml::from_reader::<_, RawEntityMetadataMap>(fp).unwrap()
-    });
-    static ENUM_MAP: Lazy<EnumMap> = Lazy::new(||{
-        let enums_file = file_finder::find_file_in_current_or_exe_dir("enums.yml")
-            .expect("Could not find enums.yml");
-        let fp = File::open(enums_file).expect("Could not open enums definition file.");
-        serde_yaml::from_reader::<_, EnumMap>(fp).unwrap()
-    });
+static RAW_METADATA_MAP: Lazy<RawEntityMetadataMap> = Lazy::new(|| {
+    let entities_file = file_finder::find_file_in_current_or_exe_dir("entities.yml")
+        .expect("Could not find entities.yml");
+    let fp = File::open(entities_file).expect("Could not open entity definition file.");
+    serde_yaml::from_reader::<_, RawEntityMetadataMap>(fp).unwrap()
+});
+static ENUM_MAP: Lazy<EnumMap> = Lazy::new(|| {
+    let enums_file = file_finder::find_file_in_current_or_exe_dir("enums.yml")
+        .expect("Could not find enums.yml");
+    let fp = File::open(enums_file).expect("Could not open enums definition file.");
+    serde_yaml::from_reader::<_, EnumMap>(fp).unwrap()
+});
 
 pub fn all_known_discriminators() -> Vec<&'static String> {
     RAW_METADATA_MAP.keys().collect()

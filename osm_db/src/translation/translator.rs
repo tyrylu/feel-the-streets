@@ -5,11 +5,11 @@ use super::spec::TranslationSpec;
 use crate::entity::Entity;
 use crate::Error;
 use hashbrown::HashMap;
+use log::{trace, warn};
 use osm_api::object::OSMObject;
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::SmolStr;
 use serde_json::Value;
-use log::{trace, warn};
 
 pub fn translate(
     object: &OSMObject,

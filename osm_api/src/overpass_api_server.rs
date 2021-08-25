@@ -1,12 +1,12 @@
 use crate::Result;
 use chrono::{DateTime, Duration, Utc};
+use log::{debug, warn};
 use once_cell::sync::Lazy;
 use regex::Regex;
-use std::io::{self, Read, Seek, SeekFrom};
 use std::cell::RefCell;
+use std::io::{self, Read, Seek, SeekFrom};
 use std::time::Instant;
 use tempfile::tempfile;
-use log::{warn, debug};
 
 const QUERY_RETRY_COUNT: u8 = 3;
 
@@ -72,8 +72,8 @@ impl OverpassApiServer {
             .post(&final_url)
             .send_form(&[("data", query)])
             .or_else(getting_non_200_response_is_ok)?;
-            self.update_status()?;
-            match resp.status() {
+        self.update_status()?;
+        match resp.status() {
             200 => {
                 debug!("Request successfully finished after {:?}.", start.elapsed());
                 if !result_to_tempfile {
@@ -118,15 +118,15 @@ impl OverpassApiServer {
 
     pub fn has_available_slot(&self) -> bool {
         let now = Utc::now();
-        *self.available_slots.borrow() > 0 || self.slots_available_after.borrow().iter().any(|s| s < &now)
+        *self.available_slots.borrow() > 0
+            || self.slots_available_after.borrow().iter().any(|s| s < &now)
     }
 
     pub fn slot_available_after(&self) -> Duration {
         if *self.available_slots.borrow() > 0 {
             Duration::zero()
-        }
-        else {
+        } else {
             *self.slots_available_after.borrow().iter().min().unwrap() - Utc::now()
         }
     }
-    }
+}

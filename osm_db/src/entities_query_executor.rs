@@ -1,8 +1,8 @@
 use crate::area_db::AreaDatabase;
 use crate::entities_query::EntitiesQuery;
+use log::debug;
 use rusqlite::{CachedStatement, Rows};
 use std::time::Instant;
-use log::debug;
 
 pub struct EntitiesQueryExecutor<'a> {
     query: &'a EntitiesQuery,

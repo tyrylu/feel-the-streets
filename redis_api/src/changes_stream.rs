@@ -4,8 +4,8 @@ use osm_db::semantic_change::SemanticChange;
 use redis::acl::Rule;
 use redis::streams::{StreamInfoGroupsReply, StreamMaxlen};
 use redis::{Client, Commands, Connection};
-use std::env;
 use std::collections::HashMap;
+use std::env;
 
 pub struct ChangesStream {
     area_id: i64,
@@ -215,9 +215,8 @@ impl ChangesStream {
 
     pub fn len(&mut self) -> Result<usize> {
         if self.exists()? {
-        Ok(self.redis_connection.xlen(self.changes_key())?)
-        }
-        else {
+            Ok(self.redis_connection.xlen(self.changes_key())?)
+        } else {
             Ok(0)
         }
     }
@@ -231,6 +230,8 @@ impl ChangesStream {
     }
 
     pub fn all_redownload_requests(&mut self) -> Result<Vec<String>> {
-        Ok(self.redis_connection.smembers(self.redownload_requests_key())?)
+        Ok(self
+            .redis_connection
+            .smembers(self.redownload_requests_key())?)
     }
 }

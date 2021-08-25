@@ -1,9 +1,9 @@
 use crate::Error;
 use hashbrown::HashMap;
+use serde::{Deserialize, Serialize};
 use smol_str::SmolStr;
 use std::iter;
 use std::str::FromStr;
-use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
 pub enum OSMObjectType {

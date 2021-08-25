@@ -4,8 +4,8 @@ use crate::entities_query_executor::EntitiesQueryExecutor;
 use crate::entity::Entity;
 use crate::entity_relationship::EntityRelationship;
 use crate::Result;
+use log::{info, trace};
 use std::collections::HashMap;
-use log::{trace, info};
 
 mod address;
 mod street;
