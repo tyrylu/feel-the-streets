@@ -218,3 +218,11 @@ class SoundController:
         for entity in request_interesting_entities.send(self)[0][1]:
             if entity.is_road_like:
                 self._spawn_crossing_sound_for(entity)
+
+    def reset(self, person):
+        self._stop_interesting_sounds(True)
+        self._point_of_view = person
+        self._interesting_sounds.clear()
+        self._interesting_roads.clear()
+        self._groups_map.clear()
+        self._load_sound_played = False

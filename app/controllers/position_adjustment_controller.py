@@ -20,4 +20,6 @@ class PositionAdjustmentController:
                     self._controlled.move_to(to_latlon(intersection), force=True)
                     return MoveValidationResult.cancel
         return MoveValidationResult.accept
-        
+
+    def reset(self, person):
+        self._controlled = person

@@ -27,8 +27,12 @@ def mark_areas_as_also_local(areas):
 log = logging.getLogger(__name__)
 
 class AreaSelectionDialog(BaseDialog):
-    def __init__(self, parent):
-        super().__init__(parent, _("Select an area"), _("&Select"), _("&Exit"), cancel_button_column=2, buttons_to_new_row=False)
+    def __init__(self, parent, is_initial):
+        if is_initial:
+            close_label = _("&Exit")
+        else:
+            close_label = _("&Close")
+        super().__init__(parent, _("Select an area"), _("&Select"), close_label, cancel_button_column=2, buttons_to_new_row=False)
         self._initialize_areas()
         
     def _initialize_areas(self):

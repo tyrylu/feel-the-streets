@@ -60,3 +60,7 @@ class InterestingEntitiesController:
 
     def _interesting_entities_requested(self, sender):
         return self._interesting_entities
+
+    def reset(self, person):
+        self._point_of_view = person
+        self._interesting_entities.clear()

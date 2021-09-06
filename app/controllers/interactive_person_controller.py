@@ -400,3 +400,5 @@ class InteractivePersonController:
         # Move the colliding entity to wards the road so it can continue in its walk.
         because_of.move_to_center_of(last_road)
         
+    def reset(self, person):
+        self._person = person

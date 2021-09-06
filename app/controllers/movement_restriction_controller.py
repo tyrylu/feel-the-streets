@@ -41,4 +41,6 @@ class MovementRestrictionController:
         remaining_road_like = [thing for thing in filter_important_roads(sender.inside_of_roads) if thing not in to_be_left_roads]
         # Are we leaving a road like thing and no other road like thing remains?
         return MoveValidationResult.accept if len(remaining_road_like) > 0 else MoveValidationResult.reject
-        
+
+    def reset(self, person):
+        self._restricted_entity = person

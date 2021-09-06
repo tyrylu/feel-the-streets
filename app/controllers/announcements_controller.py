@@ -188,3 +188,9 @@ class AnnouncementsController:
     def _interesting_entity_sound_not_found(self, sender, entity):
         if not config().presentation.announce_interesting_objects:
             self._announce_interesting_entity(entity)
+
+    def reset(self, person):
+        self._point_of_view = person
+        self._description_counts.clear()
+        self._do_not_announce_leave_of.clear()
+        

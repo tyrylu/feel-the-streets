@@ -31,7 +31,7 @@ class MainWindow(QMainWindow):
         self._pending_count = 0
         self._applier = None
         self._maybe_show_message()
-        self._do_select_db()
+        self.do_select_db(True)
 
     def _maybe_show_message(self):
         motd = get_motd()
@@ -44,14 +44,15 @@ class MainWindow(QMainWindow):
                 motd.mark_as_seen()
 
 
-    def _do_select_db(self):
-        dlg = AreaSelectionDialog(self)
+    def do_select_db(self, is_initial):
+        dlg = AreaSelectionDialog(self, is_initial)
         res = dlg.exec_()
-        if res == QDialog.DialogCode.Rejected:
+        if res == QDialog.DialogCode.Rejected and is_initial:
             sys.exit(0)
         elif res == QDialog.DialogCode.Accepted:
             self._selected_map = dlg.selected_map
             self._selected_map_name = dlg.selected_map_name
+            self._is_initial = is_initial
             if not os.path.exists(AreaDatabase.path_for(dlg.selected_map, server_side=False)):
                 self._download_database(dlg.selected_map)
             else:
@@ -64,18 +65,30 @@ class MainWindow(QMainWindow):
             area_name = get_area_names_cache()[original_id]
         else:
             area_name = self._selected_map_name
+        map.reset()
         map.set_call_args(self._selected_map, area_name)
-        menu_service.set_call_args(self)
-        self._app_controller = ApplicationController(self)
         person = Person(map=map(), position=LatLon(0, 0))
-        self._person_controller = InteractivePersonController(person, self)
-        self._interesting_entities_controller = InterestingEntitiesController(person)
-        self._sound_controller = SoundController(person)
-        self._announcements_controller = AnnouncementsController(person)
-        self._last_location_controller = LastLocationController(person)
-        self._restriction_controller = MovementRestrictionController(person)
-        self._speech_controller = SpeechController()
-        self._adjustment_controller = PositionAdjustmentController(person)
+        if self._is_initial:
+            menu_service.set_call_args(self)
+            self._app_controller = ApplicationController(self)
+            self._person_controller = InteractivePersonController(person, self)
+            self._interesting_entities_controller = InterestingEntitiesController(person)
+            self._sound_controller = SoundController(person)
+            self._announcements_controller = AnnouncementsController(person)
+            self    ._last_location_controller = LastLocationController(person)
+            self._restriction_controller = MovementRestrictionController(person)
+            self._speech_controller = SpeechController()
+            self._adjustment_controller = PositionAdjustmentController(person)
+        else:
+            self._person_controller.reset(person)
+            self._interesting_entities_controller.reset(person)
+            self._sound_controller.reset(person)
+            self._announcements_controller.reset(person)
+            self._last_location_controller.reset(person)
+            self._restriction_controller.reset(person)
+            self._adjustment_controller.reset(person)
+
+
         if not self._last_location_controller.restored_position:
                   person.move_to(map().default_start_location, force=True)
         self.raise_()
