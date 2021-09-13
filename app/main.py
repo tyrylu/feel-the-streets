@@ -22,9 +22,11 @@ def handle_error(exc, thread=None):
 def main():
     threading.excepthook = lambda args: handle_error(args.exception, args.thread)
     sys.excepthook = lambda type, value, traceback: handle_error(value)
-    level = logging._nameToLevel[os.environ.get("FTS_LOG", "info").upper()]
-    logging.basicConfig(level=level, filename="fts.log", filemode="w")
-    osm_db.init_logging()
+    # Teach python about the trace level used by the rust extension
+    logging.addLevelName(5, "TRACE")
+    level = os.environ.get("FTS_LOG", "info")
+    logging.basicConfig(level=logging._nameToLevel[level.upper()], filename="fts.log", filemode="w")
+    osm_db.init_logging(level)
     # We need the QT application before setting up the locale stuff...
     app = QApplication(sys.argv)
     locale_setup.setup_locale(config().general.language)
