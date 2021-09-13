@@ -6,7 +6,7 @@ from ..services import speech, map, config, menu_service
 from ..objects_browser import ObjectsBrowserWindow, ObjectsSorter
 from ..road_segments_browser import RoadSegmentsBrowserDialog
 from ..geometry_utils import get_road_section_angle, distance_filter, distance_between, get_meaningful_turns, bearing_to, get_smaller_turn
-from ..search import get_query_from_user, QueryExecutor, create_query_for_name_search
+from ..search import get_query_from_user, QueryExecutor, create_query_for_name_search, create_query_for_address_search
 from ..search_indicator import SearchIndicator
 from ..config_utils import make_config_option_switchable
 from ..entity_utils import get_last_important_road, filter_important_roads
@@ -209,6 +209,13 @@ class InteractivePersonController:
         query = create_query_for_name_search(name)
         self._handle_search(query, float("inf"))
 
+    @menu_command(_("Information"), _("Search by address..."), "alt+f")
+    def do_search_by_address(self):
+        address, ok = QInputDialog.getText(self._main_window, _("Enter address"), _("Enter the address"))
+        if not ok:
+            return
+        query = create_query_for_address_search(address)
+        self._handle_search(query, float("inf"))
 
     @menu_command(_("Information"), _("Advanced search..."), "ctrl+shift+f")
     def do_search(self, evt):

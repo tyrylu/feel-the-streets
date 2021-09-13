@@ -32,6 +32,13 @@ def create_query(discriminator, current_position, distance, conditions):
 def create_query_for_name_search(name):
     return create_query("Named", None, float("inf"), [FieldNamed("name").like("%{}%".format(name))])
 
+def create_query_for_address_search(address):
+    # Try to be nice to the user and ignore whitespace differences
+    address = address.strip()
+    street, number = address.rsplit(" ", 1)
+    street = street.strip()
+    return create_query("Addressable", None, float("inf"), [FieldNamed("address.street").eq(street), FieldNamed("address.housenumber").eq(number)])
+
 def get_query_from_user(parent, position):
     entities = all_known_discriminators()
     name_mapping = {}
