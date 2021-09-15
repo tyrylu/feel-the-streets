@@ -2,6 +2,7 @@ import sys
 import os
 import threading
 import logging
+import webbrowser
 from PySide2.QtWidgets import QApplication, QMessageBox
 import osm_db
 from . import locale_setup
@@ -16,7 +17,10 @@ def handle_error(exc, thread=None):
         log.exception("Unhandled exception in main thread", exc_info=exc)
     else:
         log.exception("Unhandled exception in thread %s", thread, exc_info=exc)
-    QMessageBox.critical(None, _("Unexpected error"), _("The application encountered an unexpected error, please contact the developer and provide the contents of fts.log which is located in the folder with the executable."))
+    resp = QMessageBox.critical(None, _("Unexpected error"), _("The application encountered an unexpected error, please contact the developer and provide the contents of fts.log which is located in the folder with the executable. Do you want to see it now?"), QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No, QMessageBox.StandardButton.Yes)
+    if resp == QMessageBox.StandardButton.Yes:
+        webbrowser.open("fts.log")
+
     sys.exit(1)
 
 def main():
