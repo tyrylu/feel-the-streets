@@ -565,7 +565,7 @@ impl AreaDatabase {
     }
 
     pub fn get_entity_relationship_counts_by_kind(&self) -> Result<HashMap<String, usize>> {
-        let mut stmt = self.conn.prepare_cached("SELECT kind, count(*) FROM entity_relationships GROUP BY discriminator")?;
+        let mut stmt = self.conn.prepare_cached("SELECT kind, count(*) FROM entity_relationships GROUP BY kind")?;
         let results = stmt.query_map([], |row| Ok((format!("{:?}", row.get_unwrap::<_, EntityRelationshipKind>(0)), row.get_unwrap(1))))?.map(|e| e.expect("Should not happen")).collect();
         Ok(results)
     }
