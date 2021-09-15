@@ -162,6 +162,9 @@ def describe_angle_as_turn_instructions(angle, precision):
 def format_rel_bearing(bearing):
     if config().presentation.represent_bearings_as_clock_position:
         clock_position = round(bearing/30)
+        # It is more common to represent the directly ahead as the 12th, so adjust for that
+        if clock_position == 0:
+            clock_position = 12
         return _("on {} o'clock").format(clock_position)
     else:
         return _("{}° relatively").format(format_number(bearing, config().presentation.angle_decimal_places))
