@@ -17,10 +17,12 @@
         </tr>
     </thead>
     <tbody>
-        % for type, count in entity_counts %<tr>
+        {% for type, count in entity_counts %}
+        <tr>
             <td>{{ type }}</td>
             <td>{{ count }}</td>
         </tr>
+    {% endfor %}
     </tbody>
 </table>
 <h2>Registered clients</h2>
@@ -51,10 +53,12 @@
         </tr>
     </thead>
     <tbody>
-        % for type, count in relationship_counts %<tr>
+        {% for type, count in relationship_counts %}
+            % for type, count in relationship_counts %<tr>
             <td>{{ type }}</td>
             <td>{{ count }}</td>
         </tr>
+    {% endfor %}
     </tbody>
 </table>
 {% endblock %}
