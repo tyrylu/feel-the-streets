@@ -6,3 +6,4 @@ from .open_ruian_details import OpenRUIANDetails
 from .show_parents import ShowParents
 from .show_children import ShowChildren
 from .turn_to_wards import TurnToWards
+from .gps_coords import GPSCoords
