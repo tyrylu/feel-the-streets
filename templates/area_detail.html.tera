@@ -26,7 +26,7 @@
     </tbody>
 </table>
 <h2>Registered clients</h2>
-<table class="sortable"></table>>
+<table class="sortable">
 <thead>
     <tr>
         <th>Client</th>
@@ -54,7 +54,7 @@
     </thead>
     <tbody>
         {% for type, count in relationship_counts %}
-            % for type, count in relationship_counts %<tr>
+        <tr>
             <td>{{ type }}</td>
             <td>{{ count }}</td>
         </tr>
