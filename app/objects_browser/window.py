@@ -85,6 +85,7 @@ class ObjectsBrowserWindow(QWidget):
 
     def on_goto_clicked(self, evt):
         self._person.move_to(self.selected_object[2], force=True)
+        self.close()
         
     def _do_close(self):
         self.close()
