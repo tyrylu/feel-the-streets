@@ -180,12 +180,12 @@ class InteractivePersonController:
         self._maybe_perform_turn(turns, False, _("There is no meaningful turn, the road is too short."))
         
 
-    @menu_command(_("Movement"), _("Turn about..."), "Ctrl+r")
-    def rotate_by(self, evt):
-        amount, ok = QInputDialog.getDouble(self._main_window, _("Data"), _("Enter the angle"), minValue=-360, maxValue=360)
+    @menu_command(_("Movement"), _("Set direction..."), "Ctrl+r")
+    def set_direction(self, evt):
+        amount, ok = QInputDialog.getDouble(self._main_window, _("Data"), _("Enter the angle"), minValue=0, maxValue=359)
         if not ok:
             return
-        self._person.rotate(float(amount))
+        self._person.set_direction(float(amount))
     
     def _maybe_select_road(self):
         roads = self._person.inside_of_roads
