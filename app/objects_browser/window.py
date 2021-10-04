@@ -2,7 +2,7 @@ import inspect
 from PySide2.QtGui import QKeySequence, Qt
 from PySide2.QtWidgets import QWidget, QListWidget, QTreeWidgetItem, QPushButton, QLabel, QGridLayout, QMenuBar, QApplication, QAction
 from osm_db import EntityMetadata
-from ..humanization_utils import format_field_value, underscored_to_words
+from ..humanization_utils import format_field_value, underscored_to_words, format_relationship
 from ..services import menu_service
 from ..more_accessible_tree_widget import MoreAccessibleTreeWidget
 from . import object_actions
@@ -66,11 +66,10 @@ class ObjectsBrowserWindow(QWidget):
         self._sorter.objects_sorted.connect(self._objects_sorted)
         self._sorter.start()
     
-    def _objects_sorted(self, data):
-        objects, item_data = data
-        self._objects = objects
-        for (desc, dist, rel_bearing) in item_data:
-            self._objects_list.addItem(_("{object}: distance {distance} meters, {rel_bearing}").format(object=desc, distance=dist, rel_bearing=rel_bearing))
+    def _objects_sorted(self, rels):
+        self._rels = rels
+        for rel in rels:
+            self._objects_list.addItem(format_relationship(rel))
         if self._progress_indicator:
             self._progress_indicator.hide()
             self._progress_indicator.deleteLater()
@@ -84,7 +83,7 @@ class ObjectsBrowserWindow(QWidget):
         action.setShortcut(QKeySequence(shortcut))
 
     def on_goto_clicked(self, evt):
-        self._person.move_to(self.selected_object[2], force=True)
+        self._person.move_to(self.selected_object.closest_point, force=True)
         self.close()
         
     def _do_close(self):
@@ -98,7 +97,7 @@ class ObjectsBrowserWindow(QWidget):
             menu_service().ensure_key_capturer_focus()
     
     def on_objects_listbox(self, current_index):
-        selected = self._objects[current_index][1]
+        selected = self._rels[current_index].entity
         self._props.clear()
         common_item = QTreeWidgetItem([_("Common properties")])
         specific_item = QTreeWidgetItem([_("Specific properties")])
@@ -139,7 +138,7 @@ class ObjectsBrowserWindow(QWidget):
 
     @property
     def selected_object(self):
-        return self._objects[self._objects_list.currentRow()]
+        return self._rels[self._objects_list.currentRow()]
 
     def on_copypropvalue_selected(self, evt):
         prop = self._props.currentItem().text(0)

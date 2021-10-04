@@ -168,3 +168,6 @@ def format_rel_bearing(bearing):
         return _("on {} o'clock").format(clock_position)
     else:
         return _("{}° relatively").format(format_number(bearing, config().presentation.angle_decimal_places))
+
+def format_relationship(rel):
+    return _("{object}: distance {distance} meters, {rel_bearing}").format(object=rel.entity_human, distance=rel.distance_human, rel_bearing=rel.relative_bearing_human)

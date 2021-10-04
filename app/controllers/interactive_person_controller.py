@@ -1,9 +1,9 @@
 from PySide2.QtWidgets import QInputDialog, QMessageBox, QApplication
 from pygeodesy.ellipsoidalVincenty import LatLon
 from ..entities import entity_post_enter
-from ..humanization_utils import describe_entity, format_number, describe_angle_as_turn_instructions
+from ..humanization_utils import describe_entity, format_number, describe_angle_as_turn_instructions, format_relationship
 from ..services import speech, map, config, menu_service
-from ..objects_browser import ObjectsBrowserWindow, ObjectsSorter
+from ..objects_browser import ObjectsBrowserWindow, ObjectsSorter, tracked_object_changed
 from ..road_segments_browser import RoadSegmentsBrowserDialog
 from ..geometry_utils import get_road_section_angle, distance_filter, distance_between, get_meaningful_turns, bearing_to, get_smaller_turn
 from ..search import get_query_from_user, QueryExecutor, create_query_for_name_search, create_query_for_address_search
@@ -27,6 +27,7 @@ class InteractivePersonController:
         self._browser_window = None
         self._search_progress = None
         self._search_executor = None
+        self._tracked_object = None
         menu_service().register_menu_commands(self)
         cfg = config()
         make_config_option_switchable(_("Disallow leaving roads"), cfg.navigation, "disallow_leaving_roads", "alt+o")
@@ -39,6 +40,7 @@ class InteractivePersonController:
         make_config_option_switchable(_("Announce the current object after leaving other"), cfg.presentation, "announce_current_object_after_leaving_other")
         make_config_option_switchable(_("Represent bearings as clock positions"), cfg.presentation, "represent_bearings_as_clock_position")
         leave_disallowed_sound_played.connect(self._leave_disalloved_sound_played)
+        tracked_object_changed.connect(self._tracked_object_changed)
 
     def _get_current_coordinates_string(self):
         lat = format_number(self._person.position.lat, config().presentation.coordinate_decimal_places)
@@ -358,33 +360,36 @@ class InteractivePersonController:
     @menu_command(_("Information"), _("Nearest address"), "a")
     def _nearest_address(self):
         found = None
-        unsorted = map().within_distance(self._person.position, config().presentation.near_by_radius, fast=True)
+        unsorted = [o for o in map().within_distance(self._person.position, config().presentation.near_by_radius, fast=True) if o.value_of_field("address")]
         sorter = ObjectsSorter(unsorted, self._person)
-        entities, data = sorter.perform_sorting()
-        for (idx, (_dist, entity, _closest)) in enumerate(entities):
-            if entity.value_of_field("address"):
-                found = idx
-                break
-        self._report_single_entity(data[idx])
+        rels = sorter.perform_sorting()
+        self._report_single_relationship(next(iter(rels), None))
     
     @menu_command(_("Information"), _("Nearest named road"), "d")
     def _nearest_named_road(self):
-        found = None
-        unsorted = map().within_distance(self._person.position, config().presentation.near_by_radius, fast=True)
+        unsorted = [entity for entity in map().within_distance(self._person.position, config().presentation.near_by_radius, fast=True) if entity.is_road_like and entity.value_of_field("name")]
         sorter = ObjectsSorter(unsorted, self._person)
-        entities, data = sorter.perform_sorting()
-        for (idx, (_dist, entity, _closest)) in enumerate(entities):
-            if entity.is_road_like and entity.value_of_field("name"):
-                found = idx
-                break
-        self._report_single_entity(data[idx])
+        rels = sorter.perform_sorting()
+        self._report_single_relationship(next(iter(rels), None))
     
-    def _report_single_entity(self, item_data):
-        if not item_data:
+    def _report_single_relationship(self, relationship):
+        if not relationship:
             speech().speak(_("Not found."), add_to_history=False)
         else:
-            desc, dist, rel_bearing = item_data
-            speech().speak(_("{object}: distance {distance} meters, {rel_bearing}° relatively").format(object=desc, distance=dist, rel_bearing=rel_bearing), add_to_history=False)
+                        speech().speak(format_relationship(relationship), add_to_history=False)
+
+    @menu_command(_("Information"), _("Tracked object information"), "k")
+    def tracked_object_info(self):
+        if self._tracked_object:
+            rel = self._person.spatial_relationship_to(self._tracked_object)
+            speech().speak(format_relationship(rel), interrupt=True)
+        else:
+            speech().speak(_("No tracked object."), interrupt=True, add_to_history=False)
+
+    @menu_command(_("Program"), _("Stop tracking the currently tracked object"), index=0)
+    def stop_tracking(self):
+        self._tracked_object = None
+        speech().speak(_("Stopped tracking the current object."), interrupt=True, add_to_history=False)
 
     def _leave_disalloved_sound_played(self, sender, because_of):
         if not config().navigation.correct_direction_after_leave_disallowed: return
@@ -409,3 +414,7 @@ class InteractivePersonController:
         
     def reset(self, person):
         self._person = person
+        self._tracked_object = None
+
+    def _tracked_object_changed(self, sender, entity):
+        self._tracked_object = entity

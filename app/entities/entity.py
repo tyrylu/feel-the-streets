@@ -1,13 +1,14 @@
 from pydantic import BaseModel, Field
 from ordered_set import OrderedSet
-from typing import ClassVar, Set
+from typing import ClassVar, Optional, Set
+import osm_db
 from . import entity_pre_move, entity_post_move, entity_pre_enter, entity_post_enter, entity_pre_leave, entity_post_leave, entity_rotated, entity_move_rejected, MoveValidationResult
 from ..measuring import measure
 from ..map import Map
-from ..geometry_utils import to_shapely_point, to_latlon, closest_point_to
+from ..geometry_utils import to_shapely_point, to_latlon, closest_point_to, distance_between, bearing_to
+from ..humanization_utils import describe_entity, format_number, format_rel_bearing
+from ..services import config
 from pygeodesy.ellipsoidalVincenty import LatLon
-
-
 
 class Entity(BaseModel):
     use_step_sounds: ClassVar[bool] = False
@@ -109,4 +110,33 @@ class Entity(BaseModel):
             if candidate.is_road_like:
                 return candidate.effective_width
         return None
+
+    def spatial_relationship_to(self, entity, include_human=True):
+        rel_bearing_human = None
+        cur_distance_human = None
+        entity_human = None
+        closest_latlon = self.closest_point_to(entity.geometry)
+        cur_distance = distance_between(closest_latlon, self.position)
+        bearing = bearing_to(self.position, closest_latlon)
+        rel_bearing = (bearing - self.direction) % 360
+        if include_human:
+            rel_bearing_human = format_rel_bearing(rel_bearing)
+            cur_distance_human = format_number(cur_distance, config().presentation.distance_decimal_places)
+            entity_human = describe_entity(entity)
+        return SpatialRelationship(entity=entity, entity_human=entity_human, distance=cur_distance, distance_human=cur_distance_human, relative_bearing=rel_bearing, relative_bearing_human=rel_bearing_human, closest_point=closest_latlon)
+        
 Entity.update_forward_refs()
+
+class SpatialRelationship(BaseModel):
+    """Represents the distance and bearing, optionally with human readable representations of these values, to an entity."""
+    distance: float
+    relative_bearing: float
+    entity: osm_db.Entity
+    closest_point: LatLon
+    distance_human: Optional[str] = None
+    relative_bearing_human: Optional[str] = None
+    entity_human: Optional[str] = None
+
+    class Config:
+        arbitrary_types_allowed = True
+    

@@ -16,18 +16,7 @@ class ObjectsSorter(QThread):
         self.objects_sorted.emit(self.perform_sorting())
     
     def perform_sorting(self):
-        objects = []
-        items_data = []
-        for obj in self._unsorted_objects:
-            closest_latlon = self._person.closest_point_to(obj.geometry)
-            cur_distance = distance_between(closest_latlon, self._person.position)
-            objects.append((cur_distance, obj, closest_latlon))
-        objects.sort(key=lambda e: e[0])
-        for dist, obj, closest in objects:
-            bearing = bearing_to(self._person.position, closest)
-            rel_bearing = (bearing - self._person.direction) % 360
-            rel_bearing = format_rel_bearing(rel_bearing)
-            dist = format_number(dist, config().presentation.distance_decimal_places)
-            items_data.append((describe_entity(obj), dist, rel_bearing))
-        return objects, items_data
+        rels = [self._person.spatial_relationship_to(o) for o in self._unsorted_objects]
+        rels.sort(key=lambda r: r.distance)
+        return rels
         
