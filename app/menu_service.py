@@ -38,7 +38,11 @@ class MenuService:
         item = QAction(label, self._key_capturer)
         item.setShortcutContext(Qt.WidgetShortcut)
         # We must add a separate action to the menu, otherwise the shortcut is being triggered even when the menubar is focused.
-        menu_action = menu.addAction(label)
+        if cmd.index is None:
+            menu_action = menu.addAction(label)
+        else:
+            menu_action = QAction(label)
+            menu.insertAction(menu.actions()[cmd.index], menu_action)
         self._key_capturer.addAction(item)
         item.triggered.connect(cmd)
         menu_action.triggered.connect(cmd)
@@ -86,13 +90,14 @@ class MenuService:
         self._window.activateWindow()
         self._key_capturer.setFocus()
 
-def menu_command(menu, label, shortcut=None, name=None, checkable=False):
+def menu_command(menu, label, shortcut=None, name=None, checkable=False, index=None):
     def wrap(func):
         func.menu = menu
         func.item_label = label
         func.item_shortcut = shortcut
         func.item_name = name
         func.checkable = checkable
+        func.index = index
         return func
     return wrap
 
