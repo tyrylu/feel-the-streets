@@ -26,7 +26,7 @@ fn osm_db(_py: Python, m: &PyModule) -> PyResult<()> {
 
     #[pyfn(m)]
     fn init_logging(py: Python, level: &str) -> PyResult<()> {
-        let filter = log::LevelFilter::from_str(&level).map_err(|e| PyRuntimeError::new_err(format!("Could not parse {} as a logging level, error: {}", level, e)))?;
+        let filter = log::LevelFilter::from_str(level).map_err(|e| PyRuntimeError::new_err(format!("Could not parse {} as a logging level, error: {}", level, e)))?;
         let _handle = pyo3_log::Logger::new(py, pyo3_log::Caching::LoggersAndLevels).map_err(|_| PyRuntimeError::new_err("Logger could not be created"))?
     .filter(filter)
     .install()
