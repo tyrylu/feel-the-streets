@@ -168,8 +168,8 @@ impl EntitiesQuery {
             ));
         }
         for (idx, condition) in self.conditions.iter().enumerate() {
-            if let Some(val) = condition.to_param_value() {
-                params.push((format!(":param{}", idx), val));
+            if let Some(mut vals) = condition.to_param_values(idx) {
+                params.append(&mut vals);
             }
         }
         params

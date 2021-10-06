@@ -37,7 +37,10 @@ def create_query_for_address_search(address):
     address = address.strip()
     street, number = address.rsplit(" ", 1)
     street = street.strip()
-    return create_query("Addressable", None, float("inf"), [FieldNamed("address.street").eq(street), FieldNamed("address.housenumber").eq(number)])
+    housenumber_condition = FieldNamed("address.housenumber").eq(number)
+    if "/" not in number: # It might be a part of a number composed of more parts
+        housenumber_condition = housenumber_condition.or_(FieldNamed("address.housenumber").like(f"{number}/%")).or_(FieldNamed("address.housenumber").like(f"%/{number}"))
+    return create_query("Addressable", None, float("inf"), [FieldNamed("address.street").eq(street), housenumber_condition])
 
 def get_query_from_user(parent, position):
     entities = all_known_discriminators()
