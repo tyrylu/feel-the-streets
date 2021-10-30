@@ -1,5 +1,5 @@
-from PySide2.QtWidgets import QTreeWidget
-from PySide2.QtGui import Qt, QAccessible, QAccessibleStateChangeEvent
+from PySide6.QtWidgets import QTreeWidget
+from PySide6.QtGui import Qt, QAccessible, QAccessibleStateChangeEvent
 
 def get_expansion_state_string(is_expanded):
     if is_expanded:

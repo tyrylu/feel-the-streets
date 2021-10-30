@@ -1,11 +1,10 @@
 pendulum # 177 ms
 pydantic # 153 ms
 pygeodesy # 74 ms
-pika # 90 ms
 appdirs # 43 ms
 accessible_output2 # 90
 blinker # 10 ms
-PySide2 # 899 ms
+PySide6 # 899 ms
 anglr # 1 ms
 pyopenal # 454 ms
 pyogg # 303 ms

@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QDialog, QPushButton, QGridLayout
+from PySide6.QtWidgets import QDialog, QPushButton, QGridLayout
 
 class BaseDialog(QDialog):
     def __init__(self, parent, title, ok_text, cancel_text, ok_button_column=0, cancel_button_column=1, buttons_to_new_row=True):

@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QInputDialog, QMessageBox, QApplication
+from PySide6.QtWidgets import QInputDialog, QMessageBox, QApplication
 from pygeodesy.ellipsoidalVincenty import LatLon
 from ..entities import entity_post_enter
 from ..humanization_utils import describe_entity, format_number, describe_angle_as_turn_instructions, format_relationship

@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QComboBox
+from PySide6.QtWidgets import QComboBox
 from osm_db import Enum
 from . import widget_for
 from ...humanization_utils import underscored_to_words

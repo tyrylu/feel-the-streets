@@ -1,4 +1,4 @@
-from PySide2.QtCore import QThread, Signal
+from PySide6.QtCore import QThread, Signal
 from ..services import config
 from ..humanization_utils import format_number, format_rel_bearing, describe_entity
 from ..geometry_utils import distance_between, bearing_to

@@ -1,6 +1,6 @@
-from PySide2.QtCore import Qt
-from PySide2.QtGui import QKeySequence
-from PySide2.QtWidgets import QAction, QWidget
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QKeySequence, QAction
+from PySide6.QtWidgets import QWidget
 
 def safe_set_checked(target, new_state):
     target.blockSignals(True)

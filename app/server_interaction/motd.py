@@ -1,4 +1,4 @@
-from PySide2.QtCore import QLocale
+from PySide6.QtCore import QLocale
 import datetime
 import os.path
 from ..config import Config

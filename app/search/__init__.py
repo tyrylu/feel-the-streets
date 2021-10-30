@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QInputDialog, QProgressDialog
+from PySide6.QtWidgets import QInputDialog, QProgressDialog
 from osm_db import EntityMetadata, all_known_discriminators, EntitiesQuery, FieldNamed
 from ..humanization_utils import get_class_display_name
 from .search_conditions import SpecifySearchConditionsDialog

@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication
 from ..services import speech, menu_service
 from ..menu_service import menu_command
 

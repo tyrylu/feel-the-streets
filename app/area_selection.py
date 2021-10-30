@@ -1,7 +1,7 @@
 import functools
 import logging
-from PySide2.QtCore import QCollator
-from PySide2.QtWidgets import QPushButton, QListWidget, QLabel, QMessageBox, QInputDialog, QDialog
+from PySide6.QtCore import QCollator
+from PySide6.QtWidgets import QPushButton, QListWidget, QLabel, QMessageBox, QInputDialog, QDialog
 import pendulum
 from osm_db import AreaDatabase
 from .base_dialog import BaseDialog

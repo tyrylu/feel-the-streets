@@ -5,7 +5,7 @@ import builtins
 from osm_db import EntityMetadata, Enum
 import jinja2
 import logging
-from PySide2.QtCore import QLocale
+from PySide6.QtCore import QLocale
 from .services import config
 
 OPPOSITE_TURN_THRESHOLD = 175

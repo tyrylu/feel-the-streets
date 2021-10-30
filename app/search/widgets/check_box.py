@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QCheckBox
+from PySide6.QtWidgets import QCheckBox
 from . import widget_for
 
 @widget_for("bool")

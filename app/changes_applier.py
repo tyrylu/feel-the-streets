@@ -1,7 +1,7 @@
 import os
 import datetime
 import logging
-from PySide2.QtCore import QThread, Signal
+from PySide6.QtCore import QThread, Signal
 from osm_db import AreaDatabase, CHANGE_REMOVE, CHANGE_REDOWNLOAD_DATABASE
 from .semantic_changelog_generator import get_change_description
 

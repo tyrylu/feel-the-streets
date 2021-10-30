@@ -1,5 +1,5 @@
-from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QPushButton, QLabel, QSpinBox, QTreeWidgetItem, QListWidget, QWidget, QMessageBox
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QPushButton, QLabel, QSpinBox, QTreeWidgetItem, QListWidget, QWidget, QMessageBox
 from osm_db import EntityMetadata, FieldNamed
 from ..base_dialog import BaseDialog
 from ..humanization_utils import underscored_to_words, get_class_display_name

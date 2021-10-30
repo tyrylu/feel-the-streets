@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QDialog, QListWidget, QPushButton, QLabel, QVBoxLayout
+from PySide6.QtWidgets import QDialog, QListWidget, QPushButton, QLabel, QVBoxLayout
 import shapely.wkb as wkb
 from .geometry_utils import get_line_segments, find_closest_line_segment_of, to_latlon, distance_between, merge_similar_line_segments, get_complete_road_line
 from .humanization_utils import format_number

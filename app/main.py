@@ -3,7 +3,7 @@ import os
 import threading
 import logging
 import webbrowser
-from PySide2.QtWidgets import QApplication, QMessageBox
+from PySide6.QtWidgets import QApplication, QMessageBox
 import osm_db
 from . import locale_setup
 from .services import speech, config

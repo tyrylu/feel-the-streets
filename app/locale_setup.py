@@ -3,8 +3,8 @@ import sys
 import gettext
 import logging
 import locale
-from PySide2.QtCore import QTranslator, QLocale
-from PySide2.QtWidgets import QApplication
+from PySide6.QtCore import QTranslator, QLocale
+from PySide6.QtWidgets import QApplication
 
 log = logging.getLogger(__name__)
 

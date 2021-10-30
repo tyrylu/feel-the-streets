@@ -1,5 +1,5 @@
 import logging
-from PySide2.QtCore import QThread, Signal
+from PySide6.QtCore import QThread, Signal
 from .server_interaction import get_areas_with_name, get_area_parents, RateLimitedError
 
 log = logging.getLogger(__name__)

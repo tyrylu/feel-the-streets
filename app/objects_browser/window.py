@@ -1,6 +1,6 @@
 import inspect
-from PySide2.QtGui import QKeySequence, Qt
-from PySide2.QtWidgets import QWidget, QListWidget, QTreeWidgetItem, QPushButton, QLabel, QGridLayout, QMenuBar, QApplication, QAction
+from PySide6.QtGui import QKeySequence, QAction, Qt
+from PySide6.QtWidgets import QWidget, QListWidget, QTreeWidgetItem, QPushButton, QLabel, QGridLayout, QMenuBar, QApplication
 from osm_db import EntityMetadata
 from ..humanization_utils import format_field_value, underscored_to_words, format_relationship
 from ..services import menu_service

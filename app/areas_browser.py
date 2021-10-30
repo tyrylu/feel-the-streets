@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QLabel, QListWidget
+from PySide6.QtWidgets import QLabel, QListWidget
 from .base_dialog import BaseDialog
 from .humanization_utils import underscored_to_words
 

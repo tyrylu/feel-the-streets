@@ -1,6 +1,6 @@
 from .base_dialog import BaseDialog
-from PySide2.QtWidgets import QTextBrowser, QLabel
-from PySide2.QtCore import Qt
+from PySide6.QtWidgets import QTextBrowser, QLabel
+from PySide6.QtCore import Qt
 
 class MessageDialog(BaseDialog):
 

@@ -1,4 +1,4 @@
-from PySide2.QtCore import QObject, Signal, QThread
+from PySide6.QtCore import QObject, Signal, QThread
 import os
 import logging
 import xml.etree.ElementTree as et

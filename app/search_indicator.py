@@ -1,5 +1,5 @@
-from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QWidget, QLabel
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QWidget, QLabel
 
 class SearchIndicator(QWidget):
     def __init__(self):

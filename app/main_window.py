@@ -1,5 +1,5 @@
 import sys
-from PySide2.QtWidgets import QMainWindow, QDialog, QProgressDialog, QMessageBox, QWidget, QApplication
+from PySide6.QtWidgets import QMainWindow, QDialog, QProgressDialog, QMessageBox, QWidget, QApplication
 import os
 import webbrowser
 from pygeodesy.ellipsoidalVincenty import LatLon

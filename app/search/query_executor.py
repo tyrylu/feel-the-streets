@@ -1,5 +1,5 @@
-from PySide2.QtCore import QThread, Signal
-from PySide2.QtWidgets import QApplication
+from PySide6.QtCore import QThread, Signal
+from PySide6.QtWidgets import QApplication
 from ..services import map
 from ..geometry_utils import distance_filter
 

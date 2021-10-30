@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication
 from ..services import menu_service, speech
 from ..menu_service import menu_command
 from ..area_selection import AreaSelectionDialog
