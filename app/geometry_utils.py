@@ -127,7 +127,8 @@ def closest_point_to(point, geom, convert=True):
     elif geom.geom_type == "LineString":
         return geom.interpolate(geom.project(point))
     elif geom.geom_type == "Polygon":
-        return geom.exterior.interpolate(geom.exterior.project(point))
+        exterior_line = LineString(geom.exterior)
+        return exterior_line.interpolate(exterior_line.project(point))
     elif geom.geom_type in {"GeometryCollection", "MultiPolygon"}:
         return closest_point_from_geoms(geom.geoms, point)
     else:
