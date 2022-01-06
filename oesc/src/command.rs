@@ -1,5 +1,12 @@
-use structopt::StructOpt;
-#[derive(StructOpt, Debug)]
+use clap::{Parser, Subcommand};
+
+#[derive(Parser)]
+pub struct Args {
+    #[clap(subcommand)]
+    pub command: Command
+}
+
+#[derive(Subcommand, Debug)]
 pub enum Command {
     /// Changes an entity field's type. Note that it must be run in production where the area databases are stored, so it can actually do the changes. In addition, the entities.yml file must be modified manually.
     ChangeFieldType {
@@ -10,7 +17,7 @@ pub enum Command {
         /// The new type for the field. Note that the conversions must all pass before the change will be actually executed.
         new_type: String,
         /// If specified, ignores the type conversion failures and continues nonetheless.
-        #[structopt(long)]
+        #[clap(long)]
         force: bool,
     },
     RemoveField {
@@ -31,10 +38,10 @@ pub enum Command {
     /// Forces a redownload of the given areas or all of them.
     RequestRedownload {
         /// Request redownload for all areas
-        #[structopt(long, conflicts_with = "area")]
+        #[clap(long, conflicts_with = "area")]
         all: bool,
         /// Request redownload for a specific area
-        #[structopt(long, conflicts_with = "all")]
+        #[clap(long, conflicts_with = "all")]
         area: Option<i64>,
     },
     /// Creates a frozen copy of the current state of an area.

@@ -10,10 +10,12 @@ edition = "2018"
 osm_db = {path="../osm_db"}
 redis_api = {path = "../redis_api"}
 server={path="../server"}
-structopt= "0.3.25"
-anyhow = "1.0.50"
+anyhow = "1.0.52"
 dotenv = "0.15.0"
 diesel = { version = "1.4.8", features = ["sqlite", "chrono"] }
 url = "2.2.2"
-ureq = { version = "2.3.1", default_features = false, features = ["tls", "json"] }
-serde = { version = "1.0.130", features = ["derive"] }
+ureq = { version = "2.4.0", default_features = false, features = ["tls", "json"] }
+serde = { version = "1.0.133", features = ["derive"] }
+clap = { version = "3.0.5", features = ["derive"] }
+
+[features]

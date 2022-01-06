@@ -1,5 +1,5 @@
 use anyhow::Result;
-use structopt::StructOpt;
+use clap::Parser;
 
 mod change_field_type;
 mod command;
@@ -8,9 +8,9 @@ mod remove_field;
 mod request_redownload;
 mod view_field_usage;
 
-use command::Command;
+use command::{Args, Command};
 fn main() -> Result<()> {
-    let cmd = Command::from_args();
+    let cmd = Args::parse().command;
     match cmd {
         Command::ChangeFieldType {
             entity,
