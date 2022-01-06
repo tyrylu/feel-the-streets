@@ -1,3 +1,4 @@
+#![allow(clippy::new_without_default)]
 use crate::Result;
 use osm_api::object::OSMObject;
 use serde::{Deserialize, Serialize};

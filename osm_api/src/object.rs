@@ -1,3 +1,4 @@
+#![allow(clippy::too_many_arguments)]
 use crate::Error;
 use hashbrown::HashMap;
 use serde::{Deserialize, Serialize};

@@ -22,18 +22,18 @@ pub fn convert_address(tags: &HashMap<String, String>) -> (HashMap<String, Strin
 pub fn convert_field_value(
     raw_value: &str,
     value_type: &str,
-    mut record: &mut TranslationRecord,
+    record: &mut TranslationRecord,
 ) -> Option<Value> {
     match value_type {
         "str" | "Address" => Some(Value::String(raw_value.to_string())),
-        "int" => convert_int(raw_value, &mut record),
-        "bool" => convert_bool(raw_value, &mut record),
-        "float" => convert_float(raw_value, &mut record),
-        "tons" => convert_to_tons(raw_value, &mut record),
-        "meters" => convert_to_meters(raw_value, &mut record),
+        "int" => convert_int(raw_value, record),
+        "bool" => convert_bool(raw_value, record),
+        "float" => convert_float(raw_value, record),
+        "tons" => convert_to_tons(raw_value, record),
+        "meters" => convert_to_meters(raw_value, record),
         _ => {
             if let Some(enum_spec) = Enum::with_name(value_type) {
-                convert_value_of_enum(raw_value, &enum_spec, &mut record)
+                convert_value_of_enum(raw_value, &enum_spec, record)
             } else {
                 panic!("Failed to handle type specifier {}.", value_type)
             }
@@ -44,7 +44,7 @@ pub fn convert_field_value(
 pub fn convert_entity_data(
     discriminator: &str,
     entity_data: &HashMap<String, String>,
-    mut record: &mut TranslationRecord,
+    record: &mut TranslationRecord,
 ) -> HashMap<String, Value> {
     record.set_current_discriminator(discriminator);
     let all_fields = EntityMetadata::for_discriminator(discriminator)
@@ -57,7 +57,7 @@ pub fn convert_entity_data(
             .get(key)
             .map(|f| f.type_name.as_str())
             .unwrap_or("str");
-        if let Some(converted) = convert_field_value(value, type_name, &mut record) {
+        if let Some(converted) = convert_field_value(value, type_name, record) {
             converted_data.insert(key.clone(), converted);
         }
     }
@@ -130,8 +130,8 @@ fn split_unit_spec<'a>(
     }
 }
 
-fn convert_to_tons(value: &str, mut record: &mut TranslationRecord) -> Option<Value> {
-    let (magnitude, unit_str) = split_unit_spec(value, &mut record)?;
+fn convert_to_tons(value: &str, record: &mut TranslationRecord) -> Option<Value> {
+    let (magnitude, unit_str) = split_unit_spec(value, record)?;
     match unit_str {
         None => construct_json_f64(magnitude),
         Some(unit) => match unit {
@@ -144,8 +144,8 @@ fn convert_to_tons(value: &str, mut record: &mut TranslationRecord) -> Option<Va
     }
 }
 
-fn convert_to_meters(value: &str, mut record: &mut TranslationRecord) -> Option<Value> {
-    let (magnitude, unit_str) = split_unit_spec(value, &mut record)?;
+fn convert_to_meters(value: &str, record: &mut TranslationRecord) -> Option<Value> {
+    let (magnitude, unit_str) = split_unit_spec(value, record)?;
     match unit_str {
         None => construct_json_f64(magnitude),
         Some(unit) => match unit {

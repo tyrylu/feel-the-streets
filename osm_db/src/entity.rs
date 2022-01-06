@@ -104,17 +104,17 @@ impl Entity {
         if !value.is_object() {
             warn!("Entity data was not a map, it was instead: {}", value);
         } else {
-            let mut data_map = value.as_object_mut().unwrap();
+            let data_map = value.as_object_mut().unwrap();
             for change in changes {
                 match change {
                     Create { key, value } => {
                         let (target, final_key_part) =
-                            get_target_of_key(key, &mut data_map, true).unwrap();
+                            get_target_of_key(key, data_map, true).unwrap();
                         target.insert(final_key_part, value.clone());
                     }
                     Remove { key } => {
                         if let Some((target, final_key_part)) =
-                            get_target_of_key(key, &mut data_map, false)
+                            get_target_of_key(key, data_map, false)
                         {
                             target.remove(&final_key_part);
                         } else {
@@ -123,7 +123,7 @@ impl Entity {
                     }
                     Update { key, new_value, .. } => {
                         if let Some((target, final_key_part)) =
-                            get_target_of_key(key, &mut data_map, false)
+                            get_target_of_key(key, data_map, false)
                         {
                             match target.get_mut(&final_key_part) {
                                 Some(val) => *val = new_value.clone(),

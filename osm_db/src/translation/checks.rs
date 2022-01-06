@@ -7,11 +7,11 @@ use serde_json::Value;
 pub fn check_entity_data_consistency(
     discriminator: &str,
     data: &HashMap<String, Value>,
-    mut record: &mut TranslationRecord,
+    record: &mut TranslationRecord,
 ) -> bool {
     match EntityMetadata::for_discriminator(discriminator) {
         Some(metadata) => {
-            check_entity_data_consistency_against_metadata(data, &metadata, &mut record)
+            check_entity_data_consistency_against_metadata(data, &metadata, record)
         }
         None => {
             warn!(

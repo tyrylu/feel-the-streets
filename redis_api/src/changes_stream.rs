@@ -7,6 +7,7 @@ use redis::{Client, Commands, Connection};
 use std::collections::HashMap;
 use std::env;
 
+#[allow(clippy::len_without_is_empty)]
 pub struct ChangesStream {
     area_id: i64,
     redis_connection: Connection,

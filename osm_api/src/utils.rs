@@ -78,7 +78,7 @@ pub fn connect_polygon_segments(segments: &mut Vec<LineString<f64>>) {
             .0
             .extend_from_slice(&second_unwrapped.0[1..]);
     }
-    for mut segment in segments.iter_mut() {
-        ensure_closed(&mut segment);
+    for segment in segments.iter_mut() {
+        ensure_closed(segment);
     }
 }

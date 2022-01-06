@@ -11,11 +11,13 @@ use osm_api::object_manager::OSMObjectManager;
 use osm_api::SmolStr;
 use serde_json::Value;
 
+type RelatedIdsIterator = Box<dyn Iterator<Item = String>>;
+
 pub fn translate(
     object: &OSMObject,
     manager: &OSMObjectManager,
-    mut record: &mut TranslationRecord,
-) -> Result<Option<(Entity, Box<dyn Iterator<Item = String>>)>, Error> {
+    record: &mut TranslationRecord,
+) -> Result<Option<(Entity, RelatedIdsIterator)>, Error> {
     let lookup_res = TranslationSpec::primary_discriminator_for_object(object);
     match lookup_res {
         None => {
@@ -75,7 +77,7 @@ pub fn translate(
             entity_data.insert("user".to_string(), object.user.clone());
             entity_data.insert("uid".to_string(), object.uid.to_string());
             let mut converted_data =
-                conversions::convert_entity_data(&discriminator, &entity_data, &mut record);
+                conversions::convert_entity_data(&discriminator, &entity_data, record);
             // Address, must be done there, because we need to nest the object.
             let mut aware = false;
             for spec in &specs {
@@ -97,7 +99,7 @@ pub fn translate(
                 }
             }
 
-            if !checks::check_entity_data_consistency(&discriminator, &converted_data, &mut record)
+            if !checks::check_entity_data_consistency(&discriminator, &converted_data, record)
             {
                 return Ok(None);
             }

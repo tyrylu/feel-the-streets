@@ -37,7 +37,7 @@ fn find_or_create_suitable_change<'a>(
 pub fn update_area(
     area: &mut Area,
     conn: &SqliteConnection,
-    mut record: &mut TranslationRecord,
+    record: &mut TranslationRecord,
 ) -> Result<()> {
     info!("Updating area {} (id {}).", area.name, area.osm_id);
     area.state = AreaState::GettingChanges;
@@ -99,7 +99,7 @@ pub fn update_area(
                 let mut cache = manager.get_cache();
                 manager.cache_object_into(&mut cache, &new);
                 drop(cache); // So we don't end up in a locked state for the cache db
-                translator::translate(&new, &manager, &mut record)?
+                translator::translate(&new, &manager, record)?
             }
             .map(|(o, ids)| {
                 SemanticChange::creating(
@@ -133,7 +133,7 @@ pub fn update_area(
                 drop(cache);
                 let osm_id = new_object.unique_id();
                 let old = area_db.get_entity(&osm_id)?;
-                let new = translator::translate(&new_object, &manager, &mut record)?;
+                let new = translator::translate(&new_object, &manager, record)?;
                 match (old, new) {
                     (None, None) => None,
                     (Some(_), None) => Some(SemanticChange::removing(&osm_id)),
@@ -229,7 +229,7 @@ pub fn update_area(
 }
 
 fn infer_additional_relationships(
-    mut changes: &mut Vec<SemanticChange>,
+    changes: &mut Vec<SemanticChange>,
     area_db: &AreaDatabase,
 ) -> Result<()> {
     let mut cache = HashMap::new();
@@ -252,7 +252,7 @@ fn infer_additional_relationships(
                 let target = if relationship.parent_id == changes[idx].osm_id().unwrap() {
                     &mut changes[idx]
                 } else {
-                    find_or_create_suitable_change(&mut changes, &relationship.parent_id, false)
+                    find_or_create_suitable_change(changes, &relationship.parent_id, false)
                 };
                 target.add_rooted_relationship(RootedEntityRelationship::new(
                     relationship.child_id.as_str(),
@@ -294,7 +294,7 @@ fn infer_additional_relationships(
                 let target = if parent_id == changes[idx].osm_id().unwrap() {
                     &mut changes[idx]
                 } else {
-                    find_or_create_suitable_change(&mut changes, &parent_id, true)
+                    find_or_create_suitable_change(changes, &parent_id, true)
                 };
                 target.add_relationship_change(change);
             }

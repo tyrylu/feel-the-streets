@@ -11,9 +11,9 @@ mod address;
 mod street;
 
 pub fn infer_additional_relationships_for_entity(
-    mut entity: &mut Entity,
+    entity: &mut Entity,
     db: &AreaDatabase,
-    mut street_names_cache: &mut HashMap<String, Option<String>>,
+    street_names_cache: &mut HashMap<String, Option<String>>,
 ) -> Result<Vec<EntityRelationship>> {
     trace!(
         "Inferring address relationships for {} {}",
@@ -21,13 +21,13 @@ pub fn infer_additional_relationships_for_entity(
         entity.id
     );
     let mut relationships = vec![];
-    for relationship in address::try_infer_address_for(&mut entity, db)? {
+    for relationship in address::try_infer_address_for(entity, db)? {
         // Note that we must insert the address relationships there because otherwise we would not be able to use them when identifying the street relationships.
         db.insert_entity_relationship(&relationship)?;
         relationships.push(relationship);
     }
     if let Some(relationship) =
-        street::try_infer_street_for(&mut entity, db, &mut street_names_cache)?
+        street::try_infer_street_for(entity, db, street_names_cache)?
     {
         // And for consistency, we'll insert this one as well.
         db.insert_entity_relationship(&relationship)?;
