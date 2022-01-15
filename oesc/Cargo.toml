@@ -7,6 +7,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+osm_api = {path="../osm_api"}
 osm_db = {path="../osm_db"}
 redis_api = {path = "../redis_api"}
 server={path="../server"}
@@ -16,6 +17,6 @@ diesel = { version = "1.4.8", features = ["sqlite", "chrono"] }
 url = "2.2.2"
 ureq = { version = "2.4.0", default_features = false, features = ["tls", "json"] }
 serde = { version = "1.0.133", features = ["derive"] }
-clap = { version = "3.0.5", features = ["derive"] }
+clap = { version = "3.0.7", features = ["derive"] }
 
 [features]

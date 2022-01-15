@@ -29,6 +29,7 @@ pub struct Area {
     pub updated_at: NaiveDateTime,
     pub newest_osm_object_timestamp: Option<String>,
     pub db_size: i64,
+    pub parent_osm_ids: String,
 }
 
 impl Area {
@@ -81,7 +82,7 @@ impl Area {
     }
 }
 
-pub fn finalize_area_creation(osm_id: i64, conn: &SqliteConnection) -> Result<usize> {
+pub fn finalize_area_creation(osm_id: i64, parent_ids_str: String, conn: &SqliteConnection) -> Result<usize> {
     let size = fs::metadata(AreaDatabase::path_for(osm_id, true))?.len();
     let query = diesel::update(areas::table)
         .filter(areas::osm_id.eq(osm_id))
@@ -90,6 +91,7 @@ pub fn finalize_area_creation(osm_id: i64, conn: &SqliteConnection) -> Result<us
             areas::updated_at.eq(now),
             areas::db_size.eq(size as i64),
             areas::newest_osm_object_timestamp.eq(Option::<String>::None),
+            areas::parent_osm_ids.eq(parent_ids_str),
         ));
     Ok(query.execute(conn)?)
 }

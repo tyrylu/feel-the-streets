@@ -51,4 +51,6 @@ pub enum Command {
         /// The human readable name of the new copy.
         new_name: String,
     },
+    /// Regenerates the parent osm ids for all areas.
+    RegenerateParentOSMIds,
 }

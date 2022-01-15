@@ -4,6 +4,7 @@ use clap::Parser;
 mod change_field_type;
 mod command;
 mod create_frozen_copy;
+mod regenerate_parent_osm_ids;
 mod remove_field;
 mod request_redownload;
 mod view_field_usage;
@@ -31,6 +32,7 @@ fn main() -> Result<()> {
         }
         Command::CreateFrozenCopy { area_id, new_name } => {
             create_frozen_copy::create_frozen_copy(area_id, new_name)
-        }
+        },
+        Command::RegenerateParentOSMIds => regenerate_parent_osm_ids::regenerate_parent_osm_ids()
     }
 }

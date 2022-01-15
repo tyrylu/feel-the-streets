@@ -32,6 +32,7 @@ fn rocket() -> _ {
                 api_routes::ping,
                 api_routes::motd,
                 api_routes::create_client,
+                api_routes::osm_object_names,
             ],
         )
         .mount("/", routes![ui_routes::areas, ui_routes::area_detail])

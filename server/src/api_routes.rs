@@ -1,6 +1,7 @@
 use crate::area::{Area, AreaState};
 use crate::background_tasks::CreateAreaDatabaseTask;
 use crate::{DbConn, Error, Result};
+use crate::names_cache::{OSMObjectNamesCache, CacheMap};
 use doitlater::{ExecutableExt, Queue};
 use osm_db::AreaDatabase;
 use redis_api::ChangesStream;
@@ -128,4 +129,10 @@ pub async fn create_client(req: Json<CreateClientRequest>) -> Result<Json<Create
         let password = stream.create_client(&client_id)?;
         Ok(Json(CreateClientResponse { password }))
     }
+}
+
+#[get("/osm_object_names")]
+pub fn osm_object_names() -> Result<Json<CacheMap>> {
+    let cache = OSMObjectNamesCache::load()?;
+    Ok(Json(cache.into_cache_map()))
 }
