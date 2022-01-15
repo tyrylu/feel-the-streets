@@ -10,6 +10,6 @@ table! {
         updated_at -> Timestamp,
         newest_osm_object_timestamp -> Nullable<Text>,
         db_size -> BigInt,
-        parent_osm_ids -> Text,
+        parent_osm_ids -> Nullable<Text>,
     }
 }

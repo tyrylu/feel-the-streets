@@ -29,7 +29,7 @@ pub struct Area {
     pub updated_at: NaiveDateTime,
     pub newest_osm_object_timestamp: Option<String>,
     pub db_size: i64,
-    pub parent_osm_ids: String,
+    pub parent_osm_ids: Option<String>,
 }
 
 impl Area {

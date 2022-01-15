@@ -10,7 +10,7 @@ pub(crate) fn regenerate_parent_osm_ids() -> Result<()> {
     for mut area in Area::all(&conn)? {
         println!("Regenerating parent osm ids for {}...", area.name);
         let parent_ids_str = area_db_creation::get_parent_ids_str_for(area.osm_id, &manager)?;
-        area.parent_osm_ids = parent_ids_str;
+        area.parent_osm_ids = Some(parent_ids_str);
         area.save(&conn)?;
     }
     println!("All areas processed successfully.");
