@@ -84,9 +84,6 @@ jobs:
       with:
         name: to_deploy_linux
         path: to_deploy
-    - name: Cleanup python app binary
-      if: runner.os == 'Windows'
-      run: rm dist/fts/Qt5Quick.dll, dist/fts/Qt5QmlModels.dll, dist/fts/Qt5VirtualKeyboard.dll
     - name: Upload Python app binary
       if: runner.os == 'Windows'  
       uses: actions/upload-artifact@v2
