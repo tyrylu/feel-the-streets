@@ -11,6 +11,7 @@ mod view_field_usage;
 
 use command::{Args, Command};
 fn main() -> Result<()> {
+    server::init_logging();
     let cmd = Args::parse().command;
     match cmd {
         Command::ChangeFieldType {

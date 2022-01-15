@@ -523,7 +523,7 @@ impl OSMObjectManager {
     }
 
     pub fn get_area_parents(&self, area_id: i64) -> Result<Vec<OSMObject>> {
-        let query = format!("[out:json];rel({});<<;out meta;", area_id - 3_600_000);
+        let query = format!("[out:json];rel({});<<;out meta;", area_id - 3_600_000_000);
         let readable = self.run_query(&query, false)?;
         self.cache_objects_from(readable, true)
     }

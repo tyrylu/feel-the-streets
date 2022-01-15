@@ -37,8 +37,11 @@ pub fn create_area_database(area: i64) -> Result<()> {
 }
 
 pub fn get_parent_ids_str_for(area: i64, manager: &OSMObjectManager) -> Result<String> {
+    info!("Searching administrative parents for {}.", area);
     let mut parents = manager.get_area_parents(area)?;
+    info!("Found {} administrative parent candidates.", parents.len());
     parents.retain(|p| p.tags.contains_key("admin_level"));
+    info!("After filtering, {} candidates remained.", parents.len());
     parents.sort_by_key(|p| p.tags["admin_level"].clone());
     let mut cache = OSMObjectNamesCache::load()?;
     for parent in &parents {
