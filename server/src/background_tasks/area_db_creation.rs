@@ -41,7 +41,9 @@ pub fn get_parent_ids_str_for(area: i64, manager: &OSMObjectManager) -> Result<S
     info!("Found {} administrative parent candidates.", parents.len());
     parents.retain(|p| p.tags.contains_key("admin_level"));
     info!("After filtering, {} candidates remained.", parents.len());
-    parents.sort_by_key(|p| p.tags["admin_level"].clone());
+    parents.sort_by_key(|p| {
+        if p.tags["admin_level"].len() == 1 {
+            format!("0{}", p.tags["admin_level"]) } else{p.tags["admin_level"].clone()} });
     let mut cache = OSMObjectNamesCache::load()?;
     for parent in &parents {
         cache.cache_names_of(parent);
