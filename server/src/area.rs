@@ -74,6 +74,7 @@ impl Area {
                 areas::updated_at.eq(now),
                 areas::newest_osm_object_timestamp.eq(&self.newest_osm_object_timestamp),
                 areas::db_size.eq(self.db_size),
+                areas::parent_osm_ids.eq(&self.parent_osm_ids),
             ));
 
         let query_debug = diesel::debug_query::<diesel::sqlite::Sqlite, _>(&query);
