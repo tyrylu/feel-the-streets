@@ -10,7 +10,7 @@ from .services import map, menu_service, config
 from .server_interaction import AreaDatabaseDownloader, SemanticChangeRetriever, has_api_connectivity, ConnectionError, get_motd, create_client
 from .changes_applier import ChangesApplier
 from .message_dialog import MessageDialog
-from .local_areas_utils import get_area_names_cache
+from .server_interaction import get_osm_object_names
 from osm_db import AreaDatabase, EntitiesQuery
 from .size_utils import format_size
 
@@ -62,9 +62,10 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(f"{self._selected_map_name} - Feel the streets")
         if is_frozen_area(self._selected_map):
             original_id = self._selected_map - FROZEN_AREA_OSM_ID_OFFSET
-            area_name = get_area_names_cache()[original_id]
         else:
-            area_name = self._selected_map_name
+            original_id = self._selected_map
+        rel_id = f"r{original_id - 3600000000}"
+        area_name = get_osm_object_names(True)[rel_id]["native"]
         map.reset()
         map.set_call_args(self._selected_map, area_name)
         person = Person(map=map(), position=LatLon(0, 0))

@@ -5,6 +5,7 @@ import xml.etree.ElementTree as et
 import requests
 import atomicwrites
 from ..services import config
+from ..local_utils import cache_response, get_cached_response, get_local_area_ids
 from .motd import Motd
 from osm_db import AreaDatabase
 
@@ -34,12 +35,24 @@ def get_areas_with_name(name):
     return results
 
 def get_areas():
-    resp = session.get(url_for("areas"))
-    if resp.status_code == 200:
-        return resp.json()
+    if not has_api_connectivity():
+        data = get_cached_response("areas.json")
+        local_ids = get_local_area_ids()
+        local_data = []
+        for area in data:
+            if area["osm_id"] in local_ids:
+                area["state"] = "Local"
+                local_data.append(area)
+        return local_data
     else:
-        log.warn("Non 200 response during areas request, status code %s.", resp.status_code)
-        return None
+        resp = session.get(url_for("areas"))
+        if resp.status_code == 200:
+            data = resp.json()
+            cache_response("areas.json", data)
+            return data
+        else:
+            log.warn("Non 200 response during areas request, status code %s.", resp.status_code)
+            return None
 
 def request_area_creation(area_id, area_name):
     resp = session.post(url_for("areas"), json={"name": area_name, "osm_id": area_id})
@@ -48,7 +61,6 @@ def request_area_creation(area_id, area_name):
     else:
         log.warn("Unexpected status code during an area creation request: %s, response %s.", resp.status_code, resp.content)
         return None
-
 
 class AreaDatabaseDownloader(QThread):
     download_progressed = Signal(int, int)
@@ -127,3 +139,11 @@ def create_client(client_id):
     print(resp.content, resp.status_code)
     if resp.status_code == 200:
         return resp.json()["password"]
+
+def get_osm_object_names(from_cache=False):
+    if has_api_connectivity() and not from_cache:
+        data = session.get(url_for("osm_object_names")).json()
+        cache_response("osm_object_names.json", data)
+        return data
+    else:
+        return get_cached_response("osm_object_names.json")

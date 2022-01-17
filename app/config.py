@@ -30,6 +30,7 @@ class PresentationConfig(BaseModel):
     play_crossing_sounds: bool = True
     announce_current_object_after_leaving_other: bool = True
     represent_bearings_as_clock_position: bool = True
+    areas_list_max_parents: int = 1
 
 class ChangelogsConfig(BaseModel):
     enabled: bool = False

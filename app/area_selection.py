@@ -1,28 +1,39 @@
 import functools
 import logging
-from PySide6.QtCore import QCollator
-from PySide6.QtWidgets import QPushButton, QListWidget, QLabel, QMessageBox, QInputDialog, QDialog
+import os
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QPushButton, QLabel, QMessageBox, QInputDialog, QDialog, QTreeWidgetItem
 import pendulum
 from osm_db import AreaDatabase
 from .base_dialog import BaseDialog
-from .server_interaction import has_api_connectivity, get_areas, request_area_creation
+from .server_interaction import has_api_connectivity, get_areas, request_area_creation, get_osm_object_names
 from .time_utils import rfc_3339_to_local_string
 from .size_utils import format_size
 from .areas_browser import AreasBrowserDialog
 from.area_candidates_searcher import AreaCandidatesSearcher
 from .search_indicator import SearchIndicator
-from .local_areas_utils import get_area_names_cache, cache_area_names, get_local_area_infos
+from .local_utils import get_local_area_ids
+from .more_accessible_tree_widget import MoreAccessibleTreeWidget
+from .services import config
+
+def area_id_to_osm_id(area_id):
+    return f"r{area_id - 3600000000}"
 
 def translate_area_state(state):
     translations = {"Updated": _("updated"), "Creating": _("creating"), "GettingChanges": _("getting changes"), "ApplyingChanges": _("applying changes"), "Frozen": _("frozen"), "LocalCopyExists": _("local copy exists"), "Local": _("local")}
     return ", ".join(translations[s] for s in state.split(","))
 
 def mark_areas_as_also_local(areas):
-    local_infos = get_local_area_infos()
-    local_ids = [a["osm_id"] for a in local_infos]
+    local_ids = get_local_area_ids()
     for area in areas:
         if area["osm_id"] in local_ids:
             area["state"] += ",LocalCopyExists"
+
+def osm_object_id_to_name(osm_object_id, osm_object_names):
+    lang = os.environ["LANG"]
+    if "_" in lang:
+        lang = lang.split("_")[0]
+    return osm_object_names[osm_object_id].get(lang, osm_object_names[osm_object_id]["native"])
 
 log = logging.getLogger(__name__)
 
@@ -36,23 +47,21 @@ class AreaSelectionDialog(BaseDialog):
         self._initialize_areas()
         
     def _initialize_areas(self):
+        available = get_areas()
         if has_api_connectivity():
-            available = get_areas()
             mark_areas_as_also_local(available)
-            cache_area_names(available)
         else:
-            available = get_local_area_infos()
             self.request_button.setDisabled(True)
-        collator = QCollator()
-        available.sort(key=functools.cmp_to_key(lambda a, b: collator.compare(a["name"], b["name"])))
-        self._area_ids = [a["osm_id"] for a in available]
-        self._area_names = [a["name"] for a in available]
+        self._osm_object_items = {}
+        self._osm_object_names = get_osm_object_names()
         self._fill_areas(available)
+        self._areas.setSortingEnabled(True)
+        self._areas.sortByColumn(0, Qt.AscendingOrder)
 
     def create_ui(self):
         areas_label = QLabel(_("&Available areas"))
         self.layout.addWidget(areas_label, 0, 0, 1, 3)
-        self._areas = QListWidget()
+        self._areas = MoreAccessibleTreeWidget()
         self._areas.setAccessibleName(_("Available areas"))
         self.layout.addWidget(self._areas, 1, 0, 1, 3)
         areas_label.setBuddy(self._areas)
@@ -62,20 +71,45 @@ class AreaSelectionDialog(BaseDialog):
 
     def _fill_areas(self, areas):
         for area in areas:
+            print(area)
             area["created_at"] = rfc_3339_to_local_string(area["created_at"])
             area["updated_at"] = rfc_3339_to_local_string(area["updated_at"])
             area["db_size"] = format_size(area["db_size"])
             area["state"] = translate_area_state(area["state"])
-            self._areas.addItem(_("{name}: {state}, last updated {updated_at}, file size {db_size}, created {created_at}").format(**area))
+            try:
+                area["name"] = osm_object_id_to_name(area_id_to_osm_id(area["osm_id"]), self._osm_object_names)
+            except KeyError:
+                pass
+            parents = area["parent_osm_ids"].split(",")
+            target_id = self._ensure_parents(parents)
+            item = QTreeWidgetItem([_("{name}: {state}, last updated {updated_at}, file size {db_size}, created {created_at}").format(**area)])
+            item.setData(0, Qt.UserRole, area)
+            if target_id:
+                self._osm_object_items[target_id].addChild(item)
+            else:
+                self._areas.addTopLevelItem(item)
+
+    def _ensure_parents(self, parents):
+        target_id = None
+        for idx, parent in enumerate(parents[:-1]):
+            if idx + 1 > config().presentation.areas_list_max_parents: break
+            target_id = parent
+            if parent in self._osm_object_items: continue
+            item = QTreeWidgetItem([osm_object_id_to_name(parent, self._osm_object_names)])
+            self._osm_object_items[parent] = item
+            if idx == 0:
+                self._areas.addTopLevelItem(item)
+            else:
+                self._osm_object_items[parents[idx - 1]].addChild(item)
+        return target_id
 
     @property
     def selected_map(self):
-        return self._area_ids[self._areas.currentRow()]
+        return self._areas.currentItem().data(0, Qt.UserRole)["osm_id"]
 
     @property
     def selected_map_name(self):
-        return self._area_names[self._areas.currentRow()]
-
+        return self._areas.currentItem().data(0, Qt.UserRole)["name"]
 
     def on_request_clicked(self):
         name, ok = QInputDialog.getText(self, _("Enter the name of the requested area"), _("Area name requested"))
