@@ -15,8 +15,8 @@ rocket_dyn_templates = { version = "0.1.0-rc.1", features = ["tera"] }
 diesel = { version = "1.4.8", features = ["sqlite", "chrono"] }
 diesel_migrations = "1.4.0"
 diesel-derive-enum = { version = "1.1.2", features = ["sqlite"] }
-serde = { version = "1.0.133", features = ["derive"] }
-serde_json = "1.0.74"
+serde = { version = "1.0.136", features = ["derive"] }
+serde_json = "1.0.79"
 chrono = { version = "0.4.19", default_features = false, features = ["serde", "clock", "std"] }
 thiserror = "1.0.30"
 dotenv = "0.15.0"
