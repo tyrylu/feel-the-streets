@@ -1,6 +1,8 @@
 use osm_db::semantic_change::EntryChange;
 use pyo3::prelude::*;
 use serde_json::Value;
+use crate::ChangeType;
+
 
 #[pyclass]
 pub struct DictChange {
@@ -10,11 +12,12 @@ pub struct DictChange {
 #[pymethods]
 impl DictChange {
     #[getter]
-    fn kind(&self) -> i32 {
+    fn kind(&self) -> ChangeType {
+        use ChangeType::*;
         match self.inner {
-            EntryChange::Create { .. } => crate::CHANGE_CREATE,
-            EntryChange::Update { .. } => crate::CHANGE_UPDATE,
-            EntryChange::Remove { .. } => crate::CHANGE_REMOVE,
+            EntryChange::Create { .. } => Create,
+            EntryChange::Update { .. } => Update,
+            EntryChange::Remove { .. } => Remove,
         }
     }
 

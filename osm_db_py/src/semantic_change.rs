@@ -1,15 +1,9 @@
 use crate::dict_change::DictChange;
+use crate::ChangeType;
 use osm_db::semantic_change::SemanticChange;
 use pyo3::exceptions;
 use pyo3::prelude::*;
 use serde_json::Value;
-
-#[pyclass]
-pub enum SemanticChangeType {
-    Add,
-    Remove,
-    Change
-}
 
 #[pyclass(name = "SemanticChange")]
 pub struct PySemanticChange {
@@ -29,11 +23,12 @@ impl PySemanticChange {
         }
     }
     #[getter]
-    fn get_type(&self) -> i32 {
+    fn get_type(&self) -> ChangeType {
+        use ChangeType::*;
         match self.inner {
-            SemanticChange::Create { .. } => crate::CHANGE_CREATE,
-            SemanticChange::Update { .. } => crate::CHANGE_UPDATE,
-            SemanticChange::Remove { .. } => crate::CHANGE_REMOVE,
+            SemanticChange::Create { .. } => Create,
+            SemanticChange::Update { .. } => Update,
+            SemanticChange::Remove { .. } => Remove,
         }
     }
     #[getter]
