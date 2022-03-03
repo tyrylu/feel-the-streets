@@ -26,7 +26,7 @@ fn find_or_create_suitable_change<'a>(
     updates_only: bool,
 ) -> &'a mut SemanticChange {
     if let Some(pos) = changes.iter().position(|c| {
-        c.osm_id().unwrap() == parent_id && !c.is_remove() && (!updates_only || c.is_update())
+        c.osm_id() == parent_id && !c.is_remove() && (!updates_only || c.is_update())
     }) {
         &mut changes[pos]
     } else {
@@ -235,7 +235,7 @@ fn infer_additional_relationships(
     let mut cache = HashMap::new();
     for idx in 0..changes.len() {
         if changes[idx].is_create() {
-            let entity_id = changes[idx].osm_id().unwrap();
+            let entity_id = changes[idx].osm_id();
             debug!(
                 "Enriching tags after creation resulting from {:?}, entity id {}.",
                 changes[idx], entity_id
@@ -249,7 +249,7 @@ fn infer_additional_relationships(
                 &mut cache,
             )?;
             for relationship in relationships {
-                let target = if relationship.parent_id == changes[idx].osm_id().unwrap() {
+                let target = if relationship.parent_id == changes[idx].osm_id() {
                     &mut changes[idx]
                 } else {
                     find_or_create_suitable_change(changes, &relationship.parent_id, false)
@@ -260,7 +260,7 @@ fn infer_additional_relationships(
                 ));
             }
         } else if changes[idx].is_update() {
-            let entity_id = changes[idx].osm_id().unwrap();
+            let entity_id = changes[idx].osm_id();
             debug!(
                 "Enriching relationships resulting from update {:?}, entity id {}.",
                 changes[idx], entity_id
@@ -291,7 +291,7 @@ fn infer_additional_relationships(
                         )),
                     ),
                 };
-                let target = if parent_id == changes[idx].osm_id().unwrap() {
+                let target = if parent_id == changes[idx].osm_id() {
                     &mut changes[idx]
                 } else {
                     find_or_create_suitable_change(changes, &parent_id, true)

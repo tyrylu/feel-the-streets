@@ -68,7 +68,6 @@ impl RelationshipChange {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum SemanticChange {
-    RedownloadDatabase,
     Create {
         id: String,
         geometry: String,
@@ -129,7 +128,7 @@ impl SemanticChange {
     pub fn add_rooted_relationship(&mut self, relationship: RootedEntityRelationship) {
         use SemanticChange::*;
         match self {
-            Remove { .. } | RedownloadDatabase => {} // Adding a relationship to a removal change makes no sense, same for a redownload request.
+            Remove { .. } => {} // Adding a relationship to a removal change makes no sense, same for a redownload request.
             Create {
                 entity_relationships,
                 ..
@@ -141,13 +140,12 @@ impl SemanticChange {
         }
     }
 
-    pub fn osm_id(&self) -> Option<&str> {
+    pub fn osm_id(&self) -> &str {
         use SemanticChange::*;
         match self {
-            RedownloadDatabase => None,
-            Create { id, .. } => Some(id),
-            Update { osm_id, .. } => Some(osm_id),
-            Remove { osm_id, .. } => Some(osm_id),
+            Create { id, .. } => id,
+            Update { osm_id, .. } => osm_id,
+            Remove { osm_id, .. } => osm_id,
         }
     }
 

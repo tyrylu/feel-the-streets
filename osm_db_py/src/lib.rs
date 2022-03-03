@@ -48,5 +48,6 @@ fn osm_db(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<field_condition::PyFieldCondition>()?;
     m.add_class::<field_named::FieldNamed>()?;
     m.add_class::<area_db::PyAreaDatabase>()?;
+    m.add_class::<semantic_change::SemanticChangeType>()?;
     Ok(())
 }

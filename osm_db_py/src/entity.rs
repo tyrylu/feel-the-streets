@@ -1,7 +1,6 @@
 use crate::conversions;
 use osm_db::entity::Entity;
 use pyo3::basic::CompareOp;
-use pyo3::class::basic::PyObjectProtocol;
 use pyo3::prelude::*;
 use pyo3::types::PyBytes;
 use std::collections::hash_map::DefaultHasher;
@@ -50,18 +49,15 @@ impl PyEntity {
     pub fn is_road_like(&self) -> bool {
         self.inner.is_road_like()
     }
-}
 
-#[pyproto]
-impl PyObjectProtocol for PyEntity {
-    fn __hash__(&'p self) -> PyResult<u64> {
+    fn __hash__(&self) -> PyResult<u64> {
         let mut hasher = DefaultHasher::new();
         self.inner.id.hash(&mut hasher);
         let hash = hasher.finish();
         Ok(hash)
     }
 
-    fn __richcmp__(&'p self, other: PyRef<'p, Self>, op: CompareOp) -> PyResult<bool> {
+    fn __richcmp__(&self, other: PyRef<Self>, op: CompareOp) -> PyResult<bool> {
         let id1 = &self.inner.id;
         let id2 = &other.inner.id;
         match op {
@@ -73,4 +69,5 @@ impl PyObjectProtocol for PyEntity {
             CompareOp::Ge => Ok(id1 >= id2),
         }
     }
+
 }

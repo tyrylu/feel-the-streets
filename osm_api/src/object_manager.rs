@@ -370,20 +370,19 @@ impl OSMObjectManager {
                 let geom_type = object.tags.get("type").map(|t| t.as_str()).unwrap_or("");
                 if geom_type == "multipolygon" {
                     let first_related = self.related_objects_of(object)?.next().unwrap();
-                    let multi;
-                    match first_related
+                    let multi = match first_related
                         .tags
                         .get("role")
                         .map(|r| r.as_str())
                         .unwrap_or("")
                     {
                         "inner" | "outer" => {
-                            multi = self.construct_multipolygon_from_complex_polygons(object)?;
+                            self.construct_multipolygon_from_complex_polygons(object)?
                         }
                         _ => {
-                            multi = self.construct_multipolygon_from_polygons(object)?;
+                            self.construct_multipolygon_from_polygons(object)?
                         }
-                    }
+                    };
                     if let Some(geom) = multi {
                         Ok(Some(geom))
                     } else {

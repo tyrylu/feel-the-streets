@@ -21,6 +21,6 @@ tempfile = "3.3.0"
 bincode = "1.3.3"
 hashbrown = { version = "0.12.0", features = ["serde"] }
 wkb = "0.7.1"
-geo-types = "0.7.2"
+geo-types = "0.7.3"
 smol_str = "0.1.21"
 zstd_util = "0.1.1"

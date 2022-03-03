@@ -4,6 +4,13 @@ use pyo3::exceptions;
 use pyo3::prelude::*;
 use serde_json::Value;
 
+#[pyclass]
+pub enum SemanticChangeType {
+    Add,
+    Remove,
+    Change
+}
+
 #[pyclass(name = "SemanticChange")]
 pub struct PySemanticChange {
     pub(crate) inner: SemanticChange,
@@ -24,21 +31,14 @@ impl PySemanticChange {
     #[getter]
     fn get_type(&self) -> i32 {
         match self.inner {
-            SemanticChange::RedownloadDatabase => crate::CHANGE_REDOWNLOAD_DATABASE,
             SemanticChange::Create { .. } => crate::CHANGE_CREATE,
             SemanticChange::Update { .. } => crate::CHANGE_UPDATE,
             SemanticChange::Remove { .. } => crate::CHANGE_REMOVE,
         }
     }
     #[getter]
-    fn osm_id(&self) -> Option<&str> {
-        match &self.inner {
-            SemanticChange::Remove { osm_id, .. } | SemanticChange::Update { osm_id, .. } => {
-                Some(osm_id)
-            }
-            SemanticChange::Create { id, .. } => Some(id),
-            SemanticChange::RedownloadDatabase => None,
-        }
+    fn osm_id(&self) -> &str {
+        self.inner.osm_id()
     }
     #[getter]
     fn data_changes(&self) -> Vec<DictChange> {
@@ -48,8 +48,7 @@ impl PySemanticChange {
                 .map(|c| DictChange::new(c.clone()))
                 .collect(),
             SemanticChange::Remove { .. }
-            | SemanticChange::Create { .. }
-            | SemanticChange::RedownloadDatabase => vec![],
+            | SemanticChange::Create { .. } => vec![],
         }
     }
 
@@ -82,7 +81,7 @@ impl PySemanticChange {
                 }
                 ret
             }
-            SemanticChange::Remove { .. } | SemanticChange::RedownloadDatabase => vec![],
+            SemanticChange::Remove { .. } => vec![],
         }
     }
 }

@@ -306,7 +306,6 @@ impl AreaDatabase {
     pub fn apply_change(&mut self, change: &SemanticChange) -> Result<()> {
         use SemanticChange::*;
         match change {
-            RedownloadDatabase => Err(Error::IllegalChangeType),
             Create {
                 id,
                 discriminator,
