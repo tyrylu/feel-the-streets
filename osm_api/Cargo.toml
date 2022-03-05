@@ -14,7 +14,7 @@ sqlitemap = {path="../sqlitemap"}
 log = "0.4.14"
 itertools = "0.10.3"
 regex = "1.5.4"
-once_cell = "1.9.0"
+once_cell = "1.10.0"
 chrono = { version = "0.4.19", default_features = false, features = ["std", "clock"] }
 xml-rs = "0.8.4"
 tempfile = "3.3.0"
