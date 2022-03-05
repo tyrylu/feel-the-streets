@@ -2,7 +2,8 @@ import os
 import datetime
 import logging
 from PySide6.QtCore import QThread, Signal
-from osm_db import AreaDatabase, CHANGE_REMOVE, CHANGE_REDOWNLOAD_DATABASE
+from osm_db import AreaDatabase
+from osm_db import ChangeType as CT
 from .semantic_changelog_generator import get_change_description
 
 
@@ -32,7 +33,7 @@ class ChangesApplier(QThread):
             self.will_process_change.emit(nth + 1)
             entity = None
             # We must retrieve the entity before deleting it so we can produce the display representation of it.
-            if self._generate_changelog and change.type is CHANGE_REMOVE:
+            if self._generate_changelog and change.type is CT.Remove:
                 entity = db.get_entity(change.osm_id)
             db.apply_change(change)
             changes_applyed = True

@@ -37,6 +37,8 @@ class SoundController:
         self._groups_map: DefaultDict[Entity, Dict[Entity, str]] = collections.defaultdict(dict)
         self._interesting_sounds = collections.defaultdict(dict) # A mapping which maps a sound originating entity, some entity which was a reason for the sound source generation (e. g. the second part of a crossing tuple) to the sound source.
         self._interesting_roads = set()
+        self._crossing_sounds = {}
+        self._current_crossing_sound = None
         entity_post_move.connect(self.post_move)
         entity_post_enter.connect(self.post_enter)
         entity_post_leave.connect(self.post_leave)
@@ -54,6 +56,16 @@ class SoundController:
         x, y = sender.cartesian_position
         if self._point_of_view is sender:
             sound().listener.set_position([x, y, 0])
+            crossing_sound = self._crossing_sounds.get((sender.position.lat, sender.position.lon), None)
+            if crossing_sound:
+                if self._current_crossing_sound:
+                    self._current_crossing_sound.set_pitch(1.0)
+                self._current_crossing_sound = crossing_sound
+                crossing_sound.set_pitch(config().presentation.current_crossing_pitch)
+            else:
+                if self._current_crossing_sound:
+                    self._current_crossing_sound.set_pitch(1.0)
+                    self._current_crossing_sound = None
             for entity, source in self._interesting_sounds.items():
                 if entity.is_road_like: continue # We're not moving the road crossing sounds with the listener
                 x, y = map().project_latlon(self._point_of_view.closest_point_to(entity.geometry))
@@ -165,6 +177,7 @@ class SoundController:
             x, y = map().project_latlon(dest_latlon)
             snd = sound().play("road_turn", x=x, y=y, z=0, set_loop=True)
             self._interesting_sounds[current_road][interesting_road] = snd
+            self._crossing_sounds[(dest_latlon.lat, dest_latlon.lon)] = snd
 
 
     def _spawn_sound_for(self, entity):
@@ -225,4 +238,5 @@ class SoundController:
         self._interesting_sounds.clear()
         self._interesting_roads.clear()
         self._groups_map.clear()
+        self._crossing_sounds.clear()
         self._load_sound_played = False

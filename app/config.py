@@ -31,6 +31,7 @@ class PresentationConfig(BaseModel):
     announce_current_object_after_leaving_other: bool = True
     represent_bearings_as_clock_position: bool = True
     areas_list_max_parents: int = 1
+    current_crossing_pitch: float = 1.1
 
 class ChangelogsConfig(BaseModel):
     enabled: bool = False
