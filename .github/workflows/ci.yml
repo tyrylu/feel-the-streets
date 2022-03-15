@@ -51,6 +51,9 @@ jobs:
     - name: Add spatialite to path
       if: runner.os == 'Windows'
       run: echo $PWD\spatialite-loadable-modules-5.0.0-win-amd64 >> $env:GITHUB_PATH
+    - name: Make pyinstaller happy by making the correctly named copy of geos_c.dll
+      if: runner.os == 'Windows'
+      run: Copy-Item $PWD\spatialite-loadable-modules-5.0.0-win-amd64\libgeos_c-1.dll $PWD\spatialite-loadable-modules-5.0.0-win-amd64\geos_c.dll
     - name: Build the app executable
       if: runner.os == 'Windows'
       run: pyinstaller run_app.spec
