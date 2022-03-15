@@ -43,4 +43,5 @@ def get_change_description(change, entity, include_geometry_changes=False):
             msg += get_dictchange_description(subchange, fields) + "\n"
         return msg
     else:
+        breakpoint()
         raise RuntimeError("Invalid semantic change type %s."%change.type)

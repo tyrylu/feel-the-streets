@@ -15,6 +15,8 @@ static AVAILABLE_SLOTS_RE: Lazy<Regex> =
 static SLOT_AVAILABLE_AFTER_RE: Lazy<Regex> = Lazy::new(|| {
     Regex::new(r"^Slot available after: (\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)").unwrap()
 });
+static RATE_LIMIT_RE: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"^Rate limit: (\d+)").unwrap());
 
 fn getting_non_200_response_is_ok(
     err: ureq::Error,
@@ -30,6 +32,7 @@ pub struct OverpassApiServer {
     url: &'static str,
     available_slots: RefCell<usize>,
     slots_available_after: RefCell<Vec<DateTime<Utc>>>,
+    rate_limit: RefCell<usize>,
 }
 
 impl OverpassApiServer {
@@ -38,6 +41,7 @@ impl OverpassApiServer {
             http_client: ureq::Agent::new(),
             available_slots: RefCell::new(0),
             slots_available_after: RefCell::new(vec![]),
+            rate_limit: RefCell::new(0),
             url,
         };
         ret.update_status()?;
@@ -101,6 +105,10 @@ impl OverpassApiServer {
             .call()?
             .into_string()?;
         for line in text.lines() {
+            let rate_limit_match = RATE_LIMIT_RE.captures(line);
+            if let Some(res) = rate_limit_match {
+                *self.rate_limit.borrow_mut() = res.get(1).unwrap().as_str().parse().unwrap();
+            }
             let available_count_match = AVAILABLE_SLOTS_RE.captures(line);
             if let Some(res) = available_count_match {
                 *self.available_slots.borrow_mut() = res.get(1).unwrap().as_str().parse().unwrap();
@@ -120,12 +128,13 @@ impl OverpassApiServer {
 
     pub fn has_available_slot(&self) -> bool {
         let now = Utc::now();
+        *self.rate_limit.borrow() == 0 ||
         *self.available_slots.borrow() > 0
             || self.slots_available_after.borrow().iter().any(|s| s < &now)
     }
 
     pub fn slot_available_after(&self) -> Duration {
-        if *self.available_slots.borrow() > 0 {
+        if *self.available_slots.borrow() > 0 || *self.rate_limit.borrow() == 0 {
             Duration::zero()
         } else {
             *self.slots_available_after.borrow().iter().min().unwrap() - Utc::now()
