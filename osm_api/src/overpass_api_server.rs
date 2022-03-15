@@ -50,7 +50,7 @@ impl OverpassApiServer {
             res = match self.run_query_internal(query, result_to_tempfile) {
                 Ok(r) => Some(Ok(r)),
                 Err(e) => {
-                    warn!("Query failed during retry {}, error: {:?}", retry, e);
+                    warn!("Query failed during retry {}, error: {:?}, we had {:?} available slots with available times {:?}.", retry, e, self.available_slots, self.slots_available_after);
                     Some(Err(e))
                 }
             };
@@ -86,13 +86,15 @@ impl OverpassApiServer {
                 }
             }
             _ => {
-                warn!("Unexpected status code {} from the server.", resp.status());
+                warn!("Unexpected status code {} from the server. We now have {:?} slots with availability times {:?}.", resp.status(), self.available_slots, self.slots_available_after);
                 self.run_query(query, result_to_tempfile)
             }
         }
     }
 
     fn update_status(&self) -> Result<()> {
+        *self.available_slots.borrow_mut() = 0;
+        self.slots_available_after.borrow_mut().clear();
         let text = self
             .http_client
             .get(&format!("{}/api/status", self.url))

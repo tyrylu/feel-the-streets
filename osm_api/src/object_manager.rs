@@ -82,7 +82,7 @@ impl OSMObjectManager {
         Ok(OSMObjectManager {
             api_servers: vec![
                 OverpassApiServer::new("https://z.overpass-api.de")?,
-                OverpassApiServer::new("https://lz4.overpass-api.de")?,
+                //OverpassApiServer::new("https://lz4.overpass-api.de")?,
             ],
             cache_conn: Some(conn),
             geometries_cache: RefCell::new(HashMap::new()),
