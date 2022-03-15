@@ -19,6 +19,9 @@ fn main() {
         .lookup_differences_in(id, &after)
         .expect("Could not lookup changes")
     {
-        println!("{:?}", change);
+        let change = change.expect("No change");
+        let obj = change.old.as_ref().unwrap_or_else(|| change.new.as_ref().expect(&format!("No old or new for change {:?}", change)));
+        let geom = manager.get_geometry_as_wkb(&obj).expect("Could not get geom").expect(&format!("Geometry for {:?} was none.", obj));
+        println!("{:?}, geom len: {}", change, geom.len());
     }
 }
