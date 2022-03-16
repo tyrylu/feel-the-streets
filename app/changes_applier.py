@@ -33,7 +33,7 @@ class ChangesApplier(QThread):
             self.will_process_change.emit(nth + 1)
             entity = None
             # We must retrieve the entity before deleting it so we can produce the display representation of it.
-            if self._generate_changelog and change.type is CT.Remove:
+            if self._generate_changelog and change.type == CT.Remove:
                 entity = db.get_entity(change.osm_id)
             db.apply_change(change)
             changes_applyed = True
