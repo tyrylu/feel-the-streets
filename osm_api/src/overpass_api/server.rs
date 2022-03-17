@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc, Duration};
 use crossbeam_channel::{Sender, Receiver};
-use log::{warn, debug};
+use log::{warn, debug, info};
 use once_cell::sync::Lazy;
 use regex::Regex;
 use super::servers::ServerQuery;
@@ -42,7 +42,7 @@ fn query_executor(req: Request, query: ServerQuery, wake_sender: Sender<()>) {
 
 fn run_query(req: Request, query: &str, result_to_tempfile: bool, wake_sender: &Sender<()>) -> Result<Box<dyn Read + Send>> {
     let start = Instant::now();
-    debug!("Calling interpreter endpoint {}", req.url());
+    debug!("Calling interpreter endpoint {} with query {}", req.url(), query);
     let resp = req
         .send_form(&[("data", query)])?;
     debug!("Request successfully finished after {:?}.", start.elapsed());
@@ -65,7 +65,9 @@ pub fn requests_dispatcher(url: &'static str, queries_receiver: Receiver<ServerQ
     while !should_exit.load(Ordering::SeqCst) {
         // In the previous iteration, we finished at least one in-flight query, and we have the current quota status, so how much must we sleep to make a query slot available to us?
         if !server.has_available_slot() {
-            thread::sleep(server.slot_available_after().to_std().unwrap());
+            let dur = server.slot_available_after().to_std().unwrap();
+            info!("Overpass API endpoint at {} ran out of slots, going to sleep for {:?} to make one.", url, dur);
+            thread::sleep(dur);
         }
         // Now, we have at least one slot available, so get something to work on.
         if let Ok(query) = queries_receiver.recv() {

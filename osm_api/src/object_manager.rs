@@ -50,10 +50,11 @@ fn translate_type_shortcut(shortcut: char) -> &'static str {
     }
 }
 
-fn format_query(timeout: u32, query: &str) -> String {
+fn format_query(timeout: u32, maxsize: usize, query: &str) -> String {
     format!(
-        "[out:json][timeout:{timeout}][maxsize:1073741824];{query};out meta;",
+        "[out:json][timeout:{timeout}][maxsize:{maxsize}];{query};out meta;",
         timeout = timeout,
+        maxsize = maxsize,
         query = query
     )
 }
@@ -180,24 +181,37 @@ impl OSMObjectManager {
 
     pub fn lookup_objects_in(&self, area: i64) -> Result<()> {
         info!("Looking up all objects in area {}.", area);
-        let query = format_query(900, &format_data_retrieval(area));
+        // Area retrieval queries are costly, so tell the server about it upfront.
+        let query = format_query(900, 1073741824, &format_data_retrieval(area));
         let readable = self.run_query(&query, false)?;
         self.cache_objects_from(readable, false)?;
         Ok(())
     }
 
     fn lookup_objects<S: AsRef<str>>(&self, ids: &mut [S]) -> Result<()> {
-        const MAX_SIMULTANEOUSLY_QUERYED: usize = 1_000_000;
+        fn batch_size_for_object_type(object_type: char) -> usize {
+            match object_type {
+                'n' => 4512,
+                'w' => 2024,
+                'r' => 560,
+                _ => {panic!("Unsupported object type.");},
+            }
+        }
+        fn memory_cost_per_instance(object_type: char) -> usize {
+            1073741824 / batch_size_for_object_type(object_type)
+        }
         let mut objects: Vec<OSMObject> = Vec::with_capacity(ids.len());
         ids.sort_unstable_by_key(|oid| oid.as_ref().chars().next());
         for (entity_type, entity_ids) in &ids
             .iter()
             .group_by(|oid| oid.as_ref().chars().next().unwrap())
         {
-            for chunk in &entity_ids.chunks(MAX_SIMULTANEOUSLY_QUERYED) {
+            for chunk in &entity_ids.chunks(batch_size_for_object_type(entity_type)) {
                 let ids_str = chunk.map(|c| &(c.as_ref())[1..]).join(",");
+                // Note that this way of counting the actual chunk length is inefficient, so if anyone knows of a better way, i am open ears.
                 let query = format_query(
                     900,
+                    memory_cost_per_instance(entity_type) * ids_str.matches(',').count() + 1,
                     &format!("{}(id:{})", translate_type_shortcut(entity_type), ids_str),
                 );
                 let readable = self.run_query(&query, false)?;
