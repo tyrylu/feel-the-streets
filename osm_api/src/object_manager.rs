@@ -1,7 +1,7 @@
 use crate::change::OSMObjectChange;
 use crate::change_iterator::OSMObjectChangeIterator;
 use crate::object::{OSMObject, OSMObjectFromNetwork, OSMObjectSpecifics, OSMObjectType};
-use crate::overpass_api_server::OverpassApiServer;
+use crate::overpass_api::Servers;
 use crate::utils;
 use crate::{Error, Result};
 use chrono::{DateTime, Utc};
@@ -21,7 +21,6 @@ use std::collections::HashSet;
 use std::fs;
 use std::io::{BufReader, Read};
 use std::sync::Mutex;
-use std::thread;
 use std::time::Instant;
 use zstd_util::ZstdContext;
 
@@ -68,7 +67,7 @@ fn format_data_retrieval(area: i64) -> String {
 
 pub struct OSMObjectManager {
     geometries_cache: RefCell<HashMap<SmolStr, Option<Geometry<f64>>>>,
-    api_servers: Vec<OverpassApiServer>,
+    api_servers: Servers,
     cache_conn: Option<Connection>,
     seen_cache: RefCell<bool>,
     retrieved_from_network: RefCell<HashSet<SmolStr>>,
@@ -80,13 +79,7 @@ impl OSMObjectManager {
         let conn = Connection::open("entity_cache.db").expect("Could not create connection.");
         conn.execute("PRAGMA SYNCHRONOUS=off", []).unwrap();
         Ok(OSMObjectManager {
-            api_servers: vec![
-                OverpassApiServer::new("https://z.overpass-api.de")?,
-                OverpassApiServer::new("https://lz4.overpass-api.de")?,
-                OverpassApiServer::new("https://overpass.kumi.systems")?,
-                OverpassApiServer::new("https://maps.mail.ru/osm/tools/overpass")?,
-            ],
-            cache_conn: Some(conn),
+            api_servers: Servers::default(),            cache_conn: Some(conn),
             geometries_cache: RefCell::new(HashMap::new()),
             seen_cache: RefCell::new(false),
             retrieved_from_network: RefCell::new(HashSet::new()),
@@ -138,27 +131,8 @@ impl OSMObjectManager {
         }
     }
 
-    fn select_api_server(&self) -> &OverpassApiServer {
-        if let Some(server) = self.api_servers.iter().find(|s| s.has_available_slot()) {
-            server
-        } else {
-            let least_duration_server = self
-                .api_servers
-                .iter()
-                .min_by_key(|s| s.slot_available_after())
-                .unwrap();
-            let duration = least_duration_server.slot_available_after();
-            warn!(
-                "No available API server, going to sleep for {} to make a slot available.",
-                duration
-            );
-            thread::sleep(duration.to_std().unwrap());
-            least_duration_server
-        }
-    }
-
-    fn run_query(&self, query: &str, result_to_tempfile: bool) -> Result<Box<dyn Read>> {
-        self.select_api_server()
+    fn run_query(&self, query: &str, result_to_tempfile: bool) -> Result<Box<dyn Read + Send>> {
+        self.api_servers
             .run_query(query, result_to_tempfile)
     }
 

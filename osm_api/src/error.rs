@@ -16,4 +16,6 @@ pub enum Error {
     SerializationError(#[from] bincode::Error),
     #[error("Zstd operation error: {0}")]
     ZstdError(#[from] zstd_util::Error),
+    #[error("The retry limit was exceeded")]
+    RetryLimitExceeded,
 }
