@@ -68,21 +68,26 @@ pub fn requests_dispatcher(url: &'static str, queries_receiver: Receiver<ServerQ
             thread::sleep(server.slot_available_after().to_std().unwrap());
         }
         // Now, we have at least one slot available, so get something to work on.
-        let query = queries_receiver.recv().unwrap();
-        let req = server.prepare_run_query();
-        in_flight_requests += 1;
-        let wake_clone = wake_tx.clone();
-        thread::spawn(move || query_executor(req, query, wake_clone));
-        // Did we reach the maximum nuber of in-flight queries? If yes, wait for at leas one to finish.
-        if server.rate_limit > 0 && server.rate_limit == in_flight_requests {
-            let _ = wake_rx.recv().unwrap();
-            in_flight_requests -= 1;
-            // The wake could have been from a request which finished while we slept and others could finish as well, so find out how many actually did.
-            while let Ok(()) = wake_rx.try_recv() {
+        if let Ok(query) = queries_receiver.recv() {
+            let req = server.prepare_run_query();
+            in_flight_requests += 1;
+            let wake_clone = wake_tx.clone();
+            thread::spawn(move || query_executor(req, query, wake_clone));
+            // Did we reach the maximum nuber of in-flight queries? If yes, wait for at leas one to finish.
+            if server.rate_limit > 0 && server.rate_limit == in_flight_requests {
+                let _ = wake_rx.recv().unwrap();
                 in_flight_requests -= 1;
+                // The wake could have been from a request which finished while we slept and others could finish as well, so find out how many actually did.
+                while let Ok(()) = wake_rx.try_recv() {
+                    in_flight_requests -= 1;
+                }
             }
+            server.update_status().expect("Could not update status");
         }
-        server.update_status().expect("Could not update status");
+        else {
+            // The Servers instance got dropped, so just exit gracefully.
+            break;
+        }
     }
 }
 
