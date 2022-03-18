@@ -211,7 +211,7 @@ impl OSMObjectManager {
                 // Note that this way of counting the actual chunk length is inefficient, so if anyone knows of a better way, i am open ears.
                 let query = format_query(
                     900,
-                    memory_cost_per_instance(entity_type) * ids_str.matches(',').count() + 1,
+                    memory_cost_per_instance(entity_type) * (ids_str.matches(',').count() + 1),
                     &format!("{}(id:{})", translate_type_shortcut(entity_type), ids_str),
                 );
                 let readable = self.run_query(&query, false)?;
