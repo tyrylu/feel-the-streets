@@ -6,7 +6,6 @@ from .query_executor import QueryExecutor
 from ..geometry_utils import xy_ranges_bounding_square
 
 def create_query(discriminator, current_position, distance, conditions):
-    print(f"Creating query for discriminator {discriminator} within distance {distance} at position {current_position}")
     query = EntitiesQuery()
     if distance < float("inf"):
         min_x, min_y, max_x, max_y = xy_ranges_bounding_square(current_position, distance*2)

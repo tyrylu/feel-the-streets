@@ -148,7 +148,10 @@ impl Server {
          if self.available_slots > 0 || self.rate_limit == 0 {
             Duration::zero()
         } else {
-            *self.slots_available_after.iter().min().unwrap() - Utc::now()
+            match self.slots_available_after.iter().min() {
+                Some(dt) => *dt - Utc::now(),
+                None => Duration::seconds(5) // Handles the case when all slots are taken and we are requested to get the sleep value.
+            }
         }
     }
 

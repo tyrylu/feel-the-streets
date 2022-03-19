@@ -24,9 +24,8 @@ def url_for(path):
 def get_areas_with_name(name):
     query = f'[out:json];area["name"="{name}"];out meta;'
     resp = requests.get("https://overpass-api.de/api/interpreter", params={"data": query})
-    print(f"Status code: {resp.status_code}")
     if resp.status_code != 200:
-        raise RateLimitedError()
+            raise RateLimitedError()
     results = {}
     for area in resp.json()["elements"]:
         if "admin_level" not in area["tags"]:

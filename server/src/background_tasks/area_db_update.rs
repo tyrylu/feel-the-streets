@@ -18,7 +18,9 @@ use serde::{Deserialize, Serialize};
 use std::{
     collections::{HashMap, HashSet},
     fs,
+    sync::{Arc, Mutex},
 };
+use osm_api::overpass_api::Servers;
 
 fn find_or_create_suitable_change<'a>(
     changes: &'a mut Vec<SemanticChange>,
@@ -35,13 +37,14 @@ fn find_or_create_suitable_change<'a>(
     }
 }
 pub fn update_area(
-    area: &mut Area,
-    conn: &SqliteConnection,
-    record: &mut TranslationRecord,
-) -> Result<()> {
+    mut area: Area,
+    conn: Arc<Mutex<SqliteConnection>>,
+    manager: OSMObjectManager
+) -> Result<TranslationRecord> {
     info!("Updating area {} (id {}).", area.name, area.osm_id);
+    let mut record = TranslationRecord::new();
     area.state = AreaState::GettingChanges;
-    area.save(conn)?;
+    area.save(&conn.lock().unwrap())?;
     let after = if let Some(timestamp) = &area.newest_osm_object_timestamp {
         info!(
             "Looking differences after the latest known OSM object timestamp {}",
@@ -55,8 +58,7 @@ pub fn update_area(
         );
         DateTime::from_utc(area.updated_at, Utc)
     };
-    let manager = OSMObjectManager::new()?;
-    let mut area_db = AreaDatabase::open_existing(area.osm_id, true)?;
+        let mut area_db = AreaDatabase::open_existing(area.osm_id, true)?;
     let mut first = true;
     let mut osm_change_count = 0;
     let mut semantic_changes = vec![];
@@ -67,7 +69,7 @@ pub fn update_area(
         use OSMObjectChangeType::*;
         if first {
             area.state = AreaState::ApplyingChanges;
-            area.save(conn)?;
+            area.save(&conn.lock().unwrap())?;
             first = false;
         }
         let change = change?;
@@ -96,10 +98,8 @@ pub fn update_area(
         let semantic_change = match change.change_type {
             Create => {
                 let new = change.new.expect("No new for a create change");
-                let mut cache = manager.get_cache();
-                manager.cache_object_into(&mut cache, &new);
-                drop(cache); // So we don't end up in a locked state for the cache db
-                translator::translate(&new, &manager, record)?
+                manager.cache_object(&new);
+                translator::translate(&new, &manager, &mut record)?
             }
             .map(|(o, ids)| {
                 SemanticChange::creating(
@@ -117,8 +117,7 @@ pub fn update_area(
             Delete => {
                 let osm_id = change.old.expect("No old in a deletion change").unique_id();
                 manager
-                    .get_cache()
-                    .remove::<Vec<u8>>(&osm_id.as_str())
+                    .remove_cached_object(osm_id.as_str())
                     .expect("Could not remove cached entity");
                 if area_db.has_entity(&osm_id)? {
                     Some(SemanticChange::removing(&osm_id))
@@ -127,13 +126,11 @@ pub fn update_area(
                 }
             }
             Modify => {
-                let mut cache = manager.get_cache();
                 let new_object = change.new.expect("No new during a modify");
-                manager.cache_object_into(&mut cache, &new_object);
-                drop(cache);
+                manager.cache_object(&new_object);
                 let osm_id = new_object.unique_id();
                 let old = area_db.get_entity(&osm_id)?;
-                let new = translator::translate(&new_object, &manager, record)?;
+                let new = translator::translate(&new_object, &manager, &mut record)?;
                 match (old, new) {
                     (None, None) => None,
                     (Some(_), None) => Some(SemanticChange::removing(&osm_id)),
@@ -224,8 +221,8 @@ pub fn update_area(
     let size = fs::metadata(AreaDatabase::path_for(area.osm_id, true))?.len() as i64;
     area.db_size = size;
     area.state = AreaState::Updated;
-    area.save(conn)?;
-    Ok(())
+    area.save(&conn.lock().unwrap())?;
+    Ok(record)
 }
 
 fn infer_additional_relationships(
@@ -305,12 +302,24 @@ fn infer_additional_relationships(
 
 pub fn update_area_databases() -> Result<()> {
     info!("Going to perform the area database update for all up-to date areas.");
-    let area_db_conn = SqliteConnection::establish("server.db")?;
-    let mut record = TranslationRecord::new();
-    let areas = Area::all_updated(&area_db_conn)?;
+    let pool = rusty_pool::ThreadPool::default();
+    let area_db_conn = Arc::new(Mutex::new(SqliteConnection::establish("server.db")?));
+    let servers = Arc::new(Servers::default());
+    let cache = Arc::new(osm_api::object_manager::open_cache()?);
+    let areas = Area::all_updated(&area_db_conn.lock().unwrap())?;
     let now = Utc::now();
-    for mut area in areas {
-        update_area(&mut area, &area_db_conn, &mut record)?;
+    let mut record = TranslationRecord::new();
+    let mut tasks = vec![];
+    for area in areas {
+        let conn_clone = area_db_conn.clone();
+        let manager = OSMObjectManager::new_multithread(servers.clone(), cache.clone())?;
+        tasks.push(pool.evaluate(move || update_area(area, conn_clone, manager)));
+    }
+    for task in tasks {
+        match task.await_complete() {
+            Ok(rec) => rec.merge_to(&mut record),
+            Err(e) => { error!("Failed to update the area, error: {:?}", e);}
+        }
     }
     record.save_to_file(&format!("area_updates_{}.json", now.to_rfc3339()))?;
     info!("Area updates finished successfully.");

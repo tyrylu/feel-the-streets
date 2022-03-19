@@ -71,7 +71,6 @@ class AreaSelectionDialog(BaseDialog):
 
     def _fill_areas(self, areas):
         for area in areas:
-            print(area)
             area["created_at"] = rfc_3339_to_local_string(area["created_at"])
             area["updated_at"] = rfc_3339_to_local_string(area["updated_at"])
             area["db_size"] = format_size(area["db_size"])

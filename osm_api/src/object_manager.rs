@@ -10,17 +10,16 @@ use hashbrown::HashMap;
 use itertools::Itertools;
 use log::{debug, error, info, warn};
 use once_cell::sync::Lazy;
-use rusqlite::Connection;
+use sled::Db;
 use serde::Deserialize;
 use serde_json::{self, Deserializer};
 use smol_str::SmolStr;
-use sqlitemap::SqliteMap;
 use std::cell::{Ref, RefCell};
 use std::cmp;
 use std::collections::HashSet;
 use std::fs;
 use std::io::{BufReader, Read};
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
 use std::time::Instant;
 use zstd_util::ZstdContext;
 
@@ -34,6 +33,10 @@ static ZSTD_CONTEXT: Lazy<Mutex<ZstdContext>> = Lazy::new(|| {
 fn serialize_and_compress(object: &OSMObject) -> Result<Vec<u8>> {
     let serialized = bincode::serialize(&object)?;
     Ok(ZSTD_CONTEXT.lock().unwrap().compress(&serialized)?)
+}
+
+pub fn open_cache() -> Result<Db> {
+    Ok(sled::open("entities_cache")?)
 }
 
 fn deserialize_compressed(compressed: &[u8]) -> Result<OSMObject> {
@@ -68,55 +71,43 @@ fn format_data_retrieval(area: i64) -> String {
 
 pub struct OSMObjectManager {
     geometries_cache: RefCell<HashMap<SmolStr, Option<Geometry<f64>>>>,
-    api_servers: Servers,
-    cache_conn: Option<Connection>,
-    seen_cache: RefCell<bool>,
+    api_servers: Arc<Servers>,
+    cache: Arc<Db>,
     retrieved_from_network: RefCell<HashSet<SmolStr>>,
     cache_queries: RefCell<u32>,
     cache_hits: RefCell<u32>,
 }
 impl OSMObjectManager {
+    /// Use this constructor only if there's only one OSMObjectManager at a time.
     pub fn new() -> Result<Self> {
-        let conn = Connection::open("entity_cache.db").expect("Could not create connection.");
-        conn.execute("PRAGMA SYNCHRONOUS=off", []).unwrap();
+        Self::new_multithread(Arc::new(Servers::default()), Arc::new(open_cache()?))
+    }
+
+    /// Creates an OsmObjectManager in a scenario where each thread has its own instance and there are at least two of these.
+    pub fn new_multithread(servers: Arc<Servers>, cache: Arc<Db>) -> Result<Self> {
         Ok(OSMObjectManager {
-            api_servers: Servers::default(),            cache_conn: Some(conn),
+            api_servers: servers,            cache,
             geometries_cache: RefCell::new(HashMap::new()),
-            seen_cache: RefCell::new(false),
             retrieved_from_network: RefCell::new(HashSet::new()),
             cache_queries: RefCell::new(0),
             cache_hits: RefCell::new(0),
         })
     }
 
-    pub fn get_cache(&self) -> SqliteMap<'_> {
-        let res = SqliteMap::new(
-            self.cache_conn.as_ref().unwrap(),
-            "raw_entities",
-            "text",
-            "blob",
-            !*self.seen_cache.borrow(),
-        )
-        .unwrap();
-        *self.seen_cache.borrow_mut() = true;
-        res
-    }
-
     pub fn get_ids_retrieved_from_network(&self) -> Ref<HashSet<SmolStr>> {
         self.retrieved_from_network.borrow()
     }
 
-    pub fn cache_object_into(&self, cache: &mut SqliteMap<'_>, object: &OSMObject) {
+    pub fn cache_object(&self, object: &OSMObject) {
         let compressed = serialize_and_compress(object).expect("Could not serialize object");
-        cache
-            .insert::<Vec<u8>>(&object.unique_id().as_str(), &compressed)
+        self.cache
+            .insert(object.unique_id().as_bytes(), compressed)
             .expect("Could not cache object.");
     }
 
     fn has_object(&self, id: &str) -> bool {
         *self.cache_queries.borrow_mut() += 1;
-        let mut cache = self.get_cache();
-        let exists = cache.contains_key(&id).expect("Cache query failed.");
+        let exists = self.cache.contains_key(&id).expect("Cache query failed.");
         if exists {
             *self.cache_hits.borrow_mut() += 1;
         }
@@ -124,9 +115,8 @@ impl OSMObjectManager {
     }
 
     fn get_cached_object(&self, id: &str) -> Result<Option<OSMObject>> {
-        let mut cache = self.get_cache();
-        if let Some(data) = cache.get::<Vec<u8>>(&id)? {
-            Ok(Some(deserialize_compressed(&data)?))
+        if let Some(data) = self.cache.get(&id)? {
+            Ok(Some(deserialize_compressed(data.as_ref())?))
         } else {
             Ok(None)
         }
@@ -142,9 +132,7 @@ impl OSMObjectManager {
         readable: Box<dyn Read>,
         return_objects: bool,
     ) -> Result<Vec<OSMObject>> {
-        self.cache_conn.as_ref().unwrap().execute("BEGIN", [])?;
         let start = Instant::now();
-        let mut cache = self.get_cache();
         let mut objects = Vec::new();
         let mut cached_readable = BufReader::with_capacity(65536, readable);
         let mut buf = [0; 1];
@@ -164,7 +152,7 @@ impl OSMObjectManager {
                         self.retrieved_from_network
                             .borrow_mut()
                             .insert(internal_object.unique_id());
-                        self.cache_object_into(&mut cache, &internal_object);
+                        self.cache_object(&internal_object);
                         if return_objects {
                             objects.push(internal_object);
                         }
@@ -175,7 +163,7 @@ impl OSMObjectManager {
             cached_readable.read_exact(&mut buf)?; // Skip a comma
         }
         debug!("Caching finished after {:?}", start.elapsed());
-        self.commit_cache();
+        self.flush_cache();
         Ok(objects)
     }
 
@@ -479,12 +467,9 @@ impl OSMObjectManager {
         }
     }
 
-    fn commit_cache(&self) {
-        self.cache_conn
-            .as_ref()
-            .unwrap()
-            .execute("COMMIT", [])
-            .expect("Commit failed.");
+    fn flush_cache(&self) {
+        self.cache.flush()
+            .expect("Flush failed.");
     }
     
     pub fn lookup_differences_in(
@@ -516,12 +501,26 @@ impl OSMObjectManager {
         let readable = self.run_query(&query, false)?;
         self.cache_objects_from(readable, true)
     }
+
+    pub fn cached_objects(
+        &self,
+    ) -> Box<dyn (Iterator<Item = OSMObject>)> {
+        Box::new(
+            self.cache
+                .iter()
+                .filter_map(|pair| pair.ok())
+                .map(|(_k, v)| deserialize_compressed(&v).expect("Could not deserialize object")),
+        )
+    }
+
+    pub fn remove_cached_object(&self, id: &str) -> Result<()> {
+        self.cache.remove(id)?;
+        Ok(())
+    }
 }
 
 impl Drop for OSMObjectManager {
     fn drop(&mut self) {
-        let conn = self.cache_conn.take().unwrap();
-        conn.close().expect("Failed to close cache connection.");
         info!(
             "Out of {} entity cache queries {} were cache hits.",
             self.cache_queries.borrow(),
@@ -530,14 +529,3 @@ impl Drop for OSMObjectManager {
     }
 }
 
-pub fn cached_objects_in<'a>(
-    cache: &'a mut SqliteMap<'_>,
-) -> Box<dyn (Iterator<Item = OSMObject>) + 'a> {
-    Box::new(
-        cache
-            .iter::<String, Vec<u8>>()
-            .unwrap()
-            .filter_map(|pair| pair.ok())
-            .map(|(_k, v)| deserialize_compressed(&v).expect("Could not deserialize object")),
-    )
-}

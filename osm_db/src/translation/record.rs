@@ -75,7 +75,8 @@ impl TranslationRecord {
             .entry(field.to_string())
             .or_insert(0)) += 1;
     }
-    pub fn record_unknown_field(&mut self, discriminator: &str, field: &str, value: &str) {
+
+        pub fn record_unknown_field(&mut self, discriminator: &str, field: &str, value: &str) {
         self.unknown_fields
             .entry(discriminator.to_string())
             .or_insert_with(HashMap::new)
@@ -89,5 +90,35 @@ impl TranslationRecord {
         let mut fp = File::create(&path)?;
         write!(fp, "{}", serialized)?;
         Ok(())
+    }
+
+    pub fn merge_to(mut self, target: &mut Self) {
+        target.potentially_interesting_objects.append(&mut self.potentially_interesting_objects);
+        for (discriminator, missing) in self.missing_required_fields.into_iter() {
+            let target_fields = target.missing_required_fields.entry(discriminator).or_insert_with(HashMap::new);
+            for (field, occurrences) in missing.into_iter() {
+                *(target_fields
+                    .entry(field)
+                    .or_insert(0)) += occurrences;
+            }
+        }
+        for (discriminator, unknown) in self.unknown_fields.into_iter() {
+            let target_unknown = target.unknown_fields.entry(discriminator).or_insert_with(HashMap::new);
+            for (field, mut values) in unknown.into_iter() {
+                target_unknown.entry(field).or_insert_with(Vec::new).append(&mut values);
+            }
+        }
+        for (discriminator, members) in self.missing_enum_members.into_iter() {
+            let other_missing = target.missing_enum_members.entry(discriminator).or_insert_with(HashMap::new);
+            for (member, occurrences) in members.into_iter() {
+                *other_missing.entry(member).or_insert(0) += occurrences;
+            }
+        }
+        for (discriminator, violations) in self.type_violations.into_iter() {
+            let other_violations = target.type_violations.entry(discriminator).or_insert_with(HashMap::new);
+            for (field, mut values) in violations.into_iter() {
+                other_violations.entry(field).or_insert_with(Vec::new).append(&mut values);
+            }
+        }
     }
 }

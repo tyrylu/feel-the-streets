@@ -24,3 +24,4 @@ base64 = "0.13.0"
 typetag = "0.1.8"
 doitlater = "0.1.2"
 redis_api = {path = "../redis_api"}
+rusty_pool = { version = "0.6.0", default-features = false }
