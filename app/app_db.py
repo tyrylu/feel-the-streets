@@ -1,5 +1,5 @@
 import sqlite3
-from .models import LastLocation, Bookmark
+from .models import Bookmark
 
 # Yes, the area columns could be integers, but only if we wouldn't mess the schema when migrating to area ids in the past (maybe before 1.0?).
 MAYBE_CREATE_MIGRATIONS = "CREATE TABLE IF NOT EXISTS migrations (id INTEGER PRIMARY KEY, version INTEGER NOT NULL, applied_at TEXT NOT NULL)"
@@ -20,8 +20,11 @@ class AppDb:
         self._db.execute("INSERT INTO bookmarks (name, area, latitude, longitude, direction) VALUES (?, ?, ?, ?, ?)", (mark.name, mark.area, mark.latitude, mark.longitude, mark.direction))
         self._db.commit()
 
-    def bookmarks_for_area(self, area):
-        cursor = self._db.execute("SELECT id, name, latitude, longitude, direction FROM bookmarks WHERE area = ?", (area,))
+    def bookmarks_for_area(self, area, include_hidden=False):
+        query = "SELECT id, name, latitude, longitude, direction FROM bookmarks WHERE area = ?"
+        if not include_hidden:
+            query += " AND name NOT LIKE '.%'"
+        cursor = self._db.execute(query, (area,))
         marks = []
         for id, name, latitude, longitude, direction in cursor.fetchall():
             marks.append(Bookmark(id=id, name=name, latitude=latitude, longitude=longitude, area=area, direction=direction))

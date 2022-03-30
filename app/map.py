@@ -6,7 +6,7 @@ import shapely.wkb as wkb
 from shapely.geometry.point import Point
 from .geometry_utils import distance_filter, effective_width_filter, xy_ranges_bounding_square
 from .measuring import measure
-from .models import Bookmark, LastLocation
+from .models import Bookmark
 from . import services
 
 log = logging.getLogger(__name__)
