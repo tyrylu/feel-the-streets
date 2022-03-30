@@ -245,9 +245,14 @@ class InteractivePersonController:
     
     @menu_command(_("Bookmarks"), _("Add bookmark..."), "ctrl+b")
     def add_bookmark(self, evt):
-        name, ok = QInputDialog.getText(self._main_window, _("Data entry"), _("Enter a name for the new bookmark"),)
-        if not ok or not name:
-            return
+        while True:
+            name, ok = QInputDialog.getText(self._main_window, _("Data entry"), _("Enter a name for the new bookmark"),)
+            if not ok or not name:
+                return
+            if name.startswith("."):
+                QMessageBox.warning(self._main_window, _("Error"), _("The bookmark name can not start with a dot, please enter a different name."))
+            else:
+                break
         self._person.map.add_bookmark(name, lon=self._person.position.lon, lat=self._person.position.lat, direction=self._person.direction)
     
     @menu_command(_("Bookmarks"), _("Go to bookmark..."), "b")
