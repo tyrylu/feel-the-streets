@@ -107,14 +107,30 @@ impl Server {
         this.update_status()?;
         Ok(this)
     }
+    fn get_api_status(&self) -> Result<String> {
+        Ok(self
+        .agent
+        .get(&format!("{}/api/status", self.url))
+        .call()?
+        .into_string()?)
+        }
+
     fn update_status(&mut self) -> Result<()> {
         self.available_slots = 0;
         self.slots_available_after.clear();
-        let text = self
-            .agent
-            .get(&format!("{}/api/status", self.url))
-            .call()?
-            .into_string()?;
+        let mut retry = 0;
+        let text = loop {
+            retry += 1;
+            if retry > 3 {
+                return Err(Error::RetryLimitExceeded);
+            }
+            match self.get_api_status() {
+                Ok(status) => break status,
+                Err(e) => {
+                    warn!("Could not get status during retry {}, error: {:?}", retry, e);
+                }
+            }
+        };
         for line in text.lines() {
             let rate_limit_match = RATE_LIMIT_RE.captures(line);
             if let Some(res) = rate_limit_match {
