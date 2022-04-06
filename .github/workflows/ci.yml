@@ -6,10 +6,10 @@ on:
     branches: [ master ]
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest]
+        runner: [windows-latest, ubuntu-latest, [self-hosted, linux, ARM64]]
       fail-fast: false
     steps:
     - uses: actions/checkout@v2
@@ -82,7 +82,7 @@ jobs:
         name: to_deploy_windows
         path: to_deploy
     - name: Upload Linux artifacts
-      if: runner.os == 'Linux'  
+      if: runner.os == 'Linux' && runner.arch != ''ARM64'
       uses: actions/upload-artifact@v2
       with:
         name: to_deploy_linux
