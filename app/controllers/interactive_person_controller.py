@@ -5,6 +5,7 @@ from ..humanization_utils import describe_entity, format_number, describe_angle_
 from ..services import speech, map, config, menu_service
 from ..objects_browser import ObjectsBrowserWindow, ObjectsSorter, tracked_object_changed
 from ..road_segments_browser import RoadSegmentsBrowserDialog
+from ..bookmarks import BookmarksDialog
 from ..geometry_utils import get_road_section_angle, distance_filter, distance_between, get_meaningful_turns, bearing_to, get_smaller_turn
 from ..search import get_query_from_user, QueryExecutor, create_query_for_name_search, create_query_for_address_search
 from ..search_indicator import SearchIndicator
@@ -255,19 +256,13 @@ class InteractivePersonController:
                 break
         self._person.map.add_bookmark(name, lon=self._person.position.lon, lat=self._person.position.lat, direction=self._person.direction)
     
-    @menu_command(_("Bookmarks"), _("Go to bookmark..."), "b")
-    def go_to_bookmark(self, evt):
+    @menu_command(_("Bookmarks"), _("Manage bookmarks"), "b")
+    def manage_bookmarks(self):
         bookmarks = self._person.map.bookmarks
-        reprs = []
-        for mark in bookmarks:
-            point = LatLon(mark.latitude, mark.longitude)
-            dist = format_number(distance_between(self._person.position, point), config().presentation.distance_decimal_places)
-            bearing = format_number((bearing_to(self._person.position, point) - self._person.direction) % 360, config().presentation.angle_decimal_places)
-            reprs.append(_("{name}: distance {distance} meters, {bearing}° relatively").format(name=mark.name, distance=dist, bearing=bearing))
-        name, ok = QInputDialog.getItem(self._main_window, _("Data entry"), _("Select a bookmark"), reprs, editable=False)
-        if not ok:
+        dialog = BookmarksDialog(self._main_window, bookmarks, self._person)
+        if dialog.exec_() == dialog.DialogCode.Rejected:
             return
-        bookmark = bookmarks[reprs.index(name)]
+        bookmark = dialog.selected_bookmark
         self._person.move_to(LatLon(bookmark.latitude, bookmark.longitude), force=True)
         self._person.set_direction(bookmark.direction)
 

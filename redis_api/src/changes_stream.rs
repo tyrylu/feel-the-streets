@@ -54,6 +54,7 @@ impl ChangesStream {
             client_id,
             &[Rule::Pattern(format!("fts.{}.*", self.area_id))],
         )?;
+        self.redis_connection.acl_save()?;
         Ok(())
     }
 
