@@ -17,7 +17,7 @@ def setup_locale(lang):
         os.environ["LANG"] = lang
     # The gettext support requires the LANG environment variable even on win32.
     if lang == "system" and sys.platform == "win32" and "LANG" not in os.environ:
-        lang, enc = locale.getdefaultlocale()
+        lang, _enc = locale.getdefaultlocale()
         os.environ["LANG"] = lang
     locale.setlocale(locale.LC_ALL, "")
     gettext.install("messages", locales_dir)

@@ -2,7 +2,7 @@ import logging
 from osm_db import EntitiesQuery, FieldNamed, AreaDatabase
 from pygeodesy.ellipsoidalVincenty import LatLon
 from pygeodesy.etm import ExactTransverseMercator
-import shapely.wkb as wkb
+from shapely import wkb
 from shapely.geometry.point import Point
 from .geometry_utils import distance_filter, effective_width_filter, xy_ranges_bounding_square
 from .measuring import measure
@@ -89,7 +89,7 @@ class Map:
         query.add_condition(FieldNamed("name").eq(self._name))
         candidates =self._db.get_entities(query)
         if not candidates:
-            log.warn("Area %s does not have a Place entity, falling back to the first entity in the database.", self._name)
+            log.warning("Area %s does not have a Place entity, falling back to the first entity in the database.", self._name)
             query = EntitiesQuery()
             query.set_limit(1)
             candidates = self._db.get_entities(query)

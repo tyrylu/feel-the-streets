@@ -6,5 +6,5 @@ class IsNotNull(WidgetlessOperator):
     label = _("Is not null")
 
     @staticmethod
-    def get_comparison_expression(field, value_expr, value_widget):
+    def get_comparison_expression(_field, value_expr, _value_widget):
         return value_expr.is_not_null()

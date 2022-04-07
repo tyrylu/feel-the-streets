@@ -8,7 +8,7 @@ class PositionAdjustmentController:
         self._controlled = controlled
         entity_pre_enter.connect(self._entity_pre_enter)
     
-    def _entity_pre_enter(self, sender, enters):
+    def _entity_pre_enter(self, _sender, enters):
         for place in enters:
             if place.is_road_like:
                 current_roads = filter_important_roads(self._controlled.inside_of_roads)

@@ -1,9 +1,8 @@
 import enum
 import collections
-import shapely.wkb as wkb
 from ..services import speech, config
 from ..entities import entity_post_enter, entity_post_leave, entity_rotated
-from ..humanization_utils import describe_entity, format_number, describe_relative_angle, TemplateType, describe_angle_as_turn_instructions
+from ..humanization_utils import describe_entity, format_number, describe_relative_angle, TemplateType
 from ..geometry_utils import bearing_to, get_meaningful_turns, get_smaller_turn
 from ..entity_utils import get_last_important_road, filter_important_roads
 from .interesting_entities_controller import interesting_entity_in_range
@@ -64,7 +63,7 @@ class AnnouncementsController:
     def _select_most_important_classification(self, places, enters):
         classifications = [self._classify_enter_into(p, enters) for p in places]
         # If we have a turn, we want to know about that
-        if any([cl[0] is EntranceKind.turn for cl in classifications]):
+        if any((cl[0] is EntranceKind.turn for cl in classifications)):
             return (EntranceKind.turn, None)
         # Now, we either have all continuations or initial entrances
         return classifications[0]
@@ -174,7 +173,7 @@ class AnnouncementsController:
         if self._point_of_view is sender:
             speech().speak(_("{degrees} degrees").format(degrees=format_number(sender.direction, config().presentation.angle_decimal_places)), add_to_history=False)
 
-    def _interesting_entity_in_range(self, sender, entity):
+    def _interesting_entity_in_range(self, _sender, entity):
         if not config().presentation.announce_interesting_objects: return
         self._announce_interesting_entity(entity)
 
@@ -185,7 +184,7 @@ class AnnouncementsController:
         rel_bearing = (bearing - self._point_of_view.direction) % 360
         speech().speak(_("{angle_description} is a {entity_description}").format(angle_description=describe_relative_angle(rel_bearing), entity_description=describe_entity(entity, template_type=TemplateType.short)))
 
-    def _interesting_entity_sound_not_found(self, sender, entity):
+    def _interesting_entity_sound_not_found(self, _sender, entity):
         if not config().presentation.announce_interesting_objects:
             self._announce_interesting_entity(entity)
 

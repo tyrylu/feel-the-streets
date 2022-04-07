@@ -6,6 +6,6 @@ class Source(openal.Source):
         super().__init__(buffer, destroy_buffer)
         self._transformer = CoordinatesTransformer(coordinates_divider, coordinate_decimal_places, coordinate_system, origin)
         
-    def set_position(self, pos):
-        transformed_pos = self._transformer.transform_coordinates(pos)
+    def set_position(self, value):
+        transformed_pos = self._transformer.transform_coordinates(value)
         super().set_position(transformed_pos)

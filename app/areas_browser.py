@@ -7,7 +7,7 @@ class AreasBrowserDialog(BaseDialog):
     def __init__(self, parent, area_name, areas):
         super().__init__(parent, _("Select the area you mean"), _("&Select"), _("&Close"))
         self._areas = list(areas.items())
-        for id, (parent_name, data) in self._areas:
+        for _id, (parent_name, _data) in self._areas:
             self._areas_list.addItem(_("{area_name}, {parent_name}").format(area_name=area_name, parent_name=parent_name))
         self._areas_list.setCurrentRow(0)
 

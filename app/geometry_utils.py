@@ -1,7 +1,6 @@
 from collections import defaultdict
 import logging
-import shapely.wkb as wkb
-import shapely.geometry as geometry
+from shapely import wkb, geometry
 from shapely.geometry.linestring import LineString
 import pydantic
 from pygeodesy.ellipsoidalVincenty import LatLon, VincentyError
@@ -29,7 +28,7 @@ def bearing_to(initial, target):
 
 def bearings_to(initial, target):
     try:
-        dist, initial, final = initial.distanceTo3(target)
+        _dist, initial, final = initial.distanceTo3(target)
         return initial, final
     except:
         return 0, 0
@@ -153,7 +152,6 @@ def distance_filter(entities, position, distance):
                 res_entities.append(entity)
         return res_entities
 def effective_width_filter(entities, position):
-    from .humanization_utils import describe_entity
     with measure("Shapely & pygeodesi effective distance filtering"):
         res_entities = []
         shapely_point = to_shapely_point(position)
@@ -226,7 +224,6 @@ def get_complete_road_line(road):
         start_points[line.coords[0]].append(line)
         end_points[line.coords[-1]].append(line)
         to_check.append(line)
-    i = 0
     while to_check:
         candidate = to_check.pop()
         begins_with_lines = end_points.get(candidate.coords[0])
@@ -332,5 +329,5 @@ def get_crossing_point(base_road, known_crossing_part, candidates):
         candidate_intersection = base_geom.intersection(candidate_geom)
         if not  candidate_intersection.is_empty and intersection.distance(candidate_intersection) == 0.0 and candidate_intersection.geom_type == "Point":
             return candidate_intersection
-    log.warn("Did not find a point intersection for base road %s, known crossing part %s and candidates %s.", base_road.id, known_crossing_part.id, [c.id for c in candidates])
+    log.warning("Did not find a point intersection for base road %s, known crossing part %s and candidates %s.", base_road.id, known_crossing_part.id, [c.id for c in candidates])
     return None

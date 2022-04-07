@@ -1,4 +1,4 @@
-from PySide6.QtCore import QObject, Signal, QThread
+from PySide6.QtCore import Signal, QThread
 import os
 import logging
 import xml.etree.ElementTree as et
@@ -25,7 +25,7 @@ def get_areas_with_name(name):
     query = f'[out:json];area["name"="{name}"];out meta;'
     resp = requests.get("https://overpass-api.de/api/interpreter", params={"data": query})
     if resp.status_code != 200:
-            raise RateLimitedError()
+        raise RateLimitedError()
     results = {}
     for area in resp.json()["elements"]:
         if "admin_level" not in area["tags"]:
@@ -50,7 +50,7 @@ def get_areas():
             cache_response("areas.json", data)
             return data
         else:
-            log.warn("Non 200 response during areas request, status code %s.", resp.status_code)
+            log.warning("Non 200 response during areas request, status code %s.", resp.status_code)
             return None
 
 def request_area_creation(area_id, area_name):
@@ -58,14 +58,14 @@ def request_area_creation(area_id, area_name):
     if resp.status_code in {200, 201}:
         return resp.json()
     else:
-        log.warn("Unexpected status code during an area creation request: %s, response %s.", resp.status_code, resp.content)
+        log.warning("Unexpected status code during an area creation request: %s, response %s.", resp.status_code, resp.content)
         return None
 
 class AreaDatabaseDownloader(QThread):
     download_progressed = Signal(int, int)
     download_finished = Signal(bool)
 
-    def __init__(self, area, parent):
+    def __init__(self, area):
         super().__init__()
         self._area = area
 
@@ -85,7 +85,7 @@ class AreaDatabaseDownloader(QThread):
                     self.download_progressed.emit(total, so_far)
             self.download_finished.emit(True)
         else:
-            log.warn("Non 200 status code during area download: %s.", resp.status_code)
+            log.warning("Non 200 status code during area download: %s.", resp.status_code)
             self.download_finished.emit(False)
 
 def has_api_connectivity():
@@ -126,7 +126,7 @@ def get_motd():
         return None
     resp = session.get(url_for("motd"))
     if resp.status_code != 200:
-        log.warn("Motd request returned with status %s.", resp.status_code)
+        log.warning("Motd request returned with status %s.", resp.status_code)
         return None
     data = resp.json()
     if not data: # No motd has been published yet

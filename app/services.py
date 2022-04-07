@@ -1,6 +1,5 @@
 import os
 import sys
-import platform
 from .di import Singleton
 from .sound_manager import SoundManager, SoundProperties
 from .map import Map
@@ -26,6 +25,6 @@ def create_sound():
 speech = Singleton(SpeechService)
 sound = Singleton(factory=create_sound)
 map = Singleton(Map)
-config = Singleton(factory=lambda: Config.from_user_config())
+config = Singleton(factory=Config.from_user_config)
 app_db = Singleton(factory=create_app_db)
 menu_service = Singleton(MenuService)

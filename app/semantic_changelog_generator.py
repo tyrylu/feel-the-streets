@@ -2,7 +2,6 @@ import json
 import osm_db
 from osm_db import ChangeType as CT
 from .humanization_utils import underscored_to_words, format_field_value, get_field_type, describe_entity
-from .services import map
 
 def get_dictchange_description(dictchange, entity_fields):
     field_type = get_field_type(dictchange.key, entity_fields)
@@ -43,5 +42,4 @@ def get_change_description(change, entity, include_geometry_changes=False):
             msg += get_dictchange_description(subchange, fields) + "\n"
         return msg
     else:
-        breakpoint()
         raise RuntimeError("Invalid semantic change type %s."%change.type)

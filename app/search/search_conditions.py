@@ -90,7 +90,7 @@ class SpecifySearchConditionsDialog(BaseDialog):
             self.layout.removeWidget(self._value_label)
             self._value_label.deleteLater()
             self._value_label = None
-        operator = self._operators[self._operator.currentRow()]
+        operator = self._operators[index]
         value_label = self._create_value_label(operator.get_value_label(self._field))
         self._value_widget = operator.get_value_widget(self, self._field)
         if not self._value_widget:
@@ -108,7 +108,7 @@ class SpecifySearchConditionsDialog(BaseDialog):
         label = QLabel(label, self)
         return label
 
-    def on_add_clicked(self, evt):
+    def on_add_clicked(self):
         if not hasattr(self, "_field_name"):
             return
         self._added_condition = True
@@ -135,7 +135,7 @@ class SpecifySearchConditionsDialog(BaseDialog):
                 conditions.append(part)
         return conditions
        
-    def on_remove_clicked(self, evt):   
+    def on_remove_clicked(self):   
         selection = self._criteria_list.currentRow()
         if selection < 0:
             return

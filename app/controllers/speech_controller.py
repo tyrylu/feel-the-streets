@@ -7,7 +7,7 @@ class SpeechController:
         menu_service().register_menu_commands(self)
 
     @menu_command(_("Speech"), _("Silence"), "s")
-    def silence_speech(self, evt):
+    def silence_speech(self):
         speech().silence()
 
     @menu_command(_("Speech"), _("Move to and speak the first speech history item"), "home")

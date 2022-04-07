@@ -11,7 +11,7 @@ from .server_interaction import AreaDatabaseDownloader, SemanticChangeRetriever,
 from .changes_applier import ChangesApplier
 from .message_dialog import MessageDialog
 from .server_interaction import get_osm_object_names
-from osm_db import AreaDatabase, EntitiesQuery
+from osm_db import AreaDatabase
 from .size_utils import format_size
 
 FROZEN_AREA_OSM_ID_OFFSET = 20000000000
@@ -91,7 +91,7 @@ class MainWindow(QMainWindow):
 
 
         if not self._last_location_controller.restored_position:
-                  person.move_to(map().default_start_location, force=True)
+            person.move_to(map().default_start_location, force=True)
         self.raise_()
         menu_service().ensure_key_capturer_focus()
 
@@ -105,7 +105,7 @@ class MainWindow(QMainWindow):
         self._download_progress_dialog.setValue(percentage)
 
     def _download_database(self, area):
-        self._downloader = AreaDatabaseDownloader(area, None)
+        self._downloader = AreaDatabaseDownloader(area)
         self._area = area
         self._downloader.moveToThread(QApplication.instance().thread())
         self._downloader.download_progressed.connect(self._download_progress_callback)

@@ -6,6 +6,6 @@ class Listener(openal.Listener):
         super().__init__()
         self._transformer = CoordinatesTransformer(coordinates_divider, coordinate_decimal_places, coordinate_system, origin)
         
-    def set_position(self, pos):
-        transformed_coords = self._transformer.transform_coordinates(pos)
+    def set_position(self, vec3):
+        transformed_coords = self._transformer.transform_coordinates(vec3)
         super().set_position(transformed_coords)

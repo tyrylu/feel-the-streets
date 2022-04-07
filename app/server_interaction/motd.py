@@ -10,7 +10,7 @@ def select_message_from_choices(choices):
     if locale_name in choices:
         return choices[locale_name]
     if "_" in locale_name:
-        lang, country = locale_name.split("_")
+        lang, _country = locale_name.split("_")
         if lang in choices:
             return choices[lang]
     return choices["default"]
@@ -18,11 +18,11 @@ def select_message_from_choices(choices):
 def get_local_last_motd():
     if not os.path.exists(LAST_MOTD_FILE):
         return 0
-    with open(LAST_MOTD_FILE) as fp:
+    with open(LAST_MOTD_FILE, encoding="ascii") as fp:
         return int(fp.read())
 
 def save_local_last_motd(timestamp):
-    with open(LAST_MOTD_FILE, "w") as fp:
+    with open(LAST_MOTD_FILE, "w", encoding="ascii") as fp:
         fp.write(str(timestamp))
 
 class Motd:

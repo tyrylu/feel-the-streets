@@ -1,8 +1,7 @@
+import ctypes
 import openal
-from openal import *
-from openal import _err
+from openal import al, alc, ALC_TRUE, _err
 from openal.al_lib import lib
-
 
 # Constants needed to do the initialization.
 ALC_NUM_HRTF_SPECIFIERS_SOFT = 0x1994
@@ -21,11 +20,7 @@ def oalInitHRTF(requested_hrtf=None):
     if not alc.alcIsExtensionPresent(openal._oaldevice, b"ALC_SOFT_HRTF"):
         _err("HRTF extension not present")
         
-    if al.alIsExtensionPresent(b"AL_EXT_STEREO_ANGLES"):
-        _stereo_angles_ext_supported = True
-    else:
-        _stereo_angles_ext_supported = False
-        
+    _stereo_angles_ext_supported = al.alIsExtensionPresent(b"AL_EXT_STEREO_ANGLES")
     # Enumerate available HRTFs, and reset the device using one
     num_hrtf = ctypes.c_int(0)
     alc.alcGetIntegerv(openal._oaldevice, ALC_NUM_HRTF_SPECIFIERS_SOFT, 1, num_hrtf)
@@ -47,9 +42,9 @@ def oalInitHRTF(requested_hrtf=None):
         
         if index == -1:
             if requested_hrtf:
-                _err('HRTF "{}" not found'.format(requested_name))
+                _err('HRTF "{}" not found'.format(requested_hrtf))
         else:
-            attr[2] = ALC_HRTF_ID_SOFT
+            attr[2] = ALC_HRTF_SOFT
             attr[3] = index
             
         attr[4] = 0

@@ -1,10 +1,7 @@
-import functools
 import logging
 import os
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QPushButton, QLabel, QMessageBox, QInputDialog, QDialog, QTreeWidgetItem
-import pendulum
-from osm_db import AreaDatabase
 from .base_dialog import BaseDialog
 from .server_interaction import has_api_connectivity, get_areas, request_area_creation, get_osm_object_names
 from .time_utils import rfc_3339_to_local_string

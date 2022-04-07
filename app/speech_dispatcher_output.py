@@ -15,7 +15,7 @@ class SpeechDispatcherOutput(Output):
         self._client = None
         if has_speechd_api:
             self._client = Client()
-            lang, encoding = locale.getdefaultlocale()
+            lang, _encoding = locale.getdefaultlocale()
             if "_" in lang:
                 lang = lang.split("_")[0]
             self._client.set_language(lang)
@@ -31,13 +31,13 @@ class SpeechDispatcherOutput(Output):
             msg = msg[:-1]
         return msg
 
-    def speak(self, message, **kwargs):
-        message = self._sanitize_message(message)
+    def speak(self, text, **kwargs):
+        text = self._sanitize_message(text)
         if kwargs.get("interrupt", False):
             self.silence()
         try:
-            self._client.say(message)
-        except SSIPCommunicationError as e:
+            self._client.say(text)
+        except SSIPCommunicationError as _e:
             if "retries" in kwargs and kwargs["retries"] < 2:
                 self._client = Client()
             else:

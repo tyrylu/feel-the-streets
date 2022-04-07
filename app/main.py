@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 
 def handle_error(exc, thread=None):
     if not QApplication.instance():
-        app = QApplication()
+        _app = QApplication()
     if not thread:
         log.exception("Unhandled exception in main thread", exc_info=exc)
     else:

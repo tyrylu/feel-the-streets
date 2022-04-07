@@ -1,4 +1,3 @@
-from anglr import Angle
 from . import Entity
 from ..services import sound
 
@@ -7,7 +6,7 @@ class Vehicle(Entity):
     sound: str
 
     def __init__(self, **data):
-        super.__init__(**data)
+        super().__init__(**data)
         x, y, z = self.cartesian_position
         self._sound_channel = sound().play(self.sound, x=x, y=y, z=z)
     

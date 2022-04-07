@@ -10,13 +10,13 @@ from .object_actions.action import ObjectAction
 from .objects_sorter import ObjectsSorter
 
 def action_execution_handler_factory(action, entity, window):
-    def handler(evt):
+    def handler():
         return action.execute(entity, window)
     return handler
 
 class ObjectsBrowserWindow(QWidget):
 
-    def __init__(self, parent, title, person, unsorted_objects, autoshow=True, progress_indicator=None):
+    def __init__(self, title, person, unsorted_objects, autoshow=True, progress_indicator=None):
         super().__init__(None)
         act = QAction("close", self)
         act.triggered.connect(self._do_close)
@@ -82,7 +82,7 @@ class ObjectsBrowserWindow(QWidget):
         action.triggered.connect(callback)
         action.setShortcut(QKeySequence(shortcut))
 
-    def on_goto_clicked(self, evt):
+    def on_goto_clicked(self):
         self._person.move_to(self.selected_object.closest_point, force=True)
         self.close()
         
@@ -140,17 +140,17 @@ class ObjectsBrowserWindow(QWidget):
     def selected_object(self):
         return self._rels[self._objects_list.currentRow()]
 
-    def on_copypropvalue_selected(self, evt):
+    def on_copypropvalue_selected(self):
         prop = self._props.currentItem().text(0)
         val = prop.split(": ", 1)[1]
         QApplication.clipboard().setText(val)
     
-    def on_copypropname_selected(self, evt):
+    def on_copypropname_selected(self):
         prop = self._props.currentItem().text(0)
         name = prop.split(": ", 1)[0]
         QApplication.clipboard().setText(name)
     
-    def on_copypropline_selected(self, evt):
+    def on_copypropline_selected(self):
         prop = self._props.currentItem().text(0)
         QApplication.clipboard().setText(prop)
 

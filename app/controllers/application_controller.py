@@ -1,8 +1,6 @@
 from PySide6.QtWidgets import QApplication
-from ..services import menu_service, speech
+from ..services import menu_service
 from ..menu_service import menu_command
-from ..area_selection import AreaSelectionDialog
-
 
 class ApplicationController:
     def __init__(self, window):
@@ -16,6 +14,6 @@ class ApplicationController:
 
 
     @menu_command(_("Program"), _("Quit"), "ctrl+q")
-    def do_quit(self, evt):
+    def do_quit(self):
         self._main_window.close()
         QApplication.instance().quit()

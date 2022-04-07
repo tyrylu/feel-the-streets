@@ -3,7 +3,6 @@ from pyogg import VorbisFile
 import os
 import fnmatch
 import random
-from . import sndmgr
 from .coordinate_system import CoordinateSystem
 from .hrtf_init import oalInitHRTF
 from .listener import Listener
@@ -12,11 +11,8 @@ from .source import Source
 # Constants not exposed by the pyopenal bindings
 AL_SOURCE_RADIUS = 0x1031
 
-sndmgr = None
-
-class SoundManager(object):
+class SoundManager:
     def __init__(self, sounds_dir="sounds", sound_extensions=["wav", "mp3", "ogg", "flac"], recursive_search=True, init_hrtf=True, coordinates_divider=1, coordinate_decimal_places=None, coordinate_system=CoordinateSystem.cartesian_right_handed, origin=None):
-        global sndmgr
         self._sounds = {}
         self._sound_files = {}
         self._group_counts = {}
@@ -34,7 +30,6 @@ class SoundManager(object):
         self._sounds_dir = sounds_dir
         self._index_dir(sounds_dir)
         self.listener = Listener(self._coordinates_divider, self._coordinate_decimal_places, self._coordinate_system, self._origin)
-        sndmgr = self
 
     def _index_dir(self, path):
         for dirpath, subdirs, files in os.walk(path):
@@ -79,12 +74,12 @@ class SoundManager(object):
             source = Source(buffer, False, self._coordinates_divider, self._coordinate_decimal_places, self._coordinate_system, self._origin)
             self._sources.append(source)
             return source
-        except openal.ALError:
+        except openal.ALError as e:
             for candidate_source in self._sources:
                 if candidate_source.get_state() == openal.AL_STOPPED:
                     candidate_source._set_buffer(buffer)
                     return candidate_source
-            raise RuntimeError("Can not create audio source.")
+            raise RuntimeError("Can not create audio source.") from e
 
     def get_channel(self, name, set_loop=False, x=None, y=None, z=None, pan=None):
         buffer = self.get(name)

@@ -1,10 +1,10 @@
-import collections, math
+import collections
 import logging
 import random
 from typing import DefaultDict, Dict
 import anglr
 from blinker import Signal
-import shapely.wkb as wkb
+from shapely import wkb
 from osm_db import Enum
 from ..services import sound, config, menu_service, map
 from ..geometry_utils import to_latlon
@@ -120,7 +120,7 @@ class SoundController:
         if leaves.is_road_like:
             if sender in self._groups_map:
                 if leaves not in self._groups_map[sender]:
-                    log.warn("Entity %s about to be deleted from the sounds stack, but it was not in it in the first place.", describe_entity(leaves))
+                    log.warning("Entity %s about to be deleted from the sounds stack, but it was not in it in the first place.", describe_entity(leaves))
                     return
                 del self._groups_map[sender][leaves]
             if leaves in self._interesting_sounds:
@@ -140,7 +140,7 @@ class SoundController:
         sound().play("leave_disallowed", x=x, y=y, z=0)
         leave_disallowed_sound_played.send(self, because_of=sender)
 
-    def _interesting_entity_in_range(self, sender, entity):
+    def _interesting_entity_in_range(self, _sender, entity):
         if not entity.is_road_like and config().presentation.play_sounds_for_interesting_objects:
             self._spawn_sound_for(entity)   
         elif entity.is_road_like:
@@ -189,7 +189,7 @@ class SoundController:
         x, y = map().project_latlon(self._point_of_view.closest_point_to(entity.geometry))
         self._interesting_sounds[entity][None] = sound().play(sound_name, set_loop=True, x=x, y=y, z=0)
 
-    def _interesting_entity_out_of_range(self, sender, entity):
+    def _interesting_entity_out_of_range(self, _sender, entity):
         if config().presentation.play_crossing_sounds:
             if entity in self._interesting_roads:
                 self._interesting_roads.remove(entity)

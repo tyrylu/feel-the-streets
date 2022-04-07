@@ -36,14 +36,14 @@ class AppDb:
         if not val: return None
         id, latitude, longitude, direction = val
         return Bookmark(id=id, name=name, latitude=latitude, longitude=longitude, area=area, direction=direction)
-    
+
     def remove_bookmark(self, bookmark_id):
         self._db.execute("DELETE FROM bookmarks WHERE id = ?", (bookmark_id,))
         self._db.commit()
 
     def last_location_for(self, area_id):
         return self._get_bookmark(area_id, LAST_LOCATION_NAME)
-    
+
     def update_last_location_for(self, area_id, lat, lon, direction):
         location_id = self._last_location_ids.get(area_id, None)
         if location_id:
@@ -55,7 +55,7 @@ class AppDb:
 
     def _table_has_column(self, table, column):
         res = self._db.execute(f"PRAGMA table_info({table})")
-        for cid, name, type, notnull, default_value, pk in res.fetchall():
+        for _cid, name, _type, _notnull, _default_value, _pk in res.fetchall():
             if name == column:
                 return True
         return False

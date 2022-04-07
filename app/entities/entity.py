@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from ordered_set import OrderedSet
-from typing import ClassVar, Optional, Set
+from typing import ClassVar, Optional
 import osm_db
 from . import entity_pre_move, entity_post_move, entity_pre_enter, entity_post_enter, entity_pre_leave, entity_post_leave, entity_rotated, entity_move_rejected, MoveValidationResult
 from ..measuring import measure
@@ -26,7 +26,7 @@ class Entity(BaseModel):
 
     def move_to(self, pos, force=False):
         if not force and entity_pre_move.has_receivers_for(self):
-            for func, ret in entity_pre_move.send(self, new_pos=pos):
+            for _func, ret in entity_pre_move.send(self, new_pos=pos):
                 if ret is MoveValidationResult.reject:
                     entity_move_rejected.send(self)
                     return False
@@ -64,25 +64,26 @@ class Entity(BaseModel):
         if enters and entity_post_enter.has_receivers_for(self):
             entity_post_enter.send(self, enters=enters)
         entity_post_move.send(self)
+        return True
     
     def move_by(self, pos_delta, force=False, direction=None):
         if not direction:
             direction = self.direction
         pos, new_dir = self.position.destination2(pos_delta, direction)
         if self.move_to(pos, force):
-            self.set_direction(new_dir)
+            self.set_direction(new_dir, True)
     
     def rotate(self, amount):
         self.set_direction(self.direction + amount)
     
-    def set_direction(self, direction):
+    def set_direction(self, direction, silent=False):
         self.direction = direction % 360
-        entity_rotated.send(self)
+        if not silent:
+            entity_rotated.send(self)
     
     @property
     def cartesian_position(self):
         return self.map.project_latlon(self.position)
-        return cartesian.x, cartesian.y, cartesian.z
 
     def closest_point_to(self, geometry, convert_geometry=True):
         return to_latlon(closest_point_to(self.position_point, geometry, convert_geometry))
