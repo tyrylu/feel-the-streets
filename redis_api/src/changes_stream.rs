@@ -207,9 +207,11 @@ impl ChangesStream {
         let mut pipe = redis::pipe();
         let mut pipe_ref = pipe.atomic();
         for client_id in self.registered_clients()? {
-            pipe_ref = pipe_ref
+            if !(self.is_redownload_requested_for(&client_id)?) {
+                pipe_ref = pipe_ref
                 .hincr(self.change_counts_key(), client_id, count)
                 .ignore();
+            }
         }
         pipe.query(&mut self.redis_connection)?;
         Ok(())
