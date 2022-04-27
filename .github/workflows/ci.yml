@@ -58,6 +58,15 @@ jobs:
     - name: Build the app executable
       if: runner.os == 'Windows'
       run: pyinstaller run_app.spec
+    - name: Download recent enough OpenAL
+      if: runner.os == 'Windows'
+      run: Invoke-WebRequest -outfile openal-soft.zip https://openal-soft.org/openal-binaries/openal-soft-1.22.0-bin.zip
+    - name: Unpack the OpenAL library archive
+      if: runner.os == 'Windows'
+      run: 7z.exe x openal-soft.zip
+    - name: Update the library used by the Windows executable
+      if: runner.os == 'Windows'
+      run: cp openal-soft-1.22.0-bin\bin\Win64\soft_oal.dll dist\fts\soft_oal_64.dll
     - name: Prepare deployment directory
       run: mkdir to_deploy
     - name: Copy common artifacts, part 1
