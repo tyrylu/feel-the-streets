@@ -7,6 +7,7 @@ from .coordinate_system import CoordinateSystem
 from .hrtf_init import oalInitHRTF
 from .listener import Listener
 from .source import Source
+from . import watcher
 
 # Constants not exposed by the pyopenal bindings
 AL_SOURCE_RADIUS = 0x1031
@@ -30,6 +31,7 @@ class SoundManager:
         self._sounds_dir = sounds_dir
         self._index_dir(sounds_dir)
         self.listener = Listener(self._coordinates_divider, self._coordinate_decimal_places, self._coordinate_system, self._origin)
+        watcher.start()
 
     def _index_dir(self, path):
         for dirpath, subdirs, files in os.walk(path):
