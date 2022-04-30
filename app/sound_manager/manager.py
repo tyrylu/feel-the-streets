@@ -3,14 +3,19 @@ from pyogg import VorbisFile
 import os
 import fnmatch
 import random
+import logging
+import ctypes
 from .coordinate_system import CoordinateSystem
-from .hrtf_init import oalInitHRTF
+from .hrtf_init import oalInitHRTF, get_hrtf_device_attrs
 from .listener import Listener
 from .source import Source
 from . import watcher
 
 # Constants not exposed by the pyopenal bindings
 AL_SOURCE_RADIUS = 0x1031
+AL_STOP_SOURCES_ON_DISCONNECT_SOFT = 0x19AB
+
+log = logging.getLogger(__name__)
 
 class SoundManager:
     def __init__(self, sounds_dir="sounds", sound_extensions=["wav", "mp3", "ogg", "flac"], recursive_search=True, init_hrtf=True, coordinates_divider=1, coordinate_decimal_places=None, coordinate_system=CoordinateSystem.cartesian_right_handed, origin=None):
@@ -31,7 +36,13 @@ class SoundManager:
         self._sounds_dir = sounds_dir
         self._index_dir(sounds_dir)
         self.listener = Listener(self._coordinates_divider, self._coordinate_decimal_places, self._coordinate_system, self._origin)
-        watcher.start()
+        if openal.alc.alcIsExtensionPresent(None, b"ALC_SOFT_reopen_device"):
+            # Having this extension also implies presence of the AL_SOFT_hold_on_disconnect extension, at least for Openalsoft 1.22
+            openal.al.alDisable(AL_STOP_SOURCES_ON_DISCONNECT_SOFT)
+            watcher.default_device_changed.connect(self._on_default_device_changed)
+            watcher.start()
+        else:
+            log.warning("The ALC_SOFT_reopen_device OpenAL extension is not present, device changes will be broken.")
 
     def _index_dir(self, path):
         for dirpath, subdirs, files in os.walk(path):
@@ -122,3 +133,11 @@ class SoundManager:
 
     def __del__(self):
         openal.oalQuit()
+
+    def _on_default_device_changed(self, _sender, device_name):
+        reopen_device_prototype = ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.c_char_p, ctypes.POINTER(ctypes.c_int))
+        addr = openal.alc.alcGetProcAddress(None, b"alcReopenDeviceSOFT")
+        reopen_device = reopen_device_prototype(addr)
+        if not reopen_device(openal.oalGetDevice(), None, get_hrtf_device_attrs(None)):
+            log.error("Device reopen failed, error: %s", openal.alc.alcGetError(openal.oalGetDevice()))
+

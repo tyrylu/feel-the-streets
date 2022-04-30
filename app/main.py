@@ -24,7 +24,7 @@ def handle_error(exc, thread=None):
     sys.exit(1)
 
 def main():
-    threading.excepthook = lambda args: handle_error(args.exception, args.thread)
+    threading.excepthook = lambda args: handle_error(args.exc_value, args.thread)
     sys.excepthook = lambda type, value, traceback: handle_error(value)
     # Teach python about the trace level used by the rust extension
     logging.addLevelName(5, "TRACE")
