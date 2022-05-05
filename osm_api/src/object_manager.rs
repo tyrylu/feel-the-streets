@@ -149,9 +149,9 @@ impl OSMObjectManager {
                 match OSMObjectFromNetwork::deserialize(&mut de) {
                     Ok(obj) => {
                         let internal_object = obj.into_osm_object();
-                        {self.retrieved_from_network
+                        self.retrieved_from_network
                             .borrow_mut()
-                            .insert(internal_object.unique_id());}
+                            .insert(internal_object.unique_id());
                         self.cache_object(&internal_object);
                         if return_objects {
                             objects.push(internal_object);

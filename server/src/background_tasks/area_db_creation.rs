@@ -24,6 +24,7 @@ pub fn create_area_database(area: i64) -> Result<()> {
             translator::translate(&obj, &manager, &mut record).expect("Translation failure.")
         }),
     )?;
+    drop(from_network_ids);
     db.begin()?;
     infer_additional_relationships_for(&db)?;
     db.commit()?;
