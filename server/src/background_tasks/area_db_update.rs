@@ -47,14 +47,14 @@ pub fn update_area(
     area.save(&conn.lock().unwrap())?;
     let after = if let Some(timestamp) = &area.newest_osm_object_timestamp {
         info!(
-            "Looking differences after the latest known OSM object timestamp {}",
-            timestamp
+            "Looking differences after the latest known OSM object timestamp {} of area {}",
+            timestamp, area.osm_id
         );
         DateTime::parse_from_rfc3339(timestamp)?.with_timezone(&Utc)
     } else {
         info!(
-            "Looking differences after the area update time of {}",
-            area.updated_at
+            "Looking differences after the area update time of {} for area {}",
+            area.updated_at, area.osm_id
         );
         DateTime::from_utc(area.updated_at, Utc)
     };
@@ -80,7 +80,7 @@ pub fn update_area(
         {
             area.newest_osm_object_timestamp = Some(change.new.as_ref().unwrap().timestamp.clone());
         }
-        trace!("Processing OSM change {:?}", change);
+        trace!("Processing OSM change {:?} during update of area {}", change, area.osm_id);
         let id = change
             .old
             .as_ref()
@@ -88,8 +88,8 @@ pub fn update_area(
             .unique_id();
         if seen_unique_ids.contains(&id) {
             trace!(
-                "We already saw a change of object with id {}, will not process it again.",
-                id
+                "During update of area {} we already saw a change of object with id {}, will not process it again.",
+                area.osm_id, id
             );
             continue;
         } else {
@@ -184,8 +184,8 @@ pub fn update_area(
                 Ok(_) => semantic_changes.push(semantic_change),
                 Err(e) => {
                     warn!(
-                        "Failed to apply semantic change {:?} with error {}",
-                        semantic_change, e
+                        "During update of area {} application of semantic change {:?} failed with error {}",
+                        area.osm_id, semantic_change, e
                     );
                 }
             }
@@ -193,30 +193,28 @@ pub fn update_area(
     }
     area_db.apply_deferred_relationship_additions()?;
     info!(
-        "Area updated successfully, applyed {} semantic changes resulting from {} OSM changes.",
-        semantic_changes.len(),
+        "Area {} updated successfully, applyed {} semantic changes resulting from {} OSM changes.",
+        area.osm_id, semantic_changes.len(),
         osm_change_count
     );
-    info!("Inferring additional entity relationships and enriching the semantic changes...");
-    //area_db.commit()?;
-    //area_db.begin()?;
+    info!("Inferring additional entity relationships and enriching the semantic changes for area {}...", area.osm_id);
     infer_additional_relationships(&mut semantic_changes, &area_db)?;
     area_db.commit()?;
     let mut stream = ChangesStream::new_from_env(area.osm_id)?;
     if !stream.exists()? || !stream.should_publish_changes()? {
-        info!("Not publishing the changes, because there is either no client to receive them, or all the clients have to redownload the area anyway.");
+        info!("Not publishing the changes of area {}, because there is either no client to receive them, or all the clients have to redownload the area anyway.", area.osm_id);
     } else {
-        info!("Doing a garbage collection for the stream...");
+        info!("Doing a garbage collection for the stream of area {}...", area.osm_id);
         let prev_usage = stream.memory_usage()?;
         let collected = stream.garbage_collect()?;
         let current_usage = stream.memory_usage()?;
-        info!("Garbage collection removed {} changes decreasing the memory usage of the stream from {} to {} bytes.", collected, prev_usage, current_usage);
-        info!("Publishing the changes...");
+        info!("Garbage collection of the stream for area {} removed {} changes decreasing the memory usage of the stream from {} to {} bytes.", area.osm_id, collected, prev_usage, current_usage);
+        info!("Publishing the changes for area {}...", area.osm_id);
         let mut batch = stream.begin_batch();
         for change in semantic_changes {
             batch.add_change(&change)?;
         }
-        info!("Changes published and replies checked.");
+        info!("Changes for area {} published.", area.osm_id);
     }
     let size = fs::metadata(AreaDatabase::path_for(area.osm_id, true))?.len() as i64;
     area.db_size = size;

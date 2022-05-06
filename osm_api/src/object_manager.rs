@@ -182,7 +182,7 @@ impl OSMObjectManager {
                 'n' => 4512,
                 'w' => 2024,
                 'r' => 560,
-                _ => {panic!("Unsupported object type.");},
+                val @ _ => {panic!("Unsupported object type {}.", val);},
             }
         }
         fn memory_cost_per_instance(object_type: char) -> usize {
@@ -430,7 +430,7 @@ impl OSMObjectManager {
                 "inner" => inners.push(points),
                 "outer" => outers.push(points),
                 _ => {
-                    warn!("Unknown multipolygon part tole {}.", related.tags["role"]);
+                    warn!("Unknown multipolygon part role {} as part of the geometry for object {}.", related.tags["role"], object.unique_id());
                     return Ok(None);
                 }
             }

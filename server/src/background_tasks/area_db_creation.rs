@@ -32,15 +32,15 @@ pub fn create_area_database(area: i64) -> Result<()> {
     let area_db_conn = SqliteConnection::establish("server.db")?;
     area::finalize_area_creation(area, parent_ids_str, &area_db_conn)?;
     record.save_to_file(&format!("creation_{}.json", area))?;
-    info!("Area created successfully.");
+    info!("Area {} created successfully.", area);
     Ok(())
 }
 
 pub fn get_parent_ids_str_for(area: i64, manager: &OSMObjectManager) -> Result<String> {
         let mut parents = manager.get_area_parents(area)?;
-    info!("Found {} administrative parent candidates.", parents.len());
+    info!("Found {} administrative parent candidates for area {}.", parents.len(), area);
     parents.retain(|p| p.tags.contains_key("admin_level"));
-    info!("After filtering, {} candidates remained.", parents.len());
+    info!("After filtering, {} candidates for area {} remained.", parents.len(), area);
     parents.sort_by_key(|p| {
         if p.tags["admin_level"].len() == 1 {
             format!("0{}", p.tags["admin_level"]) } else{p.tags["admin_level"].clone()} });
