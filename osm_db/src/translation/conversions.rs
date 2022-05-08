@@ -55,7 +55,7 @@ pub fn convert_entity_data(
         record.set_current_field(key);
         let type_name = all_fields
             .get(key)
-            .map(|f| f.type_name.as_str())
+            .map(|f| f.type_name)
             .unwrap_or("str");
         if let Some(converted) = convert_field_value(value, type_name, record) {
             converted_data.insert(key.clone(), converted);

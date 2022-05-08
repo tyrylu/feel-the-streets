@@ -106,7 +106,7 @@ impl TranslationSpec {
         let mut current_metadata =
             EntityMetadata::for_discriminator(discriminator).expect("No metadata of an entity.");
         loop {
-            let discriminator = &current_metadata.discriminator;
+            let discriminator = current_metadata.discriminator;
             if discriminator == "OSMEntity" {
                 break; // It has no parent and no translation spec
             }

@@ -11,7 +11,7 @@ pub fn check_entity_data_consistency(
 ) -> bool {
     match EntityMetadata::for_discriminator(discriminator) {
         Some(metadata) => {
-            check_entity_data_consistency_against_metadata(data, &metadata, record)
+            check_entity_data_consistency_against_metadata(data, metadata, record)
         }
         None => {
             warn!(
@@ -29,16 +29,16 @@ fn check_entity_data_consistency_against_metadata(
     record: &mut TranslationRecord,
 ) -> bool {
     let all_fields = metadata.all_fields();
-    let _known_field_names: HashSet<&String> = all_fields.iter().map(|(n, _)| n).collect();
+    let _known_field_names: HashSet<&String> = all_fields.iter().map(|(n, _)| *n).collect();
     for (name, field) in all_fields.iter() {
-        if field.required && !data.contains_key(name) {
-            record.record_missing_required_field(&metadata.discriminator, name);
+        if field.required && !data.contains_key(*name) {
+            record.record_missing_required_field(metadata.discriminator, name);
             return false;
         }
     }
     for (name, value) in data.iter() {
         if !_known_field_names.contains(name) {
-            record.record_unknown_field(&metadata.discriminator, name, &value.to_string());
+            record.record_unknown_field(metadata.discriminator, name, &value.to_string());
         }
     }
     true

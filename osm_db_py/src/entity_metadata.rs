@@ -5,7 +5,7 @@ use pyo3::types::PyDict;
 
 #[pyclass(name = "EntityMetadata")]
 pub struct PyEntityMetadata {
-    inner: EntityMetadata,
+    inner: &'static EntityMetadata,
 }
 #[pymethods]
 impl PyEntityMetadata {
@@ -21,7 +21,7 @@ impl PyEntityMetadata {
     }
     #[getter]
     pub fn discriminator(&self) -> &str {
-        self.inner.discriminator.as_str()
+        self.inner.discriminator
     }
 
     #[getter]
@@ -67,7 +67,7 @@ pub struct PyField {
 impl PyField {
     #[getter]
     pub fn type_name(&self) -> &str {
-        self.inner.type_name.as_str()
+        self.inner.type_name
     }
 
     #[getter]

@@ -20,6 +20,31 @@ static ENUM_MAP: Lazy<EnumMap> = Lazy::new(|| {
     let fp = File::open(enums_file).expect("Could not open enums definition file.");
     serde_yaml::from_reader::<_, EnumMap>(fp).unwrap()
 });
+static METADATA_MAP: Lazy<HashMap<&'static str, EntityMetadata>> = Lazy::new(|| {
+    let mut ret = HashMap::with_capacity(RAW_METADATA_MAP.len());
+    for (name, raw) in RAW_METADATA_MAP.iter() {
+        let mut fields = IndexMap::with_capacity(raw.fields.len());
+        for (name, type_name) in &raw.fields {
+            let required = type_name.starts_with('!');
+            let start = if required { 1 } else { 0 };
+            fields.insert(
+                name,
+                Field {
+                    type_name: &type_name[start..],
+                    required,
+                },
+            );
+        }
+        ret.insert(name.as_str(), EntityMetadata {
+            fields,
+            long_display_template: &raw.long_display_template,
+            short_display_template: &raw.short_display_template,
+            inherits: &raw.inherits,
+            discriminator: name,
+        });
+    }
+    ret
+});
 
 pub fn all_known_discriminators() -> Vec<&'static String> {
     RAW_METADATA_MAP.keys().collect()
@@ -33,54 +58,33 @@ struct RawEntityMetadata {
     fields: IndexMap<String, String>,
 }
 
-impl RawEntityMetadata {
-    fn for_discriminator(discriminator: &str) -> Option<&Self> {
-        RAW_METADATA_MAP.get(discriminator)
-    }
-}
-
 #[derive(Clone)]
 pub struct Field {
-    pub type_name: String,
+    pub type_name: &'static str,
     pub required: bool,
 }
 
 pub struct EntityMetadata {
-    pub discriminator: String,
-    pub long_display_template: Option<String>,
-    pub short_display_template: Option<String>,
-    inherits: Option<String>,
-    pub fields: IndexMap<String, Field>,
+    pub discriminator: &'static str,
+    pub long_display_template: &'static Option<String>,
+    pub short_display_template: &'static Option<String>,
+    inherits: &'static Option<String>,
+    pub fields: IndexMap<&'static String, Field>,
 }
 
 impl EntityMetadata {
-    pub fn for_discriminator(discriminator: &str) -> Option<Self> {
-        let raw = RawEntityMetadata::for_discriminator(discriminator)?;
-        let mut fields = IndexMap::with_capacity(raw.fields.len());
-        for (name, type_name) in &raw.fields {
-            let required = type_name.starts_with('!');
-            let start = if required { 1 } else { 0 };
-            fields.insert(
-                name.to_string(),
-                Field {
-                    type_name: type_name[start..].to_string(),
-                    required,
-                },
-            );
-        }
-        Some(Self {
-            fields,
-            long_display_template: raw.long_display_template.clone(),
-            short_display_template: raw.short_display_template.clone(),
-            inherits: raw.inherits.clone(),
-            discriminator: discriminator.to_string(),
-        })
-    }
+    pub fn for_discriminator(discriminator: &str) -> Option<&'static Self> {
+        METADATA_MAP.get(discriminator)
+            }
 
-    pub fn parent_metadata(&self) -> Option<Self> {
-        EntityMetadata::for_discriminator(&self.inherits.clone()?)
+    pub fn parent_metadata(&self) -> Option<&Self> {
+        match self.inherits {
+            None => None,
+            Some(val) => EntityMetadata::for_discriminator(val)
+        }
     }
-    pub fn all_fields(&self) -> IndexMap<String, Field> {
+    
+    pub fn all_fields(&self) -> IndexMap<&'static String, Field> {
         let mut ret = self.fields.clone();
         if let Some(parent) = self.parent_metadata() {
             ret.extend(parent.all_fields());

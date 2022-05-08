@@ -182,7 +182,7 @@ impl OSMObjectManager {
                 'n' => 4512,
                 'w' => 2024,
                 'r' => 560,
-                val @ _ => {panic!("Unsupported object type {}.", val);},
+                val => {panic!("Unsupported object type {}.", val);},
             }
         }
         fn memory_cost_per_instance(object_type: char) -> usize {
