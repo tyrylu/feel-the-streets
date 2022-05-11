@@ -98,6 +98,10 @@ pub fn update_area(
         let semantic_change = match change.change_type {
             Create => {
                 let new = change.new.expect("No new for a create change");
+                if area_db.has_entity(&new.unique_id())? {
+                    debug!("We already have the object with id {}, it just became a part of a bigger object, not generating a create change.", new.unique_id());
+                    continue;
+                }
                 manager.cache_object(&new);
                 translator::translate(&new, &manager, &mut record)?
             }
