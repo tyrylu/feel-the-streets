@@ -42,7 +42,7 @@ where
         let msg = format!("{}", self);
         rocket::response::status::Custom(
             rocket::http::Status::InternalServerError,
-            rocket::response::content::Plain(msg),
+            rocket::response::content::RawText(msg),
         )
         .respond_to(request)
     }
