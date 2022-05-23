@@ -18,7 +18,7 @@ pub async fn areas(conn: DbConn) -> Result<Template> {
     #[derive(serde::Serialize)]
     struct TCtxt {
         areas: Vec<Area>,
-        stream_infos: HashMap<i32, StreamInfo>,
+        stream_infos: HashMap<String, StreamInfo>,
     }
     let areas = conn.run(|conn| Area::all(conn)).await?;
     let mut ctx = TCtxt {
@@ -29,7 +29,7 @@ pub async fn areas(conn: DbConn) -> Result<Template> {
     for area in &ctx.areas {
         stream.connect_to_stream(area.osm_id);
         ctx.stream_infos.insert(
-            area.id,
+            area.id.to_string(),
             StreamInfo {
                 len: stream.len()?,
                 memory_usage: stream.memory_usage()?,
