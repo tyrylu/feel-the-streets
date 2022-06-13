@@ -1,5 +1,6 @@
 use std::{io::Read, sync::{atomic::{AtomicBool, Ordering}, Arc}};
-use crate::Result;
+use crate::{Error, Result};
+use log::warn;
 use super::server;
 use crossbeam_channel::Sender;
 use std::thread;
@@ -35,9 +36,19 @@ impl Servers {
     }
 
     pub fn run_query(&self, query: &str, result_to_tempfile: bool) -> Result<Box<dyn Read + Send>> {
-        let (tx, rx) = crossbeam_channel::bounded(1);
-        self.commands_sender.send(ServerQuery { query: query.to_string(), result_sender: tx, result_to_tempfile }).unwrap();
-        rx.recv().unwrap()
+        for retry in 0..3 {
+            let (tx, rx) = crossbeam_channel::bounded(1);
+            self.commands_sender.send(ServerQuery { query: query.to_string(), result_sender: tx, result_to_tempfile }).unwrap();
+            match rx.recv().unwrap() {
+                Ok(ret) => return Ok(ret),
+                Err(Error::RetryLimitExceeded) => {
+                    warn!("Query failed to be processed by an overpass API server, this is the {}. occurrence.", retry + 1);
+                    continue;
+                },
+                Err(e) => return Err(e)
+            }
+        }
+        Err(Error::RetryLimitExceeded)
     }
 }
 
