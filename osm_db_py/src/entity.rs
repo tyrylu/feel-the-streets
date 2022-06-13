@@ -69,5 +69,4 @@ impl PyEntity {
             CompareOp::Ge => Ok(id1 >= id2),
         }
     }
-
 }

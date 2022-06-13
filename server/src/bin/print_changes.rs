@@ -20,8 +20,16 @@ fn main() {
         .expect("Could not lookup changes")
     {
         let change = change.expect("No change");
-        let obj = change.old.as_ref().unwrap_or_else(|| change.new.as_ref().unwrap_or_else(|| panic!("No old or new for change {:?}", change)));
-        let geom = manager.get_geometry_as_wkb(obj).expect("Could not get geom").unwrap_or_else(|| panic!("Geometry for {:?} was none.", obj));
+        let obj = change.old.as_ref().unwrap_or_else(|| {
+            change
+                .new
+                .as_ref()
+                .unwrap_or_else(|| panic!("No old or new for change {:?}", change))
+        });
+        let geom = manager
+            .get_geometry_as_wkb(obj)
+            .expect("Could not get geom")
+            .unwrap_or_else(|| panic!("Geometry for {:?} was none.", obj));
         println!("{:?}, geom len: {}", change, geom.len());
     }
 }

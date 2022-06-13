@@ -13,6 +13,10 @@ fn main() -> Result<()> {
         .parse()
         .expect("Area id not an int");
     let area = Area::find_by_osm_id(area_id, &area_db_conn.lock().unwrap())?;
-    let _record = server::background_tasks::area_db_update::update_area(area, area_db_conn, OSMObjectManager::new()?)?;
+    let _record = server::background_tasks::area_db_update::update_area(
+        area,
+        area_db_conn,
+        OSMObjectManager::new()?,
+    )?;
     Ok(())
 }

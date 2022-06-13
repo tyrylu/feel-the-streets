@@ -14,8 +14,10 @@ impl PyFieldCondition {
 
 #[pymethods]
 impl PyFieldCondition {
-pub fn or_(&self, right: &Self) -> Self {
-        Self::new(FieldCondition::Or{left: Box::new(self.inner.clone()), right: Box::new(right.inner.clone())})
+    pub fn or_(&self, right: &Self) -> Self {
+        Self::new(FieldCondition::Or {
+            left: Box::new(self.inner.clone()),
+            right: Box::new(right.inner.clone()),
+        })
     }
-
 }

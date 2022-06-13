@@ -1,8 +1,7 @@
+use crate::ChangeType;
 use osm_db::semantic_change::EntryChange;
 use pyo3::prelude::*;
 use serde_json::Value;
-use crate::ChangeType;
-
 
 #[pyclass]
 pub struct DictChange {

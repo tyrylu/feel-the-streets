@@ -1,7 +1,7 @@
 use crate::area::{Area, AreaState};
 use crate::background_tasks::CreateAreaDatabaseTask;
+use crate::names_cache::{CacheMap, OSMObjectNamesCache};
 use crate::{DbConn, Error, Result};
-use crate::names_cache::{OSMObjectNamesCache, CacheMap};
 use doitlater::{ExecutableExt, Queue};
 use osm_db::AreaDatabase;
 use redis_api::ChangesStream;

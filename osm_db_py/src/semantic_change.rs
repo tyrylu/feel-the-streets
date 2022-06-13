@@ -42,8 +42,7 @@ impl PySemanticChange {
                 .iter()
                 .map(|c| DictChange::new(c.clone()))
                 .collect(),
-            SemanticChange::Remove { .. }
-            | SemanticChange::Create { .. } => vec![],
+            SemanticChange::Remove { .. } | SemanticChange::Create { .. } => vec![],
         }
     }
 

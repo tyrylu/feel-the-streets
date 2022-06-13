@@ -6,6 +6,7 @@ use chrono::{DateTime, Utc};
 use diesel::{Connection, SqliteConnection};
 use osm_api::change::OSMObjectChangeType;
 use osm_api::object_manager::OSMObjectManager;
+use osm_api::overpass_api::Servers;
 use osm_db::semantic_change::SemanticChange;
 use osm_db::translation::{record::TranslationRecord, translator};
 use osm_db::{
@@ -20,16 +21,16 @@ use std::{
     fs,
     sync::{Arc, Mutex},
 };
-use osm_api::overpass_api::Servers;
 
 fn find_or_create_suitable_change<'a>(
     changes: &'a mut Vec<SemanticChange>,
     parent_id: &str,
     updates_only: bool,
 ) -> &'a mut SemanticChange {
-    if let Some(pos) = changes.iter().position(|c| {
-        c.osm_id() == parent_id && !c.is_remove() && (!updates_only || c.is_update())
-    }) {
+    if let Some(pos) = changes
+        .iter()
+        .position(|c| c.osm_id() == parent_id && !c.is_remove() && (!updates_only || c.is_update()))
+    {
         &mut changes[pos]
     } else {
         changes.push(SemanticChange::updating(parent_id, vec![], vec![], vec![]));
@@ -39,7 +40,7 @@ fn find_or_create_suitable_change<'a>(
 pub fn update_area(
     mut area: Area,
     conn: Arc<Mutex<SqliteConnection>>,
-    manager: OSMObjectManager
+    manager: OSMObjectManager,
 ) -> Result<TranslationRecord> {
     info!("Updating area {} (id {}).", area.name, area.osm_id);
     let mut record = TranslationRecord::new();
@@ -58,7 +59,7 @@ pub fn update_area(
         );
         DateTime::from_utc(area.updated_at, Utc)
     };
-        let mut area_db = AreaDatabase::open_existing(area.osm_id, true)?;
+    let mut area_db = AreaDatabase::open_existing(area.osm_id, true)?;
     let mut first = true;
     let mut osm_change_count = 0;
     let mut semantic_changes = vec![];
@@ -80,7 +81,11 @@ pub fn update_area(
         {
             area.newest_osm_object_timestamp = Some(change.new.as_ref().unwrap().timestamp.clone());
         }
-        trace!("Processing OSM change {:?} during update of area {}", change, area.osm_id);
+        trace!(
+            "Processing OSM change {:?} during update of area {}",
+            change,
+            area.osm_id
+        );
         let id = change
             .old
             .as_ref()
@@ -198,7 +203,8 @@ pub fn update_area(
     area_db.apply_deferred_relationship_additions()?;
     info!(
         "Area {} updated successfully, applyed {} semantic changes resulting from {} OSM changes.",
-        area.osm_id, semantic_changes.len(),
+        area.osm_id,
+        semantic_changes.len(),
         osm_change_count
     );
     info!("Inferring additional entity relationships and enriching the semantic changes for area {}...", area.osm_id);
@@ -208,7 +214,10 @@ pub fn update_area(
     if !stream.exists()? || !stream.should_publish_changes()? {
         info!("Not publishing the changes of area {}, because there is either no client to receive them, or all the clients have to redownload the area anyway.", area.osm_id);
     } else {
-        info!("Doing a garbage collection for the stream of area {}...", area.osm_id);
+        info!(
+            "Doing a garbage collection for the stream of area {}...",
+            area.osm_id
+        );
         let prev_usage = stream.memory_usage()?;
         let collected = stream.garbage_collect()?;
         let current_usage = stream.memory_usage()?;
@@ -320,7 +329,9 @@ pub fn update_area_databases() -> Result<()> {
     for task in tasks {
         match task.await_complete() {
             Ok(rec) => rec.merge_to(&mut record),
-            Err(e) => { error!("Failed to update the area, error: {:?}", e);}
+            Err(e) => {
+                error!("Failed to update the area, error: {:?}", e);
+            }
         }
     }
     record.save_to_file(&format!("area_updates_{}.json", now.to_rfc3339()))?;

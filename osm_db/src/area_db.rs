@@ -546,7 +546,9 @@ impl AreaDatabase {
     }
 
     fn num_rows_in_table(&self, table: &str) -> Result<usize> {
-        let mut stmt = self.conn.prepare_cached(&format!("SELECT count(*) from {}", table))?;
+        let mut stmt = self
+            .conn
+            .prepare_cached(&format!("SELECT count(*) from {}", table))?;
         Ok(stmt.query_row([], |row| Ok(row.get_unwrap(0)))?)
     }
 
@@ -556,16 +558,31 @@ impl AreaDatabase {
     pub fn num_entity_relationships(&self) -> Result<usize> {
         self.num_rows_in_table("entity_relationships")
     }
-    
+
     pub fn get_entity_counts_by_discriminator(&self) -> Result<HashMap<String, usize>> {
-        let mut stmt = self.conn.prepare_cached("SELECT discriminator, count(*) FROM entities GROUP BY discriminator")?;
-        let results = stmt.query_map([], |row| Ok((row.get_unwrap(0), row.get_unwrap(1))))?.map(|e| e.expect("Should not happen")).collect();
+        let mut stmt = self.conn.prepare_cached(
+            "SELECT discriminator, count(*) FROM entities GROUP BY discriminator",
+        )?;
+        let results = stmt
+            .query_map([], |row| Ok((row.get_unwrap(0), row.get_unwrap(1))))?
+            .map(|e| e.expect("Should not happen"))
+            .collect();
         Ok(results)
     }
 
     pub fn get_entity_relationship_counts_by_kind(&self) -> Result<HashMap<String, usize>> {
-        let mut stmt = self.conn.prepare_cached("SELECT kind, count(*) FROM entity_relationships GROUP BY kind")?;
-        let results = stmt.query_map([], |row| Ok((format!("{:?}", row.get_unwrap::<_, EntityRelationshipKind>(0)), row.get_unwrap(1))))?.map(|e| e.expect("Should not happen")).collect();
+        let mut stmt = self
+            .conn
+            .prepare_cached("SELECT kind, count(*) FROM entity_relationships GROUP BY kind")?;
+        let results = stmt
+            .query_map([], |row| {
+                Ok((
+                    format!("{:?}", row.get_unwrap::<_, EntityRelationshipKind>(0)),
+                    row.get_unwrap(1),
+                ))
+            })?
+            .map(|e| e.expect("Should not happen"))
+            .collect();
         Ok(results)
     }
-    }
+}

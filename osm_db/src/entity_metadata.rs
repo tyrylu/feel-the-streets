@@ -35,13 +35,16 @@ static METADATA_MAP: Lazy<HashMap<&'static str, EntityMetadata>> = Lazy::new(|| 
                 },
             );
         }
-        ret.insert(name.as_str(), EntityMetadata {
-            fields,
-            long_display_template: &raw.long_display_template,
-            short_display_template: &raw.short_display_template,
-            inherits: &raw.inherits,
-            discriminator: name,
-        });
+        ret.insert(
+            name.as_str(),
+            EntityMetadata {
+                fields,
+                long_display_template: &raw.long_display_template,
+                short_display_template: &raw.short_display_template,
+                inherits: &raw.inherits,
+                discriminator: name,
+            },
+        );
     }
     ret
 });
@@ -75,15 +78,15 @@ pub struct EntityMetadata {
 impl EntityMetadata {
     pub fn for_discriminator(discriminator: &str) -> Option<&'static Self> {
         METADATA_MAP.get(discriminator)
-            }
+    }
 
     pub fn parent_metadata(&self) -> Option<&Self> {
         match self.inherits {
             None => None,
-            Some(val) => EntityMetadata::for_discriminator(val)
+            Some(val) => EntityMetadata::for_discriminator(val),
         }
     }
-    
+
     pub fn all_fields(&self) -> IndexMap<&'static String, Field> {
         let mut ret = self.fields.clone();
         if let Some(parent) = self.parent_metadata() {

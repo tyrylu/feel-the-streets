@@ -26,9 +26,7 @@ pub fn infer_additional_relationships_for_entity(
         db.insert_entity_relationship(&relationship)?;
         relationships.push(relationship);
     }
-    if let Some(relationship) =
-        street::try_infer_street_for(entity, db, street_names_cache)?
-    {
+    if let Some(relationship) = street::try_infer_street_for(entity, db, street_names_cache)? {
         // And for consistency, we'll insert this one as well.
         db.insert_entity_relationship(&relationship)?;
         relationships.push(relationship);

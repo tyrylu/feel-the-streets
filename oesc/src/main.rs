@@ -33,7 +33,7 @@ fn main() -> Result<()> {
         }
         Command::CreateFrozenCopy { area_id, new_name } => {
             create_frozen_copy::create_frozen_copy(area_id, new_name)
-        },
-        Command::RegenerateParentOSMIds => regenerate_parent_osm_ids::regenerate_parent_osm_ids()
+        }
+        Command::RegenerateParentOSMIds => regenerate_parent_osm_ids::regenerate_parent_osm_ids(),
     }
 }

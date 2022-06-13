@@ -10,9 +10,7 @@ pub fn check_entity_data_consistency(
     record: &mut TranslationRecord,
 ) -> bool {
     match EntityMetadata::for_discriminator(discriminator) {
-        Some(metadata) => {
-            check_entity_data_consistency_against_metadata(data, metadata, record)
-        }
+        Some(metadata) => check_entity_data_consistency_against_metadata(data, metadata, record),
         None => {
             warn!(
                 "Failed to get the entity metadata for discriminator {}!",

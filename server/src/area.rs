@@ -83,7 +83,11 @@ impl Area {
     }
 }
 
-pub fn finalize_area_creation(osm_id: i64, parent_ids_str: String, conn: &SqliteConnection) -> Result<usize> {
+pub fn finalize_area_creation(
+    osm_id: i64,
+    parent_ids_str: String,
+    conn: &SqliteConnection,
+) -> Result<usize> {
     let size = fs::metadata(AreaDatabase::path_for(osm_id, true))?.len();
     let query = diesel::update(areas::table)
         .filter(areas::osm_id.eq(osm_id))

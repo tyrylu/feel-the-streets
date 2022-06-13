@@ -99,8 +99,7 @@ pub fn translate(
                 }
             }
 
-            if !checks::check_entity_data_consistency(&discriminator, &converted_data, record)
-            {
+            if !checks::check_entity_data_consistency(&discriminator, &converted_data, record) {
                 return Ok(None);
             }
             let raw_data =

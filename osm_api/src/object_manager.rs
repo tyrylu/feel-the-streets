@@ -10,9 +10,9 @@ use hashbrown::HashMap;
 use itertools::Itertools;
 use log::{debug, error, info, warn};
 use once_cell::sync::Lazy;
-use sled::Db;
 use serde::Deserialize;
 use serde_json::{self, Deserializer};
+use sled::Db;
 use smol_str::SmolStr;
 use std::cell::{Ref, RefCell};
 use std::cmp;
@@ -86,7 +86,8 @@ impl OSMObjectManager {
     /// Creates an OsmObjectManager in a scenario where each thread has its own instance and there are at least two of these.
     pub fn new_multithread(servers: Arc<Servers>, cache: Arc<Db>) -> Result<Self> {
         Ok(OSMObjectManager {
-            api_servers: servers,            cache,
+            api_servers: servers,
+            cache,
             geometries_cache: RefCell::new(HashMap::new()),
             retrieved_from_network: RefCell::new(HashSet::new()),
             cache_queries: RefCell::new(0),
@@ -123,8 +124,7 @@ impl OSMObjectManager {
     }
 
     fn run_query(&self, query: &str, result_to_tempfile: bool) -> Result<Box<dyn Read + Send>> {
-        self.api_servers
-            .run_query(query, result_to_tempfile)
+        self.api_servers.run_query(query, result_to_tempfile)
     }
 
     fn cache_objects_from(
@@ -182,7 +182,9 @@ impl OSMObjectManager {
                 'n' => 4512,
                 'w' => 2024,
                 'r' => 560,
-                val => {panic!("Unsupported object type {}.", val);},
+                val => {
+                    panic!("Unsupported object type {}.", val);
+                }
             }
         }
         fn memory_cost_per_instance(object_type: char) -> usize {
@@ -357,9 +359,7 @@ impl OSMObjectManager {
                         "inner" | "outer" => {
                             self.construct_multipolygon_from_complex_polygons(object)?
                         }
-                        _ => {
-                            self.construct_multipolygon_from_polygons(object)?
-                        }
+                        _ => self.construct_multipolygon_from_polygons(object)?,
                     };
                     if let Some(geom) = multi {
                         Ok(Some(geom))
@@ -430,7 +430,11 @@ impl OSMObjectManager {
                 "inner" => inners.push(points),
                 "outer" => outers.push(points),
                 _ => {
-                    warn!("Unknown multipolygon part role {} as part of the geometry for object {}.", related.tags["role"], object.unique_id());
+                    warn!(
+                        "Unknown multipolygon part role {} as part of the geometry for object {}.",
+                        related.tags["role"],
+                        object.unique_id()
+                    );
                     return Ok(None);
                 }
             }
@@ -468,10 +472,9 @@ impl OSMObjectManager {
     }
 
     fn flush_cache(&self) {
-        self.cache.flush()
-            .expect("Flush failed.");
+        self.cache.flush().expect("Flush failed.");
     }
-    
+
     pub fn lookup_differences_in(
         &self,
         area: i64,
@@ -502,9 +505,7 @@ impl OSMObjectManager {
         self.cache_objects_from(readable, true)
     }
 
-    pub fn cached_objects(
-        &self,
-    ) -> Box<dyn (Iterator<Item = OSMObject>)> {
+    pub fn cached_objects(&self) -> Box<dyn (Iterator<Item = OSMObject>)> {
         Box::new(
             self.cache
                 .iter()
@@ -528,4 +529,3 @@ impl Drop for OSMObjectManager {
         );
     }
 }
-

@@ -1,5 +1,5 @@
-use pyo3::prelude::*;
 use pyo3::exceptions::PyRuntimeError;
+use pyo3::prelude::*;
 use std::str::FromStr;
 
 mod area_db;
@@ -16,9 +16,8 @@ mod semantic_change;
 pub enum ChangeType {
     Create,
     Remove,
-    Update
+    Update,
 }
-
 
 #[pymodule]
 fn osm_db(_py: Python, m: &PyModule) -> PyResult<()> {
@@ -29,16 +28,24 @@ fn osm_db(_py: Python, m: &PyModule) -> PyResult<()> {
 
     #[pyfn(m)]
     fn init_logging(py: Python, level: &str) -> PyResult<()> {
-        let filter = log::LevelFilter::from_str(level).map_err(|e| PyRuntimeError::new_err(format!("Could not parse {} as a logging level, error: {}", level, e)))?;
-        let _handle = pyo3_log::Logger::new(py, pyo3_log::Caching::LoggersAndLevels).map_err(|_| PyRuntimeError::new_err("Logger could not be created"))?
-    .filter(filter)
-    .install()
-    .map_err(|_| PyRuntimeError::new_err("Someone installed a rust-side logger before us"))?;
-    Ok(())
-        }
-        m.add_class::<ChangeType>()?;
-        m.add_class::<semantic_change::PySemanticChange>()?;
-        m.add_class::<dict_change::DictChange>()?;
+        let filter = log::LevelFilter::from_str(level).map_err(|e| {
+            PyRuntimeError::new_err(format!(
+                "Could not parse {} as a logging level, error: {}",
+                level, e
+            ))
+        })?;
+        let _handle = pyo3_log::Logger::new(py, pyo3_log::Caching::LoggersAndLevels)
+            .map_err(|_| PyRuntimeError::new_err("Logger could not be created"))?
+            .filter(filter)
+            .install()
+            .map_err(|_| {
+                PyRuntimeError::new_err("Someone installed a rust-side logger before us")
+            })?;
+        Ok(())
+    }
+    m.add_class::<ChangeType>()?;
+    m.add_class::<semantic_change::PySemanticChange>()?;
+    m.add_class::<dict_change::DictChange>()?;
     m.add_class::<entity::PyEntity>()?;
     m.add_class::<entity_metadata::PyEntityMetadata>()?;
     m.add_class::<entity_metadata::PyField>()?;

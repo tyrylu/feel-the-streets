@@ -1,8 +1,8 @@
 use anyhow::Result;
-use diesel::{SqliteConnection, Connection};
+use diesel::{Connection, SqliteConnection};
+use osm_api::object_manager::OSMObjectManager;
 use server::area::Area;
 use server::background_tasks::area_db_creation;
-use osm_api::object_manager::OSMObjectManager;
 
 pub(crate) fn regenerate_parent_osm_ids() -> Result<()> {
     let conn = SqliteConnection::establish("server.db")?;

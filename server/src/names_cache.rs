@@ -1,15 +1,14 @@
-use std::{collections::HashMap, path::Path, fs::File};
-use osm_api::{object::OSMObject, SmolStr};
 use crate::Result;
+use osm_api::{object::OSMObject, SmolStr};
+use std::{collections::HashMap, fs::File, path::Path};
 
 pub(crate) type CacheMap = HashMap<SmolStr, HashMap<String, String>>;
 
 pub struct OSMObjectNamesCache {
-    cache: CacheMap
+    cache: CacheMap,
 }
 
 impl OSMObjectNamesCache {
-    
     pub fn load() -> Result<Self> {
         Self::load_from("osm_object.names")
     }
@@ -18,11 +17,10 @@ impl OSMObjectNamesCache {
         let dest = Path::new(path);
         let cache: CacheMap = if dest.exists() {
             serde_json::from_reader(File::open(dest)?)?
-        }
-        else {
+        } else {
             CacheMap::new()
         };
-        Ok(Self{cache})
+        Ok(Self { cache })
     }
 
     pub fn cache_names_of(&mut self, object: &OSMObject) {

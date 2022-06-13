@@ -1,27 +1,26 @@
-use chrono::{DateTime, Utc, Duration};
-use crossbeam_channel::{Sender, Receiver};
-use log::{warn, debug, info};
+use super::servers::ServerQuery;
+use crate::{Error, Result};
+use chrono::{DateTime, Duration, Utc};
+use crossbeam_channel::{Receiver, Sender};
+use log::{debug, info, warn};
 use once_cell::sync::Lazy;
 use regex::Regex;
-use super::servers::ServerQuery;
-use ureq::{Agent, Request};
-use crate::{Result, Error};
+use std::io::{self, Read, Seek, SeekFrom};
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use std::thread;
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::io::{self, Read, Seek, SeekFrom};
-use tempfile::tempfile;
 use std::time::Instant;
+use tempfile::tempfile;
+use ureq::{Agent, Request};
 
 static AVAILABLE_SLOTS_RE: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"^(\d+) slots available now.").unwrap());
 static SLOT_AVAILABLE_AFTER_RE: Lazy<Regex> = Lazy::new(|| {
     Regex::new(r"^Slot available after: (\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)").unwrap()
 });
-static RATE_LIMIT_RE: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"^Rate limit: (\d+)").unwrap());
+static RATE_LIMIT_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^Rate limit: (\d+)").unwrap());
 
-    const QUERY_RETRY_COUNT: u8 = 6;
+const QUERY_RETRY_COUNT: u8 = 6;
 
 fn query_executor(server: Server, query: ServerQuery, wake_sender: Sender<()>) {
     let mut retry = 0;
@@ -29,24 +28,40 @@ fn query_executor(server: Server, query: ServerQuery, wake_sender: Sender<()>) {
     let ret = loop {
         retry += 1;
         if retry > QUERY_RETRY_COUNT {
-            break Err(Error::RetryLimitExceeded)
+            break Err(Error::RetryLimitExceeded);
         }
-        match run_query(req.clone(), &query.query, query.result_to_tempfile, &wake_sender) {
+        match run_query(
+            req.clone(),
+            &query.query,
+            query.result_to_tempfile,
+            &wake_sender,
+        ) {
             Ok(r) => break Ok(r),
             Err(e) => {
                 warn!("Query failed during retry {}, error: {:?}.", retry, e);
-                server.get_api_status().expect("Could not get status").wait_for_available_slot();
+                server
+                    .get_api_status()
+                    .expect("Could not get status")
+                    .wait_for_available_slot();
             }
         }
     };
     query.result_sender.send(ret).unwrap();
 }
 
-fn run_query(req: Request, query: &str, result_to_tempfile: bool, wake_sender: &Sender<()>) -> Result<Box<dyn Read + Send>> {
+fn run_query(
+    req: Request,
+    query: &str,
+    result_to_tempfile: bool,
+    wake_sender: &Sender<()>,
+) -> Result<Box<dyn Read + Send>> {
     let start = Instant::now();
-    debug!("Calling interpreter endpoint {} with query {}", req.url(), query);
-    let resp = req
-        .send_form(&[("data", query)])?;
+    debug!(
+        "Calling interpreter endpoint {} with query {}",
+        req.url(),
+        query
+    );
+    let resp = req.send_form(&[("data", query)])?;
     debug!("Request successfully finished after {:?}.", start.elapsed());
     // Maybe wake the dispatcher
     wake_sender.send(()).unwrap();
@@ -60,7 +75,11 @@ fn run_query(req: Request, query: &str, result_to_tempfile: bool, wake_sender: &
     }
 }
 
-pub fn requests_dispatcher(url: &'static str, queries_receiver: Receiver<ServerQuery>, should_exit: Arc<AtomicBool>) {
+pub fn requests_dispatcher(
+    url: &'static str,
+    queries_receiver: Receiver<ServerQuery>,
+    should_exit: Arc<AtomicBool>,
+) {
     let server = Server::new(url);
     let mut in_flight_requests = 0;
     let (wake_tx, wake_rx) = crossbeam_channel::unbounded();
@@ -70,7 +89,7 @@ pub fn requests_dispatcher(url: &'static str, queries_receiver: Receiver<ServerQ
         status.wait_for_available_slot();
         // Now, we have at least one slot available, so get something to work on.
         if let Ok(query) = queries_receiver.recv() {
-                        in_flight_requests += 1;
+            in_flight_requests += 1;
             let wake_clone = wake_tx.clone();
             let server_clone = server.clone();
             thread::spawn(move || query_executor(server_clone, query, wake_clone));
@@ -83,8 +102,7 @@ pub fn requests_dispatcher(url: &'static str, queries_receiver: Receiver<ServerQ
                     in_flight_requests -= 1;
                 }
             }
-        }
-        else {
+        } else {
             // The Servers instance got dropped, so just exit gracefully.
             break;
         }
@@ -95,28 +113,33 @@ struct ServerStatus {
     rate_limit: usize,
     available_slots: usize,
     slots_available_after: Vec<DateTime<Utc>>,
-    url: &'static str
+    url: &'static str,
 }
 
 impl ServerStatus {
     fn empty(url: &'static str) -> Self {
-        Self {rate_limit: 0, available_slots: 0, slots_available_after: vec![], url}
+        Self {
+            rate_limit: 0,
+            available_slots: 0,
+            slots_available_after: vec![],
+            url,
+        }
     }
 
     fn has_available_slot(&self) -> bool {
         let now = Utc::now();
-        self.rate_limit == 0 ||
-        self.available_slots > 0
+        self.rate_limit == 0
+            || self.available_slots > 0
             || self.slots_available_after.iter().any(|s| s < &now)
     }
 
     fn slot_available_after(&self) -> Duration {
-         if self.available_slots > 0 || self.rate_limit == 0 {
+        if self.available_slots > 0 || self.rate_limit == 0 {
             Duration::zero()
         } else {
             match self.slots_available_after.iter().min() {
                 Some(dt) => *dt - Utc::now(),
-                None => Duration::seconds(5) // Handles the case when all slots are taken and we are requested to get the sleep value.
+                None => Duration::seconds(5), // Handles the case when all slots are taken and we are requested to get the sleep value.
             }
         }
     }
@@ -138,15 +161,18 @@ struct Server {
 
 impl Server {
     fn new(url: &'static str) -> Self {
-        Self { agent: Agent::new(), url}
+        Self {
+            agent: Agent::new(),
+            url,
+        }
     }
     fn get_api_status_text(&self) -> Result<String> {
         Ok(self
-        .agent
-        .get(&format!("{}/api/status", self.url))
-        .call()?
-        .into_string()?)
-        }
+            .agent
+            .get(&format!("{}/api/status", self.url))
+            .call()?
+            .into_string()?)
+    }
 
     fn get_api_status(&self) -> Result<ServerStatus> {
         let mut retry = 0;
@@ -158,7 +184,10 @@ impl Server {
             match self.get_api_status_text() {
                 Ok(status) => break status,
                 Err(e) => {
-                    warn!("Could not get status during retry {}, error: {:?}", retry, e);
+                    warn!(
+                        "Could not get status during retry {}, error: {:?}",
+                        retry, e
+                    );
                 }
             }
         };
@@ -187,7 +216,6 @@ impl Server {
 
     fn prepare_run_query(&self) -> Request {
         let final_url = format!("{}/api/interpreter", self.url);
-        self.agent
-            .post(&final_url)
+        self.agent.post(&final_url)
     }
 }

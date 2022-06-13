@@ -1,9 +1,9 @@
 use crate::area;
-use crate::Result;
 use crate::names_cache::OSMObjectNamesCache;
+use crate::Result;
 use diesel::{Connection, SqliteConnection};
-use osm_api::SmolStr;
 use osm_api::object_manager::OSMObjectManager;
+use osm_api::SmolStr;
 use osm_db::area_db::AreaDatabase;
 use osm_db::relationship_inference::infer_additional_relationships_for;
 use osm_db::translation::{record::TranslationRecord, translator};
@@ -16,14 +16,12 @@ pub fn create_area_database(area: i64) -> Result<()> {
     manager.lookup_objects_in(area)?;
     let from_network_ids = manager.get_ids_retrieved_from_network();
     let mut db = AreaDatabase::create(area)?;
-    db.insert_entities(
-        manager.cached_objects().filter_map(|obj| {
-            if !from_network_ids.contains(&obj.unique_id()) {
-                return None;
-            }
-            translator::translate(&obj, &manager, &mut record).expect("Translation failure.")
-        }),
-    )?;
+    db.insert_entities(manager.cached_objects().filter_map(|obj| {
+        if !from_network_ids.contains(&obj.unique_id()) {
+            return None;
+        }
+        translator::translate(&obj, &manager, &mut record).expect("Translation failure.")
+    }))?;
     drop(from_network_ids);
     db.begin()?;
     infer_additional_relationships_for(&db)?;
@@ -37,19 +35,35 @@ pub fn create_area_database(area: i64) -> Result<()> {
 }
 
 pub fn get_parent_ids_str_for(area: i64, manager: &OSMObjectManager) -> Result<String> {
-        let mut parents = manager.get_area_parents(area)?;
-    info!("Found {} administrative parent candidates for area {}.", parents.len(), area);
+    let mut parents = manager.get_area_parents(area)?;
+    info!(
+        "Found {} administrative parent candidates for area {}.",
+        parents.len(),
+        area
+    );
     parents.retain(|p| p.tags.contains_key("admin_level"));
-    info!("After filtering, {} candidates for area {} remained.", parents.len(), area);
+    info!(
+        "After filtering, {} candidates for area {} remained.",
+        parents.len(),
+        area
+    );
     parents.sort_by_key(|p| {
         if p.tags["admin_level"].len() == 1 {
-            format!("0{}", p.tags["admin_level"]) } else{p.tags["admin_level"].clone()} });
+            format!("0{}", p.tags["admin_level"])
+        } else {
+            p.tags["admin_level"].clone()
+        }
+    });
     let mut cache = OSMObjectNamesCache::load()?;
     for parent in &parents {
         cache.cache_names_of(parent);
     }
     cache.save()?;
-    Ok(parents.iter().map(|p|p.unique_id()).collect::<Vec<SmolStr>>().join(","))
+    Ok(parents
+        .iter()
+        .map(|p| p.unique_id())
+        .collect::<Vec<SmolStr>>()
+        .join(","))
 }
 
 #[derive(Serialize, Deserialize)]
