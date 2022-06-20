@@ -8,11 +8,20 @@ use osm_db::area_db::AreaDatabase;
 use osm_db::relationship_inference::infer_additional_relationships_for;
 use osm_db::translation::{record::TranslationRecord, translator};
 use serde::{Deserialize, Serialize};
+use std::sync::{Arc, Mutex};
 
 pub fn create_area_database(area: i64) -> Result<()> {
-    info!("Starting to create area with id {}.", area);
     let manager = OSMObjectManager::new()?;
-    let mut record = TranslationRecord::new();
+    let area_db_conn = Arc::new(Mutex::new(SqliteConnection::establish("server.db")?));
+    let cache = Arc::new(Mutex::new(OSMObjectNamesCache::load()?));
+    create_area_database_worker(area, manager, area_db_conn, cache.clone())?;
+    cache.lock().unwrap().save()?;
+    Ok(())
+}
+
+pub fn create_area_database_worker(area: i64, manager: OSMObjectManager, area_db_conn: Arc<Mutex<SqliteConnection>>, cache: Arc<Mutex<OSMObjectNamesCache>>) -> Result<()> {
+    info!("Starting to create area with id {}.", area);
+        let mut record = TranslationRecord::new();
     manager.lookup_objects_in(area)?;
     let from_network_ids = manager.get_ids_retrieved_from_network();
     let mut db = AreaDatabase::create(area)?;
@@ -26,15 +35,14 @@ pub fn create_area_database(area: i64) -> Result<()> {
     db.begin()?;
     infer_additional_relationships_for(&db)?;
     db.commit()?;
-    let parent_ids_str = get_parent_ids_str_for(area, &manager)?;
-    let area_db_conn = SqliteConnection::establish("server.db")?;
-    area::finalize_area_creation(area, parent_ids_str, &area_db_conn)?;
+    let parent_ids_str = get_parent_ids_str_for(area, &manager, &mut *cache.lock().unwrap())?;
+    area::finalize_area_creation(area, parent_ids_str, &*area_db_conn.lock().unwrap())?;
     record.save_to_file(&format!("creation_{}.json", area))?;
     info!("Area {} created successfully.", area);
     Ok(())
 }
 
-pub fn get_parent_ids_str_for(area: i64, manager: &OSMObjectManager) -> Result<String> {
+pub fn get_parent_ids_str_for(area: i64, manager: &OSMObjectManager, cache: &mut OSMObjectNamesCache) -> Result<String> {
     let mut parents = manager.get_area_parents(area)?;
     info!(
         "Found {} administrative parent candidates for area {}.",
@@ -54,11 +62,9 @@ pub fn get_parent_ids_str_for(area: i64, manager: &OSMObjectManager) -> Result<S
             p.tags["admin_level"].clone()
         }
     });
-    let mut cache = OSMObjectNamesCache::load()?;
-    for parent in &parents {
+        for parent in &parents {
         cache.cache_names_of(parent);
     }
-    cache.save()?;
     Ok(parents
         .iter()
         .map(|p| p.unique_id())

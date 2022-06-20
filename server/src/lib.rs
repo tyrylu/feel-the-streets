@@ -13,7 +13,7 @@ pub mod area;
 pub mod background_tasks;
 mod diff_utils;
 mod error;
-mod names_cache;
+pub mod names_cache;
 mod schema;
 pub mod ui_routes;
 

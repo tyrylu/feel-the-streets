@@ -25,6 +25,7 @@ class SemanticChangeRetriever:
 
     def new_changes_in(self, area):
         reply = self._conn.xreadgroup(config().general.client_id, "fts_app", {f"fts.{area}.changes": ">"})
+        print(reply)
         messages = reply[0][1]
         for (message_id, data) in messages:
             self._message_ids[area].append(message_id)
