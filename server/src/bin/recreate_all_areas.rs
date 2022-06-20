@@ -2,8 +2,8 @@ extern crate server;
 use diesel::{Connection, SqliteConnection};
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::overpass_api::Servers;
-use server::{area::Area, background_tasks::area_db_creation, Result};
 use server::names_cache::OSMObjectNamesCache;
+use server::{area::Area, background_tasks::area_db_creation, Result};
 use std::fs;
 use std::path::Path;
 use std::sync::{Arc, Mutex};
@@ -26,7 +26,14 @@ fn main() -> Result<()> {
         let manager = OSMObjectManager::new_multithread(servers.clone(), cache.clone())?;
         let server_conn_clone = server_conn.clone();
         let names_cache_clone = names_cache.clone();
-        tasks.push(pool.evaluate(move || area_db_creation::create_area_database_worker(area.osm_id, manager, server_conn_clone, names_cache_clone)));
+        tasks.push(pool.evaluate(move || {
+            area_db_creation::create_area_database_worker(
+                area.osm_id,
+                manager,
+                server_conn_clone,
+                names_cache_clone,
+            )
+        }));
     }
     for task in tasks {
         if let Err(e) = task.await_complete() {

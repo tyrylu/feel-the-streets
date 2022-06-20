@@ -19,9 +19,14 @@ pub fn create_area_database(area: i64) -> Result<()> {
     Ok(())
 }
 
-pub fn create_area_database_worker(area: i64, manager: OSMObjectManager, area_db_conn: Arc<Mutex<SqliteConnection>>, cache: Arc<Mutex<OSMObjectNamesCache>>) -> Result<()> {
+pub fn create_area_database_worker(
+    area: i64,
+    manager: OSMObjectManager,
+    area_db_conn: Arc<Mutex<SqliteConnection>>,
+    cache: Arc<Mutex<OSMObjectNamesCache>>,
+) -> Result<()> {
     info!("Starting to create area with id {}.", area);
-        let mut record = TranslationRecord::new();
+    let mut record = TranslationRecord::new();
     manager.lookup_objects_in(area)?;
     let from_network_ids = manager.get_ids_retrieved_from_network();
     let mut db = AreaDatabase::create(area)?;
@@ -42,7 +47,11 @@ pub fn create_area_database_worker(area: i64, manager: OSMObjectManager, area_db
     Ok(())
 }
 
-pub fn get_parent_ids_str_for(area: i64, manager: &OSMObjectManager, cache: &mut OSMObjectNamesCache) -> Result<String> {
+pub fn get_parent_ids_str_for(
+    area: i64,
+    manager: &OSMObjectManager,
+    cache: &mut OSMObjectNamesCache,
+) -> Result<String> {
     let mut parents = manager.get_area_parents(area)?;
     info!(
         "Found {} administrative parent candidates for area {}.",
@@ -62,7 +71,7 @@ pub fn get_parent_ids_str_for(area: i64, manager: &OSMObjectManager, cache: &mut
             p.tags["admin_level"].clone()
         }
     });
-        for parent in &parents {
+    for parent in &parents {
         cache.cache_names_of(parent);
     }
     Ok(parents
