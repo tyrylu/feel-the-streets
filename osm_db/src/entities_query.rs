@@ -2,6 +2,7 @@ use crate::entities_query_condition::FieldCondition;
 use crate::entity_relationship_kind::EntityRelationshipKind;
 use rusqlite::types::ToSql;
 use std::f64;
+use std::fmt::Write;
 
 const RECTANGLE_CONDITION_SQL: &str = "(entities.rowid = idx_entities_geometry.pkid) AND (idx_entities_geometry.xmin <= :max_x) AND (idx_entities_geometry.xmax >= :min_x) AND (idx_entities_geometry.ymin <= :max_y) AND (idx_entities_geometry.ymax >= :min_y)";
 const CHILD_ID_FILTER_SQL: &str =
@@ -121,10 +122,10 @@ impl EntitiesQuery {
         }
         let mut query_sql = base_query.to_string();
         if !condition_fragments.is_empty() {
-            query_sql.push_str(&format!(" WHERE {}", condition_fragments.join(" AND ")));
+            write!(query_sql, " WHERE {}", condition_fragments.join(" AND ")).unwrap();
         }
         if let Some(limit) = self.limit {
-            query_sql.push_str(&format!(" LIMIT {}", limit));
+            write!(query_sql, " LIMIT {}", limit).unwrap();
         }
         query_sql
     }

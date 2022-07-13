@@ -95,7 +95,7 @@ pub fn requests_dispatcher(
             thread::spawn(move || query_executor(server_clone, query, wake_clone));
             // Did we reach the maximum nuber of in-flight queries? If yes, wait for at leas one to finish.
             if status.rate_limit > 0 && status.rate_limit == in_flight_requests {
-                let _ = wake_rx.recv().unwrap();
+                wake_rx.recv().unwrap();
                 in_flight_requests -= 1;
                 // The wake could have been from a request which finished while we slept and others could finish as well, so find out how many actually did.
                 while let Ok(()) = wake_rx.try_recv() {
