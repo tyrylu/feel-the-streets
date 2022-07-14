@@ -29,6 +29,13 @@ def is_interesting(entity):
     # Filter out sidewalks if we want to avoid them
     if config().navigation.try_avoid_sidewalks and is_footway(entity):
         return False
+    # Configurable interesting object classes
+    if entity.discriminator == "Land" and not config().presentation.lands_are_interesting:
+        return False
+    if entity.discriminator == "Shop" and not config().presentation.shops_are_interesting:
+        return False
+    if entity.discriminator == "Amenity" and entity.value_of_field("type") == Enum.with_name("AmenityType").value_for_name("waste_basket") and not config().presentation.trashcans_are_interesting:
+        return False
     return True
 
 def  filter_interesting_entities(objects):

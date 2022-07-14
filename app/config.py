@@ -32,6 +32,9 @@ class PresentationConfig(BaseModel):
     represent_bearings_as_clock_position: bool = True
     areas_list_max_parents: int = 1
     current_crossing_pitch: float = 1.1
+    lands_are_interesting: bool = True
+    shops_are_interesting: bool = True
+    trashcans_are_interesting: bool = True
 
 class ChangelogsConfig(BaseModel):
     enabled: bool = False
