@@ -16,7 +16,7 @@ dotenv = "0.15.0"
 diesel = { version = "1.4.8", features = ["sqlite", "chrono"] }
 url = "2.2.2"
 ureq = { version = "2.5.0", default_features = false, features = ["tls", "json"] }
-serde = { version = "1.0.139", features = ["derive"] }
-clap = { version = "3.2.11", features = ["derive"] }
+serde = { version = "1.0.140", features = ["derive"] }
+clap = { version = "3.2.14", features = ["derive"] }
 
 [features]

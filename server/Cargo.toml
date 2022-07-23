@@ -15,13 +15,13 @@ rocket_dyn_templates = { version = "0.1.0-rc.2", features = ["tera"] }
 diesel = { version = "1.4.8", features = ["sqlite", "chrono"] }
 diesel_migrations = "1.4.0"
 diesel-derive-enum = { version = "1.1.2", features = ["sqlite"] }
-serde = { version = "1.0.139", features = ["derive"] }
+serde = { version = "1.0.140", features = ["derive"] }
 serde_json = "1.0.82"
 chrono = { version = "0.4.19", default_features = false, features = ["serde", "clock", "std"] }
 thiserror = "1.0.31"
 dotenv = "0.15.0"
 base64 = "0.13.0"
 typetag = "0.2.1"
-doitlater = "0.2.0"
+doitlater = "0.2.1"
 redis_api = {path = "../redis_api"}
 rusty_pool = { version = "0.7.0", default-features = false }
