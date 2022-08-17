@@ -9,6 +9,7 @@ use osm_db::relationship_inference::infer_additional_relationships_for;
 use osm_db::translation::{record::TranslationRecord, translator};
 use serde::{Deserialize, Serialize};
 use std::sync::{Arc, Mutex};
+use doitlater::typetag;
 
 pub fn create_area_database(area: i64) -> Result<()> {
     let manager = OSMObjectManager::new()?;

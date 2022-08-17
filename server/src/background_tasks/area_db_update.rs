@@ -21,6 +21,7 @@ use std::{
     fs,
     sync::{Arc, Mutex},
 };
+use doitlater::typetag;
 
 fn find_or_create_suitable_change<'a>(
     changes: &'a mut Vec<SemanticChange>,
