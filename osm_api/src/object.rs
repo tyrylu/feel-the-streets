@@ -6,7 +6,7 @@ use smol_str::SmolStr;
 use std::iter;
 use std::str::FromStr;
 
-#[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, Clone, PartialEq, Eq, Debug)]
 pub enum OSMObjectType {
     #[serde(rename = "node")]
     Node,

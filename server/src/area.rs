@@ -10,7 +10,7 @@ use osm_db::AreaDatabase;
 use serde::Serialize;
 use std::fs;
 
-#[derive(PartialEq, Serialize, DbEnum, Debug)]
+#[derive(PartialEq, Eq, Serialize, DbEnum, Debug)]
 pub enum AreaState {
     Creating,
     ApplyingChanges,
