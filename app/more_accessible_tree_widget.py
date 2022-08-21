@@ -1,5 +1,7 @@
 from PySide6.QtWidgets import QTreeWidget
 from PySide6.QtGui import Qt
+from PySide6 import QtCore
+import platform
 
 def get_expansion_state_string(is_expanded):
     if is_expanded:
@@ -15,9 +17,10 @@ class MoreAccessibleTreeWidget(QTreeWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._seen_items = set()
-        self.model().rowsInserted.connect(self._on_rows_inserted)
-        self.itemCollapsed.connect(self._on_item_collapsed)
-        self.itemExpanded.connect(self._on_item_expanded)
+        if platform.system() == "Windows" and QtCore.qVersion() < "6.4":
+            self.model().rowsInserted.connect(self._on_rows_inserted)
+            self.itemCollapsed.connect(self._on_item_collapsed)
+            self.itemExpanded.connect(self._on_item_expanded)
 
     def _on_rows_inserted(self, parent, start, end):
         item = self.itemFromIndex(parent)
