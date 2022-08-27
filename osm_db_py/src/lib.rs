@@ -23,7 +23,7 @@ pub enum ChangeType {
 fn osm_db(_py: Python, m: &PyModule) -> PyResult<()> {
     #[pyfn(m)]
     pub fn all_known_discriminators() -> Vec<&'static String> {
-        osm_db::entity_metadata::all_known_discriminators()
+        ::osm_db::entity_metadata::all_known_discriminators()
     }
 
     #[pyfn(m)]

@@ -25,9 +25,8 @@ impl PyEntity {
 
     #[getter]
     pub fn geometry(&self) -> PyObject {
-        let gil = Python::acquire_gil();
-        let py = gil.python();
-        PyBytes::new(py, &self.inner.geometry).into()
+        Python::with_gil(|py| {
+        PyBytes::new(py, &self.inner.geometry).into()})
     }
 
     #[getter]
@@ -36,9 +35,8 @@ impl PyEntity {
     }
 
     pub fn value_of_field(&mut self, key: &str) -> PyObject {
-        let gil = Python::acquire_gil();
-        let py = gil.python();
-        conversions::convert_value(self.inner.value_of_field(key), &py)
+        Python::with_gil(|py| {
+        conversions::convert_value(self.inner.value_of_field(key), &py)})
     }
 
     pub fn defined_field_names(&mut self) -> Vec<&String> {
