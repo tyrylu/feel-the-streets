@@ -50,13 +50,18 @@ impl ChangesStream {
     pub fn register_client(&mut self, client_id: &str) -> Result<()> {
         self.redis_connection
             .xgroup_create_mkstream(self.changes_key(), client_id, "$")?;
-        self.redis_connection.acl_setuser_rules(
-            client_id,
-            &[Rule::Pattern(format!("fts.{}.*", self.area_id))],
-        )?;
-        self.redis_connection.acl_save()?;
+            self.ensure_access_for(client_id)?;
         Ok(())
     }
+
+        pub fn ensure_access_for(&mut self, client_id: &str) -> Result<()> {
+            self.redis_connection.acl_setuser_rules(
+                client_id,
+                &self.needed_acl_rules(),
+            )?;
+            self.redis_connection.acl_save()?;
+            Ok(())
+        }
 
     pub fn create_client(&mut self, client_id: &str) -> Result<String> {
         let password: String = self.redis_connection.acl_genpass()?;
@@ -237,5 +242,9 @@ impl ChangesStream {
         Ok(self
             .redis_connection
             .smembers(self.redownload_requests_key())?)
+    }
+
+    fn needed_acl_rules(&self) -> [Rule; 1] {
+        [Rule::Pattern(format!("fts.{}.*", self.area_id))]
     }
 }

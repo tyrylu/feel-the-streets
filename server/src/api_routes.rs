@@ -80,6 +80,7 @@ pub async fn download_area(area_osm_id: i64, client_id: String, conn: DbConn) ->
             let mut stream = ChangesStream::new_from_env(area_osm_id)?;
             if stream.has_client(&client_id)? {
                 stream.redownload_finished_for(&client_id)?;
+                stream.ensure_access_for(&client_id)?;
             } else {
                 stream.register_client(&client_id)?;
             }
