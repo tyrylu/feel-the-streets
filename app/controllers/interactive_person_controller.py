@@ -5,7 +5,7 @@ from ..humanization_utils import describe_entity, format_number, format_relation
 from ..services import speech, map, config, menu_service
 from ..objects_browser import ObjectsBrowserWindow, ObjectsSorter, tracked_object_changed
 from ..road_segments_browser import RoadSegmentsBrowserDialog
-from ..bookmarks import BookmarksDialog
+from ..bookmarks import BookmarksDialog, get_bookmark_name
 from ..geometry_utils import get_road_section_angle, get_meaningful_turns, get_smaller_turn
 from ..search import get_query_from_user, QueryExecutor, create_query_for_name_search, create_query_for_address_search
 from ..search_indicator import SearchIndicator
@@ -242,14 +242,9 @@ class InteractivePersonController:
     
     @menu_command(_("Bookmarks"), _("Add bookmark..."), "ctrl+b")
     def add_bookmark(self):
-        while True:
-            name, ok = QInputDialog.getText(self._main_window, _("Data entry"), _("Enter a name for the new bookmark"),)
-            if not ok or not name:
-                return
-            if name.startswith("."):
-                QMessageBox.warning(self._main_window, _("Error"), _("The bookmark name can not start with a dot, please enter a different name."))
-            else:
-                break
+        name = get_bookmark_name(self._main_window)
+        if not name:
+            return
         self._person.map.add_bookmark(name, lon=self._person.position.lon, lat=self._person.position.lat, direction=self._person.direction)
     
     @menu_command(_("Bookmarks"), _("Manage bookmarks"), "b")
@@ -261,18 +256,6 @@ class InteractivePersonController:
         bookmark = dialog.selected_bookmark
         self._person.move_to(LatLon(bookmark.latitude, bookmark.longitude), force=True)
         self._person.set_direction(bookmark.direction)
-
-    @menu_command(_("Bookmarks"), _("Remove bookmark..."), "ctrl+shift+b")
-    def remove_bookmark(self):
-        bookmarks = list(self._person.map.bookmarks)
-        reprs = [_("{name}: longitude: {longitude}, latitude: {latitude}").format(name=b.name, longitude=b.longitude, latitude=b.latitude) for b in bookmarks]
-        repr, ok = QInputDialog.getItem(self._main_window, _("Data entry"), _("Select a bookmark"), reprs, editable=False)
-        if not ok:
-            return
-        bookmark = bookmarks[reprs.index(repr)]
-        if QMessageBox.question(self._main_window, _("Question"), _("Do you really want to delete the bookmark {name}?").format(name=bookmark.name)) == QMessageBox.Yes:
-            map().remove_bookmark(bookmark)
-
 
     def _go_looking_for_interesting(self, movement_fn):
         self._search_for_interesting = True

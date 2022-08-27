@@ -49,6 +49,7 @@ class SemanticChangeRetriever:
         num = self._conn.hget(f"fts.{area}.change_counts", config().general.client_id)
         if num is None:
             return 0
+        print(num)
         return int(num)
     
     def redownload_requested_for(self, area):

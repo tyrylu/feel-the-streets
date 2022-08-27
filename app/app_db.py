@@ -41,6 +41,9 @@ class AppDb:
         self._db.execute("DELETE FROM bookmarks WHERE id = ?", (bookmark_id,))
         self._db.commit()
 
+
+    def update_bookmark(self, mark):
+        self._db.execute("UPDATE bookmarks SET name=?, latitude=?, longitude=?, direction=? WHERE id=?", (mark.name, mark.latitude, mark.longitude, mark.direction, mark.id))
     def last_location_for(self, area_id):
         return self._get_bookmark(area_id, LAST_LOCATION_NAME)
 

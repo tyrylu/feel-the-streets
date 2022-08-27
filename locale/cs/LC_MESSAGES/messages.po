@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Feel the streets 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2022-04-06 18:11+0200\n"
-"PO-Revision-Date: 2022-04-06 18:56+0200\n"
+"PO-Revision-Date: 2022-08-27 17:00+0200\n"
 "Last-Translator: \n"
 "Language-Team: cs <LL@li.org>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
 "Generated-By: Babel 2.9.1\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: entities.yml
 msgid "Region"
@@ -11208,7 +11208,7 @@ msgstr "Zvolte záložku"
 
 #: app/controllers/interactive_person_controller.py:277
 msgid "Do you really want to delete the bookmark {name}?"
-msgstr "Opravdu si přejete záložku {bookmark} odstranit?"
+msgstr "Opravdu si přejete záložku {name} odstranit?"
 
 #: app/controllers/interactive_person_controller.py:301
 msgid "Interesting object found after {} meters."
