@@ -18,7 +18,7 @@ diesel-derive-enum = { version = "1.1.2", features = ["sqlite"] }
 serde = { version = "1.0.144", features = ["derive"] }
 serde_json = "1.0.85"
 chrono = { version = "0.4.22", default-features = false, features = ["serde", "clock", "std"] }
-thiserror = "1.0.32"
+thiserror = "1.0.35"
 dotenv = "0.15.0"
 base64 = "0.13.0"
 doitlater = "0.2.1"

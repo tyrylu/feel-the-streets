@@ -7,7 +7,9 @@ pub enum Error {
     #[error("Disk cache error: {0}")]
     DiskCacheError(#[from] sled::Error),
     #[error("XML reading error: {0}")]
-    XmlReaderError(#[from] xml::reader::Error),
+    XmlReaderError(#[from] quick_xml::Error),
+    #[error("XML attribute conversion error: {0}")]
+    XmlAttrError(#[from] quick_xml::events::attributes::AttrError),
     #[error("HTTP related error: {0}")]
     HttpError(#[from] ureq::Error),
     #[error("WKB write error: {0}")]
