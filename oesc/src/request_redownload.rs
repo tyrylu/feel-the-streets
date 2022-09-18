@@ -4,7 +4,6 @@ use redis_api::ChangesStream;
 use server::area::{Area, AreaState};
 
 pub fn request_redownload(all: bool, area: Option<i64>) -> Result<()> {
-    let _dotenv_path = dotenv::dotenv()?;
     let areas = if all {
         let server_conn = SqliteConnection::establish("server.db")?;
         Area::all(&server_conn)?

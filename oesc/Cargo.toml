@@ -12,7 +12,7 @@ osm_db = {path="../osm_db"}
 redis_api = {path = "../redis_api"}
 server={path="../server"}
 anyhow = "1.0.65"
-dotenv = "0.15.0"
+dotenvy = "0.15.3"
 diesel = { version = "1.4.8", features = ["sqlite", "chrono"] }
 url = "2.3.1"
 ureq = { version = "2.5.0", default-features = false, features = ["tls", "json"] }

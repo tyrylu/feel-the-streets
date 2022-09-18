@@ -3,7 +3,7 @@ use osm_api::object_manager::OSMObjectManager;
 use std::env;
 
 fn main() {
-    let _dotenv_path = dotenv::dotenv().expect("Dotenv initialization failed");
+    let _dotenv_path = dotenvy::dotenv().expect("Dotenv initialization failed");
     server::init_logging();
     let id: i64 = env::args()
         .nth(1)

@@ -8,7 +8,6 @@ use redis_api::ChangesStream;
 use server::area::Area;
 
 pub fn remove_field(entity: String, field: String, new_name: Option<String>) -> Result<()> {
-    let _dotenv_path = dotenv::dotenv()?;
     let server_conn = SqliteConnection::establish("server.db")?;
     for area in Area::all_updated(&server_conn)? {
         println!("Processing area {} (id {})...", area.name, area.osm_id);

@@ -3,7 +3,7 @@ use log::info;
 use server::{background_tasks::UpdateAreaDatabasesTask, Result};
 
 fn main() -> Result<()> {
-    let _dotenv_path = dotenv::dotenv()?;
+    let _dotenv_path = dotenvy::dotenv()?;
     server::init_logging();
     let mut worker = Worker::new_from_env()?;
     info!("The worker is ready.");

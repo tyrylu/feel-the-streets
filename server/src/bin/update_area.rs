@@ -4,7 +4,7 @@ use server::{area::Area, Result};
 use std::sync::{Arc, Mutex};
 
 fn main() -> Result<()> {
-    let _dotenv_path = dotenv::dotenv()?;
+    let _dotenv_path = dotenvy::dotenv()?;
     server::init_logging();
     let area_db_conn = Arc::new(Mutex::new(SqliteConnection::establish("server.db")?));
     let area_id: i64 = std::env::args()

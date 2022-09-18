@@ -8,7 +8,7 @@ use server::DbConn;
 
 #[rocket::launch]
 fn rocket() -> _ {
-    let _dotenv_path = dotenv::dotenv().expect("Failed to setup environment from env file");
+    let _dotenv_path = dotenvy::dotenv().expect("Failed to setup environment from env file");
     server::init_logging();
     rocket::build()
         .attach(DbConn::fairing())

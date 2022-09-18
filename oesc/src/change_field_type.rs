@@ -15,7 +15,6 @@ pub fn change_field_type(
     new_type: String,
     force: bool,
 ) -> Result<()> {
-    let _dotenv_path = dotenv::dotenv()?;
     let server_conn = SqliteConnection::establish("server.db")?;
     for area in Area::all_updated(&server_conn)? {
         println!("Processing area {} (id {})...", area.name, area.osm_id);

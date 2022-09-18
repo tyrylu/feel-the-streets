@@ -25,7 +25,7 @@ pub enum Error {
     #[error("The given client is already created")]
     ClientAlreadyExists,
     #[error("Dotenv error: {0}")]
-    DotenvError(#[from] dotenv::Error),
+    DotenvError(#[from] dotenvy::Error),
     #[error("The system time is before the unix epoch: {0}")]
     SystemTimeError(#[from] SystemTimeError),
     #[error("Redis api error: {0}")]

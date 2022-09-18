@@ -9,7 +9,7 @@ use std::path::Path;
 use std::sync::{Arc, Mutex};
 
 fn main() -> Result<()> {
-    let _dotenv_path = dotenv::dotenv()?;
+    let _dotenv_path = dotenvy::dotenv()?;
     server::init_logging();
     let pool = rusty_pool::ThreadPool::default();
     let server_conn = Arc::new(Mutex::new(SqliteConnection::establish("server.db")?));
