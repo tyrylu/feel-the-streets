@@ -179,12 +179,12 @@ impl AreaDatabase {
         let mut stmt = self
             .conn
             .prepare_cached("select id from entities where id = ?")?;
-        stmt.exists(&[&osm_id]).map_err(Error::from)
+        stmt.exists([&osm_id]).map_err(Error::from)
     }
 
     pub fn get_entity(&self, osm_id: &str) -> Result<Option<Entity>> {
         let mut stmt = self.conn.prepare_cached("select id, discriminator, AsBinary(geometry) as geometry, data, effective_width from entities where id = ?")?;
-        match stmt.query_row(&[&osm_id], row_to_entity) {
+        match stmt.query_row([&osm_id], row_to_entity) {
             Ok(e) => Ok(Some(e)),
             Err(e) => match e {
                 rusqlite::Error::QueryReturnedNoRows => Ok(None),
@@ -283,7 +283,7 @@ impl AreaDatabase {
         let mut stmt = self
             .conn
             .prepare_cached("delete from entities where id = ?")?;
-        stmt.execute(&[&osm_id])?;
+        stmt.execute([&osm_id])?;
         Ok(())
     }
 
@@ -316,7 +316,7 @@ impl AreaDatabase {
             } => self.insert_entity(
                 id,
                 discriminator,
-                &base64::decode(&geometry).expect("Geometry should be base64 encoded"),
+                &base64::decode(geometry).expect("Geometry should be base64 encoded"),
                 effective_width,
                 data,
                 entity_relationships,
@@ -345,7 +345,7 @@ impl AreaDatabase {
         let mut stmt = self
             .conn
             .prepare_cached("select isValid(geomFromWKB(?, 4326))")?;
-        stmt.query_row(&[&geometry], |row| row.get(0))
+        stmt.query_row([&geometry], |row| row.get(0))
             .map_err(Error::from)
     }
 

@@ -108,7 +108,7 @@ impl OSMObjectManager {
 
     fn has_object(&self, id: &str) -> bool {
         *self.cache_queries.borrow_mut() += 1;
-        let exists = self.cache.contains_key(&id).expect("Cache query failed.");
+        let exists = self.cache.contains_key(id).expect("Cache query failed.");
         if exists {
             *self.cache_hits.borrow_mut() += 1;
         }
@@ -116,7 +116,7 @@ impl OSMObjectManager {
     }
 
     fn get_cached_object(&self, id: &str) -> Result<Option<OSMObject>> {
-        if let Some(data) = self.cache.get(&id)? {
+        if let Some(data) = self.cache.get(id)? {
             Ok(Some(deserialize_compressed(data.as_ref())?))
         } else {
             Ok(None)

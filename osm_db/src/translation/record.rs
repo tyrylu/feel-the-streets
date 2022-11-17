@@ -87,7 +87,7 @@ impl TranslationRecord {
 
     pub fn save_to_file(&self, path: &str) -> Result<()> {
         let serialized = serde_json::to_string(&self)?;
-        let mut fp = File::create(&path)?;
+        let mut fp = File::create(path)?;
         write!(fp, "{}", serialized)?;
         Ok(())
     }
