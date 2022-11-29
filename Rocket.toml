@@ -1,4 +1,0 @@
-[release]
-address = "::1"
-[global.databases.serverdb]
-url = "server.db"

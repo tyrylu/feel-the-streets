@@ -1,13 +1,12 @@
+use axum::{Router, routing::get, extract::{Path, State}, response::Html};
 use std::collections::HashMap;
-
 use crate::area::Area;
-use crate::{DbConn, Result};
+use crate::{AppState, Result};
 use osm_db::AreaDatabase;
 use redis_api::ChangesStream;
-use rocket_dyn_templates::Template;
+use tera::Context;
 
-#[get("/areas")]
-pub async fn areas(conn: DbConn) -> Result<Template> {
+pub async fn areas(State(state): State<AppState>) -> Result<Html<String>> {
     #[derive(serde::Serialize)]
     struct StreamInfo {
         len: usize,
@@ -20,7 +19,7 @@ pub async fn areas(conn: DbConn) -> Result<Template> {
         areas: Vec<Area>,
         stream_infos: HashMap<String, StreamInfo>,
     }
-    let areas = conn.run(|conn| Area::all(conn)).await?;
+    let areas = Area::all(&state.db_conn.lock().unwrap())?;
     let mut ctx = TCtxt {
         areas,
         stream_infos: HashMap::new(),
@@ -37,11 +36,10 @@ pub async fn areas(conn: DbConn) -> Result<Template> {
             },
         );
     }
-    Ok(Template::render("areas", ctx))
+    Ok(Html(state.templates.render("areas.html", &Context::from_serialize(&ctx)?)?))
 }
 
-#[get("/areas/<area_id>")]
-pub async fn area_detail(area_id: i32, conn: DbConn) -> Result<Template> {
+pub async fn area_detail(Path(area_id): Path<i32>, State(state): State<AppState>) -> Result<Html<String>> {
     #[derive(serde::Serialize)]
     struct Tctxt {
         area: Area,
@@ -52,7 +50,7 @@ pub async fn area_detail(area_id: i32, conn: DbConn) -> Result<Template> {
         entity_counts: HashMap<String, usize>,
         relationship_counts: HashMap<String, usize>,
     }
-    let area = conn.run(move |c| Area::find_by_id(area_id, c)).await?;
+    let area = Area::find_by_id(area_id, &state.db_conn.lock().unwrap())?;
     let mut stream = ChangesStream::new_from_env(area.osm_id)?;
     let redownload_requests = stream.all_redownload_requests()?;
     let change_counts = stream.all_change_counts()?;
@@ -61,9 +59,9 @@ pub async fn area_detail(area_id: i32, conn: DbConn) -> Result<Template> {
     let entity_relationship_count = area_db.num_entity_relationships()?;
     let entity_counts = area_db.get_entity_counts_by_discriminator()?;
     let relationship_counts = area_db.get_entity_relationship_counts_by_kind()?;
-    Ok(Template::render(
-        "area_detail",
-        Tctxt {
+    Ok(Html(state.templates.render(
+        "area_detail.html",
+        &Context::from_serialize(Tctxt {
             area,
             change_counts,
             redownload_requests,
@@ -72,5 +70,13 @@ pub async fn area_detail(area_id: i32, conn: DbConn) -> Result<Template> {
             entity_counts,
             relationship_counts,
         },
-    ))
+    )?)?))
+}
+
+pub fn routes() -> Router<AppState> {
+    Router::new()
+    .route("/areas", get(areas))
+    .route("/areas/:area_id", get(area_detail))
+
+
 }

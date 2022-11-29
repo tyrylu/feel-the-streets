@@ -1,4 +1,4 @@
-{% extends "base" %}
+{% extends "base.html.tera" %}
 {% block title %}Available areas{% endblock %}
 {% block extra_head %}
 <script src="/js/sortable.js"></script>

@@ -1,41 +1,27 @@
-use rocket::fairing::AdHoc;
-use rocket::fs::FileServer;
-use rocket::routes;
-use rocket_dyn_templates::Template;
+use axum::Router;
+use server::{AppState, Result};
 use server::api_routes;
 use server::ui_routes;
-use server::DbConn;
+use tera::Tera;
+use diesel::{Connection, SqliteConnection};
+use std::net::SocketAddr;
+use std::sync::{Arc, Mutex};
 
-#[rocket::launch]
-fn rocket() -> _ {
+#[tokio::main]
+async fn main() -> Result<()> {
     let _dotenv_path = dotenvy::dotenv().expect("Failed to setup environment from env file");
     server::init_logging();
-    rocket::build()
-        .attach(DbConn::fairing())
-        .attach(AdHoc::on_liftoff("Database Migrations", |rocket| {
-            Box::pin(async move {
-                let conn = DbConn::get_one(rocket).await.expect("database connection");
-                match conn.run(|c| server::run_migrations(c)).await {
-                    Ok(()) => (),
-                    Err(e) => {
-                        panic!("Failed to run database migrations: {:?}", e);
-                    }
-                }
-            })
-        }))
-        .mount(
-            "/api",
-            routes![
-                api_routes::areas,
-                api_routes::maybe_create_area,
-                api_routes::download_area,
-                api_routes::ping,
-                api_routes::motd,
-                api_routes::create_client,
-                api_routes::osm_object_names,
-            ],
-        )
-        .mount("/", routes![ui_routes::areas, ui_routes::area_detail])
-        .mount("/", FileServer::from("static"))
-        .attach(Template::fairing())
-}
+    let tera = Tera::new("templates/*")?;
+    let db_conn = Arc::new(Mutex::new(SqliteConnection::establish("server.db")?));
+    server::run_migrations(&db_conn.lock().unwrap())?;
+    let state = AppState { templates: tera, db_conn };
+    let app = Router::new()
+    .nest("/api", api_routes::routes())
+    .nest("/", ui_routes::routes())
+    .with_state(state);
+    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+    axum::Server::bind(&addr)
+        .serve(app.into_make_service())
+        .await.unwrap();
+Ok(())
+    }

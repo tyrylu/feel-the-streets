@@ -1,4 +1,8 @@
 use std::time::SystemTimeError;
+use axum::{
+    http::StatusCode,
+    response::{IntoResponse, Response}};
+    
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -32,18 +36,16 @@ pub enum Error {
     RedisApiError(#[from] redis_api::Error),
     #[error("Doitlater error: {0}")]
     DoItLaterError(#[from] doitlater::Error),
+    #[error("Tera error: {0}")]
+    TeraError(#[from] tera::Error),
 }
 
-impl<'r, 'o> rocket::response::Responder<'r, 'o> for Error
-where
-    'o: 'r,
-{
-    fn respond_to(self, request: &'r rocket::Request<'_>) -> rocket::response::Result<'o> {
-        let msg = format!("{}", self);
-        rocket::response::status::Custom(
-            rocket::http::Status::InternalServerError,
-            rocket::response::content::RawText(msg),
+impl IntoResponse for Error {
+    fn into_response(self) -> Response {
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            format!("Something went wrong: {}", self),
         )
-        .respond_to(request)
+            .into_response()
     }
 }
