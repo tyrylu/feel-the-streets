@@ -1,8 +1,8 @@
 {% extends "base.html.tera" %}
 {% block title %}Details of area {{ area.name }}{% endblock %}
 {% block extra_head %}
-<script src="/js/sortable.js"></script>
-<link rel="stylesheet" href="/css/sortable.css" type="text/css">
+<script src="/static/js/sortable.js"></script>
+<link rel="stylesheet" href="/static/css/sortable.css" type="text/css">
 {% endblock %}
 {% block section_title %}Details of area {{ area.name }}{% endblock %}
 {% block content %}

@@ -20,7 +20,7 @@ async fn main() -> Result<()> {
         templates: tera,
         db_conn,
     };
-    let spa = SpaRouter::new("/", "static");
+    let spa = SpaRouter::new("/static", "static");
     let app = Router::new()
     .merge(spa)    
     .nest("/api", api_routes::routes())
