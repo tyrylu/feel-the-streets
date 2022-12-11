@@ -1920,6 +1920,7 @@ dependencies = [
  "tera",
  "thiserror",
  "tokio",
+ "tower-http",
  "tracing-subscriber",
 ]
 
@@ -2231,6 +2232,7 @@ dependencies = [
  "tower",
  "tower-layer",
  "tower-service",
+ "tracing",
 ]
 
 [[package]]

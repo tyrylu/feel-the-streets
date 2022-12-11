@@ -2,6 +2,7 @@ use crate::area;
 use crate::names_cache::OSMObjectNamesCache;
 use crate::Result;
 use diesel::{Connection, SqliteConnection};
+use doitlater::typetag;
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::SmolStr;
 use osm_db::area_db::AreaDatabase;
@@ -9,7 +10,6 @@ use osm_db::relationship_inference::infer_additional_relationships_for;
 use osm_db::translation::{record::TranslationRecord, translator};
 use serde::{Deserialize, Serialize};
 use std::sync::{Arc, Mutex};
-use doitlater::typetag;
 
 pub fn create_area_database(area: i64) -> Result<()> {
     let manager = OSMObjectManager::new()?;

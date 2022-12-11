@@ -4,6 +4,7 @@ use crate::diff_utils::ListChange;
 use crate::Result;
 use chrono::{DateTime, Utc};
 use diesel::{Connection, SqliteConnection};
+use doitlater::typetag;
 use osm_api::change::OSMObjectChangeType;
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::overpass_api::Servers;
@@ -21,7 +22,6 @@ use std::{
     fs,
     sync::{Arc, Mutex},
 };
-use doitlater::typetag;
 
 fn find_or_create_suitable_change<'a>(
     changes: &'a mut Vec<SemanticChange>,

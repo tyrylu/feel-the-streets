@@ -1,17 +1,23 @@
-use axum::{Router, routing::{get, post}, response::{Json, IntoResponse}, extract::{Path as ExtractPath, Query, State}, http::{header::CONTENT_TYPE, StatusCode}};
-use axum_extra::body::AsyncReadBody;
 use crate::area::{Area, AreaState};
 use crate::background_tasks::CreateAreaDatabaseTask;
 use crate::names_cache::{CacheMap, OSMObjectNamesCache};
 use crate::{AppState, Error, Result};
+use axum::{
+    extract::{Path as ExtractPath, Query, State},
+    http::{header::CONTENT_TYPE, StatusCode},
+    response::{IntoResponse, Json},
+    routing::{get, post},
+    Router,
+};
+use axum_extra::body::AsyncReadBody;
 use doitlater::{ExecutableExt, Queue};
 use osm_db::AreaDatabase;
 use redis_api::ChangesStream;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use tokio::fs::{self, File};
 use std::path::Path;
 use std::time::SystemTime;
+use tokio::fs::{self, File};
 
 #[derive(Deserialize)]
 pub struct MaybeCreateAreaRequest {
@@ -42,7 +48,7 @@ pub struct CreateClientResponse {
 
 #[derive(Deserialize)]
 struct ClientIdentification {
-    client_id: String
+    client_id: String,
 }
 
 pub async fn areas(State(state): State<AppState>) -> Result<Json<Vec<Area>>> {
@@ -51,8 +57,8 @@ pub async fn areas(State(state): State<AppState>) -> Result<Json<Vec<Area>>> {
 }
 
 async fn maybe_create_area(
-        State(state): State<AppState>,
-        Json(area): Json<MaybeCreateAreaRequest>,
+    State(state): State<AppState>,
+    Json(area): Json<MaybeCreateAreaRequest>,
 ) -> Result<impl IntoResponse> {
     let area_id = area.osm_id;
     match Area::find_by_osm_id(area_id, &mut state.db_conn.lock().unwrap()) {
@@ -67,7 +73,11 @@ async fn maybe_create_area(
     }
 }
 
-async fn download_area(ExtractPath(area_osm_id): ExtractPath<i64>, ident: Query<ClientIdentification>, State(state): State<AppState>) -> Result<impl IntoResponse> {
+async fn download_area(
+    ExtractPath(area_osm_id): ExtractPath<i64>,
+    ident: Query<ClientIdentification>,
+    State(state): State<AppState>,
+) -> Result<impl IntoResponse> {
     let area = Area::find_by_osm_id(area_osm_id, &mut state.db_conn.lock().unwrap())?;
     if area.state != AreaState::Updated && area.state != AreaState::Frozen {
         Err(Error::DatabaseIntegrityError)
@@ -82,7 +92,10 @@ async fn download_area(ExtractPath(area_osm_id): ExtractPath<i64>, ident: Query<
             }
         }
         let headers = [(CONTENT_TYPE, "application/octed-stream")];
-        Ok((headers, AsyncReadBody::new(File::open(AreaDatabase::path_for(area_osm_id, true)).await?)))
+        Ok((
+            headers,
+            AsyncReadBody::new(File::open(AreaDatabase::path_for(area_osm_id, true)).await?),
+        ))
     }
 }
 
@@ -133,10 +146,10 @@ pub async fn osm_object_names() -> Result<Json<CacheMap>> {
 
 pub fn routes() -> Router<AppState> {
     Router::new()
-    .route("/areas", get(areas).post(maybe_create_area))
-    .route("/areas/:area_osm_id/download", get(download_area))
-    .route("/ping", get(ping))
-    .route("/motd", get(motd))
-    .route("/create_client", post(create_client))
-    .route("/osm_object_names", get(osm_object_names))
+        .route("/areas", get(areas).post(maybe_create_area))
+        .route("/areas/:area_osm_id/download", get(download_area))
+        .route("/ping", get(ping))
+        .route("/motd", get(motd))
+        .route("/create_client", post(create_client))
+        .route("/osm_object_names", get(osm_object_names))
 }

@@ -1,8 +1,8 @@
-use std::time::SystemTimeError;
 use axum::{
     http::StatusCode,
-    response::{IntoResponse, Response}};
-    
+    response::{IntoResponse, Response},
+};
+use std::time::SystemTimeError;
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {

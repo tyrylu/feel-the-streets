@@ -1,9 +1,14 @@
-use axum::{Router, routing::get, extract::{Path, State}, response::Html};
-use std::collections::HashMap;
 use crate::area::Area;
 use crate::{AppState, Result};
+use axum::{
+    extract::{Path, State},
+    response::Html,
+    routing::get,
+    Router,
+};
 use osm_db::AreaDatabase;
 use redis_api::ChangesStream;
+use std::collections::HashMap;
 use tera::Context;
 
 pub async fn areas(State(state): State<AppState>) -> Result<Html<String>> {
@@ -36,10 +41,16 @@ pub async fn areas(State(state): State<AppState>) -> Result<Html<String>> {
             },
         );
     }
-    Ok(Html(state.templates.render("areas.html", &Context::from_serialize(&ctx)?)?))
+    Ok(Html(state.templates.render(
+        "areas.html.tera",
+        &Context::from_serialize(&ctx)?,
+    )?))
 }
 
-pub async fn area_detail(Path(area_id): Path<i32>, State(state): State<AppState>) -> Result<Html<String>> {
+pub async fn area_detail(
+    Path(area_id): Path<i32>,
+    State(state): State<AppState>,
+) -> Result<Html<String>> {
     #[derive(serde::Serialize)]
     struct Tctxt {
         area: Area,
@@ -60,7 +71,7 @@ pub async fn area_detail(Path(area_id): Path<i32>, State(state): State<AppState>
     let entity_counts = area_db.get_entity_counts_by_discriminator()?;
     let relationship_counts = area_db.get_entity_relationship_counts_by_kind()?;
     Ok(Html(state.templates.render(
-        "area_detail.html",
+        "area_detail.html.tera",
         &Context::from_serialize(Tctxt {
             area,
             change_counts,
@@ -69,14 +80,12 @@ pub async fn area_detail(Path(area_id): Path<i32>, State(state): State<AppState>
             entity_relationship_count,
             entity_counts,
             relationship_counts,
-        },
-    )?)?))
+        })?,
+    )?))
 }
 
 pub fn routes() -> Router<AppState> {
     Router::new()
-    .route("/areas", get(areas))
-    .route("/areas/:area_id", get(area_detail))
-
-
+        .route("/areas", get(areas))
+        .route("/areas/:area_id", get(area_detail))
 }

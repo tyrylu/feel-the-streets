@@ -26,20 +26,28 @@ pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 #[derive(Clone)]
 pub struct AppState {
     pub db_conn: Arc<Mutex<SqliteConnection>>,
-    pub templates: Tera
+    pub templates: Tera,
 }
 
 pub fn run_migrations(conn: &mut SqliteConnection) -> Result<()> {
-    conn.run_pending_migrations(MIGRATIONS).expect("Failed to migrate");
+    conn.run_pending_migrations(MIGRATIONS)
+        .expect("Failed to migrate");
     Ok(())
 }
 
 pub fn init_logging() {
-    tracing_subscriber::registry()
-        .with(tracing_subscriber::EnvFilter::new(
-            std::env::var("FTS_LOG")
-                .unwrap_or_else(|_| "info".into()),
-        ))
-        .with(tracing_subscriber::fmt::layer())
-        .init();
+    let filter_layer = tracing_subscriber::EnvFilter::new(
+        std::env::var("FTS_LOG").unwrap_or_else(|_| "info".into()),
+    );
+    if std::env::var("INVOCATION_ID").is_ok() {
+        tracing_subscriber::registry()
+            .with(filter_layer)
+            .with(tracing_subscriber::fmt::layer().without_time())
+            .init();
+    } else {
+        tracing_subscriber::registry()
+            .with(filter_layer)
+            .with(tracing_subscriber::fmt::layer())
+            .init();
+    }
 }
