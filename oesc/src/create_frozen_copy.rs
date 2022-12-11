@@ -14,11 +14,11 @@ pub fn create_frozen_copy(area_id: i64, new_name: String) -> Result<()> {
     println!("Copying the area database...");
     fs::copy(&orig_path, &new_path)?;
     println!("Copied, creating the database record...");
-    let db_conn = SqliteConnection::establish("server.db")?;
-    let mut new_area = Area::create(frozen_id, &new_name, &db_conn)?;
+    let mut db_conn = SqliteConnection::establish("server.db")?;
+    let mut new_area = Area::create(frozen_id, &new_name, &mut db_conn)?;
     new_area.state = AreaState::Frozen;
     new_area.db_size = fs::metadata(new_path)?.len().try_into().unwrap();
-    new_area.save(&db_conn)?;
+    new_area.save(&mut db_conn)?;
     println!(
         "Successfully created a frozen copy of area {} with new name {} and id {}.",
         area_id, new_name, frozen_id

@@ -14,13 +14,14 @@ mod schema;
 pub mod ui_routes;
 
 use diesel::SqliteConnection;
+use diesel_migrations::{EmbeddedMigrations, MigrationHarness};
 pub use error::Error;
 use std::sync::{Arc, Mutex};
 use tera::Tera;
 use tracing_subscriber::prelude::*;
 
 pub type Result<T> = core::result::Result<T, Error>;
-embed_migrations!();
+pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
 #[derive(Clone)]
 pub struct AppState {
@@ -28,8 +29,9 @@ pub struct AppState {
     pub templates: Tera
 }
 
-pub fn run_migrations(conn: &SqliteConnection) -> Result<()> {
-    embedded_migrations::run(conn).map_err(Error::from)
+pub fn run_migrations(conn: &mut SqliteConnection) -> Result<()> {
+    conn.run_pending_migrations(MIGRATIONS).expect("Failed to migrate");
+    Ok(())
 }
 
 pub fn init_logging() {

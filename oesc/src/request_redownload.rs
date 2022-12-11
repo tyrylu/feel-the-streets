@@ -5,8 +5,8 @@ use server::area::{Area, AreaState};
 
 pub fn request_redownload(all: bool, area: Option<i64>) -> Result<()> {
     let areas = if all {
-        let server_conn = SqliteConnection::establish("server.db")?;
-        Area::all(&server_conn)?
+        let mut server_conn = SqliteConnection::establish("server.db")?;
+        Area::all(&mut server_conn)?
             .iter()
             .filter(|a| a.state != AreaState::Frozen)
             .map(|a| a.osm_id)

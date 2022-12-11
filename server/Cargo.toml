@@ -8,20 +8,20 @@ edition = "2018"
 log = "0.4.17"
 osm_db = {path="../osm_db"}
 osm_api = {path="../osm_api"}
-diesel = { version = "1.4.8", features = ["sqlite", "chrono"] }
-diesel_migrations = "1.4.0"
-diesel-derive-enum = { version = "1.1.2", features = ["sqlite"] }
-serde = { version = "1.0.147", features = ["derive"] }
+diesel = { version = "2.0.2", features = ["sqlite", "chrono"] }
+diesel_migrations = "2.0.0"
+diesel-derive-enum = { version = "2.0.0-rc.0", features = ["sqlite"] }
+serde = { version = "1.0.149", features = ["derive"] }
 serde_json = "1.0.89"
 chrono = { version = "0.4.23", default-features = false, features = ["serde", "clock", "std"] }
 thiserror = "1.0.37"
 dotenvy = "0.15.6"
-base64 = "0.13.1"
+base64 = "0.20.0"
 doitlater = "0.2.2"
 redis_api = {path = "../redis_api"}
 rusty_pool = { version = "0.7.0", default-features = false }
-axum = "0.6.0"
+axum = "0.6.1"
 tera = "1.17.1"
-axum-extra = { version = "0.4.0", features = ["async-read-body"] }
-tokio = { version = "1.22.0", features = ["fs", "macros", "rt", "rt-multi-thread"] }
+axum-extra = { version = "0.4.2", features = ["async-read-body"] }
+tokio = { version = "1.23.0", features = ["fs", "macros", "rt", "rt-multi-thread"] }
 tracing-subscriber = {version="0.3.16", features=["env-filter"]}

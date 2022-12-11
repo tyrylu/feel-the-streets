@@ -33,19 +33,19 @@ pub struct Area {
 }
 
 impl Area {
-    pub fn all(conn: &SqliteConnection) -> QueryResult<Vec<Area>> {
+    pub fn all(conn: &mut SqliteConnection) -> QueryResult<Vec<Area>> {
         areas::dsl::areas.order(areas::name.asc()).load(conn)
     }
 
-    pub fn find_by_id(id: i32, conn: &SqliteConnection) -> QueryResult<Area> {
+    pub fn find_by_id(id: i32, conn: &mut SqliteConnection) -> QueryResult<Area> {
         areas::table.find(id).get_result(conn)
     }
 
-    pub fn find_by_osm_id(id: i64, conn: &SqliteConnection) -> QueryResult<Area> {
+    pub fn find_by_osm_id(id: i64, conn: &mut SqliteConnection) -> QueryResult<Area> {
         areas::table.filter(areas::osm_id.eq(id)).get_result(conn)
     }
 
-    pub fn create(osm_id: i64, name: &str, conn: &SqliteConnection) -> QueryResult<Area> {
+    pub fn create(osm_id: i64, name: &str, conn: &mut SqliteConnection) -> QueryResult<Area> {
         // Sqlite3 does not support the returning clause...
         diesel::insert_into(areas::table)
             .values((
@@ -61,12 +61,12 @@ impl Area {
             .limit(1)
             .get_result(conn)
     }
-    pub fn all_updated(conn: &SqliteConnection) -> QueryResult<Vec<Area>> {
+    pub fn all_updated(conn: &mut SqliteConnection) -> QueryResult<Vec<Area>> {
         areas::dsl::areas
             .filter(areas::state.eq(AreaState::Updated))
             .load(conn)
     }
-    pub fn save(&self, conn: &SqliteConnection) -> QueryResult<usize> {
+    pub fn save(&self, conn: &mut SqliteConnection) -> QueryResult<usize> {
         let query = diesel::update(areas::table)
             .filter(areas::id.eq(&self.id))
             .set((
@@ -86,7 +86,7 @@ impl Area {
 pub fn finalize_area_creation(
     osm_id: i64,
     parent_ids_str: String,
-    conn: &SqliteConnection,
+    conn: &mut SqliteConnection,
 ) -> Result<usize> {
     let size = fs::metadata(AreaDatabase::path_for(osm_id, true))?.len();
     let query = diesel::update(areas::table)

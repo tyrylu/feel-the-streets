@@ -15,8 +15,8 @@ pub fn change_field_type(
     new_type: String,
     force: bool,
 ) -> Result<()> {
-    let server_conn = SqliteConnection::establish("server.db")?;
-    for area in Area::all_updated(&server_conn)? {
+    let mut server_conn = SqliteConnection::establish("server.db")?;
+    for area in Area::all_updated(&mut server_conn)? {
         println!("Processing area {} (id {})...", area.name, area.osm_id);
         let mut area_db = AreaDatabase::open_existing(area.osm_id, true)?;
         let mut query = EntitiesQuery::default();

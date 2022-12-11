@@ -6,8 +6,6 @@ use axum::{
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
-    #[error("Migrations execution error: {0}")]
-    MigrationsExecutionError(#[from] diesel_migrations::RunMigrationsError),
     #[error("I/O error: {0}")]
     IoError(#[from] std::io::Error),
     #[error("Diesel error: {0}")]

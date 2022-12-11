@@ -50,8 +50,11 @@ pub(crate) fn row_to_entity(row: &Row) -> core::result::Result<Entity, rusqlite:
 }
 
 fn init_extensions(conn: &Connection) -> Result<()> {
-    conn.load_extension_enable()?;
-    conn.load_extension("mod_spatialite", None)?;
+    unsafe {
+        conn.load_extension_enable()?;
+        conn.load_extension("mod_spatialite", None)?;
+        conn.load_extension_disable()?;
+    }
     Ok(())
 }
 
@@ -81,19 +84,12 @@ impl AreaDatabase {
     }
 
     pub fn create(area: i64) -> Result<Self> {
-        // We're not, and will not, be using anything which a relatively new sqlite would not support, so, if it can help Fedora in not crashing...
-        unsafe {
-            rusqlite::bypass_sqlite_version_check();
-        }
         let conn = Connection::open(&AreaDatabase::path_for(area, true))?;
         init_extensions(&conn)?;
         conn.execute_batch(INIT_AREA_DB_SQL)?;
         AreaDatabase::common_construct(conn)
     }
     pub fn open_existing(area: i64, server_side: bool) -> Result<Self> {
-        unsafe {
-            rusqlite::bypass_sqlite_version_check();
-        }
         let conn = Connection::open_with_flags(
             &AreaDatabase::path_for(area, server_side),
             OpenFlags::SQLITE_OPEN_READ_WRITE,

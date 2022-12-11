@@ -13,7 +13,7 @@ async fn main() -> Result<()> {
     server::init_logging();
     let tera = Tera::new("templates/*")?;
     let db_conn = Arc::new(Mutex::new(SqliteConnection::establish("server.db")?));
-    server::run_migrations(&db_conn.lock().unwrap())?;
+    server::run_migrations(&mut db_conn.lock().unwrap())?;
     let state = AppState { templates: tera, db_conn };
     let app = Router::new()
     .nest("/api", api_routes::routes())

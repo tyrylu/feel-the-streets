@@ -46,7 +46,7 @@ struct ClientIdentification {
 }
 
 pub async fn areas(State(state): State<AppState>) -> Result<Json<Vec<Area>>> {
-    let areas = Area::all(&state.db_conn.lock().unwrap())?;
+    let areas = Area::all(&mut state.db_conn.lock().unwrap())?;
     Ok(Json(areas))
 }
 
@@ -55,10 +55,10 @@ async fn maybe_create_area(
         Json(area): Json<MaybeCreateAreaRequest>,
 ) -> Result<impl IntoResponse> {
     let area_id = area.osm_id;
-    match Area::find_by_osm_id(area_id, &state.db_conn.lock().unwrap()) {
+    match Area::find_by_osm_id(area_id, &mut state.db_conn.lock().unwrap()) {
         Ok(a) => Ok((StatusCode::OK, Json(a))),
         Err(_e) => {
-            let area = Area::create(area.osm_id, &area.name, &state.db_conn.lock().unwrap())?;
+            let area = Area::create(area.osm_id, &area.name, &mut state.db_conn.lock().unwrap())?;
             let mut queue = Queue::new_from_env()?;
             CreateAreaDatabaseTask::new(area.osm_id)
                 .enqueue_into(&mut queue, &format!("create_area_{}", area.osm_id))?;
@@ -68,7 +68,7 @@ async fn maybe_create_area(
 }
 
 async fn download_area(ExtractPath(area_osm_id): ExtractPath<i64>, ident: Query<ClientIdentification>, State(state): State<AppState>) -> Result<impl IntoResponse> {
-    let area = Area::find_by_osm_id(area_osm_id, &state.db_conn.lock().unwrap())?;
+    let area = Area::find_by_osm_id(area_osm_id, &mut state.db_conn.lock().unwrap())?;
     if area.state != AreaState::Updated && area.state != AreaState::Frozen {
         Err(Error::DatabaseIntegrityError)
     } else {
@@ -121,7 +121,7 @@ pub async fn create_client(req: Json<CreateClientRequest>) -> Result<Json<Create
     if stream.has_client(client_id)? {
         Err(Error::ClientAlreadyExists)
     } else {
-        let password = stream.create_client(&client_id)?;
+        let password = stream.create_client(client_id)?;
         Ok(Json(CreateClientResponse { password }))
     }
 }
