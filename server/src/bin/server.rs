@@ -1,4 +1,5 @@
 use axum::Router;
+use axum_extra::routing::SpaRouter;
 use diesel::{Connection, SqliteConnection};
 use server::api_routes;
 use server::ui_routes;
@@ -19,12 +20,15 @@ async fn main() -> Result<()> {
         templates: tera,
         db_conn,
     };
+    let spa = SpaRouter::new("/", "static");
     let app = Router::new()
-        .nest("/api", api_routes::routes())
+    .merge(spa)    
+    .nest("/api", api_routes::routes())
         .nest("/", ui_routes::routes())
         .layer(TraceLayer::new_for_http())
         .with_state(state);
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+    let addr = SocketAddr::from(([127, 0, 0, 1], 8000));
+    log::info!("Listening on {}", addr);
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
         .await
