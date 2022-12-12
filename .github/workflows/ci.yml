@@ -74,10 +74,8 @@ jobs:
     - name: Copy common artifacts, part 2
       run: cp fts.dict to_deploy
     - name: Copy common artifacts, part 3
-      run: cp Rocket.toml to_deploy
-    - name: Copy common artifacts, part 4
       run: cp -r static to_deploy
-    - name: Copy common artifacts, part 5
+    - name: Copy common artifacts, part 4
       run: cp -r templates to_deploy
     - name: Copy Linux artifacts
       if: runner.os == 'Linux'
