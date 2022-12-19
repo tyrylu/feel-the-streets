@@ -8,5 +8,5 @@ edition = "2018"
 [dependencies]
 osm_db = {path = "../osm_db"}
 redis = "0.22.1"
-thiserror = "1.0.37"
+thiserror = "1.0.38"
 log = "0.4.17"
