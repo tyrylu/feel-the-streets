@@ -23,6 +23,6 @@ smol_str = { version = "0.1.23", features = ["serde"] }
 zstd_util = "0.1.2"
 crossbeam-channel = "0.5.6"
 sled = "0.34.7"
-quick-xml = "0.26.0"
+quick-xml = "0.27.0"
 
 [features]
