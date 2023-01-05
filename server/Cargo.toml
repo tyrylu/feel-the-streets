@@ -23,6 +23,6 @@ rusty_pool = { version = "0.7.0", default-features = false }
 axum = "0.6.1"
 tera = "1.17.1"
 axum-extra = { version = "0.4.2", features = ["async-read-body", "spa"] }
-tokio = { version = "1.23.0", features = ["fs", "macros", "rt", "rt-multi-thread"] }
+tokio = { version = "1.23.1", features = ["fs", "macros", "rt", "rt-multi-thread"] }
 tracing-subscriber = {version="0.3.16", features=["env-filter"]}
 tower-http = { version = "0.3.5", features = ["trace"] }
