@@ -4,7 +4,7 @@ use crate::names_cache::{CacheMap, OSMObjectNamesCache};
 use crate::{AppState, Error, Result};
 use axum::{
     extract::{Path as ExtractPath, Query, State},
-    http::{header::CONTENT_TYPE, StatusCode},
+    http::{header::{CONTENT_TYPE, CONTENT_LENGTH}, StatusCode},
     response::{IntoResponse, Json},
     routing::{get, post},
     Router,
@@ -91,7 +91,7 @@ async fn download_area(
                 stream.register_client(&ident.client_id)?;
             }
         }
-        let headers = [(CONTENT_TYPE, "application/octed-stream")];
+        let headers = [(CONTENT_LENGTH, area.db_size.to_string()), (CONTENT_TYPE, "application/octed-stream".to_string())];
         Ok((
             headers,
             AsyncReadBody::new(File::open(AreaDatabase::path_for(area_osm_id, true)).await?),
