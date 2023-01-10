@@ -24,12 +24,14 @@ class SemanticChangeRetriever:
         self._message_ids = defaultdict(list)
 
     def new_changes_in(self, area):
-        reply = self._conn.xreadgroup(config().general.client_id, "fts_app", {f"fts.{area}.changes": ">"})
-        print(reply)
-        messages = reply[0][1]
-        for (message_id, data) in messages:
-            self._message_ids[area].append(message_id)
-            yield SemanticChange.from_serialized(data[b"c"])
+        while True:
+            reply = self._conn.xreadgroup(config().general.client_id, "fts_app", {f"fts.{area}.changes": ">"})
+            if not reply:
+                break
+            messages = reply[0][1]
+            for (message_id, data) in messages:
+                self._message_ids[area].append(message_id)
+                yield SemanticChange.from_serialized(data[b"c"])
 
     def acknowledge_changes_for(self, area):
         if area not in self._message_ids:
