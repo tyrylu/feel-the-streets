@@ -1,3 +1,4 @@
+use base64::prelude::*;
 use crate::entities_query_executor::EntitiesQueryExecutor;
 use crate::entity::Entity;
 use crate::entity_relationship::EntityRelationship;
@@ -312,7 +313,7 @@ impl AreaDatabase {
             } => self.insert_entity(
                 id,
                 discriminator,
-                &base64::decode(geometry).expect("Geometry should be base64 encoded"),
+                &BASE64_STANDARD.decode(geometry).expect("Geometry should be base64 encoded"),
                 effective_width,
                 data,
                 entity_relationships,

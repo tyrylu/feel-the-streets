@@ -1,3 +1,4 @@
+use base64::prelude::*;
 use crate::Result;
 use osm_db::entity::Entity;
 use osm_db::semantic_change::EntryChange;
@@ -14,8 +15,8 @@ fn diff_properties(old: &Entity, new: &Entity) -> Vec<EntryChange> {
     if old.geometry != new.geometry {
         changes.push(EntryChange::updating(
             "geometry",
-            Value::from(base64::encode(&old.geometry)),
-            Value::from(base64::encode(&new.geometry)),
+            Value::from(BASE64_STANDARD.encode(&old.geometry)),
+            Value::from(BASE64_STANDARD.encode(&new.geometry)),
         ));
     }
     if old.discriminator != new.discriminator {

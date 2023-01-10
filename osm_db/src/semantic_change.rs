@@ -1,3 +1,4 @@
+use base64::prelude::*;
 use crate::entity_relationship::RootedEntityRelationship;
 use crate::Result;
 use once_cell::sync::Lazy;
@@ -97,7 +98,7 @@ impl SemanticChange {
         relationships: Vec<RootedEntityRelationship>,
     ) -> Self {
         SemanticChange::Create {
-            geometry: base64::encode(&geometry),
+            geometry: BASE64_STANDARD.encode(&geometry),
             id,
             discriminator,
             data,

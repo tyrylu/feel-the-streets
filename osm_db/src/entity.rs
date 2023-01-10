@@ -1,3 +1,4 @@
+use base64::prelude::*;
 use crate::semantic_change::EntryChange;
 use log::warn;
 use osm_api::SmolStr;
@@ -59,7 +60,7 @@ impl Entity {
             if let EntryChange::Update { key, new_value, .. } = change {
                 match key.as_ref() {
                     "geometry" => {
-                        self.geometry = base64::decode(
+                        self.geometry = BASE64_STANDARD.decode(
                             new_value
                                 .as_str()
                                 .expect("Non-string attempted to be set as a geometry"),
