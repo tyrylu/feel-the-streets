@@ -17,7 +17,7 @@ chrono = { version = "0.4.23", default-features = false, features = ["serde", "c
 thiserror = "1.0.38"
 dotenvy = "0.15.6"
 base64 = "0.21.0"
-doitlater = "0.2.2"
+doitlater = "0.2.3"
 redis_api = {path = "../redis_api"}
 rusty_pool = { version = "0.7.0", default-features = false }
 axum = "0.6.2"
