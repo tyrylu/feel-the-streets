@@ -11,7 +11,7 @@ pub enum Error {
     #[error("XML attribute conversion error: {0}")]
     XmlAttrError(#[from] quick_xml::events::attributes::AttrError),
     #[error("HTTP related error: {0}")]
-    HttpError(#[from] ureq::Error),
+    HttpError(Box<ureq::Error>),
     #[error("WKB write error: {0}")]
     WKBWriteError(String),
     #[error("Serialization error: {0}")]
@@ -20,4 +20,10 @@ pub enum Error {
     ZstdError(#[from] zstd_util::Error),
     #[error("The retry limit was exceeded")]
     RetryLimitExceeded,
+}
+
+impl From<ureq::Error> for Error {
+    fn from(value: ureq::Error) -> Self {
+        Error::HttpError(Box::new(value))
+    }
 }
