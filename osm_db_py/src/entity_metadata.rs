@@ -14,8 +14,7 @@ impl PyEntityMetadata {
         match EntityMetadata::for_discriminator(discriminator) {
             Some(metadata) => Ok(Self { inner: metadata }),
             None => Err(exceptions::PyKeyError::new_err(format!(
-                "No entity with discriminator {}.",
-                discriminator
+                "No entity with discriminator {discriminator}."
             ))),
         }
     }

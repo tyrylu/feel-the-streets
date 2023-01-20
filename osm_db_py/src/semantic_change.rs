@@ -17,8 +17,7 @@ impl PySemanticChange {
         match SemanticChange::from_serialized(data) {
             Ok(change) => Ok(PySemanticChange { inner: change }),
             Err(e) => Err(exceptions::PyValueError::new_err(format!(
-                "Could not parse json, error: {}",
-                e
+                "Could not parse json, error: {e}"
             ))),
         }
     }

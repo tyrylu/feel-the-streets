@@ -93,7 +93,7 @@ impl EntitiesQuery {
         };
         let mut discriminator_placeholders = vec![];
         for idx in 0..self.included_discriminators.len() {
-            discriminator_placeholders.push(format!(":included_discriminator{}", idx));
+            discriminator_placeholders.push(format!(":included_discriminator{idx}"));
         }
         if !discriminator_placeholders.is_empty() {
             condition_fragments.push(format!(
@@ -103,7 +103,7 @@ impl EntitiesQuery {
         }
         discriminator_placeholders.clear();
         for idx in 0..self.excluded_discriminators.len() {
-            discriminator_placeholders.push(format!(":excluded_discriminator{}", idx));
+            discriminator_placeholders.push(format!(":excluded_discriminator{idx}"));
         }
         if !discriminator_placeholders.is_empty() {
             condition_fragments.push(format!(
@@ -125,7 +125,7 @@ impl EntitiesQuery {
             write!(query_sql, " WHERE {}", condition_fragments.join(" AND ")).unwrap();
         }
         if let Some(limit) = self.limit {
-            write!(query_sql, " LIMIT {}", limit).unwrap();
+            write!(query_sql, " LIMIT {limit}").unwrap();
         }
         query_sql
     }
@@ -133,9 +133,9 @@ impl EntitiesQuery {
     fn prepare_relationship_id_filter(&self, condition_part: &str) -> String {
         // Note that for simplicity's sake, we are appending the right parent of the subquery there.
         if self.relationship_kind.is_some() {
-            format!("{} AND kind = :relationship_kind)", condition_part)
+            format!("{condition_part} AND kind = :relationship_kind)")
         } else {
-            format!("{})", condition_part)
+            format!("{condition_part})")
         }
     }
 
@@ -151,10 +151,10 @@ impl EntitiesQuery {
             vec![]
         };
         for (idx, discriminator) in self.included_discriminators.iter().enumerate() {
-            params.push((format!(":included_discriminator{}", idx), discriminator));
+            params.push((format!(":included_discriminator{idx}"), discriminator));
         }
         for (idx, discriminator) in self.excluded_discriminators.iter().enumerate() {
-            params.push((format!(":excluded_discriminator{}", idx), discriminator));
+            params.push((format!(":excluded_discriminator{idx}"), discriminator));
         }
         if self.child_id.is_some() {
             params.push((":parent_id".to_string(), self.child_id.as_ref().unwrap()));

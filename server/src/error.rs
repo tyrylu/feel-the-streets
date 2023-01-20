@@ -42,7 +42,7 @@ impl IntoResponse for Error {
     fn into_response(self) -> Response {
         (
             StatusCode::INTERNAL_SERVER_ERROR,
-            format!("Something went wrong: {}", self),
+            format!("Something went wrong: {self}"),
         )
             .into_response()
     }

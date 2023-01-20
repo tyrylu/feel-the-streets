@@ -221,7 +221,7 @@ impl OSMObject {
         match self.specifics {
             Node { .. } => Box::new(iter::empty()),
             Way { ref nodes, .. } => {
-                Box::new(nodes.clone().into_iter().map(|n| (format!("n{}", n), None)))
+                Box::new(nodes.clone().into_iter().map(|n| (format!("n{n}"), None)))
             }
             Relation { ref members, .. } => Box::new(
                 members

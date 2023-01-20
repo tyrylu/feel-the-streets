@@ -89,7 +89,7 @@ fn diff_json_maps_internal(
 
 fn to_composite_key(prefix: &Option<String>, subkey: &str) -> String {
     match prefix {
-        Some(prefix) => format!("{}/{}", prefix, subkey),
+        Some(prefix) => format!("{prefix}/{subkey}"),
         None => subkey.to_string(),
     }
 }

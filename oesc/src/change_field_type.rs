@@ -31,12 +31,11 @@ pub fn change_field_type(
                 None => {
                     if force {
                         eprintln!(
-                            "Value {} was not a string, continuing because of the force flag.",
-                            old_val
+                            "Value {old_val} was not a string, continuing because of the force flag."
                         );
                         continue;
                     } else {
-                        eprintln!("Value {} was not a string.", old_val);
+                        eprintln!("Value {old_val} was not a string.");
                         process::exit(1);
                     }
                 }
@@ -55,10 +54,10 @@ pub fn change_field_type(
                     vec![],
                 ));
             } else if !force {
-                eprintln!("Could not interpret value {} as the requested type {}, change will not be executed.", old_val, new_type);
+                eprintln!("Could not interpret value {old_val} as the requested type {new_type}, change will not be executed.");
                 process::exit(1);
             } else {
-                eprintln!("Could not interpret value {} as the requested type {}, continuing regardless, force flag is in effect.", old_val, new_type);
+                eprintln!("Could not interpret value {old_val} as the requested type {new_type}, continuing regardless, force flag is in effect.");
             }
         }
         println!(

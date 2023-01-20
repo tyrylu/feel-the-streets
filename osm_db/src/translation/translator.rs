@@ -57,7 +57,7 @@ pub fn translate(
                     for unprefixes in &spec.unprefixes {
                         if new_key.starts_with(unprefixes) {
                             trace!("Unprefixing {}.", new_key);
-                            new_key = new_key.replace(&format!("{}:", unprefixes), "");
+                            new_key = new_key.replace(&format!("{unprefixes}:"), "");
                             break;
                         }
                     }

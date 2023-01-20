@@ -16,9 +16,9 @@ pub fn request_redownload(all: bool, area: Option<i64>) -> Result<()> {
     };
     for area_id in areas {
         let mut stream = ChangesStream::new_from_env(area_id)?;
-        println!("Processing area {}", area_id);
+        println!("Processing area {area_id}");
         let removed = stream.trim_to_exact_length(0)?;
-        println!("Removed {} changes from the stream.", removed);
+        println!("Removed {removed} changes from the stream.");
         stream.request_redownload()?;
         println!("The clients were notified about a redownload request.");
         println!("Success.");

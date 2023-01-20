@@ -37,7 +37,7 @@ fn main() -> Result<()> {
     }
     for task in tasks {
         if let Err(e) = task.await_complete() {
-            println!("Failed to recreate area, error: {}", e);
+            println!("Failed to recreate area, error: {e}");
         }
     }
     names_cache.lock().unwrap().save()?;

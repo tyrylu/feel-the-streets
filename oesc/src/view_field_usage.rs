@@ -35,7 +35,7 @@ pub fn view_field_usage(entity: String, field: String) -> Result<()> {
     );
     println!("Values summary follows.");
     for (val, occurrences) in values.iter() {
-        println!("{} occurs {} times.", val, occurrences);
+        println!("{val} occurs {occurrences} times.");
     }
     Ok(())
 }

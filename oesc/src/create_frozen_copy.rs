@@ -20,8 +20,7 @@ pub fn create_frozen_copy(area_id: i64, new_name: String) -> Result<()> {
     new_area.db_size = fs::metadata(new_path)?.len().try_into().unwrap();
     new_area.save(&mut db_conn)?;
     println!(
-        "Successfully created a frozen copy of area {} with new name {} and id {}.",
-        area_id, new_name, frozen_id
+        "Successfully created a frozen copy of area {area_id} with new name {new_name} and id {frozen_id}."
     );
     Ok(())
 }

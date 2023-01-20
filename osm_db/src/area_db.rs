@@ -80,19 +80,19 @@ impl AreaDatabase {
             appdata_dir.push("feel-the-streets/areas");
             appdata_dir
         };
-        root.push(format!("{}.db", area));
+        root.push(format!("{area}.db"));
         root
     }
 
     pub fn create(area: i64) -> Result<Self> {
-        let conn = Connection::open(&AreaDatabase::path_for(area, true))?;
+        let conn = Connection::open(AreaDatabase::path_for(area, true))?;
         init_extensions(&conn)?;
         conn.execute_batch(INIT_AREA_DB_SQL)?;
         AreaDatabase::common_construct(conn)
     }
     pub fn open_existing(area: i64, server_side: bool) -> Result<Self> {
         let conn = Connection::open_with_flags(
-            &AreaDatabase::path_for(area, server_side),
+            AreaDatabase::path_for(area, server_side),
             OpenFlags::SQLITE_OPEN_READ_WRITE,
         )?;
         init_extensions(&conn)?;
@@ -210,15 +210,14 @@ impl AreaDatabase {
     ) -> Result<Vec<Entity>> {
         let mut candidate_params = vec![];
         for i in 0..candidate_ids.len() {
-            candidate_params.push(format!(":candidate{}", i));
+            candidate_params.push(format!(":candidate{i}"));
         }
         let mut query = format!("SELECT id, discriminator, AsBinary(geometry) as geometry, data, effective_width FROM entities WHERE id in ({})", candidate_params.join(","));
         if fast {
             query += " AND length(geometry) < 100000";
         }
         let fragment = format!(
-            " AND St_Disjoint(geometry, GeomFromText('POINT({} {})', 4326)) = 0",
-            x, y
+            " AND St_Disjoint(geometry, GeomFromText('POINT({x} {y})', 4326)) = 0"
         );
         query += &fragment;
         let mut params: Vec<(&str, &dyn ToSql)> = vec![];
@@ -545,7 +544,7 @@ impl AreaDatabase {
     fn num_rows_in_table(&self, table: &str) -> Result<usize> {
         let mut stmt = self
             .conn
-            .prepare_cached(&format!("SELECT count(*) from {}", table))?;
+            .prepare_cached(&format!("SELECT count(*) from {table}"))?;
         Ok(stmt.query_row([], |row| Ok(row.get_unwrap(0)))?)
     }
 

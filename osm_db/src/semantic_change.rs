@@ -98,7 +98,7 @@ impl SemanticChange {
         relationships: Vec<RootedEntityRelationship>,
     ) -> Self {
         SemanticChange::Create {
-            geometry: BASE64_STANDARD.encode(&geometry),
+            geometry: BASE64_STANDARD.encode(geometry),
             id,
             discriminator,
             data,

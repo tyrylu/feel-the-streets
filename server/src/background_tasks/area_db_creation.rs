@@ -43,7 +43,7 @@ pub fn create_area_database_worker(
     db.commit()?;
     let parent_ids_str = get_parent_ids_str_for(area, &manager, &mut cache.lock().unwrap())?;
     area::finalize_area_creation(area, parent_ids_str, &mut area_db_conn.lock().unwrap())?;
-    record.save_to_file(&format!("creation_{}.json", area))?;
+    record.save_to_file(&format!("creation_{area}.json"))?;
     info!("Area {} created successfully.", area);
     Ok(())
 }

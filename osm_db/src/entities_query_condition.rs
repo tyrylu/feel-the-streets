@@ -38,25 +38,25 @@ impl FieldCondition {
     fn to_query_fragment_internal(&self, condition_placeholder_base: String) -> String {
         match self {
             Self::Concrete { field, condition } => {
-                let field_expr = format!("json_extract(data, '$.{}')", field);
+                let field_expr = format!("json_extract(data, '$.{field}')");
                 let operation = match condition {
                     Condition::IsNull => "IS NULL".to_string(),
                     Condition::IsNotNull => "IS NOT NULL".to_string(),
-                    Condition::Eq { .. } => format!("= :param{}", condition_placeholder_base),
-                    Condition::Neq { .. } => format!("!= :param{}", condition_placeholder_base),
-                    Condition::Lt { .. } => format!("< :param{}", condition_placeholder_base),
-                    Condition::Le { .. } => format!("<= :param{}", condition_placeholder_base),
-                    Condition::Gt { .. } => format!("> :param{}", condition_placeholder_base),
-                    Condition::Ge { .. } => format!(">= :param{}", condition_placeholder_base),
-                    Condition::Like { .. } => format!("LIKE :param{}", condition_placeholder_base),
+                    Condition::Eq { .. } => format!("= :param{condition_placeholder_base}"),
+                    Condition::Neq { .. } => format!("!= :param{condition_placeholder_base}"),
+                    Condition::Lt { .. } => format!("< :param{condition_placeholder_base}"),
+                    Condition::Le { .. } => format!("<= :param{condition_placeholder_base}"),
+                    Condition::Gt { .. } => format!("> :param{condition_placeholder_base}"),
+                    Condition::Ge { .. } => format!(">= :param{condition_placeholder_base}"),
+                    Condition::Like { .. } => format!("LIKE :param{condition_placeholder_base}"),
                 };
-                format!("{} {}", field_expr, operation)
+                format!("{field_expr} {operation}")
             }
             Self::Or { left, right } => {
                 format!(
                     "({} OR {})",
-                    left.to_query_fragment_internal(format!("{}l", condition_placeholder_base)),
-                    right.to_query_fragment_internal(format!("{}r", condition_placeholder_base))
+                    left.to_query_fragment_internal(format!("{condition_placeholder_base}l")),
+                    right.to_query_fragment_internal(format!("{condition_placeholder_base}r"))
                 )
             }
         }
@@ -79,15 +79,15 @@ impl FieldCondition {
                 | Condition::Gt { value }
                 | Condition::Ge { value }
                 | Condition::Like { value } => Some(vec![(
-                    format!(":param{}", condition_placeholder_base),
+                    format!(":param{condition_placeholder_base}"),
                     value.as_ref(),
                 )]),
                 Condition::IsNull | Condition::IsNotNull => None,
             },
             Self::Or { left, right } => {
                 match (
-                    left.to_param_values_internal(format!("{}l", condition_placeholder_base)),
-                    right.to_param_values_internal(format!("{}r", condition_placeholder_base)),
+                    left.to_param_values_internal(format!("{condition_placeholder_base}l")),
+                    right.to_param_values_internal(format!("{condition_placeholder_base}r")),
                 ) {
                     (Some(mut left), Some(mut right)) => {
                         left.append(&mut right);

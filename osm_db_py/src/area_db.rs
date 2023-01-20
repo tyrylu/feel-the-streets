@@ -27,8 +27,7 @@ impl PyAreaDatabase {
                 inner: Mutex::new(db),
             }),
             Err(e) => Err(exceptions::PyValueError::new_err(format!(
-                "Failed to open the database, error: {}",
-                e
+                "Failed to open the database, error: {e}"
             ))),
         }
     }
@@ -38,8 +37,7 @@ impl PyAreaDatabase {
             move || match self.inner.lock().unwrap().get_entities(&query.inner) {
                 Ok(res) => Ok(res.into_iter().map(|e| PyEntity { inner: e }).collect()),
                 Err(e) => Err(exceptions::PyValueError::new_err(format!(
-                    "Error executing the query: {}",
-                    e
+                    "Error executing the query: {e}"
                 ))),
             },
         )
@@ -59,8 +57,7 @@ impl PyAreaDatabase {
         ) {
             Ok(res) => Ok(res.into_iter().map(|e| PyEntity { inner: e }).collect()),
             Err(e) => Err(exceptions::PyValueError::new_err(format!(
-                "Failed to execute the query, error: {}",
-                e
+                "Failed to execute the query, error: {e}"
             ))),
         }
     }
@@ -69,8 +66,7 @@ impl PyAreaDatabase {
         match self.inner.lock().unwrap().apply_change(&change.inner) {
             Ok(()) => Ok(()),
             Err(e) => Err(exceptions::PyValueError::new_err(format!(
-                "Failed to apply the change, error: {}",
-                e
+                "Failed to apply the change, error: {e}"
             ))),
         }
     }
@@ -78,8 +74,7 @@ impl PyAreaDatabase {
         match self.inner.lock().unwrap().begin() {
             Ok(()) => Ok(()),
             Err(e) => Err(exceptions::PyValueError::new_err(format!(
-                "Failed to execute BEGIN, error: {}",
-                e
+                "Failed to execute BEGIN, error: {e}"
             ))),
         }
     }
@@ -88,8 +83,7 @@ impl PyAreaDatabase {
         match self.inner.lock().unwrap().commit() {
             Ok(()) => Ok(()),
             Err(e) => Err(exceptions::PyValueError::new_err(format!(
-                "Failed to execute COMMIT, error: {}",
-                e
+                "Failed to execute COMMIT, error: {e}"
             ))),
         }
     }
@@ -98,8 +92,7 @@ impl PyAreaDatabase {
         match self.inner.lock().unwrap().get_entity(osm_id) {
             Ok(res) => Ok(res.map(|e| PyEntity { inner: e })),
             Err(e) => Err(exceptions::PyValueError::new_err(format!(
-                "Failed to get entity, error: {}",
-                e
+                "Failed to get entity, error: {e}"
             ))),
         }
     }
@@ -108,8 +101,7 @@ impl PyAreaDatabase {
         match self.inner.lock().unwrap().get_child_count(parent_id) {
             Ok(num) => Ok(num),
             Err(e) => Err(exceptions::PyValueError::new_err(format!(
-                "Failed to query child count: {}",
-                e
+                "Failed to query child count: {e}"
             ))),
         }
     }
@@ -117,8 +109,7 @@ impl PyAreaDatabase {
         match self.inner.lock().unwrap().get_parent_count(parent_id) {
             Ok(num) => Ok(num),
             Err(e) => Err(exceptions::PyValueError::new_err(format!(
-                "Failed to query parent count: {}",
-                e
+                "Failed to query parent count: {e}"
             ))),
         }
     }
@@ -131,8 +122,7 @@ impl PyAreaDatabase {
         {
             Ok(_) => Ok(()),
             Err(e) => Err(exceptions::PyRuntimeError::new_err(format!(
-                "Failed to apply deferred relationship additions: {}",
-                e
+                "Failed to apply deferred relationship additions: {e}"
             ))),
         }
     }

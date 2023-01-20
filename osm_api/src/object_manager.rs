@@ -55,17 +55,13 @@ fn translate_type_shortcut(shortcut: char) -> &'static str {
 
 fn format_query(timeout: u32, maxsize: usize, query: &str) -> String {
     format!(
-        "[out:json][timeout:{timeout}][maxsize:{maxsize}];{query};out meta;",
-        timeout = timeout,
-        maxsize = maxsize,
-        query = query
+        "[out:json][timeout:{timeout}][maxsize:{maxsize}];{query};out meta;"
     )
 }
 
 fn format_data_retrieval(area: i64) -> String {
     format!(
-        r#"((area({area});node(area);area({area});way(area);area({area});rel(area);>>;);>>;)"#,
-        area = area
+        r#"((area({area});node(area);area({area});way(area);area({area});rel(area);>>;);>>;)"#
     )
 }
 
@@ -222,7 +218,7 @@ impl OSMObjectManager {
                 Way { ref nodes, .. } => {
                     for node in nodes {
                         total_examined += 1;
-                        let node_id = format!("n{}", node);
+                        let node_id = format!("n{node}");
                         if !self.has_object(&node_id) {
                             debug!("Node with id {} missing.", node_id);
                             missing.push(node_id);
@@ -309,7 +305,7 @@ impl OSMObjectManager {
         match self.get_geometry_of(object)? {
             None => Ok(None),
             Some(geom) => Ok(Some(
-                wkb::geom_to_wkb(&geom).map_err(|e| Error::WKBWriteError(format!("{:?}", e)))?,
+                wkb::geom_to_wkb(&geom).map_err(|e| Error::WKBWriteError(format!("{e:?}")))?,
             )),
         }
     }
@@ -483,9 +479,7 @@ impl OSMObjectManager {
         let mut iterators = Vec::with_capacity(3);
         for kind in &["node", "way", "rel"] {
             let query = format!(
-                "((area({area});{object_kind}(area);>>;);>>;)",
-                area = area,
-                object_kind = kind
+                "((area({area});{kind}(area);>>;);>>;)"
             );
             let final_query = format!(
                 "[out:xml][timeout:900][adiff:\"{after}\"];{query};out meta;",
