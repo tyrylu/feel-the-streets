@@ -1,4 +1,4 @@
-use crate::change::OSMObjectChange;
+use crate::change::OSMObjectChangeEvent;
 use crate::change_iterator::OSMObjectChangeIterator;
 use crate::object::{OSMObject, OSMObjectFromNetwork, OSMObjectSpecifics, OSMObjectType};
 use crate::overpass_api::Servers;
@@ -475,7 +475,7 @@ impl OSMObjectManager {
         &self,
         area: i64,
         after: &DateTime<Utc>,
-    ) -> Result<Box<dyn Iterator<Item = Result<OSMObjectChange>>>> {
+    ) -> Result<Box<dyn Iterator<Item = Result<OSMObjectChangeEvent>>>> {
         let mut iterators = Vec::with_capacity(3);
         for kind in &["node", "way", "rel"] {
             let query = format!(

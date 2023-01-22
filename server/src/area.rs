@@ -30,6 +30,7 @@ pub struct Area {
     pub newest_osm_object_timestamp: Option<String>,
     pub db_size: i64,
     pub parent_osm_ids: Option<String>,
+    pub last_update_remark: Option<String>,
 }
 
 impl Area {
@@ -75,6 +76,7 @@ impl Area {
                 areas::newest_osm_object_timestamp.eq(&self.newest_osm_object_timestamp),
                 areas::db_size.eq(self.db_size),
                 areas::parent_osm_ids.eq(&self.parent_osm_ids),
+                areas::last_update_remark.eq(&self.last_update_remark),
             ));
 
         let query_debug = diesel::debug_query::<diesel::sqlite::Sqlite, _>(&query);

@@ -1,4 +1,5 @@
 use chrono::{DateTime, Utc};
+use osm_api::change::OSMObjectChangeEvent;
 use osm_api::object_manager::OSMObjectManager;
 use std::env;
 
@@ -15,11 +16,13 @@ fn main() {
             .expect("It must be an RFC 3339 datetime")
             .with_timezone(&Utc);
     let manager = OSMObjectManager::new().expect("Could not create OSMObjectManager");
-    for change in manager
+    for event in manager
         .lookup_differences_in(id, &after)
         .expect("Could not lookup changes")
     {
-        let change = change.expect("No change");
+        let event = event.expect("No event");
+        match event {
+            OSMObjectChangeEvent::Change(change) => {
         let obj = change.old.as_ref().unwrap_or_else(|| {
             change
                 .new
@@ -31,5 +34,10 @@ fn main() {
             .expect("Could not get geom")
             .unwrap_or_else(|| panic!("Geometry for {:?} was none.", obj));
         println!("{:?}, geom len: {}", change, geom.len());
+    },
+    OSMObjectChangeEvent::Remark(remark) => {
+        println!("Got a remark from the server: {remark}");
+    }
+}
     }
 }

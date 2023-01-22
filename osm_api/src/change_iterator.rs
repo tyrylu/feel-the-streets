@@ -1,9 +1,9 @@
-use crate::change::{OSMObjectChange, OSMObjectChangeType};
+use crate::change::{OSMObjectChange, OSMObjectChangeType, OSMObjectChangeEvent};
 use crate::object::*;
 use crate::Error;
 use crate::Result;
 use hashbrown::HashMap;
-use log::{trace, warn};
+use log::trace;
 use std::io::{BufReader, Read};
 use std::str::FromStr;
 use quick_xml::{events::{attributes::Attributes, Event}, Reader};
@@ -20,7 +20,7 @@ fn convert_to_map(attributes: Attributes) -> Result<HashMap<String, String>> {
 pub struct OSMObjectChangeIterator<T: Read> {
     reader: Reader<BufReader<T>>,
     finished: bool,
-    current_change: Option<OSMObjectChange>,
+    current_event: Option<OSMObjectChangeEvent>,
     current_change_type: Option<OSMObjectChangeType>,
     old: Option<OSMObject>,
     new: Option<OSMObject>,
@@ -34,7 +34,7 @@ impl<T: Read> OSMObjectChangeIterator<T> {
         OSMObjectChangeIterator {
             reader,
             finished: false,
-            current_change: None,
+            current_event: None,
             current_change_type: None,
             old: None,
             new: None,
@@ -155,7 +155,7 @@ impl<T: Read> OSMObjectChangeIterator<T> {
             Ok(Event::Text(chars)) => {
                 trace!("Characters: {}", chars.unescape()?);
                 if self.in_remark {
-                    warn!("Received a remark from the server: {}", chars.unescape()?);
+                    self.current_event = Some(OSMObjectChangeEvent::Remark(chars.unescape()?.to_string()));
                 }
             }
             Ok(Event::Eof) => {
@@ -170,7 +170,7 @@ impl<T: Read> OSMObjectChangeIterator<T> {
                 );
                 match tag.local_name().as_ref() {
                     b"action" => {
-                        self.current_change = None;
+                        self.current_event = None;
                         let attrs = convert_to_map(tag.attributes())?;
                         self.old = None;
                         self.new = None;
@@ -195,14 +195,14 @@ impl<T: Read> OSMObjectChangeIterator<T> {
                 trace!("End of element with name {:?}.", tag.local_name());
                 match tag.local_name().as_ref() {
                     b"action" => {
-                        self.current_change = Some(OSMObjectChange {
+                        self.current_event = Some(OSMObjectChangeEvent::Change(OSMObjectChange {
                             change_type: self
                                 .current_change_type
                                 .take()
                                 .expect("Did not set change type?"),
                             old: self.old.take(),
                             new: self.new.take(),
-                        })
+                        }))
                     }
                     b"osm3response" => self.finished = true,
                     b"remark" => self.in_remark = false,
@@ -221,7 +221,7 @@ impl<T: Read> OSMObjectChangeIterator<T> {
 }
 
 impl<T: Read> Iterator for OSMObjectChangeIterator<T> {
-    type Item = Result<OSMObjectChange>;
+    type Item = Result<OSMObjectChangeEvent>;
 
     fn next(&mut self) -> Option<Self::Item> {
         trace!("Next change requested.");
@@ -233,8 +233,8 @@ impl<T: Read> Iterator for OSMObjectChangeIterator<T> {
                         trace!("Finished.");
                         return None;
                     }
-                    if self.current_change.is_some() {
-                        return Some(Ok(self.current_change.take()?));
+                    if self.current_event.is_some() {
+                        return Some(Ok(self.current_event.take()?));
                     }
                 }
             }

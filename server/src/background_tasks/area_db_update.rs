@@ -5,7 +5,7 @@ use crate::Result;
 use chrono::{DateTime, Utc};
 use diesel::{Connection, SqliteConnection};
 use doitlater::typetag;
-use osm_api::change::OSMObjectChangeType;
+use osm_api::change::{OSMObjectChangeType, OSMObjectChangeEvent};
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::overpass_api::Servers;
 use osm_db::semantic_change::SemanticChange;
@@ -46,6 +46,7 @@ pub fn update_area(
     info!("Updating area {} (id {}).", area.name, area.osm_id);
     let mut record = TranslationRecord::new();
     area.state = AreaState::GettingChanges;
+    area.last_update_remark = None;
     area.save(&mut conn.lock().unwrap())?;
     let after = if let Some(timestamp) = &area.newest_osm_object_timestamp {
         info!(
@@ -66,15 +67,17 @@ pub fn update_area(
     let mut semantic_changes = vec![];
     let mut seen_unique_ids = HashSet::new();
     area_db.begin()?;
-    for change in manager.lookup_differences_in(area.osm_id, &after)? {
-        osm_change_count += 1;
+    for event in manager.lookup_differences_in(area.osm_id, &after)? {
+        let event = event?;
+        match event {
+        OSMObjectChangeEvent::Change(change) => {
+            osm_change_count += 1;
         use OSMObjectChangeType::*;
         if first {
             area.state = AreaState::ApplyingChanges;
             area.save(&mut conn.lock().unwrap())?;
             first = false;
         }
-        let change = change?;
         if change.new.is_some()
             && (area.newest_osm_object_timestamp.is_none()
                 || change.new.as_ref().unwrap().timestamp
@@ -200,6 +203,11 @@ pub fn update_area(
                 }
             }
         }
+    },
+OSMObjectChangeEvent::Remark(remark) => {
+    area.last_update_remark = Some(remark);
+}
+}
     }
     area_db.apply_deferred_relationship_additions()?;
     info!(

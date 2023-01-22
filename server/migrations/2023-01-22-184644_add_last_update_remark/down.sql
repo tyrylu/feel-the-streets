@@ -1,0 +1,1 @@
+ALTER TABLE areas DROP COLUMN last_update_remark;

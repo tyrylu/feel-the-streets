@@ -11,5 +11,6 @@ table! {
         newest_osm_object_timestamp -> Nullable<Text>,
         db_size -> BigInt,
         parent_osm_ids -> Nullable<Text>,
+        last_update_remark -> Nullable<Text>,
     }
 }
