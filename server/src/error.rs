@@ -36,6 +36,8 @@ pub enum Error {
     DoItLaterError(#[from] doitlater::Error),
     #[error("Tera error: {0}")]
     TeraError(#[from] tera::Error),
+    #[error("Failed to join a Tokio task: {0}")]
+    JoinError(#[from] tokio::task::JoinError)
 }
 
 impl IntoResponse for Error {

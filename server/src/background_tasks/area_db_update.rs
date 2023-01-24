@@ -22,6 +22,7 @@ use std::{
     fs,
     sync::{Arc, Mutex},
 };
+use tokio::runtime::Runtime;
 
 fn find_or_create_suitable_change<'a>(
     changes: &'a mut Vec<SemanticChange>,
@@ -320,9 +321,8 @@ fn infer_additional_relationships(
     Ok(())
 }
 
-pub fn update_area_databases() -> Result<()> {
+async fn update_area_databases_async() -> Result<()> {
     info!("Going to perform the area database update for all up-to date areas.");
-    let pool = rusty_pool::ThreadPool::default();
     let area_db_conn = Arc::new(Mutex::new(SqliteConnection::establish("server.db")?));
     let servers = Arc::new(Servers::default());
     let cache = Arc::new(osm_api::object_manager::open_cache()?);
@@ -333,10 +333,10 @@ pub fn update_area_databases() -> Result<()> {
     for area in areas {
         let conn_clone = area_db_conn.clone();
         let manager = OSMObjectManager::new_multithread(servers.clone(), cache.clone())?;
-        tasks.push(pool.evaluate(move || update_area(area, conn_clone, manager)));
+        tasks.push(tokio::task::spawn_blocking(move || update_area(area, conn_clone, manager)));
     }
     for task in tasks {
-        match task.await_complete() {
+        match task.await? {
             Ok(rec) => rec.merge_to(&mut record),
             Err(e) => {
                 error!("Failed to update the area, error: {:?}", e);
@@ -346,6 +346,11 @@ pub fn update_area_databases() -> Result<()> {
     record.save_to_file(&format!("area_updates_{}.json", now.to_rfc3339()))?;
     info!("Area updates finished successfully.");
     Ok(())
+}
+
+pub fn update_area_databases() -> Result<()> {
+    let rt = Runtime::new()?;
+    rt.block_on(update_area_databases_async())
 }
 
 #[derive(Serialize, Deserialize)]

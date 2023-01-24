@@ -8,10 +8,10 @@ use std::fs;
 use std::path::Path;
 use std::sync::{Arc, Mutex};
 
-fn main() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     let _dotenv_path = dotenvy::dotenv()?;
     server::init_logging();
-    let pool = rusty_pool::ThreadPool::default();
     let server_conn = Arc::new(Mutex::new(SqliteConnection::establish("server.db")?));
     let servers = Arc::new(Servers::default());
     let cache = Arc::new(osm_api::object_manager::open_cache()?);
@@ -26,7 +26,7 @@ fn main() -> Result<()> {
         let manager = OSMObjectManager::new_multithread(servers.clone(), cache.clone())?;
         let server_conn_clone = server_conn.clone();
         let names_cache_clone = names_cache.clone();
-        tasks.push(pool.evaluate(move || {
+        tasks.push(tokio::task::spawn_blocking(move || {
             area_db_creation::create_area_database_worker(
                 area.osm_id,
                 manager,
@@ -36,7 +36,7 @@ fn main() -> Result<()> {
         }));
     }
     for task in tasks {
-        if let Err(e) = task.await_complete() {
+        if let Err(e) = task.await {
             println!("Failed to recreate area, error: {e}");
         }
     }
