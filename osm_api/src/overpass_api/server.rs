@@ -5,7 +5,7 @@ use crossbeam_channel::{Receiver, Sender};
 use log::{debug, info, warn};
 use once_cell::sync::Lazy;
 use regex::Regex;
-use std::io::{self, Read, Seek, SeekFrom};
+use std::io::{self, Read, Seek};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use std::thread;
@@ -70,7 +70,7 @@ fn run_query(
     } else {
         let mut file = tempfile()?;
         io::copy(&mut resp.into_reader(), &mut file)?;
-        file.seek(SeekFrom::Start(0))?;
+        file.rewind()?;
         Ok(Box::new(file))
     }
 }
