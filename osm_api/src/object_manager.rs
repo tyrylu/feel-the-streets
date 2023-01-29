@@ -1,6 +1,7 @@
 use crate::change::OSMObjectChangeEvent;
 use crate::change_iterator::OSMObjectChangeIterator;
-use crate::object::{OSMObject, OSMObjectFromNetwork, OSMObjectSpecifics, OSMObjectType};
+use crate::object::{OSMObject, OSMObjectSpecifics, OSMObjectType};
+use crate::raw_object::OSMObject as RawOSMObject;
 use crate::overpass_api::Servers;
 use crate::utils;
 use crate::{Error, Result};
@@ -10,15 +11,15 @@ use hashbrown::HashMap;
 use itertools::Itertools;
 use log::{debug, error, info, warn};
 use once_cell::sync::Lazy;
+use quick_xml::de::Deserializer;
 use serde::Deserialize;
-use serde_json::{self, Deserializer};
 use sled::Db;
 use smol_str::SmolStr;
 use std::cell::{Ref, RefCell};
 use std::cmp;
 use std::collections::HashSet;
 use std::fs;
-use std::io::{BufReader, Read};
+use std::io::{BufReader, Read, BufRead};
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
 use zstd_util::ZstdContext;
@@ -55,7 +56,7 @@ fn translate_type_shortcut(shortcut: char) -> &'static str {
 
 fn format_query(timeout: u32, maxsize: usize, query: &str) -> String {
     format!(
-        "[out:json][timeout:{timeout}][maxsize:{maxsize}];{query};out meta;"
+        "[timeout:{timeout}][maxsize:{maxsize}];{query};out meta;"
     )
 }
 
@@ -131,32 +132,22 @@ impl OSMObjectManager {
         let start = Instant::now();
         let mut objects = Vec::new();
         let mut cached_readable = BufReader::with_capacity(65536, readable);
-        let mut buf = [0; 1];
-        loop {
-            let _bytes = cached_readable.read(&mut buf)?;
-            if String::from_utf8_lossy(&buf[..]) == "[" {
-                break;
-            }
+        let mut line = String::new();
+        // Read past the xml declaration, the initial osm tag, and the note and meta tags.
+        // Fortunately, every of these has a line of its own.
+        for _ in 0..4 {
+            cached_readable.read_line(&mut line)?;
         }
-        // We're past the data header, only objects follow.
-        loop {
-            {
-                let mut de = Deserializer::from_reader(&mut cached_readable);
-                match OSMObjectFromNetwork::deserialize(&mut de) {
-                    Ok(obj) => {
-                        let internal_object = obj.into_osm_object();
-                        self.retrieved_from_network
-                            .borrow_mut()
-                            .insert(internal_object.unique_id());
-                        self.cache_object(&internal_object);
-                        if return_objects {
-                            objects.push(internal_object);
-                        }
-                    }
-                    Err(_e) => break,
-                }
+        let mut de = Deserializer::from_reader(cached_readable);
+        while let Ok(obj) = RawOSMObject::deserialize(&mut de) {
+            let internal_object: OSMObject = obj.try_into()?;
+            self.retrieved_from_network
+                .borrow_mut()
+                .insert(internal_object.unique_id());
+            self.cache_object(&internal_object);
+            if return_objects {
+                objects.push(internal_object);
             }
-            cached_readable.read_exact(&mut buf)?; // Skip a comma
         }
         debug!("Caching finished after {:?}", start.elapsed());
         self.flush_cache();
@@ -494,7 +485,7 @@ impl OSMObjectManager {
     }
 
     pub fn get_area_parents(&self, area_id: i64) -> Result<Vec<OSMObject>> {
-        let query = format!("[out:json];rel({});<<;out meta;", area_id - 3_600_000_000);
+        let query = format!("rel({});<<;out meta;", area_id - 3_600_000_000);
         let readable = self.run_query(&query, false)?;
         self.cache_objects_from(readable, true)
     }

@@ -1,8 +1,10 @@
 #![allow(clippy::too_many_arguments)]
-use crate::Error;
+use crate::{Error, Result};
+use crate::raw_object::{OSMObject as RawOSMObject, RelationMember, Tag};
 use hashbrown::HashMap;
 use serde::{Deserialize, Serialize};
 use smol_str::SmolStr;
+use std::convert::TryFrom;
 use std::iter;
 use std::str::FromStr;
 
@@ -19,7 +21,7 @@ pub enum OSMObjectType {
 impl FromStr for OSMObjectType {
     type Err = Error;
 
-    fn from_str(value: &str) -> Result<Self, Self::Err> {
+    fn from_str(value: &str) -> Result<Self> {
         match value {
             "node" => Ok(OSMObjectType::Node),
             "way" => Ok(OSMObjectType::Way),
@@ -49,28 +51,6 @@ impl OSMRelationMember {
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
-#[serde(tag = "type")]
-pub enum OSMObjectSpecificsFromNetwork {
-    #[serde(rename = "node")]
-    Node { lat: f64, lon: f64 },
-    #[serde(rename = "way")]
-    Way { nodes: Vec<u64> },
-    #[serde(rename = "relation")]
-    Relation { members: Vec<OSMRelationMember> },
-}
-
-impl OSMObjectSpecificsFromNetwork {
-    fn into_internal(self) -> OSMObjectSpecifics {
-        use OSMObjectSpecificsFromNetwork::*;
-        match self {
-            Node { lat, lon } => OSMObjectSpecifics::Node { lat, lon },
-            Way { nodes } => OSMObjectSpecifics::Way { nodes },
-            Relation { members } => OSMObjectSpecifics::Relation { members },
-        }
-    }
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum OSMObjectSpecifics {
     #[serde(rename = "node")]
     Node { lat: f64, lon: f64 },
@@ -78,20 +58,6 @@ pub enum OSMObjectSpecifics {
     Way { nodes: Vec<u64> },
     #[serde(rename = "relation")]
     Relation { members: Vec<OSMRelationMember> },
-}
-
-#[derive(Deserialize, Serialize, Clone, Debug)]
-pub struct OSMObjectFromNetwork {
-    pub id: u64,
-    pub timestamp: String,
-    pub version: u32,
-    pub changeset: u64,
-    pub user: String,
-    pub uid: u32,
-    #[serde(default)]
-    pub tags: HashMap<String, String>,
-    #[serde(flatten)]
-    pub specifics: OSMObjectSpecificsFromNetwork,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug)]
@@ -105,21 +71,6 @@ pub struct OSMObject {
     #[serde(default)]
     pub tags: HashMap<String, String>,
     pub specifics: OSMObjectSpecifics,
-}
-
-impl OSMObjectFromNetwork {
-    pub fn into_osm_object(self) -> OSMObject {
-        OSMObject {
-            id: self.id,
-            timestamp: self.timestamp,
-            version: self.version,
-            changeset: self.changeset,
-            uid: self.uid,
-            user: self.user,
-            tags: self.tags,
-            specifics: self.specifics.into_internal(),
-        }
-    }
 }
 
 impl OSMObject {
@@ -247,4 +198,38 @@ impl AsRef<OSMObject> for OSMObject {
     fn as_ref(&self) -> &OSMObject {
         self
     }
+}
+
+impl TryFrom<RawOSMObject> for OSMObject {
+    type Error = Error;
+
+    fn try_from(raw_object: RawOSMObject) -> Result<Self> {
+        match raw_object {
+            RawOSMObject::Node(n) => {
+                Ok(OSMObject::new_node(n.id, n.timestamp.into(), n.version, n.changeset, n.user.into(), n.uid, to_tags_hashmap(n.tags), n.lat, n.lon))
+            },
+            RawOSMObject::Way(w) => {
+                Ok(OSMObject::new_way(w.id, w.timestamp.into(), w.version, w.changeset, w.user.into(), w.uid, to_tags_hashmap(w.tags), w.nodes.iter().map(|n| n.reference).collect()))
+            },
+            RawOSMObject::Relation(r) => {
+                Ok(OSMObject::new_rel(r.id, r.timestamp.into(), r.version, r.changeset, r.user.into(), r.uid, to_tags_hashmap(r.tags), to_typed_members(r.members)?))
+            }
+        }
+    }
+}
+
+fn to_tags_hashmap(tags: Vec<Tag>) -> HashMap<String, String> {
+    let mut ret = HashMap::with_capacity(tags.len());
+    for tag in tags {
+        ret.insert(tag.k.into(), tag.v.into());
+    }
+    ret
+}
+
+fn to_typed_members(members: Vec<RelationMember>) -> Result<Vec<OSMRelationMember>> {
+    let mut ret = Vec::with_capacity(members.len());
+    for member in members {
+        ret.push(OSMRelationMember::new(member.reference, OSMObjectType::from_str(member.referenced_type.as_str())?, member.role.into()));
+    }
+    Ok(ret)
 }
