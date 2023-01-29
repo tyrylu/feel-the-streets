@@ -2,7 +2,7 @@
 name = "osm_db_py"
 version = "0.1.0"
 authors = ["Lukáš Tyrychtr <lukastyrychtr@gmail.com>"]
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 osm_db = {"path" = "../osm_db"}

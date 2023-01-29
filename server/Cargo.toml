@@ -2,7 +2,7 @@
 name = "server"
 version = "0.1.0"
 authors = ["Lukáš Tyrychtr <lukastyrychtr@gmail.com>"]
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 log = "0.4.17"
