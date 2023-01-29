@@ -27,12 +27,12 @@ fn main() {
             change
                 .new
                 .as_ref()
-                .unwrap_or_else(|| panic!("No old or new for change {:?}", change))
+                .unwrap_or_else(|| panic!("No old or new for change {change:?}"))
         });
         let geom = manager
             .get_geometry_as_wkb(obj)
             .expect("Could not get geom")
-            .unwrap_or_else(|| panic!("Geometry for {:?} was none.", obj));
+            .unwrap_or_else(|| panic!("Geometry for {obj:?} was none."));
         println!("{:?}, geom len: {}", change, geom.len());
     },
     OSMObjectChangeEvent::Remark(remark) => {

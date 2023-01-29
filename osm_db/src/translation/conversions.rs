@@ -35,7 +35,7 @@ pub fn convert_field_value(
             if let Some(enum_spec) = Enum::with_name(value_type) {
                 convert_value_of_enum(raw_value, &enum_spec, record)
             } else {
-                panic!("Failed to handle type specifier {}.", value_type)
+                panic!("Failed to handle type specifier {value_type}.")
             }
         }
     }

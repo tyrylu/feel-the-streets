@@ -142,7 +142,7 @@ impl<T: Read> OSMObjectChangeIterator<T> {
                         _ => panic!("Unexpected end of element {:?}.", tag.local_name()),
                     }
                 }
-                event => panic!("Unexpected event during xml parsing: {:?}.", event),
+                event => panic!("Unexpected event during xml parsing: {event:?}."),
             }
         }
     }
@@ -214,7 +214,7 @@ impl<T: Read> OSMObjectChangeIterator<T> {
                 self.finished = true;
                 return Err(Error::from(e));
             }
-            event => panic!("Unexpected event during parsing: {:?}", event),
+            event => panic!("Unexpected event during parsing: {event:?}"),
         }
         Ok(())
     }

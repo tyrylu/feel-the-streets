@@ -179,7 +179,7 @@ impl OSMObjectManager {
                 'w' => 2024,
                 'r' => 560,
                 val => {
-                    panic!("Unsupported object type {}.", val);
+                    panic!("Unsupported object type {val}.");
                 }
             }
         }
