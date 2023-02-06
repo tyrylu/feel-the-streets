@@ -11,7 +11,7 @@ osm_api = {path="../osm_api"}
 osm_db = {path="../osm_db"}
 redis_api = {path = "../redis_api"}
 server={path="../server"}
-anyhow = "1.0.68"
+anyhow = "1.0.69"
 dotenvy = "0.15.6"
 diesel = { version = "2.0.3", features = ["sqlite", "chrono"] }
 url = "2.3.1"
