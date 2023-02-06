@@ -19,7 +19,7 @@ bincode = "1.3.3"
 hashbrown = { version = "0.13.2", features = ["serde"] }
 wkb = "0.7.1"
 geo-types = "0.7.8"
-smol_str = { version = "0.1.23", features = ["serde"] }
+smol_str = { version = "0.1.24", features = ["serde"] }
 zstd_util = "0.1.3"
 crossbeam-channel = "0.5.6"
 sled = "0.34.7"
