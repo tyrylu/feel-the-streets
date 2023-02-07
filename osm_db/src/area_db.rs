@@ -20,6 +20,15 @@ const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (id, discriminato
 const INSERT_ENTITY_RELATIONSHIP_SQL: &str =
     "INSERT INTO entity_relationships (parent_id, child_id, kind) VALUES (?, ?, ?) ON CONFLICT DO NOTHING";
 
+    fn get_single_entity_sql(geometry_as_wkb: bool) -> &'static str {
+        if !geometry_as_wkb {
+            "select id, discriminator, geometry, data, effective_width from entities where id = ?"
+        }
+        else {
+            "select id, discriminator, AsBinary(geometry) as geometry, data, effective_width from entities where id = ?"
+        }
+    }
+
 #[derive(PartialEq)]
 enum ForeignKeyViolationClassification {
     Fatal,
@@ -179,8 +188,8 @@ impl AreaDatabase {
         stmt.exists([&osm_id]).map_err(Error::from)
     }
 
-    pub fn get_entity(&self, osm_id: &str) -> Result<Option<Entity>> {
-        let mut stmt = self.conn.prepare_cached("select id, discriminator, AsBinary(geometry) as geometry, data, effective_width from entities where id = ?")?;
+    fn get_single_entity(&self, osm_id: &str, geometry_as_wkb: bool) -> Result<Option<Entity>> {
+        let mut stmt = self.conn.prepare_cached(get_single_entity_sql(geometry_as_wkb))?;
         match stmt.query_row([&osm_id], row_to_entity) {
             Ok(e) => Ok(Some(e)),
             Err(e) => match e {
@@ -189,6 +198,15 @@ impl AreaDatabase {
             },
         }
     }
+    
+        pub fn get_entity(&self, osm_id: &str) -> Result<Option<Entity>> {
+            self.get_single_entity(osm_id, true)
+        }
+
+        pub fn get_entity_raw(&self, osm_id: &str) -> Result<Option<Entity>> {
+            self.get_single_entity(osm_id, false)
+        }
+
     pub fn get_entities(&self, query: &EntitiesQuery) -> Result<Vec<Entity>> {
         let mut executor = EntitiesQueryExecutor::new(query);
         let rows = executor.prepare_execute(self)?;

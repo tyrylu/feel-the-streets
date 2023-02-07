@@ -18,6 +18,8 @@ pub enum Error {
     OsmDbError(#[from] osm_db::Error),
     #[error("Osm API error: {0}")]
     OsmApiError(#[from] osm_api::Error),
+    #[error("OSM replication API error: {0}")]
+    OSMReplicationApiError(#[from] osm_api::replication::Error),
     #[error("Datetime parssing error: {0}")]
     DateTimeParseError(#[from] chrono::format::ParseError),
     #[error("Environment variable error: {0}")]

@@ -1,11 +1,10 @@
 use crate::schema::areas;
 use crate::Result;
-use chrono::NaiveDateTime;
+use chrono::{Utc, NaiveDateTime};
 use diesel::dsl::now;
 use diesel::prelude::*;
 use diesel::SqliteConnection;
 use diesel_derive_enum::DbEnum;
-use log::debug;
 use osm_db::AreaDatabase;
 use serde::Serialize;
 use std::fs;
@@ -19,7 +18,7 @@ pub enum AreaState {
     Frozen,
 }
 
-#[derive(Serialize, Queryable, AsChangeset)]
+#[derive(Serialize, Queryable, Identifiable, AsChangeset)]
 pub struct Area {
     pub id: i32,
     pub osm_id: i64,
@@ -31,6 +30,7 @@ pub struct Area {
     pub db_size: i64,
     pub parent_osm_ids: Option<String>,
     pub last_update_remark: Option<String>,
+    pub geometry: Option<Vec<u8>>,
 }
 
 impl Area {
@@ -62,26 +62,16 @@ impl Area {
             .limit(1)
             .get_result(conn)
     }
+    
     pub fn all_updated(conn: &mut SqliteConnection) -> QueryResult<Vec<Area>> {
         areas::dsl::areas
             .filter(areas::state.eq(AreaState::Updated))
             .load(conn)
     }
-    pub fn save(&self, conn: &mut SqliteConnection) -> QueryResult<usize> {
-        let query = diesel::update(areas::table)
-            .filter(areas::id.eq(&self.id))
-            .set((
-                areas::state.eq(&self.state),
-                areas::updated_at.eq(now),
-                areas::newest_osm_object_timestamp.eq(&self.newest_osm_object_timestamp),
-                areas::db_size.eq(self.db_size),
-                areas::parent_osm_ids.eq(&self.parent_osm_ids),
-                areas::last_update_remark.eq(&self.last_update_remark),
-            ));
 
-        let query_debug = diesel::debug_query::<diesel::sqlite::Sqlite, _>(&query);
-        debug!("Executing query: {}", query_debug);
-        query.execute(conn)
+    pub fn save(&mut self, conn: &mut SqliteConnection) -> QueryResult<Area> {
+    self.updated_at = Utc::now().naive_local();
+        self.save_changes(conn)    
     }
 }
 

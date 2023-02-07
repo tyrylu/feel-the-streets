@@ -1,5 +1,5 @@
 table! {
-    use diesel::sql_types::{Integer, BigInt, Text, Timestamp, Nullable};
+    use diesel::sql_types::{Integer, BigInt, Binary, Text, Timestamp, Nullable};
     use crate::area::AreaStateMapping;
     areas (id) {
                 id -> Integer,
@@ -12,5 +12,6 @@ table! {
         db_size -> BigInt,
         parent_osm_ids -> Nullable<Text>,
         last_update_remark -> Nullable<Text>,
+        geometry -> Nullable<Binary>,
     }
 }

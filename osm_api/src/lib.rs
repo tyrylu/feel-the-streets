@@ -7,6 +7,7 @@ pub mod object;
 pub mod object_manager;
 pub mod overpass_api;
 mod raw_object;
+pub mod replication;
 mod utils;
 pub use error::Error;
 pub use smol_str::SmolStr;

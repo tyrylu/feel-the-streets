@@ -53,4 +53,6 @@ pub enum Command {
     },
     /// Regenerates the parent osm ids for all areas.
     RegenerateParentOSMIds,
+    /// Regenerates area geometries
+    RegenerateAreaGeometries,
 }
