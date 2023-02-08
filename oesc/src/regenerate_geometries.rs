@@ -6,8 +6,7 @@ use server::area::Area;
 const AREA_ID_OFFSET: i64 = 3_600_000_000;
 
 pub(crate) fn regenerate_area_geometries() -> Result<()> {
-    server::init_logging();
-    let mut conn = SqliteConnection::establish("server.db")?;
+        let mut conn = SqliteConnection::establish("server.db")?;
     for mut area in Area::all(&mut conn)? {
     let area_db = AreaDatabase::open_existing(area.osm_id, true)?;
     let rel_id = format!("r{}", area.osm_id - AREA_ID_OFFSET);
