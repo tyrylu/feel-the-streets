@@ -13,7 +13,7 @@ serde_yaml = "0.9.17"
 indexmap = { version = "1.9.2", features = ["serde-1"] }
 once_cell = "1.17.0"
 log = "0.4.17"
-uom = "0.33.0"
+uom = "0.34.0"
 rusqlite = { "version" = "~0.28", "features" = ["bundled-windows", "load_extension"] }
 thiserror = "1.0.38"
 hashbrown = { version = "0.13.2", features = ["serde"] }
