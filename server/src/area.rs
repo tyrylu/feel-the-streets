@@ -94,7 +94,7 @@ impl Area {
 
     pub fn save(&mut self, conn: &mut Connection) -> Result<()> {
     self.updated_at = Utc::now();
-        let mut stmt = conn.prepare_cached("UPDATE areas SET (osm_id = ?, state = ?, name = ?, created_at = ?, updated_at = ?, newest_osm_object_timestamp = ?, db_size = ?, parent_osm_ids = ?, last_update_remark = ?, geometry = ?) where id = ?")?;
+        let mut stmt = conn.prepare_cached("UPDATE areas SET osm_id = ?, state = ?, name = ?, created_at = ?, updated_at = ?, newest_osm_object_timestamp = ?, db_size = ?, parent_osm_ids = ?, last_update_remark = ?, geometry = ? WHERE id = ?")?;
         stmt.execute((&self.osm_id, &self.state, &self.name, self.created_at, self.updated_at, &self.newest_osm_object_timestamp, self.db_size, &self.parent_osm_ids, &self.last_update_remark, &self.geometry, self.id))?;
         Ok(())
     }
