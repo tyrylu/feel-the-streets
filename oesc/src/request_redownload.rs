@@ -1,11 +1,11 @@
 use anyhow::Result;
-use diesel::{Connection, SqliteConnection};
 use redis_api::ChangesStream;
+use server::db;
 use server::area::{Area, AreaState};
 
 pub fn request_redownload(all: bool, area: Option<i64>) -> Result<()> {
     let areas = if all {
-        let mut server_conn = SqliteConnection::establish("server.db")?;
+        let mut server_conn = db::connect_to_server_db()?;
         Area::all(&mut server_conn)?
             .iter()
             .filter(|a| a.state != AreaState::Frozen)

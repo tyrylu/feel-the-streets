@@ -1,9 +1,8 @@
 extern crate server;
-use diesel::{Connection, SqliteConnection};
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::overpass_api::Servers;
 use server::names_cache::OSMObjectNamesCache;
-use server::{area::Area, background_tasks::area_db_creation, Result};
+use server::{area::Area, background_tasks::area_db_creation, db, Result};
 use std::fs;
 use std::path::Path;
 use std::sync::{Arc, Mutex};
@@ -12,7 +11,7 @@ use std::sync::{Arc, Mutex};
 async fn main() -> Result<()> {
     let _dotenv_path = dotenvy::dotenv()?;
     server::init_logging();
-    let server_conn = Arc::new(Mutex::new(SqliteConnection::establish("server.db")?));
+    let server_conn = Arc::new(Mutex::new(db::connect_to_server_db()?));
     let servers = Arc::new(Servers::default());
     let cache = Arc::new(osm_api::object_manager::open_cache()?);
     let names_cache = Arc::new(Mutex::new(OSMObjectNamesCache::load()?));

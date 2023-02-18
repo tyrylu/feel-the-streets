@@ -1,12 +1,12 @@
 use anyhow::Result;
-use diesel::{Connection, SqliteConnection};
 use osm_api::object_manager::OSMObjectManager;
+use server::db;
 use server::area::Area;
 use server::background_tasks::area_db_creation;
 use server::names_cache::OSMObjectNamesCache;
 
 pub(crate) fn regenerate_parent_osm_ids() -> Result<()> {
-    let mut conn = SqliteConnection::establish("server.db")?;
+    let mut conn = db::connect_to_server_db()?;
     let manager = OSMObjectManager::new()?;
     let mut cache = OSMObjectNamesCache::load()?;
     for mut area in Area::all(&mut conn)? {

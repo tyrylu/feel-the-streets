@@ -1,8 +1,8 @@
 use axum::Router;
 use axum_extra::routing::SpaRouter;
-use diesel::{Connection, SqliteConnection};
 use server::api_routes;
 use server::ui_routes;
+use server::db;
 use server::{AppState, Result};
 use std::net::SocketAddr;
 use std::sync::{Arc, Mutex};
@@ -14,8 +14,7 @@ async fn main() -> Result<()> {
     let _dotenv_path = dotenvy::dotenv().expect("Failed to setup environment from env file");
     server::init_logging();
     let tera = Tera::new("templates/*")?;
-    let db_conn = Arc::new(Mutex::new(SqliteConnection::establish("server.db")?));
-    server::run_migrations(&mut db_conn.lock().unwrap())?;
+    let db_conn = Arc::new(Mutex::new(db::connect_to_server_db()?));
     let state = AppState {
         templates: tera,
         db_conn,

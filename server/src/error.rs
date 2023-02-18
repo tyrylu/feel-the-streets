@@ -8,12 +8,10 @@ use std::time::SystemTimeError;
 pub enum Error {
     #[error("I/O error: {0}")]
     IoError(#[from] std::io::Error),
-    #[error("Diesel error: {0}")]
-    DieselError(#[from] diesel::result::Error),
+    #[error("Rusqlite error: {0}")]
+    RusqliteError(#[from] rusqlite::Error),
     #[error("Json error: {0}")]
     JsonError(#[from] serde_json::Error),
-    #[error("Diesel connection error: {0}")]
-    DieselConnectionError(#[from] diesel::ConnectionError),
     #[error("Osm  database error: {0}")]
     OsmDbError(#[from] osm_db::Error),
     #[error("Osm API error: {0}")]

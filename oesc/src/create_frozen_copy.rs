@@ -1,6 +1,6 @@
 use anyhow::Result;
-use diesel::{Connection, SqliteConnection};
 use osm_db::AreaDatabase;
+use server::db;
 use server::area::{Area, AreaState};
 use std::convert::TryInto;
 use std::fs;
@@ -14,7 +14,7 @@ pub fn create_frozen_copy(area_id: i64, new_name: String) -> Result<()> {
     println!("Copying the area database...");
     fs::copy(orig_path, &new_path)?;
     println!("Copied, creating the database record...");
-    let mut db_conn = SqliteConnection::establish("server.db")?;
+    let mut db_conn = db::connect_to_server_db()?;
     let mut new_area = Area::create(frozen_id, &new_name, &mut db_conn)?;
     new_area.state = AreaState::Frozen;
     new_area.db_size = fs::metadata(new_path)?.len().try_into().unwrap();

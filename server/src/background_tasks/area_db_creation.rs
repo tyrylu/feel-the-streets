@@ -1,7 +1,6 @@
-use crate::area;
+use crate::{area, db::{self, Connection}};
 use crate::names_cache::OSMObjectNamesCache;
 use crate::Result;
-use diesel::{Connection, SqliteConnection};
 use doitlater::typetag;
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::SmolStr;
@@ -13,7 +12,7 @@ use std::sync::{Arc, Mutex};
 
 pub fn create_area_database(area: i64) -> Result<()> {
     let manager = OSMObjectManager::new()?;
-    let area_db_conn = Arc::new(Mutex::new(SqliteConnection::establish("server.db")?));
+    let area_db_conn = Arc::new(Mutex::new(db::connect_to_server_db()?));
     let cache = Arc::new(Mutex::new(OSMObjectNamesCache::load()?));
     create_area_database_worker(area, manager, area_db_conn, cache.clone())?;
     cache.lock().unwrap().save()?;
@@ -23,7 +22,7 @@ pub fn create_area_database(area: i64) -> Result<()> {
 pub fn create_area_database_worker(
     area: i64,
     manager: OSMObjectManager,
-    area_db_conn: Arc<Mutex<SqliteConnection>>,
+    area_db_conn: Arc<Mutex<Connection>>,
     cache: Arc<Mutex<OSMObjectNamesCache>>,
 ) -> Result<()> {
     info!("Starting to create area with id {}.", area);

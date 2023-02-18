@@ -1,9 +1,9 @@
 use crate::area::{Area, AreaState};
+use crate::db::{self, Connection};
 use crate::diff_utils;
 use crate::diff_utils::ListChange;
 use crate::Result;
 use chrono::{DateTime, Utc};
-use diesel::{Connection, SqliteConnection};
 use doitlater::typetag;
 use osm_api::change::{OSMObjectChangeType, OSMObjectChangeEvent};
 use osm_api::object_manager::OSMObjectManager;
@@ -41,7 +41,7 @@ fn find_or_create_suitable_change<'a>(
 }
 pub fn update_area(
     mut area: Area,
-    conn: Arc<Mutex<SqliteConnection>>,
+    conn: Arc<Mutex<Connection>>,
     manager: OSMObjectManager,
 ) -> Result<TranslationRecord> {
     info!("Updating area {} (id {}).", area.name, area.osm_id);
@@ -60,7 +60,7 @@ pub fn update_area(
             "Looking differences after the area update time of {} for area {}",
             area.updated_at, area.osm_id
         );
-        DateTime::from_utc(area.updated_at, Utc)
+        area.updated_at
     };
     let mut area_db = AreaDatabase::open_existing(area.osm_id, true)?;
     let mut first = true;
@@ -323,7 +323,7 @@ fn infer_additional_relationships(
 
 async fn update_area_databases_async() -> Result<()> {
     info!("Going to perform the area database update for all up-to date areas.");
-    let area_db_conn = Arc::new(Mutex::new(SqliteConnection::establish("server.db")?));
+    let area_db_conn = Arc::new(Mutex::new(db::connect_to_server_db()?));
     let servers = Arc::new(Servers::default());
     let cache = Arc::new(osm_api::object_manager::open_cache()?);
     let areas = Area::all_updated(&mut area_db_conn.lock().unwrap())?;

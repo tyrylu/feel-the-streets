@@ -1,11 +1,11 @@
 use anyhow::Result;
-use diesel::{Connection, SqliteConnection};
 use osm_db::area_db::AreaDatabase;
 use osm_db::entities_query::EntitiesQuery;
 use osm_db::entities_query_condition::{Condition, FieldCondition};
 use osm_db::semantic_change::{EntryChange, SemanticChange};
 use osm_db::translation::{conversions, record::TranslationRecord};
 use redis_api::ChangesStream;
+use server::db;
 use server::area::Area;
 use std::process;
 
@@ -15,7 +15,7 @@ pub fn change_field_type(
     new_type: String,
     force: bool,
 ) -> Result<()> {
-    let mut server_conn = SqliteConnection::establish("server.db")?;
+    let mut server_conn = db::connect_to_server_db()?;
     for area in Area::all_updated(&mut server_conn)? {
         println!("Processing area {} (id {})...", area.name, area.osm_id);
         let mut area_db = AreaDatabase::open_existing(area.osm_id, true)?;
