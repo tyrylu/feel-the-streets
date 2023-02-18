@@ -7,7 +7,7 @@ use serde::Serialize;
 use std::fs;
 
 const ALL_AREA_COLUMNS: &str = "id, osm_id, name, state, created_at, updated_at, newest_osm_object_timestamp, db_size, parent_osm_ids, last_update_remark, geometry";
-const SELECT_SOME_AREAS: &str = "SELECT id, osm_id, name, state, created_at, updated_at, newest_osm_object_timestamp, db_size, parent_osm_ids, last_update_remark, geometry";
+const SELECT_SOME_AREAS: &str = "SELECT id, osm_id, name, state, created_at, updated_at, newest_osm_object_timestamp, db_size, parent_osm_ids, last_update_remark, geometry FROM areas";
 
 fn row_to_area(row: &'_ Row<'_>) -> rusqlite::Result<Area> {
 Ok(Area { id: row.get_unwrap(0), osm_id: row.get_unwrap(1), name: row.get_unwrap(2), state: row.get_unwrap(3), created_at: row.get_unwrap(4), updated_at: row.get_unwrap(5), newest_osm_object_timestamp: row.get_unwrap(6), db_size: row.get_unwrap(7)
