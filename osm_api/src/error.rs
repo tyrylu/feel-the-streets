@@ -24,6 +24,8 @@ pub enum Error {
     ReplicationError(#[from] crate::replication::Error),
     #[error("The retry limit was exceeded")]
     RetryLimitExceeded,
+    #[error("The passed object was not an OSM way")]
+    NotAWay,
 }
 
 impl From<ureq::Error> for Error {

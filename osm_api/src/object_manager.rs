@@ -1,15 +1,15 @@
 use crate::change::OSMObjectChangeEvent;
 use crate::change_iterator::OSMObjectChangeIterator;
-use crate::object::{OSMObject, OSMObjectSpecifics, OSMObjectType};
+use crate::object::{OSMObject, OSMObjectSpecifics};
 use crate::raw_object::OSMObject as RawOSMObject;
 use crate::overpass_api::Servers;
 use crate::utils;
 use crate::{Error, Result};
 use chrono::{DateTime, Utc};
-use geo_types::{Geometry, LineString, Point, Polygon};
+use geo_types::{Geometry, GeometryCollection, LineString, Point, Polygon};
 use hashbrown::HashMap;
 use itertools::Itertools;
-use log::{debug, error, info, warn};
+use log::{debug, error, info, warn, trace};
 use once_cell::sync::Lazy;
 use quick_xml::de::Deserializer;
 use serde::Deserialize;
@@ -278,7 +278,10 @@ impl OSMObjectManager {
         use self::OSMObjectSpecifics::{Node, Way};
         let node_count = match &way.specifics {
             Way { nodes } => nodes.len(),
-            _ => unreachable!(),
+            _ => {
+                warn!("Requested to get a coord sequence for {}.", way.unique_id());
+                return Err(Error::NotAWay);
+            },
         };
         let mut coords = Vec::with_capacity(node_count);
         for obj in self.related_objects_of(way)? {
@@ -301,7 +304,7 @@ impl OSMObjectManager {
         }
     }
 
-    fn get_geometry_of(&self, object: &OSMObject) -> Result<Option<Geometry<f64>>> {
+    pub fn get_geometry_of(&self, object: &OSMObject) -> Result<Option<Geometry<f64>>> {
         let exists = self
             .geometries_cache
             .borrow()
@@ -310,6 +313,7 @@ impl OSMObjectManager {
             Ok(self.geometries_cache.borrow()[&object.unique_id()].clone())
         } else {
             let res = self.get_geometry_of_uncached(object)?;
+            trace!("Object {} has geometry {:?}", object.unique_id(), res);
             self.geometries_cache
                 .borrow_mut()
                 .insert(object.unique_id(), res.clone());
@@ -320,7 +324,7 @@ impl OSMObjectManager {
     fn get_geometry_of_uncached(&self, object: &OSMObject) -> Result<Option<Geometry<f64>>> {
         use self::OSMObjectSpecifics::*;
         match object.specifics {
-            Node { lon, lat } => Ok(Some(Geometry::Point(Point::new(lon, lat)))),
+            Node { lon, lat } => Ok(Some(Point::new(lon, lat).into())),
             Way { .. } => {
                 let coords = self.get_way_coords(object)?;
                 if coords.0.len() <= 1 {
@@ -328,131 +332,122 @@ impl OSMObjectManager {
                     return Ok(None);
                 }
                 if utils::object_should_have_closed_geometry(object) && coords.0.len() > 2 {
-                    Ok(Some(Geometry::Polygon(Polygon::new(coords, vec![]))))
+                    Ok(Some(Polygon::new(coords, vec![]).into()))
                 } else {
-                    Ok(Some(Geometry::LineString(coords)))
+                    Ok(Some(coords.into()))
                 }
             }
             Relation { .. } => {
-                let geom_type = object.tags.get("type").map(|t| t.as_str()).unwrap_or("");
-                if geom_type == "multipolygon" {
-                    let first_related = self.related_objects_of(object)?.next().unwrap();
-                    let multi = match first_related
-                        .tags
-                        .get("role")
-                        .map(|r| r.as_str())
-                        .unwrap_or("")
-                    {
-                        "inner" | "outer" => {
-                            self.construct_multipolygon_from_complex_polygons(object)?
+                let should_be_multipolygon = object.tags.get("type").map(|t| t.as_str()).unwrap_or("") == "multipolygon";
+                let mut inners = vec![];
+                let mut outers = vec![];
+                let mut others = vec![];
+                for related in self.related_objects_of(object)? {
+                    let role = related.tags.get("role").map(|r| r.as_str()).unwrap_or("");
+                    match role {
+                        "inner" => inners.push(related),
+                        "outer" => outers.push(related),
+                        _ => others.push(related)
+                    }
+                }
+                let mut multipolygon = None;
+                if should_be_multipolygon {
+                    if (!outers.is_empty() || !inners.is_empty()) && !others.is_empty() {
+                        warn!("Could not create multipolygon from object {}, it has {} inner ring(s), {} outer ring(s) and {} other part(s).", object.unique_id(), inners.len(), outers.len(), others.len());
+                    }
+                    else if outers.is_empty() {
+                        // Likely a multipolygon from a list of outer ring specifications without an explicit role.
+                        multipolygon = self.construct_multipolygon_from_parts(object.unique_id(), inners.as_slice(), others.as_slice())?;
+                    }
+                    else {
+                        multipolygon = self.construct_multipolygon_from_parts(object.unique_id(), inners.as_slice(), outers.as_slice())?;
+                    }
+                    }
+                    if multipolygon.is_some() {
+                        Ok(multipolygon)
+                    }
+                    else if !outers.is_empty() && !should_be_multipolygon {
+                        // Try to create a multipolygon from whatewer we have roles for and add it to the rest, if there's any rest.
+                        match self.construct_multipolygon_from_parts(object.unique_id(), inners.as_slice(), outers.as_slice())? {
+                            Some(poly) if others.is_empty() => {
+                                Ok(Some(poly.into()))
+                            },
+                            Some(poly) => {
+                                let mut coll = GeometryCollection::default();
+                                coll.0.push(poly);
+                                for o in others {
+                                    coll.0.push(self.get_geometry_of(&o)?.unwrap());
+                                }
+                                Ok(Some(Geometry::GeometryCollection(coll)))
+                            },
+                            None => self.create_geometry_collection(object)
                         }
-                        _ => self.construct_multipolygon_from_polygons(object)?,
-                    };
-                    if let Some(geom) = multi {
-                        Ok(Some(geom))
-                    } else {
+                    }
+                    else {
                         self.create_geometry_collection(object)
                     }
-                } else {
-                    self.create_geometry_collection(object)
-                }
-            }
+        }
         }
     }
 
     fn create_geometry_collection(&self, object: &OSMObject) -> Result<Option<Geometry<f64>>> {
-        Ok(Some(Geometry::GeometryCollection(
+        let mut coll = GeometryCollection::new_from(
             self.related_objects_of(object)?
                 .map(|o| self.get_geometry_of(&o))
                 .filter_map(|g| g.ok())
                 .flatten()
                 .collect(),
-        )))
-    }
-
-    fn construct_multipolygon_from_polygons(
-        &self,
-        object: &OSMObject,
-    ) -> Result<Option<Geometry<f64>>> {
-        let mut parts = vec![];
-        for related in self.related_objects_of(object)? {
-            let rel_geom = self.get_geometry_of(&related)?.unwrap();
-            if let Geometry::Polygon(poly) = rel_geom {
-                parts.push(poly);
-            } else {
-                warn!(
-                    "Multipolygon promise broken for object with id {}",
-                    related.unique_id()
-                );
-                return Ok(None);
-            }
+        );
+        if coll.len() == 1 {
+            Ok(Some(coll.0.pop().unwrap().into()))
         }
-        Ok(Some(Geometry::MultiPolygon(parts.into())))
+        else {
+            Ok(Some(Geometry::GeometryCollection(coll)))
+        }
     }
 
-    fn construct_multipolygon_from_complex_polygons(
+    fn construct_multipolygon_from_parts(
         &self,
-        object: &OSMObject,
+        object_id: SmolStr,
+        inner_objects: &[OSMObject], outer_objects: &[OSMObject],
     ) -> Result<Option<Geometry<f64>>> {
         let mut inners = vec![];
         let mut outers = vec![];
-        for related in self.related_objects_of(object)? {
-            if !related.tags.contains_key("role") {
-                warn!(
-                    "Missing role specifier for object {} as part of geometry of object {}",
-                    related.unique_id(),
-                    object.unique_id()
-                );
-                return Ok(None);
-            }
-            if !(related.object_type() == OSMObjectType::Way) {
-                warn!(
-                    "Creation of a point sequence for object {} not supported/impossible.",
-                    related.unique_id()
-                );
-                return Ok(None);
-            }
-            let points = self.get_way_coords(&related)?;
-            match related.tags["role"].as_ref() {
-                "inner" => inners.push(points),
-                "outer" => outers.push(points),
-                _ => {
-                    warn!(
-                        "Unknown multipolygon part role {} as part of the geometry for object {}.",
-                        related.tags["role"],
-                        object.unique_id()
-                    );
-                    return Ok(None);
-                }
-            }
+        for i in inner_objects {
+            inners.push(self.get_way_coords(i)?);
         }
-        utils::connect_polygon_segments(&mut inners);
+        for o in outer_objects {
+            outers.push(self.get_way_coords(o)?);
+        }
+                utils::connect_polygon_segments(&mut inners);
         utils::connect_polygon_segments(&mut outers);
         if outers.len() != 1 && !inners.is_empty() {
-            warn!("multiple outer ring(s) and some inner ring(s), geometry for object {} is ambiguous.", object.unique_id());
+            warn!("multiple outer ring(s) and some inner ring(s), geometry for object {object_id} is ambiguous.");
             return Ok(None);
         }
         let mut polys = Vec::with_capacity(cmp::max(inners.len(), outers.len()));
-        // Because i could not manage to convince the loop that references are enough, the check must be done there
-        let inners_is_empty = inners.is_empty();
-        for inner in &inners {
-            if inner.0.len() < 4 {
-                warn!("One of the inner polygons for object {} did not have enough points, falling back to a geometry collection.", object.unique_id());
-                return Ok(None);
-            }
-            polys.push(Polygon::new(outers[0].clone(), inners.clone()))
-        }
-        if inners_is_empty {
+        if inners.is_empty() {
+            // A possible multipolygon given a list of outer rings.
             for outer in outers {
-                if outer.0.len() < 4 {
-                    warn!("One of the outer rings of object {} did not have enough points, falling back to a geometry collection.", object.unique_id());
+                if outer.0.len() < 3 {
+                    warn!("One of the outer rings of object {object_id} did not have enough points, falling back to a geometry collection.");
                     return Ok(None);
                 }
                 polys.push(Polygon::new(outer, vec![]));
             }
         }
+        else {
+            // A single polygon given an outer ring and list of inner hole rings.
+            for inner in &inners {
+                if inner.0.len() < 3 {
+                    warn!("One of the inner polygons for object {object_id} did not have enough points, falling back to a geometry collection.");
+                    return Ok(None);
+                }
+                            }
+                            polys.push(Polygon::new(outers[0].clone(), inners.clone()))
+        }
         if polys.len() == 1 {
-            Ok(Some(Geometry::Polygon(polys[0].clone())))
+            Ok(Some(polys[0].clone().into()))
         } else {
             Ok(Some(Geometry::MultiPolygon(polys.into())))
         }

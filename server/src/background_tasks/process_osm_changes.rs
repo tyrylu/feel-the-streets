@@ -32,6 +32,6 @@ fn process_osm_changes(initial_sn: u32) -> Result<()> {
 
 fn process_osm_change(sn: u32, r_client: &ReplicationApiClient) -> Result<()> {
     debug!("Processing OSM change {sn}.");
-    let change = r_client.get_change(SequenceNumber::from_u32(sn)?)?;
+    let _change = r_client.get_change(SequenceNumber::from_u32(sn)?)?;
     Ok(())
 }
