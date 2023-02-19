@@ -430,8 +430,9 @@ impl OSMObjectManager {
         let mut polys = Vec::with_capacity(cmp::max(inners.len(), outers.len()));
         if inners.is_empty() {
             // A possible multipolygon given a list of outer rings.
+            // The number of needed points, e. g. 4 or more, is because the polygon closing logic closes the polygon, which adds a point, so we need at-least 3 original ones.
             for outer in outers {
-                if outer.0.len() < 3 {
+                if outer.0.len() < 4 {
                     warn!("One of the outer rings of object {object_id} did not have enough points, falling back to a geometry collection.");
                     return Ok(None);
                 }
@@ -440,8 +441,9 @@ impl OSMObjectManager {
         }
         else {
             // A single polygon given an outer ring and list of inner hole rings.
+            // The magic number of points has the same reason as above.
             for inner in &inners {
-                if inner.0.len() < 3 {
+                if inner.0.len() < 4 {
                     warn!("One of the inner polygons for object {object_id} did not have enough points, falling back to a geometry collection.");
                     return Ok(None);
                 }
