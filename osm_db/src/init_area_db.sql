@@ -1,4 +1,4 @@
-SELECT InitSpatialMetadata(1);
+SELECT InitSpatialMetadata(1, 'WGS84');
 CREATE TABLE entities (
 	id VARCHAR(16) PRIMARY KEY,
 	discriminator VARCHAR(64) NOT NULL,
