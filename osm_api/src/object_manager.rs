@@ -160,6 +160,8 @@ impl OSMObjectManager {
         let query = format_query(900, 1073741824, &format_data_retrieval(area));
         let readable = self.run_query(&query, false)?;
         self.cache_objects_from(readable, false)?;
+        // Ensure that we have the object for the area as well, it sometimes might not be returned by the previous query.
+        self.lookup_objects(&mut [crate::area_id_to_osm_id(area)])?;
         Ok(())
     }
 

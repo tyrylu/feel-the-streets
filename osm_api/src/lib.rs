@@ -11,3 +11,7 @@ pub mod replication;
 mod utils;
 pub use error::Error;
 pub use smol_str::SmolStr;
+
+pub fn area_id_to_osm_id(area_id: i64) -> String {
+    format!("r{}", area_id - 3_600_000_000)
+}
