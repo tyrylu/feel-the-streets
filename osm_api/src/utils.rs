@@ -1,5 +1,5 @@
 use crate::object::OSMObject;
-use geo_types::LineString;
+use geo_types::{Coord, LineString};
 use once_cell::sync::Lazy;
 use std::collections::HashMap;
 
@@ -31,54 +31,58 @@ pub fn object_should_have_closed_geometry(object: &OSMObject) -> bool {
     false
 }
 
-pub fn ensure_closed(coords: &mut LineString<f64>) {
-    if coords.0.first().unwrap() != coords.0.last().unwrap() {
-        let new_last = *coords.0.first().unwrap();
-        coords.0.push(new_last);
+fn coord_to_key(coord: Coord<f64>) -> ([u8; 8], [u8; 8]) {
+    (coord.x.to_le_bytes(), coord.y.to_le_bytes())
+}
+
+fn merge_to_from_end(merge_to: &mut LineString<f64>, mut merge_from: LineString<f64>) {
+    let last_coord_idx = merge_from.0.len() - 1;
+    if merge_from[last_coord_idx] == merge_to[0] {
+        // We have the merge_to coords, and then the merge_from ones, except for the last one.
+        merge_to.0.splice(0..0, merge_from.0[0..last_coord_idx].iter().copied());
+    }
+    else {
+        // We have the coords in merge_to, and then the ones from merge_from, except the last one, but reversed, because we need to preserve the line.
+        merge_from.0.reverse();
+        merge_to.0.extend_from_slice(&merge_from.0[1..]);
     }
 }
 
-fn find_connectable_segments(
-    segments: &[LineString<f64>],
-) -> (Option<&LineString<f64>>, Option<&LineString<f64>>) {
-    if segments.len() == 1 {
-        return (None, None);
+fn merge_to_from_start(merge_to: &mut LineString<f64>, merge_from: LineString<f64>) {
+        if merge_from[0] == merge_to[0] {
+        // We have the reversed merge_to coords, and then the ones from merge_from, except for the first.
+        merge_to.0.reverse();
     }
-    let mut starts = HashMap::new();
-    let mut ends = HashMap::new();
-    for segment in segments {
-        starts.insert((segment.0[0].x.to_bits(), segment[0].y.to_bits()), segment);
-        ends.insert(
-            (
-                segment.0[segment.0.len() - 1].x.to_bits(),
-                segment.0[segment.0.len() - 1].y.to_bits(),
-            ),
-            segment,
-        );
+    // Now, we definitely have the coordinate match as the last coord of merge_to and first coord of merge_from, so both cases are now the same.
+    merge_to.0.extend_from_slice(&merge_from.0[1..]);
     }
-    for end in ends.keys() {
-        if starts.contains_key(end) {
-            return (Some(ends[end]), Some(starts[end]));
-        }
-    }
-    (None, None)
-}
 
 pub fn connect_polygon_segments(segments: &mut Vec<LineString<f64>>) {
-    loop {
-        let cloned_segments = segments.clone();
-        let (mut first, second) = find_connectable_segments(&cloned_segments);
-        if first.is_none() {
-            break;
+    let mut did_connect_segments = true;
+    while did_connect_segments {
+        did_connect_segments = false;
+        let mut end_points = HashMap::new();
+        let mut current_segment_idx = 0;
+        while current_segment_idx < segments.len() {
+            let current_segment = &mut segments[current_segment_idx];
+            if let Some(previous_segment_idx) = end_points.get(&coord_to_key(current_segment[0])) {
+                let removed_segment = segments.swap_remove(current_segment_idx);
+                merge_to_from_start(&mut segments[*previous_segment_idx], removed_segment);
+                did_connect_segments = true;
+            }
+            else if let Some(previous_segment_idx) = end_points.get(&coord_to_key(current_segment[current_segment.0.len() - 1])) {
+                                let removed_segment = segments.swap_remove(current_segment_idx);
+                                merge_to_from_end(&mut segments[*previous_segment_idx], removed_segment);
+                did_connect_segments = true;
+            }
+            else {
+                end_points.insert(coord_to_key(current_segment[0]), current_segment_idx);
+                end_points.insert(coord_to_key(current_segment[current_segment.0.len() - 1]), current_segment_idx);
+                current_segment_idx += 1;
+            }
         }
-        let second_unwrapped = second.unwrap();
-        let mut first_unwrapped = first.as_mut().unwrap().clone();
-        segments.retain(|s| s != second_unwrapped);
-        first_unwrapped
-            .0
-            .extend_from_slice(&second_unwrapped.0[1..]);
     }
     for segment in segments.iter_mut() {
-        ensure_closed(segment);
+        segment.close();
     }
 }
