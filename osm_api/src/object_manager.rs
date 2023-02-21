@@ -1,6 +1,6 @@
 use crate::change::OSMObjectChangeEvent;
 use crate::change_iterator::OSMObjectChangeIterator;
-use crate::object::{OSMObject, OSMObjectSpecifics};
+use crate::object::{OSMObject, OSMObjectSpecifics, OSMObjectType};
 use crate::raw_object::OSMObject as RawOSMObject;
 use crate::overpass_api::Servers;
 use crate::utils;
@@ -347,11 +347,13 @@ impl OSMObjectManager {
                 for related in self.related_objects_of(object)? {
                     let role = related.tags.get("role").map(|r| r.as_str()).unwrap_or("");
                     match role {
-                        "inner" => inners.push(related),
-                        "outer" => outers.push(related),
+                        "inner" => self.extend_list_of_polygon_parts(&mut inners, related)?,
+                        "outer" => self.extend_list_of_polygon_parts(&mut outers, related)?,
                         _ => others.push(related)
                     }
                 }
+                inners.dedup();
+                outers.dedup();
                 let mut multipolygon = None;
                 if should_be_multipolygon {
                     if (!outers.is_empty() || !inners.is_empty()) && !others.is_empty() {
@@ -372,7 +374,7 @@ impl OSMObjectManager {
                         // Try to create a multipolygon from whatewer we have roles for and add it to the rest, if there's any rest.
                         match self.construct_multipolygon_from_parts(object.unique_id(), inners.as_slice(), outers.as_slice())? {
                             Some(poly) if others.is_empty() => {
-                                Ok(Some(poly.into()))
+                                Ok(Some(poly))
                             },
                             Some(poly) => {
                                 let mut coll = GeometryCollection::default();
@@ -392,6 +394,15 @@ impl OSMObjectManager {
         }
     }
 
+    fn extend_list_of_polygon_parts(&self, parts: &mut Vec<OSMObject>, new_object: OSMObject) -> Result<()> {
+        match new_object.object_type() {
+            OSMObjectType::Node => {warn!("A node {} can not be a direct part of a polygon defining relationship.", new_object.unique_id());},
+            OSMObjectType::Way => {parts.push(new_object);},
+            OSMObjectType::Relation => {parts.extend(self.related_objects_of(&new_object)?);},
+        }
+        Ok(())
+    }
+
     fn create_geometry_collection(&self, object: &OSMObject) -> Result<Option<Geometry<f64>>> {
         let mut coll = GeometryCollection::new_from(
             self.related_objects_of(object)?
@@ -401,7 +412,7 @@ impl OSMObjectManager {
                 .collect(),
         );
         if coll.len() == 1 {
-            Ok(Some(coll.0.pop().unwrap().into()))
+            Ok(Some(coll.0.pop().unwrap()))
         }
         else {
             Ok(Some(Geometry::GeometryCollection(coll)))

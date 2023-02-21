@@ -31,7 +31,7 @@ impl FromStr for OSMObjectType {
     }
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub struct OSMRelationMember {
     #[serde(rename = "type")]
     referenced_type: OSMObjectType,
@@ -50,7 +50,7 @@ impl OSMRelationMember {
     }
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub enum OSMObjectSpecifics {
     #[serde(rename = "node")]
     Node { lat: f64, lon: f64 },
@@ -60,7 +60,7 @@ pub enum OSMObjectSpecifics {
     Relation { members: Vec<OSMRelationMember> },
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug)]
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq)]
 pub struct OSMObject {
     pub id: u64,
     pub timestamp: String,
