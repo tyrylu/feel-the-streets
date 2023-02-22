@@ -9,7 +9,7 @@ use chrono::{DateTime, Utc};
 use geo_types::{Geometry, GeometryCollection, LineString, Point, Polygon};
 use hashbrown::HashMap;
 use itertools::Itertools;
-use log::{debug, error, info, warn, trace};
+use log::{debug, info, warn, trace};
 use once_cell::sync::Lazy;
 use quick_xml::de::Deserializer;
 use serde::Deserialize;
