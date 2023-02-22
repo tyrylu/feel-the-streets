@@ -250,7 +250,7 @@ impl OSMObjectManager {
             match obj {
                 Ok(Some(o)) => Some((o, maybe_role)),
                 _ => {
-                    error!("The OSM API did not return the object with id {}, or its retrieval failed. Assuming that it was not specified as a dependency for some other object.", id);
+                    warn!("The OSM object {} references non-existent object{}, ignoring that particular reference.", object.unique_id(), id);
                     None
             }
         }
