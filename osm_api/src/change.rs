@@ -18,5 +18,5 @@ pub struct OSMObjectChange {
 #[allow(clippy::large_enum_variant)]
 pub enum OSMObjectChangeEvent {
     Change(OSMObjectChange),
-    Remark(String)
+    Remark(String),
 }

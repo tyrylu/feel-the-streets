@@ -1,8 +1,8 @@
 use anyhow::Result;
 use osm_db::area_db::AreaDatabase;
 use osm_db::entities_query::EntitiesQuery;
-use server::db;
 use server::area::Area;
+use server::db;
 use std::collections::HashMap;
 
 pub fn view_field_usage(entity: String, field: String) -> Result<()> {

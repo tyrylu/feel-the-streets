@@ -1,5 +1,5 @@
-use base64::prelude::*;
 use crate::Result;
+use base64::prelude::*;
 use osm_db::entity::Entity;
 use osm_db::semantic_change::EntryChange;
 use serde_json::{Map, Value};

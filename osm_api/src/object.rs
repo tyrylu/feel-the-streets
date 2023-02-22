@@ -1,6 +1,6 @@
 #![allow(clippy::too_many_arguments)]
-use crate::{Error, Result};
 use crate::raw_object::{OSMObject as RawOSMObject, RelationMember, Tag};
+use crate::{Error, Result};
 use hashbrown::HashMap;
 use serde::{Deserialize, Serialize};
 use smol_str::SmolStr;
@@ -205,15 +205,37 @@ impl TryFrom<RawOSMObject> for OSMObject {
 
     fn try_from(raw_object: RawOSMObject) -> Result<Self> {
         match raw_object {
-            RawOSMObject::Node(n) => {
-                Ok(OSMObject::new_node(n.id, n.timestamp.into(), n.version, n.changeset, n.user.into(), n.uid, to_tags_hashmap(n.tags), n.lat, n.lon))
-            },
-            RawOSMObject::Way(w) => {
-                Ok(OSMObject::new_way(w.id, w.timestamp.into(), w.version, w.changeset, w.user.into(), w.uid, to_tags_hashmap(w.tags), w.nodes.iter().map(|n| n.reference).collect()))
-            },
-            RawOSMObject::Relation(r) => {
-                Ok(OSMObject::new_rel(r.id, r.timestamp.into(), r.version, r.changeset, r.user.into(), r.uid, to_tags_hashmap(r.tags), to_typed_members(r.members)?))
-            }
+            RawOSMObject::Node(n) => Ok(OSMObject::new_node(
+                n.id,
+                n.timestamp.into(),
+                n.version,
+                n.changeset,
+                n.user.into(),
+                n.uid,
+                to_tags_hashmap(n.tags),
+                n.lat,
+                n.lon,
+            )),
+            RawOSMObject::Way(w) => Ok(OSMObject::new_way(
+                w.id,
+                w.timestamp.into(),
+                w.version,
+                w.changeset,
+                w.user.into(),
+                w.uid,
+                to_tags_hashmap(w.tags),
+                w.nodes.iter().map(|n| n.reference).collect(),
+            )),
+            RawOSMObject::Relation(r) => Ok(OSMObject::new_rel(
+                r.id,
+                r.timestamp.into(),
+                r.version,
+                r.changeset,
+                r.user.into(),
+                r.uid,
+                to_tags_hashmap(r.tags),
+                to_typed_members(r.members)?,
+            )),
         }
     }
 }
@@ -229,7 +251,11 @@ fn to_tags_hashmap(tags: Vec<Tag>) -> HashMap<String, String> {
 fn to_typed_members(members: Vec<RelationMember>) -> Result<Vec<OSMRelationMember>> {
     let mut ret = Vec::with_capacity(members.len());
     for member in members {
-        ret.push(OSMRelationMember::new(member.reference, OSMObjectType::from_str(member.referenced_type.as_str())?, member.role.into()));
+        ret.push(OSMRelationMember::new(
+            member.reference,
+            OSMObjectType::from_str(member.referenced_type.as_str())?,
+            member.role.into(),
+        ));
     }
     Ok(ret)
 }

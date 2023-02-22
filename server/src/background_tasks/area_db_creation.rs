@@ -1,6 +1,9 @@
-use crate::{area, db::{self, Connection}};
 use crate::names_cache::OSMObjectNamesCache;
 use crate::Result;
+use crate::{
+    area,
+    db::{self, Connection},
+};
 use doitlater::typetag;
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::SmolStr;

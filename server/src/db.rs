@@ -1,5 +1,5 @@
-pub use rusqlite::Connection;
 use crate::Result;
+pub use rusqlite::Connection;
 
 pub fn connect_to_server_db() -> Result<Connection> {
     let conn = Connection::open("server.db")?;

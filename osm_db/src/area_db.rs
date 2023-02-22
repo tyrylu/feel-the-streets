@@ -1,4 +1,3 @@
-use base64::prelude::*;
 use crate::entities_query_executor::EntitiesQueryExecutor;
 use crate::entity::Entity;
 use crate::entity_relationship::EntityRelationship;
@@ -6,6 +5,7 @@ use crate::entity_relationship_kind::EntityRelationshipKind;
 use crate::semantic_change::{RelationshipChange, SemanticChange};
 use crate::{entities_query::EntitiesQuery, entity_relationship::RootedEntityRelationship};
 use crate::{Error, Result};
+use base64::prelude::*;
 use log::{debug, error, info, trace, warn};
 use osm_api::SmolStr;
 use rusqlite::types::ToSql;
@@ -19,14 +19,13 @@ const INSERT_ENTITY_SQL: &str = "insert into entities (id, discriminator, geomet
 const INSERT_ENTITY_RELATIONSHIP_SQL: &str =
     "INSERT INTO entity_relationships (parent_id, child_id, kind) VALUES (?, ?, ?) ON CONFLICT DO NOTHING";
 
-    fn get_single_entity_sql(geometry_as_wkb: bool) -> &'static str {
-        if !geometry_as_wkb {
-            "select id, discriminator, geometry, data, effective_width from entities where id = ?"
-        }
-        else {
-            "select id, discriminator, AsBinary(geometry) as geometry, data, effective_width from entities where id = ?"
-        }
+fn get_single_entity_sql(geometry_as_wkb: bool) -> &'static str {
+    if !geometry_as_wkb {
+        "select id, discriminator, geometry, data, effective_width from entities where id = ?"
+    } else {
+        "select id, discriminator, AsBinary(geometry) as geometry, data, effective_width from entities where id = ?"
     }
+}
 
 #[derive(PartialEq)]
 enum ForeignKeyViolationClassification {
@@ -118,7 +117,7 @@ impl AreaDatabase {
             let mut insert_related_stmt =
                 self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
             if entity.geometry.len() < 1_000_000 {
-                let mut insert_stmt =   self.conn.prepare(INSERT_ENTITY_SQL)?;
+                let mut insert_stmt = self.conn.prepare(INSERT_ENTITY_SQL)?;
                 trace!("Inserting {:?}", entity);
                 match insert_stmt.execute(params![
                     entity.id.as_str(),
@@ -184,7 +183,9 @@ impl AreaDatabase {
     }
 
     fn get_single_entity(&self, osm_id: &str, geometry_as_wkb: bool) -> Result<Option<Entity>> {
-        let mut stmt = self.conn.prepare_cached(get_single_entity_sql(geometry_as_wkb))?;
+        let mut stmt = self
+            .conn
+            .prepare_cached(get_single_entity_sql(geometry_as_wkb))?;
         match stmt.query_row([&osm_id], row_to_entity) {
             Ok(e) => Ok(Some(e)),
             Err(e) => match e {
@@ -193,14 +194,14 @@ impl AreaDatabase {
             },
         }
     }
-    
-        pub fn get_entity(&self, osm_id: &str) -> Result<Option<Entity>> {
-            self.get_single_entity(osm_id, true)
-        }
 
-        pub fn get_entity_raw(&self, osm_id: &str) -> Result<Option<Entity>> {
-            self.get_single_entity(osm_id, false)
-        }
+    pub fn get_entity(&self, osm_id: &str) -> Result<Option<Entity>> {
+        self.get_single_entity(osm_id, true)
+    }
+
+    pub fn get_entity_raw(&self, osm_id: &str) -> Result<Option<Entity>> {
+        self.get_single_entity(osm_id, false)
+    }
 
     pub fn get_entities(&self, query: &EntitiesQuery) -> Result<Vec<Entity>> {
         let mut executor = EntitiesQueryExecutor::new(query);
@@ -229,9 +230,8 @@ impl AreaDatabase {
         if fast {
             query += " AND length(geometry) < 100000";
         }
-        let fragment = format!(
-            " AND St_Disjoint(geometry, GeomFromText('POINT({x} {y})', 4326)) = 0"
-        );
+        let fragment =
+            format!(" AND St_Disjoint(geometry, GeomFromText('POINT({x} {y})', 4326)) = 0");
         query += &fragment;
         let mut params: Vec<(&str, &dyn ToSql)> = vec![];
         for (i, id) in candidate_ids.iter().enumerate() {
@@ -321,7 +321,9 @@ impl AreaDatabase {
             } => self.insert_entity(
                 id,
                 discriminator,
-                &BASE64_STANDARD.decode(geometry).expect("Geometry should be base64 encoded"),
+                &BASE64_STANDARD
+                    .decode(geometry)
+                    .expect("Geometry should be base64 encoded"),
                 effective_width,
                 data,
                 entity_relationships,

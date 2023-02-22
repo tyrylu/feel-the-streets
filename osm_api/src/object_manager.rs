@@ -1,15 +1,15 @@
 use crate::change::OSMObjectChangeEvent;
 use crate::change_iterator::OSMObjectChangeIterator;
 use crate::object::{OSMObject, OSMObjectSpecifics, OSMObjectType};
-use crate::raw_object::OSMObject as RawOSMObject;
 use crate::overpass_api::Servers;
+use crate::raw_object::OSMObject as RawOSMObject;
 use crate::utils;
 use crate::{Error, Result};
 use chrono::{DateTime, Utc};
 use geo_types::{Geometry, GeometryCollection, LineString, Point, Polygon};
 use hashbrown::HashMap;
 use itertools::Itertools;
-use log::{debug, info, warn, trace};
+use log::{debug, info, trace, warn};
 use once_cell::sync::Lazy;
 use quick_xml::de::Deserializer;
 use serde::Deserialize;
@@ -19,7 +19,7 @@ use std::cell::{Ref, RefCell};
 use std::cmp;
 use std::collections::HashSet;
 use std::fs;
-use std::io::{BufReader, Read, BufRead};
+use std::io::{BufRead, BufReader, Read};
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
 use zstd_util::ZstdContext;
@@ -55,15 +55,11 @@ fn translate_type_shortcut(shortcut: char) -> &'static str {
 }
 
 fn format_query(timeout: u32, maxsize: usize, query: &str) -> String {
-    format!(
-        "[timeout:{timeout}][maxsize:{maxsize}];{query};out meta;"
-    )
+    format!("[timeout:{timeout}][maxsize:{maxsize}];{query};out meta;")
 }
 
 fn format_data_retrieval(area: i64) -> String {
-    format!(
-        r#"((area({area});node(area);area({area});way(area);area({area});rel(area);>>;);>>;)"#
-    )
+    format!(r#"((area({area});node(area);area({area});way(area);area({area});rel(area);>>;);>>;)"#)
 }
 
 pub struct OSMObjectManager {
@@ -283,7 +279,7 @@ impl OSMObjectManager {
             _ => {
                 warn!("Requested to get a coord sequence for {}.", way.unique_id());
                 return Err(Error::NotAWay);
-            },
+            }
         };
         let mut coords = Vec::with_capacity(node_count);
         for obj in self.related_objects_of(way)? {
@@ -340,7 +336,8 @@ impl OSMObjectManager {
                 }
             }
             Relation { .. } => {
-                let should_be_multipolygon = object.tags.get("type").map(|t| t.as_str()).unwrap_or("") == "multipolygon";
+                let should_be_multipolygon =
+                    object.tags.get("type").map(|t| t.as_str()).unwrap_or("") == "multipolygon";
                 let mut inners = vec![];
                 let mut outers = vec![];
                 let mut others = vec![];
@@ -349,7 +346,7 @@ impl OSMObjectManager {
                     match role {
                         "inner" => self.extend_list_of_polygon_parts(&mut inners, related)?,
                         "outer" => self.extend_list_of_polygon_parts(&mut outers, related)?,
-                        _ => others.push(related)
+                        _ => others.push(related),
                     }
                 }
                 inners.dedup();
@@ -358,47 +355,66 @@ impl OSMObjectManager {
                 if should_be_multipolygon {
                     if (!outers.is_empty() || !inners.is_empty()) && !others.is_empty() {
                         warn!("Could not create multipolygon from object {}, it has {} inner ring(s), {} outer ring(s) and {} other part(s).", object.unique_id(), inners.len(), outers.len(), others.len());
-                    }
-                    else if outers.is_empty() {
+                    } else if outers.is_empty() {
                         // Likely a multipolygon from a list of outer ring specifications without an explicit role.
-                        multipolygon = self.construct_multipolygon_from_parts(object.unique_id(), inners.as_slice(), others.as_slice())?;
+                        multipolygon = self.construct_multipolygon_from_parts(
+                            object.unique_id(),
+                            inners.as_slice(),
+                            others.as_slice(),
+                        )?;
+                    } else {
+                        multipolygon = self.construct_multipolygon_from_parts(
+                            object.unique_id(),
+                            inners.as_slice(),
+                            outers.as_slice(),
+                        )?;
                     }
-                    else {
-                        multipolygon = self.construct_multipolygon_from_parts(object.unique_id(), inners.as_slice(), outers.as_slice())?;
-                    }
-                    }
-                    if multipolygon.is_some() {
-                        Ok(multipolygon)
-                    }
-                    else if !outers.is_empty() && !should_be_multipolygon {
-                        // Try to create a multipolygon from whatewer we have roles for and add it to the rest, if there's any rest.
-                        match self.construct_multipolygon_from_parts(object.unique_id(), inners.as_slice(), outers.as_slice())? {
-                            Some(poly) if others.is_empty() => {
-                                Ok(Some(poly))
-                            },
-                            Some(poly) => {
-                                let mut coll = GeometryCollection::default();
-                                coll.0.push(poly);
-                                for o in others {
-                                    coll.0.push(self.get_geometry_of(&o)?.unwrap());
-                                }
-                                Ok(Some(Geometry::GeometryCollection(coll)))
-                            },
-                            None => self.create_geometry_collection(object)
+                }
+                if multipolygon.is_some() {
+                    Ok(multipolygon)
+                } else if !outers.is_empty() && !should_be_multipolygon {
+                    // Try to create a multipolygon from whatewer we have roles for and add it to the rest, if there's any rest.
+                    match self.construct_multipolygon_from_parts(
+                        object.unique_id(),
+                        inners.as_slice(),
+                        outers.as_slice(),
+                    )? {
+                        Some(poly) if others.is_empty() => Ok(Some(poly)),
+                        Some(poly) => {
+                            let mut coll = GeometryCollection::default();
+                            coll.0.push(poly);
+                            for o in others {
+                                coll.0.push(self.get_geometry_of(&o)?.unwrap());
+                            }
+                            Ok(Some(Geometry::GeometryCollection(coll)))
                         }
+                        None => self.create_geometry_collection(object),
                     }
-                    else {
-                        self.create_geometry_collection(object)
-                    }
-        }
+                } else {
+                    self.create_geometry_collection(object)
+                }
+            }
         }
     }
 
-    fn extend_list_of_polygon_parts(&self, parts: &mut Vec<OSMObject>, new_object: OSMObject) -> Result<()> {
+    fn extend_list_of_polygon_parts(
+        &self,
+        parts: &mut Vec<OSMObject>,
+        new_object: OSMObject,
+    ) -> Result<()> {
         match new_object.object_type() {
-            OSMObjectType::Node => {warn!("A node {} can not be a direct part of a polygon defining relationship.", new_object.unique_id());},
-            OSMObjectType::Way => {parts.push(new_object);},
-            OSMObjectType::Relation => {parts.extend(self.related_objects_of(&new_object)?);},
+            OSMObjectType::Node => {
+                warn!(
+                    "A node {} can not be a direct part of a polygon defining relationship.",
+                    new_object.unique_id()
+                );
+            }
+            OSMObjectType::Way => {
+                parts.push(new_object);
+            }
+            OSMObjectType::Relation => {
+                parts.extend(self.related_objects_of(&new_object)?);
+            }
         }
         Ok(())
     }
@@ -413,8 +429,7 @@ impl OSMObjectManager {
         );
         if coll.len() == 1 {
             Ok(Some(coll.0.pop().unwrap()))
-        }
-        else {
+        } else {
             Ok(Some(Geometry::GeometryCollection(coll)))
         }
     }
@@ -422,7 +437,8 @@ impl OSMObjectManager {
     fn construct_multipolygon_from_parts(
         &self,
         object_id: SmolStr,
-        inner_objects: &[OSMObject], outer_objects: &[OSMObject],
+        inner_objects: &[OSMObject],
+        outer_objects: &[OSMObject],
     ) -> Result<Option<Geometry<f64>>> {
         let mut inners = vec![];
         let mut outers = vec![];
@@ -432,7 +448,7 @@ impl OSMObjectManager {
         for o in outer_objects {
             outers.push(self.get_way_coords(o)?);
         }
-                utils::connect_polygon_segments(&mut inners);
+        utils::connect_polygon_segments(&mut inners);
         utils::connect_polygon_segments(&mut outers);
         if outers.len() != 1 && !inners.is_empty() {
             warn!("multiple outer ring(s) and some inner ring(s), geometry for object {object_id} is ambiguous.");
@@ -449,8 +465,7 @@ impl OSMObjectManager {
                 }
                 polys.push(Polygon::new(outer, vec![]));
             }
-        }
-        else {
+        } else {
             // A single polygon given an outer ring and list of inner hole rings.
             // The magic number of points has the same reason as above.
             for inner in &inners {
@@ -458,8 +473,8 @@ impl OSMObjectManager {
                     warn!("One of the inner polygons for object {object_id} did not have enough points, falling back to a geometry collection.");
                     return Ok(None);
                 }
-                            }
-                            polys.push(Polygon::new(outers[0].clone(), inners.clone()))
+            }
+            polys.push(Polygon::new(outers[0].clone(), inners.clone()))
         }
         if polys.len() == 1 {
             Ok(Some(polys[0].clone().into()))
@@ -479,9 +494,7 @@ impl OSMObjectManager {
     ) -> Result<Box<dyn Iterator<Item = Result<OSMObjectChangeEvent>>>> {
         let mut iterators = Vec::with_capacity(3);
         for kind in &["node", "way", "rel"] {
-            let query = format!(
-                "((area({area});{kind}(area);>>;);>>;)"
-            );
+            let query = format!("((area({area});{kind}(area);>>;);>>;)");
             let final_query = format!(
                 "[out:xml][timeout:900][adiff:\"{after}\"];{query};out meta;",
                 after = after.to_rfc3339(),

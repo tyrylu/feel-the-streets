@@ -39,9 +39,10 @@ fn merge_to_from_end(merge_to: &mut LineString<f64>, mut merge_from: LineString<
     let last_coord_idx = merge_from.0.len() - 1;
     if merge_from[last_coord_idx] == merge_to[0] {
         // We have the merge_to coords, and then the merge_from ones, except for the last one.
-        merge_to.0.splice(0..0, merge_from.0[0..last_coord_idx].iter().copied());
-    }
-    else {
+        merge_to
+            .0
+            .splice(0..0, merge_from.0[0..last_coord_idx].iter().copied());
+    } else {
         // We have the coords in merge_to, and then the ones from merge_from, except the last one, but reversed, because we need to preserve the line.
         merge_from.0.reverse();
         merge_to.0.extend_from_slice(&merge_from.0[1..]);
@@ -49,13 +50,13 @@ fn merge_to_from_end(merge_to: &mut LineString<f64>, mut merge_from: LineString<
 }
 
 fn merge_to_from_start(merge_to: &mut LineString<f64>, merge_from: LineString<f64>) {
-        if merge_from[0] == merge_to[0] {
+    if merge_from[0] == merge_to[0] {
         // We have the reversed merge_to coords, and then the ones from merge_from, except for the first.
         merge_to.0.reverse();
     }
     // Now, we definitely have the coordinate match as the last coord of merge_to and first coord of merge_from, so both cases are now the same.
     merge_to.0.extend_from_slice(&merge_from.0[1..]);
-    }
+}
 
 pub fn connect_polygon_segments(segments: &mut Vec<LineString<f64>>) {
     let mut did_connect_segments = true;
@@ -69,15 +70,18 @@ pub fn connect_polygon_segments(segments: &mut Vec<LineString<f64>>) {
                 let removed_segment = segments.swap_remove(current_segment_idx);
                 merge_to_from_start(&mut segments[*previous_segment_idx], removed_segment);
                 did_connect_segments = true;
-            }
-            else if let Some(previous_segment_idx) = end_points.get(&coord_to_key(current_segment[current_segment.0.len() - 1])) {
-                                let removed_segment = segments.swap_remove(current_segment_idx);
-                                merge_to_from_end(&mut segments[*previous_segment_idx], removed_segment);
+            } else if let Some(previous_segment_idx) =
+                end_points.get(&coord_to_key(current_segment[current_segment.0.len() - 1]))
+            {
+                let removed_segment = segments.swap_remove(current_segment_idx);
+                merge_to_from_end(&mut segments[*previous_segment_idx], removed_segment);
                 did_connect_segments = true;
-            }
-            else {
+            } else {
                 end_points.insert(coord_to_key(current_segment[0]), current_segment_idx);
-                end_points.insert(coord_to_key(current_segment[current_segment.0.len() - 1]), current_segment_idx);
+                end_points.insert(
+                    coord_to_key(current_segment[current_segment.0.len() - 1]),
+                    current_segment_idx,
+                );
                 current_segment_idx += 1;
             }
         }

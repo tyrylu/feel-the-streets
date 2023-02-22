@@ -6,7 +6,7 @@ pub(crate) struct Tag {
     #[serde(rename = "@k")]
     pub(crate) k: SmolStr,
     #[serde(rename = "@v")]
-    pub(crate) v: SmolStr
+    pub(crate) v: SmolStr,
 }
 
 #[derive(Debug, Deserialize)]
@@ -28,13 +28,13 @@ pub(crate) struct OSMNode {
     #[serde(rename = "@lon")]
     pub lon: f64,
     #[serde(default, rename = "tag")]
-    pub tags: Vec<Tag>
+    pub tags: Vec<Tag>,
 }
-    
+
 #[derive(Debug, Deserialize)]
 pub(crate) struct NodeRef {
     #[serde(rename = "@ref")]
-    pub(crate) reference: u64
+    pub(crate) reference: u64,
 }
 
 #[derive(Debug, Deserialize)]
@@ -54,8 +54,8 @@ pub(crate) struct OSMWay {
     #[serde(default, rename = "nd")]
     pub nodes: Vec<NodeRef>,
     #[serde(default, rename = "tag")]
-    pub tags: Vec<Tag>
-}    
+    pub tags: Vec<Tag>,
+}
 
 #[derive(Debug, Deserialize)]
 pub(crate) struct RelationMember {
@@ -64,7 +64,7 @@ pub(crate) struct RelationMember {
     #[serde(rename = "@ref")]
     pub(crate) reference: u64,
     #[serde(rename = "@role")]
-    pub(crate) role: SmolStr
+    pub(crate) role: SmolStr,
 }
 
 #[derive(Debug, Deserialize)]
@@ -84,13 +84,13 @@ pub(crate) struct OSMRelation {
     #[serde(rename = "member", default)]
     pub members: Vec<RelationMember>,
     #[serde(default, rename = "tag")]
-    pub tags: Vec<Tag>
+    pub tags: Vec<Tag>,
 }
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) enum OSMObject {
     Node(OSMNode),
-        Way(OSMWay),
-    Relation(OSMRelation)
+    Way(OSMWay),
+    Relation(OSMRelation),
 }

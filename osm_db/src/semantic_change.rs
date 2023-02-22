@@ -1,6 +1,6 @@
-use base64::prelude::*;
 use crate::entity_relationship::RootedEntityRelationship;
 use crate::Result;
+use base64::prelude::*;
 use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;

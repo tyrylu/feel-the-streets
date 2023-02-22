@@ -5,7 +5,7 @@ use crate::diff_utils::ListChange;
 use crate::Result;
 use chrono::{DateTime, Utc};
 use doitlater::typetag;
-use osm_api::change::{OSMObjectChangeType, OSMObjectChangeEvent};
+use osm_api::change::{OSMObjectChangeEvent, OSMObjectChangeType};
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::overpass_api::Servers;
 use osm_db::semantic_change::SemanticChange;
@@ -71,41 +71,42 @@ pub fn update_area(
     for event in manager.lookup_differences_in(area.osm_id, &after)? {
         let event = event?;
         match event {
-        OSMObjectChangeEvent::Change(change) => {
-            osm_change_count += 1;
-        use OSMObjectChangeType::*;
-        if first {
-            area.state = AreaState::ApplyingChanges;
-            area.save(&mut conn.lock().unwrap())?;
-            first = false;
-        }
-        if change.new.is_some()
-            && (area.newest_osm_object_timestamp.is_none()
-                || change.new.as_ref().unwrap().timestamp
-                    > *area.newest_osm_object_timestamp.as_ref().unwrap())
-        {
-            area.newest_osm_object_timestamp = Some(change.new.as_ref().unwrap().timestamp.clone());
-        }
-        trace!(
-            "Processing OSM change {:?} during update of area {}",
-            change,
-            area.osm_id
-        );
-        let id = change
-            .old
-            .as_ref()
-            .unwrap_or_else(|| change.new.as_ref().expect("No old or new"))
-            .unique_id();
-        if seen_unique_ids.contains(&id) {
-            trace!(
+            OSMObjectChangeEvent::Change(change) => {
+                osm_change_count += 1;
+                use OSMObjectChangeType::*;
+                if first {
+                    area.state = AreaState::ApplyingChanges;
+                    area.save(&mut conn.lock().unwrap())?;
+                    first = false;
+                }
+                if change.new.is_some()
+                    && (area.newest_osm_object_timestamp.is_none()
+                        || change.new.as_ref().unwrap().timestamp
+                            > *area.newest_osm_object_timestamp.as_ref().unwrap())
+                {
+                    area.newest_osm_object_timestamp =
+                        Some(change.new.as_ref().unwrap().timestamp.clone());
+                }
+                trace!(
+                    "Processing OSM change {:?} during update of area {}",
+                    change,
+                    area.osm_id
+                );
+                let id = change
+                    .old
+                    .as_ref()
+                    .unwrap_or_else(|| change.new.as_ref().expect("No old or new"))
+                    .unique_id();
+                if seen_unique_ids.contains(&id) {
+                    trace!(
                 "During update of area {} we already saw a change of object with id {}, will not process it again.",
                 area.osm_id, id
             );
-            continue;
-        } else {
-            seen_unique_ids.insert(id);
-        }
-        let semantic_change = match change.change_type {
+                    continue;
+                } else {
+                    seen_unique_ids.insert(id);
+                }
+                let semantic_change = match change.change_type {
             Create => {
                 let new = change.new.expect("No new for a create change");
                 if area_db.has_entity(&new.unique_id())? {
@@ -193,22 +194,22 @@ pub fn update_area(
                 }
             }
         };
-        if let Some(semantic_change) = semantic_change {
-            match area_db.apply_change(&semantic_change) {
-                Ok(_) => semantic_changes.push(semantic_change),
-                Err(e) => {
-                    warn!(
+                if let Some(semantic_change) = semantic_change {
+                    match area_db.apply_change(&semantic_change) {
+                        Ok(_) => semantic_changes.push(semantic_change),
+                        Err(e) => {
+                            warn!(
                         "During update of area {} application of semantic change {:?} failed with error {}",
                         area.osm_id, semantic_change, e
                     );
+                        }
+                    }
                 }
             }
+            OSMObjectChangeEvent::Remark(remark) => {
+                area.last_update_remark = Some(remark);
+            }
         }
-    },
-OSMObjectChangeEvent::Remark(remark) => {
-    area.last_update_remark = Some(remark);
-}
-}
     }
     area_db.apply_deferred_relationship_additions()?;
     info!(
@@ -333,7 +334,9 @@ async fn update_area_databases_async() -> Result<()> {
     for area in areas {
         let conn_clone = area_db_conn.clone();
         let manager = OSMObjectManager::new_multithread(servers.clone(), cache.clone())?;
-        tasks.push(tokio::task::spawn_blocking(move || update_area(area, conn_clone, manager)));
+        tasks.push(tokio::task::spawn_blocking(move || {
+            update_area(area, conn_clone, manager)
+        }));
     }
     for task in tasks {
         match task.await? {

@@ -1,5 +1,5 @@
-use base64::prelude::*;
 use crate::semantic_change::EntryChange;
+use base64::prelude::*;
 use log::warn;
 use osm_api::SmolStr;
 use serde_json::{Map, Value};
@@ -60,12 +60,13 @@ impl Entity {
             if let EntryChange::Update { key, new_value, .. } = change {
                 match key.as_ref() {
                     "geometry" => {
-                        self.geometry = BASE64_STANDARD.decode(
-                            new_value
-                                .as_str()
-                                .expect("Non-string attempted to be set as a geometry"),
-                        )
-                        .expect("The string was not a base64-encoded geometry")
+                        self.geometry = BASE64_STANDARD
+                            .decode(
+                                new_value
+                                    .as_str()
+                                    .expect("Non-string attempted to be set as a geometry"),
+                            )
+                            .expect("The string was not a base64-encoded geometry")
                     }
                     "discriminator" => {
                         self.discriminator = SmolStr::new_inline(

@@ -1,7 +1,7 @@
 use crate::Result;
-use osm_api::replication::{ReplicationApiClient, SequenceNumber};
 use doitlater::typetag;
-use serde::{Serialize, Deserialize};
+use osm_api::replication::{ReplicationApiClient, SequenceNumber};
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
 pub struct ProcessOSMChangesTask;
@@ -23,7 +23,10 @@ fn run_osm_changes_processing() -> Result<()> {
 fn process_osm_changes(initial_sn: u32) -> Result<()> {
     let r_client = ReplicationApiClient::default();
     let latest_state = r_client.latest_replication_state()?;
-    info!("Processing OSM changes from {initial_sn} to {}", latest_state.sequence_number.0);
+    info!(
+        "Processing OSM changes from {initial_sn} to {}",
+        latest_state.sequence_number.0
+    );
     for sn in initial_sn..=latest_state.sequence_number.0 {
         process_osm_change(sn, &r_client)?;
     }

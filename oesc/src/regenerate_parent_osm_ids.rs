@@ -1,8 +1,8 @@
 use anyhow::Result;
 use osm_api::object_manager::OSMObjectManager;
-use server::db;
 use server::area::Area;
 use server::background_tasks::area_db_creation;
+use server::db;
 use server::names_cache::OSMObjectNamesCache;
 
 pub(crate) fn regenerate_parent_osm_ids() -> Result<()> {

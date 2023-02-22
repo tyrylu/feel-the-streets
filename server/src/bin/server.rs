@@ -1,8 +1,8 @@
 use axum::Router;
 use axum_extra::routing::SpaRouter;
 use server::api_routes;
-use server::ui_routes;
 use server::db;
+use server::ui_routes;
 use server::{AppState, Result};
 use std::net::SocketAddr;
 use std::sync::{Arc, Mutex};
@@ -21,8 +21,8 @@ async fn main() -> Result<()> {
     };
     let spa = SpaRouter::new("/static", "static");
     let app = Router::new()
-    .merge(spa)    
-    .nest("/api", api_routes::routes())
+        .merge(spa)
+        .nest("/api", api_routes::routes())
         .nest("/", ui_routes::routes())
         .layer(TraceLayer::new_for_http())
         .with_state(state);

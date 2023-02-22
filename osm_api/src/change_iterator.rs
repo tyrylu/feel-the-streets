@@ -1,18 +1,24 @@
-use crate::change::{OSMObjectChange, OSMObjectChangeType, OSMObjectChangeEvent};
+use crate::change::{OSMObjectChange, OSMObjectChangeEvent, OSMObjectChangeType};
 use crate::object::*;
 use crate::Error;
 use crate::Result;
 use hashbrown::HashMap;
 use log::trace;
+use quick_xml::{
+    events::{attributes::Attributes, Event},
+    Reader,
+};
 use std::io::{BufReader, Read};
 use std::str::FromStr;
-use quick_xml::{events::{attributes::Attributes, Event}, Reader};
 
 fn convert_to_map(attributes: Attributes) -> Result<HashMap<String, String>> {
     let mut map = HashMap::new();
     for attr in attributes {
         let attr = attr?;
-        map.insert(String::from_utf8_lossy(attr.key.local_name().as_ref()).to_string(), attr.unescape_value()?.to_string());
+        map.insert(
+            String::from_utf8_lossy(attr.key.local_name().as_ref()).to_string(),
+            attr.unescape_value()?.to_string(),
+        );
     }
     Ok(map)
 }
@@ -121,7 +127,10 @@ impl<T: Read> OSMObjectChangeIterator<T> {
                     }
                 }
                 Event::End(tag) => {
-                    trace!("End of {:?} element during object parsing.", tag.local_name());
+                    trace!(
+                        "End of {:?} element during object parsing.",
+                        tag.local_name()
+                    );
                     match tag.local_name().as_ref() {
                         b"node" => {
                             return Ok(OSMObject::new_node(
@@ -150,12 +159,13 @@ impl<T: Read> OSMObjectChangeIterator<T> {
     fn parse_change_step(&mut self) -> Result<()> {
         let mut buf = vec![];
         trace!("Doing a parse change step.");
-                match self.reader.read_event_into(&mut buf) {
+        match self.reader.read_event_into(&mut buf) {
             Ok(Event::Decl(_)) => trace!("Start document."),
             Ok(Event::Text(chars)) => {
                 trace!("Characters: {}", chars.unescape()?);
                 if self.in_remark {
-                    self.current_event = Some(OSMObjectChangeEvent::Remark(chars.unescape()?.to_string()));
+                    self.current_event =
+                        Some(OSMObjectChangeEvent::Remark(chars.unescape()?.to_string()));
                 }
             }
             Ok(Event::Eof) => {

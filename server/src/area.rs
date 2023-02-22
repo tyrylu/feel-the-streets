@@ -1,8 +1,8 @@
 use crate::Result;
-use chrono::{Utc, DateTime};
+use chrono::{DateTime, Utc};
 use osm_db::AreaDatabase;
-use rusqlite::{Connection,Row};
 use rusqlite::types::{FromSql, ToSql};
+use rusqlite::{Connection, Row};
 use serde::Serialize;
 use std::fs;
 
@@ -10,8 +10,19 @@ const ALL_AREA_COLUMNS: &str = "id, osm_id, name, state, created_at, updated_at,
 const SELECT_SOME_AREAS: &str = "SELECT id, osm_id, name, state, created_at, updated_at, newest_osm_object_timestamp, db_size, parent_osm_ids, last_update_remark, geometry FROM areas";
 
 fn row_to_area(row: &'_ Row<'_>) -> rusqlite::Result<Area> {
-Ok(Area { id: row.get_unwrap(0), osm_id: row.get_unwrap(1), name: row.get_unwrap(2), state: row.get_unwrap(3), created_at: row.get_unwrap(4), updated_at: row.get_unwrap(5), newest_osm_object_timestamp: row.get_unwrap(6), db_size: row.get_unwrap(7)
-    , parent_osm_ids: row.get_unwrap(8), last_update_remark: row.get_unwrap(9), geometry: row.get_unwrap(10) })
+    Ok(Area {
+        id: row.get_unwrap(0),
+        osm_id: row.get_unwrap(1),
+        name: row.get_unwrap(2),
+        state: row.get_unwrap(3),
+        created_at: row.get_unwrap(4),
+        updated_at: row.get_unwrap(5),
+        newest_osm_object_timestamp: row.get_unwrap(6),
+        db_size: row.get_unwrap(7),
+        parent_osm_ids: row.get_unwrap(8),
+        last_update_remark: row.get_unwrap(9),
+        geometry: row.get_unwrap(10),
+    })
 }
 
 #[derive(PartialEq, Eq, Serialize, Debug)]
@@ -31,7 +42,9 @@ impl FromSql for AreaState {
             "applying_changes" => Ok(AreaState::ApplyingChanges),
             "getting_changes" => Ok(AreaState::GettingChanges),
             "frozen" => Ok(AreaState::Frozen),
-            _ => Err(rusqlite::types::FromSqlError::Other("Invalid value for AreaState".into()))
+            _ => Err(rusqlite::types::FromSqlError::Other(
+                "Invalid value for AreaState".into(),
+            )),
         }
     }
 }
@@ -66,7 +79,10 @@ pub struct Area {
 impl Area {
     pub fn all(conn: &mut Connection) -> Result<Vec<Area>> {
         let mut stmt = conn.prepare_cached(&format!("{SELECT_SOME_AREAS} ORDER BY name"))?;
-        let areas = stmt.query_map((), row_to_area)?.map(|a| a.expect("Could not get area")).collect();
+        let areas = stmt
+            .query_map((), row_to_area)?
+            .map(|a| a.expect("Could not get area"))
+            .collect();
         Ok(areas)
     }
 
@@ -79,23 +95,38 @@ impl Area {
         let mut stmt = conn.prepare_cached(&format!("{SELECT_SOME_AREAS} WHERE osm_id = ?"))?;
         Ok(stmt.query_row([id], row_to_area)?)
     }
-    
+
     pub fn create(osm_id: i64, name: &str, conn: &mut Connection) -> Result<Area> {
         let now = Utc::now();
         let mut stmt = conn.prepare_cached(&format!("INSERT INTO areas (osm_id, name, state, created_at, updated_at) VALUES (?, ?, ?, ?, ?) RETURNING {ALL_AREA_COLUMNS}"))?;
         Ok(stmt.query_row((osm_id, name, AreaState::Creating, now, now), row_to_area)?)
     }
-    
+
     pub fn all_updated(conn: &mut Connection) -> Result<Vec<Area>> {
         let mut stmt = conn.prepare_cached(&format!("{SELECT_SOME_AREAS} WHERE state = ?"))?;
-        let areas = stmt.query_map([AreaState::Updated], row_to_area)?.map(|a| a.expect("Could not get area")).collect();
+        let areas = stmt
+            .query_map([AreaState::Updated], row_to_area)?
+            .map(|a| a.expect("Could not get area"))
+            .collect();
         Ok(areas)
-            }
+    }
 
     pub fn save(&mut self, conn: &mut Connection) -> Result<()> {
-    self.updated_at = Utc::now();
+        self.updated_at = Utc::now();
         let mut stmt = conn.prepare_cached("UPDATE areas SET osm_id = ?, state = ?, name = ?, created_at = ?, updated_at = ?, newest_osm_object_timestamp = ?, db_size = ?, parent_osm_ids = ?, last_update_remark = ?, geometry = ? WHERE id = ?")?;
-        stmt.execute((&self.osm_id, &self.state, &self.name, self.created_at, self.updated_at, &self.newest_osm_object_timestamp, self.db_size, &self.parent_osm_ids, &self.last_update_remark, &self.geometry, self.id))?;
+        stmt.execute((
+            &self.osm_id,
+            &self.state,
+            &self.name,
+            self.created_at,
+            self.updated_at,
+            &self.newest_osm_object_timestamp,
+            self.db_size,
+            &self.parent_osm_ids,
+            &self.last_update_remark,
+            &self.geometry,
+            self.id,
+        ))?;
         Ok(())
     }
 }
@@ -107,5 +138,11 @@ pub fn finalize_area_creation(
 ) -> Result<usize> {
     let size = fs::metadata(AreaDatabase::path_for(osm_id, true))?.len();
     let mut stmt = conn.prepare_cached("UPDATE areas SET state = ?, parent_osm_ids = ?, db_size = ?, updated_at = ? WHERE osm_id = ?")?;
-    Ok(stmt.execute((AreaState::Updated, parent_ids_str, size as i64, Utc::now(), osm_id))?)
+    Ok(stmt.execute((
+        AreaState::Updated,
+        parent_ids_str,
+        size as i64,
+        Utc::now(),
+        osm_id,
+    ))?)
 }

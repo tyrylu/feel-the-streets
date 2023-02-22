@@ -5,8 +5,8 @@ use osm_db::entities_query_condition::{Condition, FieldCondition};
 use osm_db::semantic_change::{EntryChange, SemanticChange};
 use osm_db::translation::{conversions, record::TranslationRecord};
 use redis_api::ChangesStream;
-use server::db;
 use server::area::Area;
+use server::db;
 use std::process;
 
 pub fn change_field_type(

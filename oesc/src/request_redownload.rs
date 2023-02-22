@@ -1,7 +1,7 @@
 use anyhow::Result;
 use redis_api::ChangesStream;
-use server::db;
 use server::area::{Area, AreaState};
+use server::db;
 
 pub fn request_redownload(all: bool, area: Option<i64>) -> Result<()> {
     let areas = if all {

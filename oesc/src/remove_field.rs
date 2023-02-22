@@ -4,8 +4,8 @@ use osm_db::entities_query::EntitiesQuery;
 use osm_db::entities_query_condition::{Condition, FieldCondition};
 use osm_db::semantic_change::{EntryChange, SemanticChange};
 use redis_api::ChangesStream;
-use server::db;
 use server::area::Area;
+use server::db;
 
 pub fn remove_field(entity: String, field: String, new_name: Option<String>) -> Result<()> {
     let mut server_conn = db::connect_to_server_db()?;

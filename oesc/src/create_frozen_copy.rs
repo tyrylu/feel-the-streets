@@ -1,7 +1,7 @@
 use anyhow::Result;
 use osm_db::AreaDatabase;
-use server::db;
 use server::area::{Area, AreaState};
+use server::db;
 use std::convert::TryInto;
 use std::fs;
 
