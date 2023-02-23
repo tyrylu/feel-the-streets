@@ -15,7 +15,8 @@ use std::path::PathBuf;
 use std::time::Instant;
 
 const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
-const INSERT_ENTITY_SQL: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (?, ?, MakeValid(geomFromWKB(?, 4326)), ?, ?)";
+const INSERT_ENTITY_SQL: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (?, ?, geomFromWKB(?, 4326), ?, ?)";
+const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (?, ?, Buffer(geomFromWKB(?, 4326), 0), ?, ?)";
 const INSERT_ENTITY_RELATIONSHIP_SQL: &str =
     "INSERT INTO entity_relationships (parent_id, child_id, kind) VALUES (?, ?, ?) ON CONFLICT DO NOTHING";
 
@@ -117,7 +118,11 @@ impl AreaDatabase {
             let mut insert_related_stmt =
                 self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
             if entity.geometry.len() < 1_000_000 {
-                let mut insert_stmt = self.conn.prepare(INSERT_ENTITY_SQL)?;
+                let mut insert_stmt = if self.geometry_is_valid(&entity.geometry)? {
+                    self.conn.prepare(INSERT_ENTITY_SQL)?
+                } else {
+                    self.conn.prepare(INSERT_ENTITY_SQL_BUFFERED)?
+                };
                 trace!("Inserting {:?}", entity);
                 match insert_stmt.execute(params![
                     entity.id.as_str(),
@@ -257,7 +262,11 @@ impl AreaDatabase {
         data: &str,
         entity_relationships: &[RootedEntityRelationship],
     ) -> Result<()> {
-        let mut stmt = self.conn.prepare_cached(INSERT_ENTITY_SQL)?;
+        let mut stmt = if self.geometry_is_valid(geometry)? {
+            self.conn.prepare_cached(INSERT_ENTITY_SQL)?
+        } else {
+            self.conn.prepare_cached(INSERT_ENTITY_SQL_BUFFERED)?
+        };
         stmt.execute(params![id, discriminator, geometry, effective_width, data])?;
         let mut insert_relationship_stmt =
             self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
@@ -296,7 +305,7 @@ impl AreaDatabase {
         let mut stmt = if self.geometry_is_valid(&entity.geometry)? {
             self.conn.prepare_cached("update entities set discriminator = ?, geometry = GeomFromWKB(?, 4326), effective_width = ?, data = ? where id = ?;")?
         } else {
-            self.conn.prepare_cached("update entities set discriminator = ?, geometry = MakeValid(GeomFromWKB(?, 4326)), effective_width = ?, data = ? where id = ?;")?
+            self.conn.prepare_cached("update entities set discriminator = ?, geometry = Buffer(GeomFromWKB(?, 4326), 0), effective_width = ?, data = ? where id = ?;")?
         };
         stmt.execute(params![
             entity.discriminator.as_str(),
