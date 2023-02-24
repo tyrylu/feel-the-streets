@@ -413,7 +413,7 @@ impl OSMObjectManager {
                 parts.push(new_object);
             }
             OSMObjectType::Relation => {
-                parts.extend(self.related_objects_of(&new_object)?);
+                parts.extend(self.related_objects_of(&new_object)?.filter(|o| o.object_type() == OSMObjectType::Way));
             }
         }
         Ok(())
