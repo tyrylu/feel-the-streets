@@ -15,8 +15,8 @@ use std::path::PathBuf;
 use std::time::Instant;
 
 const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
-const INSERT_ENTITY_SQL: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (?, ?, geomFromWKB(?, 4326), ?, ?)";
-const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (?, ?, Buffer(geomFromWKB(?, 4326), 0), ?, ?)";
+const INSERT_ENTITY_SQL: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (:id, :discriminator, geomFromWKB(:geometry, 4326), :effective_width, :data)";
+const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (:id, :discriminator, coalesce(MakeValid(GeomFromWkb(:geometry, 4326)), Buffer(geomFromWKB(:geometry, 4326), 0)), :effective_width, :data)";
 const INSERT_ENTITY_RELATIONSHIP_SQL: &str =
     "INSERT INTO entity_relationships (parent_id, child_id, kind) VALUES (?, ?, ?) ON CONFLICT DO NOTHING";
 
@@ -124,13 +124,13 @@ impl AreaDatabase {
                     self.conn.prepare(INSERT_ENTITY_SQL_BUFFERED)?
                 };
                 trace!("Inserting {:?}", entity);
-                match insert_stmt.execute(params![
-                    entity.id.as_str(),
-                    entity.discriminator.as_str(),
-                    entity.geometry,
-                    entity.effective_width,
-                    entity.data,
-                ]) {
+                match insert_stmt.execute(named_params! {
+                    ":id": entity.id.as_str(),
+                    ":discriminator": entity.discriminator.as_str(),
+                    ":geometry": entity.geometry,
+                    ":effective_width": entity.effective_width,
+                    ":data": entity.data,
+                }) {
                     Ok(_) => {
                         count += 1;
                         for related_id in related_ids {
@@ -267,7 +267,7 @@ impl AreaDatabase {
         } else {
             self.conn.prepare_cached(INSERT_ENTITY_SQL_BUFFERED)?
         };
-        stmt.execute(params![id, discriminator, geometry, effective_width, data])?;
+        stmt.execute(named_params!{":id": id, ":discriminator": discriminator, ":geometry": geometry, ":effective_width": effective_width, ":data": data})?;
         let mut insert_relationship_stmt =
             self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
         for relationship in entity_relationships {
