@@ -303,17 +303,17 @@ impl AreaDatabase {
 
     fn save_updated_entity(&self, entity: &Entity) -> Result<()> {
         let mut stmt = if self.geometry_is_valid(&entity.geometry)? {
-            self.conn.prepare_cached("update entities set discriminator = ?, geometry = GeomFromWKB(?, 4326), effective_width = ?, data = ? where id = ?;")?
+            self.conn.prepare_cached("update entities set discriminator = :discriminator, geometry = GeomFromWKB(:geometry, 4326), effective_width = :effective_width, data = :data where id = :id;")?
         } else {
-            self.conn.prepare_cached("update entities set discriminator = ?, geometry = Buffer(GeomFromWKB(?, 4326), 0), effective_width = ?, data = ? where id = ?;")?
+            self.conn.prepare_cached("update entities set discriminator = :discriminator, geometry = coalesce(MakeValid(GeomFromWKB(:geometry, 4326)), Buffer(GeomFromWKB(:geometry, 4326), 0)), effective_width = :effective_width, data = :data where id = :id;")?
         };
-        stmt.execute(params![
-            entity.discriminator.as_str(),
-            entity.geometry,
-            entity.effective_width,
-            entity.data,
-            entity.id.as_str(),
-        ])?;
+        stmt.execute(named_params! {
+            ":discriminator": entity.discriminator.as_str(),
+            ":geometry": entity.geometry,
+            ":effective_width": entity.effective_width,
+            ":data": entity.data,
+            ":id": entity.id.as_str(),
+    })?;
         Ok(())
     }
 
