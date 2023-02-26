@@ -10,13 +10,13 @@ use log::{debug, error, info, trace, warn};
 use osm_api::SmolStr;
 use rusqlite::types::ToSql;
 use rusqlite::{named_params, params, Connection, OpenFlags, Row};
+use std::borrow::Cow;
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::time::Instant;
 
 const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
 const INSERT_ENTITY_SQL: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (:id, :discriminator, geomFromWKB(:geometry, 4326), :effective_width, :data)";
-const INSERT_ENTITY_SQL_BUFFERED: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (:id, :discriminator, coalesce(MakeValid(GeomFromWkb(:geometry, 4326)), Buffer(geomFromWKB(:geometry, 4326), 0)), :effective_width, :data)";
 const INSERT_ENTITY_RELATIONSHIP_SQL: &str =
     "INSERT INTO entity_relationships (parent_id, child_id, kind) VALUES (?, ?, ?) ON CONFLICT DO NOTHING";
 
@@ -118,16 +118,13 @@ impl AreaDatabase {
             let mut insert_related_stmt =
                 self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
             if entity.geometry.len() < 1_000_000 {
-                let mut insert_stmt = if self.geometry_is_valid(&entity.geometry)? {
-                    self.conn.prepare(INSERT_ENTITY_SQL)?
-                } else {
-                    self.conn.prepare(INSERT_ENTITY_SQL_BUFFERED)?
-                };
+                let geom = self.make_geometry_valid(&entity.geometry)?;
+                let mut insert_stmt = self.conn.prepare(INSERT_ENTITY_SQL)?;
                 trace!("Inserting {:?}", entity);
                 match insert_stmt.execute(named_params! {
                     ":id": entity.id.as_str(),
                     ":discriminator": entity.discriminator.as_str(),
-                    ":geometry": entity.geometry,
+                    ":geometry": geom,
                     ":effective_width": entity.effective_width,
                     ":data": entity.data,
                 }) {
@@ -262,12 +259,9 @@ impl AreaDatabase {
         data: &str,
         entity_relationships: &[RootedEntityRelationship],
     ) -> Result<()> {
-        let mut stmt = if self.geometry_is_valid(geometry)? {
-            self.conn.prepare_cached(INSERT_ENTITY_SQL)?
-        } else {
-            self.conn.prepare_cached(INSERT_ENTITY_SQL_BUFFERED)?
-        };
-        stmt.execute(named_params!{":id": id, ":discriminator": discriminator, ":geometry": geometry, ":effective_width": effective_width, ":data": data})?;
+        let valid_geometry = self.make_geometry_valid(geometry)?;
+        let mut stmt = self.conn.prepare_cached(INSERT_ENTITY_SQL)?;
+        stmt.execute(named_params!{":id": id, ":discriminator": discriminator, ":geometry": valid_geometry, ":effective_width": effective_width, ":data": data})?;
         let mut insert_relationship_stmt =
             self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
         for relationship in entity_relationships {
@@ -302,14 +296,11 @@ impl AreaDatabase {
     }
 
     fn save_updated_entity(&self, entity: &Entity) -> Result<()> {
-        let mut stmt = if self.geometry_is_valid(&entity.geometry)? {
-            self.conn.prepare_cached("update entities set discriminator = :discriminator, geometry = GeomFromWKB(:geometry, 4326), effective_width = :effective_width, data = :data where id = :id;")?
-        } else {
-            self.conn.prepare_cached("update entities set discriminator = :discriminator, geometry = coalesce(MakeValid(GeomFromWKB(:geometry, 4326)), Buffer(GeomFromWKB(:geometry, 4326), 0)), effective_width = :effective_width, data = :data where id = :id;")?
-        };
-        stmt.execute(named_params! {
+        let geom = self.make_geometry_valid(&entity.geometry)?;
+        let mut stmt = self.conn.prepare_cached("update entities set discriminator = :discriminator, geometry = GeomFromWKB(:geometry, 4326), effective_width = :effective_width, data = :data where id = :id;")?;
+                    stmt.execute(named_params! {
             ":discriminator": entity.discriminator.as_str(),
-            ":geometry": entity.geometry,
+            ":geometry": geom,
             ":effective_width": entity.effective_width,
             ":data": entity.data,
             ":id": entity.id.as_str(),
@@ -600,5 +591,37 @@ impl AreaDatabase {
             .map(|e| e.expect("Should not happen"))
             .collect();
         Ok(results)
+    }
+
+    fn make_geometry_valid<'a>(&'a self, geom: &'a [u8]) -> Result<Cow<[u8]>> {
+        // We don't want to introduce a mutable reference for a simple parsing, and we don't represent geometries as typed objects, so that's the reason for this check.
+        if self.geometry_is_valid(geom)? {
+            return Ok(geom.into())
+        }
+        // Note that we support only little-endian WKB geometries.
+        if geom[0] == 1 && geom[1] == 7 {
+            let cloned_geom = geom.to_vec();
+            let parsed_geom = wkb::wkb_to_geom(&mut cloned_geom.as_slice()).unwrap();
+            if let geo_types::Geometry::GeometryCollection(coll) = parsed_geom {
+                let mut output_wkb = vec![1_u8];
+                output_wkb.extend(7_u32.to_le_bytes());
+                output_wkb.extend((coll.len() as u32).to_le_bytes());
+                for part in coll {
+                    output_wkb.append(&mut self.make_valid_safe(&wkb::geom_to_wkb(&part).unwrap())?);
+                }
+            Ok(output_wkb.into())
+            }
+            else {
+                panic!("The unparsed data said that it's a geometry collection, but it was {parsed_geom:?} instead.");
+            }
+        }
+        else {
+            Ok(self.make_valid_safe(geom)?.into())
+        }
+    }
+
+    fn make_valid_safe(&self, geom: &[u8]) -> Result<Vec<u8>> {
+        let mut stmt = self.conn.prepare_cached("SELECT AsBinary(MakeValid(GeomFromWKB(?, 4326)))")?;
+        Ok(stmt.query_row([geom], |r| Ok(r.get_unwrap(0)))?)
     }
 }
