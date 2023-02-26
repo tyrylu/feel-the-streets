@@ -420,13 +420,18 @@ impl OSMObjectManager {
     }
 
     fn create_geometry_collection(&self, object: &OSMObject) -> Result<Option<Geometry<f64>>> {
-        let mut coll = GeometryCollection::new_from(
-            self.related_objects_of(object)?
-                .map(|o| self.get_geometry_of(&o))
-                .filter_map(|g| g.ok())
-                .flatten()
-                .collect(),
-        );
+        let mut coll = GeometryCollection::default();
+        for related in self.related_objects_of(object)? {
+            let related_geom = self.get_geometry_of(&related)?;
+            if let Some(related_geom) = related_geom {
+            if let Geometry::GeometryCollection(mut related_coll) = related_geom {
+                coll.0.append(&mut related_coll.0);
+            }
+            else {
+                coll.0.push(related_geom);
+            }
+        }
+    }
         if coll.len() == 1 {
             Ok(Some(coll.0.pop().unwrap()))
         } else {
