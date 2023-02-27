@@ -1,5 +1,4 @@
 use axum::Router;
-use axum_extra::routing::SpaRouter;
 use server::api_routes;
 use server::db;
 use server::ui_routes;
@@ -7,6 +6,7 @@ use server::{AppState, Result};
 use std::net::SocketAddr;
 use std::sync::{Arc, Mutex};
 use tera::Tera;
+use tower_http::services::ServeDir;
 use tower_http::trace::TraceLayer;
 
 #[tokio::main]
@@ -19,9 +19,8 @@ async fn main() -> Result<()> {
         templates: tera,
         db_conn,
     };
-    let spa = SpaRouter::new("/static", "static");
     let app = Router::new()
-        .merge(spa)
+        .nest_service("/static", ServeDir::new("static"))
         .nest("/api", api_routes::routes())
         .nest("/", ui_routes::routes())
         .layer(TraceLayer::new_for_http())
