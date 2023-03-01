@@ -118,6 +118,7 @@ impl AreaDatabase {
             let mut insert_related_stmt =
                 self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
             if entity.geometry.len() < 1_000_000 {
+                trace!("Making geometry for entity {} valid.", entity.id);
                 let geom = self.make_geometry_valid(&entity.geometry)?;
                 let mut insert_stmt = self.conn.prepare(INSERT_ENTITY_SQL)?;
                 trace!("Inserting {:?}", entity);
@@ -157,7 +158,8 @@ impl AreaDatabase {
                 }
             } else {
                 warn!(
-                    "Not inserting entity with data {} with geometry size {}.",
+                    "Not inserting entity {}, data {} with geometry size {}.",
+                    entity.id,
                     entity.data,
                     entity.geometry.len()
                 )
@@ -595,7 +597,9 @@ impl AreaDatabase {
 
     fn make_geometry_valid<'a>(&'a self, geom: &'a [u8]) -> Result<Cow<[u8]>> {
         // We don't want to introduce a mutable reference for a simple parsing, and we don't represent geometries as typed objects, so that's the reason for this check.
+        trace!("Making geometry with length {} valid.", geom.len());
         if self.geometry_is_valid(geom)? {
+            trace!("Geometry is valid, returning as is.");
             return Ok(geom.into())
         }
         // Note that we support only little-endian WKB geometries.
@@ -606,6 +610,7 @@ impl AreaDatabase {
                 let mut output_wkb = vec![1_u8];
                 output_wkb.extend(7_u32.to_le_bytes());
                 output_wkb.extend((coll.len() as u32).to_le_bytes());
+                trace!("Geometry is a collection with {} parts.", coll.len());
                 for part in coll {
                     output_wkb.append(&mut self.make_valid_safe(&wkb::geom_to_wkb(&part).unwrap())?);
                 }

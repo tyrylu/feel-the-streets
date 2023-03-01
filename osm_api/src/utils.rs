@@ -1,5 +1,5 @@
 use crate::object::OSMObject;
-use geo_types::{Coord, LineString};
+use geo_types::{Coord, LineString, Geometry};
 use once_cell::sync::Lazy;
 use std::collections::HashMap;
 
@@ -89,4 +89,17 @@ pub fn connect_polygon_segments(segments: &mut Vec<LineString<f64>>) {
     for segment in segments.iter_mut() {
         segment.close();
     }
+}
+
+pub(crate) fn expand_geometry_collections(geoms: &[Geometry<f64>]) -> Vec<Geometry<f64>> {
+    let mut expanded = Vec::with_capacity(geoms.len());
+    for geom in geoms {
+        if let Geometry::GeometryCollection(ref coll) = geom {
+            expanded.extend(expand_geometry_collections(&coll.0));
+        }
+        else {
+            expanded.push(geom.clone());
+        }
+    }
+    expanded
 }

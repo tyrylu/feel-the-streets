@@ -384,7 +384,7 @@ impl OSMObjectManager {
                             let mut coll = GeometryCollection::default();
                             coll.0.push(poly);
                             for o in others {
-                                coll.0.push(self.get_geometry_of(&o)?.unwrap());
+                                coll.0.append(&mut utils::expand_geometry_collections(&[self.get_geometry_of(&o)?.unwrap()]));
                             }
                             Ok(Some(Geometry::GeometryCollection(coll)))
                         }
@@ -424,8 +424,8 @@ impl OSMObjectManager {
         for related in self.related_objects_of(object)? {
             let related_geom = self.get_geometry_of(&related)?;
             if let Some(related_geom) = related_geom {
-            if let Geometry::GeometryCollection(mut related_coll) = related_geom {
-                coll.0.append(&mut related_coll.0);
+            if let Geometry::GeometryCollection(related_coll) = related_geom {
+                coll.0.append(&mut utils::expand_geometry_collections(&related_coll.0));
             }
             else {
                 coll.0.push(related_geom);
