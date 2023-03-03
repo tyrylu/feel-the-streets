@@ -7,7 +7,7 @@
 {% block section_title %}Details of area {{ area.name }}{% endblock %}
 {% block content %}
 <p>Area was created at {{ area.created_at }}.</p>
-<p>It contains {{ entity_count }} entitites and {{ entity_relationship_count }} entity relationships.</p>
+<p>It contains {{ entity_count }} entities and {{ entity_relationship_count }} entity relationships.</p>
 <h2>Entity counts by type</h2>
 <table class="sortable">
     <thead>
