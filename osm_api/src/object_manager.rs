@@ -382,7 +382,7 @@ impl OSMObjectManager {
                         Some(poly) if others.is_empty() => Ok(Some(poly)),
                         Some(poly) => {
                             let mut coll = GeometryCollection::default();
-                            coll.0.push(poly);
+                            coll.0.append(&mut utils::expand_geometry_collections(&[poly]));
                             for o in others {
                                 coll.0.append(&mut utils::expand_geometry_collections(&[self.get_geometry_of(&o)?.unwrap()]));
                             }
@@ -484,7 +484,7 @@ impl OSMObjectManager {
         if polys.len() == 1 {
             Ok(Some(polys[0].clone().into()))
         } else {
-            Ok(Some(Geometry::MultiPolygon(polys.into())))
+            Ok(Some(Geometry::GeometryCollection(polys.into())))
         }
     }
 
