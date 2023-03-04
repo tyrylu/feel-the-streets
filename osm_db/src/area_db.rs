@@ -117,7 +117,6 @@ impl AreaDatabase {
         for (entity, related_ids) in entities {
             let mut insert_related_stmt =
                 self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
-            if entity.geometry.len() < 1_000_000 {
                 trace!("Making geometry for entity {} valid.", entity.id);
                 let geom = self.make_geometry_valid(&entity.geometry)?;
                 let mut insert_stmt = self.conn.prepare(INSERT_ENTITY_SQL)?;
@@ -156,14 +155,6 @@ impl AreaDatabase {
                         error!("Failed to insert entity {:?}, error: {}", entity, e);
                     }
                 }
-            } else {
-                warn!(
-                    "Not inserting entity {}, data {} with geometry size {}.",
-                    entity.id,
-                    entity.data,
-                    entity.geometry.len()
-                )
-            }
         }
         // Handle deferred relationship insertions.
         for (parent, child) in deferred_relationship_insertions.iter() {

@@ -45,7 +45,9 @@ class Map:
         with measure("Index query"):
             rough_distant = self._db.get_entities(query)
         if fast:
+            rough_distant = [e for e in rough_distant if len(e.geometry) < 100000]
             self._rough_distant_cache = (position, rough_distant)
+        log.debug("Huge geometry lengths: %s", [len(e.geometry) for e in rough_distant if len(e.geometry) > 100000])
         return rough_distant
     
     def within_distance(self, position, distance, fast=True):
