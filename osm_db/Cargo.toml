@@ -20,4 +20,4 @@ hashbrown = { version = "0.13.2", features = ["serde"] }
 dirs-next = "2.0.0"
 base64 = "0.21.0"
 wkb = "0.7.1"
-geo-types = "0.7.8"
+geo-types = "0.7.9"
