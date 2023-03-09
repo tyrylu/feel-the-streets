@@ -18,7 +18,7 @@ tempfile = "3.4.0"
 bincode = "1.3.3"
 hashbrown = { version = "0.13.2", features = ["serde"] }
 wkb = "0.7.1"
-geo-types = "0.7.8"
+geo-types = "0.7.9"
 smol_str = { version = "0.1.24", features = ["serde"] }
 zstd_util = "0.1.3"
 crossbeam-channel = "0.5.7"
