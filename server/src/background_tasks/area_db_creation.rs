@@ -33,7 +33,8 @@ pub fn create_area_database_worker(
     let mut record = TranslationRecord::new();
     manager.lookup_objects_in(area)?;
     let area_object = manager.get_object(&osm_api::area_id_to_osm_id(area))?.expect("Area object not found");
-    let area_bounds = db::get_geometry_bounds(&*area_db_conn.lock().unwrap(), &manager.get_geometry_as_wkb(&area_object, &BoundaryRect::whole_world())?.unwrap())?;
+    let area_geom = manager.get_geometry_as_wkb(&area_object, &BoundaryRect::whole_world())?.unwrap();
+    let area_bounds = db::get_geometry_bounds(&*area_db_conn.lock().unwrap(), &area_geom)?;
     let from_network_ids = manager.get_ids_retrieved_from_network();
     let mut db = AreaDatabase::create(area)?;
     db.insert_entities(manager.cached_objects().filter_map(|obj| {
@@ -47,7 +48,7 @@ pub fn create_area_database_worker(
     infer_additional_relationships_for(&db)?;
     db.commit()?;
     let parent_ids_str = get_parent_ids_str_for(area, &manager, &mut cache.lock().unwrap())?;
-    area::finalize_area_creation(area, parent_ids_str, &mut area_db_conn.lock().unwrap())?;
+    area::finalize_area_creation(area, parent_ids_str, &area_geom, &mut area_db_conn.lock().unwrap())?;
     record.save_to_file(&format!("creation_{area}.json"))?;
     info!("Area {} created successfully.", area);
     Ok(())

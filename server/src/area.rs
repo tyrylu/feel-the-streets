@@ -134,15 +134,17 @@ impl Area {
 pub fn finalize_area_creation(
     osm_id: i64,
     parent_ids_str: String,
+    geometry: &[u8],
     conn: &mut Connection,
 ) -> Result<usize> {
     let size = fs::metadata(AreaDatabase::path_for(osm_id, true))?.len();
-    let mut stmt = conn.prepare_cached("UPDATE areas SET state = ?, parent_osm_ids = ?, db_size = ?, updated_at = ? WHERE osm_id = ?")?;
+    let mut stmt = conn.prepare_cached("UPDATE areas SET state = ?, parent_osm_ids = ?, db_size = ?, updated_at = ?, geometry = ? WHERE osm_id = ?")?;
     Ok(stmt.execute((
         AreaState::Updated,
         parent_ids_str,
         size as i64,
         Utc::now(),
+        geometry,
         osm_id,
     ))?)
 }
