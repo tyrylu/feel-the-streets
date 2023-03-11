@@ -120,7 +120,7 @@ impl AreaDatabase {
                 trace!("Making geometry for entity {} valid.", entity.id);
                 let geom = self.make_geometry_valid(&entity.geometry)?;
                 let mut insert_stmt = self.conn.prepare(INSERT_ENTITY_SQL)?;
-                trace!("Inserting {:?}", entity);
+                trace!("Inserting {} {}, data {}, geom {:?}.", entity.discriminator, entity.id, entity.data, geom);
                 match insert_stmt.execute(named_params! {
                     ":id": entity.id.as_str(),
                     ":discriminator": entity.discriminator.as_str(),
@@ -588,7 +588,7 @@ impl AreaDatabase {
 
     fn make_geometry_valid<'a>(&'a self, geom: &'a [u8]) -> Result<Cow<[u8]>> {
         // We don't want to introduce a mutable reference for a simple parsing, and we don't represent geometries as typed objects, so that's the reason for this check.
-        trace!("Making geometry with length {} valid.", geom.len());
+        trace!("Making geometry {:?} valid.", geom);
         if self.geometry_is_valid(geom)? {
             trace!("Geometry is valid, returning as is.");
             return Ok(geom.into())
@@ -598,10 +598,14 @@ impl AreaDatabase {
             let cloned_geom = geom.to_vec();
             let parsed_geom = wkb::wkb_to_geom(&mut cloned_geom.as_slice()).unwrap();
             if let geo_types::Geometry::GeometryCollection(coll) = parsed_geom {
-                let mut output_wkb = vec![1_u8];
-                output_wkb.extend(7_u32.to_le_bytes());
-                output_wkb.extend((coll.len() as u32).to_le_bytes());
-                trace!("Geometry is a collection with {} parts.", coll.len());
+                let mut output_wkb = if coll.0.len() == 1 {
+                vec![]
+                }else {
+                    let mut out = vec![1_u8];
+                out.extend(7_u32.to_le_bytes());
+                out.extend((coll.len() as u32).to_le_bytes());
+                out
+                };
                 for part in coll {
                     output_wkb.append(&mut self.make_valid_safe(&wkb::geom_to_wkb(&part).unwrap())?);
                 }

@@ -1,3 +1,4 @@
+use crate::BoundaryRect;
 use crate::change::OSMObjectChangeEvent;
 use crate::change_iterator::OSMObjectChangeIterator;
 use crate::object::{OSMObject, OSMObjectSpecifics, OSMObjectType};
@@ -272,7 +273,7 @@ impl OSMObjectManager {
             .insert("parent_id".to_string(), parent.unique_id().to_string());
     }
 
-    fn get_way_coords(&self, way: &OSMObject) -> Result<LineString<f64>> {
+    fn get_way_coords(&self, way: &OSMObject, object_bounds: &BoundaryRect) -> Result<LineString<f64>> {
         use self::OSMObjectSpecifics::{Node, Way};
         let node_count = match &way.specifics {
             Way { nodes } => nodes.len(),
@@ -284,17 +285,17 @@ impl OSMObjectManager {
         let mut coords = Vec::with_capacity(node_count);
         for obj in self.related_objects_of(way)? {
             match obj.specifics {
-                Node { lon, lat } => {
+                Node { lon, lat } if object_bounds.contains_point(lon, lat) => {
                     coords.push((lon, lat));
                 }
-                _ => unreachable!(),
+                _ => { },
             }
         }
         Ok(coords.into())
     }
 
-    pub fn get_geometry_as_wkb(&self, object: &OSMObject) -> Result<Option<Vec<u8>>> {
-        match self.get_geometry_of(object)? {
+    pub fn get_geometry_as_wkb(&self, object: &OSMObject, object_bounds: &BoundaryRect) -> Result<Option<Vec<u8>>> {
+        match self.get_geometry_of(object, object_bounds)? {
             None => Ok(None),
             Some(geom) => Ok(Some(
                 wkb::geom_to_wkb(&geom).map_err(|e| Error::WKBWriteError(format!("{e:?}")))?,
@@ -302,7 +303,7 @@ impl OSMObjectManager {
         }
     }
 
-    pub fn get_geometry_of(&self, object: &OSMObject) -> Result<Option<Geometry<f64>>> {
+    pub fn get_geometry_of(&self, object: &OSMObject, object_bounds: &BoundaryRect) -> Result<Option<Geometry<f64>>> {
         let exists = self
             .geometries_cache
             .borrow()
@@ -310,7 +311,7 @@ impl OSMObjectManager {
         if exists {
             Ok(self.geometries_cache.borrow()[&object.unique_id()].clone())
         } else {
-            let res = self.get_geometry_of_uncached(object)?;
+            let res = self.get_geometry_of_uncached(object, object_bounds)?;
             trace!("Object {} has geometry {:?}", object.unique_id(), res);
             self.geometries_cache
                 .borrow_mut()
@@ -319,15 +320,18 @@ impl OSMObjectManager {
         }
     }
 
-    fn get_geometry_of_uncached(&self, object: &OSMObject) -> Result<Option<Geometry<f64>>> {
+    fn get_geometry_of_uncached(&self, object: &OSMObject, object_bounds: &BoundaryRect) -> Result<Option<Geometry<f64>>> {
         use self::OSMObjectSpecifics::*;
         match object.specifics {
-            Node { lon, lat } => Ok(Some(Point::new(lon, lat).into())),
+            Node { lon, lat } if object_bounds.contains_point(lon, lat) => Ok(Some(Point::new(lon, lat).into())),
             Way { .. } => {
-                let coords = self.get_way_coords(object)?;
-                if coords.0.len() <= 1 {
-                    warn!("One or zero nodes for object {}", object.unique_id());
+                let coords = self.get_way_coords(object, object_bounds)?;
+                if coords.0.is_empty() {
+                    debug!("Zero nodes for object {}, likely filtere by the object boundary", object.unique_id());
                     return Ok(None);
+                }
+                if coords.0.len() == 1 {
+                    return Ok(Some(Point::new(coords.0[0].x, coords.0[0].y).into()))
                 }
                 if utils::object_should_have_closed_geometry(object) && coords.0.len() > 2 {
                     Ok(Some(Polygon::new(coords, vec![]).into()))
@@ -361,12 +365,14 @@ impl OSMObjectManager {
                             object.unique_id(),
                             inners.as_slice(),
                             others.as_slice(),
+                            object_bounds,
                         )?;
                     } else {
                         multipolygon = self.construct_multipolygon_from_parts(
                             object.unique_id(),
                             inners.as_slice(),
                             outers.as_slice(),
+                            object_bounds,
                         )?;
                     }
                 }
@@ -378,22 +384,27 @@ impl OSMObjectManager {
                         object.unique_id(),
                         inners.as_slice(),
                         outers.as_slice(),
+                        object_bounds
                     )? {
                         Some(poly) if others.is_empty() => Ok(Some(poly)),
                         Some(poly) => {
                             let mut coll = GeometryCollection::default();
                             coll.0.append(&mut utils::expand_geometry_collections(&[poly]));
                             for o in others {
-                                coll.0.append(&mut utils::expand_geometry_collections(&[self.get_geometry_of(&o)?.unwrap()]));
-                            }
+                                match self.get_geometry_of(&o, object_bounds)? {
+                                    Some(o) => {coll.0.append(&mut utils::expand_geometry_collections(&[o]));},
+                                    None => {}
+                                }
+                                                            }
                             Ok(Some(Geometry::GeometryCollection(coll)))
                         }
-                        None => self.create_geometry_collection(object),
+                        None => self.create_geometry_collection(object, object_bounds),
                     }
                 } else {
-                    self.create_geometry_collection(object)
+                    self.create_geometry_collection(object, object_bounds)
                 }
             }
+        _ => Ok(None)
         }
     }
 
@@ -419,10 +430,10 @@ impl OSMObjectManager {
         Ok(())
     }
 
-    fn create_geometry_collection(&self, object: &OSMObject) -> Result<Option<Geometry<f64>>> {
+    fn create_geometry_collection(&self, object: &OSMObject, object_bounds: &BoundaryRect) -> Result<Option<Geometry<f64>>> {
         let mut coll = GeometryCollection::default();
         for related in self.related_objects_of(object)? {
-            let related_geom = self.get_geometry_of(&related)?;
+            let related_geom = self.get_geometry_of(&related, object_bounds)?;
             if let Some(related_geom) = related_geom {
             if let Geometry::GeometryCollection(related_coll) = related_geom {
                 coll.0.append(&mut utils::expand_geometry_collections(&related_coll.0));
@@ -434,7 +445,9 @@ impl OSMObjectManager {
     }
         if coll.len() == 1 {
             Ok(Some(coll.0.pop().unwrap()))
-        } else {
+        } else if coll.is_empty() {
+            return Ok(None)
+        }else{ 
             Ok(Some(Geometry::GeometryCollection(coll)))
         }
     }
@@ -444,14 +457,21 @@ impl OSMObjectManager {
         object_id: SmolStr,
         inner_objects: &[OSMObject],
         outer_objects: &[OSMObject],
+        object_bounds: &BoundaryRect,
     ) -> Result<Option<Geometry<f64>>> {
         let mut inners = vec![];
         let mut outers = vec![];
         for i in inner_objects {
-            inners.push(self.get_way_coords(i)?);
+            let coords =self.get_way_coords(i, object_bounds)?;
+            if !coords.0.is_empty() {
+            inners.push(coords);
+            }
         }
         for o in outer_objects {
-            outers.push(self.get_way_coords(o)?);
+            let coords = self.get_way_coords(o, object_bounds)?;
+            if !coords.0.is_empty() {
+                outers.push(coords);
+            }
         }
         utils::connect_polygon_segments(&mut inners);
         utils::connect_polygon_segments(&mut outers);
@@ -483,6 +503,8 @@ impl OSMObjectManager {
         }
         if polys.len() == 1 {
             Ok(Some(polys[0].clone().into()))
+        } else if polys.is_empty() {
+            return Ok(None)
         } else {
             Ok(Some(Geometry::GeometryCollection(polys.into())))
         }

@@ -1,4 +1,5 @@
 use chrono::{DateTime, Utc};
+use osm_api::BoundaryRect;
 use osm_api::change::OSMObjectChangeEvent;
 use osm_api::object_manager::OSMObjectManager;
 use std::env;
@@ -30,7 +31,7 @@ fn main() {
                         .unwrap_or_else(|| panic!("No old or new for change {change:?}"))
                 });
                 let geom = manager
-                    .get_geometry_as_wkb(obj)
+                    .get_geometry_as_wkb(obj, &BoundaryRect::whole_world())
                     .expect("Could not get geom")
                     .unwrap_or_else(|| panic!("Geometry for {obj:?} was none."));
                 println!("{:?}, geom len: {}", change, geom.len());

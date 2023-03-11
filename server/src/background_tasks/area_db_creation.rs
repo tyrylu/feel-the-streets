@@ -5,6 +5,7 @@ use crate::{
     db::{self, Connection},
 };
 use doitlater::typetag;
+use osm_api::BoundaryRect;
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::SmolStr;
 use osm_db::area_db::AreaDatabase;
@@ -31,13 +32,15 @@ pub fn create_area_database_worker(
     info!("Starting to create area with id {}.", area);
     let mut record = TranslationRecord::new();
     manager.lookup_objects_in(area)?;
+    let area_object = manager.get_object(&osm_api::area_id_to_osm_id(area))?.expect("Area object not found");
+    let area_bounds = db::get_geometry_bounds(&*area_db_conn.lock().unwrap(), &manager.get_geometry_as_wkb(&area_object, &BoundaryRect::whole_world())?.unwrap())?;
     let from_network_ids = manager.get_ids_retrieved_from_network();
     let mut db = AreaDatabase::create(area)?;
     db.insert_entities(manager.cached_objects().filter_map(|obj| {
         if !from_network_ids.contains(&obj.unique_id()) {
             return None;
         }
-        translator::translate(&obj, &manager, &mut record).expect("Translation failure.")
+        translator::translate(&obj, &area_bounds, &manager, &mut record).expect("Translation failure.")
     }))?;
     drop(from_network_ids);
     db.begin()?;

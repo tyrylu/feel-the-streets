@@ -1,3 +1,4 @@
+use osm_api::BoundaryRect;
 use osm_api::object_manager::OSMObjectManager;
 use std::env;
 use std::fs;
@@ -7,7 +8,7 @@ fn main() -> osm_api::Result<()> {
     let manager = OSMObjectManager::new()?;
     let obj = manager.get_object(&id)?.expect("Could not get object");
     let geom = manager
-        .get_geometry_of(&obj)?
+        .get_geometry_of(&obj, &BoundaryRect::whole_world())?
         .expect("Could not create geometry");
     fs::write(
         format!("{}_geom.txt", obj.unique_id()),

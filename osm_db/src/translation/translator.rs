@@ -5,7 +5,8 @@ use super::spec::TranslationSpec;
 use crate::entity::Entity;
 use crate::Error;
 use hashbrown::HashMap;
-use log::{trace, warn};
+use log::{trace, debug, warn};
+use osm_api::BoundaryRect;
 use osm_api::object::OSMObject;
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::SmolStr;
@@ -15,6 +16,7 @@ type RelatedIdsIterator = Box<dyn Iterator<Item = String>>;
 
 pub fn translate(
     object: &OSMObject,
+    object_bounds: &BoundaryRect,
     manager: &OSMObjectManager,
     record: &mut TranslationRecord,
 ) -> Result<Option<(Entity, RelatedIdsIterator)>, Error> {
@@ -104,7 +106,7 @@ pub fn translate(
             }
             let raw_data =
                 serde_json::to_string(&converted_data).expect("Could not serialize entity data.");
-            let geometry = manager.get_geometry_as_wkb(object)?;
+            let geometry = manager.get_geometry_as_wkb(object, object_bounds)?;
             match geometry {
                 Some(geom) => {
                     let effective_width = calculate_effective_width(&discriminator, &entity_data);
@@ -121,7 +123,7 @@ pub fn translate(
                     )))
                 }
                 None => {
-                    warn!("Failed to generate geometry for object {:?}", &object);
+                    debug!("Failed to generate geometry for object {:?}, likely because of the object boundary filtering", &object);
                     Ok(None)
                 }
             }

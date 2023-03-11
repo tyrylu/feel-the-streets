@@ -67,6 +67,8 @@ pub fn update_area(
     let mut osm_change_count = 0;
     let mut semantic_changes = vec![];
     let mut seen_unique_ids = HashSet::new();
+    let area_geom = area_db.get_entity(&osm_api::area_id_to_osm_id(area.osm_id))?.expect("Area entity not found").geometry;
+    let area_bounds = db::get_geometry_bounds(&*conn.lock().unwrap(), &area_geom)?;
     area_db.begin()?;
     for event in manager.lookup_differences_in(area.osm_id, &after)? {
         let event = event?;
@@ -114,7 +116,7 @@ pub fn update_area(
                     continue;
                 }
                 manager.cache_object(&new);
-                translator::translate(&new, &manager, &mut record)?
+                translator::translate(&new, &area_bounds, &manager, &mut record)?
             }
             .map(|(o, ids)| {
                 SemanticChange::creating(
@@ -145,7 +147,7 @@ pub fn update_area(
                 manager.cache_object(&new_object);
                 let osm_id = new_object.unique_id();
                 let old = area_db.get_entity(&osm_id)?;
-                let new = translator::translate(&new_object, &manager, &mut record)?;
+                let new = translator::translate(&new_object, &area_bounds, &manager, &mut record)?;
                 match (old, new) {
                     (None, None) => None,
                     (Some(_), None) => Some(SemanticChange::removing(&osm_id)),
