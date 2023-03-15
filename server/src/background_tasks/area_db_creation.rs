@@ -35,6 +35,7 @@ pub fn create_area_database_worker(
     let area_object = manager.get_object(&osm_api::area_id_to_osm_id(area))?.expect("Area object not found");
     let area_geom = manager.get_geometry_as_wkb(&area_object, &BoundaryRect::whole_world())?.unwrap();
     let area_bounds = db::get_geometry_bounds(&*area_db_conn.lock().unwrap(), &area_geom)?;
+    info!("Using area bounds: {:?}", area_bounds);
     let from_network_ids = manager.get_ids_retrieved_from_network();
     let mut db = AreaDatabase::create(area)?;
     db.insert_entities(manager.cached_objects().filter_map(|obj| {
