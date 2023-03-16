@@ -391,9 +391,8 @@ impl OSMObjectManager {
                             let mut coll = GeometryCollection::default();
                             coll.0.append(&mut utils::expand_geometry_collections(&[poly]));
                             for o in others {
-                                match self.get_geometry_of(&o, object_bounds)? {
-                                    Some(o) => {coll.0.append(&mut utils::expand_geometry_collections(&[o]));},
-                                    None => {}
+                                if let Some(o) = self.get_geometry_of(&o, object_bounds)? {
+                                    coll.0.append(&mut utils::expand_geometry_collections(&[o]));
                                 }
                                                             }
                             Ok(Some(Geometry::GeometryCollection(coll)))
