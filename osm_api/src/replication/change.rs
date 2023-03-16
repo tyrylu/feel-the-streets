@@ -7,9 +7,37 @@ use crate::raw_object::OSMObject as RawOSMObject;
 
 #[derive(Debug, Deserialize)]
 pub(crate) struct RawOSMChange {
-    pub modify: Vec<RawOSMObject>,
-    pub create: Vec<RawOSMObject>,
-    pub delete: Vec<RawOSMObject>,
+    pub modify: Vec<Modification>,
+    pub create: Vec<Creation>,
+    pub delete: Vec<Deletion>
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Modification {
+    #[serde(rename = "node", alias = "way", alias = "relation")]
+    changes: Vec<RawOSMObject>
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Creation {
+    #[serde(rename = "node", alias = "way", alias = "relation")]
+    changes: Vec<RawOSMObject>
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Deletion {
+    #[serde(rename = "node", alias = "way", alias = "relation")]
+    changes: Vec<RawOSMObject>
+}
+
+#[derive(Debug, Deserialize)]
+pub(crate) enum RawOSMChangePart {
+    #[serde(rename="modify")]
+    Modify(Vec<RawOSMObject>),
+    #[serde(rename="create")]
+    Create(Vec<RawOSMObject>),
+    #[serde(rename="delete")]
+    Delete(Vec<RawOSMObject>),
 }
 
 #[derive(Debug)]
@@ -23,22 +51,12 @@ impl TryFrom<RawOSMChange> for OSMChange {
     type Error = crate::Error;
 
     fn try_from(value: RawOSMChange) -> Result<Self> {
+        let modify = value.modify.into_iter().flat_map(|c| c.changes.into_iter()).map(|o| o.try_into()).collect::<Result<Vec<OSMObject>>>()?;
+        let create = value.create.into_iter().flat_map(|c| c.changes.into_iter()).map(|o| o.try_into()).collect::<Result<Vec<OSMObject>>>()?;
+        let delete = value.delete.into_iter().flat_map(|c| c.changes.into_iter()).map(|o| o.try_into()).collect::<Result<Vec<OSMObject>>>()?;
+
         Ok(OSMChange {
-            create: value
-                .create
-                .into_iter()
-                .map(|o| o.try_into())
-                .collect::<Result<Vec<OSMObject>>>()?,
-            modify: value
-                .modify
-                .into_iter()
-                .map(|o| o.try_into())
-                .collect::<Result<Vec<OSMObject>>>()?,
-            delete: value
-                .delete
-                .into_iter()
-                .map(|o| o.try_into())
-                .collect::<Result<Vec<OSMObject>>>()?,
+            modify, create, delete
         })
     }
 }

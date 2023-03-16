@@ -68,7 +68,7 @@ pub fn update_area(
     let mut semantic_changes = vec![];
     let mut seen_unique_ids = HashSet::new();
     let area_geom = area_db.get_entity(&osm_api::area_id_to_osm_id(area.osm_id))?.expect("Area entity not found").geometry;
-    let area_bounds = db::get_geometry_bounds(&*conn.lock().unwrap(), &area_geom)?;
+    let area_bounds = db::get_geometry_bounds(&conn.lock().unwrap(), &area_geom)?;
     area_db.begin()?;
     for event in manager.lookup_differences_in(area.osm_id, &after)? {
         let event = event?;

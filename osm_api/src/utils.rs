@@ -1,5 +1,5 @@
 use crate::object::OSMObject;
-use geo_types::{Coord, LineString, Geometry};
+use geo_types::{Coord, LineString, Geometry, GeometryCollection};
 use once_cell::sync::Lazy;
 use std::collections::HashMap;
 
@@ -94,12 +94,35 @@ pub fn connect_polygon_segments(segments: &mut Vec<LineString<f64>>) {
 pub(crate) fn expand_geometry_collections(geoms: &[Geometry<f64>]) -> Vec<Geometry<f64>> {
     let mut expanded = Vec::with_capacity(geoms.len());
     for geom in geoms {
-        if let Geometry::GeometryCollection(ref coll) = geom {
-            expanded.extend(expand_geometry_collections(&coll.0));
+        match geom {
+            Geometry::GeometryCollection(ref coll) => expanded.extend(expand_geometry_collections(&coll.0)),
+            other => expanded.push(other.clone())
         }
-        else {
-            expanded.push(geom.clone());
-        }
-    }
+            }
     expanded
+}
+
+pub(crate) fn unnest_geometry(geom: Geometry<f64>) -> Geometry<f64> {
+    let mut parts: Vec<Geometry<f64>> = vec![];
+    match geom {
+        Geometry::Point(p) => parts.push(p.into()),
+        Geometry::Polygon(p) => parts.push(p.into()),
+        Geometry::LineString(l) => parts.push(l.into()),
+        Geometry::MultiLineString(ml) => parts.append(&mut ml.0.into_iter().map(|p| p.into()).collect()),
+        Geometry::MultiPoint(mp) => parts.append(&mut mp.0.into_iter().map(|p| p.into()).collect()),
+        Geometry::MultiPolygon(mp) => parts.append(&mut mp.0.into_iter().map(|p| p.into()).collect()),
+        Geometry::GeometryCollection(gc) => parts.append(&mut expand_geometry_collections(&gc.0)),
+        g => panic!("Geometry {g:?} not supported yet.")
+    }
+    if parts.len() == 1 {
+        parts.pop().unwrap()
+    }
+    else {
+        Geometry::GeometryCollection(GeometryCollection::from(parts))
+    }
+}
+
+pub fn unnest_wkb_geometry(mut geom: &[u8]) -> Vec<u8> {
+    let parsed = wkb::wkb_to_geom(&mut geom).expect("Unnest, could not parse geometry");
+    wkb::geom_to_wkb(&unnest_geometry(parsed)).expect("Unnest, could not write geometry")
 }

@@ -119,6 +119,7 @@ impl AreaDatabase {
                 self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
                 trace!("Making geometry for entity {} valid.", entity.id);
                 let geom = self.make_geometry_valid(&entity.geometry)?;
+                let geom = osm_api::unnest_wkb_geometry(&geom);
                 let mut insert_stmt = self.conn.prepare(INSERT_ENTITY_SQL)?;
                 trace!("Inserting {} {}, data {}, geom {:?}.", entity.discriminator, entity.id, entity.data, geom);
                 match insert_stmt.execute(named_params! {
@@ -253,6 +254,7 @@ impl AreaDatabase {
         entity_relationships: &[RootedEntityRelationship],
     ) -> Result<()> {
         let valid_geometry = self.make_geometry_valid(geometry)?;
+        let valid_geometry = osm_api::unnest_wkb_geometry(&valid_geometry);
         let mut stmt = self.conn.prepare_cached(INSERT_ENTITY_SQL)?;
         stmt.execute(named_params!{":id": id, ":discriminator": discriminator, ":geometry": valid_geometry, ":effective_width": effective_width, ":data": data})?;
         let mut insert_relationship_stmt =

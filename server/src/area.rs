@@ -129,6 +129,15 @@ impl Area {
         ))?;
         Ok(())
     }
+
+    pub fn all_containing(conn: &mut Connection, geometry: &[u8]) -> Result<Vec<Area>> {
+        let mut stmt = conn.prepare_cached(&format!("{SELECT_SOME_AREAS} WHERE MBRIntersects(geometry, GeomFromWKB(?, 4326))"))?;
+        let areas = stmt
+            .query_map([geometry], row_to_area)?
+            .map(|a| a.expect("Could not get area"))
+            .collect();
+        Ok(areas)
+    }
 }
 
 pub fn finalize_area_creation(

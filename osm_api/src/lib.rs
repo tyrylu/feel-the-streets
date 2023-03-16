@@ -4,6 +4,7 @@ mod boundary_rect;
 pub mod change;
 mod change_iterator;
 mod error;
+pub mod main_api;
 pub mod object;
 pub mod object_manager;
 pub mod overpass_api;
@@ -12,6 +13,7 @@ pub mod replication;
 mod utils;
 pub use boundary_rect::BoundaryRect;
 pub use error::Error;
+pub use utils::unnest_wkb_geometry;
 pub use smol_str::SmolStr;
 
 pub fn area_id_to_osm_id(area_id: i64) -> String {
