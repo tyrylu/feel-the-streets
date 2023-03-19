@@ -38,10 +38,13 @@ pub fn create_area_database_worker(
     info!("Using area bounds: {:?}", area_bounds);
     let from_network_ids = manager.get_ids_retrieved_from_network();
     let mut db = AreaDatabase::create(area)?;
+    let mut newest_timestamp = "2000-01-01T00:00:00Z".to_string();
     db.insert_entities(manager.cached_objects().filter_map(|obj| {
         if !from_network_ids.contains(&obj.unique_id()) {
             return None;
         }
+        let ts_clone = newest_timestamp.clone();
+        newest_timestamp= ts_clone.max(obj.timestamp.clone());
         translator::translate(&obj, &area_bounds, &manager, &mut record).expect("Translation failure.")
     }))?;
     drop(from_network_ids);
@@ -49,7 +52,7 @@ pub fn create_area_database_worker(
     infer_additional_relationships_for(&db)?;
     db.commit()?;
     let parent_ids_str = get_parent_ids_str_for(area, &manager, &mut cache.lock().unwrap())?;
-    area::finalize_area_creation(area, parent_ids_str, &area_geom, &mut area_db_conn.lock().unwrap())?;
+    area::finalize_area_creation(area, parent_ids_str, &area_geom, &newest_timestamp, &mut area_db_conn.lock().unwrap())?;
     record.save_to_file(&format!("creation_{area}.json"))?;
     info!("Area {} created successfully.", area);
     Ok(())
