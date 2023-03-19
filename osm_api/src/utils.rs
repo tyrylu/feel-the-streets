@@ -91,19 +91,8 @@ pub fn connect_polygon_segments(segments: &mut Vec<LineString<f64>>) {
     }
 }
 
-pub(crate) fn expand_geometry_collections(geoms: &[Geometry<f64>]) -> Vec<Geometry<f64>> {
-    let mut expanded = Vec::with_capacity(geoms.len());
-    for geom in geoms {
-        match geom {
-            Geometry::GeometryCollection(ref coll) => expanded.extend(expand_geometry_collections(&coll.0)),
-            other => expanded.push(other.clone())
-        }
-            }
-    expanded
-}
-
-pub(crate) fn unnest_geometry(geom: Geometry<f64>) -> Geometry<f64> {
-    let mut parts: Vec<Geometry<f64>> = vec![];
+fn unnest_geometry_to_parts(geom: Geometry<f64>) -> Vec<Geometry<f64>> {
+    let mut parts = vec![];
     match geom {
         Geometry::Point(p) => parts.push(p.into()),
         Geometry::Polygon(p) => parts.push(p.into()),
@@ -111,9 +100,14 @@ pub(crate) fn unnest_geometry(geom: Geometry<f64>) -> Geometry<f64> {
         Geometry::MultiLineString(ml) => parts.append(&mut ml.0.into_iter().map(|p| p.into()).collect()),
         Geometry::MultiPoint(mp) => parts.append(&mut mp.0.into_iter().map(|p| p.into()).collect()),
         Geometry::MultiPolygon(mp) => parts.append(&mut mp.0.into_iter().map(|p| p.into()).collect()),
-        Geometry::GeometryCollection(gc) => parts.append(&mut expand_geometry_collections(&gc.0)),
+        Geometry::GeometryCollection(gc) => parts.extend(gc.iter().flat_map(|g| unnest_geometry_to_parts(g.clone()))),
         g => panic!("Geometry {g:?} not supported yet.")
     }
+    parts
+    }
+
+pub(crate) fn unnest_geometry(geom: Geometry<f64>) -> Geometry<f64> {
+    let mut parts = unnest_geometry_to_parts(geom);
     if parts.len() == 1 {
         parts.pop().unwrap()
     }

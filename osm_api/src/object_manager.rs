@@ -389,13 +389,13 @@ impl OSMObjectManager {
                         Some(poly) if others.is_empty() => Ok(Some(poly)),
                         Some(poly) => {
                             let mut coll = GeometryCollection::default();
-                            coll.0.append(&mut utils::expand_geometry_collections(&[poly]));
+                            coll.0.push(poly);
                             for o in others {
                                 if let Some(o) = self.get_geometry_of(&o, object_bounds)? {
-                                    coll.0.append(&mut utils::expand_geometry_collections(&[o]));
+                                    coll.0.push(o);
                                 }
                                                             }
-                            Ok(Some(Geometry::GeometryCollection(coll)))
+                            Ok(Some(utils::unnest_geometry(Geometry::GeometryCollection(coll))))
                         }
                         None => self.create_geometry_collection(object, object_bounds),
                     }
@@ -434,20 +434,13 @@ impl OSMObjectManager {
         for related in self.related_objects_of(object)? {
             let related_geom = self.get_geometry_of(&related, object_bounds)?;
             if let Some(related_geom) = related_geom {
-            if let Geometry::GeometryCollection(related_coll) = related_geom {
-                coll.0.append(&mut utils::expand_geometry_collections(&related_coll.0));
-            }
-            else {
                 coll.0.push(related_geom);
-            }
         }
     }
-        if coll.len() == 1 {
-            Ok(Some(coll.0.pop().unwrap()))
-        } else if coll.is_empty() {
-            return Ok(None)
+    if coll.is_empty() {
+                        Ok(None)
         }else{ 
-            Ok(Some(Geometry::GeometryCollection(coll)))
+            Ok(Some(utils::unnest_geometry(Geometry::GeometryCollection(coll))))
         }
     }
 
