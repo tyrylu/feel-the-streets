@@ -354,6 +354,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "cron-parser"
+version = "0.7.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b3d0da1167446e43ab7212425dd51557626e3635c4687bf622ab12e13ad27a73"
+dependencies = [
+ "chrono",
+]
+
+[[package]]
 name = "crossbeam-channel"
 version = "0.5.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -488,15 +497,15 @@ dependencies = [
 
 [[package]]
 name = "doitlater"
-version = "0.2.3"
+version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f7d3dcf80ee5b706625cf86dedbe591d5dcbd2685d6e5fff53f05dd0d14013b4"
+checksum = "d2d21f61d680dc207e966c942754848607f7f3b4cb936f9009860aa6812ad7d6"
 dependencies = [
  "bincode",
  "chrono",
+ "cron-parser",
  "log",
  "redis",
- "saffron",
  "serde",
  "thiserror",
  "typetag",
@@ -1118,16 +1127,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "nom"
-version = "5.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ffb4262d26ed83a1c0a33a38fe2bb15797329c85770da05e6b828ddb782627af"
-dependencies = [
- "memchr",
- "version_check",
-]
-
-[[package]]
 name = "nu-ansi-term"
 version = "0.46.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1740,16 +1739,6 @@ name = "ryu"
 version = "1.0.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7b4b9743ed687d4b4bcedf9ff5eaa7398495ae14e61cba0a295704edbc7decde"
-
-[[package]]
-name = "saffron"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "03fb9a628596fc7590eb7edbf7b0613287be78df107f5f97b118aad59fb2eea9"
-dependencies = [
- "chrono",
- "nom",
-]
 
 [[package]]
 name = "same-file"
