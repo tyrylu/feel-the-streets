@@ -9,7 +9,7 @@ osm_db = {"path" = "../osm_db"}
 pyo3 = "0.18.1"
 pyo3-log = "0.8.1"
 log = "0.4.17"
-serde_json = "1.0.94"
+serde_json = "1.0.95"
 
 [lib]
 name = "osm_db"
