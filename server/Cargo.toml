@@ -23,4 +23,4 @@ axum-extra = { version = "0.6.0", features = ["async-read-body", "spa"] }
 tokio = { version = "1.27.0", features = ["fs", "macros", "rt", "rt-multi-thread"] }
 tracing-subscriber = {version="0.3.16", features=["env-filter"]}
 tower-http = { version = "0.4.0", features = ["trace"] }
-is-terminal = "0.4.5"
+is-terminal = "0.4.6"
