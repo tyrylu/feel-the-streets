@@ -37,20 +37,25 @@ pub fn create_area_database_worker(
     let area_bounds = db::get_geometry_bounds(&area_db_conn.lock().unwrap(), &area_geom)?;
     info!("Using area bounds: {:?}", area_bounds);
     let from_network_ids = manager.get_ids_retrieved_from_network();
-    let mut db = AreaDatabase::create(area)?;
+    let mut area_db = AreaDatabase::create(area)?;
     let mut newest_timestamp = "2000-01-01T00:00:00Z".to_string();
-    db.insert_entities(manager.cached_objects().filter_map(|obj| {
+    area_db.insert_entities(manager.cached_objects().filter_map(|obj| {
         if !from_network_ids.contains(&obj.unique_id()) {
             return None;
         }
-        let ts_clone = newest_timestamp.clone();
-        newest_timestamp= ts_clone.max(obj.timestamp.clone());
-        translator::translate(&obj, &area_bounds, &manager, &mut record).expect("Translation failure.")
+        let entity = translator::translate(&obj, &area_bounds, &manager, &mut record).expect("Translation failure.");
+        if let Some(ent) = &entity {
+            let ts_clone = newest_timestamp.clone();
+            newest_timestamp= ts_clone.max(obj.timestamp.clone());
+            db::insert_area_entity(&area_db_conn.lock().unwrap(), area, &ent.0.id).expect("Could not insert entity to the entities summary table");
+            db::insert_entity_geometry_parts(&area_db_conn.lock().unwrap(), &manager, &obj).expect("Could not insert object geometry parts");
+        }
+        entity
     }))?;
     drop(from_network_ids);
-    db.begin()?;
-    infer_additional_relationships_for(&db)?;
-    db.commit()?;
+    area_db.begin()?;
+    infer_additional_relationships_for(&area_db)?;
+    area_db.commit()?;
     let parent_ids_str = get_parent_ids_str_for(area, &manager, &mut cache.lock().unwrap())?;
     area::finalize_area_creation(area, parent_ids_str, &area_geom, &newest_timestamp, &mut area_db_conn.lock().unwrap())?;
     record.save_to_file(&format!("creation_{area}.json"))?;

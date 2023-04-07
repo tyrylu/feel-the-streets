@@ -49,7 +49,7 @@ fn process_osm_change(sn: u32, r_client: &ReplicationApiClient, m_client: &MainA
     let change = r_client.get_change(SequenceNumber::from_u32(sn)?)?;
     for modified in &change.modify {
         if changeset_might_be_interesting(modified.changeset, &mut changeset_interests, m_client, &mut server_db) {
-            handle_modification(modified, &manager, &mut server_db)?;
+            handle_modification(modified, manager, &mut server_db)?;
         }
         else {
                         continue;
@@ -57,7 +57,7 @@ fn process_osm_change(sn: u32, r_client: &ReplicationApiClient, m_client: &MainA
     }
     for created in &change.create {
         if changeset_might_be_interesting(created.changeset, &mut changeset_interests, m_client, &mut server_db) {
-            handle_creation(created, &manager, &mut server_db)?;
+            handle_creation(created, manager, &mut server_db)?;
         }
         else {
                         continue;
@@ -65,7 +65,7 @@ fn process_osm_change(sn: u32, r_client: &ReplicationApiClient, m_client: &MainA
     }
     for deleted in &change.delete {
         if changeset_might_be_interesting(deleted.changeset, &mut changeset_interests, m_client, &mut server_db) {
-            handle_deletion(deleted, &manager, &mut server_db)?;
+            handle_deletion(deleted, manager, &mut server_db)?;
         }
         else {
                         continue;
