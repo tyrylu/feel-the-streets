@@ -148,7 +148,7 @@ pub fn finalize_area_creation(
     conn: &mut Connection,
 ) -> Result<usize> {
     let size = fs::metadata(AreaDatabase::path_for(osm_id, true))?.len();
-    let mut stmt = conn.prepare_cached("UPDATE areas SET state = ?, parent_osm_ids = ?, newest_osm_timestamp = ?, db_size = ?, updated_at = ?, geometry = geomFromWKB(?, 4326) WHERE osm_id = ?")?;
+    let mut stmt = conn.prepare_cached("UPDATE areas SET state = ?, parent_osm_ids = ?, newest_osm_object_timestamp = ?, db_size = ?, updated_at = ?, geometry = geomFromWKB(?, 4326) WHERE osm_id = ?")?;
     Ok(stmt.execute((
         AreaState::Updated,
         parent_ids_str,
