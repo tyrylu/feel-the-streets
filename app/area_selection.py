@@ -54,6 +54,7 @@ class AreaSelectionDialog(BaseDialog):
         self._fill_areas(available)
         self._areas.setSortingEnabled(True)
         self._areas.sortByColumn(0, Qt.AscendingOrder)
+        self._areas.setFocus()
 
     def create_ui(self):
         areas_label = QLabel(_("&Available areas"))
