@@ -503,15 +503,15 @@ dependencies = [
 
 [[package]]
 name = "doitlater"
-version = "0.2.4"
+version = "0.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d2d21f61d680dc207e966c942754848607f7f3b4cb936f9009860aa6812ad7d6"
+checksum = "7ecb08d2657a676f3c270734130b5503151810385c1dda6286ef978e6f472fef"
 dependencies = [
  "bincode",
  "chrono",
  "cron-parser",
  "log",
- "redis 0.22.3",
+ "redis",
  "serde",
  "thiserror",
  "typetag",
@@ -1610,20 +1610,6 @@ dependencies = [
 
 [[package]]
 name = "redis"
-version = "0.22.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "aa8455fa3621f6b41c514946de66ea0531f57ca017b2e6c7cc368035ea5b46df"
-dependencies = [
- "combine",
- "itoa",
- "percent-encoding",
- "ryu",
- "sha1_smol",
- "url",
-]
-
-[[package]]
-name = "redis"
 version = "0.23.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3ea8c51b5dc1d8e5fd3350ec8167f464ec0995e79f2e90a075b63371500d557f"
@@ -1642,7 +1628,7 @@ version = "0.1.0"
 dependencies = [
  "log",
  "osm_db",
- "redis 0.23.0",
+ "redis",
  "thiserror",
 ]
 
