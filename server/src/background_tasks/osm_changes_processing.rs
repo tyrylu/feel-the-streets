@@ -7,6 +7,7 @@ use osm_api::object::OSMObject;
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::replication::{ReplicationApiClient, SequenceNumber};
 use osm_api::main_api::MainAPIClient;
+use osm_db::translation::{record::TranslationRecord, translator};
 use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -37,35 +38,37 @@ pub fn process_osm_changes(initial_sn: u32) -> Result<()> {
         latest_state.sequence_number.0
     );
     let manager = OSMObjectManager::new()?;
+    let server_db = db::connect_to_server_db()?;
     for sn in initial_sn..=latest_state.sequence_number.0 {
-        process_osm_change(sn, &r_client, &m_client, &manager)?;
+        process_osm_change(sn, &r_client, &m_client, &manager, &server_db)?;
     }
     Ok(())
 }
 
-fn process_osm_change(sn: u32, r_client: &ReplicationApiClient, m_client: &MainAPIClient, manager: &OSMObjectManager) -> Result<()> {
-    let mut server_db = db::connect_to_server_db()?;
-    let mut changeset_interests = HashMap::new();
+fn process_osm_change(sn: u32, r_client: &ReplicationApiClient, m_client: &MainAPIClient, manager: &OSMObjectManager, server_db: &Connection) -> Result<()> {
+        let mut changeset_interests = HashMap::new();
     let change = r_client.get_change(SequenceNumber::from_u32(sn)?)?;
+    let newest_timestamp = db::newest_osm_object_timestamp(server_db)?;
+    let mut record = TranslationRecord::new();
     for modified in &change.modify {
-        if changeset_might_be_interesting(modified.changeset, &mut changeset_interests, m_client, &mut server_db) {
-            handle_modification(modified, manager, &mut server_db)?;
+        if changeset_is_recent_enough(modified.changeset, &modified.timestamp, &newest_timestamp, &mut changeset_interests) && changeset_might_be_interesting(modified.changeset, &mut changeset_interests, m_client, server_db) {
+            handle_modification(modified, manager, server_db, &mut record)?;
         }
         else {
                         continue;
         }
     }
     for created in &change.create {
-        if changeset_might_be_interesting(created.changeset, &mut changeset_interests, m_client, &mut server_db) {
-            handle_creation(created, manager, &mut server_db)?;
+        if changeset_is_recent_enough(created.changeset, &created.timestamp, &newest_timestamp, &mut changeset_interests) && changeset_might_be_interesting(created.changeset, &mut changeset_interests, m_client, server_db) {
+            handle_creation(created, manager, server_db, &mut record)?;
         }
         else {
                         continue;
         }
     }
     for deleted in &change.delete {
-        if changeset_might_be_interesting(deleted.changeset, &mut changeset_interests, m_client, &mut server_db) {
-            handle_deletion(deleted, manager, &mut server_db)?;
+        if changeset_is_recent_enough(deleted.changeset, &deleted.timestamp, &newest_timestamp, &mut changeset_interests) && changeset_might_be_interesting(deleted.changeset, &mut changeset_interests, m_client, server_db) {
+            handle_deletion(deleted, server_db)?;
         }
         else {
                         continue;
@@ -75,7 +78,13 @@ fn process_osm_change(sn: u32, r_client: &ReplicationApiClient, m_client: &MainA
     Ok(())
 }
 
-fn changeset_might_be_interesting(changeset: u64, changeset_interests: &mut HashMap<u64, bool>, m_api: &MainAPIClient, conn: &mut Connection) -> bool {
+fn changeset_is_recent_enough(changeset: u64, changeset_time: &str, newest_time: &str, changeset_interests: &mut HashMap<u64, bool>) -> bool {
+    *changeset_interests.entry(changeset).or_insert_with(|| {
+        changeset_time > newest_time
+    })
+}
+
+fn changeset_might_be_interesting(changeset: u64, changeset_interests: &mut HashMap<u64, bool>, m_api: &MainAPIClient, conn: &Connection) -> bool {
     *changeset_interests.entry(changeset).or_insert_with(|| {
         debug!("Getting information about changeset {}", changeset);
         let changeset = m_api.get_changeset(changeset).expect("Could not get changeset");
@@ -87,33 +96,51 @@ fn changeset_might_be_interesting(changeset: u64, changeset_interests: &mut Hash
     })
 }
 
-fn handle_modification(object: &OSMObject, manager: &OSMObjectManager, conn: &mut Connection) -> Result<()> {
+fn handle_modification(object: &OSMObject, manager: &OSMObjectManager, conn: &Connection, record: &mut TranslationRecord) -> Result<()> {
+    let areas = Area::all_containing(conn, &manager.get_geometry_as_wkb(object, &BoundaryRect::whole_world())?.unwrap())?;
+    let geometric_containing_area_ids: Vec<i64> = areas.iter().map(|a| a.osm_id).collect();
+    let db_containing_area_ids = db::areas_containing(&object.unique_id(), conn)?;
+    for area in areas {
+        let bounds = db::get_geometry_bounds(conn, &area.geometry.unwrap())?;
+        if let Some((new_entity, new_related_ids)) = translator::translate(object, &bounds, manager, record)? {
+            if db_containing_area_ids.contains(&area.osm_id) {
+                info!("Object {} was modified in area {}.", new_entity.id, area.osm_id);
+            }
+            else {
+                info!("Due to a modification of object {}, it now should be also in area {}", new_entity.id, area.osm_id);
+            }
+        }
+    }
+    for area_id in db_containing_area_ids {
+        if !geometric_containing_area_ids.contains(&area_id) {
+            info!("Object {} is no longer part of area {}.", object.unique_id(), area_id);
+        }
+    }
+    for parent_entity_id in db::entities_containing(&object.unique_id(), conn)? {
+        info!("Because of a change of {}, we need to recalculate the geometry of {parent_entity_id}.", object.unique_id());
+    }
+    Ok(())
+}
+
+fn handle_creation(object: &OSMObject, manager: &OSMObjectManager, conn: &Connection, record: &mut TranslationRecord) -> Result<()> {
     let areas = Area::all_containing(conn, &manager.get_geometry_as_wkb(object, &BoundaryRect::whole_world())?.unwrap())?;
     if areas.is_empty() {
         return Ok(())
     }
-    info!("Object {} changed at least in {}.", object.unique_id(), areas[0].name);
+    for area in areas {
+        let bounds = db::get_geometry_bounds(conn, &area.geometry.unwrap())?;
+        if let Some((entity, related_ids)) = translator::translate(object, &bounds, manager, record)? {
+            info!("Object {} was created in area {}.", entity.id, area.osm_id);
+        }
+    }
     Ok(())
 }
 
-fn handle_creation(object: &OSMObject, manager: &OSMObjectManager, conn: &mut Connection) -> Result<()> {
-    let areas = Area::all_containing(conn, &manager.get_geometry_as_wkb(object, &BoundaryRect::whole_world())?.unwrap())?;
-    if areas.is_empty() {
+fn handle_deletion(object: &OSMObject, conn: &Connection) -> Result<()> {
+       let area_ids = db::areas_containing(&object.unique_id(), conn)?;
+       if area_ids.is_empty() {
         return Ok(())
+       }
+       info!("Object {} was deleted in {:?}", object.unique_id(), area_ids);
+       Ok(())
     }
-    info!("Object {} was created in {}.", object.unique_id(), areas[0].name);
-    Ok(())
-}
-
-fn handle_deletion(object: &OSMObject, manager: &OSMObjectManager, conn: &mut Connection) -> Result<()> {
-    if let Some(geom) = manager.get_geometry_as_wkb(object, &BoundaryRect::whole_world())? {
-    let areas = Area::all_containing(conn, &geom)?;
-    if areas.is_empty() {
-        return Ok(())
-    }
-    info!("Object {} was deleted in {}.", object.unique_id(), areas[0].name);
-} else {
-    warn!("Can not determine whether object {} has any occurrences, it has no geometry.", object.unique_id());
-}
-    Ok(())
-}

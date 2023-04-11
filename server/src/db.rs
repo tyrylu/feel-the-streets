@@ -14,6 +14,8 @@ pub fn connect_to_server_db() -> Result<Connection> {
     conn.load_extension_disable()?;
     conn.execute("CREATE TABLE IF NOT EXISTS area_entities (area_id INTEGER, entity_id TEXT, PRIMARY KEY (area_id, entity_id))", [])?;
     conn.execute("CREATE TABLE IF NOT EXISTS entity_geometry_parts (entity_id TEXT, contained_entity_id TEXT, PRIMARY KEY (entity_id, contained_entity_id))", [])?;
+    conn.execute("CREATE INDEX IF NOT EXISTS idx_area_entities_by_entity_id ON area_entities(entity_id)", [])?;
+    conn.execute("CREATE INDEX IF NOT EXISTS idx_entity_geometry_parts_by_contained_entity_id ON entity_geometry_parts(contained_entity_id)", [])?;
     Ok(conn)
 }
 
@@ -73,4 +75,21 @@ fn begin_transaction(conn: &Connection) -> Result<()> {
 fn commit_transaction(conn: &Connection) -> Result<()> {
     conn.execute("COMMIT", [])?;
     Ok(())
+}
+
+pub fn newest_osm_object_timestamp(conn: &Connection) -> Result<String> {
+    let mut stmt = conn.prepare_cached("SELECT max(newest_osm_object_timestamp) from areas")?;
+    Ok(stmt.query_row([], |r| Ok(r.get_unwrap(0)))?)
+}
+
+pub fn areas_containing(entity_id: &str, conn: &Connection) -> Result<Vec<i64>> {
+    let mut stmt = conn.prepare_cached("SELECT area_id from area_entities WHERE entity_id = ?")?;
+    let ids = stmt.query_map([entity_id], |r| Ok(r.get_unwrap(0)))?.map(|a| a.expect("Could not get area id")).collect();
+    Ok(ids)
+}
+
+pub fn entities_containing(child_id: &str, conn: &Connection) -> Result<Vec<String>> {
+    let mut stmt = conn.prepare_cached("SELECT entity_id from entity_geometry_parts WHERE contained_entity_id = ?")?;
+    let ids = stmt.query_map([child_id], |r| Ok(r.get_unwrap(0)))?.map(|a| a.expect("Could not get area id")).collect();
+    Ok(ids)
 }

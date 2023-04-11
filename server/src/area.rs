@@ -61,7 +61,7 @@ impl ToSql for AreaState {
     }
 }
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize)]
 pub struct Area {
     pub id: i32,
     pub osm_id: i64,
@@ -77,7 +77,7 @@ pub struct Area {
 }
 
 impl Area {
-    pub fn all(conn: &mut Connection) -> Result<Vec<Area>> {
+    pub fn all(conn: &Connection) -> Result<Vec<Area>> {
         let mut stmt = conn.prepare_cached(&format!("{SELECT_SOME_AREAS} ORDER BY name"))?;
         let areas = stmt
             .query_map((), row_to_area)?
@@ -86,23 +86,23 @@ impl Area {
         Ok(areas)
     }
 
-    pub fn find_by_id(id: i32, conn: &mut Connection) -> Result<Area> {
+    pub fn find_by_id(id: i32, conn: &Connection) -> Result<Area> {
         let mut stmt = conn.prepare_cached(&format!("{SELECT_SOME_AREAS} WHERE id = ?"))?;
         Ok(stmt.query_row([id], row_to_area)?)
     }
 
-    pub fn find_by_osm_id(id: i64, conn: &mut Connection) -> Result<Area> {
+    pub fn find_by_osm_id(id: i64, conn: &Connection) -> Result<Area> {
         let mut stmt = conn.prepare_cached(&format!("{SELECT_SOME_AREAS} WHERE osm_id = ?"))?;
         Ok(stmt.query_row([id], row_to_area)?)
     }
 
-    pub fn create(osm_id: i64, name: &str, conn: &mut Connection) -> Result<Area> {
+    pub fn create(osm_id: i64, name: &str, conn: &Connection) -> Result<Area> {
         let now = Utc::now();
         let mut stmt = conn.prepare_cached(&format!("INSERT INTO areas (osm_id, name, state, created_at, updated_at) VALUES (?, ?, ?, ?, ?) RETURNING {ALL_AREA_COLUMNS}"))?;
         Ok(stmt.query_row((osm_id, name, AreaState::Creating, now, now), row_to_area)?)
     }
 
-    pub fn all_updated(conn: &mut Connection) -> Result<Vec<Area>> {
+    pub fn all_updated(conn: &Connection) -> Result<Vec<Area>> {
         let mut stmt = conn.prepare_cached(&format!("{SELECT_SOME_AREAS} WHERE state = ?"))?;
         let areas = stmt
             .query_map([AreaState::Updated], row_to_area)?
@@ -111,7 +111,7 @@ impl Area {
         Ok(areas)
     }
 
-    pub fn save(&mut self, conn: &mut Connection) -> Result<()> {
+    pub fn save(&mut self, conn: &Connection) -> Result<()> {
         self.updated_at = Utc::now();
         let mut stmt = conn.prepare_cached("UPDATE areas SET osm_id = ?, state = ?, name = ?, created_at = ?, updated_at = ?, newest_osm_object_timestamp = ?, db_size = ?, parent_osm_ids = ?, last_update_remark = ?, geometry = ? WHERE id = ?")?;
         stmt.execute((
@@ -130,7 +130,7 @@ impl Area {
         Ok(())
     }
 
-    pub fn all_containing(conn: &mut Connection, geometry: &[u8]) -> Result<Vec<Area>> {
+    pub fn all_containing(conn: &Connection, geometry: &[u8]) -> Result<Vec<Area>> {
         let mut stmt = conn.prepare_cached(&format!("{SELECT_SOME_AREAS} WHERE MBRIntersects(geometry, GeomFromWKB(?, 4326))"))?;
         let areas = stmt
             .query_map([geometry], row_to_area)?
@@ -145,7 +145,7 @@ pub fn finalize_area_creation(
     parent_ids_str: String,
     geometry: &[u8],
     newest_osm_timestamp: &str,
-    conn: &mut Connection,
+    conn: &Connection,
 ) -> Result<usize> {
     let size = fs::metadata(AreaDatabase::path_for(osm_id, true))?.len();
     let mut stmt = conn.prepare_cached("UPDATE areas SET state = ?, parent_osm_ids = ?, newest_osm_object_timestamp = ?, db_size = ?, updated_at = ?, geometry = geomFromWKB(?, 4326) WHERE osm_id = ?")?;
