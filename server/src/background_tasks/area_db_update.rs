@@ -48,7 +48,7 @@ pub fn update_area(
     let mut record = TranslationRecord::new();
     area.state = AreaState::GettingChanges;
     area.last_update_remark = None;
-    area.save(&mut conn.lock().unwrap())?;
+    area.save(&conn.lock().unwrap())?;
     let after = if let Some(timestamp) = &area.newest_osm_object_timestamp {
         info!(
             "Looking differences after the latest known OSM object timestamp {} of area {}",
@@ -78,7 +78,7 @@ pub fn update_area(
                 use OSMObjectChangeType::*;
                 if first {
                     area.state = AreaState::ApplyingChanges;
-                    area.save(&mut conn.lock().unwrap())?;
+                    area.save(&conn.lock().unwrap())?;
                     first = false;
                 }
                 if change.new.is_some()
@@ -245,7 +245,7 @@ pub fn update_area(
     let size = fs::metadata(AreaDatabase::path_for(area.osm_id, true))?.len() as i64;
     area.db_size = size;
     area.state = AreaState::Updated;
-    area.save(&mut conn.lock().unwrap())?;
+    area.save(&conn.lock().unwrap())?;
     Ok(record)
 }
 
@@ -329,7 +329,7 @@ async fn update_area_databases_async() -> Result<()> {
     let area_db_conn = Arc::new(Mutex::new(db::connect_to_server_db()?));
     let servers = Arc::new(Servers::default());
     let cache = Arc::new(osm_api::object_manager::open_cache()?);
-    let areas = Area::all_updated(&mut area_db_conn.lock().unwrap())?;
+    let areas = Area::all_updated(&area_db_conn.lock().unwrap())?;
     let now = Utc::now();
     let mut record = TranslationRecord::new();
     let mut tasks = vec![];

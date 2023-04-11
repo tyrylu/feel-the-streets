@@ -24,7 +24,7 @@ pub async fn areas(State(state): State<AppState>) -> Result<Html<String>> {
         areas: Vec<Area>,
         stream_infos: HashMap<String, StreamInfo>,
     }
-    let areas = Area::all(&mut state.db_conn.lock().unwrap())?;
+    let areas = Area::all(&state.db_conn.lock().unwrap())?;
     let mut ctx = TCtxt {
         areas,
         stream_infos: HashMap::new(),
@@ -61,7 +61,7 @@ pub async fn area_detail(
         entity_counts: HashMap<String, usize>,
         relationship_counts: HashMap<String, usize>,
     }
-    let area = Area::find_by_id(area_id, &mut state.db_conn.lock().unwrap())?;
+    let area = Area::find_by_id(area_id, &state.db_conn.lock().unwrap())?;
     let mut stream = ChangesStream::new_from_env(area.osm_id)?;
     let redownload_requests = stream.all_redownload_requests()?;
     let change_counts = stream.all_change_counts()?;

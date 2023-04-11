@@ -102,7 +102,7 @@ fn handle_modification(object: &OSMObject, manager: &OSMObjectManager, conn: &Co
     let db_containing_area_ids = db::areas_containing(&object.unique_id(), conn)?;
     for area in areas {
         let bounds = db::get_geometry_bounds(conn, &area.geometry.unwrap())?;
-        if let Some((new_entity, new_related_ids)) = translator::translate(object, &bounds, manager, record)? {
+        if let Some((new_entity, _new_related_ids)) = translator::translate(object, &bounds, manager, record)? {
             if db_containing_area_ids.contains(&area.osm_id) {
                 info!("Object {} was modified in area {}.", new_entity.id, area.osm_id);
             }
@@ -129,7 +129,7 @@ fn handle_creation(object: &OSMObject, manager: &OSMObjectManager, conn: &Connec
     }
     for area in areas {
         let bounds = db::get_geometry_bounds(conn, &area.geometry.unwrap())?;
-        if let Some((entity, related_ids)) = translator::translate(object, &bounds, manager, record)? {
+        if let Some((entity, _related_ids)) = translator::translate(object, &bounds, manager, record)? {
             info!("Object {} was created in area {}.", entity.id, area.osm_id);
         }
     }

@@ -6,11 +6,11 @@ use server::db;
 use std::collections::HashMap;
 
 pub fn view_field_usage(entity: String, field: String) -> Result<()> {
-    let mut server_conn = db::connect_to_server_db()?;
+    let server_conn = db::connect_to_server_db()?;
     let mut values = HashMap::new();
     let mut null_values = 0;
     let mut nonnull_values = 0;
-    for area in Area::all(&mut server_conn)? {
+    for area in Area::all(&server_conn)? {
         println!("Processing area {} (id {})...", area.name, area.osm_id);
         let area_db = AreaDatabase::open_existing(area.osm_id, true)?;
         let mut query = EntitiesQuery::default();

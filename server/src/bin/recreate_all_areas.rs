@@ -16,7 +16,7 @@ async fn main() -> Result<()> {
     let cache = Arc::new(osm_api::object_manager::open_cache()?);
     let names_cache = Arc::new(Mutex::new(OSMObjectNamesCache::load()?));
     let mut tasks = vec![];
-    for area in Area::all(&mut server_conn.lock().unwrap())? {
+    for area in Area::all(&server_conn.lock().unwrap())? {
         let area_file = format!("{}.db", area.osm_id);
         if Path::new(&area_file).exists() {
             fs::remove_file(&area_file)?;
