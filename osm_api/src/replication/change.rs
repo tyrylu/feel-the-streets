@@ -7,8 +7,11 @@ use crate::raw_object::OSMObject as RawOSMObject;
 
 #[derive(Debug, Deserialize)]
 pub(crate) struct RawOSMChange {
+    #[serde(default)]
     pub modify: Vec<Modification>,
+    #[serde(default)]
     pub create: Vec<Creation>,
+    #[serde(default)]
     pub delete: Vec<Deletion>
 }
 
@@ -30,15 +33,6 @@ pub struct Deletion {
     changes: Vec<RawOSMObject>
 }
 
-#[derive(Debug, Deserialize)]
-pub(crate) enum RawOSMChangePart {
-    #[serde(rename="modify")]
-    Modify(Vec<RawOSMObject>),
-    #[serde(rename="create")]
-    Create(Vec<RawOSMObject>),
-    #[serde(rename="delete")]
-    Delete(Vec<RawOSMObject>),
-}
 
 #[derive(Debug)]
 pub struct OSMChange {

@@ -101,7 +101,8 @@ fn handle_modification(object: &OSMObject, manager: &OSMObjectManager, conn: &Co
     let geometric_containing_area_ids: Vec<i64> = areas.iter().map(|a| a.osm_id).collect();
     let db_containing_area_ids = db::areas_containing(&object.unique_id(), conn)?;
     for area in areas {
-        let bounds = db::get_geometry_bounds(conn, &area.geometry.unwrap())?;
+        trace!("During modification, Getting bounds of area with OSM id {}.", area.osm_id);
+        let bounds = area.bounds(conn)?;
         if let Some((new_entity, _new_related_ids)) = translator::translate(object, &bounds, manager, record)? {
             if db_containing_area_ids.contains(&area.osm_id) {
                 info!("Object {} was modified in area {}.", new_entity.id, area.osm_id);
@@ -123,12 +124,17 @@ fn handle_modification(object: &OSMObject, manager: &OSMObjectManager, conn: &Co
 }
 
 fn handle_creation(object: &OSMObject, manager: &OSMObjectManager, conn: &Connection, record: &mut TranslationRecord) -> Result<()> {
-    let areas = Area::all_containing(conn, &manager.get_geometry_as_wkb(object, &BoundaryRect::whole_world())?.unwrap())?;
+    let geom = manager.get_geometry_as_wkb(object, &BoundaryRect::whole_world())?;
+    // Use an if-let when we require Rust 1.65 for some other reason
+    if geom.is_none() {
+        return Ok(());
+    }
+    let areas = Area::all_containing(conn, &geom.unwrap())?;
     if areas.is_empty() {
         return Ok(())
     }
     for area in areas {
-        let bounds = db::get_geometry_bounds(conn, &area.geometry.unwrap())?;
+        let bounds = area.bounds(conn)?;
         if let Some((entity, _related_ids)) = translator::translate(object, &bounds, manager, record)? {
             info!("Object {} was created in area {}.", entity.id, area.osm_id);
         }

@@ -1,5 +1,6 @@
 use crate::Result;
 use chrono::{DateTime, Utc};
+use osm_api::BoundaryRect;
 use osm_db::AreaDatabase;
 use rusqlite::types::{FromSql, ToSql};
 use rusqlite::{Connection, Row};
@@ -137,6 +138,16 @@ impl Area {
             .map(|a| a.expect("Could not get area"))
             .collect();
         Ok(areas)
+    }
+
+    pub fn bounds(&self, conn: &Connection) -> Result<BoundaryRect> {
+    let mut stmt = conn.prepare_cached("SELECT MbrMinX(geometry) as minx, MbrMinY(geometry) as miny, MbrMaxX(geometry) as maxx, MbrMaxY(geometry) as maxy from areas where osm_id = ?")?;
+    Ok(stmt.query_row([self.osm_id], |r| Ok(BoundaryRect {
+        min_x: r.get_unwrap(0),
+        min_y: r.get_unwrap(1),
+        max_x: r.get_unwrap(2),
+        max_y: r.get_unwrap(3)
+    }))?)
     }
 }
 

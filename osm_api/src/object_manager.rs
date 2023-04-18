@@ -247,7 +247,7 @@ impl OSMObjectManager {
             match obj {
                 Ok(Some(o)) => Some((o, maybe_role)),
                 _ => {
-                    warn!("The OSM object {} references non-existent object{}, ignoring that particular reference.", object.unique_id(), id);
+                    warn!("The OSM object {} references non-existent object {}, ignoring that particular reference.", object.unique_id(), id);
                     None
             }
         }
@@ -312,7 +312,7 @@ impl OSMObjectManager {
             Ok(self.geometries_cache.borrow()[&object.unique_id()].clone())
         } else {
             let res = self.get_geometry_of_uncached(object, object_bounds)?;
-            trace!("Object {} has geometry {:?}", object.unique_id(), res);
+            trace!("Object {} has in bounds {:?} geometry {:?}", object.unique_id(), object_bounds, res);
             self.geometries_cache
                 .borrow_mut()
                 .insert(object.unique_id(), res.clone());
