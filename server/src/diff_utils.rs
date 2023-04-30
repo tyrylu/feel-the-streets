@@ -15,22 +15,22 @@ fn diff_properties(old: &Entity, new: &Entity) -> Vec<EntryChange> {
     if old.geometry != new.geometry {
         changes.push(EntryChange::updating(
             "geometry",
-            Value::from(BASE64_STANDARD.encode(&old.geometry)),
-            Value::from(BASE64_STANDARD.encode(&new.geometry)),
+            BASE64_STANDARD.encode(&old.geometry).into(),
+            BASE64_STANDARD.encode(&new.geometry).into(),
         ));
     }
     if old.discriminator != new.discriminator {
         changes.push(EntryChange::updating(
             "discriminator",
-            Value::from(old.discriminator.as_str()),
-            Value::from(new.discriminator.as_str()),
+            old.discriminator.as_str().into(),
+            new.discriminator.as_str().into(),
         ));
     }
     if old.effective_width != new.effective_width {
         changes.push(EntryChange::updating(
             "effective_width",
-            old.effective_width.map(Value::from).unwrap_or(Value::Null),
-            new.effective_width.map(Value::from).unwrap_or(Value::Null),
+            old.effective_width.into(),
+            new.effective_width.into(),
         ));
     }
     changes
