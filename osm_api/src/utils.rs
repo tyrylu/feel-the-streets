@@ -1,5 +1,5 @@
 use crate::object::OSMObject;
-use geo_types::{Coord, LineString, Geometry, GeometryCollection};
+use geo_types::{Coord, LineString, Geometry};
 use once_cell::sync::Lazy;
 use std::collections::HashMap;
 
@@ -112,7 +112,7 @@ pub(crate) fn unnest_geometry(geom: Geometry<f64>) -> Geometry<f64> {
         parts.pop().unwrap()
     }
     else {
-        Geometry::GeometryCollection(GeometryCollection::from(parts))
+        Geometry::GeometryCollection(parts.into())
     }
 }
 

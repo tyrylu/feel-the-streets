@@ -21,17 +21,17 @@ impl FromStr for ReplicationState {
             if line.starts_with('#') {
                 continue;
             }
-            let parts: Vec<_> = line.split('=').collect();
-            match parts[0] {
-                "sequenceNumber" => sn = Some(SequenceNumber::from_str(parts[1])?),
-                "timestamp" => ts = Some(parts[1]),
+            let (key, val) = line.split_once('=').unwrap();
+            match key {
+                "sequenceNumber" => sn = Some(SequenceNumber::from_str(val)?),
+                "timestamp" => ts = Some(val.replace('\\', "")),
                 key => return Err(Error::UnknownKey(key.to_string())),
             }
         }
         match (sn, ts) {
             (Some(s), Some(t)) => Ok(Self {
                 sequence_number: s,
-                timestamp: t.to_string(),
+                timestamp: t,
             }),
             (Some(_), None) => Err(Error::MissingTimestamp),
             (None, Some(_)) => Err(Error::MissingSequenceNumber),
@@ -75,13 +75,21 @@ impl SequenceNumber {
         }
     }
 
-    pub fn as_uri_path(&self) -> String {
+    fn base_path(&self) -> String {
         let padded = format!("{:0>9}", self.0);
         format!(
-            "{}/{}/{}.osc.gz",
+            "{}/{}/{}",
             &padded[0..=2],
             &padded[3..=5],
             &padded[6..=8]
         )
     }
-}
+
+    pub fn data_path(&self) -> String {
+    format!("{}.osc.gz", self.base_path())
+    }
+
+    pub fn stats_path(&self) -> String {
+        format!("{}.stats.txt", self.base_path())
+        }
+    }

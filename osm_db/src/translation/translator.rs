@@ -10,7 +10,6 @@ use osm_api::BoundaryRect;
 use osm_api::object::OSMObject;
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::SmolStr;
-use serde_json::Value;
 
 type RelatedIdsIterator = Box<dyn Iterator<Item = String>>;
 
@@ -91,9 +90,9 @@ pub fn translate(
                 if !address_data.is_empty() {
                     let mut new_data = serde_json::Map::new();
                     for (k, v) in address_data.iter() {
-                        new_data.insert(k.clone(), Value::from(v.clone()));
+                        new_data.insert(k.clone(), v.clone().into());
                     }
-                    converted_data.insert("address".to_string(), Value::from(new_data));
+                    converted_data.insert("address".to_string(), new_data.into());
                     // Now, remove the original addr parts
                     for field_name in address_field_names {
                         converted_data.remove(field_name);
@@ -132,7 +131,7 @@ pub fn translate(
 }
 fn calculate_effective_width(discriminator: &str, tags: &HashMap<String, String>) -> Option<f64> {
     match discriminator {
-        "PowerLine" => Some(f64::from(0)),
+        "PowerLine" => Some(0_f64),
         "WaterWay" => match tags.get("width").map(|w| w.as_str()).unwrap_or("0").parse() {
             Ok(val) => Some(val),
             Err(e) => {
@@ -193,7 +192,7 @@ fn calculate_effective_width(discriminator: &str, tags: &HashMap<String, String>
                         2
                     }
                 };
-                Some(f64::from(lanes * width))
+                Some((lanes * width).into())
             }
         }
         _ => None,

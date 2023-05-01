@@ -198,7 +198,7 @@ impl OSMObjectManager {
         Ok(())
     }
 
-    fn ensure_has_cached_dependencies_for<O: AsRef<OSMObject>>(&self, objects: &[O]) -> Result<()> {
+    pub fn ensure_has_cached_dependencies_for<O: AsRef<OSMObject>>(&self, objects: &[O]) -> Result<()> {
         use self::OSMObjectSpecifics::*;
         let mut missing = vec![];
         let mut total_examined = 0;
@@ -304,18 +304,19 @@ impl OSMObjectManager {
     }
 
     pub fn get_geometry_of(&self, object: &OSMObject, object_bounds: &BoundaryRect) -> Result<Option<Geometry<f64>>> {
+                let uid = object.unique_id();
         let exists = self
             .geometries_cache
             .borrow()
-            .contains_key(&object.unique_id());
+            .contains_key(&uid);
         if exists {
-            Ok(self.geometries_cache.borrow()[&object.unique_id()].clone())
+            Ok(self.geometries_cache.borrow()[&uid].clone())
         } else {
             let res = self.get_geometry_of_uncached(object, object_bounds)?;
-            trace!("Object {} has in bounds {:?} geometry {:?}", object.unique_id(), object_bounds, res);
+            trace!("Object {} has in bounds {:?} geometry {:?}", uid, object_bounds, res);
             self.geometries_cache
                 .borrow_mut()
-                .insert(object.unique_id(), res.clone());
+                .insert(uid, res.clone());
             Ok(res)
         }
     }

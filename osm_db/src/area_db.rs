@@ -82,7 +82,7 @@ impl AreaDatabase {
     }
     pub fn path_for(area: i64, server_side: bool) -> PathBuf {
         let mut root = if server_side {
-            PathBuf::from(".")
+            ".".into()
         } else {
             let mut appdata_dir = dirs_next::data_local_dir().expect("No local app data dir");
             appdata_dir.push("feel-the-streets/areas");

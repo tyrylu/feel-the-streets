@@ -64,8 +64,8 @@ impl PySemanticChange {
                 ..
             } => {
                 let mut ret = vec![
-                    DictChange::creating("id", Value::from(id.as_str())),
-                    DictChange::creating("discriminator", Value::from(discriminator.clone())),
+                    DictChange::creating("id", id.as_str().into()),
+                    DictChange::creating("discriminator", discriminator.clone().into()),
                     DictChange::creating("geometry", Value::from(geometry.clone())),
                     DictChange::creating("data", Value::from(data.clone())),
                 ];

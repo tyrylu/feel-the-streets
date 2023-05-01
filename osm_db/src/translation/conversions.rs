@@ -67,7 +67,7 @@ fn convert_value_of_enum(
     record: &mut TranslationRecord,
 ) -> Option<Value> {
     if let Some(num) = enum_spec.value_for_name(value) {
-        Some(Value::Number(Number::from(*num)))
+        Some(Value::Number((*num).into()))
     } else {
         record.record_missing_enum_member(&enum_spec.name, value);
         None
@@ -76,7 +76,7 @@ fn convert_value_of_enum(
 
 fn convert_int(value: &str, record: &mut TranslationRecord) -> Option<Value> {
     match value.parse::<i64>() {
-        Ok(val) => Some(Value::Number(Number::from(val))),
+        Ok(val) => Some(Value::Number(val.into())),
         Err(_) => {
             record.record_type_violation(value);
             None

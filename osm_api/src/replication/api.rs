@@ -28,12 +28,22 @@ impl ReplicationApiClient {
             self.agent
                 .get(&format!(
                     "{PLANET_REPLICATION_BASE}/minute/{}",
-                    number.as_uri_path()
+                    number.data_path()
                 ))
                 .call()?
                 .into_reader(),
         )))?;
         change.try_into()
+    }
+
+    pub fn get_change_stats(&self, number: &SequenceNumber) -> Result<ReplicationState> {
+        Ok(ReplicationState::from_str(
+            &self
+                .agent
+                .get(&format!("{PLANET_REPLICATION_BASE}/minute/{}", number.stats_path()))
+                .call()?
+                .into_string()?,
+        )?)
     }
 }
 

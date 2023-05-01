@@ -26,7 +26,7 @@ static METADATA_MAP: Lazy<HashMap<&'static str, EntityMetadata>> = Lazy::new(|| 
         let mut fields = IndexMap::with_capacity(raw.fields.len());
         for (name, type_name) in &raw.fields {
             let required = type_name.starts_with('!');
-            let start = usize::from(required);
+            let start = required.into();
             fields.insert(
                 name,
                 Field {
