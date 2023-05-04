@@ -1,12 +1,9 @@
 use crate::BoundaryRect;
-use crate::change::OSMObjectChangeEvent;
-use crate::change_iterator::OSMObjectChangeIterator;
 use crate::object::{OSMObject, OSMObjectSpecifics, OSMObjectType};
 use crate::overpass_api::Servers;
 use crate::raw_object::OSMObject as RawOSMObject;
 use crate::utils;
 use crate::{Error, Result};
-use chrono::{DateTime, Utc};
 use geo_types::{Geometry, GeometryCollection, LineString, Point, Polygon};
 use hashbrown::HashMap;
 use itertools::Itertools;
@@ -505,26 +502,6 @@ impl OSMObjectManager {
 
     fn flush_cache(&self) {
         self.cache.flush().expect("Flush failed.");
-    }
-
-    pub fn lookup_differences_in(
-        &self,
-        area: i64,
-        after: &DateTime<Utc>,
-    ) -> Result<Box<dyn Iterator<Item = Result<OSMObjectChangeEvent>>>> {
-        let mut iterators = Vec::with_capacity(3);
-        for kind in &["node", "way", "rel"] {
-            let query = format!("((area({area});{kind}(area);>>;);>>;)");
-            let final_query = format!(
-                "[out:xml][timeout:900][adiff:\"{after}\"];{query};out meta;",
-                after = after.to_rfc3339(),
-                query = query
-            );
-            info!("Looking up differences in area {}, {}s only.", area, kind);
-            let readable = self.run_query(&final_query, true)?;
-            iterators.push(OSMObjectChangeIterator::new(readable));
-        }
-        Ok(Box::new(iterators.into_iter().flatten()))
     }
 
     pub fn get_area_parents(&self, area_id: i64) -> Result<Vec<OSMObject>> {

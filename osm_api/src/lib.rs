@@ -2,7 +2,6 @@ pub type Result<T> = core::result::Result<T, Error>;
 
 mod boundary_rect;
 pub mod change;
-mod change_iterator;
 mod error;
 pub mod main_api;
 pub mod object;

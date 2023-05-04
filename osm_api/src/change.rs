@@ -13,10 +13,3 @@ pub struct OSMObjectChange {
     pub old: Option<OSMObject>,
     pub new: Option<OSMObject>,
 }
-
-/// We are most often anyway constructing the Change wariant, so it would be a needless indirection most of the time.
-#[allow(clippy::large_enum_variant)]
-pub enum OSMObjectChangeEvent {
-    Change(OSMObjectChange),
-    Remark(String),
-}
