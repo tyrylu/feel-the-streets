@@ -94,3 +94,22 @@ pub fn entities_containing(child_id: &str, conn: &Connection) -> Result<Vec<Stri
     let ids = stmt.query_map([child_id], |r| Ok(r.get_unwrap(0)))?.map(|a| a.expect("Could not get area id")).collect();
     Ok(ids)
 }
+
+pub(crate) fn delete_entity_records(conn: &Connection, entity_id: &str) -> Result<()> {
+    delete_entity_geometry_parts(conn, entity_id)?;
+    let mut del_entity_stmt = conn.prepare_cached("DELETE FROM area_entities WHERE entity_id = ?")?;
+    del_entity_stmt.execute([entity_id])?;
+    Ok(())
+}
+
+pub(crate) fn delete_entity_geometry_parts(conn: &Connection, entity_id: &str) -> Result<()> {
+    let mut del_geometry_parts_stmt = conn.prepare_cached("DELETE FROM entity_geometry_parts WHERE entity_id = ?")?;
+    del_geometry_parts_stmt.execute([entity_id])?;
+   Ok(())
+}
+
+pub(crate) fn delete_area_entity(conn: &Connection, area_id: i64, entity_id: &str) -> Result<()> {
+    let mut del_entity_stmt = conn.prepare_cached("DELETE FROM area_entities WHERE area_id = ? AND entity_id = ?")?;
+    del_entity_stmt.execute((area_id, entity_id))?;
+    Ok(())
+}

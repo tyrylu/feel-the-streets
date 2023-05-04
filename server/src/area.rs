@@ -141,8 +141,11 @@ impl Area {
     }
 
     pub fn bounds(&self, conn: &Connection) -> Result<BoundaryRect> {
+        Area::bounds_of(self.osm_id, conn)
+    }
+    pub fn bounds_of(osm_id: i64, conn: &Connection) -> Result<BoundaryRect> {
     let mut stmt = conn.prepare_cached("SELECT MbrMinX(geometry) as minx, MbrMinY(geometry) as miny, MbrMaxX(geometry) as maxx, MbrMaxY(geometry) as maxy from areas where osm_id = ?")?;
-    Ok(stmt.query_row([self.osm_id], |r| Ok(BoundaryRect {
+    Ok(stmt.query_row([osm_id], |r| Ok(BoundaryRect {
         min_x: r.get_unwrap(0),
         min_y: r.get_unwrap(1),
         max_x: r.get_unwrap(2),
