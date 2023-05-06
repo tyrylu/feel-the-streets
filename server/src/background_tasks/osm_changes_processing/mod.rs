@@ -437,7 +437,7 @@ fn to_update_change(
             ListChange::Remove(v) => RelationshipChange::removing(v),
         })
         .collect();
-    let (property_changes, data_changes) = diff_utils::diff_entities(&old_entity, &new_entity)?;
+    let (data_changes, property_changes) = diff_utils::diff_entities(&old_entity, &new_entity)?;
     Ok(SemanticChange::updating(
         &old_entity.id,
         property_changes,
