@@ -4,7 +4,7 @@ use serde::Deserialize;
 #[derive(Debug, Deserialize)]
 pub(crate) struct RawChangesets {
     #[serde(rename = "changeset")]
-    pub(crate) changesets: Vec<RawChangeset>
+    pub(crate) changesets: Vec<RawChangeset>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -34,5 +34,5 @@ pub struct RawChangeset {
     #[serde(rename = "@comments_count")]
     pub(crate) comments_count: u32,
     #[serde(rename = "tag")]
-    pub(crate) tags: Vec<Tag>
+    pub(crate) tags: Vec<Tag>,
 }

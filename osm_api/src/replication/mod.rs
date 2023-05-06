@@ -77,19 +77,14 @@ impl SequenceNumber {
 
     fn base_path(&self) -> String {
         let padded = format!("{:0>9}", self.0);
-        format!(
-            "{}/{}/{}",
-            &padded[0..=2],
-            &padded[3..=5],
-            &padded[6..=8]
-        )
+        format!("{}/{}/{}", &padded[0..=2], &padded[3..=5], &padded[6..=8])
     }
 
     pub fn data_path(&self) -> String {
-    format!("{}.osc.gz", self.base_path())
+        format!("{}.osc.gz", self.base_path())
     }
 
     pub fn stats_path(&self) -> String {
         format!("{}.stats.txt", self.base_path())
-        }
     }
+}

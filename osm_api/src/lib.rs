@@ -12,8 +12,8 @@ pub mod replication;
 mod utils;
 pub use boundary_rect::BoundaryRect;
 pub use error::Error;
-pub use utils::unnest_wkb_geometry;
 pub use smol_str::SmolStr;
+pub use utils::unnest_wkb_geometry;
 
 pub fn area_id_to_osm_id(area_id: i64) -> String {
     format!("r{}", area_id - 3_600_000_000)

@@ -5,7 +5,7 @@ use std::collections::HashMap;
 pub(crate) struct AreaInfo<'a> {
     pub changes: Vec<SemanticChange>,
     pub geometry: Option<Vec<u8>>,
-    pub newest_timestamp: &'a str
+    pub newest_timestamp: &'a str,
 }
 
 #[derive(Default)]
@@ -16,7 +16,7 @@ impl<'a> SemanticChangesContainer<'a> {
         self.0.entry(area).or_default().changes.push(change);
     }
 
-    pub fn iter_mut(&mut self) -> impl Iterator<Item=(&i64, &mut AreaInfo<'a>)> {
+    pub fn iter_mut(&mut self) -> impl Iterator<Item = (&i64, &mut AreaInfo<'a>)> {
         self.0.iter_mut()
     }
 
@@ -30,4 +30,4 @@ impl<'a> SemanticChangesContainer<'a> {
             entry.newest_timestamp = timestamp;
         }
     }
-    }
+}

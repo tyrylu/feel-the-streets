@@ -12,27 +12,26 @@ pub(crate) struct RawOSMChange {
     #[serde(default)]
     pub create: Vec<Creation>,
     #[serde(default)]
-    pub delete: Vec<Deletion>
+    pub delete: Vec<Deletion>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Modification {
     #[serde(rename = "node", alias = "way", alias = "relation")]
-    changes: Vec<RawOSMObject>
+    changes: Vec<RawOSMObject>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Creation {
     #[serde(rename = "node", alias = "way", alias = "relation")]
-    changes: Vec<RawOSMObject>
+    changes: Vec<RawOSMObject>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Deletion {
     #[serde(rename = "node", alias = "way", alias = "relation")]
-    changes: Vec<RawOSMObject>
+    changes: Vec<RawOSMObject>,
 }
-
 
 #[derive(Debug)]
 pub struct OSMChange {
@@ -45,12 +44,29 @@ impl TryFrom<RawOSMChange> for OSMChange {
     type Error = crate::Error;
 
     fn try_from(value: RawOSMChange) -> Result<Self> {
-        let modify = value.modify.into_iter().flat_map(|c| c.changes.into_iter()).map(|o| o.try_into()).collect::<Result<Vec<OSMObject>>>()?;
-        let create = value.create.into_iter().flat_map(|c| c.changes.into_iter()).map(|o| o.try_into()).collect::<Result<Vec<OSMObject>>>()?;
-        let delete = value.delete.into_iter().flat_map(|c| c.changes.into_iter()).map(|o| o.try_into()).collect::<Result<Vec<OSMObject>>>()?;
+        let modify = value
+            .modify
+            .into_iter()
+            .flat_map(|c| c.changes.into_iter())
+            .map(|o| o.try_into())
+            .collect::<Result<Vec<OSMObject>>>()?;
+        let create = value
+            .create
+            .into_iter()
+            .flat_map(|c| c.changes.into_iter())
+            .map(|o| o.try_into())
+            .collect::<Result<Vec<OSMObject>>>()?;
+        let delete = value
+            .delete
+            .into_iter()
+            .flat_map(|c| c.changes.into_iter())
+            .map(|o| o.try_into())
+            .collect::<Result<Vec<OSMObject>>>()?;
 
         Ok(OSMChange {
-            modify, create, delete
+            modify,
+            create,
+            delete,
         })
     }
 }

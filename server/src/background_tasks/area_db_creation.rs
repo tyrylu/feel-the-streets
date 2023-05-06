@@ -5,8 +5,8 @@ use crate::{
     db::{self, Connection},
 };
 use doitlater::typetag;
-use osm_api::BoundaryRect;
 use osm_api::object_manager::OSMObjectManager;
+use osm_api::BoundaryRect;
 use osm_api::SmolStr;
 use osm_db::area_db::AreaDatabase;
 use osm_db::relationship_inference::infer_additional_relationships_for;
@@ -32,8 +32,12 @@ pub fn create_area_database_worker(
     info!("Starting to create area with id {}.", area);
     let mut record = TranslationRecord::new();
     manager.lookup_objects_in(area)?;
-    let area_object = manager.get_object(&osm_api::area_id_to_osm_id(area))?.expect("Area object not found");
-    let area_geom = manager.get_geometry_as_wkb(&area_object, &BoundaryRect::whole_world())?.unwrap();
+    let area_object = manager
+        .get_object(&osm_api::area_id_to_osm_id(area))?
+        .expect("Area object not found");
+    let area_geom = manager
+        .get_geometry_as_wkb(&area_object, &BoundaryRect::whole_world())?
+        .unwrap();
     let area_bounds = db::get_geometry_bounds(&area_db_conn.lock().unwrap(), &area_geom)?;
     info!("Using area bounds: {:?}", area_bounds);
     let from_network_ids = manager.get_ids_retrieved_from_network();
@@ -43,12 +47,15 @@ pub fn create_area_database_worker(
         if !from_network_ids.contains(&obj.unique_id()) {
             return None;
         }
-        let entity = translator::translate(&obj, &area_bounds, &manager, &mut record).expect("Translation failure.");
+        let entity = translator::translate(&obj, &area_bounds, &manager, &mut record)
+            .expect("Translation failure.");
         if let Some(ent) = &entity {
             let ts_clone = newest_timestamp.clone();
-            newest_timestamp= ts_clone.max(obj.timestamp.clone());
-            db::insert_area_entity(&area_db_conn.lock().unwrap(), area, &ent.0.id).expect("Could not insert entity to the entities summary table");
-            db::insert_entity_geometry_parts(&area_db_conn.lock().unwrap(), &manager, &obj).expect("Could not insert object geometry parts");
+            newest_timestamp = ts_clone.max(obj.timestamp.clone());
+            db::insert_area_entity(&area_db_conn.lock().unwrap(), area, &ent.0.id)
+                .expect("Could not insert entity to the entities summary table");
+            db::insert_entity_geometry_parts(&area_db_conn.lock().unwrap(), &manager, &obj)
+                .expect("Could not insert object geometry parts");
         }
         entity
     }))?;
@@ -57,7 +64,13 @@ pub fn create_area_database_worker(
     infer_additional_relationships_for(&area_db)?;
     area_db.commit()?;
     let parent_ids_str = get_parent_ids_str_for(area, &manager, &mut cache.lock().unwrap())?;
-    area::finalize_area_creation(area, parent_ids_str, &area_geom, &newest_timestamp, &area_db_conn.lock().unwrap())?;
+    area::finalize_area_creation(
+        area,
+        parent_ids_str,
+        &area_geom,
+        &newest_timestamp,
+        &area_db_conn.lock().unwrap(),
+    )?;
     record.save_to_file(&format!("creation_{area}.json"))?;
     info!("Area {} created successfully.", area);
     Ok(())

@@ -117,45 +117,51 @@ impl AreaDatabase {
         for (entity, related_ids) in entities {
             let mut insert_related_stmt =
                 self.conn.prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?;
-                trace!("Making geometry for entity {} valid.", entity.id);
-                let geom = self.make_geometry_valid(&entity.geometry)?;
-                let geom = osm_api::unnest_wkb_geometry(&geom);
-                let mut insert_stmt = self.conn.prepare(INSERT_ENTITY_SQL)?;
-                trace!("Inserting {} {}, data {}, geom {:?}.", entity.discriminator, entity.id, entity.data, geom);
-                match insert_stmt.execute(named_params! {
-                    ":id": entity.id.as_str(),
-                    ":discriminator": entity.discriminator.as_str(),
-                    ":geometry": geom,
-                    ":effective_width": entity.effective_width,
-                    ":data": entity.data,
-                }) {
-                    Ok(_) => {
-                        count += 1;
-                        for related_id in related_ids {
-                            if let Err(e) = insert_related_stmt.execute(params![
-                                entity.id.as_str(),
-                                related_id,
-                                EntityRelationshipKind::OSMChild
-                            ]) {
-                                match classify_db_error(&e, &related_id) {
-                                    ForeignKeyViolationClassification::Retryable => {
-                                        deferred_relationship_insertions
-                                            .insert(entity.id.clone(), related_id);
-                                    }
-                                    ForeignKeyViolationClassification::Fatal => {
-                                        continue;
-                                    } // Now it only means that we tryed to insert a relationship for an entity which we definitely don't have in the database - relations are handled separately and anything else can only depend on a smaller object which was inserted before (because of the overpass API query ordering the entities just right)
-                                    ForeignKeyViolationClassification::NoViolation => {
-                                        return Err(Error::DbError(e));
-                                    }
+            trace!("Making geometry for entity {} valid.", entity.id);
+            let geom = self.make_geometry_valid(&entity.geometry)?;
+            let geom = osm_api::unnest_wkb_geometry(&geom);
+            let mut insert_stmt = self.conn.prepare(INSERT_ENTITY_SQL)?;
+            trace!(
+                "Inserting {} {}, data {}, geom {:?}.",
+                entity.discriminator,
+                entity.id,
+                entity.data,
+                geom
+            );
+            match insert_stmt.execute(named_params! {
+                ":id": entity.id.as_str(),
+                ":discriminator": entity.discriminator.as_str(),
+                ":geometry": geom,
+                ":effective_width": entity.effective_width,
+                ":data": entity.data,
+            }) {
+                Ok(_) => {
+                    count += 1;
+                    for related_id in related_ids {
+                        if let Err(e) = insert_related_stmt.execute(params![
+                            entity.id.as_str(),
+                            related_id,
+                            EntityRelationshipKind::OSMChild
+                        ]) {
+                            match classify_db_error(&e, &related_id) {
+                                ForeignKeyViolationClassification::Retryable => {
+                                    deferred_relationship_insertions
+                                        .insert(entity.id.clone(), related_id);
+                                }
+                                ForeignKeyViolationClassification::Fatal => {
+                                    continue;
+                                } // Now it only means that we tryed to insert a relationship for an entity which we definitely don't have in the database - relations are handled separately and anything else can only depend on a smaller object which was inserted before (because of the overpass API query ordering the entities just right)
+                                ForeignKeyViolationClassification::NoViolation => {
+                                    return Err(Error::DbError(e));
                                 }
                             }
                         }
                     }
-                    Err(e) => {
-                        error!("Failed to insert entity {:?}, error: {}", entity, e);
-                    }
                 }
+                Err(e) => {
+                    error!("Failed to insert entity {:?}, error: {}", entity, e);
+                }
+            }
         }
         // Handle deferred relationship insertions.
         for (parent, child) in deferred_relationship_insertions.iter() {
@@ -293,13 +299,13 @@ impl AreaDatabase {
     fn save_updated_entity(&self, entity: &Entity) -> Result<()> {
         let geom = self.make_geometry_valid(&entity.geometry)?;
         let mut stmt = self.conn.prepare_cached("update entities set discriminator = :discriminator, geometry = GeomFromWKB(:geometry, 4326), effective_width = :effective_width, data = :data where id = :id;")?;
-                    stmt.execute(named_params! {
-            ":discriminator": entity.discriminator.as_str(),
-            ":geometry": geom,
-            ":effective_width": entity.effective_width,
-            ":data": entity.data,
-            ":id": entity.id.as_str(),
-    })?;
+        stmt.execute(named_params! {
+                ":discriminator": entity.discriminator.as_str(),
+                ":geometry": geom,
+                ":effective_width": entity.effective_width,
+                ":data": entity.data,
+                ":id": entity.id.as_str(),
+        })?;
         Ok(())
     }
 
@@ -593,7 +599,7 @@ impl AreaDatabase {
         trace!("Making geometry {:?} valid.", geom);
         if self.geometry_is_valid(geom)? {
             trace!("Geometry is valid, returning as is.");
-            return Ok(geom.into())
+            return Ok(geom.into());
         }
         // Note that we support only little-endian WKB geometries.
         if geom[0] == 1 && geom[1] == 7 {
@@ -601,29 +607,30 @@ impl AreaDatabase {
             let parsed_geom = wkb::wkb_to_geom(&mut cloned_geom.as_slice()).unwrap();
             if let geo_types::Geometry::GeometryCollection(coll) = parsed_geom {
                 let mut output_wkb = if coll.0.len() == 1 {
-                vec![]
-                }else {
+                    vec![]
+                } else {
                     let mut out = vec![1_u8];
-                out.extend(7_u32.to_le_bytes());
-                out.extend((coll.len() as u32).to_le_bytes());
-                out
+                    out.extend(7_u32.to_le_bytes());
+                    out.extend((coll.len() as u32).to_le_bytes());
+                    out
                 };
                 for part in coll {
-                    output_wkb.append(&mut self.make_valid_safe(&wkb::geom_to_wkb(&part).unwrap())?);
+                    output_wkb
+                        .append(&mut self.make_valid_safe(&wkb::geom_to_wkb(&part).unwrap())?);
                 }
-            Ok(output_wkb.into())
-            }
-            else {
+                Ok(output_wkb.into())
+            } else {
                 panic!("The unparsed data said that it's a geometry collection, but it was {parsed_geom:?} instead.");
             }
-        }
-        else {
+        } else {
             Ok(self.make_valid_safe(geom)?.into())
         }
     }
 
     fn make_valid_safe(&self, geom: &[u8]) -> Result<Vec<u8>> {
-        let mut stmt = self.conn.prepare_cached("SELECT AsBinary(MakeValid(GeomFromWKB(?, 4326)))")?;
+        let mut stmt = self
+            .conn
+            .prepare_cached("SELECT AsBinary(MakeValid(GeomFromWKB(?, 4326)))")?;
         Ok(stmt.query_row([geom], |r| Ok(r.get_unwrap(0)))?)
     }
 }

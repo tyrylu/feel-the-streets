@@ -1,5 +1,5 @@
 use crate::object::OSMObject;
-use geo_types::{Coord, LineString, Geometry};
+use geo_types::{Coord, Geometry, LineString};
 use once_cell::sync::Lazy;
 use std::collections::HashMap;
 
@@ -97,21 +97,26 @@ fn unnest_geometry_to_parts(geom: Geometry<f64>) -> Vec<Geometry<f64>> {
         Geometry::Point(p) => parts.push(p.into()),
         Geometry::Polygon(p) => parts.push(p.into()),
         Geometry::LineString(l) => parts.push(l.into()),
-        Geometry::MultiLineString(ml) => parts.append(&mut ml.0.into_iter().map(|p| p.into()).collect()),
+        Geometry::MultiLineString(ml) => {
+            parts.append(&mut ml.0.into_iter().map(|p| p.into()).collect())
+        }
         Geometry::MultiPoint(mp) => parts.append(&mut mp.0.into_iter().map(|p| p.into()).collect()),
-        Geometry::MultiPolygon(mp) => parts.append(&mut mp.0.into_iter().map(|p| p.into()).collect()),
-        Geometry::GeometryCollection(gc) => parts.extend(gc.iter().flat_map(|g| unnest_geometry_to_parts(g.clone()))),
-        g => panic!("Geometry {g:?} not supported yet.")
+        Geometry::MultiPolygon(mp) => {
+            parts.append(&mut mp.0.into_iter().map(|p| p.into()).collect())
+        }
+        Geometry::GeometryCollection(gc) => {
+            parts.extend(gc.iter().flat_map(|g| unnest_geometry_to_parts(g.clone())))
+        }
+        g => panic!("Geometry {g:?} not supported yet."),
     }
     parts
-    }
+}
 
 pub(crate) fn unnest_geometry(geom: Geometry<f64>) -> Geometry<f64> {
     let mut parts = unnest_geometry_to_parts(geom);
     if parts.len() == 1 {
         parts.pop().unwrap()
-    }
-    else {
+    } else {
         Geometry::GeometryCollection(parts.into())
     }
 }

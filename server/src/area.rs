@@ -132,7 +132,9 @@ impl Area {
     }
 
     pub fn all_containing(conn: &Connection, geometry: &[u8]) -> Result<Vec<Area>> {
-        let mut stmt = conn.prepare_cached(&format!("{SELECT_SOME_AREAS} WHERE MBRIntersects(geometry, GeomFromWKB(?, 4326))"))?;
+        let mut stmt = conn.prepare_cached(&format!(
+            "{SELECT_SOME_AREAS} WHERE MBRIntersects(geometry, GeomFromWKB(?, 4326))"
+        ))?;
         let areas = stmt
             .query_map([geometry], row_to_area)?
             .map(|a| a.expect("Could not get area"))
@@ -144,13 +146,15 @@ impl Area {
         Area::bounds_of(self.osm_id, conn)
     }
     pub fn bounds_of(osm_id: i64, conn: &Connection) -> Result<BoundaryRect> {
-    let mut stmt = conn.prepare_cached("SELECT MbrMinX(geometry) as minx, MbrMinY(geometry) as miny, MbrMaxX(geometry) as maxx, MbrMaxY(geometry) as maxy from areas where osm_id = ?")?;
-    Ok(stmt.query_row([osm_id], |r| Ok(BoundaryRect {
-        min_x: r.get_unwrap(0),
-        min_y: r.get_unwrap(1),
-        max_x: r.get_unwrap(2),
-        max_y: r.get_unwrap(3)
-    }))?)
+        let mut stmt = conn.prepare_cached("SELECT MbrMinX(geometry) as minx, MbrMinY(geometry) as miny, MbrMaxX(geometry) as maxx, MbrMaxY(geometry) as maxy from areas where osm_id = ?")?;
+        Ok(stmt.query_row([osm_id], |r| {
+            Ok(BoundaryRect {
+                min_x: r.get_unwrap(0),
+                min_y: r.get_unwrap(1),
+                max_x: r.get_unwrap(2),
+                max_y: r.get_unwrap(3),
+            })
+        })?)
     }
 }
 

@@ -5,10 +5,10 @@ use super::spec::TranslationSpec;
 use crate::entity::Entity;
 use crate::Error;
 use hashbrown::HashMap;
-use log::{trace, debug, warn};
-use osm_api::BoundaryRect;
+use log::{debug, trace, warn};
 use osm_api::object::OSMObject;
 use osm_api::object_manager::OSMObjectManager;
+use osm_api::BoundaryRect;
 use osm_api::SmolStr;
 
 type RelatedIdsIterator = Box<dyn Iterator<Item = String>>;

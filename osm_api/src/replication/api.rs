@@ -40,7 +40,10 @@ impl ReplicationApiClient {
         Ok(ReplicationState::from_str(
             &self
                 .agent
-                .get(&format!("{PLANET_REPLICATION_BASE}/minute/{}", number.stats_path()))
+                .get(&format!(
+                    "{PLANET_REPLICATION_BASE}/minute/{}",
+                    number.stats_path()
+                ))
                 .call()?
                 .into_string()?,
         )?)
