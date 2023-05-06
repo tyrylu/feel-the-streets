@@ -225,11 +225,15 @@ fn handle_modification<'a>(
     changes: &mut SemanticChangesContainer<'a>,
 ) -> Result<()> {
     let start = Instant::now();
+    let object_geom = manager.get_geometry_as_wkb(object, &BoundaryRect::whole_world())?;
+    if object_geom.is_none() {
+        warn!("Ignoring modification of object {}, it no longer has a geometry.", object.unique_id());
+        return Ok(());
+    }
+    let object_geom = object_geom.unwrap();
     let areas = Area::all_containing(
         conn,
-        &manager
-            .get_geometry_as_wkb(object, &BoundaryRect::whole_world())?
-            .unwrap(),
+        &object_geom,
     )?;
     trace!(
         "All db areas containing the entity retrieved in {:? }, they are: {:?}",
