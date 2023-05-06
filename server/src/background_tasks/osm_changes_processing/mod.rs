@@ -148,6 +148,7 @@ fn process_osm_change(
         let mut area_db = AreaDatabase::open_existing(*area_id, true)?;
         area_db.begin()?;
         for change in &info.changes {
+            debug!("Applying change {:?}", change);
             area_db.apply_change(change)?;
         }
         area_db.apply_deferred_relationship_additions()?;
