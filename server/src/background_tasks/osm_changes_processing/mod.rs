@@ -69,8 +69,8 @@ fn process_osm_change(
 ) -> Result<()> {
     let number = SequenceNumber::from_u32(sn)?;
     let newest_timestamp = db::newest_osm_object_timestamp(server_db)?;
-    let stats = r_client.get_change_stats(&number)?;
-    if stats.timestamp <= newest_timestamp {
+    let info = r_client.get_change_info(&number)?;
+    if info.timestamp <= newest_timestamp {
         info!("Not processing change {}, it is too old.", sn);
         return Ok(());
     }

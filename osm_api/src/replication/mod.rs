@@ -84,7 +84,7 @@ impl SequenceNumber {
         format!("{}.osc.gz", self.base_path())
     }
 
-    pub fn stats_path(&self) -> String {
-        format!("{}.stats.txt", self.base_path())
+    pub fn state_path(&self) -> String {
+        format!("{}.state.txt", self.base_path())
     }
 }
