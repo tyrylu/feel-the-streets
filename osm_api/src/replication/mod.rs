@@ -2,6 +2,7 @@ mod api;
 mod change;
 pub use api::ReplicationApiClient;
 pub use change::OSMChange;
+use chrono::{DateTime, FixedOffset};
 
 use std::str::FromStr;
 
@@ -9,7 +10,7 @@ pub struct SequenceNumber(pub u32);
 
 pub struct ReplicationState {
     pub sequence_number: SequenceNumber,
-    pub timestamp: String,
+    pub timestamp: DateTime<FixedOffset>,
 }
 
 impl FromStr for ReplicationState {
@@ -24,7 +25,7 @@ impl FromStr for ReplicationState {
             let (key, val) = line.split_once('=').unwrap();
             match key {
                 "sequenceNumber" => sn = Some(SequenceNumber::from_str(val)?),
-                "timestamp" => ts = Some(val.replace('\\', "")),
+                "timestamp" => ts = Some(DateTime::parse_from_rfc3339(&val.replace('\\', ""))?),
                 key => return Err(Error::UnknownKey(key.to_string())),
             }
         }
@@ -54,6 +55,8 @@ pub enum Error {
     NoData,
     #[error("Unknown replication state key: {0}")]
     UnknownKey(String),
+    #[error("Could not parse timestamp, error: {0}")]
+    TimestampParseError(#[from] chrono::ParseError),
 }
 
 impl FromStr for SequenceNumber {

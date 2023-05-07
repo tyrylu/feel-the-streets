@@ -7,6 +7,7 @@ use crate::diff_utils::{self, ListChange};
 use crate::Result;
 use base64::prelude::*;
 use doitlater::typetag;
+use chrono::{DateTime, FixedOffset};
 use osm_api::main_api::MainAPIClient;
 use osm_api::object::OSMObject;
 use osm_api::object_manager::OSMObjectManager;
@@ -54,8 +55,9 @@ pub fn process_osm_changes(initial_sn: u32) -> Result<u32> {
     );
     let manager = OSMObjectManager::new()?;
     let server_db = db::connect_to_server_db()?;
+    let newest_timestamp = DateTime::parse_from_rfc3339(&db::newest_osm_object_timestamp(&server_db)?)?;
     for sn in initial_sn..=latest_state.sequence_number.0 {
-        process_osm_change(sn, &r_client, &m_client, &manager, &server_db)?;
+        process_osm_change(sn, &r_client, &m_client, &manager, &server_db, &newest_timestamp)?;
     }
     Ok(latest_state.sequence_number.0)
 }
@@ -66,14 +68,20 @@ fn process_osm_change(
     m_client: &MainAPIClient,
     manager: &OSMObjectManager,
     server_db: &Connection,
+    newest_timestamp: &DateTime<FixedOffset>,
 ) -> Result<()> {
     let number = SequenceNumber::from_u32(sn)?;
-    let newest_timestamp = db::newest_osm_object_timestamp(server_db)?;
-    let info = r_client.get_change_info(&number)?;
-    if info.timestamp <= newest_timestamp {
+        let info = r_client.get_change_info(&number)?;
+    if info.timestamp <= *newest_timestamp {
         info!("Not processing change {}, it is too old.", sn);
         return Ok(());
     }
+    // Ignore a change which is not at least a minute old, because otherwise we already applyed it.
+        if info.timestamp.signed_duration_since(*newest_timestamp).num_seconds() < 60 {
+        info!("Not processing change {}, it is the last we seen.", sn);
+        return Ok(())
+    }
+
     let mut changeset_interests = HashMap::new();
     let change = r_client.get_change(number)?;
     let mut record = TranslationRecord::new();
