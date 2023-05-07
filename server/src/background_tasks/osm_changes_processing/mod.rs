@@ -474,7 +474,7 @@ fn infer_additional_relationships(
             );
             let mut entity = area_db
                 .get_entity(&entity_id)?
-                .expect("Entity disappeared from a database");
+                .expect("Entity disappeared");
             let relationships = relationship_inference::infer_additional_relationships_for_entity(
                 &mut entity,
                 area_db,

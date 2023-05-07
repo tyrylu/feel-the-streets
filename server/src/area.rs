@@ -7,8 +7,8 @@ use rusqlite::{Connection, Row};
 use serde::Serialize;
 use std::fs;
 
-const ALL_AREA_COLUMNS: &str = "id, osm_id, name, state, created_at, updated_at, newest_osm_object_timestamp, db_size, parent_osm_ids, last_update_remark, geometry";
-const SELECT_SOME_AREAS: &str = "SELECT id, osm_id, name, state, created_at, updated_at, newest_osm_object_timestamp, db_size, parent_osm_ids, last_update_remark, geometry FROM areas";
+const ALL_AREA_COLUMNS: &str = "id, osm_id, name, state, created_at, updated_at, newest_osm_object_timestamp, db_size, parent_osm_ids, geometry";
+const SELECT_SOME_AREAS: &str = "SELECT id, osm_id, name, state, created_at, updated_at, newest_osm_object_timestamp, db_size, parent_osm_ids, geometry FROM areas";
 
 fn row_to_area(row: &'_ Row<'_>) -> rusqlite::Result<Area> {
     Ok(Area {
@@ -21,8 +21,7 @@ fn row_to_area(row: &'_ Row<'_>) -> rusqlite::Result<Area> {
         newest_osm_object_timestamp: row.get_unwrap(6),
         db_size: row.get_unwrap(7),
         parent_osm_ids: row.get_unwrap(8),
-        last_update_remark: row.get_unwrap(9),
-        geometry: row.get_unwrap(10),
+                geometry: row.get_unwrap(9),
     })
 }
 
@@ -73,7 +72,6 @@ pub struct Area {
     pub newest_osm_object_timestamp: Option<String>,
     pub db_size: i64,
     pub parent_osm_ids: Option<String>,
-    pub last_update_remark: Option<String>,
     pub geometry: Option<Vec<u8>>,
 }
 
@@ -114,7 +112,7 @@ impl Area {
 
     pub fn save(&mut self, conn: &Connection) -> Result<()> {
         self.updated_at = Utc::now();
-        let mut stmt = conn.prepare_cached("UPDATE areas SET osm_id = ?, state = ?, name = ?, created_at = ?, updated_at = ?, newest_osm_object_timestamp = ?, db_size = ?, parent_osm_ids = ?, last_update_remark = ?, geometry = ? WHERE id = ?")?;
+        let mut stmt = conn.prepare_cached("UPDATE areas SET osm_id = ?, state = ?, name = ?, created_at = ?, updated_at = ?, newest_osm_object_timestamp = ?, db_size = ?, parent_osm_ids = ?, geometry = ? WHERE id = ?")?;
         stmt.execute((
             &self.osm_id,
             &self.state,
@@ -124,7 +122,6 @@ impl Area {
             &self.newest_osm_object_timestamp,
             self.db_size,
             &self.parent_osm_ids,
-            &self.last_update_remark,
             &self.geometry,
             self.id,
         ))?;

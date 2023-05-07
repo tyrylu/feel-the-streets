@@ -12,8 +12,7 @@
             <th>Name</th>
             <th>State</th>
             <th>Updated at</th>
-            <th>Last update remark</th>
-            <th>Database size</th>
+                        <th>Database size</th>
             <th>Changes stream length</th>
             <th>Changes stream memory usage</th>
             <th>Number of registered clients</th>
@@ -25,7 +24,6 @@
             <td><a href="areas/{{ area.id }}">{{ area.name }}</a></td>
             <td>{{ area.state }}</td>
             <td>{{ area.updated_at }}</td>
-            <td>{{ area.last_update_remark }}</td>
             <td data-sort="{{ area.db_size }}">{{ area.db_size | filesizeformat }}</td>
             <td>{{ stream_infos[area.id].len }}</td>
             <td data-sort="{{ stream_infos[area.id].memory_usage }}">{{ stream_infos[area.id].memory_usage | filesizeformat }}</td>
