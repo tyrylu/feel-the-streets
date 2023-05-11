@@ -27,6 +27,8 @@ def mark_areas_as_also_local(areas):
             area["state"] += ",LocalCopyExists"
 
 def osm_object_id_to_name(osm_object_id, osm_object_names):
+    if osm_object_id not in osm_object_names:
+        return _("Unknown area {}").format(osm_object_id)
     lang = os.environ["LANG"]
     if "_" in lang:
         lang = lang.split("_")[0]
