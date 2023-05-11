@@ -1,3 +1,4 @@
+use chrono::{DateTime, FixedOffset};
 use crate::names_cache::OSMObjectNamesCache;
 use crate::Result;
 use crate::{
@@ -14,8 +15,11 @@ use osm_db::translation::{record::TranslationRecord, translator};
 use serde::{Deserialize, Serialize};
 use std::sync::{Arc, Mutex};
 
-pub fn create_area_database(area: i64) -> Result<()> {
-    let manager = OSMObjectManager::new()?;
+pub fn create_area_database(area: i64, at_time: Option<DateTime<FixedOffset>>) -> Result<()> {
+    if let Some(time) = at_time {
+        info!("Using historical area state as of {}.", time);
+    }
+    let manager = OSMObjectManager::new(at_time.as_ref())?;
     let area_db_conn = Arc::new(Mutex::new(db::connect_to_server_db()?));
     let cache = Arc::new(Mutex::new(OSMObjectNamesCache::load()?));
     create_area_database_worker(area, manager, area_db_conn, cache.clone())?;
@@ -124,6 +128,6 @@ impl CreateAreaDatabaseTask {
 #[typetag::serde]
 impl doitlater::Executable for CreateAreaDatabaseTask {
     fn execute(&self) -> std::result::Result<(), Box<dyn std::error::Error>> {
-        create_area_database(self.area_id).map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
+        create_area_database(self.area_id, None::<DateTime<FixedOffset>>).map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
     }
 }

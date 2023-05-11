@@ -1,3 +1,4 @@
+use chrono::{DateTime, TimeZone, Utc};
 use crate::object::{OSMObject, OSMObjectSpecifics, OSMObjectType};
 use crate::overpass_api::Servers;
 use crate::raw_object::OSMObject as RawOSMObject;
@@ -22,6 +23,8 @@ use std::sync::{Arc, Mutex};
 use std::time::Instant;
 use zstd_util::ZstdContext;
 
+pub const ANY_TIME: Option<&DateTime<Utc>> = None;
+
 const COMPRESSION_LEVEL: i32 = 10;
 
 static ZSTD_CONTEXT: Lazy<Mutex<ZstdContext>> = Lazy::new(|| {
@@ -34,8 +37,14 @@ fn serialize_and_compress(object: &OSMObject) -> Result<Vec<u8>> {
     Ok(ZSTD_CONTEXT.lock().unwrap().compress(&serialized)?)
 }
 
-pub fn open_cache() -> Result<Db> {
-    Ok(sled::open("entities_cache")?)
+pub fn open_cache(past_time: Option<&DateTime<impl TimeZone>>) -> Result<Db> {
+    let cache_path = if let Some(time) = past_time {
+        format!("entities_cache_{}", time.with_timezone(&Utc).timestamp())
+    }
+    else {
+        "entities_cache".to_string()
+    };
+    Ok(sled::open(cache_path)?)
 }
 
 fn deserialize_compressed(compressed: &[u8]) -> Result<OSMObject> {
@@ -52,8 +61,14 @@ fn translate_type_shortcut(shortcut: char) -> &'static str {
     }
 }
 
-fn format_query(timeout: u32, maxsize: usize, query: &str) -> String {
-    format!("[timeout:{timeout}][maxsize:{maxsize}];{query};out meta;")
+fn format_query(past_time: &Option<String>, timeout: u32, maxsize: usize, query: &str) -> String {
+    let date_specifier = if let Some(timespec) = past_time {
+        format!("[date:\"{timespec}\"]")
+    }
+    else {
+        "".to_string()
+    };
+    format!("{}[timeout:{timeout}][maxsize:{maxsize}];{query};out meta;", date_specifier)
 }
 
 fn format_data_retrieval(area: i64) -> String {
@@ -67,15 +82,16 @@ pub struct OSMObjectManager {
     retrieved_from_network: RefCell<HashSet<SmolStr>>,
     cache_queries: RefCell<u32>,
     cache_hits: RefCell<u32>,
+    past_time: Option<String>,
 }
 impl OSMObjectManager {
     /// Use this constructor only if there's only one OSMObjectManager at a time.
-    pub fn new() -> Result<Self> {
-        Self::new_multithread(Arc::new(Servers::default()), Arc::new(open_cache()?))
+    pub fn new(past_time: Option<&DateTime<impl TimeZone>>) -> Result<Self> {
+        Self::new_multithread(past_time, Arc::new(Servers::default()), Arc::new(open_cache(past_time)?))
     }
 
     /// Creates an OsmObjectManager in a scenario where each thread has its own instance and there are at least two of these.
-    pub fn new_multithread(servers: Arc<Servers>, cache: Arc<Db>) -> Result<Self> {
+    pub fn new_multithread(past_time: Option<&DateTime<impl TimeZone>>, servers: Arc<Servers>, cache: Arc<Db>) -> Result<Self> {
         Ok(OSMObjectManager {
             api_servers: servers,
             cache,
@@ -83,6 +99,7 @@ impl OSMObjectManager {
             retrieved_from_network: RefCell::new(HashSet::new()),
             cache_queries: RefCell::new(0),
             cache_hits: RefCell::new(0),
+            past_time: past_time.map(|t| t.with_timezone(&Utc).to_rfc3339())
         })
     }
 
@@ -151,7 +168,7 @@ impl OSMObjectManager {
     pub fn lookup_objects_in(&self, area: i64) -> Result<()> {
         info!("Looking up all objects in area {}.", area);
         // Area retrieval queries are costly, so tell the server about it upfront.
-        let query = format_query(900, 1073741824, &format_data_retrieval(area));
+        let query = format_query(&self.past_time, 900, 1073741824, &format_data_retrieval(area));
         let readable = self.run_query(&query, false)?;
         self.cache_objects_from(readable, false)?;
         // Ensure that we have the object for the area as well, it sometimes might not be returned by the previous query.
@@ -183,6 +200,7 @@ impl OSMObjectManager {
                 let ids_str = chunk.map(|c| &(c.as_ref())[1..]).join(",");
                 // Note that this way of counting the actual chunk length is inefficient, so if anyone knows of a better way, i am open ears.
                 let query = format_query(
+                    &self.past_time,
                     900,
                     memory_cost_per_instance(entity_type) * (ids_str.matches(',').count() + 1),
                     &format!("{}(id:{})", translate_type_shortcut(entity_type), ids_str),
@@ -540,7 +558,7 @@ impl OSMObjectManager {
     }
 
     pub fn get_area_parents(&self, area_id: i64) -> Result<Vec<OSMObject>> {
-        let query = format!("rel({});<<;out meta;", area_id - 3_600_000_000);
+        let query = format_query(&self.past_time, 900, 500_000_000, &format!("rel({});<<", area_id - 3_600_000_000));
         let readable = self.run_query(&query, false)?;
         self.cache_objects_from(readable, true)
     }

@@ -1,3 +1,4 @@
+use chrono::{DateTime, Local};
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::BoundaryRect;
 use std::env;
@@ -31,7 +32,7 @@ fn main() -> osm_api::Result<()> {
     } else {
         BoundaryRect::whole_world()
     };
-    let manager = OSMObjectManager::new()?;
+    let manager = OSMObjectManager::new(None::<&DateTime<Local>>)?;
     println!("Getting geometry for {id} in bounds: {bounds:?}");
     let obj = manager.get_object(&id)?.expect("Could not get object");
     let geom = manager

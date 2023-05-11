@@ -1,4 +1,5 @@
-extern crate server;
+use chrono::Utc;
+use log::info;
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::overpass_api::Servers;
 use server::names_cache::OSMObjectNamesCache;
@@ -11,9 +12,11 @@ use std::sync::{Arc, Mutex};
 async fn main() -> Result<()> {
     let _dotenv_path = dotenvy::dotenv()?;
     server::init_logging();
+    let now = Utc::now();
+    info!("Recreating all areas as of {}.", now);
     let server_conn = Arc::new(Mutex::new(db::connect_to_server_db()?));
     let servers = Arc::new(Servers::default());
-    let cache = Arc::new(osm_api::object_manager::open_cache()?);
+    let cache = Arc::new(osm_api::object_manager::open_cache(Some(&now))?);
     let names_cache = Arc::new(Mutex::new(OSMObjectNamesCache::load()?));
     let mut tasks = vec![];
     for area in Area::all(&server_conn.lock().unwrap())? {
@@ -21,8 +24,8 @@ async fn main() -> Result<()> {
         if Path::new(&area_file).exists() {
             fs::remove_file(&area_file)?;
         }
-        println!("Recreating area {}...", area.name);
-        let manager = OSMObjectManager::new_multithread(servers.clone(), cache.clone())?;
+        info!("Recreating area {}...", area.name);
+        let manager = OSMObjectManager::new_multithread(Some(&now), servers.clone(), cache.clone())?;
         let server_conn_clone = server_conn.clone();
         let names_cache_clone = names_cache.clone();
         tasks.push(tokio::task::spawn_blocking(move || {

@@ -10,7 +10,7 @@ use doitlater::typetag;
 use chrono::{DateTime, FixedOffset};
 use osm_api::main_api::MainAPIClient;
 use osm_api::object::OSMObject;
-use osm_api::object_manager::OSMObjectManager;
+use osm_api::object_manager::{ANY_TIME, OSMObjectManager};
 use osm_api::replication::{ReplicationApiClient, SequenceNumber};
 use osm_api::BoundaryRect;
 use osm_db::entity::Entity;
@@ -53,7 +53,7 @@ pub fn process_osm_changes(initial_sn: u32) -> Result<u32> {
         "Processing OSM changes from {initial_sn} to {}",
         latest_state.sequence_number.0
     );
-    let manager = OSMObjectManager::new()?;
+    let manager = OSMObjectManager::new(ANY_TIME)?;
     let server_db = db::connect_to_server_db()?;
     let newest_timestamp = DateTime::parse_from_rfc3339(&db::newest_osm_object_timestamp(&server_db)?)?;
     for sn in initial_sn..=latest_state.sequence_number.0 {
