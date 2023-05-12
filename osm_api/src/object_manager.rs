@@ -480,7 +480,12 @@ impl OSMObjectManager {
         object_bounds: &BoundaryRect,
     ) -> Result<Option<Geometry<f64>>> {
         let mut coll = GeometryCollection::default();
+        let object_id = object.unique_id();
         for related in self.related_objects_of(object)? {
+            if object_id == related.unique_id() {
+                warn!("Object {} references itself as a child, ignoring.", object_id);
+                continue;
+            }
             let related_geom = self.get_geometry_of(&related, object_bounds)?;
             if let Some(related_geom) = related_geom {
                 coll.0.push(related_geom);
