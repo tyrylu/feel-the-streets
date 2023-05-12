@@ -8,8 +8,9 @@ use std::fs;
 use std::path::Path;
 use std::sync::{Arc, Mutex};
 
-#[tokio::main]
-async fn main() -> Result<()> {
+
+
+async fn async_main() -> Result<()> {
     let _dotenv_path = dotenvy::dotenv()?;
     server::init_logging();
     let now = Utc::now();
@@ -44,4 +45,13 @@ async fn main() -> Result<()> {
     }
     names_cache.lock().unwrap().save()?;
     Ok(())
+}
+
+fn main() -> Result<()> {
+    tokio::runtime::Builder::new_multi_thread()
+    .enable_all()
+    .thread_stack_size(4*1024*1024)
+    .build()
+    .unwrap()
+    .block_on(async_main())
 }
