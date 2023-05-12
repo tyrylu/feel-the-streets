@@ -39,6 +39,7 @@ def main():
     mw = MainWindow()
     # If we don't show the main window early enough, the event loop can exit prematurely in some cases.
     mw.show()
+    mw.activateWindow(())
     ret = app.exec_()
     # On Linux, the speech dispatcher communication thread is still running and it's a daemon one, so using sys.exit now would not have any effect.
     # To workaround that, destroy the speech instance and let the destructor take care of the things it needs
