@@ -30,6 +30,7 @@ class MainWindow(QMainWindow):
         self._progress = None
         self._pending_count = 0
         self._applier = None
+        self._selection_dialog = None
         self._maybe_show_message()
         self.do_select_db(True)
 
@@ -43,20 +44,23 @@ class MainWindow(QMainWindow):
             elif res == MessageDialog.DialogCode.Accepted:
                 motd.mark_as_seen()
 
-
     def do_select_db(self, is_initial):
-        dlg = AreaSelectionDialog(self, is_initial)
-        res = dlg.exec_()
-        if res == QDialog.DialogCode.Rejected and is_initial:
+        self._is_initial = is_initial
+        self._selection_dialog = AreaSelectionDialog(self, is_initial)
+        self._selection_dialog.finished.connect(self._on_area_selection_finished)
+        self._selection_dialog.open()
+
+    def _on_area_selection_finished(self, res):
+        if res == QDialog.DialogCode.Rejected and self._is_initial:
             sys.exit(0)
         elif res == QDialog.DialogCode.Accepted:
-            self._selected_map = dlg.selected_map
-            self._selected_map_name = dlg.selected_map_name
-            self._is_initial = is_initial
-            if not os.path.exists(AreaDatabase.path_for(dlg.selected_map, server_side=False)):
-                self._download_database(dlg.selected_map)
+            self._selected_map = self._selection_dialog.selected_map
+            self._selected_map_name = self._selection_dialog.selected_map_name
+            self._selection_dialog = None
+            if not os.path.exists(AreaDatabase.path_for(self._selected_map, server_side=False)):
+                self._download_database(self._selected_map)
             else:
-                self._update_database(dlg.selected_map)
+                self._update_database(self._selected_map)
 
     def _on_map_ready(self):
         self.setWindowTitle(f"{self._selected_map_name} - Feel the streets")
