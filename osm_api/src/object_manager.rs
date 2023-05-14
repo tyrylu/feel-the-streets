@@ -258,17 +258,9 @@ impl OSMObjectManager {
     fn related_objects_of<'a>(
         &'a self,
         object: &'a OSMObject,
-        seen_ids: &'a mut HashSet<SmolStr>,
     ) -> Result<impl Iterator<Item = OSMObject> + 'a> {
         self.ensure_has_cached_dependencies_for(&[object])?;
         Ok(object.related_ids().filter_map(move |(id, maybe_role)| {
-            if seen_ids.contains(&id) {
-                warn!("Object {} is a part of a dependency cycle.", id);
-                return None;
-            }
-            else {
-                seen_ids.insert(id.clone());
-            }
             let obj = self.get_cached_object(&id);
             match obj {
                 Ok(Some(o)) => Some((o, maybe_role)),
@@ -313,8 +305,7 @@ impl OSMObjectManager {
             }
         };
         let mut coords = Vec::with_capacity(node_count);
-        // A way's cildren by definition can't form a cycle, so passing an empy set here is fine.
-        for obj in self.related_objects_of(way, &mut HashSet::new())? {
+        for obj in self.related_objects_of(way)? {
             match obj.specifics {
                 Node { lon, lat } if object_bounds.contains_point(lon, lat) => {
                     coords.push((lon, lat));
@@ -338,17 +329,24 @@ impl OSMObjectManager {
         }
     }
 
-    pub fn get_geometry_of(
+    pub fn get_geometry_of(&self, object: &OSMObject,
+        object_bounds: &BoundaryRect,
+        ) -> Result<Option<Geometry<f64>>> {
+            self.get_geometry_of_internal(object, object_bounds, &mut HashSet::new())
+        }
+
+    fn get_geometry_of_internal(
         &self,
         object: &OSMObject,
         object_bounds: &BoundaryRect,
+        seen_ids: &mut HashSet<SmolStr>,
     ) -> Result<Option<Geometry<f64>>> {
         let uid = object.unique_id();
         let exists = self.geometries_cache.borrow().contains_key(&uid);
         if exists {
             Ok(self.geometries_cache.borrow()[&uid].clone())
         } else {
-            let res = self.get_geometry_of_uncached(object, object_bounds)?;
+            let res = self.get_geometry_of_uncached(object, object_bounds, seen_ids)?;
             trace!(
                 "Object {} has in bounds {:?} geometry {:?}",
                 uid,
@@ -364,6 +362,7 @@ impl OSMObjectManager {
         &self,
         object: &OSMObject,
         object_bounds: &BoundaryRect,
+        seen_ids: &mut HashSet<SmolStr>,
     ) -> Result<Option<Geometry<f64>>> {
         use self::OSMObjectSpecifics::*;
         match object.specifics {
@@ -394,8 +393,7 @@ impl OSMObjectManager {
                 let mut inners = vec![];
                 let mut outers = vec![];
                 let mut others = vec![];
-                let mut seen_ids = HashSet::from([object.unique_id()]);
-                for related in self.related_objects_of(object, &mut seen_ids)? {
+                for related in self.related_objects_of(object)? {
                     let role = related.tags.get("role").map(|r| r.as_str()).unwrap_or("");
                     match role {
                         "inner" => self.extend_list_of_polygon_parts(&mut inners, related)?,
@@ -441,7 +439,7 @@ impl OSMObjectManager {
                             let mut coll = GeometryCollection::default();
                             coll.0.push(poly);
                             for o in others {
-                                if let Some(o) = self.get_geometry_of(&o, object_bounds)? {
+                                if let Some(o) = self.get_geometry_of_internal(&o, object_bounds, seen_ids)? {
                                     coll.0.push(o);
                                 }
                             }
@@ -449,10 +447,10 @@ impl OSMObjectManager {
                                 coll,
                             ))))
                         }
-                        None => self.create_geometry_collection(object, object_bounds, &mut seen_ids),
+                        None => self.create_geometry_collection(object, object_bounds, seen_ids),
                     }
                 } else {
-                    self.create_geometry_collection(object, object_bounds, &mut seen_ids)
+                    self.create_geometry_collection(object, object_bounds, seen_ids)
                 }
             }
             _ => Ok(None),
@@ -476,8 +474,7 @@ impl OSMObjectManager {
             }
             OSMObjectType::Relation => {
                 parts.extend(
-                    // We're explicitly filtering for ways, so we can't introduce a cycle here as well.
-                    self.related_objects_of(&new_object, &mut HashSet::new())?
+                    self.related_objects_of(&new_object)?
                         .filter(|o| o.object_type() == OSMObjectType::Way),
                 );
             }
@@ -492,8 +489,16 @@ impl OSMObjectManager {
         seen_ids: &mut HashSet<SmolStr>,
     ) -> Result<Option<Geometry<f64>>> {
         let mut coll = GeometryCollection::default();
-        for related in self.related_objects_of(object, seen_ids)? {
-            let related_geom = self.get_geometry_of(&related, object_bounds)?;
+        for related in self.related_objects_of(object)? {
+            let related_id = related.unique_id();
+            if seen_ids.contains(&related_id) {
+                warn!("While crreating a geometry collection for {}, found a reference cycle involving {}.", object.unique_id(), related_id);
+                continue;
+            }
+            else {
+                seen_ids.insert(related_id);
+            }
+            let related_geom = self.get_geometry_of_internal(&related, object_bounds, seen_ids)?;
             if let Some(related_geom) = related_geom {
                 coll.0.push(related_geom);
             }
