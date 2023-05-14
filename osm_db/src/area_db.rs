@@ -109,7 +109,7 @@ impl AreaDatabase {
 
     pub fn insert_entities<T>(&mut self, entities: T) -> Result<()>
     where
-        T: Iterator<Item = (Entity, Box<dyn Iterator<Item = String>>)>,
+        T: Iterator<Item = (Entity, Box<dyn Iterator<Item = SmolStr>>)>,
     {
         let mut count = 0;
         self.begin()?;
@@ -140,7 +140,7 @@ impl AreaDatabase {
                     for related_id in related_ids {
                         if let Err(e) = insert_related_stmt.execute(params![
                             entity.id.as_str(),
-                            related_id,
+                            related_id.as_str(),
                             EntityRelationshipKind::OSMChild
                         ]) {
                             match classify_db_error(&e, &related_id) {
@@ -407,7 +407,7 @@ impl AreaDatabase {
         Ok(())
     }
 
-    pub fn get_entity_child_ids(&self, parent_id: &str) -> Result<Vec<String>> {
+    pub fn get_entity_child_ids(&self, parent_id: &str) -> Result<Vec<SmolStr>> {
         Ok(self
             .conn
             .prepare_cached(
@@ -415,7 +415,7 @@ impl AreaDatabase {
             )?
             .query_and_then(
                 params![parent_id, EntityRelationshipKind::OSMChild],
-                |row| Ok(row.get_unwrap(0)),
+                |row| Ok(SmolStr::new_inline(&row.get_unwrap::<_, String>(0))),
             )?
             .filter_map(Result::ok)
             .collect())

@@ -12,7 +12,7 @@ use osm_api::main_api::MainAPIClient;
 use osm_api::object::OSMObject;
 use osm_api::object_manager::{ANY_TIME, OSMObjectManager};
 use osm_api::replication::{ReplicationApiClient, SequenceNumber};
-use osm_api::BoundaryRect;
+use osm_api::{BoundaryRect, SmolStr};
 use osm_db::entity::Entity;
 use osm_db::entity_relationship::RootedEntityRelationship;
 use osm_db::entity_relationship_kind::EntityRelationshipKind;
@@ -415,7 +415,7 @@ fn handle_deletion(
     Ok(())
 }
 
-fn to_create_change(entity: Entity, ids: impl Iterator<Item = String>) -> SemanticChange {
+fn to_create_change(entity: Entity, ids: impl Iterator<Item = SmolStr>) -> SemanticChange {
     SemanticChange::creating(
         entity.id.to_string(),
         entity.geometry,
@@ -428,7 +428,7 @@ fn to_create_change(entity: Entity, ids: impl Iterator<Item = String>) -> Semant
 
 fn to_update_change(
     new_entity: Entity,
-    new_related_ids: impl Iterator<Item = String>,
+    new_related_ids: impl Iterator<Item = SmolStr>,
     area_id: i64,
 ) -> Result<SemanticChange> {
     let area_db = AreaDatabase::open_existing(area_id, true)?;
@@ -455,8 +455,8 @@ fn to_update_change(
     ))
 }
 
-fn child_ids_to_rels(ids: impl Iterator<Item = String>) -> Vec<RootedEntityRelationship> {
-    ids.map(|id| RootedEntityRelationship::new(&id, EntityRelationshipKind::OSMChild))
+fn child_ids_to_rels(ids: impl Iterator<Item = SmolStr>) -> Vec<RootedEntityRelationship> {
+    ids.map(|id| RootedEntityRelationship::new(id.as_str(), EntityRelationshipKind::OSMChild))
         .collect()
 }
 

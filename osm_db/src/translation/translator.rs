@@ -11,7 +11,7 @@ use osm_api::object_manager::OSMObjectManager;
 use osm_api::BoundaryRect;
 use osm_api::SmolStr;
 
-type RelatedIdsIterator = Box<dyn Iterator<Item = String>>;
+type RelatedIdsIterator = Box<dyn Iterator<Item = SmolStr>>;
 
 pub fn translate(
     object: &OSMObject,
@@ -118,7 +118,7 @@ pub fn translate(
                             data: raw_data,
                             parsed_data: None,
                         },
-                        Box::new(object.related_ids().map(|(id, _)| id.to_string())),
+                        Box::new(object.related_ids().map(|(id, _)| id)),
                     )))
                 }
                 None => {
