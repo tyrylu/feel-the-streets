@@ -2,6 +2,7 @@ use crate::entity_relationship::RootedEntityRelationship;
 use crate::Result;
 use base64::prelude::*;
 use once_cell::sync::Lazy;
+use osm_api::SmolStr;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::sync::Mutex;
@@ -17,36 +18,36 @@ static ZSTD_CONTEXT: Lazy<Mutex<ZstdContext>> = Lazy::new(|| {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum EntryChange {
     Create {
-        key: String,
+        key: SmolStr,
         value: Value,
     },
     Update {
-        key: String,
+        key: SmolStr,
         old_value: Value,
         new_value: Value,
     },
     Remove {
-        key: String,
+        key: SmolStr,
     },
 }
 
 impl EntryChange {
     pub fn updating(key: &str, old_value: Value, new_value: Value) -> Self {
         EntryChange::Update {
-            key: key.to_string(),
+            key: SmolStr::new_inline(key),
             old_value,
             new_value,
         }
     }
     pub fn creating(key: &str, value: Value) -> Self {
         EntryChange::Create {
-            key: key.to_string(),
+            key: SmolStr::new_inline(key),
             value,
         }
     }
     pub fn removing(key: &str) -> Self {
         EntryChange::Remove {
-            key: key.to_string(),
+            key: SmolStr::new_inline(key),
         }
     }
 }
@@ -70,18 +71,18 @@ impl RelationshipChange {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum SemanticChange {
     Create {
-        id: String,
+        id: SmolStr,
         geometry: String,
-        discriminator: String,
+        discriminator: SmolStr,
         data: String,
         effective_width: Option<f64>,
         entity_relationships: Vec<RootedEntityRelationship>,
     },
     Remove {
-        osm_id: String,
+        osm_id: SmolStr,
     },
     Update {
-        osm_id: String,
+        osm_id: SmolStr,
         property_changes: Vec<EntryChange>,
         data_changes: Vec<EntryChange>,
         relationship_changes: Vec<RelationshipChange>,
@@ -90,17 +91,17 @@ pub enum SemanticChange {
 
 impl SemanticChange {
     pub fn creating(
-        id: String,
+        id: &str,
         geometry: Vec<u8>,
-        discriminator: String,
+        discriminator: &str,
         data: String,
         effective_width: Option<f64>,
         relationships: Vec<RootedEntityRelationship>,
     ) -> Self {
         SemanticChange::Create {
             geometry: BASE64_STANDARD.encode(geometry),
-            id,
-            discriminator,
+            id: SmolStr::new_inline(id),
+            discriminator: SmolStr::new_inline(discriminator),
             data,
             effective_width,
             entity_relationships: relationships,
@@ -108,7 +109,7 @@ impl SemanticChange {
     }
     pub fn removing(osm_id: &str) -> Self {
         SemanticChange::Remove {
-            osm_id: osm_id.to_string(),
+            osm_id: SmolStr::new_inline(osm_id),
         }
     }
 
@@ -122,7 +123,7 @@ impl SemanticChange {
             property_changes,
             data_changes,
             relationship_changes,
-            osm_id: osm_id.to_string(),
+            osm_id: SmolStr::new_inline(osm_id),
         }
     }
 

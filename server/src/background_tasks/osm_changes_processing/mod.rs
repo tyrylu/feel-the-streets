@@ -417,9 +417,9 @@ fn handle_deletion(
 
 fn to_create_change(entity: Entity, ids: impl Iterator<Item = SmolStr>) -> SemanticChange {
     SemanticChange::creating(
-        entity.id.to_string(),
+        &entity.id,
         entity.geometry,
-        entity.discriminator.to_string(),
+        &entity.discriminator,
         entity.data,
         entity.effective_width,
         child_ids_to_rels(ids),
