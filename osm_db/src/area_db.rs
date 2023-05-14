@@ -268,7 +268,7 @@ impl AreaDatabase {
         for relationship in entity_relationships {
             if let Err(e) = insert_relationship_stmt.execute(params![
                 id,
-                relationship.child_id,
+                relationship.child_id.as_str(),
                 relationship.kind
             ]) {
                 match classify_db_error(&e, &relationship.child_id) {
@@ -379,7 +379,7 @@ impl AreaDatabase {
                     if let Err(e) = self
                         .conn
                         .prepare_cached(INSERT_ENTITY_RELATIONSHIP_SQL)?
-                        .execute(params![parent_id, value.child_id, value.kind])
+                        .execute(params![parent_id, value.child_id.as_str(), value.kind])
                     {
                         match classify_db_error(&e, &value.child_id) {
                             ForeignKeyViolationClassification::Retryable => {
@@ -400,7 +400,7 @@ impl AreaDatabase {
                         .prepare_cached(
                             "DELETE FROM entity_relationships where parent_id = ? and child_id = ? AND kind = ?",
                         )?
-                        .execute(params![parent_id, value.child_id, value.kind])?;
+                        .execute(params![parent_id, value.child_id.as_str(), value.kind])?;
                 }
             }
         }

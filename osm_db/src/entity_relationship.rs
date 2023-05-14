@@ -21,14 +21,14 @@ impl EntityRelationship {
 
 #[derive(Clone, Debug, Hash, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RootedEntityRelationship {
-    pub child_id: String,
+    pub child_id: SmolStr,
     pub kind: EntityRelationshipKind,
 }
 
 impl RootedEntityRelationship {
     pub fn new(child_id: &str, kind: EntityRelationshipKind) -> Self {
         RootedEntityRelationship {
-            child_id: child_id.to_string(),
+            child_id: SmolStr::new_inline(child_id),
             kind,
         }
     }
