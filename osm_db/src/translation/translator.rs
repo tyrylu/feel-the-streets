@@ -118,7 +118,7 @@ pub fn translate(
                             data: raw_data,
                             parsed_data: None,
                         },
-                        Box::new(object.related_ids().map(|(id, _)| id)),
+                        Box::new(object.related_ids().map(|(id, _)| id.to_string())),
                     )))
                 }
                 None => {

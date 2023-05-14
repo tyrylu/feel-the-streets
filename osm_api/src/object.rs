@@ -37,7 +37,7 @@ pub struct OSMRelationMember {
     referenced_type: OSMObjectType,
     #[serde(rename = "ref")]
     reference: u64,
-    pub role: String,
+    pub role: SmolStr,
 }
 
 impl OSMRelationMember {
@@ -45,7 +45,7 @@ impl OSMRelationMember {
         OSMRelationMember {
             referenced_type,
             reference,
-            role,
+            role: role.into(),
         }
     }
 }
@@ -167,12 +167,12 @@ impl OSMObject {
         }
     }
 
-    pub fn related_ids(&self) -> Box<dyn Iterator<Item = (String, Option<String>)>> {
+    pub fn related_ids(&self) -> Box<dyn Iterator<Item = (SmolStr, Option<SmolStr>)>> {
         use OSMObjectSpecifics::*;
         match self.specifics {
             Node { .. } => Box::new(iter::empty()),
             Way { ref nodes, .. } => {
-                Box::new(nodes.clone().into_iter().map(|n| (format!("n{n}"), None)))
+                Box::new(nodes.clone().into_iter().map(|n| (SmolStr::new_inline(&format!("n{n}")), None)))
             }
             Relation { ref members, .. } => Box::new(
                 members
@@ -185,11 +185,11 @@ impl OSMObject {
 }
 
 impl OSMRelationMember {
-    pub fn unique_reference(&self) -> String {
+    pub fn unique_reference(&self) -> SmolStr {
         match self.referenced_type {
-            OSMObjectType::Node => format!("n{}", self.reference),
-            OSMObjectType::Way => format!("w{}", self.reference),
-            OSMObjectType::Relation => format!("r{}", self.reference),
+            OSMObjectType::Node => SmolStr::new_inline(&format!("n{}", self.reference)),
+            OSMObjectType::Way => SmolStr::new_inline(&format!("w{}", self.reference)),
+            OSMObjectType::Relation => SmolStr::new_inline(&format!("r{}", self.reference)),
         }
     }
 }

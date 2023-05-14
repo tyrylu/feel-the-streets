@@ -226,7 +226,7 @@ impl OSMObjectManager {
                 Way { ref nodes, .. } => {
                     for node in nodes {
                         total_examined += 1;
-                        let node_id = format!("n{node}");
+                        let node_id = SmolStr::new_inline(&format!("n{node}"));
                         if !self.has_object(&node_id) {
                             debug!("Node with id {} missing.", node_id);
                             missing.push(node_id);
@@ -258,9 +258,17 @@ impl OSMObjectManager {
     fn related_objects_of<'a>(
         &'a self,
         object: &'a OSMObject,
+        seen_ids: &'a mut HashSet<SmolStr>,
     ) -> Result<impl Iterator<Item = OSMObject> + 'a> {
         self.ensure_has_cached_dependencies_for(&[object])?;
         Ok(object.related_ids().filter_map(move |(id, maybe_role)| {
+            if seen_ids.contains(&id) {
+                warn!("Object {} is a part of a dependency cycle.", id);
+                return None;
+            }
+            else {
+                seen_ids.insert(id.clone());
+            }
             let obj = self.get_cached_object(&id);
             match obj {
                 Ok(Some(o)) => Some((o, maybe_role)),
@@ -272,7 +280,7 @@ impl OSMObjectManager {
             }).map(move |(mut related, maybe_role)| {
                 OSMObjectManager::enrich_tags(object, &mut related);
             if let Some(role) = maybe_role {
-                related.tags.insert("role".to_string(), role);
+                related.tags.insert("role".to_string(), role.to_string());
             }
             related
         }))
@@ -305,7 +313,8 @@ impl OSMObjectManager {
             }
         };
         let mut coords = Vec::with_capacity(node_count);
-        for obj in self.related_objects_of(way)? {
+        // A way's cildren by definition can't form a cycle, so passing an empy set here is fine.
+        for obj in self.related_objects_of(way, &mut HashSet::new())? {
             match obj.specifics {
                 Node { lon, lat } if object_bounds.contains_point(lon, lat) => {
                     coords.push((lon, lat));
@@ -385,7 +394,8 @@ impl OSMObjectManager {
                 let mut inners = vec![];
                 let mut outers = vec![];
                 let mut others = vec![];
-                for related in self.related_objects_of(object)? {
+                let mut seen_ids = HashSet::from([object.unique_id()]);
+                for related in self.related_objects_of(object, &mut seen_ids)? {
                     let role = related.tags.get("role").map(|r| r.as_str()).unwrap_or("");
                     match role {
                         "inner" => self.extend_list_of_polygon_parts(&mut inners, related)?,
@@ -439,10 +449,10 @@ impl OSMObjectManager {
                                 coll,
                             ))))
                         }
-                        None => self.create_geometry_collection(object, object_bounds),
+                        None => self.create_geometry_collection(object, object_bounds, &mut seen_ids),
                     }
                 } else {
-                    self.create_geometry_collection(object, object_bounds)
+                    self.create_geometry_collection(object, object_bounds, &mut seen_ids)
                 }
             }
             _ => Ok(None),
@@ -466,7 +476,8 @@ impl OSMObjectManager {
             }
             OSMObjectType::Relation => {
                 parts.extend(
-                    self.related_objects_of(&new_object)?
+                    // We're explicitly filtering for ways, so we can't introduce a cycle here as well.
+                    self.related_objects_of(&new_object, &mut HashSet::new())?
                         .filter(|o| o.object_type() == OSMObjectType::Way),
                 );
             }
@@ -478,14 +489,10 @@ impl OSMObjectManager {
         &self,
         object: &OSMObject,
         object_bounds: &BoundaryRect,
+        seen_ids: &mut HashSet<SmolStr>,
     ) -> Result<Option<Geometry<f64>>> {
         let mut coll = GeometryCollection::default();
-        let object_id = object.unique_id();
-        for related in self.related_objects_of(object)? {
-            if object_id == related.unique_id() {
-                warn!("Object {} references itself as a child, ignoring.", object_id);
-                continue;
-            }
+        for related in self.related_objects_of(object, seen_ids)? {
             let related_geom = self.get_geometry_of(&related, object_bounds)?;
             if let Some(related_geom) = related_geom {
                 coll.0.push(related_geom);
