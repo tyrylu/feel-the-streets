@@ -1,9 +1,10 @@
 use crate::Result;
 use osm_api::object::{OSMObject, OSMObjectType};
 use osm_api::object_manager::OSMObjectManager;
-use osm_api::BoundaryRect;
+use osm_api::{BoundaryRect, SmolStr};
 use rusqlite::named_params;
 pub use rusqlite::Connection;
+use std::collections::HashSet;
 
 pub fn connect_to_server_db() -> Result<Connection> {
     let conn = Connection::open("server.db")?;
@@ -49,8 +50,9 @@ pub fn insert_entity_geometry_parts(
     object: &OSMObject,
 ) -> Result<()> {
     begin_transaction(conn)?;
-    insert_entity_geometry_parts_of(object.unique_id().as_str(), object, conn, manager)?;
-    commit_transaction(conn)
+    let mut seen_ids = HashSet::from([object.unique_id()]);
+    insert_entity_geometry_parts_of(object.unique_id().as_str(), object, conn, manager, &mut seen_ids)?;
+        commit_transaction(conn)
 }
 
 fn insert_entity_geometry_parts_of(
@@ -58,6 +60,7 @@ fn insert_entity_geometry_parts_of(
     object: &OSMObject,
     conn: &Connection,
     manager: &OSMObjectManager,
+    seen_ids: &mut HashSet<SmolStr>,
 ) -> Result<()> {
     match object.object_type() {
         OSMObjectType::Node => {}
@@ -68,10 +71,17 @@ fn insert_entity_geometry_parts_of(
         }
         OSMObjectType::Relation => {
             for (oid, _) in object.related_ids() {
+                if seen_ids.contains(&oid) {
+                    warn!("When inserting the geometry parts of {}, we already inserted {}, skipping.", entity_id, oid);
+                    continue;
+                }
+                else {
+                seen_ids.insert(oid.clone());
                 insert_entity_geometry_part(conn, entity_id, &oid)?;
                 if let Some(related_object) = manager.get_object(&oid)? {
-                    insert_entity_geometry_parts_of(entity_id, &related_object, conn, manager)?;
+                    insert_entity_geometry_parts_of(entity_id, &related_object, conn, manager, seen_ids)?;
                 }
+            }
             }
         }
     }
