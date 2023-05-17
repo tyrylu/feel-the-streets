@@ -335,8 +335,11 @@ fn handle_geometry_change(
     changes: &mut SemanticChangesContainer,
 ) -> Result<()> {
     let object = manager
-        .get_object(entity_id)?
-        .expect("Modified object managed to disappear");
+        .get_object(entity_id)?;
+    if object.is_none() {
+        return Ok(()); // We'll get a removal event for it in a future change
+    }
+    let object = object.unwrap();
     for area_id in db::areas_containing(entity_id, conn)? {
         let old_geom = AreaDatabase::open_existing(area_id, true)?
             .get_entity(entity_id)?
