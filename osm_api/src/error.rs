@@ -26,6 +26,8 @@ pub enum Error {
     RetryLimitExceeded,
     #[error("The passed object was not an OSM way")]
     NotAWay,
+    #[error("The Overpass API returned an error: {0}")]
+    OverpassAPIError(String),
 }
 
 impl From<ureq::Error> for Error {

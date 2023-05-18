@@ -1,5 +1,7 @@
+use crate::Error;
 use serde::Deserialize;
 use smol_str::SmolStr;
+
 
 #[derive(Debug, Deserialize)]
 pub(crate) struct Tag {
@@ -93,4 +95,33 @@ pub(crate) enum OSMObject {
     Node(OSMNode),
     Way(OSMWay),
     Relation(OSMRelation),
+}
+
+#[derive(Deserialize)]
+pub(crate) struct RemarkElement {
+    #[serde(rename="$text")]
+    remark: String,
+}
+
+#[derive(Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub(crate) enum OSMObjectOrRemark {
+    Node(OSMNode),
+    Way(OSMWay),
+    Relation(OSMRelation),
+    Remark(RemarkElement),
+}
+
+impl TryInto<OSMObject> for OSMObjectOrRemark {
+    type Error = Error;
+
+    fn try_into(self) -> Result<OSMObject, Self::Error> {
+        use OSMObjectOrRemark::*;
+        match self {
+            Node(n) => Ok(OSMObject::Node(n)),
+            Way(w) => Ok(OSMObject::Way(w)),
+            Relation(r) => Ok(OSMObject::Relation(r)),
+            Remark(elem) => Err(Error::OverpassAPIError(elem.remark))
+        }
+    }
 }

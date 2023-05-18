@@ -1,7 +1,7 @@
 use chrono::{DateTime, TimeZone, Utc};
 use crate::object::{OSMObject, OSMObjectSpecifics, OSMObjectType};
 use crate::overpass_api::Servers;
-use crate::raw_object::OSMObject as RawOSMObject;
+use crate::raw_object::{OSMObjectOrRemark, OSMObject as RawOSMObject};
 use crate::utils;
 use crate::BoundaryRect;
 use crate::{Error, Result};
@@ -150,8 +150,9 @@ impl OSMObjectManager {
             cached_readable.read_line(&mut line)?;
         }
         let mut de = Deserializer::from_reader(cached_readable);
-        while let Ok(obj) = RawOSMObject::deserialize(&mut de) {
-            let internal_object: OSMObject = obj.try_into()?;
+        while let Ok(obj) = OSMObjectOrRemark::deserialize(&mut de) {
+            let raw: RawOSMObject = obj.try_into()?;
+            let internal_object: OSMObject = raw.try_into()?;
             self.retrieved_from_network
                 .borrow_mut()
                 .insert(internal_object.unique_id());
