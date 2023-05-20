@@ -576,7 +576,8 @@ impl OSMObjectManager {
     }
 
     pub fn get_area_parents(&self, area_id: i64) -> Result<Vec<OSMObject>> {
-        let query = format_query(&self.past_time, 900, 500_000_000, &format!("rel({});<<", area_id - 3_600_000_000));
+        // We're intentionally ignoring the past time, as this query times out with any past time value, and these areas will most likely be valid in our timeframes.
+        let query = format_query(&None, 900, 500_000_000, &format!("rel({});<<", area_id - 3_600_000_000));
         let readable = self.run_query(&query, false)?;
         self.cache_objects_from(readable, true)
     }
