@@ -28,7 +28,7 @@ impl Default for Servers {
             "https://z.overpass-api.de",
             "https://lz4.overpass-api.de",
             "https://overpass.kumi.systems",
-            "https://maps.mail.ru/osm/tools/overpass",
+            // "https://maps.mail.ru/osm/tools/overpass",
         ])
     }
 }
