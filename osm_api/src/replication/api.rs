@@ -1,5 +1,5 @@
-use super::change::RawOSMChange;
-use super::{OSMChange, ReplicationState, SequenceNumber};
+use super::change::RawOSMChanges;
+use super::{OSMChanges, ReplicationState, SequenceNumber};
 use crate::Result;
 use flate2::read::GzDecoder;
 use std::io::BufReader;
@@ -23,8 +23,8 @@ impl ReplicationApiClient {
         )?)
     }
 
-    pub fn get_change(&self, number: SequenceNumber) -> Result<OSMChange> {
-        let change: RawOSMChange = quick_xml::de::from_reader(BufReader::new(GzDecoder::new(
+    pub fn get_change(&self, number: SequenceNumber) -> Result<OSMChanges> {
+        let changes: RawOSMChanges = quick_xml::de::from_reader(BufReader::new(GzDecoder::new(
             self.agent
                 .get(&format!(
                     "{PLANET_REPLICATION_BASE}/minute/{}",
@@ -33,7 +33,7 @@ impl ReplicationApiClient {
                 .call()?
                 .into_reader(),
         )))?;
-        change.try_into()
+        changes.try_into()
     }
 
     pub fn get_change_info(&self, number: &SequenceNumber) -> Result<ReplicationState> {

@@ -1,72 +1,70 @@
-use crate::Result;
+use crate::{Result, SmolStr};
 use serde::Deserialize;
 use std::convert::TryFrom;
-
 use crate::object::OSMObject;
 use crate::raw_object::OSMObject as RawOSMObject;
 
 #[derive(Debug, Deserialize)]
-pub(crate) struct RawOSMChange {
-    #[serde(default)]
-    pub modify: Vec<Modification>,
-    #[serde(default)]
-    pub create: Vec<Creation>,
-    #[serde(default)]
-    pub delete: Vec<Deletion>,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct Modification {
-    #[serde(rename = "node", alias = "way", alias = "relation")]
-    changes: Vec<RawOSMObject>,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct Creation {
-    #[serde(rename = "node", alias = "way", alias = "relation")]
-    changes: Vec<RawOSMObject>,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct Deletion {
-    #[serde(rename = "node", alias = "way", alias = "relation")]
-    changes: Vec<RawOSMObject>,
+#[serde(rename_all = "snake_case")]
+pub(crate) enum RawOSMChangesPart {
+    Modify(Vec<RawOSMObject>),
+    Create(Vec<RawOSMObject>),
+    Delete(Vec<RawOSMObject>)
 }
 
 #[derive(Debug)]
-pub struct OSMChange {
-    pub modify: Vec<OSMObject>,
-    pub create: Vec<OSMObject>,
-    pub delete: Vec<OSMObject>,
+pub enum OSMChange {
+    Modify(OSMObject),
+    Create(OSMObject),
+    Delete(OSMObject),
 }
 
-impl TryFrom<RawOSMChange> for OSMChange {
+pub(crate) type RawOSMChanges = Vec<RawOSMChangesPart>;
+pub struct OSMChanges(pub Vec<OSMChange>);
+
+impl TryFrom<RawOSMChanges> for OSMChanges {
     type Error = crate::Error;
 
-    fn try_from(value: RawOSMChange) -> Result<Self> {
-        let modify = value
-            .modify
-            .into_iter()
-            .flat_map(|c| c.changes.into_iter())
-            .map(|o| o.try_into())
-            .collect::<Result<Vec<OSMObject>>>()?;
-        let create = value
-            .create
-            .into_iter()
-            .flat_map(|c| c.changes.into_iter())
-            .map(|o| o.try_into())
-            .collect::<Result<Vec<OSMObject>>>()?;
-        let delete = value
-            .delete
-            .into_iter()
-            .flat_map(|c| c.changes.into_iter())
-            .map(|o| o.try_into())
-            .collect::<Result<Vec<OSMObject>>>()?;
+    fn try_from(val: RawOSMChanges) -> Result<OSMChanges> {
+        let mut res = vec![];
+        for part in val {
+            use RawOSMChangesPart::*;
+            match part {
+                Modify(objs) => {
+                    for o in objs {
+                        res.push(OSMChange::Modify(o.try_into()?));
+                    }
+                },
+                Create(objs) => {
+                    for o in objs {
+                        res.push(OSMChange::Create(o.try_into()?));
+                    }
+                },
+                Delete(objs) => {
+                    for o in objs {
+                        res.push(OSMChange::Delete(o.try_into()?));
+                    }
+                },
+            }
+        }
+        Ok(OSMChanges(res))
+    }
+}
 
-        Ok(OSMChange {
-            modify,
-            create,
-            delete,
-        })
+impl OSMChange {
+    pub fn changeset(&self) -> u64 {
+        match self {
+            OSMChange::Modify(o)
+            | OSMChange::Create(o)
+            | OSMChange::Delete(o) => o.changeset,
+        }
+    }
+
+    pub fn object_unique_id(&self) -> SmolStr {
+        match self {
+            OSMChange::Modify(o)
+            | OSMChange::Create(o)
+            | OSMChange::Delete(o) => o.unique_id(),
+        }
     }
 }

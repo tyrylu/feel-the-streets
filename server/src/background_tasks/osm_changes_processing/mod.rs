@@ -1,3 +1,4 @@
+mod changes_preprocessing;
 mod semantic_changes_container;
 mod state_tracking;
 
@@ -11,7 +12,7 @@ use chrono::{DateTime, FixedOffset};
 use osm_api::main_api::MainAPIClient;
 use osm_api::object::OSMObject;
 use osm_api::object_manager::{ANY_TIME, OSMObjectManager};
-use osm_api::replication::{ReplicationApiClient, SequenceNumber};
+use osm_api::replication::{OSMChange, ReplicationApiClient, SequenceNumber};
 use osm_api::{BoundaryRect, SmolStr};
 use osm_db::entity::Entity;
 use osm_db::entity_relationship::RootedEntityRelationship;
@@ -76,72 +77,33 @@ fn process_osm_change(
         info!("Not processing change {}, it is too old.", sn);
         return Ok(());
     }
-    // Ignore a change which is not at least a minute old, because otherwise we already applyed it.
+    // Ignore a change which is not at least a minute old, because otherwise we already applyed it when creating the area.
         if info.timestamp.signed_duration_since(*newest_timestamp).num_seconds() < 60 {
         info!("Not processing change {}, it is the last we seen.", sn);
         return Ok(())
     }
-
-    let mut changeset_interests = HashMap::new();
-    let change = r_client.get_change(number)?;
+        let change = r_client.get_change(number)?;
     let mut record = TranslationRecord::new();
     let mut changes_container = SemanticChangesContainer::default();
-    let mut interesting_modified = Vec::with_capacity(change.modify.len());
-    for modified in &change.modify {
-        if changeset_might_be_interesting(
-            modified.changeset,
-            &mut changeset_interests,
-            m_client,
-            server_db,
-        ) {
-            interesting_modified.push(modified);
-        } else {
-            continue;
-        }
-    }
-    manager.ensure_has_cached_dependencies_for(&interesting_modified)?;
-    for modified in interesting_modified {
-        handle_modification(
+    let raw_change_count = change.0.len();
+    let osm_changes = changes_preprocessing::filter_and_deduplicate_changes(change, m_client, server_db);
+    for osm_change in &osm_changes {
+        match osm_change {
+        OSMChange::Modify(modified) => handle_modification(
             modified,
             manager,
             server_db,
             &mut record,
             &mut changes_container,
-        )?;
-    }
-    let mut interesting_created = Vec::with_capacity(change.create.len());
-    for created in &change.create {
-        if changeset_might_be_interesting(
-            created.changeset,
-            &mut changeset_interests,
-            m_client,
-            server_db,
-        ) {
-            interesting_created.push(created);
-        } else {
-            continue;
-        }
-    }
-    manager.ensure_has_cached_dependencies_for(&interesting_created)?;
-    for created in interesting_created {
-        handle_creation(
+        )?,
+        OSMChange::Create(created) => handle_creation(
             created,
             manager,
             server_db,
             &mut record,
             &mut changes_container,
-        )?;
-    }
-    for deleted in &change.delete {
-        if changeset_might_be_interesting(
-            deleted.changeset,
-            &mut changeset_interests,
-            m_client,
-            server_db,
-        ) {
-            handle_deletion(deleted, server_db, manager, &mut changes_container)?;
-        } else {
-            continue;
+        )?,
+            OSMChange::Delete(deleted) => handle_deletion(deleted, server_db, manager, &mut changes_container)?,
         }
     }
     for (area_id, info) in changes_container.iter_mut() {
@@ -196,34 +158,11 @@ fn process_osm_change(
         area.save(server_db)?;
     }
     info!(
-        "Processed OSM change {} with {} created, {} modified, and {} deleted objects.",
+        "Processed OSM change {} with {} changes.",
         sn,
-        change.create.len(),
-        change.modify.len(),
-        change.delete.len()
+        raw_change_count,
     );
     Ok(())
-}
-
-fn changeset_might_be_interesting(
-    changeset: u64,
-    changeset_interests: &mut HashMap<u64, bool>,
-    m_api: &MainAPIClient,
-    conn: &Connection,
-) -> bool {
-    *changeset_interests.entry(changeset).or_insert_with(|| {
-        debug!("Getting information about changeset {}", changeset);
-        let changeset = m_api
-            .get_changeset(changeset)
-            .expect("Could not get changeset");
-        if let Some(bounds) = changeset.bounds {
-            !Area::all_containing(conn, &bounds.as_wkb_polygon())
-                .expect("Could not get areas containing the given bounds")
-                .is_empty()
-        } else {
-            true
-        }
-    })
 }
 
 fn handle_modification<'a>(
