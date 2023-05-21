@@ -2,7 +2,6 @@ use crate::Error;
 use serde::Deserialize;
 use smol_str::SmolStr;
 
-
 #[derive(Debug, Deserialize)]
 pub(crate) struct Tag {
     #[serde(rename = "@k")]

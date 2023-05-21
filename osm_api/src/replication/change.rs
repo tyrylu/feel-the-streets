@@ -5,11 +5,23 @@ use crate::object::OSMObject;
 use crate::raw_object::OSMObject as RawOSMObject;
 
 #[derive(Debug, Deserialize)]
+pub(crate) struct ObjectsHolder {
+    #[serde(rename = "$value")]
+    objects: Vec<RawOSMObject>
+}
+
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) enum RawOSMChangesPart {
-    Modify(Vec<RawOSMObject>),
-    Create(Vec<RawOSMObject>),
-    Delete(Vec<RawOSMObject>)
+    Modify(ObjectsHolder),
+    Create(ObjectsHolder),
+    Delete(ObjectsHolder)
+}
+
+#[derive(Debug, Deserialize)]
+pub(crate) struct RawOSMChanges {
+#[serde(rename = "$value")]
+changes: Vec<RawOSMChangesPart>
 }
 
 #[derive(Debug)]
@@ -19,7 +31,6 @@ pub enum OSMChange {
     Delete(OSMObject),
 }
 
-pub(crate) type RawOSMChanges = Vec<RawOSMChangesPart>;
 pub struct OSMChanges(pub Vec<OSMChange>);
 
 impl TryFrom<RawOSMChanges> for OSMChanges {
@@ -27,21 +38,21 @@ impl TryFrom<RawOSMChanges> for OSMChanges {
 
     fn try_from(val: RawOSMChanges) -> Result<OSMChanges> {
         let mut res = vec![];
-        for part in val {
+        for part in val.changes {
             use RawOSMChangesPart::*;
             match part {
-                Modify(objs) => {
-                    for o in objs {
+                Modify(holder) => {
+                    for o in holder.objects {
                         res.push(OSMChange::Modify(o.try_into()?));
                     }
                 },
-                Create(objs) => {
-                    for o in objs {
+                Create(holder) => {
+                    for o in holder.objects {
                         res.push(OSMChange::Create(o.try_into()?));
                     }
                 },
-                Delete(objs) => {
-                    for o in objs {
+                Delete(holder) => {
+                    for o in holder.objects {
                         res.push(OSMChange::Delete(o.try_into()?));
                     }
                 },
