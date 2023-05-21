@@ -34,20 +34,20 @@ pub enum EntryChange {
 impl EntryChange {
     pub fn updating(key: &str, old_value: Value, new_value: Value) -> Self {
         EntryChange::Update {
-            key: SmolStr::new_inline(key),
+            key: SmolStr::new(key),
             old_value,
             new_value,
         }
     }
     pub fn creating(key: &str, value: Value) -> Self {
         EntryChange::Create {
-            key: SmolStr::new_inline(key),
+            key: SmolStr::new(key),
             value,
         }
     }
     pub fn removing(key: &str) -> Self {
         EntryChange::Remove {
-            key: SmolStr::new_inline(key),
+            key: SmolStr::new(key),
         }
     }
 }
