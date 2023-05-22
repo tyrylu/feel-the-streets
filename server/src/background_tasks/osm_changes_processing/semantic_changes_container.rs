@@ -1,5 +1,6 @@
+use osm_api::SmolStr;
 use osm_db::semantic_change::SemanticChange;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 #[derive(Default)]
 pub(crate) struct AreaInfo<'a> {
@@ -9,25 +10,39 @@ pub(crate) struct AreaInfo<'a> {
 }
 
 #[derive(Default)]
-pub(crate) struct SemanticChangesContainer<'a>(HashMap<i64, AreaInfo<'a>>);
+pub(crate) struct SemanticChangesContainer<'a> {
+changes: HashMap<i64, AreaInfo<'a>>,
+    needs_geometry_update: HashSet<SmolStr>,
+    seen_entity_ids: HashSet<SmolStr>
+}
 
 impl<'a> SemanticChangesContainer<'a> {
     pub fn add_change(&mut self, area: i64, change: SemanticChange) {
-        self.0.entry(area).or_default().changes.push(change);
+        self.seen_entity_ids.insert(SmolStr::new_inline(change.osm_id()));
+        self.changes.entry(area).or_default().changes.push(change);
     }
 
     pub fn iter_mut(&mut self) -> impl Iterator<Item = (&i64, &mut AreaInfo<'a>)> {
-        self.0.iter_mut()
+        self.changes.iter_mut()
     }
 
     pub fn update_geometry_for(&mut self, area_id: i64, geometry: Vec<u8>) {
-        self.0.entry(area_id).or_default().geometry = Some(geometry);
+        self.changes.entry(area_id).or_default().geometry = Some(geometry);
     }
 
     pub fn update_newest_timestamp_for(&mut self, area_id: i64, timestamp: &'a str) {
-        let entry = self.0.entry(area_id).or_default();
+        let entry = self.changes.entry(area_id).or_default();
         if entry.newest_timestamp < timestamp {
             entry.newest_timestamp = timestamp;
         }
     }
+    
+    pub fn record_geometry_update_requirement(&mut self, entity_id: &str) {
+        self.needs_geometry_update.insert(SmolStr::new_inline(entity_id));
+    }
+
+    pub fn entities_needing_geometry_update(&self) -> HashSet<SmolStr> {
+        self.needs_geometry_update.difference(&self.seen_entity_ids).map(|i| i.clone()).collect()
+    }
+
 }

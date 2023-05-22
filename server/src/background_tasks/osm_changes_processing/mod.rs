@@ -106,6 +106,9 @@ fn process_osm_change(
             OSMChange::Delete(deleted) => handle_deletion(deleted, server_db, manager, &mut changes_container)?,
         }
     }
+    for entity_id in changes_container.entities_needing_geometry_update() {
+        handle_geometry_change(&entity_id, &server_db, &manager, &mut changes_container)?;
+    }
     for (area_id, info) in changes_container.iter_mut() {
         info!(
             "Processing {} semantic changes for area {}.",
@@ -261,8 +264,8 @@ fn handle_modification<'a>(
         db::delete_entity_geometry_parts(conn, &object_id)?;
     }
     for parent_entity_id in db::entities_containing(&object.unique_id(), conn)? {
-        debug!("Because of a geometry change of {}, we need to recalculate the geometry of {parent_entity_id}.", object.unique_id());
-        handle_geometry_change(&parent_entity_id, conn, manager, changes)?;
+        debug!("Because of a geometry change of {}, we might need to recalculate the geometry of {parent_entity_id}.", object.unique_id());
+        changes.record_geometry_update_requirement(&parent_entity_id);
     }
     Ok(())
 }
