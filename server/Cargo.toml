@@ -14,7 +14,7 @@ serde_json = "1.0.96"
 chrono = { version = "0.4.24", default-features = false, features = ["serde", "clock", "std"] }
 thiserror = "1.0.40"
 dotenvy = "0.15.7"
-base64 = "0.21.0"
+base64 = "0.21.1"
 doitlater = "0.2.6"
 redis_api = {path = "../redis_api"}
 axum = "0.6.18"
