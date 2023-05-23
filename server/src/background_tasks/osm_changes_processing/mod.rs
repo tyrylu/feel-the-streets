@@ -121,7 +121,7 @@ fn process_osm_change(
         let mut area_db = AreaDatabase::open_existing(*area_id, true)?;
         area_db.begin()?;
         for change in &info.changes {
-            debug!("Applying change {:?}", change);
+            trace!("Applying change {:?}", change);
             area_db.apply_change(change)?;
         }
         area_db.apply_deferred_relationship_additions()?;
@@ -277,6 +277,7 @@ fn handle_geometry_change(
     manager: &OSMObjectManager,
     changes: &mut SemanticChangesContainer,
 ) -> Result<()> {
+    debug!("Handling geometry update for OSM object {}.", entity_id);
     let object = manager
         .get_object(entity_id)?;
     if object.is_none() {
