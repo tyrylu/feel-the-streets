@@ -129,7 +129,7 @@ fn process_osm_change(
         area_db.commit()?;
         let mut stream = ChangesStream::new_from_env(area.osm_id)?;
         if !stream.exists()? || !stream.should_publish_changes()? {
-            info!(
+            debug!(
                 "Not publishing the changes of area {}, no clients or forced redownload.",
                 area_id
             );
@@ -161,8 +161,9 @@ fn process_osm_change(
         area.save(server_db)?;
     }
     info!(
-        "Processed OSM change {} with {} changes.",
+        "Processed OSM change {} from {} with {} changes.",
         sn,
+        info.timestamp,
         raw_change_count,
     );
     Ok(())
