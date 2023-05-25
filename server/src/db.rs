@@ -72,7 +72,7 @@ fn insert_entity_geometry_parts_of(
         OSMObjectType::Relation => {
             for (oid, _) in object.related_ids() {
                 if seen_ids.contains(&oid) {
-                    warn!("When inserting the geometry parts of {}, we already inserted {}, skipping.", entity_id, oid);
+                    debug!("When inserting the geometry parts of {}, we already inserted {}, skipping.", entity_id, oid);
                     continue;
                 }
                 else {
