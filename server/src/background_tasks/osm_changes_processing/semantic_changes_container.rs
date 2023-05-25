@@ -42,7 +42,7 @@ impl<'a> SemanticChangesContainer<'a> {
     }
 
     pub fn entities_needing_geometry_update(&self) -> HashSet<SmolStr> {
-        self.needs_geometry_update.difference(&self.seen_entity_ids).map(|i| i.clone()).collect()
+        self.needs_geometry_update.difference(&self.seen_entity_ids).cloned().collect()
     }
 
 }

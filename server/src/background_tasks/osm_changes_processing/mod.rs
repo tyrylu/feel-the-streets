@@ -107,7 +107,7 @@ fn process_osm_change(
         }
     }
     for entity_id in changes_container.entities_needing_geometry_update() {
-        handle_geometry_change(&entity_id, &server_db, &manager, &mut changes_container)?;
+        handle_geometry_change(&entity_id, server_db, manager, &mut changes_container)?;
     }
     for (area_id, info) in changes_container.iter_mut() {
         info!(

@@ -492,7 +492,7 @@ impl OSMObjectManager {
         let mut coll = GeometryCollection::default();
         for related in self.related_objects_of(object)? {
             let related_id = related.unique_id();
-            if related_id[0] == 'r' { // We track only relations, because nothing else can form a complete cycle
+            if related_id.starts_with('r') { // We track only relations, because nothing else can form a complete cycl{ //e
             if seen_ids.contains(&related_id) {
                 warn!("While crreating a geometry collection for {}, found a reference cycle involving {}.", object.unique_id(), related_id);
                 continue;
