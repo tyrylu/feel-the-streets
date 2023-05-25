@@ -492,6 +492,7 @@ impl OSMObjectManager {
         let mut coll = GeometryCollection::default();
         for related in self.related_objects_of(object)? {
             let related_id = related.unique_id();
+            if related_id[0] == 'r' { // We track only relations, because nothing else can form a complete cycle
             if seen_ids.contains(&related_id) {
                 warn!("While crreating a geometry collection for {}, found a reference cycle involving {}.", object.unique_id(), related_id);
                 continue;
@@ -499,6 +500,7 @@ impl OSMObjectManager {
             else {
                 seen_ids.insert(related_id);
             }
+        }
             let related_geom = self.get_geometry_of_internal(&related, object_bounds, seen_ids)?;
             if let Some(related_geom) = related_geom {
                 coll.0.push(related_geom);
