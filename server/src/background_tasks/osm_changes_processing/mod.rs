@@ -292,10 +292,10 @@ fn handle_geometry_change(
         let bounds = Area::bounds_of(area_id, conn)?;
         let new_geom = manager
             .get_geometry_as_wkb(&object, &bounds)?;
-        if new_geometry.is_none() {
+        if new_geom.is_none() {
             return Ok(());
         }
-        let new_geometry = new_geometry.unwrap();
+        let new_geom = new_geom.unwrap();
         let geom_change = EntryChange::updating(
             "geometry",
             BASE64_STANDARD.encode(&old_geom).into(),
