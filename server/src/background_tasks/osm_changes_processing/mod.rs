@@ -158,6 +158,7 @@ fn process_osm_change(
             let geom = area_db.make_geometry_valid(&geom)?;
             let geom = osm_api::unnest_wkb_geometry(geom.as_ref());
             area.geometry = Some(geom);
+            trace!("Updated area geometry for area {} to {:?}", area.osm_id, area.geometry);
         }
         area.state = AreaState::Updated;
         area.save(server_db)?;
