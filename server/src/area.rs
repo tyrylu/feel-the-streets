@@ -8,7 +8,7 @@ use serde::Serialize;
 use std::fs;
 
 const ALL_AREA_COLUMNS: &str = "id, osm_id, name, state, created_at, updated_at, newest_osm_object_timestamp, db_size, parent_osm_ids, geometry";
-const SELECT_SOME_AREAS: &str = "SELECT id, osm_id, name, state, created_at, updated_at, newest_osm_object_timestamp, db_size, parent_osm_ids, geometry FROM areas";
+const SELECT_SOME_AREAS: &str = "SELECT id, osm_id, name, state, created_at, updated_at, newest_osm_object_timestamp, db_size, parent_osm_ids, asBinary(geometry) FROM areas";
 
 fn row_to_area(row: &'_ Row<'_>) -> rusqlite::Result<Area> {
     Ok(Area {
@@ -112,7 +112,7 @@ impl Area {
 
     pub fn save(&mut self, conn: &Connection) -> Result<()> {
         self.updated_at = Utc::now();
-        let mut stmt = conn.prepare_cached("UPDATE areas SET osm_id = ?, state = ?, name = ?, created_at = ?, updated_at = ?, newest_osm_object_timestamp = ?, db_size = ?, parent_osm_ids = ?, geometry = ? WHERE id = ?")?;
+        let mut stmt = conn.prepare_cached("UPDATE areas SET osm_id = ?, state = ?, name = ?, created_at = ?, updated_at = ?, newest_osm_object_timestamp = ?, db_size = ?, parent_osm_ids = ?, geometry = geomFromWKB(?, 4326) WHERE id = ?")?;
         stmt.execute((
             &self.osm_id,
             &self.state,
