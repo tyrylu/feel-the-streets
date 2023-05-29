@@ -41,7 +41,7 @@ impl doitlater::Executable for ProcessOSMChangesTask {
 
 fn run_osm_changes_processing() -> Result<()> {
     let initial_sn = state_tracking::read_latest_sequence_number()?;
-    let latest_processed_sn = process_osm_changes(initial_sn)?;
+    let latest_processed_sn = process_osm_changes(initial_sn + 1)?;
     state_tracking::save_latest_sequence_number(latest_processed_sn)?;
     Ok(())
 }
