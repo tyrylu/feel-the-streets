@@ -79,7 +79,7 @@ fn process_osm_change(
     }
     // Ignore a change which is not at least a minute old, because otherwise we already applyed it when creating the area.
         if info.timestamp.signed_duration_since(*newest_timestamp).num_seconds() < 60 {
-        info!("Not processing change {}, it is the last we seen.", sn);
+        info!("Not processing change {}, it is the last we saw.", sn);
         return Ok(())
     }
         let change = r_client.get_change(number)?;
