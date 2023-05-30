@@ -18,10 +18,6 @@ changes: HashMap<i64, AreaInfo<'a>>,
 
 impl<'a> SemanticChangesContainer<'a> {
     pub fn add_change(&mut self, area: i64, change: SemanticChange) {
-        if change.osm_id() == "r148838" {
-            log::error!("Area {} encountered the phantom american ghost change: {:?}", area, change);
-            std::process::exit(42);
-        }
         self.seen_entity_ids.insert(SmolStr::new_inline(change.osm_id()));
         self.changes.entry(area).or_default().changes.push(change);
     }
