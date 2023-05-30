@@ -343,9 +343,11 @@ impl OSMObjectManager {
         seen_ids: &mut HashSet<SmolStr>,
     ) -> Result<Option<Geometry<f64>>> {
         let uid = object.unique_id();
-        let res = match self.geometries_cache.borrow_mut().entry((uid, object_bounds.to_hashable_key())) {
-            Entry::Occupied(e) => e.into_mut().clone(),
-            Entry::Vacant(e) => {
+        let key = (uid, object_bounds.to_hashable_key());
+        let maybe_geom = self.geometries_cache.borrow().get(&key).cloned();
+        let res = match maybe_geom {
+            Some(g) => g,
+            None => {
                 let geom = self.get_geometry_of_uncached(object, object_bounds, seen_ids)?;
             trace!(
                 "Object {} has in bounds {:?} geometry {:?}",
@@ -353,7 +355,8 @@ impl OSMObjectManager {
                 object_bounds,
                 geom
             );
-            e.insert(geom).clone()
+            self.geometries_cache.borrow_mut().insert(key, geom.clone());
+            geom
         }
         };
         Ok(res)
