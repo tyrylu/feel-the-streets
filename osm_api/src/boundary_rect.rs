@@ -46,4 +46,13 @@ impl BoundaryRect {
         ret.extend(self.min_y.to_le_bytes());
         ret
     }
+
+    pub(crate) fn to_hashable_key(&self) -> Vec<u8> {
+        let mut ret = vec![];
+        ret.extend(self.min_x.to_le_bytes());
+        ret.extend(self.min_y.to_le_bytes());
+        ret.extend(self.max_x.to_le_bytes());
+        ret.extend(self.max_y.to_le_bytes());
+        ret
+    }
 }

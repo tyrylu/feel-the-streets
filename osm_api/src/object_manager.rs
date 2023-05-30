@@ -6,7 +6,7 @@ use crate::utils;
 use crate::BoundaryRect;
 use crate::{Error, Result};
 use geo_types::{Geometry, GeometryCollection, LineString, Point, Polygon};
-use hashbrown::HashMap;
+use hashbrown::hash_map::{Entry, HashMap};
 use itertools::Itertools;
 use log::{debug, info, trace, warn};
 use once_cell::sync::Lazy;
@@ -76,7 +76,7 @@ fn format_data_retrieval(area: i64) -> String {
 }
 
 pub struct OSMObjectManager {
-    geometries_cache: RefCell<HashMap<SmolStr, Option<Geometry<f64>>>>,
+    geometries_cache: RefCell<HashMap<(SmolStr, Vec<u8>), Option<Geometry<f64>>>>,
     api_servers: Arc<Servers>,
     cache: Arc<Db>,
     retrieved_from_network: RefCell<HashSet<SmolStr>>,
@@ -343,20 +343,20 @@ impl OSMObjectManager {
         seen_ids: &mut HashSet<SmolStr>,
     ) -> Result<Option<Geometry<f64>>> {
         let uid = object.unique_id();
-        let exists = self.geometries_cache.borrow().contains_key(&uid);
-        if exists {
-            Ok(self.geometries_cache.borrow()[&uid].clone())
-        } else {
-            let res = self.get_geometry_of_uncached(object, object_bounds, seen_ids)?;
+        let res = match self.geometries_cache.borrow_mut().entry((uid, object_bounds.to_hashable_key())) {
+            Entry::Occupied(e) => e.into_mut().clone(),
+            Entry::Vacant(e) => {
+                let geom = self.get_geometry_of_uncached(object, object_bounds, seen_ids)?;
             trace!(
                 "Object {} has in bounds {:?} geometry {:?}",
-                uid,
+                object.unique_id(),
                 object_bounds,
-                res
+                geom
             );
-            self.geometries_cache.borrow_mut().insert(uid, res.clone());
-            Ok(res)
+            e.insert(geom).clone()
         }
+        };
+        Ok(res)
     }
 
     fn get_geometry_of_uncached(
