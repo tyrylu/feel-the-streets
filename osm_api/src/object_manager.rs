@@ -6,7 +6,7 @@ use crate::utils;
 use crate::BoundaryRect;
 use crate::{Error, Result};
 use geo_types::{Geometry, GeometryCollection, LineString, Point, Polygon};
-use hashbrown::hash_map::{Entry, HashMap};
+use hashbrown::HashMap;
 use itertools::Itertools;
 use log::{debug, info, trace, warn};
 use once_cell::sync::Lazy;

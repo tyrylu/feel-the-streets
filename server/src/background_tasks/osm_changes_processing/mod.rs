@@ -155,7 +155,7 @@ fn process_osm_change(
         area.db_size = size;
         area.newest_osm_object_timestamp = Some(info.newest_timestamp.to_string());
         if let Some(geom) = &info.geometry {
-            let geom = area_db.make_geometry_valid(&geom)?;
+            let geom = area_db.make_geometry_valid(geom)?;
             let geom = osm_api::unnest_wkb_geometry(geom.as_ref());
             area.geometry = Some(geom);
             trace!("Updated area geometry for area {} to {:?}", area.osm_id, area.geometry);
