@@ -115,7 +115,7 @@ fn process_osm_change(
             info.changes.len(),
             area_id
         );
-        let mut area = Area::find_by_osm_id(*area_id, server_db).expect("Area should exist");
+        let mut area = Area::find_by_osm_id(*area_id, server_db).unwrap_or_else(|_| panic!("Area record for area {} should exist", area_id));
         area.state = AreaState::ApplyingChanges;
         area.save(server_db)?;
         let mut area_db = AreaDatabase::open_existing(*area_id, true)?;
@@ -290,7 +290,7 @@ fn handle_geometry_change(
     for area_id in db::areas_containing(entity_id, conn)? {
         let old_geom = AreaDatabase::open_existing(area_id, true)?
             .get_entity(entity_id)?
-            .expect("The summary says we have the entity, but it is not there")
+            .unwrap_or_else(|| panic!("The summary says we have entity {}, but it is not there", entity_id))
             .geometry;
         let bounds = Area::bounds_of(area_id, conn)?;
         let new_geom = manager
@@ -387,7 +387,7 @@ fn to_update_change(
     let area_db = AreaDatabase::open_existing(area_id, true)?;
     let old_entity = area_db
         .get_entity(&new_entity.id)?
-        .expect("A modified entity is not in the db");
+        .unwrap_or_else(|| panic!("Modified entity {} is not in the db of area {}", new_entity.id, area_id));
     let old_child_ids = area_db.get_entity_child_ids(&old_entity.id)?;
     let old_rels = child_ids_to_rels(old_child_ids.into_iter());
     let new_rels = child_ids_to_rels(new_related_ids);
@@ -427,7 +427,7 @@ fn infer_additional_relationships(
             );
             let mut entity = area_db
                 .get_entity(&entity_id)?
-                .expect("Entity disappeared");
+                .unwrap_or_else(|| panic!("Entity {} disappeared", entity_id));
             let relationships = relationship_inference::infer_additional_relationships_for_entity(
                 &mut entity,
                 area_db,
@@ -451,7 +451,7 @@ fn infer_additional_relationships(
                 changes[idx]
             );
             let current_relationships = area_db.get_relationships_related_to(&entity_id)?;
-            let mut entity = area_db.get_entity(&entity_id)?.expect("Entity disappeared");
+            let mut entity = area_db.get_entity(&entity_id)?.unwrap_or_else(|| panic!("Entity {} disappeared", entity_id));
             let new_relationships =
                 relationship_inference::infer_additional_relationships_for_entity(
                     &mut entity,
