@@ -24,7 +24,7 @@ There are basically two ways how to do that:
   * Install the resulting wheel: pip install ../target/wheels/*.whl
 ### Rust components
 The Rust components handle dependencies as any Rust project, so a cargo build in the root should do the trick. A release build should be performed in a production environment, however.
-Because of Axum, you need at least Rust 1.60, but the latest stable is preferred. You can use a distribution package, if it is new enough, or you can use rustup to install a recent stable version.
+Because of Hashbrown, you need at least Rust 1.64 (we could likely go back to 1.60 if strictly needed, however), but the latest stable is preferred. You can use a distribution package, if it is new enough, or you can use rustup to install a recent stable version.
 In addition, it requires the development files for Openssl.
 
 ## Components
