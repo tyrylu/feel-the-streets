@@ -38,6 +38,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "allocator-api2"
+version = "0.2.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c4f263788a35611fba42eb41ff811c5d0360c58b97402570312a350736e2542e"
+
+[[package]]
 name = "android-tzdata"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -743,6 +749,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "43a3c133739dddd0d2990f9a4bdf8eb4b21ef50e4851ca85ab661199821d510e"
 dependencies = [
  "ahash",
+]
+
+[[package]]
+name = "hashbrown"
+version = "0.14.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2c6201b9ff9fd90a5a3bac2e56a830d0caa509576f0e503818ee82c181b3437a"
+dependencies = [
+ "ahash",
+ "allocator-api2",
  "serde",
 ]
 
@@ -1176,7 +1192,7 @@ dependencies = [
  "crossbeam-channel",
  "flate2",
  "geo-types",
- "hashbrown 0.13.2",
+ "hashbrown 0.14.0",
  "itertools",
  "log",
  "once_cell",
@@ -1200,7 +1216,7 @@ dependencies = [
  "base64 0.21.2",
  "dirs-next",
  "geo-types",
- "hashbrown 0.13.2",
+ "hashbrown 0.14.0",
  "indexmap",
  "log",
  "once_cell",
