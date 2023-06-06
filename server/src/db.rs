@@ -49,10 +49,11 @@ pub fn insert_entity_geometry_parts(
     manager: &OSMObjectManager,
     object: &OSMObject,
 ) -> Result<()> {
-    begin_transaction(conn)?;
+    let savepoint_name = format!("insert_entities_for_{}", object.unique_id());
+    begin_savepoint(conn, &savepoint_name)?;
     let mut seen_ids = HashSet::from([object.unique_id()]);
     insert_entity_geometry_parts_of(object.unique_id().as_str(), object, conn, manager, &mut seen_ids)?;
-        commit_transaction(conn)
+        commit_savepoint(conn, &savepoint_name)
 }
 
 fn insert_entity_geometry_parts_of(
@@ -98,13 +99,25 @@ fn insert_entity_geometry_part(
     Ok(())
 }
 
-fn begin_transaction(conn: &Connection) -> Result<()> {
+pub(crate) fn begin_transaction(conn: &Connection) -> Result<()> {
     conn.execute("BEGIN", [])?;
     Ok(())
 }
 
-fn commit_transaction(conn: &Connection) -> Result<()> {
+pub(crate) fn commit_transaction(conn: &Connection) -> Result<()> {
     conn.execute("COMMIT", [])?;
+    Ok(())
+}
+
+fn begin_savepoint(conn: &Connection, name: &str) -> Result<()> {
+    let stmt = format!("SAVEPOINT {}", name);
+    conn.execute(&stmt, [])?;
+    Ok(())
+}
+
+fn commit_savepoint(conn: &Connection, name: &str) -> Result<()> {
+    let stmt = format!("RELEASE {}", name);
+    conn.execute(&stmt, [])?;
     Ok(())
 }
 
