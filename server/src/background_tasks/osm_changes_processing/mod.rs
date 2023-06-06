@@ -87,6 +87,8 @@ fn process_osm_change(
     let mut changes_container = SemanticChangesContainer::default();
     let raw_change_count = change.0.len();
     let osm_changes = changes_preprocessing::filter_and_deduplicate_changes(change, m_client, server_db);
+    db::begin_transaction(server_db)?;
+    let mut area_dbs = vec![];
     for osm_change in &osm_changes {
         match osm_change {
         OSMChange::Modify(modified) => handle_modification(
@@ -120,13 +122,13 @@ fn process_osm_change(
         area.save(server_db)?;
         let mut area_db = AreaDatabase::open_existing(*area_id, true)?;
         area_db.begin()?;
+        // We'll do the commit only after changes are processed, so it is intentionally not done after change application
         for change in &info.changes {
             trace!("Applying change {:?}", change);
             area_db.apply_change(change)?;
         }
         area_db.apply_deferred_relationship_additions()?;
         infer_additional_relationships(&mut info.changes, &area_db)?;
-        area_db.commit()?;
         let mut stream = ChangesStream::new_from_env(area.osm_id)?;
         if !stream.exists()? || !stream.should_publish_changes()? {
             debug!(
@@ -160,9 +162,15 @@ fn process_osm_change(
             area.geometry = Some(geom);
             trace!("Updated area geometry for area {} to {:?}", area.osm_id, area.geometry);
         }
+        // We must push the area db there, so we can move it to the vector
+        area_dbs.push(area_db);
         area.state = AreaState::Updated;
         area.save(server_db)?;
     }
+    for area_db in area_dbs {
+        area_db.commit()?;
+    }
+    db::commit_transaction(server_db)?;
     info!(
         "Processed OSM change {} from {} with {} changes.",
         sn,
