@@ -16,6 +16,6 @@ dotenvy = "0.15.7"
 url = "2.4.0"
 ureq = { version = "2.6.2", default-features = false, features = ["tls", "json"] }
 serde = { version = "1.0.164", features = ["derive"] }
-clap = { version = "4.3.3", features = ["derive"] }
+clap = { version = "4.3.4", features = ["derive"] }
 
 [features]
