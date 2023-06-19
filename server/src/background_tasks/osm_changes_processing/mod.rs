@@ -112,22 +112,24 @@ fn process_osm_change(
         handle_geometry_change(&entity_id, server_db, manager, &mut changes_container)?;
     }
     for (area_id, info) in changes_container.iter_mut() {
-        info!(
-            "Processing {} semantic changes for area {}.",
-            info.changes.len(),
-            area_id
-        );
         let mut area = Area::find_by_osm_id(*area_id, server_db).unwrap_or_else(|_| panic!("Area record for area {} should exist", area_id));
         area.state = AreaState::ApplyingChanges;
         area.save(server_db)?;
         let mut area_db = AreaDatabase::open_existing(*area_id, true)?;
         area_db.begin()?;
+        let start = Instant::now();
         // We'll do the commit only after changes are processed, so it is intentionally not done after change application
         for change in &info.changes {
             trace!("Applying change {:?}", change);
             area_db.apply_change(change)?;
         }
         area_db.apply_deferred_relationship_additions()?;
+        info!(
+            "Processed {} semantic changes for area {} in {:?}.",
+            info.changes.len(),
+            area_id,
+            start.elapsed()
+            );
         infer_additional_relationships(&mut info.changes, &area_db)?;
         let mut stream = ChangesStream::new_from_env(area.osm_id)?;
         if !stream.exists()? || !stream.should_publish_changes()? {
