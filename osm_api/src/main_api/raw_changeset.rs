@@ -33,6 +33,6 @@ pub struct RawChangeset {
     pub(crate) changes_count: u32,
     #[serde(rename = "@comments_count")]
     pub(crate) comments_count: u32,
-    #[serde(rename = "tag")]
+    #[serde(default, rename = "tag")]
     pub(crate) tags: Vec<Tag>,
 }
