@@ -21,12 +21,15 @@ pub(crate) fn filter_and_deduplicate_changes(changes: OSMChanges,
                 seen_ids.insert(c.object_unique_id());
                 filtered.push(c);
             },
-            OSMChange::Modify(o) if seen_ids.contains(&o.unique_id()) => continue, // We saw a newer update already, so this one is redundant.
+            OSMChange::Modify(o) if seen_ids.contains(&o.unique_id()) => continue, // We saw a newer update or delete already, so this one is redundant.
             c @ OSMChange::Modify(_) => {
                 seen_ids.insert(c.object_unique_id());
                 filtered.push(c);
             },
-             c @ OSMChange::Delete(_) => filtered.push(c),
+             c @ OSMChange::Delete(_) => {
+                seen_ids.insert(c.object_unique_id());
+                filtered.push(c)
+             },
         }
     }
     filtered.reverse();
