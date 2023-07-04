@@ -1,4 +1,3 @@
-pendulum # 177 ms
 pydantic # 153 ms
 pygeodesy # 74 ms
 appdirs # 43 ms
