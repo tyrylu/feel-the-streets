@@ -9,7 +9,8 @@ class Choice:
     value_label = _("Value")
     @staticmethod
     def get_value_widget(parent, column):
-        choice = QComboBox(parent, editable=False)
+        choice = QComboBox(parent)
+        choice.setEditable(False)
         enum = Enum.with_name(column.type_name)
         for name in enum.members.keys():
             choice.addItem(underscored_to_words(name))

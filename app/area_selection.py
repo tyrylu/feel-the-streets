@@ -55,7 +55,7 @@ class AreaSelectionDialog(BaseDialog):
         self._osm_object_names = get_osm_object_names()
         self._fill_areas(available)
         self._areas.setSortingEnabled(True)
-        self._areas.sortByColumn(0, Qt.AscendingOrder)
+        self._areas.sortByColumn(0, Qt.SortOrder.AscendingOrder)
 
     def create_ui(self):
         areas_label = QLabel(_("&Available areas"))
@@ -81,7 +81,7 @@ class AreaSelectionDialog(BaseDialog):
             parents = area["parent_osm_ids"].split(",")
             target_id = self._ensure_parents(parents)
             item = QTreeWidgetItem([_("{name}: {state}, last updated {updated_at}, file size {db_size}, created {created_at}").format(**area)])
-            item.setData(0, Qt.UserRole, area)
+            item.setData(0, Qt.ItemDataRole.UserRole, area)
             if target_id:
                 self._osm_object_items[target_id].addChild(item)
             else:
@@ -103,11 +103,11 @@ class AreaSelectionDialog(BaseDialog):
 
     @property
     def selected_map(self):
-        return self._areas.currentItem().data(0, Qt.UserRole)["osm_id"]
+        return self._areas.currentItem().data(0, Qt.ItemDataRole.UserRole)["osm_id"]
 
     @property
     def selected_map_name(self):
-        return self._areas.currentItem().data(0, Qt.UserRole)["name"]
+        return self._areas.currentItem().data(0, Qt.ItemDataRole.UserRole)["name"]
 
     def on_request_clicked(self):
         name, ok = QInputDialog.getText(self, _("Enter the name of the requested area"), _("Area name requested"))

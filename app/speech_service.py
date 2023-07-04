@@ -26,7 +26,9 @@ class SpeechService:
         self._output.speak(message, interrupt=interrupt)
 
     def silence(self):
-        self._output.get_first_available_output().silence()
+        out = self._output.get_first_available_output()
+        if out:
+            out.silence()
 
     def move_to_next_history_item(self):
         if self._speech_history_position == len(self._speech_history) - 1:

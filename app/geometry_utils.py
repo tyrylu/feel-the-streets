@@ -1,5 +1,6 @@
 from collections import defaultdict
 import logging
+from typing import Optional
 from shapely import wkb, geometry
 from shapely.geometry.linestring import LineString
 import pydantic
@@ -37,9 +38,9 @@ class LineSegment(pydantic.BaseModel):
     line: LineString
     start: geometry.point.Point
     end: geometry.point.Point
-    length: float = None
-    angle: float = None
-    end_angle: float = None
+    length: Optional[float] = None
+    angle: Optional[float] = None
+    end_angle: Optional[float] = None
     current: bool = False
 
     class Config:
@@ -82,12 +83,14 @@ def get_line_segments(line):
 
 def find_closest_line_segment_of(segments, point):
     min_dist = 10**20
-    best_segment = None
+    best_segment: Optional[LineSegment] = None
     for line_segment in segments:
         dist = line_segment.line.distance(point)
         if dist < min_dist:
             min_dist = dist
             best_segment = line_segment
+    if not best_segment:
+        raise ValueError("No best segment found.")
     best_segment.current = True
     return best_segment
 

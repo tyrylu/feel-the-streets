@@ -36,6 +36,9 @@ def get_areas_with_name(name):
 def get_areas():
     if not has_api_connectivity():
         data = get_cached_response("areas.json")
+        if not data:
+            log.warning("No cached areas data found.")
+            return None
         local_ids = get_local_area_ids()
         local_data = []
         for area in data:

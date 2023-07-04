@@ -14,7 +14,7 @@ class MessageDialog(BaseDialog):
         label.setBuddy(browser)
         self.layout.addWidget(label, 0, 0, 1, 2)
         self.layout.addWidget(browser, 1, 0, 1, 2)
-        browser.setTextInteractionFlags(Qt.TextSelectableByKeyboard|Qt.TextSelectableByMouse|Qt.LinksAccessibleByKeyboard|Qt.LinksAccessibleByMouse)
+        browser.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByKeyboard|Qt.TextInteractionFlag.TextSelectableByMouse|Qt.TextInteractionFlag.LinksAccessibleByKeyboard|Qt.TextInteractionFlag.LinksAccessibleByMouse)
         browser.setOpenExternalLinks(True)
         browser.setMarkdown(self._motd.message)
         browser.setFocus()

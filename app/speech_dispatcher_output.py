@@ -16,6 +16,8 @@ class SpeechDispatcherOutput(Output):
         if has_speechd_api:
             self._client = Client()
             lang, _encoding = locale.getdefaultlocale()
+            if not lang:
+                lang = "en_US"
             if "_" in lang:
                 lang = lang.split("_")[0]
             self._client.set_language(lang)

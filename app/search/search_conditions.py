@@ -63,16 +63,16 @@ class SpecifySearchConditionsDialog(BaseDialog):
             if child_metadata:
                 name = get_class_display_name(field.type_name)
                 subparent = QTreeWidgetItem([name])
-                subparent.setData(0, Qt.UserRole, field_name)
+                subparent.setData(0, Qt.ItemDataRole.UserRole, field_name)
                 parent.addChild(subparent)
                 self._populate_fields_tree(field.type_name, subparent)
             else:
                 item = QTreeWidgetItem([underscored_to_words(field_name)])
-                item.setData(0, Qt.UserRole, (field_name, field))
+                item.setData(0, Qt.ItemDataRole.UserRole, (field_name, field))
                 parent.addChild(item)
                 
     def on_fields_tree_sel_changed(self, item):
-        data = item.data(0, Qt.UserRole)
+        data = item.data(0, Qt.ItemDataRole.UserRole)
         if data is not None and not isinstance(data, str):
             self._field_name = data[0]
             self._field = data[1]
@@ -114,7 +114,7 @@ class SpecifySearchConditionsDialog(BaseDialog):
         self._added_condition = True
         json_path = []
         parent_item = self._fields_tree.currentItem().parent()
-        parent_data = parent_item.data(0, Qt.UserRole) if parent_item else None
+        parent_data = parent_item.data(0, Qt.ItemDataRole.UserRole) if parent_item else None
         if isinstance(parent_data, str):
             json_path.append(parent_data)
         json_path.append(self._field_name)
@@ -145,5 +145,5 @@ class SpecifySearchConditionsDialog(BaseDialog):
     def ok_clicked(self):
         if not self._added_condition:
             if QMessageBox.question(self, _("Question"), _("It appears that you forgot to add the current condition to the conditions list. Do you want to add it before starting the search?")) == QMessageBox.StandardButton.Yes:
-                self.on_add_clicked(None)
+                self.on_add_clicked()
         super().ok_clicked()

@@ -36,7 +36,7 @@ class MenuService:
         if cmd.item_shortcut:
             label += "\t%s"%cmd.item_shortcut
         item = QAction(label, self._key_capturer)
-        item.setShortcutContext(Qt.WidgetShortcut)
+        item.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         # We must add a separate action to the menu, otherwise the shortcut is being triggered even when the menubar is focused.
         if cmd.index is None:
             menu_action = menu.addAction(label)

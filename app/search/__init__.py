@@ -51,7 +51,7 @@ def get_query_from_user(parent, position):
         return
     discriminator = name_mapping[entity]
     conditions_dialog = SpecifySearchConditionsDialog(parent, entity=discriminator)
-    if conditions_dialog.exec_() != SpecifySearchConditionsDialog.Accepted:
+    if conditions_dialog.exec_() != SpecifySearchConditionsDialog.DialogCode.Accepted:
         return
     distance = conditions_dialog.distance or float("inf")
     query = create_query(discriminator, position, distance, conditions_dialog.create_conditions())

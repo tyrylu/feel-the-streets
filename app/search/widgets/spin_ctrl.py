@@ -7,7 +7,10 @@ class SpinCtrl:
 
     @staticmethod
     def get_value_widget(parent, column):
-        return QSpinBox(parent, maximum=2**30, minimum=-(2**30))
+        box = QSpinBox(parent)
+        box.setMinimum(-(2**30))
+        box.setMaximum(2**30)
+        return box
 
     @staticmethod
     def get_value_as_string(value_widget):

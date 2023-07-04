@@ -40,4 +40,5 @@ class RoadSegmentsBrowserDialog(QDialog):
             segments_list.addItem(message)
             if segment.current:
                 current_idx = idx
-        segments_list.setCurrentRow(current_idx)
+        if current_idx is not None:
+            segments_list.setCurrentRow(current_idx)

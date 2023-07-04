@@ -7,7 +7,10 @@ class SpinCtrlDouble:
     value_label = _("Value")
     @staticmethod
     def get_value_widget(parent, column):
-        return QDoubleSpinBox(parent, minimum=float("-inf"), maximum=float("inf"))
+        box = QDoubleSpinBox(parent)
+        box.setMinimum(float("-inf"))
+        box.setMaximum(float("inf"))
+        return box
 
     @staticmethod
     def get_value_as_string(value_widget):

@@ -18,6 +18,9 @@ def setup_locale(lang):
     # The gettext support requires the LANG environment variable even on win32.
     if lang == "system" and sys.platform == "win32" and "LANG" not in os.environ:
         lang, _enc = locale.getdefaultlocale()
+        if not lang:
+            log.warning("Failed to get the system default locale, falling back on en_US.")
+            lang = "en_US"
         os.environ["LANG"] = lang
     locale.setlocale(locale.LC_ALL, "")
     gettext.install("messages", locales_dir)
@@ -28,6 +31,10 @@ def setup_locale(lang):
         qt_locale = QLocale(lang)
     if not translator.load(qt_locale, "qtbase_", directory=locales_dir):
         log.warning("Failed to load the QT locale data.")
-    if not QApplication.instance().installTranslator(translator):
-        log.warning("Failed to install the QT translator.")
-
+    app = QApplication.instance()
+    if app:
+        if not app.installTranslator(translator):
+            log.warning("Failed to install the QT translator.")
+    else:
+        log.warning("Failed to install the QT translator, no app instance.")
+    

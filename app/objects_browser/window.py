@@ -33,7 +33,7 @@ class ObjectsBrowserWindow(QWidget):
         layout.addWidget(objects_label, 0, 0)
         self._objects_list = QListWidget(self)
         self._objects_list.setAccessibleName(objects_label.text())
-        self._objects_list.setContextMenuPolicy(Qt.CustomContextMenu)
+        self._objects_list.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self._objects_list.currentRowChanged.connect(self.on_objects_listbox)
         self._objects_list.customContextMenuRequested.connect(self._on_objects_list_menu)
         objects_label.setBuddy(self._objects_list)
@@ -102,7 +102,7 @@ class ObjectsBrowserWindow(QWidget):
         common_item = QTreeWidgetItem([_("Common properties")])
         specific_item = QTreeWidgetItem([_("Specific properties")])
         other_item = QTreeWidgetItem([_("Other properties - they can not be searched and are not processed in any way")])
-        other_item.setData(0, Qt.AccessibleTextRole, "Override")
+        other_item.setData(0, Qt.ItemDataRole.AccessibleTextRole, "Override")
         common_fields = list(EntityMetadata.for_discriminator("OSMEntity").fields.keys())
         selected_metadata = EntityMetadata.for_discriminator(selected.discriminator)
         known_fields = selected_metadata.all_fields

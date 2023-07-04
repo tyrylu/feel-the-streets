@@ -102,7 +102,7 @@ class MainWindow(QMainWindow):
 
     def _download_progress_callback(self, total, so_far):
         if not self._download_progress_dialog:
-            self._download_progress_dialog = QProgressDialog(_("Downloading the selected database."), None, 0, 100, self)
+            self._download_progress_dialog = QProgressDialog(_("Downloading the selected database."), "", 0, 100, self)
             self._download_progress_dialog.setWindowTitle(_("Download in progress"))
         percentage = int((so_far/total)*100)
         self._download_progress_dialog.setLabelText(_("Downloading the selected database. Downloaded {so_far} of {total}.").format(so_far=format_size(so_far), total=format_size(total)))
@@ -153,7 +153,7 @@ class MainWindow(QMainWindow):
             resp = QMessageBox.question(self, _("Question"), _("The server reports %s pending changes. Do you really want to generate the changelog from all of them? It might take a while.")%self._pending_count)
             if resp == QMessageBox.StandardButton.Yes:
                 generate_changelog = False
-        self._progress = QProgressDialog(_("Applying changes for the selected database."), None, 0, self._pending_count, self)
+        self._progress = QProgressDialog(_("Applying changes for the selected database."), "", 0, self._pending_count, self)
         self._progress.setWindowTitle(_("Change application"))
         self._progress.setMinimumDuration(0)
         self._applier = ChangesApplier(area, retriever, generate_changelog)
@@ -178,7 +178,7 @@ class MainWindow(QMainWindow):
         self._applier.deleteLater()
         if changelog_path:
             changelog_size = os.path.getsize(changelog_path)
-            resp = QMessageBox.question(self, _("Success"), _("Successfully applied {total} changes. A changelog of size {size} was generated, do you want to view it now?").format(total=self._pending_count, size=format_size(changelog_size)), defaultButton=QMessageBox.No)
+            resp = QMessageBox.question(self, _("Success"), _("Successfully applied {total} changes. A changelog of size {size} was generated, do you want to view it now?").format(total=self._pending_count, size=format_size(changelog_size)), defaultButton=QMessageBox.StandardButton.No)
             if resp == QMessageBox.StandardButton.Yes:
                 # Somewhat hacky, but os.startfile is not cross platform and the webbrowser way appears to be.
                 webbrowser.open(changelog_path)

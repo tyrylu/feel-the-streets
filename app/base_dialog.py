@@ -4,7 +4,7 @@ class BaseDialog(QDialog):
     def __init__(self, parent, title, ok_text, cancel_text, ok_button_column=0, cancel_button_column=1, buttons_to_new_row=True):
         super().__init__(parent)
         self.setWindowTitle(title)
-        self.layout = QGridLayout(self)
+        self.layout: QGridLayout = QGridLayout(self)
         self.setLayout(self.layout)
         self.create_ui()
         buttons_row = self.layout.rowCount() if not buttons_to_new_row else self.layout.rowCount() + 1
@@ -19,3 +19,6 @@ class BaseDialog(QDialog):
 
     def ok_clicked(self):
         self.accept()
+
+    def create_ui(self):
+        raise NotImplementedError("create_ui() not implemented")

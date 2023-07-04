@@ -34,6 +34,7 @@ class Entity(BaseModel):
                     return False
         with measure("Inside of query"):
             new_inside_of = OrderedSet(entity for entity in self.map.intersections_at_position(pos, self.current_effective_width))
+        enters = set()
         if entity_pre_enter.has_receivers_for(self) or entity_post_enter.has_receivers_for(self):
             enters = new_inside_of.difference(self.is_inside_of)
         if enters and not force and entity_pre_enter.has_receivers_for(self):
@@ -43,6 +44,7 @@ class Entity(BaseModel):
                     return False
                 elif ret is MoveValidationResult.cancel:
                     return False
+        leaves = set()
         if entity_pre_leave.has_receivers_for(self) or entity_post_leave.has_receivers_for(self):
             leaves = self.is_inside_of.difference(new_inside_of)
         if not force and entity_pre_leave.has_receivers_for(self) and leaves:

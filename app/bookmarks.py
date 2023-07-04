@@ -11,7 +11,7 @@ def get_bookmark_name(parent, default=""):
         if not ok or not name:
             return None
         if name.startswith("."):
-            QMessageBox.warning(self._main_window, _("Error"), _("The bookmark name can not start with a dot, please enter a different name."))
+            QMessageBox.warning(parent, _("Error"), _("The bookmark name can not start with a dot, please enter a different name."))
         else:
             return name
 
@@ -41,7 +41,7 @@ class BookmarksDialog(BaseDialog):
 
     def _on_delete_clicked(self):
         mark = self.selected_bookmark
-        if QMessageBox.question(self, _("Question"), _("Do you really want to delete the bookmark {name}?").format(name=mark.name)) == QMessageBox.Yes:
+        if QMessageBox.question(self, _("Question"), _("Do you really want to delete the bookmark {name}?").format(name=mark.name)) == QMessageBox.StandardButton.Yes:
             self._bookmarks.remove(mark)
             self._bookmarks_list.takeItem(self._bookmarks_list.currentRow())
             map().remove_bookmark(mark)

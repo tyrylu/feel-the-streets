@@ -46,7 +46,7 @@ def oalInitHRTF(requested_hrtf=None):
         _err("No HRTFs found")
     else:
         if not alcResetDeviceSOFT(openal._oaldevice, get_hrtf_device_attrs(requested_hrtf)):
-            _err("Failed to reset device: {}".format(alc.alcGetError(_oaldevice, alcGetError(_oaldevice))))       
+            _err("Failed to reset device: {}".format(alc.alcGetError(openal._oaldevice, alc.alcGetError(openal._oaldevice))))       
             
         # Check if HRTF is enabled
         hrtf_state = ctypes.c_int(0)

@@ -11,7 +11,7 @@ def get_expansion_state_string(is_expanded):
 
 def set_accessible_text(item):
     acc_text = f"{item.text(0)} {get_expansion_state_string(item.isExpanded())}"
-    item.setData(0, Qt.AccessibleTextRole, acc_text)
+    item.setData(0, Qt.ItemDataRole.AccessibleTextRole, acc_text)
 
 class MoreAccessibleTreeWidget(QTreeWidget):
     def __init__(self, *args, **kwargs):
