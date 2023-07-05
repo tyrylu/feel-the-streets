@@ -36,7 +36,7 @@ jobs:
       run: cargo build --release
     - name: Install python app dependencies
       if: runner.os == 'Windows'
-      run: "$env:SKIP_CYTHON = '1';pip install -r app_requirements.txt --no-binary pydantic"
+      run: "pip install -r app_requirements.txt"
     - name: Install Pyinstaller
       if: runner.os == 'Windows'
       run: pip install pyinstaller
