@@ -125,7 +125,6 @@ class AreaSelectionDialog(BaseDialog):
         self._indicator.hide()
         QMessageBox.warning(self, _("Query limit reached"), _("You've reached the query limit for the overpass API, which is used for area searches. Try to request the area in a few minutes."))
 
-
     def _on_area_candidates(self, candidates):
         self._indicator.hide()
         if not candidates:

@@ -5,7 +5,7 @@ from .server_interaction import get_areas_with_name, get_area_parents, RateLimit
 log = logging.getLogger(__name__)
 
 class AreaCandidatesSearcher(QThread):
-    results_ready = Signal(dict)
+    results_ready = Signal(object)
     rate_limited = Signal()
 
     def __init__(self, area_name):
@@ -29,4 +29,3 @@ class AreaCandidatesSearcher(QThread):
                 parent_name = _("not known")
             candidates[id] = (parent_name, data)
         self.results_ready.emit(candidates)
-            
