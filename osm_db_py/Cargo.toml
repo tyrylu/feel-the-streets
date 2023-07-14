@@ -7,7 +7,7 @@ edition = "2021"
 [dependencies]
 osm_db = {"path" = "../osm_db"}
 pyo3 = "0.19.1"
-pyo3-log = "0.8.2"
+pyo3-log = "0.8.3"
 log = "0.4.19"
 serde_json = "1.0.100"
 
