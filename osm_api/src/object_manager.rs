@@ -368,6 +368,7 @@ impl OSMObjectManager {
         object_bounds: &BoundaryRect,
         seen_ids: &mut HashSet<SmolStr>,
     ) -> Result<Option<Geometry<f64>>> {
+        trace!("No cached geometry for {}, creating it.", object.unique_id());
         use self::OSMObjectSpecifics::*;
         match object.specifics {
             Node { lon, lat } if object_bounds.contains_point(lon, lat) => {
@@ -528,12 +529,20 @@ impl OSMObjectManager {
         let mut inners = vec![];
         let mut outers = vec![];
         for i in inner_objects {
+            if i.object_type() != OSMObjectType::Way {
+                warn!("Inner ring {} of object {} is not a way, ignoring it.", i.unique_id(), object_id);
+                continue;
+            }
             let coords = self.get_way_coords(i, object_bounds)?;
             if !coords.0.is_empty() {
                 inners.push(coords);
             }
         }
         for o in outer_objects {
+            if o.object_type() != OSMObjectType::Way {
+                warn!("Outer ring {} of object {} is not a way, ignoring it.", o.unique_id(), object_id);
+                continue;
+            }
             let coords = self.get_way_coords(o, object_bounds)?;
             if !coords.0.is_empty() {
                 outers.push(coords);
