@@ -73,7 +73,7 @@ async fn maybe_create_area(
             let mut queue = Queue::new_from_env()?;
             CreateAreaDatabaseTask::new(area.osm_id)
                 .enqueue_into(&mut queue, &format!("create_area_{}", area.osm_id))?;
-            ifno!("Enqueued area creation request for area {}", area.osm_id)
+            info!("Enqueued area creation request for area {}", area.osm_id);
             Ok((StatusCode::CREATED, Json(area)))
         }
     }
