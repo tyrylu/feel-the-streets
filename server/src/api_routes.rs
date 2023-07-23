@@ -65,10 +65,11 @@ async fn maybe_create_area(
 ) -> Result<impl IntoResponse> {
     let area_id = area.osm_id;
     info!("Maybe creating area {}", area_id);
-    match Area::find_by_osm_id(area_id, &state.db_conn.lock().unwrap()) {
+    let conn = state.db_conn.lock().unwrap();
+    match Area::find_by_osm_id(area_id, &conn) {
         Ok(a) => Ok((StatusCode::OK, Json(a))),
         Err(_e) => {
-            let area = Area::create(area.osm_id, &area.name, &state.db_conn.lock().unwrap())?;
+            let area = Area::create(area.osm_id, &area.name, &conn)?;
             info!("Created area {}", area.osm_id);
             let mut queue = Queue::new_from_env()?;
             CreateAreaDatabaseTask::new(area.osm_id)
