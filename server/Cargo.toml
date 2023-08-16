@@ -20,7 +20,7 @@ redis_api = {path = "../redis_api"}
 axum = "0.6.20"
 tera = "1.19.0"
 axum-extra = { version = "0.7.7", features = ["async-read-body"] }
-tokio = { version = "1.29.1", features = ["fs", "macros", "rt", "rt-multi-thread"] }
+tokio = { version = "1.31.0", features = ["fs", "macros", "rt", "rt-multi-thread"] }
 tracing-subscriber = {version="0.3.17", features=["env-filter"]}
 tower-http = { version = "0.4.3", features = ["trace", "fs"] }
 is-terminal = "0.4.7"
