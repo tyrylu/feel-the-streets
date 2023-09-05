@@ -18,7 +18,7 @@ base64 = "0.21.3"
 doitlater = "0.2.6"
 redis_api = {path = "../redis_api"}
 axum = "0.6.20"
-tera = "1.19.0"
+tera = "1.19.1"
 axum-extra = { version = "0.7.7", features = ["async-read-body"] }
 tokio = { version = "1.32.0", features = ["fs", "macros", "rt", "rt-multi-thread"] }
 tracing-subscriber = {version="0.3.17", features=["env-filter"]}
