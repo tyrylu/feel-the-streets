@@ -1,4 +1,5 @@
 [workspace]
+resolver = "2"
 members = ["oesc", "osm_api", "osm_db", "osm_db_py", "redis_api", "server"]
 
 [profile.release]
