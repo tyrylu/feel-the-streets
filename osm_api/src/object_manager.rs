@@ -419,6 +419,7 @@ impl OSMObjectManager {
                             inners.as_slice(),
                             others.as_slice(),
                             object_bounds,
+                            seen_ids,
                         )?;
                     } else {
                         multipolygon = self.construct_multipolygon_from_parts(
@@ -426,6 +427,7 @@ impl OSMObjectManager {
                             inners.as_slice(),
                             outers.as_slice(),
                             object_bounds,
+                            seen_ids,
                         )?;
                     }
                 }
@@ -438,6 +440,7 @@ impl OSMObjectManager {
                         inners.as_slice(),
                         outers.as_slice(),
                         object_bounds,
+                        seen_ids,
                     )? {
                         Some(poly) if others.is_empty() => Ok(Some(poly)),
                         Some(poly) => {
@@ -525,6 +528,7 @@ impl OSMObjectManager {
         inner_objects: &[OSMObject],
         outer_objects: &[OSMObject],
         object_bounds: &BoundaryRect,
+        seen_ids: &mut HashSet<SmolStr>
     ) -> Result<Option<Geometry<f64>>> {
         let mut inners = vec![];
         let mut outers = vec![];
@@ -532,6 +536,13 @@ impl OSMObjectManager {
             if i.object_type() != OSMObjectType::Way {
                 warn!("Inner ring {} of object {} is not a way, ignoring it.", i.unique_id(), object_id);
                 continue;
+            }
+            if seen_ids.contains(&i.unique_id()) {
+                warn!("While crreating a multipolygon for {}, found a reference cycle involving {}.", object_id, i.unique_id());
+                continue;
+            }
+            else {
+                seen_ids.insert(i.unique_id());
             }
             let coords = self.get_way_coords(i, object_bounds)?;
             if !coords.0.is_empty() {
@@ -542,6 +553,13 @@ impl OSMObjectManager {
             if o.object_type() != OSMObjectType::Way {
                 warn!("Outer ring {} of object {} is not a way, ignoring it.", o.unique_id(), object_id);
                 continue;
+            }
+            if seen_ids.contains(&o.unique_id()) {
+                warn!("While crreating a multipolygon for {}, found a reference cycle involving {}.", object_id, o.unique_id());
+                continue;
+            }
+            else {
+                seen_ids.insert(o.unique_id());
             }
             let coords = self.get_way_coords(o, object_bounds)?;
             if !coords.0.is_empty() {
