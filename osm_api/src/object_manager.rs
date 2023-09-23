@@ -32,6 +32,8 @@ static ZSTD_CONTEXT: Lazy<Mutex<ZstdContext>> = Lazy::new(|| {
     Mutex::new(ZstdContext::new(COMPRESSION_LEVEL, Some(&dict)))
 });
 
+type ObjectInArea = (SmolStr, Vec<u8>);
+
 fn serialize_and_compress(object: &OSMObject) -> Result<Vec<u8>> {
     let serialized = bincode::serialize(&object)?;
     Ok(ZSTD_CONTEXT.lock().unwrap().compress(&serialized)?)
@@ -77,7 +79,7 @@ fn format_data_retrieval(area: i64) -> String {
 }
 
 pub struct OSMObjectManager {
-    geometries_cache: RefCell<HashMap<(SmolStr, Vec<u8>), Option<Geometry<f64>>>>,
+    geometries_cache: RefCell<HashMap<ObjectInArea, Option<Geometry<f64>>>>,
     api_servers: Arc<Servers>,
     cache: Arc<Db>,
     retrieved_from_network: RefCell<HashSet<SmolStr>>,
