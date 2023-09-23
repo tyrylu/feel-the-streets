@@ -21,32 +21,26 @@ static SLOT_AVAILABLE_AFTER_RE: Lazy<Regex> = Lazy::new(|| {
 });
 static RATE_LIMIT_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^Rate limit: (\d+)").unwrap());
 
-const QUERY_RETRY_COUNT: u8 = 6;
-
 fn query_executor(server: Server, query: ServerQuery, wake_sender: Sender<()>) {
-    let mut retry = 0;
     let req = server.prepare_run_query();
-    let ret = loop {
-        retry += 1;
-        if retry > QUERY_RETRY_COUNT {
-            break Err(Error::RetryLimitExceeded);
-        }
-        match run_query(
+    let try_run_query = || {
+        run_query(
             req.clone(),
             &query.query,
             query.result_to_tempfile,
             &wake_sender,
-        ) {
-            Ok(r) => break Ok(r),
-            Err(e) => {
-                warn!("Query failed during retry {}, error: {:?}.", retry, e);
-                server
-                    .get_api_status()
-                    .expect("Could not get status")
-                    .wait_for_available_slot();
-            }
-        }
+        )
     };
+    let ret = try_run_query.retry(&ExponentialBuilder::default())
+        .notify(|e, dur| {
+            warn!("Query failed, error: {:?}, going to sleep for {:?}.", e, dur);
+            server
+                .get_api_status()
+                    .expect("Could not get status during a retry")
+                    .wait_for_available_slot();
+        })
+        .call()
+        .map_err(|_| Error::RetryLimitExceeded);
     query.result_sender.send(ret).unwrap();
 }
 
