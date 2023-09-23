@@ -1,4 +1,5 @@
 use super::servers::ServerQuery;
+use backon::{BlockingRetryable, ExponentialBuilder};
 use crate::{Error, Result};
 use chrono::{DateTime, Duration, Utc};
 use crossbeam_channel::{Receiver, Sender};
@@ -175,22 +176,11 @@ impl Server {
     }
 
     fn get_api_status(&self) -> Result<ServerStatus> {
-        let mut retry = 0;
-        let text = loop {
-            retry += 1;
-            if retry > 3 {
-                return Err(Error::RetryLimitExceeded);
-            }
-            match self.get_api_status_text() {
-                Ok(status) => break status,
-                Err(e) => {
-                    warn!(
-                        "Could not get status during retry {}, error: {:?}",
-                        retry, e
-                    );
-                }
-            }
-        };
+        let get_text = || self.get_api_status_text();
+        let text = get_text.retry(&ExponentialBuilder::default())
+        .notify(|e, dur| { warn!("Could not get status from Overpass API endpoint at {}, error: {:?}, going to sleep for {:?}.", self.url, e, dur); })
+        .call()
+        .map_err(|_| Error::RetryLimitExceeded)?;
         let mut status = ServerStatus::empty(self.url);
         for line in text.lines() {
             let rate_limit_match = RATE_LIMIT_RE.captures(line);
