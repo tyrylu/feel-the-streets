@@ -209,15 +209,14 @@ fn handle_modification<'a>(
     changes: &mut SemanticChangesContainer<'a>,
 ) -> Result<()> {
     let start = Instant::now();
-    let object_geom = manager.get_geometry_as_wkb(object, &BoundaryRect::whole_world())?;
-    if object_geom.is_none() {
+    let Some(object_geom) = manager.get_geometry_as_wkb(object, &BoundaryRect::whole_world())?
+    else {
         warn!(
             "Ignoring modification of object {}, it no longer has a geometry.",
             object.unique_id()
         );
         return Ok(());
-    }
-    let object_geom = object_geom.unwrap();
+    };
     let areas = Area::all_containing(conn, &object_geom)?;
     trace!(
         "All db areas containing the entity retrieved in {:? }, they are: {:?}",
@@ -310,11 +309,9 @@ fn handle_geometry_change(
     changes: &mut SemanticChangesContainer,
 ) -> Result<()> {
     debug!("Handling geometry update for OSM object {}.", entity_id);
-    let object = manager.get_object(entity_id)?;
-    if object.is_none() {
-        return Ok(()); // We'll get a removal event for it in a future change
-    }
-    let object = object.unwrap();
+    let Some(object) = manager.get_object(entity_id)? else {
+        return Ok(());
+    }; // We'll get a removal event for it in a future change
     for area_id in db::areas_containing(entity_id, conn)? {
         let old_geom = AreaDatabase::open_existing(area_id, true)?
             .get_entity(entity_id)?
@@ -326,11 +323,9 @@ fn handle_geometry_change(
             })
             .geometry;
         let bounds = Area::bounds_of(area_id, conn)?;
-        let new_geom = manager.get_geometry_as_wkb(&object, &bounds)?;
-        if new_geom.is_none() {
+        let Some(new_geom) = manager.get_geometry_as_wkb(&object, &bounds)? else {
             return Ok(());
-        }
-        let new_geom = new_geom.unwrap();
+        };
         let geom_change = EntryChange::updating(
             "geometry",
             BASE64_STANDARD.encode(&old_geom).into(),
@@ -354,12 +349,10 @@ fn handle_creation<'a>(
     record: &mut TranslationRecord,
     changes: &mut SemanticChangesContainer<'a>,
 ) -> Result<()> {
-    let geom = manager.get_geometry_as_wkb(object, &BoundaryRect::whole_world())?;
-    // Use an if-let when we require Rust 1.65 for some other reason
-    if geom.is_none() {
+    let Some(geom) = manager.get_geometry_as_wkb(object, &BoundaryRect::whole_world())? else {
         return Ok(());
-    }
-    let areas = Area::all_containing(conn, &geom.unwrap())?;
+    };
+    let areas = Area::all_containing(conn, &geom)?;
     if areas.is_empty() {
         return Ok(());
     }
