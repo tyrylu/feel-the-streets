@@ -1,7 +1,7 @@
 mod api;
 mod change;
 pub use api::ReplicationApiClient;
-pub use change::{OSMChanges, OSMChange};
+pub use change::{OSMChange, OSMChanges};
 use chrono::{DateTime, FixedOffset};
 
 use std::str::FromStr;

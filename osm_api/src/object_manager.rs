@@ -1,10 +1,10 @@
-use chrono::{DateTime, TimeZone, Utc};
 use crate::object::{OSMObject, OSMObjectSpecifics, OSMObjectType};
 use crate::overpass_api::Servers;
-use crate::raw_object::{OSMObjectOrRemark, OSMObject as RawOSMObject};
+use crate::raw_object::{OSMObject as RawOSMObject, OSMObjectOrRemark};
 use crate::utils;
 use crate::BoundaryRect;
 use crate::{Error, Result};
+use chrono::{DateTime, TimeZone, Utc};
 use geo_types::{Geometry, GeometryCollection, LineString, Point, Polygon};
 use hashbrown::HashMap;
 use itertools::Itertools;
@@ -40,8 +40,7 @@ fn serialize_and_compress(object: &OSMObject) -> Result<Vec<u8>> {
 pub fn open_cache(past_time: Option<&DateTime<impl TimeZone>>) -> Result<Db> {
     let cache_path = if let Some(time) = past_time {
         format!("entities_cache_{}", time.with_timezone(&Utc).timestamp())
-    }
-    else {
+    } else {
         "entities_cache".to_string()
     };
     Ok(sled::open(cache_path)?)
@@ -64,11 +63,13 @@ fn translate_type_shortcut(shortcut: char) -> &'static str {
 fn format_query(past_time: &Option<String>, timeout: u32, maxsize: usize, query: &str) -> String {
     let date_specifier = if let Some(timespec) = past_time {
         format!("[date:\"{timespec}\"]")
-    }
-    else {
+    } else {
         "".to_string()
     };
-    format!("{}[timeout:{timeout}][maxsize:{maxsize}];{query};out meta;", date_specifier)
+    format!(
+        "{}[timeout:{timeout}][maxsize:{maxsize}];{query};out meta;",
+        date_specifier
+    )
 }
 
 fn format_data_retrieval(area: i64) -> String {
@@ -87,11 +88,19 @@ pub struct OSMObjectManager {
 impl OSMObjectManager {
     /// Use this constructor only if there's only one OSMObjectManager at a time.
     pub fn new(past_time: Option<&DateTime<impl TimeZone>>) -> Result<Self> {
-        Self::new_multithread(past_time, Arc::new(Servers::default()), Arc::new(open_cache(past_time)?))
+        Self::new_multithread(
+            past_time,
+            Arc::new(Servers::default()),
+            Arc::new(open_cache(past_time)?),
+        )
     }
 
     /// Creates an OsmObjectManager in a scenario where each thread has its own instance and there are at least two of these.
-    pub fn new_multithread(past_time: Option<&DateTime<impl TimeZone>>, servers: Arc<Servers>, cache: Arc<Db>) -> Result<Self> {
+    pub fn new_multithread(
+        past_time: Option<&DateTime<impl TimeZone>>,
+        servers: Arc<Servers>,
+        cache: Arc<Db>,
+    ) -> Result<Self> {
         Ok(OSMObjectManager {
             api_servers: servers,
             cache,
@@ -99,7 +108,7 @@ impl OSMObjectManager {
             retrieved_from_network: RefCell::new(HashSet::new()),
             cache_queries: RefCell::new(0),
             cache_hits: RefCell::new(0),
-            past_time: past_time.map(|t| t.with_timezone(&Utc).to_rfc3339())
+            past_time: past_time.map(|t| t.with_timezone(&Utc).to_rfc3339()),
         })
     }
 
@@ -169,7 +178,12 @@ impl OSMObjectManager {
     pub fn lookup_objects_in(&self, area: i64) -> Result<()> {
         info!("Looking up all objects in area {}.", area);
         // Area retrieval queries are costly, so tell the server about it upfront.
-        let query = format_query(&self.past_time, 900, 1073741824, &format_data_retrieval(area));
+        let query = format_query(
+            &self.past_time,
+            900,
+            1073741824,
+            &format_data_retrieval(area),
+        );
         let readable = self.run_query(&query, false)?;
         self.cache_objects_from(readable, false)?;
         // Ensure that we have the object for the area as well, it sometimes might not be returned by the previous query.
@@ -330,11 +344,13 @@ impl OSMObjectManager {
         }
     }
 
-    pub fn get_geometry_of(&self, object: &OSMObject,
+    pub fn get_geometry_of(
+        &self,
+        object: &OSMObject,
         object_bounds: &BoundaryRect,
-        ) -> Result<Option<Geometry<f64>>> {
-            self.get_geometry_of_internal(object, object_bounds, &mut HashSet::new())
-        }
+    ) -> Result<Option<Geometry<f64>>> {
+        self.get_geometry_of_internal(object, object_bounds, &mut HashSet::new())
+    }
 
     fn get_geometry_of_internal(
         &self,
@@ -349,15 +365,15 @@ impl OSMObjectManager {
             Some(g) => g,
             None => {
                 let geom = self.get_geometry_of_uncached(object, object_bounds, seen_ids)?;
-            trace!(
-                "Object {} has in bounds {:?} geometry {:?}",
-                object.unique_id(),
-                object_bounds,
+                trace!(
+                    "Object {} has in bounds {:?} geometry {:?}",
+                    object.unique_id(),
+                    object_bounds,
+                    geom
+                );
+                self.geometries_cache.borrow_mut().insert(key, geom.clone());
                 geom
-            );
-            self.geometries_cache.borrow_mut().insert(key, geom.clone());
-            geom
-        }
+            }
         };
         Ok(res)
     }
@@ -368,7 +384,10 @@ impl OSMObjectManager {
         object_bounds: &BoundaryRect,
         seen_ids: &mut HashSet<SmolStr>,
     ) -> Result<Option<Geometry<f64>>> {
-        trace!("No cached geometry for {}, creating it.", object.unique_id());
+        trace!(
+            "No cached geometry for {}, creating it.",
+            object.unique_id()
+        );
         use self::OSMObjectSpecifics::*;
         match object.specifics {
             Node { lon, lat } if object_bounds.contains_point(lon, lat) => {
@@ -447,7 +466,9 @@ impl OSMObjectManager {
                             let mut coll = GeometryCollection::default();
                             coll.0.push(poly);
                             for o in others {
-                                if let Some(o) = self.get_geometry_of_internal(&o, object_bounds, seen_ids)? {
+                                if let Some(o) =
+                                    self.get_geometry_of_internal(&o, object_bounds, seen_ids)?
+                                {
                                     coll.0.push(o);
                                 }
                             }
@@ -499,15 +520,15 @@ impl OSMObjectManager {
         let mut coll = GeometryCollection::default();
         for related in self.related_objects_of(object)? {
             let related_id = related.unique_id();
-            if related_id.starts_with('r') { // We track only relations, because nothing else can form a complete cycl{ //e
-            if seen_ids.contains(&related_id) {
-                warn!("While crreating a geometry collection for {}, found a reference cycle involving {}.", object.unique_id(), related_id);
-                continue;
+            if related_id.starts_with('r') {
+                // We track only relations, because nothing else can form a complete cycl{ //e
+                if seen_ids.contains(&related_id) {
+                    warn!("While crreating a geometry collection for {}, found a reference cycle involving {}.", object.unique_id(), related_id);
+                    continue;
+                } else {
+                    seen_ids.insert(related_id);
+                }
             }
-            else {
-                seen_ids.insert(related_id);
-            }
-        }
             let related_geom = self.get_geometry_of_internal(&related, object_bounds, seen_ids)?;
             if let Some(related_geom) = related_geom {
                 coll.0.push(related_geom);
@@ -528,20 +549,27 @@ impl OSMObjectManager {
         inner_objects: &[OSMObject],
         outer_objects: &[OSMObject],
         object_bounds: &BoundaryRect,
-        seen_ids: &mut HashSet<SmolStr>
+        seen_ids: &mut HashSet<SmolStr>,
     ) -> Result<Option<Geometry<f64>>> {
         let mut inners = vec![];
         let mut outers = vec![];
         for i in inner_objects {
             if i.object_type() != OSMObjectType::Way {
-                warn!("Inner ring {} of object {} is not a way, ignoring it.", i.unique_id(), object_id);
+                warn!(
+                    "Inner ring {} of object {} is not a way, ignoring it.",
+                    i.unique_id(),
+                    object_id
+                );
                 continue;
             }
             if seen_ids.contains(&i.unique_id()) {
-                warn!("While crreating a multipolygon for {}, found a reference cycle involving {}.", object_id, i.unique_id());
+                warn!(
+                    "While crreating a multipolygon for {}, found a reference cycle involving {}.",
+                    object_id,
+                    i.unique_id()
+                );
                 continue;
-            }
-            else {
+            } else {
                 seen_ids.insert(i.unique_id());
             }
             let coords = self.get_way_coords(i, object_bounds)?;
@@ -551,14 +579,21 @@ impl OSMObjectManager {
         }
         for o in outer_objects {
             if o.object_type() != OSMObjectType::Way {
-                warn!("Outer ring {} of object {} is not a way, ignoring it.", o.unique_id(), object_id);
+                warn!(
+                    "Outer ring {} of object {} is not a way, ignoring it.",
+                    o.unique_id(),
+                    object_id
+                );
                 continue;
             }
             if seen_ids.contains(&o.unique_id()) {
-                warn!("While crreating a multipolygon for {}, found a reference cycle involving {}.", object_id, o.unique_id());
+                warn!(
+                    "While crreating a multipolygon for {}, found a reference cycle involving {}.",
+                    object_id,
+                    o.unique_id()
+                );
                 continue;
-            }
-            else {
+            } else {
                 seen_ids.insert(o.unique_id());
             }
             let coords = self.get_way_coords(o, object_bounds)?;
@@ -609,7 +644,12 @@ impl OSMObjectManager {
 
     pub fn get_area_parents(&self, area_id: i64) -> Result<Vec<OSMObject>> {
         // We're intentionally ignoring the past time, as this query times out with any past time value, and these areas will most likely be valid in our timeframes.
-        let query = format_query(&None, 900, 500_000_000, &format!("rel({});<<", area_id - 3_600_000_000));
+        let query = format_query(
+            &None,
+            900,
+            500_000_000,
+            &format!("rel({});<<", area_id - 3_600_000_000),
+        );
         let readable = self.run_query(&query, false)?;
         self.cache_objects_from(readable, true)
     }

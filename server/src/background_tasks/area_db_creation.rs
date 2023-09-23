@@ -1,10 +1,10 @@
-use chrono::{DateTime, FixedOffset};
 use crate::names_cache::OSMObjectNamesCache;
 use crate::Result;
 use crate::{
     area,
     db::{self, Connection},
 };
+use chrono::{DateTime, FixedOffset};
 use doitlater::typetag;
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::BoundaryRect;
@@ -128,6 +128,7 @@ impl CreateAreaDatabaseTask {
 #[typetag::serde]
 impl doitlater::Executable for CreateAreaDatabaseTask {
     fn execute(&self) -> std::result::Result<(), Box<dyn std::error::Error>> {
-        create_area_database(self.area_id, None::<DateTime<FixedOffset>>).map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
+        create_area_database(self.area_id, None::<DateTime<FixedOffset>>)
+            .map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
     }
 }

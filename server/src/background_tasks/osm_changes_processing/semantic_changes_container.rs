@@ -11,14 +11,15 @@ pub(crate) struct AreaInfo<'a> {
 
 #[derive(Default)]
 pub(crate) struct SemanticChangesContainer<'a> {
-changes: HashMap<i64, AreaInfo<'a>>,
+    changes: HashMap<i64, AreaInfo<'a>>,
     needs_geometry_update: HashSet<SmolStr>,
-    seen_entity_ids: HashSet<SmolStr>
+    seen_entity_ids: HashSet<SmolStr>,
 }
 
 impl<'a> SemanticChangesContainer<'a> {
     pub fn add_change(&mut self, area: i64, change: SemanticChange) {
-        self.seen_entity_ids.insert(SmolStr::new_inline(change.osm_id()));
+        self.seen_entity_ids
+            .insert(SmolStr::new_inline(change.osm_id()));
         self.changes.entry(area).or_default().changes.push(change);
     }
 
@@ -36,13 +37,16 @@ impl<'a> SemanticChangesContainer<'a> {
             entry.newest_timestamp = timestamp;
         }
     }
-    
+
     pub fn record_geometry_update_requirement(&mut self, entity_id: &str) {
-        self.needs_geometry_update.insert(SmolStr::new_inline(entity_id));
+        self.needs_geometry_update
+            .insert(SmolStr::new_inline(entity_id));
     }
 
     pub fn entities_needing_geometry_update(&self) -> HashSet<SmolStr> {
-        self.needs_geometry_update.difference(&self.seen_entity_ids).cloned().collect()
+        self.needs_geometry_update
+            .difference(&self.seen_entity_ids)
+            .cloned()
+            .collect()
     }
-
 }

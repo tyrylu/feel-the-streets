@@ -21,7 +21,7 @@ fn row_to_area(row: &'_ Row<'_>) -> rusqlite::Result<Area> {
         newest_osm_object_timestamp: row.get_unwrap(6),
         db_size: row.get_unwrap(7),
         parent_osm_ids: row.get_unwrap(8),
-                geometry: row.get_unwrap(9),
+        geometry: row.get_unwrap(9),
     })
 }
 

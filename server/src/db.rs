@@ -52,8 +52,14 @@ pub fn insert_entity_geometry_parts(
     let savepoint_name = format!("insert_entities_for_{}", object.unique_id());
     begin_savepoint(conn, &savepoint_name)?;
     let mut seen_ids = HashSet::from([object.unique_id()]);
-    insert_entity_geometry_parts_of(object.unique_id().as_str(), object, conn, manager, &mut seen_ids)?;
-        commit_savepoint(conn, &savepoint_name)
+    insert_entity_geometry_parts_of(
+        object.unique_id().as_str(),
+        object,
+        conn,
+        manager,
+        &mut seen_ids,
+    )?;
+    commit_savepoint(conn, &savepoint_name)
 }
 
 fn insert_entity_geometry_parts_of(
@@ -75,14 +81,19 @@ fn insert_entity_geometry_parts_of(
                 if seen_ids.contains(&oid) {
                     debug!("When inserting the geometry parts of {}, we already inserted {}, skipping.", entity_id, oid);
                     continue;
+                } else {
+                    seen_ids.insert(oid.clone());
+                    insert_entity_geometry_part(conn, entity_id, &oid)?;
+                    if let Some(related_object) = manager.get_object(&oid)? {
+                        insert_entity_geometry_parts_of(
+                            entity_id,
+                            &related_object,
+                            conn,
+                            manager,
+                            seen_ids,
+                        )?;
+                    }
                 }
-                else {
-                seen_ids.insert(oid.clone());
-                insert_entity_geometry_part(conn, entity_id, &oid)?;
-                if let Some(related_object) = manager.get_object(&oid)? {
-                    insert_entity_geometry_parts_of(entity_id, &related_object, conn, manager, seen_ids)?;
-                }
-            }
             }
         }
     }

@@ -4,7 +4,8 @@ use osm_api::replication::{OSMChange, OSMChanges};
 use rusqlite::Connection;
 use std::collections::{HashMap, HashSet};
 
-pub(crate) fn filter_and_deduplicate_changes(changes: OSMChanges,
+pub(crate) fn filter_and_deduplicate_changes(
+    changes: OSMChanges,
     m_api: &MainAPIClient,
     conn: &Connection,
 ) -> Vec<OSMChange> {
@@ -20,16 +21,16 @@ pub(crate) fn filter_and_deduplicate_changes(changes: OSMChanges,
             c @ OSMChange::Create(_) => {
                 seen_ids.insert(c.object_unique_id());
                 filtered.push(c);
-            },
+            }
             OSMChange::Modify(o) if seen_ids.contains(&o.unique_id()) => continue, // We saw a newer update or delete already, so this one is redundant.
             c @ OSMChange::Modify(_) => {
                 seen_ids.insert(c.object_unique_id());
                 filtered.push(c);
-            },
-             c @ OSMChange::Delete(_) => {
+            }
+            c @ OSMChange::Delete(_) => {
                 seen_ids.insert(c.object_unique_id());
                 filtered.push(c)
-             },
+            }
         }
     }
     filtered.reverse();

@@ -8,8 +8,6 @@ use std::fs;
 use std::path::Path;
 use std::sync::{Arc, Mutex};
 
-
-
 async fn async_main() -> Result<()> {
     let _dotenv_path = dotenvy::dotenv()?;
     server::init_logging();
@@ -26,7 +24,8 @@ async fn async_main() -> Result<()> {
             fs::remove_file(&area_file)?;
         }
         info!("Recreating area {}...", area.name);
-        let manager = OSMObjectManager::new_multithread(Some(&now), servers.clone(), cache.clone())?;
+        let manager =
+            OSMObjectManager::new_multithread(Some(&now), servers.clone(), cache.clone())?;
         let server_conn_clone = server_conn.clone();
         let names_cache_clone = names_cache.clone();
         tasks.push(tokio::task::spawn_blocking(move || {
@@ -49,9 +48,9 @@ async fn async_main() -> Result<()> {
 
 fn main() -> Result<()> {
     tokio::runtime::Builder::new_multi_thread()
-    .enable_all()
-    .thread_stack_size(4*1024*1024)
-    .build()
-    .unwrap()
-    .block_on(async_main())
+        .enable_all()
+        .thread_stack_size(4 * 1024 * 1024)
+        .build()
+        .unwrap()
+        .block_on(async_main())
 }

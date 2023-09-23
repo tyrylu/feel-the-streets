@@ -171,9 +171,12 @@ impl OSMObject {
         use OSMObjectSpecifics::*;
         match self.specifics {
             Node { .. } => Box::new(iter::empty()),
-            Way { ref nodes, .. } => {
-                Box::new(nodes.clone().into_iter().map(|n| (SmolStr::new_inline(&format!("n{n}")), None)))
-            }
+            Way { ref nodes, .. } => Box::new(
+                nodes
+                    .clone()
+                    .into_iter()
+                    .map(|n| (SmolStr::new_inline(&format!("n{n}")), None)),
+            ),
             Relation { ref members, .. } => Box::new(
                 members
                     .clone()

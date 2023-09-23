@@ -7,11 +7,11 @@ use crate::db;
 use crate::diff_utils::{self, ListChange};
 use crate::Result;
 use base64::prelude::*;
-use doitlater::typetag;
 use chrono::{DateTime, FixedOffset};
+use doitlater::typetag;
 use osm_api::main_api::MainAPIClient;
 use osm_api::object::OSMObject;
-use osm_api::object_manager::{ANY_TIME, OSMObjectManager};
+use osm_api::object_manager::{OSMObjectManager, ANY_TIME};
 use osm_api::replication::{OSMChange, ReplicationApiClient, SequenceNumber};
 use osm_api::{BoundaryRect, SmolStr};
 use osm_db::entity::Entity;
@@ -56,9 +56,17 @@ pub fn process_osm_changes(initial_sn: u32) -> Result<u32> {
     );
     let manager = OSMObjectManager::new(ANY_TIME)?;
     let server_db = db::connect_to_server_db()?;
-    let newest_timestamp = DateTime::parse_from_rfc3339(&db::newest_osm_object_timestamp(&server_db)?)?;
+    let newest_timestamp =
+        DateTime::parse_from_rfc3339(&db::newest_osm_object_timestamp(&server_db)?)?;
     for sn in initial_sn..=latest_state.sequence_number.0 {
-        process_osm_change(sn, &r_client, &m_client, &manager, &server_db, &newest_timestamp)?;
+        process_osm_change(
+            sn,
+            &r_client,
+            &m_client,
+            &manager,
+            &server_db,
+            &newest_timestamp,
+        )?;
     }
     Ok(latest_state.sequence_number.0)
 }
@@ -72,47 +80,56 @@ fn process_osm_change(
     newest_timestamp: &DateTime<FixedOffset>,
 ) -> Result<()> {
     let number = SequenceNumber::from_u32(sn)?;
-        let info = r_client.get_change_info(&number)?;
+    let info = r_client.get_change_info(&number)?;
     if info.timestamp <= *newest_timestamp {
         info!("Not processing change {}, it is too old.", sn);
         return Ok(());
     }
     // Ignore a change which is not at least a minute old, because otherwise we already applyed it when creating the area.
-        if info.timestamp.signed_duration_since(*newest_timestamp).num_seconds() < 60 {
+    if info
+        .timestamp
+        .signed_duration_since(*newest_timestamp)
+        .num_seconds()
+        < 60
+    {
         info!("Not processing change {}, it is the last we saw.", sn);
-        return Ok(())
+        return Ok(());
     }
-        let change = r_client.get_change(number)?;
+    let change = r_client.get_change(number)?;
     let mut record = TranslationRecord::new();
     let mut changes_container = SemanticChangesContainer::default();
     let raw_change_count = change.0.len();
-    let osm_changes = changes_preprocessing::filter_and_deduplicate_changes(change, m_client, server_db);
+    let osm_changes =
+        changes_preprocessing::filter_and_deduplicate_changes(change, m_client, server_db);
     db::begin_transaction(server_db)?;
     let mut area_dbs = vec![];
     for osm_change in &osm_changes {
         match osm_change {
-        OSMChange::Modify(modified) => handle_modification(
-            modified,
-            manager,
-            server_db,
-            &mut record,
-            &mut changes_container,
-        )?,
-        OSMChange::Create(created) => handle_creation(
-            created,
-            manager,
-            server_db,
-            &mut record,
-            &mut changes_container,
-        )?,
-            OSMChange::Delete(deleted) => handle_deletion(deleted, server_db, manager, &mut changes_container)?,
+            OSMChange::Modify(modified) => handle_modification(
+                modified,
+                manager,
+                server_db,
+                &mut record,
+                &mut changes_container,
+            )?,
+            OSMChange::Create(created) => handle_creation(
+                created,
+                manager,
+                server_db,
+                &mut record,
+                &mut changes_container,
+            )?,
+            OSMChange::Delete(deleted) => {
+                handle_deletion(deleted, server_db, manager, &mut changes_container)?
+            }
         }
     }
     for entity_id in changes_container.entities_needing_geometry_update() {
         handle_geometry_change(&entity_id, server_db, manager, &mut changes_container)?;
     }
     for (area_id, info) in changes_container.iter_mut() {
-        let mut area = Area::find_by_osm_id(*area_id, server_db).unwrap_or_else(|_| panic!("Area record for area {} should exist", area_id));
+        let mut area = Area::find_by_osm_id(*area_id, server_db)
+            .unwrap_or_else(|_| panic!("Area record for area {} should exist", area_id));
         area.state = AreaState::ApplyingChanges;
         area.save(server_db)?;
         let mut area_db = AreaDatabase::open_existing(*area_id, true)?;
@@ -129,7 +146,7 @@ fn process_osm_change(
             info.changes.len(),
             area_id,
             start.elapsed()
-            );
+        );
         infer_additional_relationships(&mut info.changes, &area_db)?;
         let mut stream = ChangesStream::new_from_env(area.osm_id)?;
         if !stream.exists()? || !stream.should_publish_changes()? {
@@ -162,7 +179,11 @@ fn process_osm_change(
             let geom = area_db.make_geometry_valid(geom)?;
             let geom = osm_api::unnest_wkb_geometry(geom.as_ref());
             area.geometry = Some(geom);
-            trace!("Updated area geometry for area {} to {:?}", area.osm_id, area.geometry);
+            trace!(
+                "Updated area geometry for area {} to {:?}",
+                area.osm_id,
+                area.geometry
+            );
         }
         // We must push the area db there, so we can move it to the vector
         area_dbs.push(area_db);
@@ -175,9 +196,7 @@ fn process_osm_change(
     db::commit_transaction(server_db)?;
     info!(
         "Processed OSM change {} from {} with {} changes.",
-        sn,
-        info.timestamp,
-        raw_change_count,
+        sn, info.timestamp, raw_change_count,
     );
     Ok(())
 }
@@ -192,14 +211,14 @@ fn handle_modification<'a>(
     let start = Instant::now();
     let object_geom = manager.get_geometry_as_wkb(object, &BoundaryRect::whole_world())?;
     if object_geom.is_none() {
-        warn!("Ignoring modification of object {}, it no longer has a geometry.", object.unique_id());
+        warn!(
+            "Ignoring modification of object {}, it no longer has a geometry.",
+            object.unique_id()
+        );
         return Ok(());
     }
     let object_geom = object_geom.unwrap();
-    let areas = Area::all_containing(
-        conn,
-        &object_geom,
-    )?;
+    let areas = Area::all_containing(conn, &object_geom)?;
     trace!(
         "All db areas containing the entity retrieved in {:? }, they are: {:?}",
         start.elapsed(),
@@ -291,8 +310,7 @@ fn handle_geometry_change(
     changes: &mut SemanticChangesContainer,
 ) -> Result<()> {
     debug!("Handling geometry update for OSM object {}.", entity_id);
-    let object = manager
-        .get_object(entity_id)?;
+    let object = manager.get_object(entity_id)?;
     if object.is_none() {
         return Ok(()); // We'll get a removal event for it in a future change
     }
@@ -300,11 +318,15 @@ fn handle_geometry_change(
     for area_id in db::areas_containing(entity_id, conn)? {
         let old_geom = AreaDatabase::open_existing(area_id, true)?
             .get_entity(entity_id)?
-            .unwrap_or_else(|| panic!("The summary says we have entity {}, but it is not there", entity_id))
+            .unwrap_or_else(|| {
+                panic!(
+                    "The summary says we have entity {}, but it is not there",
+                    entity_id
+                )
+            })
             .geometry;
         let bounds = Area::bounds_of(area_id, conn)?;
-        let new_geom = manager
-            .get_geometry_as_wkb(&object, &bounds)?;
+        let new_geom = manager.get_geometry_as_wkb(&object, &bounds)?;
         if new_geom.is_none() {
             return Ok(());
         }
@@ -395,9 +417,12 @@ fn to_update_change(
     area_id: i64,
 ) -> Result<SemanticChange> {
     let area_db = AreaDatabase::open_existing(area_id, true)?;
-    let old_entity = area_db
-        .get_entity(&new_entity.id)?
-        .unwrap_or_else(|| panic!("Modified entity {} is not in the db of area {}", new_entity.id, area_id));
+    let old_entity = area_db.get_entity(&new_entity.id)?.unwrap_or_else(|| {
+        panic!(
+            "Modified entity {} is not in the db of area {}",
+            new_entity.id, area_id
+        )
+    });
     let old_child_ids = area_db.get_entity_child_ids(&old_entity.id)?;
     let old_rels = child_ids_to_rels(old_child_ids.into_iter());
     let new_rels = child_ids_to_rels(new_related_ids);
@@ -461,7 +486,9 @@ fn infer_additional_relationships(
                 changes[idx]
             );
             let current_relationships = area_db.get_relationships_related_to(&entity_id)?;
-            let mut entity = area_db.get_entity(&entity_id)?.unwrap_or_else(|| panic!("Entity {} disappeared", entity_id));
+            let mut entity = area_db
+                .get_entity(&entity_id)?
+                .unwrap_or_else(|| panic!("Entity {} disappeared", entity_id));
             let new_relationships =
                 relationship_inference::infer_additional_relationships_for_entity(
                     &mut entity,

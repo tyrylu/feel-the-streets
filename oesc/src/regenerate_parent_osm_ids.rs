@@ -1,5 +1,5 @@
 use anyhow::Result;
-use osm_api::object_manager::{ANY_TIME, OSMObjectManager};
+use osm_api::object_manager::{OSMObjectManager, ANY_TIME};
 use server::area::Area;
 use server::background_tasks::area_db_creation;
 use server::db;

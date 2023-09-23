@@ -1,13 +1,13 @@
+use crate::object::OSMObject;
+use crate::raw_object::OSMObject as RawOSMObject;
 use crate::{Result, SmolStr};
 use serde::Deserialize;
 use std::convert::TryFrom;
-use crate::object::OSMObject;
-use crate::raw_object::OSMObject as RawOSMObject;
 
 #[derive(Debug, Deserialize)]
 pub(crate) struct ObjectsHolder {
     #[serde(rename = "$value")]
-    objects: Vec<RawOSMObject>
+    objects: Vec<RawOSMObject>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -15,13 +15,13 @@ pub(crate) struct ObjectsHolder {
 pub(crate) enum RawOSMChangesPart {
     Modify(ObjectsHolder),
     Create(ObjectsHolder),
-    Delete(ObjectsHolder)
+    Delete(ObjectsHolder),
 }
 
 #[derive(Debug, Deserialize)]
 pub(crate) struct RawOSMChanges {
-#[serde(rename = "$value")]
-changes: Vec<RawOSMChangesPart>
+    #[serde(rename = "$value")]
+    changes: Vec<RawOSMChangesPart>,
 }
 
 #[derive(Debug)]
@@ -45,17 +45,17 @@ impl TryFrom<RawOSMChanges> for OSMChanges {
                     for o in holder.objects {
                         res.push(OSMChange::Modify(o.try_into()?));
                     }
-                },
+                }
                 Create(holder) => {
                     for o in holder.objects {
                         res.push(OSMChange::Create(o.try_into()?));
                     }
-                },
+                }
                 Delete(holder) => {
                     for o in holder.objects {
                         res.push(OSMChange::Delete(o.try_into()?));
                     }
-                },
+                }
             }
         }
         Ok(OSMChanges(res))
@@ -65,17 +65,13 @@ impl TryFrom<RawOSMChanges> for OSMChanges {
 impl OSMChange {
     pub fn changeset(&self) -> u64 {
         match self {
-            OSMChange::Modify(o)
-            | OSMChange::Create(o)
-            | OSMChange::Delete(o) => o.changeset,
+            OSMChange::Modify(o) | OSMChange::Create(o) | OSMChange::Delete(o) => o.changeset,
         }
     }
 
     pub fn object_unique_id(&self) -> SmolStr {
         match self {
-            OSMChange::Modify(o)
-            | OSMChange::Create(o)
-            | OSMChange::Delete(o) => o.unique_id(),
+            OSMChange::Modify(o) | OSMChange::Create(o) | OSMChange::Delete(o) => o.unique_id(),
         }
     }
 }

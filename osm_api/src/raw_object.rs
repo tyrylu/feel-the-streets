@@ -98,7 +98,7 @@ pub(crate) enum OSMObject {
 
 #[derive(Deserialize)]
 pub(crate) struct RemarkElement {
-    #[serde(rename="$text")]
+    #[serde(rename = "$text")]
     remark: String,
 }
 
@@ -120,7 +120,7 @@ impl TryInto<OSMObject> for OSMObjectOrRemark {
             Node(n) => Ok(OSMObject::Node(n)),
             Way(w) => Ok(OSMObject::Way(w)),
             Relation(r) => Ok(OSMObject::Relation(r)),
-            Remark(elem) => Err(Error::OverpassAPIError(elem.remark))
+            Remark(elem) => Err(Error::OverpassAPIError(elem.remark)),
         }
     }
 }

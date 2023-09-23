@@ -1,6 +1,6 @@
 use super::servers::ServerQuery;
-use backon::{BlockingRetryable, ExponentialBuilder};
 use crate::{Error, Result};
+use backon::{BlockingRetryable, ExponentialBuilder};
 use chrono::{DateTime, Duration, Utc};
 use crossbeam_channel::{Receiver, Sender};
 use log::{debug, info, warn};
@@ -31,13 +31,17 @@ fn query_executor(server: Server, query: ServerQuery, wake_sender: Sender<()>) {
             &wake_sender,
         )
     };
-    let ret = try_run_query.retry(&ExponentialBuilder::default())
+    let ret = try_run_query
+        .retry(&ExponentialBuilder::default())
         .notify(|e, dur| {
-            warn!("Query failed, error: {:?}, going to sleep for {:?}.", e, dur);
+            warn!(
+                "Query failed, error: {:?}, going to sleep for {:?}.",
+                e, dur
+            );
             server
                 .get_api_status()
-                    .expect("Could not get status during a retry")
-                    .wait_for_available_slot();
+                .expect("Could not get status during a retry")
+                .wait_for_available_slot();
         })
         .call()
         .map_err(|_| Error::RetryLimitExceeded);
