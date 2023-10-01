@@ -36,9 +36,7 @@ elif platform.system() == "Windows":
     additional_libs = (lib._name, find_library("mod_spatialite"), find_library("libvorbisfile"), find_library("libvorbis"), find_library("libogg"))
 
 toc = [(os.path.basename(name), name, "BINARY") for name in additional_libs]
-toc_with_deps = bd.Dependencies(toc)
-print(f"Toc with deps: {toc_with_deps}")
-binaries = [(path, ".") for local_name, path, typ in toc_with_deps]
+binaries = [(path, ".") for local_name, path, typ in toc]
 
 a = Analysis(['run_app.py'],
              pathex=['C:\\Users\\lukas\\projekty\\feel the streets', r'c:\python3\lib\site-packages\pygeodesy'],
