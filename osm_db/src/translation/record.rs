@@ -46,7 +46,7 @@ impl TranslationRecord {
         *(self
             .missing_enum_members
             .entry(enum_name.to_string())
-            .or_insert_with(HashMap::new)
+            .or_default()
             .entry(member.to_string())
             .or_insert(0)) += 1;
     }
@@ -62,16 +62,16 @@ impl TranslationRecord {
             .expect("You should set a current field first.");
         self.type_violations
             .entry(discriminator.to_string())
-            .or_insert_with(HashMap::new)
+            .or_default()
             .entry(field.to_string())
-            .or_insert_with(Vec::new)
+            .or_default()
             .push(value.to_string());
     }
     pub fn record_missing_required_field(&mut self, discriminator: &str, field: &str) {
         *(self
             .missing_required_fields
             .entry(discriminator.to_string())
-            .or_insert_with(HashMap::new)
+            .or_default()
             .entry(field.to_string())
             .or_insert(0)) += 1;
     }
@@ -79,9 +79,9 @@ impl TranslationRecord {
     pub fn record_unknown_field(&mut self, discriminator: &str, field: &str, value: &str) {
         self.unknown_fields
             .entry(discriminator.to_string())
-            .or_insert_with(HashMap::new)
+            .or_default()
             .entry(field.to_string())
-            .or_insert_with(Vec::new)
+            .or_default()
             .push(value.to_string());
     }
 
@@ -100,7 +100,7 @@ impl TranslationRecord {
             let target_fields = target
                 .missing_required_fields
                 .entry(discriminator)
-                .or_insert_with(HashMap::new);
+                .or_default();
             for (field, occurrences) in missing.into_iter() {
                 *(target_fields.entry(field).or_insert(0)) += occurrences;
             }
@@ -109,11 +109,11 @@ impl TranslationRecord {
             let target_unknown = target
                 .unknown_fields
                 .entry(discriminator)
-                .or_insert_with(HashMap::new);
+                .or_default();
             for (field, mut values) in unknown.into_iter() {
                 target_unknown
                     .entry(field)
-                    .or_insert_with(Vec::new)
+                    .or_default()
                     .append(&mut values);
             }
         }
@@ -121,7 +121,7 @@ impl TranslationRecord {
             let other_missing = target
                 .missing_enum_members
                 .entry(discriminator)
-                .or_insert_with(HashMap::new);
+                .or_default();
             for (member, occurrences) in members.into_iter() {
                 *other_missing.entry(member).or_insert(0) += occurrences;
             }
@@ -130,11 +130,11 @@ impl TranslationRecord {
             let other_violations = target
                 .type_violations
                 .entry(discriminator)
-                .or_insert_with(HashMap::new);
+                .or_default();
             for (field, mut values) in violations.into_iter() {
                 other_violations
                     .entry(field)
-                    .or_insert_with(Vec::new)
+                    .or_default()
                     .append(&mut values);
             }
         }
