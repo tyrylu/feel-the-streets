@@ -527,9 +527,9 @@ dependencies = [
 
 [[package]]
 name = "doitlater"
-version = "0.2.6"
+version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d5ea654074ae3e483fa8f86b2f9c897b7277e3cb5706c6408a07a75c3ef5c31d"
+checksum = "76e4983bbf88bcd7d47bf8d842c0f5129b36bd0c795f66977479a9dccd5ce255"
 dependencies = [
  "bincode",
  "chrono",
