@@ -618,6 +618,7 @@ impl AreaDatabase {
                     output_wkb
                         .append(&mut self.make_valid_safe(&wkb::geom_to_wkb(&part).unwrap())?);
                 }
+                trace!("Resulting collection after making valid: {:?}.", output_wkb);
                 Ok(output_wkb.into())
             } else {
                 panic!("The unparsed data said that it's a geometry collection, but it was {parsed_geom:?} instead.");
