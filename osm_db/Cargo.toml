@@ -9,7 +9,7 @@ osm_api = {path = "../osm_api"}
 zstd_util = "0.1.4"
 serde = { version = "1.0.190", features = ["derive"] }
 serde_json = "1.0.108"
-serde_yaml = "0.9.25"
+serde_yaml = "0.9.27"
 indexmap = { version = "2.0.2", features = ["serde"] }
 once_cell = "1.18.0"
 log = "0.4.20"
