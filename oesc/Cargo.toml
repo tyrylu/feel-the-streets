@@ -13,7 +13,7 @@ redis_api = {path = "../redis_api"}
 server={path="../server"}
 anyhow = "1.0.75"
 dotenvy = "0.15.7"
-url = "2.4.1"
+url = "2.5.0"
 ureq = { version = "2.9.0", default-features = false, features = ["tls", "json"] }
 serde = { version = "1.0.193", features = ["derive"] }
 clap = { version = "4.4.8", features = ["derive"] }
