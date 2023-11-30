@@ -7,6 +7,7 @@ use std::sync::{Arc, Mutex};
 use tera::Tera;
 use tower_http::services::ServeDir;
 use tower_http::trace::TraceLayer;
+use tokio::net::TcpListener;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -24,11 +25,9 @@ async fn main() -> Result<()> {
         .nest("/", ui_routes::routes())
         .layer(TraceLayer::new_for_http())
         .with_state(state);
-    let addr = ([127, 0, 0, 1], 8000).into();
+    let addr = "127.0.0.1:8000";
     log::info!("Listening on {}", addr);
-    axum::Server::bind(&addr)
-        .serve(app.into_make_service())
-        .await
-        .unwrap();
+    let listener = TcpListener::bind(addr).await?;
+    axum::serve(listener, app.into_make_service()).await?;
     Ok(())
 }
