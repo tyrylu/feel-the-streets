@@ -15,12 +15,12 @@ chrono = { version = "0.4.31", default-features = false, features = ["serde", "c
 thiserror = "1.0.50"
 dotenvy = "0.15.7"
 base64 = "0.21.5"
-doitlater = "0.2.7"
+doitlater = "0.3.0"
 redis_api = {path = "../redis_api"}
 axum = "0.7.2"
 tera = "1.19.1"
 axum-extra = { version = "0.9.0", features = ["async-read-body"] }
-tokio = { version = "1.34.0", features = ["fs", "macros", "rt", "rt-multi-thread"] }
+tokio = { version = "1.35.0", features = ["fs", "macros", "rt", "rt-multi-thread"] }
 tracing-subscriber = {version="0.3.18", features=["env-filter"]}
 tower-http = { version = "0.5.0", features = ["trace", "fs"] }
 is-terminal = "0.4.9"
