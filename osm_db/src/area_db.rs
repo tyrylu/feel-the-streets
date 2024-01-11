@@ -298,6 +298,7 @@ impl AreaDatabase {
 
     fn save_updated_entity(&self, entity: &Entity) -> Result<()> {
         let geom = self.make_geometry_valid(&entity.geometry)?;
+        let geom = osm_api::unnest_wkb_geometry(&geom);
         let mut stmt = self.conn.prepare_cached("update entities set discriminator = :discriminator, geometry = GeomFromWKB(:geometry, 4326), effective_width = :effective_width, data = :data where id = :id;")?;
         stmt.execute(named_params! {
                 ":discriminator": entity.discriminator.as_str(),
