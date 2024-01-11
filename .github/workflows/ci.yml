@@ -60,7 +60,7 @@ jobs:
       run: pyinstaller run_app.spec
     - name: Download recent enough OpenAL
       if: runner.os == 'Windows'
-      run: Invoke-WebRequest -outfile openal-soft.zip https://openal-soft.org/openal-binaries/openal-soft-1.22.0-bin.zip
+      run: Invoke-WebRequest -outfile openal-soft.zip https://github.com/kcat/openal-soft/releases/download/1.23.1/openal-soft-1.23.1-bin.zip
     - name: Unpack the OpenAL library archive
       if: runner.os == 'Windows'
       run: 7z.exe x openal-soft.zip
