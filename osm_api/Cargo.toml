@@ -6,7 +6,7 @@ edition = "2021"
 
 [dependencies]
 serde = { version = "1.0.195", features = ["derive"] }
-serde_json = "1.0.109"
+serde_json = "1.0.111"
 thiserror = "1.0.56"
 ureq = { version = "2.9.1", default-features = false, features = ["tls"] }
 log = "0.4.20"
@@ -21,7 +21,7 @@ wkb = "0.7.1"
 geo-types = "0.7.12"
 smol_str = { version = "0.2.0", features = ["serde"] }
 zstd_util = "0.1.4"
-crossbeam-channel = "0.5.10"
+crossbeam-channel = "0.5.11"
 sled = "0.34.7"
 quick-xml = {version="0.31.0", features=["serialize", "overlapped-lists"]}
 flate2 = "1.0.28"

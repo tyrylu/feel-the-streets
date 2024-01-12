@@ -10,14 +10,14 @@ osm_db = {path="../osm_db"}
 osm_api = {path="../osm_api"}
 rusqlite = { "version" = "~0.30", "features" = ["bundled-windows", "load_extension", "chrono"] }
 serde = { version = "1.0.195", features = ["derive"] }
-serde_json = "1.0.109"
+serde_json = "1.0.111"
 chrono = { version = "0.4.31", default-features = false, features = ["serde", "clock", "std"] }
 thiserror = "1.0.56"
 dotenvy = "0.15.7"
-base64 = "0.21.5"
+base64 = "0.21.7"
 doitlater = "0.3.0"
 redis_api = {path = "../redis_api"}
-axum = "0.7.2"
+axum = "0.7.3"
 tera = "1.19.1"
 axum-extra = { version = "0.9.1", features = ["async-read-body"] }
 tokio = { version = "1.35.1", features = ["fs", "macros", "rt", "rt-multi-thread"] }
