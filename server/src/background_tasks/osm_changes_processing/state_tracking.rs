@@ -9,6 +9,7 @@ pub(crate) fn read_latest_sequence_number() -> Result<u32> {
     if Path::new(LATEST_SN_FILE).exists() {
         let content = fs::read_to_string(LATEST_SN_FILE)?;
         Ok(content
+            .trim_end_matches('\n')
             .parse()
             .expect("Could not parse latest sequence number"))
     } else {
