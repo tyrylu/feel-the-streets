@@ -7,7 +7,7 @@ use quick_xml::de;
 use std::io::BufReader;
 use ureq::Agent;
 
-const MAIN_API_BASE: &str = "https://openstreetmap.org/api/0.6";
+const MAIN_API_BASE: &str = "https://www.openstreetmap.org/api/0.6";
 
 pub struct MainAPIClient {
     agent: Agent,
