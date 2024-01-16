@@ -10,7 +10,7 @@ pub enum ChangesetState {
 
 #[derive(Debug)]
 pub struct Changeset {
-    pub id: u64,
+    pub id: u32,
     pub created_at: String,
     pub state: ChangesetState,
     pub user: String,

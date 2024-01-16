@@ -10,7 +10,7 @@ pub(crate) struct RawChangesets {
 #[derive(Debug, Deserialize)]
 pub struct RawChangeset {
     #[serde(rename = "@id")]
-    pub(crate) id: u64,
+    pub(crate) id: u32,
     #[serde(rename = "@created_at")]
     pub(crate) created_at: String,
     #[serde(rename = "@closed_at")]

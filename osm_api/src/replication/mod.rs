@@ -13,9 +13,8 @@ pub struct ReplicationState {
     pub timestamp: DateTime<FixedOffset>,
 }
 
-impl FromStr for ReplicationState {
-    type Err = Error;
-    fn from_str(val: &str) -> Result<Self, Self::Err> {
+impl ReplicationState {
+    pub(crate) fn from_changes_state_str(val: &str) -> Result<Self, Error> {
         let mut sn = None;
         let mut ts = None;
         for line in val.lines() {
@@ -29,6 +28,27 @@ impl FromStr for ReplicationState {
                 key => return Err(Error::UnknownKey(key.to_string())),
             }
         }
+        Self::from_parts(sn, ts)
+    }    
+
+    pub(crate) fn from_changesets_state_str(val: &str) -> Result<Self, Error> {
+        let mut sn = None;
+        let mut ts = None;
+        for line in val.lines() {
+            if line.starts_with('-') {
+                continue;
+            }
+            let (key, val) = line.split_once(": ").unwrap();
+            match key {
+                "sequence" => sn = Some(SequenceNumber::from_str(val)?),
+                "last_run" => ts = Some(DateTime::parse_from_rfc3339(val)?),
+                key => return Err(Error::UnknownKey(key.to_string())),
+            }
+        }
+        Self::from_parts(sn, ts)
+    }    
+
+    fn from_parts(sn: Option<SequenceNumber>, ts: Option<DateTime<FixedOffset>>) -> Result<Self, Error> {
         match (sn, ts) {
             (Some(s), Some(t)) => Ok(Self {
                 sequence_number: s,
@@ -85,6 +105,10 @@ impl SequenceNumber {
 
     pub fn data_path(&self) -> String {
         format!("{}.osc.gz", self.base_path())
+    }
+
+    pub fn changesets_path(&self) -> String {
+        format!("{}.osm.gz", self.base_path())
     }
 
     pub fn state_path(&self) -> String {

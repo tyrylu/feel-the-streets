@@ -2,11 +2,13 @@ pub type Result<T> = core::result::Result<T, Error>;
 
 mod boundary_rect;
 pub mod change;
+pub mod changeset;
 mod error;
 pub mod main_api;
 pub mod object;
 pub mod object_manager;
 pub mod overpass_api;
+mod raw_changeset;
 mod raw_object;
 pub mod replication;
 mod utils;
