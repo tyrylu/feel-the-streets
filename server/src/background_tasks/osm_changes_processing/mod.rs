@@ -49,7 +49,7 @@ fn run_osm_changes_processing() -> Result<()> {
 pub fn process_osm_changes(initial_sn: u32) -> Result<u32> {
     let r_client = ReplicationApiClient::default();
     let m_client = MainAPIClient::default();
-    let latest_state = r_client.latest_replication_state()?;
+    let latest_state = r_client.latest_changes_replication_state()?;
     info!(
         "Processing OSM changes from {initial_sn} to {}",
         latest_state.sequence_number.0
@@ -80,9 +80,9 @@ fn process_osm_change(
     newest_timestamp: &DateTime<FixedOffset>,
 ) -> Result<()> {
     let number = SequenceNumber::from_u32(sn)?;
-    let info = r_client.get_change_info(&number)?;
+    let info = r_client.get_changes_batch_info(&number)?;
     if info.timestamp <= *newest_timestamp {
-        info!("Not processing change {}, it is too old.", sn);
+        info!("Not processing changes batch {}, it is too old.", sn);
         return Ok(());
     }
     // Ignore a change which is not at least a minute old, because otherwise we already applyed it when creating the area.

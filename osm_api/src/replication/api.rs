@@ -4,7 +4,7 @@ use crate::Result;
 use flate2::read::GzDecoder;
 use std::io::BufReader;
 use std::str::FromStr;
-use ureq::Agent;
+use ureq::{Agent, AgentBuilder};
 
 const PLANET_REPLICATION_BASE: &str = "https://planet.openstreetmap.org/replication";
 
@@ -13,7 +13,7 @@ pub struct ReplicationApiClient {
 }
 
 impl ReplicationApiClient {
-    pub fn latest_replication_state(&self) -> Result<ReplicationState> {
+    pub fn latest_changes_replication_state(&self) -> Result<ReplicationState> {
         Ok(ReplicationState::from_str(
             &self
                 .agent
@@ -36,7 +36,7 @@ impl ReplicationApiClient {
         changes.try_into()
     }
 
-    pub fn get_change_info(&self, number: &SequenceNumber) -> Result<ReplicationState> {
+    pub fn get_changes_batch_info(&self, number: &SequenceNumber) -> Result<ReplicationState> {
         Ok(ReplicationState::from_str(
             &self
                 .agent
@@ -53,7 +53,7 @@ impl ReplicationApiClient {
 impl Default for ReplicationApiClient {
     fn default() -> Self {
         Self {
-            agent: Agent::new(),
+            agent: AgentBuilder::new().user_agent("Feel the streets").build(),
         }
     }
 }
