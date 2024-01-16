@@ -53,7 +53,7 @@ impl ReplicationApiClient {
 impl Default for ReplicationApiClient {
     fn default() -> Self {
         Self {
-            agent: AgentBuilder::new().user_agent("Feel the streets").build(),
+            agent: AgentBuilder::new().user_agent(&format!("Feel the streets v{}", env!("CARGO_PKG_VERSION"))).build(),
         }
     }
 }
