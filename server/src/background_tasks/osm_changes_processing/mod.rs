@@ -1,6 +1,5 @@
 mod changes_preprocessing;
 mod semantic_changes_container;
-mod state_tracking;
 
 use crate::area::{Area, AreaState};
 use crate::db;
@@ -9,7 +8,6 @@ use crate::Result;
 use base64::prelude::*;
 use chrono::{DateTime, FixedOffset};
 use doitlater::typetag;
-use osm_api::main_api::MainAPIClient;
 use osm_api::object::OSMObject;
 use osm_api::object_manager::{OSMObjectManager, ANY_TIME};
 use osm_api::replication::{OSMChange, ReplicationApiClient, SequenceNumber};
@@ -25,9 +23,12 @@ use redis_api::ChangesStream;
 use rusqlite::Connection;
 use semantic_changes_container::SemanticChangesContainer;
 use serde::{Deserialize, Serialize};
+use super::state_tracking;
 use std::collections::HashMap;
 use std::fs;
 use std::time::Instant;
+
+const LATEST_SN_FILE: &str = "latest_processed.sn";
 
 #[derive(Serialize, Deserialize)]
 pub struct ProcessOSMChangesTask;
@@ -40,15 +41,14 @@ impl doitlater::Executable for ProcessOSMChangesTask {
 }
 
 fn run_osm_changes_processing() -> Result<()> {
-    let initial_sn = state_tracking::read_latest_sequence_number()?;
+    let initial_sn = state_tracking::read_latest_sequence_number(LATEST_SN_FILE, 5_000_000)?;
     let latest_processed_sn = process_osm_changes(initial_sn + 1)?;
-    state_tracking::save_latest_sequence_number(latest_processed_sn)?;
+    state_tracking::save_latest_sequence_number(LATEST_SN_FILE, latest_processed_sn)?;
     Ok(())
 }
 
 pub fn process_osm_changes(initial_sn: u32) -> Result<u32> {
     let r_client = ReplicationApiClient::default();
-    let m_client = MainAPIClient::default();
     let latest_state = r_client.latest_changes_replication_state()?;
     info!(
         "Processing OSM changes from {initial_sn} to {}",
@@ -62,7 +62,6 @@ pub fn process_osm_changes(initial_sn: u32) -> Result<u32> {
         process_osm_change(
             sn,
             &r_client,
-            &m_client,
             &manager,
             &server_db,
             &newest_timestamp,
@@ -74,7 +73,6 @@ pub fn process_osm_changes(initial_sn: u32) -> Result<u32> {
 fn process_osm_change(
     sn: u32,
     r_client: &ReplicationApiClient,
-    m_client: &MainAPIClient,
     manager: &OSMObjectManager,
     server_db: &Connection,
     newest_timestamp: &DateTime<FixedOffset>,
@@ -100,7 +98,7 @@ fn process_osm_change(
     let mut changes_container = SemanticChangesContainer::default();
     let raw_change_count = change.0.len();
     let osm_changes =
-        changes_preprocessing::filter_and_deduplicate_changes(change, m_client, server_db);
+        changes_preprocessing::filter_and_deduplicate_changes(change, server_db);
     db::begin_transaction(server_db)?;
     let mut area_dbs = vec![];
     for osm_change in &osm_changes {

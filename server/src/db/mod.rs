@@ -8,6 +8,7 @@ use rusqlite::named_params;
 pub use rusqlite::Connection;
 use std::collections::HashSet;
 pub use self::changeset::InsertableChangeset;
+use self::changeset::Changeset;
 
 pub fn connect_to_server_db() -> Result<Connection> {
     let conn = Connection::open("server.db")?;
@@ -198,4 +199,23 @@ pub fn insert_or_update_changeset(
         changeset.max_lon,
     ))?;
     Ok(())
+}
+
+pub(crate) fn get_changeset(conn: &Connection, changeset_id: u64) -> Result<Option<Changeset>> {
+    let mut stmt = conn.prepare_cached("SELECT changeset_id, changesets_batch, min_lat, max_lat, min_lon, max_lon FROM changesets WHERE changeset_id = ?")?;
+    let mut rows = stmt.query([changeset_id])?;
+    if let Some(row) = rows.next()? {
+        Ok(Some(Changeset {
+            id: row.get_unwrap(0),
+            batch: row.get_unwrap(1),
+            bounds: BoundaryRect {
+                min_x: row.get_unwrap(4),
+                min_y: row.get_unwrap(2),
+                max_x: row.get_unwrap(5),
+                max_y: row.get_unwrap(3),
+            },
+        }))
+    } else {
+        Ok(None)
+    }
 }

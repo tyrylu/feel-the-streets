@@ -4,7 +4,6 @@ mod boundary_rect;
 pub mod change;
 pub mod changeset;
 mod error;
-pub mod main_api;
 pub mod object;
 pub mod object_manager;
 pub mod overpass_api;
