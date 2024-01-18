@@ -23,7 +23,7 @@ use redis_api::ChangesStream;
 use rusqlite::Connection;
 use semantic_changes_container::SemanticChangesContainer;
 use serde::{Deserialize, Serialize};
-use super::state_tracking;
+use super::{state_tracking, changesets_cache_filling};
 use std::collections::HashMap;
 use std::fs;
 use std::time::Instant;
@@ -50,6 +50,11 @@ fn run_osm_changes_processing() -> Result<()> {
 pub fn process_osm_changes(initial_sn: u32) -> Result<u32> {
     let r_client = ReplicationApiClient::default();
     let latest_state = r_client.latest_changes_replication_state()?;
+    let latest_changesets_state =  r_client.latest_changesets_replication_state()?;
+    changesets_cache_filling::fill_cache_with_missing_changesets(
+        &r_client,
+        latest_changesets_state.sequence_number,
+    )?;
     info!(
         "Processing OSM changes from {initial_sn} to {}",
         latest_state.sequence_number.0
