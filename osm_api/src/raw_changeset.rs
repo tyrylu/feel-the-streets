@@ -29,7 +29,7 @@ pub struct RawChangeset {
     pub(crate) max_lat: Option<f64>,
     #[serde(rename = "@max_lon")]
     pub(crate) max_lon: Option<f64>,
-    #[serde(rename = "@changes_count")]
+    #[serde(rename = "@num_changes")]
     pub(crate) changes_count: u32,
     #[serde(rename = "@comments_count")]
     pub(crate) comments_count: u32,
