@@ -41,7 +41,7 @@ impl ReplicationState {
             let (key, val) = line.split_once(": ").unwrap();
             match key {
                 "sequence" => sn = Some(SequenceNumber::from_str(val)?),
-                "last_run" => ts = Some(DateTime::parse_from_rfc3339(val)?),
+                "last_run" => ts = Some(DateTime::parse_from_str(val, "%F %T.%f %:z")?),
                 key => return Err(Error::UnknownKey(key.to_string())),
             }
         }
