@@ -12,6 +12,14 @@ pub(crate) fn filter_and_deduplicate_changes(
     let mut seen_ids = HashSet::new();
     let mut interests = HashMap::new();
     for change in changes.0.into_iter().rev() {
+        // We are not storing admin_level 2 entities
+        if change.object().tags.get("admin_level") == Some(&"2".to_string()) {
+            continue;
+        }
+        // We're also ignoring changes for the North Atlantic Treaty Organization, we will not store its geometry either.
+        if change.object().tags.get("name:en") == Some(&"North Atlantic Treaty Organization".to_string()) {
+            continue;
+        }
         if !changeset_might_be_interesting(change.changeset(), &mut interests, conn) {
             continue;
         }

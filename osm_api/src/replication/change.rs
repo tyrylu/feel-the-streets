@@ -74,4 +74,10 @@ impl OSMChange {
             OSMChange::Modify(o) | OSMChange::Create(o) | OSMChange::Delete(o) => o.unique_id(),
         }
     }
+
+    pub fn object(&self) -> &OSMObject {
+        match self {
+            OSMChange::Modify(o) | OSMChange::Create(o) | OSMChange::Delete(o) => o,
+        }
+    }
 }
