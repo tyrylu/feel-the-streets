@@ -53,7 +53,7 @@ fn changeset_might_be_interesting(
         debug!("Getting information about changeset {}", changeset);
         let changeset = db::get_changeset(conn, changeset)
             .expect("Could not get changeset info")
-            .expect("Changeset was missing");
+            .expect(&format!("Changeset {} was missing from the cache", changeset));
         !Area::all_containing(conn, &changeset.bounds.as_wkb_polygon())
             .expect("Could not get areas containing the given bounds")
             .is_empty()
