@@ -3,7 +3,7 @@ use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub(crate) struct RawChangesets {
-    #[serde(rename = "changeset")]
+    #[serde(rename = "changeset", default)]
     pub(crate) changesets: Vec<RawChangeset>,
 }
 
