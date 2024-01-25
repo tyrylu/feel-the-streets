@@ -11,15 +11,15 @@ thiserror = "1.0.56"
 ureq = { version = "2.9.1", default-features = false, features = ["tls"] }
 log = "0.4.20"
 itertools = "0.12.0"
-regex = "1.10.2"
+regex = "1.10.3"
 once_cell = "1.19.0"
-chrono = { version = "0.4.31", default-features = false, features = ["std", "clock"] }
+chrono = { version = "0.4.32", default-features = false, features = ["std", "clock"] }
 tempfile = "3.9.0"
 bincode = "1.3.3"
 hashbrown = { version = "0.14.3", features = ["serde"] }
 wkb = "0.7.1"
 geo-types = "0.7.12"
-smol_str = { version = "0.2.0", features = ["serde"] }
+smol_str = { version = "0.2.1", features = ["serde"] }
 zstd_util = "0.1.4"
 crossbeam-channel = "0.5.11"
 sled = "0.34.7"
