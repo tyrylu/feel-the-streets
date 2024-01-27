@@ -7,13 +7,15 @@ use std::collections::{HashMap, HashSet};
 pub(crate) fn filter_and_deduplicate_changes(
     changes: OSMChanges,
     conn: &Connection,
+    max_admin_level: u8,
 ) -> Vec<OSMChange> {
     let mut filtered = Vec::with_capacity(changes.0.len());
     let mut seen_ids = HashSet::new();
     let mut interests = HashMap::new();
+    let level_str = max_admin_level.to_string();
     for change in changes.0.into_iter().rev() {
-        // We are not storing admin_level 2 entities
-        if change.object().tags.get("admin_level") == Some(&"2".to_string()) {
+        // Ignore changes in areas with a lower admin level than we currently created
+        if change.object().tags.get("admin_level") < Some(&level_str) {
             continue;
         }
         // We're also ignoring changes for the North Atlantic Treaty Organization, we will not store its geometry either.

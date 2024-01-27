@@ -103,7 +103,7 @@ fn process_osm_change(
     let mut changes_container = SemanticChangesContainer::default();
     let raw_change_count = change.0.len();
     let osm_changes =
-        changes_preprocessing::filter_and_deduplicate_changes(change, server_db);
+        changes_preprocessing::filter_and_deduplicate_changes(change, server_db, 7);
     db::begin_transaction(server_db)?;
     let mut area_dbs = vec![];
     for osm_change in &osm_changes {
