@@ -10,7 +10,7 @@ pub mod names_cache;
 pub mod ui_routes;
 
 pub use error::Error;
-use is_terminal::IsTerminal;
+use std::io::IsTerminal;
 use std::sync::{Arc, Mutex};
 use tera::Tera;
 use tracing_subscriber::prelude::*;
