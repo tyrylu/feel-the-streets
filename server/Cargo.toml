@@ -8,11 +8,11 @@ edition = "2021"
 log = "0.4.20"
 osm_db = {path="../osm_db"}
 osm_api = {path="../osm_api"}
-rusqlite = { "version" = "~0.30", "features" = ["bundled-windows", "load_extension", "chrono"] }
-serde = { version = "1.0.196", features = ["derive"] }
-serde_json = "1.0.113"
-chrono = { version = "0.4.33", default-features = false, features = ["serde", "clock", "std"] }
-thiserror = "1.0.56"
+rusqlite = { "version" = "~0.31", "features" = ["bundled-windows", "load_extension", "chrono"] }
+serde = { version = "1.0.197", features = ["derive"] }
+serde_json = "1.0.114"
+chrono = { version = "0.4.34", default-features = false, features = ["serde", "clock", "std"] }
+thiserror = "1.0.57"
 dotenvy = "0.15.7"
 base64 = "0.21.7"
 doitlater = "0.3.0"

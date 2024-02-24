@@ -495,6 +495,7 @@ Bridge:
     sorting_name: str
 Building:
   inherits: Addressable
+  long_display_template: '{{ parent_display }} ({{ type }})'
   fields:
     source: str
     levels: int
@@ -1576,6 +1577,8 @@ PublicTransport:
     pub: SiteType
 RailWay:
   inherits: Named
+  long_display_template: '{{ parent_display }} ({{ type }})'
+  short_display_template: '{{ type }} {% if name %} {{ name }}{% endif %}'
   fields:
     maxspeed_source: str
     ref: str
