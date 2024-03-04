@@ -78,7 +78,7 @@ class AreaSelectionDialog(BaseDialog):
                 area["name"] = osm_object_id_to_name(area_id_to_osm_id(area["osm_id"]), self._osm_object_names)
             except KeyError:
                 pass
-            parents = area["parent_osm_ids"].split(",")
+            parents = (area["parent_osm_ids"] or "").split(",")
             target_id = self._ensure_parents(parents)
             item = QTreeWidgetItem([_("{name}: {state}, last updated {updated_at}, file size {db_size}, created {created_at}").format(**area)])
             item.setData(0, Qt.ItemDataRole.UserRole, area)
