@@ -1,10 +1,11 @@
 import logging
 from osm_db import EntitiesQuery, FieldNamed, AreaDatabase
-from pygeodesy.ellipsoidalVincenty import LatLon
+from pygeodesy.ellipsoidalVincenty import LatLon, areaOf
 from pygeodesy.etm import ExactTransverseMercator
 from shapely import wkb
 from shapely import ops as shapely_ops
 from shapely.geometry.point import Point
+from shapely.geometry.polygon import Polygon
 from .geometry_utils import distance_filter, effective_width_filter, xy_ranges_bounding_square
 from .measuring import measure
 from .models import Bookmark
@@ -139,5 +140,13 @@ class Map:
     
     def entity_area(self, entity):
         geom = wkb.loads(entity.geometry)
-        projected = self.project_geometry(geom)
-        return projected.area
+        if geom.geom_type == "Polygon":
+            ext_coords = [LatLon(y, x) for x, y in geom.exterior.coords]
+            ext_area = areaOf(ext_coords)
+            int_areas = 0
+            for interior in geom.interiors:
+                int_coords = [LatLon(y, x) for x, y in interior.coords]
+                int_areas += areaOf(int_coords)
+            return ext_area - int_areas
+        else:
+            return 0
