@@ -102,7 +102,6 @@ class ObjectsBrowserWindow(QWidget):
         common_item = QTreeWidgetItem([_("Common properties")])
         specific_item = QTreeWidgetItem([_("Specific properties")])
         other_item = QTreeWidgetItem([_("Other properties - they can not be searched and are not processed in any way")])
-        other_item.setData(0, Qt.ItemDataRole.AccessibleTextRole, "Override")
         common_fields = list(EntityMetadata.for_discriminator("OSMEntity").fields.keys())
         selected_metadata = EntityMetadata.for_discriminator(selected.discriminator)
         known_fields = selected_metadata.all_fields
