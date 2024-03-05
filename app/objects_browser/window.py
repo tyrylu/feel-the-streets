@@ -2,8 +2,8 @@ import inspect
 from PySide6.QtGui import QKeySequence, QAction, Qt
 from PySide6.QtWidgets import QWidget, QListWidget, QTreeWidgetItem, QPushButton, QLabel, QGridLayout, QMenuBar, QApplication
 from osm_db import EntityMetadata
-from ..humanization_utils import format_field_value, underscored_to_words, format_relationship
-from ..services import menu_service
+from ..humanization_utils import format_field_value, underscored_to_words, format_relationship, format_number
+from ..services import config, map, menu_service
 from ..more_accessible_tree_widget import MoreAccessibleTreeWidget
 from . import object_actions
 from .object_actions.action import ObjectAction
@@ -123,6 +123,10 @@ class ObjectsBrowserWindow(QWidget):
                 specific_item.addChild(QTreeWidgetItem([formatted_values[specific]]))
         # We add the entity ID mainly for debugging purposes, and that's the reason why it is added the last and so special in the first place.
         common_item.addChild(QTreeWidgetItem([_("Object id: {}").format(selected.id)]))
+        # Also, the area is special as well.
+        area = map().entity_area(selected)
+        if area:
+            specific_item.addChild(QTreeWidgetItem([_("Aprroximate area: {} m^2").format(format_number(area, config().presentation.area_decimal_places))]))
         self._props.addTopLevelItem(common_item)
         if specific_item.childCount() > 0:
             self._props.addTopLevelItem(specific_item)

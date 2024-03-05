@@ -3,6 +3,7 @@ from osm_db import EntitiesQuery, FieldNamed, AreaDatabase
 from pygeodesy.ellipsoidalVincenty import LatLon
 from pygeodesy.etm import ExactTransverseMercator
 from shapely import wkb
+from shapely import ops as shapely_ops
 from shapely.geometry.point import Point
 from .geometry_utils import distance_filter, effective_width_filter, xy_ranges_bounding_square
 from .measuring import measure
@@ -126,6 +127,17 @@ class Map:
         query.add_condition(FieldNamed("name").eq(name))
         return self.get_entities(query)
 
-    def project_latlon(self, latlon):
-        coords = self._projection.forward(latlon.lat, latlon.lon)
+    def _project(self, lat, lon):
+        coords = self._projection.forward(lat, lon)
         return coords.easting, coords.northing
+
+    def project_latlon(self, latlon):
+        return self._project(latlon.lat, latlon.lon)
+    
+    def project_geometry(self, geometry):
+        return shapely_ops.transform(self._project, geometry)
+    
+    def entity_area(self, entity):
+        geom = wkb.loads(entity.geometry)
+        projected = self.project_geometry(geom)
+        return projected.area

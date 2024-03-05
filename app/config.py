@@ -22,6 +22,7 @@ class PresentationConfig(BaseModel):
     angle_decimal_places: int = 0
     coordinate_decimal_places: int = 6
     distance_decimal_places: int = 0
+    area_decimal_places: int = 0
     near_by_radius: int = 100 # In meters
     interesting_objects_minimum_radius: int = 25 # meters
     play_sounds_for_interesting_objects: bool = True
