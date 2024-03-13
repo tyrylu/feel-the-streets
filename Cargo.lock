@@ -551,7 +551,7 @@ dependencies = [
  "chrono",
  "cron-parser",
  "log",
- "redis",
+ "redis 0.24.0",
  "serde",
  "thiserror",
  "typetag",
@@ -1618,12 +1618,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "redis"
+version = "0.25.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "14c442de91f2a085154b1e1b374d5d5edf5bc49d2ebbfdf47e67edd6c2df568d"
+dependencies = [
+ "combine",
+ "itoa",
+ "percent-encoding",
+ "ryu",
+ "sha1_smol",
+ "socket2 0.5.6",
+ "url",
+]
+
+[[package]]
 name = "redis_api"
 version = "0.1.0"
 dependencies = [
  "log",
  "osm_db",
- "redis",
+ "redis 0.25.1",
  "thiserror",
 ]
 
