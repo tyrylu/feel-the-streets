@@ -12,7 +12,7 @@ rusqlite = { "version" = "~0.31", "features" = ["bundled-windows", "load_extensi
 serde = { version = "1.0.197", features = ["derive"] }
 serde_json = "1.0.116"
 chrono = { version = "0.4.38", default-features = false, features = ["serde", "clock", "std"] }
-thiserror = "1.0.58"
+thiserror = "1.0.59"
 dotenvy = "0.15.7"
 base64 = "0.22.0"
 doitlater = "0.3.0"
