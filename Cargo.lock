@@ -253,12 +253,6 @@ dependencies = [
 
 [[package]]
 name = "base64"
-version = "0.21.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9d297deb1925b89f2ccc13d7635fa0714f12c87adce1c75356b39ca9b7178567"
-
-[[package]]
-name = "base64"
 version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9475866fec1451be56a3c2400fd081ff546538961565ccb5b7142cbd22bc7a51"
@@ -1226,7 +1220,7 @@ dependencies = [
 name = "osm_db"
 version = "0.1.0"
 dependencies = [
- "base64 0.22.0",
+ "base64",
  "dirs-next",
  "geo-types",
  "hashbrown",
@@ -1881,7 +1875,7 @@ version = "0.1.0"
 dependencies = [
  "axum",
  "axum-extra",
- "base64 0.22.0",
+ "base64",
  "chrono",
  "doitlater",
  "dotenvy",
@@ -2408,11 +2402,11 @@ dependencies = [
 
 [[package]]
 name = "ureq"
-version = "2.9.6"
+version = "2.9.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "11f214ce18d8b2cbe84ed3aa6486ed3f5b285cf8d8fbdbce9f3f767a724adc35"
+checksum = "d11a831e3c0b56e438a28308e7c810799e3c118417f342d30ecec080105395cd"
 dependencies = [
- "base64 0.21.7",
+ "base64",
  "log",
  "once_cell",
  "rustls",
