@@ -14,7 +14,7 @@ server={path="../server"}
 anyhow = "1.0.82"
 dotenvy = "0.15.7"
 url = "2.5.0"
-ureq = { version = "2.9.6", default-features = false, features = ["tls", "json"] }
+ureq = { version = "2.9.7", default-features = false, features = ["tls", "json"] }
 serde = { version = "1.0.198", features = ["derive"] }
 clap = { version = "4.5.4", features = ["derive"] }
 
