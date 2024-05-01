@@ -18,6 +18,6 @@ rusqlite = { "version" = "~0.31", "features" = ["bundled-windows", "load_extensi
 thiserror = "1.0.59"
 hashbrown = { version = "0.14.5", features = ["serde"] }
 dirs-next = "2.0.0"
-base64 = "0.22.0"
+base64 = "0.22.1"
 wkb = "0.7.1"
 geo-types = "0.7.13"
