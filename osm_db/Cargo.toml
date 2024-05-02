@@ -7,7 +7,7 @@ edition = "2021"
 [dependencies]
 osm_api = {path = "../osm_api"}
 zstd_util = "0.1.4"
-serde = { version = "1.0.199", features = ["derive"] }
+serde = { version = "1.0.200", features = ["derive"] }
 serde_json = "1.0.116"
 serde_yaml = "0.9.33"
 indexmap = { version = "2.2.6", features = ["serde"] }
