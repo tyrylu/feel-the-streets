@@ -52,7 +52,7 @@ pub fn translate(
                 let mut new_value = value.clone();
                 for spec in &specs {
                     if spec.renames.contains_key(key) {
-                        new_key = spec.renames[key].clone();
+                        new_key.clone_from(&spec.renames[key]);
                         break;
                     }
                     for unprefixes in &spec.unprefixes {
