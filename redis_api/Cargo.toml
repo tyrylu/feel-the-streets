@@ -9,4 +9,4 @@ edition = "2021"
 osm_db = {path = "../osm_db"}
 redis = "0.25.4"
 thiserror = "1.0.61"
-log = "0.4.21"
+log = "0.4.22"
