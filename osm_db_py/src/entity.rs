@@ -25,7 +25,7 @@ impl PyEntity {
 
     #[getter]
     pub fn geometry(&self) -> PyObject {
-        Python::with_gil(|py| PyBytes::new(py, &self.inner.geometry).into())
+        Python::with_gil(|py| PyBytes::new_bound(py, &self.inner.geometry).into())
     }
 
     #[getter]

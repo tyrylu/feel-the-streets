@@ -44,13 +44,14 @@ impl PyAreaDatabase {
     }
     pub fn get_entities_really_intersecting(
         &self,
-        candidate_ids: Vec<&str>,
+        candidate_ids: Vec<String>,
         x: f64,
         y: f64,
         fast: bool,
     ) -> PyResult<Vec<PyEntity>> {
+        let ids: Vec<&str> = candidate_ids.iter().map(|s| s.as_str()).collect();
         match self.inner.lock().unwrap().get_entities_really_intersecting(
-            &candidate_ids,
+            &ids,
             x,
             y,
             fast,

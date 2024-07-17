@@ -12,7 +12,8 @@ mod field_condition;
 mod field_named;
 mod semantic_change;
 
-#[pyclass]
+#[pyclass(eq, eq_int)]
+#[derive(PartialEq)]
 pub enum ChangeType {
     Create,
     Remove,
@@ -20,7 +21,7 @@ pub enum ChangeType {
 }
 
 #[pymodule]
-fn osm_db(_py: Python, m: &PyModule) -> PyResult<()> {
+fn osm_db(m: &Bound<'_, PyModule>) -> PyResult<()> {
     #[pyfn(m)]
     pub fn all_known_discriminators() -> Vec<&'static String> {
         ::osm_db::entity_metadata::all_known_discriminators()
