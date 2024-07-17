@@ -211,7 +211,7 @@ impl OSMObjectManager {
         ids.sort_unstable_by_key(|oid| oid.as_ref().chars().next());
         for (entity_type, entity_ids) in &ids
             .iter()
-            .group_by(|oid| oid.as_ref().chars().next().unwrap())
+            .chunk_by(|oid| oid.as_ref().chars().next().unwrap())
         {
             for chunk in &entity_ids.chunks(batch_size_for_object_type(entity_type)) {
                 let ids_str = chunk.map(|c| &(c.as_ref())[1..]).join(",");
