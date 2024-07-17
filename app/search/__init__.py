@@ -34,12 +34,21 @@ def create_query_for_name_search(name):
 def create_query_for_address_search(address):
     # Try to be nice to the user and ignore whitespace differences
     address = address.strip()
-    street, number = address.rsplit(" ", 1)
-    street = street.strip()
+    parts =address.rsplit(" ", 1)
+    if len(parts) == 1:
+        street = None
+        number = parts[0]
+    else:
+        street, number = parts
+        street = street.strip()
     housenumber_condition = FieldNamed("address.housenumber").eq(number)
     if "/" not in number: # It might be a part of a number composed of more parts
         housenumber_condition = housenumber_condition.or_(FieldNamed("address.housenumber").like(f"{number}/%")).or_(FieldNamed("address.housenumber").like(f"%/{number}"))
-    return create_query("Addressable", None, float("inf"), [FieldNamed("address.street").eq(street), housenumber_condition])
+    if street is not None:
+        conditions = [FieldNamed("address.street").eq(street), housenumber_condition]
+    else:
+        conditions = [housenumber_condition]
+    return create_query("Addressable", None, float("inf"), conditions)
 
 def get_query_from_user(parent, position):
     entities = all_known_discriminators()
