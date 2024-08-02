@@ -7,6 +7,6 @@ edition = "2021"
 
 [dependencies]
 osm_db = {path = "../osm_db"}
-redis = "0.26.0"
+redis = "0.26.1"
 thiserror = "1.0.63"
 log = "0.4.22"
