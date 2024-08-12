@@ -15,7 +15,7 @@ anyhow = "1.0.86"
 dotenvy = "0.15.7"
 url = "2.5.2"
 ureq = { version = "2.10.0", default-features = false, features = ["tls", "json"] }
-serde = { version = "1.0.204", features = ["derive"] }
+serde = { version = "1.0.206", features = ["derive"] }
 clap = { version = "4.5.13", features = ["derive"] }
 
 [features]
