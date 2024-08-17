@@ -5,7 +5,7 @@ authors = ["Lukáš Tyrychtr <lukastyrychtr@gmail.com>"]
 edition = "2021"
 
 [dependencies]
-serde = { version = "1.0.207", features = ["derive"] }
+serde = { version = "1.0.208", features = ["derive"] }
 serde_json = "1.0.125"
 thiserror = "1.0.63"
 ureq = { version = "2.10.1", default-features = false, features = ["tls"] }
