@@ -32,7 +32,7 @@ fn query_executor(server: Server, query: ServerQuery, wake_sender: Sender<()>) {
         )
     };
     let ret = try_run_query
-        .retry(&ExponentialBuilder::default())
+        .retry(ExponentialBuilder::default())
         .notify(|e, dur| {
             warn!(
                 "Query failed, error: {:?}, going to sleep for {:?}.",
@@ -175,7 +175,7 @@ impl Server {
 
     fn get_api_status(&self) -> Result<ServerStatus> {
         let get_text = || self.get_api_status_text();
-        let text = get_text.retry(&ExponentialBuilder::default())
+        let text = get_text.retry(ExponentialBuilder::default())
         .notify(|e, dur| { warn!("Could not get status from Overpass API endpoint at {}, error: {:?}, going to sleep for {:?}.", self.url, e, dur); })
         .call()
         .map_err(|_| Error::RetryLimitExceeded)?;
