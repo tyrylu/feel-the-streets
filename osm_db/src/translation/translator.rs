@@ -112,7 +112,7 @@ pub fn translate(
                     Ok(Some((
                         Entity {
                             id: object.unique_id(),
-                            discriminator: SmolStr::new_inline(&discriminator),
+                            discriminator: discriminator.into(),
                             effective_width,
                             geometry: geom,
                             data: raw_data,

@@ -19,7 +19,7 @@ pub(crate) struct SemanticChangesContainer<'a> {
 impl<'a> SemanticChangesContainer<'a> {
     pub fn add_change(&mut self, area: i64, change: SemanticChange) {
         self.seen_entity_ids
-            .insert(SmolStr::new_inline(change.osm_id()));
+            .insert(change.osm_id().into());
         self.changes.entry(area).or_default().changes.push(change);
     }
 
@@ -40,7 +40,7 @@ impl<'a> SemanticChangesContainer<'a> {
 
     pub fn record_geometry_update_requirement(&mut self, entity_id: &str) {
         self.needs_geometry_update
-            .insert(SmolStr::new_inline(entity_id));
+            .insert(entity_id.into());
     }
 
     pub fn entities_needing_geometry_update(&self) -> HashSet<SmolStr> {

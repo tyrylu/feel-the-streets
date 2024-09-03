@@ -12,8 +12,8 @@ pub struct EntityRelationship {
 impl EntityRelationship {
     pub fn new(parent_id: &str, child_id: &str, kind: EntityRelationshipKind) -> Self {
         EntityRelationship {
-            parent_id: SmolStr::new_inline(parent_id),
-            child_id: SmolStr::new_inline(child_id),
+            parent_id: parent_id.into(),
+            child_id: child_id.into(),
             kind,
         }
     }
@@ -28,7 +28,7 @@ pub struct RootedEntityRelationship {
 impl RootedEntityRelationship {
     pub fn new(child_id: &str, kind: EntityRelationshipKind) -> Self {
         RootedEntityRelationship {
-            child_id: SmolStr::new_inline(child_id),
+            child_id: child_id.into(),
             kind,
         }
     }

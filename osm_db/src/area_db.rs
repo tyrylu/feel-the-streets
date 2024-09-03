@@ -49,9 +49,9 @@ fn classify_db_error(err: &rusqlite::Error, child_id: &str) -> ForeignKeyViolati
 
 pub(crate) fn row_to_entity(row: &Row) -> core::result::Result<Entity, rusqlite::Error> {
     Ok(Entity {
-        id: SmolStr::new_inline(&row.get_unwrap::<_, String>(0)),
+        id: row.get_unwrap::<_, String>(0).into(),
         geometry: row.get_unwrap(2),
-        discriminator: SmolStr::new_inline(&row.get_unwrap::<_, String>(1)),
+        discriminator: row.get_unwrap::<_, String>(1).into(),
         data: row.get_unwrap(3),
         effective_width: row.get_unwrap(4),
         parsed_data: None,
@@ -416,7 +416,7 @@ impl AreaDatabase {
             )?
             .query_and_then(
                 params![parent_id, EntityRelationshipKind::OSMChild],
-                |row| Ok(SmolStr::new_inline(&row.get_unwrap::<_, String>(0))),
+                |row| Ok(row.get_unwrap::<_, String>(0).into()),
             )?
             .filter_map(Result::ok)
             .collect())

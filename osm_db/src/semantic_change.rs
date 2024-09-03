@@ -34,20 +34,20 @@ pub enum EntryChange {
 impl EntryChange {
     pub fn updating(key: &str, old_value: Value, new_value: Value) -> Self {
         EntryChange::Update {
-            key: SmolStr::new(key),
+            key: key.into(),
             old_value,
             new_value,
         }
     }
     pub fn creating(key: &str, value: Value) -> Self {
         EntryChange::Create {
-            key: SmolStr::new(key),
+            key: key.into(),
             value,
         }
     }
     pub fn removing(key: &str) -> Self {
         EntryChange::Remove {
-            key: SmolStr::new(key),
+            key: key.into(),
         }
     }
 }
@@ -100,8 +100,8 @@ impl SemanticChange {
     ) -> Self {
         SemanticChange::Create {
             geometry: BASE64_STANDARD.encode(geometry),
-            id: SmolStr::new_inline(id),
-            discriminator: SmolStr::new_inline(discriminator),
+            id: id.into(),
+            discriminator: discriminator.into(),
             data,
             effective_width,
             entity_relationships: relationships,
@@ -109,7 +109,7 @@ impl SemanticChange {
     }
     pub fn removing(osm_id: &str) -> Self {
         SemanticChange::Remove {
-            osm_id: SmolStr::new_inline(osm_id),
+            osm_id: osm_id.into(),
         }
     }
 
@@ -123,7 +123,7 @@ impl SemanticChange {
             property_changes,
             data_changes,
             relationship_changes,
-            osm_id: SmolStr::new_inline(osm_id),
+            osm_id: osm_id.into(),
         }
     }
 
