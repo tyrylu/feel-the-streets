@@ -3,7 +3,7 @@ use crate::raw_object::{OSMObject as RawOSMObject, RelationMember, Tag};
 use crate::{Error, Result};
 use hashbrown::HashMap;
 use serde::{Deserialize, Serialize};
-use smol_str::SmolStr;
+use smol_str::{SmolStr, format_smolstr};
 use std::convert::TryFrom;
 use std::iter;
 use std::str::FromStr;
@@ -27,6 +27,17 @@ impl FromStr for OSMObjectType {
             "way" => Ok(OSMObjectType::Way),
             "relation" => Ok(OSMObjectType::Relation),
             node_type => Err(Error::UnknownNodeType(node_type.to_string())),
+        }
+    }
+}
+
+impl OSMObjectType {
+    pub fn create_string_id(&self, id: u64) -> SmolStr {
+        use OSMObjectType::*;
+        match self {
+            Node => format_smolstr!("n{}", id),
+            Way => format_smolstr!("w{}", id),
+            Relation => format_smolstr!("r{}", id),
         }
     }
 }
@@ -160,11 +171,7 @@ impl OSMObject {
     }
 
     pub fn unique_id(&self) -> SmolStr {
-        match self.object_type() {
-            OSMObjectType::Node => SmolStr::new_inline(&format!("n{}", self.id)),
-            OSMObjectType::Way => SmolStr::new_inline(&format!("w{}", self.id)),
-            OSMObjectType::Relation => SmolStr::new_inline(&format!("r{}", self.id)),
-        }
+        self.object_type().create_string_id(self.id)
     }
 
     pub fn related_ids(&self) -> Box<dyn Iterator<Item = (SmolStr, Option<SmolStr>)>> {
@@ -175,7 +182,7 @@ impl OSMObject {
                 nodes
                     .clone()
                     .into_iter()
-                    .map(|n| (SmolStr::new_inline(&format!("n{n}")), None)),
+                    .map(|n| (format_smolstr!("n{n}"), None)),
             ),
             Relation { ref members, .. } => Box::new(
                 members
@@ -189,11 +196,7 @@ impl OSMObject {
 
 impl OSMRelationMember {
     pub fn unique_reference(&self) -> SmolStr {
-        match self.referenced_type {
-            OSMObjectType::Node => SmolStr::new_inline(&format!("n{}", self.reference)),
-            OSMObjectType::Way => SmolStr::new_inline(&format!("w{}", self.reference)),
-            OSMObjectType::Relation => SmolStr::new_inline(&format!("r{}", self.reference)),
-        }
+        self.referenced_type.create_string_id(self.reference)
     }
 }
 

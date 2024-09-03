@@ -13,7 +13,7 @@ use once_cell::sync::Lazy;
 use quick_xml::de::Deserializer;
 use serde::Deserialize;
 use sled::Db;
-use smol_str::SmolStr;
+use smol_str::{format_smolstr, SmolStr};
 use std::cell::{Ref, RefCell};
 use std::cmp;
 use std::collections::HashSet;
@@ -243,7 +243,7 @@ impl OSMObjectManager {
                 Way { ref nodes, .. } => {
                     for node in nodes {
                         total_examined += 1;
-                        let node_id = SmolStr::new_inline(&format!("n{node}"));
+                        let node_id = format_smolstr!("n{node}");
                         if !self.has_object(&node_id) {
                             debug!("Node with id {} missing.", node_id);
                             missing.push(node_id);
