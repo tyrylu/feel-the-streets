@@ -43,27 +43,27 @@ impl ChangesStream {
 
     pub(crate) fn add_change(&mut self, change: &SemanticChange) -> Result<()> {
         self.redis_connection
-            .xadd(self.changes_key(), "*", &[("c", change.serialize()?)])?;
+            .xadd::<_, _, _, _, ()>(self.changes_key(), "*", &[("c", change.serialize()?)])?;
         Ok(())
     }
 
     pub fn register_client(&mut self, client_id: &str) -> Result<()> {
         self.redis_connection
-            .xgroup_create_mkstream(self.changes_key(), client_id, "$")?;
+            .xgroup_create_mkstream::<_, _, _, ()>(&self.changes_key(), client_id, "$")?;
         self.ensure_access_for(client_id)?;
         Ok(())
     }
 
     pub fn ensure_access_for(&mut self, client_id: &str) -> Result<()> {
         self.redis_connection
-            .acl_setuser_rules(client_id, &self.needed_acl_rules())?;
-        self.redis_connection.acl_save()?;
+            .acl_setuser_rules::<_, ()>(client_id, &self.needed_acl_rules())?;
+        self.redis_connection.acl_save::<()>()?;
         Ok(())
     }
 
     pub fn create_client(&mut self, client_id: &str) -> Result<String> {
         let password: String = self.redis_connection.acl_genpass()?;
-        self.redis_connection.acl_setuser_rules(
+        self.redis_connection.acl_setuser_rules::<_, ()>(
             client_id,
             &[
                 Rule::On,
@@ -77,7 +77,7 @@ impl ChangesStream {
                 Rule::AddCommand("exists".to_string()),
             ],
         )?;
-        self.redis_connection.acl_save()?;
+        self.redis_connection.acl_save::<()>()?;
         Ok(password)
     }
 
@@ -95,7 +95,7 @@ impl ChangesStream {
             .sadd(self.redownload_requests_key(), client_ids)
             .ignore()
             .hset_multiple(self.change_counts_key(), &zero_pairs)
-            .query(&mut self.redis_connection)?;
+            .query::<()>(&mut self.redis_connection)?;
 
         Ok(())
     }
@@ -107,7 +107,7 @@ impl ChangesStream {
             .ignore()
             .xgroup_setid(self.changes_key(), client_id, "$")
             .ignore()
-            .query(&mut self.redis_connection)?;
+            .query::<()>(&mut self.redis_connection)?;
 
         Ok(())
     }
@@ -216,7 +216,7 @@ impl ChangesStream {
                     .ignore();
             }
         }
-        pipe.query(&mut self.redis_connection)?;
+        pipe.query::<()>(&mut self.redis_connection)?;
         Ok(())
     }
 
