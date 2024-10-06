@@ -1,3 +1,4 @@
+use aw3d30::elevation_map::ElevationMap;
 use crate::entities_query_executor::EntitiesQueryExecutor;
 use crate::entity::Entity;
 use crate::entity_relationship::EntityRelationship;
@@ -70,6 +71,7 @@ fn init_extensions(conn: &Connection) -> Result<()> {
 pub struct AreaDatabase {
     pub(crate) conn: Connection,
     deferred_relationship_additions: HashMap<String, RootedEntityRelationship>,
+    elevation_map: Option<ElevationMap>,
 }
 
 impl AreaDatabase {
@@ -78,6 +80,7 @@ impl AreaDatabase {
         Ok(Self {
             conn,
             deferred_relationship_additions: HashMap::new(),
+            elevation_map: None,
         })
     }
     pub fn path_for(area: i64, server_side: bool) -> PathBuf {
@@ -104,7 +107,10 @@ impl AreaDatabase {
             OpenFlags::SQLITE_OPEN_READ_WRITE,
         )?;
         init_extensions(&conn)?;
-        AreaDatabase::common_construct(conn)
+        let mut db = AreaDatabase::common_construct(conn)?;
+        db.elevation_map = Some(ElevationMap::from_serialized(&db.get_elevation_map()?)?);
+        Ok(db)
+
     }
 
     pub fn insert_entities<T>(&mut self, entities: T) -> Result<()>
@@ -634,5 +640,27 @@ impl AreaDatabase {
             .conn
             .prepare_cached("SELECT AsBinary(MakeValid(GeomFromWKB(?, 4326)))")?;
         Ok(stmt.query_row([geom], |r| Ok(r.get_unwrap(0)))?)
+    }
+
+    pub fn replace_elevation_map(&self, elevation_map: &[u8]) -> Result<()> {
+        let mut stmt = self
+            .conn
+            .prepare_cached("REPLACE INTO elevation_map (map) VALUES (?)")?;
+        stmt.execute([elevation_map])?;
+        Ok(())
+    }
+
+    fn get_elevation_map(&self) -> Result<Vec<u8>> {
+        let mut stmt = self.conn.prepare_cached("SELECT map FROM elevation_map")?;
+        Ok(stmt.query_row([], |r| Ok(r.get_unwrap(0)))?)
+    }
+
+    pub fn elevation_at_coords(&self, lat: f64, lon: f64) -> Option<i16> {
+        self
+            .elevation_map
+            .as_ref()
+            .unwrap()
+            .elevation_at_coords(lat, lon)
+        
     }
 }

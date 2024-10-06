@@ -10,6 +10,8 @@ pub enum Error {
     SerdeError(#[from] serde_json::error::Error),
     #[error("Zstd error: {0}")]
     ZstdError(#[from] zstd_util::Error),
+    #[error("Aw3d30 error: {0}")]
+    Aw3d30Error(#[from] aw3d30::Error),
     #[error("Attempted an application of a change type which should be never applied")]
     IllegalChangeType,
 }
