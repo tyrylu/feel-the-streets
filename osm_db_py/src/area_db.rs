@@ -127,4 +127,8 @@ impl PyAreaDatabase {
             ))),
         }
     }
+
+    pub fn elevation_at_coords(&self, lat: f64, lon: f64) -> Option<i16> {
+        self.inner.lock().unwrap().elevation_at_coords(lat, lon)
+    }
 }
