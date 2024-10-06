@@ -38,6 +38,8 @@ pub enum Error {
     TeraError(#[from] tera::Error),
     #[error("Failed to join a Tokio task: {0}")]
     JoinError(#[from] tokio::task::JoinError),
+    #[error("Aw3d30 error: {0}")]
+    Aw3d30Error(#[from] aw3d30::Error),
 }
 
 impl IntoResponse for Error {

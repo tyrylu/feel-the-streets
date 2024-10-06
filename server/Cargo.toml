@@ -6,6 +6,7 @@ edition = "2021"
 
 [dependencies]
 log = "0.4.22"
+aw3d30 = {path="../aw3d30"}
 osm_db = {path="../osm_db"}
 osm_api = {path="../osm_api"}
 rusqlite = { "version" = "~0.32", "features" = ["bundled-windows", "load_extension", "chrono"] }

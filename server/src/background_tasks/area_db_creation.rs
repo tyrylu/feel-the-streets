@@ -1,3 +1,4 @@
+use aw3d30::dataset::Dataset;
 use crate::names_cache::OSMObjectNamesCache;
 use crate::Result;
 use crate::{
@@ -66,6 +67,8 @@ pub fn create_area_database_worker(
     drop(from_network_ids);
     area_db.begin()?;
     infer_additional_relationships_for(&area_db)?;
+    let map = elevation_map_for_bounds(&area_bounds)?;
+    area_db.replace_elevation_map(&map)?;
     area_db.commit()?;
     let parent_ids_str = get_parent_ids_str_for(area, &manager, &mut cache.lock().unwrap())?;
     area::finalize_area_creation(
@@ -112,6 +115,12 @@ pub fn get_parent_ids_str_for(
         .map(|p| p.unique_id())
         .collect::<Vec<SmolStr>>()
         .join(","))
+}
+
+pub fn elevation_map_for_bounds(bounds: &BoundaryRect) -> Result<Vec<u8>> {
+    let dataset = Dataset::new("aw3d30_tiles");
+    let elevation_map = dataset.create_elevation_map_for_area(bounds.min_y, bounds.min_x, bounds.max_y, bounds.max_x)?;
+    Ok(elevation_map.serialize()?)
 }
 
 #[derive(Serialize, Deserialize)]

@@ -2053,6 +2053,7 @@ dependencies = [
 name = "server"
 version = "0.1.0"
 dependencies = [
+ "aw3d30",
  "axum",
  "axum-extra",
  "base64",
