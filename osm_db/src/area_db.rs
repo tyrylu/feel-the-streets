@@ -108,9 +108,10 @@ impl AreaDatabase {
         )?;
         init_extensions(&conn)?;
         let mut db = AreaDatabase::common_construct(conn)?;
-        db.elevation_map = Some(ElevationMap::from_serialized(&db.get_elevation_map()?)?);
+        if let Some(map_data) = db.get_elevation_map()? {
+            db.elevation_map = Some(ElevationMap::from_serialized(&map_data)?);
+        }
         Ok(db)
-
     }
 
     pub fn insert_entities<T>(&mut self, entities: T) -> Result<()>
@@ -650,9 +651,13 @@ impl AreaDatabase {
         Ok(())
     }
 
-    fn get_elevation_map(&self) -> Result<Vec<u8>> {
+    fn get_elevation_map(&self) -> Result<Option<Vec<u8>>> {
         let mut stmt = self.conn.prepare_cached("SELECT map FROM elevation_map")?;
-        Ok(stmt.query_row([], |r| Ok(r.get_unwrap(0)))?)
+        if let Ok(data) = stmt.query_row([], |r| Ok(r.get_unwrap(0))) {
+            Ok(Some(data))
+        } else {
+            Ok(None)
+        }
     }
 
     pub fn elevation_at_coords(&self, lat: f64, lon: f64) -> Option<i16> {
