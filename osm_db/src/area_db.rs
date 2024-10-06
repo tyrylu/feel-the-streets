@@ -646,7 +646,7 @@ impl AreaDatabase {
     pub fn replace_elevation_map(&self, elevation_map: &[u8]) -> Result<()> {
         let mut stmt = self
             .conn
-            .prepare_cached("REPLACE INTO elevation_map (map) VALUES (?)")?;
+            .prepare_cached("REPLACE INTO elevation_map (rowid, map) VALUES (1, ?)")?;
         stmt.execute([elevation_map])?;
         Ok(())
     }
