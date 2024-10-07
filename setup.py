@@ -1,3 +1,3 @@
 from setuptools import setup
 
-setup(name="Feel the streets")
+setup(name="Feel the streets", packages=["app"])
