@@ -25,14 +25,14 @@ pub(crate) fn tile_id_for(latitude: f64, longitude: f64) -> String {
     format!(
         "{}{:03}{}{:03}",
         lat_prefix,
-        latitude.floor().abs(),
+        latitude.ceil().abs(),
         lon_prefix,
         longitude.floor().abs()
     )
 }
 
 pub(crate) fn tileset_id_for(latitude: f64, longitude: f64) -> String {
-    let lat_origin = (latitude / 5.0).floor() * 5.0;
+    let lat_origin = (latitude / 5.0).ceil() * 5.0;
     let lon_origin = (longitude / 5.0).floor() * 5.0;
     let lat_bound = lat_origin + 5.0;
     let lon_bound = lon_origin + 5.0;

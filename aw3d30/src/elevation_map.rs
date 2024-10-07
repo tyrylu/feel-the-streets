@@ -15,7 +15,7 @@ pub struct ElevationMap {
 impl ElevationMap {
     pub fn elevation_at_coords(&self, lat: f64, lon: f64) -> Option<i16> {
         let x = ((lon - self.origin_lon) / DEGREE_PER_PIXEL) as u32;
-        let y = ((lat - self.origin_lat) / DEGREE_PER_PIXEL) as u32;
+        let y = ((self.origin_lat - lat) / DEGREE_PER_PIXEL) as u32;
         if x >= self.width || y >= self.height {
             return None;
         }
