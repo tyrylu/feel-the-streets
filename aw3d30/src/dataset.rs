@@ -50,15 +50,15 @@ impl Dataset {
 
     pub fn create_elevation_map_for_area(&self, min_lat: f64, min_lon: f64, max_lat: f64, max_lon: f64) -> Result<ElevationMap> {
         let x_ranges = get_pixel_ranges(min_lon, max_lon);
-        let y_ranges = get_pixel_ranges(-max_lat, -min_lat); // Latitude is decreasing in the tiles, so should in our elevation map as well.
+        let y_ranges = get_pixel_ranges(min_lat, max_lat); // Latitude is decreasing in the tiles, so should in our elevation map as well.
         let mut result = vec![];
         for y_range in &y_ranges {
             result.extend(self.create_elevation_map_block(x_ranges.as_ref(), y_range)?);
         }
 
         Ok(ElevationMap {
-            origin_lat: min_lat,
-            origin_lon: max_lon,
+            origin_lat: max_lat,
+            origin_lon: min_lon,
             width: ranges_length(&x_ranges),
             height: ranges_length(&y_ranges),
             data: result,
@@ -71,9 +71,9 @@ impl Dataset {
         for x_range in x_ranges {
             tiles.push(self.tile_for(y_range.tile_bound.abs(), x_range.tile_bound)?);
         }
-        for y_coord in *y_range.range.start()..=*y_range.range.end() {
+        for y_coord in y_range.range.clone().rev() {
             for (i, tile) in tiles.iter_mut().enumerate() {
-                result.extend(tile.data_for_row_part(y_coord, x_ranges[i].range.clone())?);
+                result.extend(tile.data_for_row_part(3599 - y_coord, x_ranges[i].range.clone())?);
             }
         }
         Ok(result)
