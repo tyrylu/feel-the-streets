@@ -38,8 +38,8 @@ impl Dataset {
                 let mut dest = std::fs::File::create(&file_path)?;
                 zstd::stream::copy_encode(&mut file, &mut dest, 22)?;
             }
+            info!("Tileset processed.");
         }
-        info!("Tileset processed.");
         Ok(())
     }
 
