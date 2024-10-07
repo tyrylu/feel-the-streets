@@ -150,3 +150,6 @@ class Map:
             return ext_area - int_areas
         else:
             return 0
+
+    def elevation_at_coords(self, lat, lon):
+        return self._db.elevation_at_coords(lat, lon)

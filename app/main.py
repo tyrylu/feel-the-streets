@@ -1,3 +1,4 @@
+import gc
 import sys
 import os
 import threading
@@ -44,6 +45,7 @@ def main():
     # On Linux, the speech dispatcher communication thread is still running and it's a daemon one, so using sys.exit now would not have any effect.
     # To workaround that, destroy the speech instance and let the destructor take care of the things it needs
     speech.reset()
+    gc.collect()
     sys.exit(ret)
 
 

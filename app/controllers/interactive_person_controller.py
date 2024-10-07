@@ -52,6 +52,15 @@ class InteractivePersonController:
     def do_current_coords(self):
         speech().speak(self._get_current_coordinates_string(), interrupt=True)
 
+    @menu_command(_("Information"), _("Current elevation"), "e")
+    def do_current_elevation(self):
+        elevation = map().elevation_at_coords(self._person.position.lat, self._person.position.lon)
+        if elevation is None:
+            speech().speak(_("Not known."), interrupt=True)
+        else:
+            speech().speak(_("Elevation: {elevation} meters").format(elevation=elevation), interrupt=True)
+
+
     def _position_impl(self, objects):    
         if objects:
             speech().silence()
