@@ -27,7 +27,7 @@ impl Tile {
     }
 
     pub(crate) fn data_for_row_part(&mut self, row: u16, col_range: RangeInclusive<u16>) -> Result<Vec<i16>> {
-        let whole_rows_offset: usize = (row as usize * 3600_usize);
+        let whole_rows_offset: usize = row as usize * 3600_usize;
         Ok(self.data[whole_rows_offset + (*col_range.start() as usize)..=whole_rows_offset + (*col_range.end() as usize)].to_vec())
     }
 }
