@@ -69,7 +69,7 @@ impl Dataset {
         let mut result = vec![];
         let mut tiles = vec![];
         for x_range in x_ranges {
-            tiles.push(self.tile_for(y_range.tile_bound, x_range.tile_bound.abs())?);
+            tiles.push(self.tile_for(y_range.tile_bound.abs(), x_range.tile_bound)?);
         }
         for y_coord in *y_range.range.start()..=*y_range.range.end() {
             for (i, tile) in tiles.iter_mut().enumerate() {
