@@ -1,3 +1,4 @@
+import logging
 import locale
 from accessible_output2.outputs.base import Output, OutputError
 try:
@@ -5,6 +6,8 @@ try:
     has_speechd_api = True
 except ImportError:
     has_speechd_api = False
+
+log = logging.getLogger(__name__)
 
 class SpeechDispatcherOutput(Output):
     name = "Linux Speech dispatcher"
@@ -17,9 +20,11 @@ class SpeechDispatcherOutput(Output):
             self._client = Client()
             lang, _encoding = locale.getdefaultlocale()
             if not lang:
+                log.info("No default locale found, using en_US as default language.")   
                 lang = "en_US"
             if "_" in lang:
                 lang = lang.split("_")[0]
+            log.info("Setting output language to %s", lang)
             self._client.set_language(lang)
         else:
             raise OutputError("Failed to import the speechd module.")

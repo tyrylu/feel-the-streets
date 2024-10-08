@@ -1,18 +1,20 @@
 import platform
 import os
 import shutil
-import accessible_output2.outputs
-from accessible_output2.outputs import auto
-from . import speech_dispatcher_output
+import locale
+from accessible_output2.outputs import auto, speech_dispatcher
 
 class SpeechService:
     def __init__(self):
-        if platform.system() == "Linux":
-            # This hack inserts the speech dispatcher output to the known outputs for accessible_output2 and gets rid of the espeak one, because it does not athere to the output construction protocol, e. g. it does not throw OutputError as it should.
-            accessible_output2.outputs.__dict__["speech_dispatcher_output"] = speech_dispatcher_output
-            del accessible_output2.outputs.__dict__["e_speak"]
-        # Now, we can rely on the standard automatic output selection.
         self._output = auto.Auto()
+        o = self._output.get_first_available_output()
+        if isinstance(o, speech_dispatcher.SpeechDispatcher):
+            lang, _encoding = locale.getdefaultlocale()
+            if not lang:
+                lang = "en_US"
+            if "_" in lang:
+                lang = lang.split("_")[0]
+            o._client.set_language(lang)    
         if platform.system() == "Windows":
             # This hack ensures that win32com does not end up crashing because of some weird corruptions of the gen_py folder.
             gen_py_path = os.path.join(os.environ["TEMP"], "gen_py")
