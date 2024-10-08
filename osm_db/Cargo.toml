@@ -17,7 +17,7 @@ log = "0.4.22"
 uom = "0.36.0"
 rusqlite = { "version" = "~0.32", "features" = ["bundled-windows", "load_extension"] }
 thiserror = "1.0.64"
-hashbrown = { version = "0.14.5", features = ["serde"] }
+hashbrown = { version = "0.15.0", features = ["serde"] }
 dirs-next = "2.0.0"
 base64 = "0.22.1"
 wkb = "0.7.1"
