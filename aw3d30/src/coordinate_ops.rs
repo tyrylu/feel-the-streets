@@ -56,6 +56,6 @@ pub fn coord_to_pixel(coord: f64, origin: f64) -> u16 {
     ((coord - origin) / DEGREE_PER_PIXEL) as u16
 }
 
-pub(crate) fn ranges_length(ranges: &Vec<RangeInfo>) -> u32 {
+pub(crate) fn ranges_length(ranges: &[RangeInfo]) -> u32 {
     ranges.iter().map(|r| (r.range.end() - r.range.start() + 1) as u32).sum()
 }

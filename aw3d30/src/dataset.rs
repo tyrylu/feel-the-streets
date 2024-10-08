@@ -50,9 +50,9 @@ impl Dataset {
 
     pub fn create_elevation_map_for_area(&self, min_lat: f64, min_lon: f64, max_lat: f64, max_lon: f64) -> Result<ElevationMap> {
         let x_ranges = get_pixel_ranges(min_lon, max_lon);
-        let y_ranges = get_pixel_ranges(min_lat, max_lat); // Latitude is decreasing in the tiles, so should in our elevation map as well.
+        let y_ranges = get_pixel_ranges(min_lat, max_lat); // Latitude is decreasing in the tiles, so should in our elevation map as well, but we'll compensate for it when going through them.
         let mut result = vec![];
-        for y_range in &y_ranges {
+        for y_range in y_ranges.iter().rev() {
             result.extend(self.create_elevation_map_block(x_ranges.as_ref(), y_range)?);
         }
 
