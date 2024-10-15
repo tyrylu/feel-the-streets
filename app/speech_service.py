@@ -3,22 +3,28 @@ import os
 import shutil
 import locale
 from accessible_output2.outputs import auto, speech_dispatcher
+from . import qt_output
+
 
 class SpeechService:
     def __init__(self):
-        self._output = auto.Auto()
-        o = self._output.get_first_available_output()
-        if isinstance(o, speech_dispatcher.SpeechDispatcher):
-            lang, _encoding = locale.getdefaultlocale()
-            if not lang:
-                lang = "en_US"
-            if "_" in lang:
-                lang = lang.split("_")[0]
-            o._client.set_language(lang)    
-        if platform.system() == "Windows":
-            # This hack ensures that win32com does not end up crashing because of some weird corruptions of the gen_py folder.
-            gen_py_path = os.path.join(os.environ["TEMP"], "gen_py")
-            shutil.rmtree(gen_py_path, ignore_errors=True)
+        from .services import config
+        if config().presentation.use_accessible_events_for_speech and qt_output.available:
+            self._output = qt_output.Output()
+        else:
+            self._output = auto.Auto()
+            o = self._output.get_first_available_output()
+            if isinstance(o, speech_dispatcher.SpeechDispatcher):
+                lang, _encoding = locale.getdefaultlocale()
+                if not lang:
+                    lang = "en_US"
+                if "_" in lang:
+                    lang = lang.split("_")[0]
+                o._client.set_language(lang)    
+            if platform.system() == "Windows":
+                # This hack ensures that win32com does not end up crashing because of some weird corruptions of the gen_py folder.
+                gen_py_path = os.path.join(os.environ["TEMP"], "gen_py")
+                shutil.rmtree(gen_py_path, ignore_errors=True)
         self._speech_history = []
         self._speech_history_position = 0
 

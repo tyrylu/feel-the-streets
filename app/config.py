@@ -36,6 +36,7 @@ class PresentationConfig(BaseModel):
     lands_are_interesting: bool = True
     shops_are_interesting: bool = True
     trashcans_are_interesting: bool = True
+    use_accessible_events_for_speech: bool = True
 
 class ChangelogsConfig(BaseModel):
     enabled: bool = False
