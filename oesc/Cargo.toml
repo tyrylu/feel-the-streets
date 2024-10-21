@@ -11,7 +11,7 @@ osm_api = {path="../osm_api"}
 osm_db = {path="../osm_db"}
 redis_api = {path = "../redis_api"}
 server={path="../server"}
-anyhow = "1.0.89"
+anyhow = "1.0.90"
 dotenvy = "0.15.7"
 url = "2.5.2"
 ureq = { version = "2.10.1", default-features = false, features = ["tls", "json"] }
