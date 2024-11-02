@@ -1,7 +1,7 @@
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("HTTP error: {0}")]
-    Http(#[from] ureq::Error),
+    Http(#[from] Box<ureq::Error>),
     #[error("Zip related error: {0}")]
     Zip(#[from] zip::result::ZipError),
     #[error("I/O error: {0}")]
@@ -14,4 +14,9 @@ pub enum Error {
     InvalidArchiveFilename(String),
     #[error("Unexpected pixel format")]
     UnexpectedPixelFormat,
+}
+impl From<ureq::Error> for Error {
+    fn from(value: ureq::Error) -> Self {
+        Error::Http(Box::new(value))
+    }
 }
