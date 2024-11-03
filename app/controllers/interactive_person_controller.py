@@ -58,8 +58,19 @@ class InteractivePersonController:
         if elevation is None:
             speech().speak(_("Not known."), interrupt=True)
         else:
-            speech().speak(_("Elevation: {elevation} meters").format(elevation=elevation), interrupt=True)
+            speech().speak(_("Elevation: {elevation} meters").format(elevation=format_number(elevation, config().presentation.elevation_decimal_places)), interrupt=True)
 
+    @menu_command(_("Information"), _("Slope in the current direction"), "p")
+    def do_current_slope(self):
+        cur_elevation = map().elevation_at_coords(self._person.position.lat, self._person.position.lon)
+        (next_pos, _next_dir) = self._person.position.destination2(config().navigation.step_length, self._person.direction)
+        next_elevation = map().elevation_at_coords(next_pos.lat, next_pos.lon)
+        if cur_elevation and next_elevation:
+            slope = 100 * ((next_elevation - cur_elevation) / config().navigation.step_length)
+            speech().speak(_("Slope: {slope}%").format(slope=format_number(slope, config().presentation.slope_decimal_places)), interrupt=True)
+        else:
+            speech().speak(_("Not known."), interrupt=True)
+        
 
     def _position_impl(self, objects):    
         if objects:
