@@ -20,7 +20,7 @@ doitlater = "0.3.0"
 redis_api = {path = "../redis_api"}
 axum = "0.7.9"
 tera = "1.20.0"
-axum-extra = { version = "0.9.4", features = ["async-read-body"] }
+axum-extra = { version = "0.9.6", features = ["async-read-body"] }
 tokio = { version = "1.41.1", features = ["fs", "macros", "rt", "rt-multi-thread"] }
 tracing-subscriber = {version="0.3.18", features=["env-filter"]}
 tower-http = { version = "0.6.2", features = ["trace", "fs"] }
