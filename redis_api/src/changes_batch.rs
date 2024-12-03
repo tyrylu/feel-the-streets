@@ -26,7 +26,7 @@ impl<'a> ChangesBatch<'a> {
     }
 }
 
-impl<'a> Drop for ChangesBatch<'a> {
+impl Drop for ChangesBatch<'_> {
     fn drop(&mut self) {
         self.stream
             .increment_changes_count_by(self.num_changes)

@@ -613,7 +613,7 @@ impl AreaDatabase {
         // Note that we support only little-endian WKB geometries.
         if geom[0] == 1 && geom[1] == 7 {
             let cloned_geom = geom.to_vec();
-            let parsed_geom = wkb::reader::read_wkb(&mut cloned_geom.as_slice()).unwrap().to_geometry();
+            let parsed_geom = wkb::reader::read_wkb(cloned_geom.as_slice()).unwrap().to_geometry();
             if let geo_types::Geometry::GeometryCollection(coll) = parsed_geom {
                 let mut output_wkb = if coll.0.len() == 1 {
                     vec![]
