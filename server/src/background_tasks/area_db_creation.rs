@@ -1,10 +1,10 @@
-use aw3d30::dataset::Dataset;
 use crate::names_cache::OSMObjectNamesCache;
 use crate::Result;
 use crate::{
     area,
     db::{self, Connection},
 };
+use aw3d30::dataset::Dataset;
 use chrono::{DateTime, FixedOffset};
 use doitlater::typetag;
 use osm_api::object_manager::OSMObjectManager;
@@ -119,7 +119,12 @@ pub fn get_parent_ids_str_for(
 
 pub fn elevation_map_for_bounds(bounds: &BoundaryRect) -> Result<Vec<u8>> {
     let dataset = Dataset::new("aw3d30_tiles");
-    let elevation_map = dataset.create_elevation_map_for_area(bounds.min_y, bounds.min_x, bounds.max_y, bounds.max_x)?;
+    let elevation_map = dataset.create_elevation_map_for_area(
+        bounds.min_y,
+        bounds.min_x,
+        bounds.max_y,
+        bounds.max_x,
+    )?;
     Ok(elevation_map.serialize()?)
 }
 

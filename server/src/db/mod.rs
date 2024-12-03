@@ -1,5 +1,7 @@
 mod changeset;
 
+use self::changeset::Changeset;
+pub use self::changeset::InsertableChangeset;
 use crate::Result;
 use osm_api::object::{OSMObject, OSMObjectType};
 use osm_api::object_manager::OSMObjectManager;
@@ -7,8 +9,6 @@ use osm_api::{BoundaryRect, SmolStr};
 use rusqlite::named_params;
 pub use rusqlite::Connection;
 use std::collections::HashSet;
-pub use self::changeset::InsertableChangeset;
-use self::changeset::Changeset;
 
 pub fn connect_to_server_db() -> Result<Connection> {
     let conn = Connection::open("server.db")?;

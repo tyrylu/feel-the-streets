@@ -9,7 +9,10 @@ fn main() -> Result<()> {
     let db_conn = db::connect_to_server_db()?;
     for mut area in Area::all(&db_conn)? {
         let bounds = area.bounds(&db_conn)?;
-        info!("Getting elevation map for {}, bounds: {:?}", area.name, bounds);
+        info!(
+            "Getting elevation map for {}, bounds: {:?}",
+            area.name, bounds
+        );
         let elevation_map = area_db_creation::elevation_map_for_bounds(&bounds)?;
         let area_db = AreaDatabase::open_existing(area.osm_id, true)?;
         area_db.replace_elevation_map(&elevation_map)?;

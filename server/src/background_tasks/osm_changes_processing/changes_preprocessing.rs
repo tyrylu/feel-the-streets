@@ -19,7 +19,9 @@ pub(crate) fn filter_and_deduplicate_changes(
             continue;
         }
         // We're also ignoring changes for the North Atlantic Treaty Organization, we will not store its geometry either.
-        if change.object().tags.get("name:en") == Some(&"North Atlantic Treaty Organization".to_string()) {
+        if change.object().tags.get("name:en")
+            == Some(&"North Atlantic Treaty Organization".to_string())
+        {
             continue;
         }
         if !changeset_might_be_interesting(change.changeset(), &mut interests, conn) {
@@ -53,15 +55,18 @@ fn changeset_might_be_interesting(
 ) -> bool {
     *changeset_interests.entry(changeset).or_insert_with(|| {
         debug!("Getting information about changeset {}", changeset);
-        if let Some(changeset) = db::get_changeset(conn, changeset)
-            .expect("Could not get changeset info") {
-        !Area::all_containing(conn, &changeset.bounds.as_wkb_polygon())
-            .expect("Could not get areas containing the given bounds")
-               .is_empty()
-            }
-        else {
-            warn!("Did not find changeset {} or it had no bounds, assuming it might be interesting.", changeset);
+        if let Some(changeset) =
+            db::get_changeset(conn, changeset).expect("Could not get changeset info")
+        {
+            !Area::all_containing(conn, &changeset.bounds.as_wkb_polygon())
+                .expect("Could not get areas containing the given bounds")
+                .is_empty()
+        } else {
+            warn!(
+                "Did not find changeset {} or it had no bounds, assuming it might be interesting.",
+                changeset
+            );
             true
-    }
-})
+        }
+    })
 }

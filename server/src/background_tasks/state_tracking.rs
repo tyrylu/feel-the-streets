@@ -11,7 +11,10 @@ pub(crate) fn read_latest_sequence_number(filename: &str, default: u32) -> Resul
             .parse()
             .expect("Could not parse latest sequence number"))
     } else {
-        info!("Latest processed sequence number not storedin {}, using the default of {}.", filename, default);
+        info!(
+            "Latest processed sequence number not storedin {}, using the default of {}.",
+            filename, default
+        );
         Ok(default)
     }
 }

@@ -42,8 +42,11 @@ impl ChangesStream {
     }
 
     pub(crate) fn add_change(&mut self, change: &SemanticChange) -> Result<()> {
-        self.redis_connection
-            .xadd::<_, _, _, _, ()>(self.changes_key(), "*", &[("c", change.serialize()?)])?;
+        self.redis_connection.xadd::<_, _, _, _, ()>(
+            self.changes_key(),
+            "*",
+            &[("c", change.serialize()?)],
+        )?;
         Ok(())
     }
 

@@ -29,7 +29,7 @@ impl ReplicationState {
             }
         }
         Self::from_parts(sn, ts)
-    }    
+    }
 
     pub(crate) fn from_changesets_state_str(val: &str) -> Result<Self, Error> {
         let mut sn = None;
@@ -46,9 +46,12 @@ impl ReplicationState {
             }
         }
         Self::from_parts(sn, ts)
-    }    
+    }
 
-    fn from_parts(sn: Option<SequenceNumber>, ts: Option<DateTime<FixedOffset>>) -> Result<Self, Error> {
+    fn from_parts(
+        sn: Option<SequenceNumber>,
+        ts: Option<DateTime<FixedOffset>>,
+    ) -> Result<Self, Error> {
         match (sn, ts) {
             (Some(s), Some(t)) => Ok(Self {
                 sequence_number: s,

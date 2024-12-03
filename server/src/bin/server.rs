@@ -5,9 +5,9 @@ use server::ui_routes;
 use server::{AppState, Result};
 use std::sync::{Arc, Mutex};
 use tera::Tera;
+use tokio::net::TcpListener;
 use tower_http::services::ServeDir;
 use tower_http::trace::TraceLayer;
-use tokio::net::TcpListener;
 
 #[tokio::main]
 async fn main() -> Result<()> {

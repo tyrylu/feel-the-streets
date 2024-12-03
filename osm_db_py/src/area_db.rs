@@ -50,12 +50,12 @@ impl PyAreaDatabase {
         fast: bool,
     ) -> PyResult<Vec<PyEntity>> {
         let ids: Vec<&str> = candidate_ids.iter().map(|s| s.as_str()).collect();
-        match self.inner.lock().unwrap().get_entities_really_intersecting(
-            &ids,
-            x,
-            y,
-            fast,
-        ) {
+        match self
+            .inner
+            .lock()
+            .unwrap()
+            .get_entities_really_intersecting(&ids, x, y, fast)
+        {
             Ok(res) => Ok(res.into_iter().map(|e| PyEntity { inner: e }).collect()),
             Err(e) => Err(exceptions::PyValueError::new_err(format!(
                 "Failed to execute the query, error: {e}"

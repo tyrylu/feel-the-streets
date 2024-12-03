@@ -42,7 +42,10 @@ fn main() -> osm_api::Result<()> {
         format!("{}_geom.txt", obj.unique_id()),
         format!("{geom:#?}"),
     )?;
-    let wkb = manager.get_geometry_as_wkb(&obj, &bounds).expect("Could not get WKB").unwrap();
+    let wkb = manager
+        .get_geometry_as_wkb(&obj, &bounds)
+        .expect("Could not get WKB")
+        .unwrap();
     fs::write(format!("{}_geom.wkb", obj.unique_id()), wkb)?;
     println!("Successfully saved.");
     Ok(())

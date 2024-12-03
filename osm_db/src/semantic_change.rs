@@ -46,9 +46,7 @@ impl EntryChange {
         }
     }
     pub fn removing(key: &str) -> Self {
-        EntryChange::Remove {
-            key: key.into(),
-        }
+        EntryChange::Remove { key: key.into() }
     }
 }
 

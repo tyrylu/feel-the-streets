@@ -69,11 +69,10 @@ impl Entity {
                             .expect("The string was not a base64-encoded geometry")
                     }
                     "discriminator" => {
-                        self.discriminator = 
-                            new_value
-                                .as_str()
-                                .expect("Non-string attempted to be set as a discriminator")
-                        .into()
+                        self.discriminator = new_value
+                            .as_str()
+                            .expect("Non-string attempted to be set as a discriminator")
+                            .into()
                     }
                     "data" => {
                         self.data = new_value

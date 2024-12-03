@@ -1,6 +1,6 @@
 use crate::coordinate_ops::DEGREE_PER_PIXEL;
-use serde::{Serialize, Deserialize};
 use crate::Result;
+use serde::{Deserialize, Serialize};
 use std::io::Cursor;
 
 #[derive(Serialize, Deserialize)]
@@ -16,7 +16,7 @@ impl ElevationMap {
     pub fn elevation_at_coords(&self, lat: f64, lon: f64) -> Option<f64> {
         self.bicubic_interpolation(lat, lon)
     }
-    
+
     fn elevation_of_square(&self, lat: f64, lon: f64) -> Option<i16> {
         let x = ((lon - self.origin_lon) / DEGREE_PER_PIXEL) as u32;
         let y = ((self.origin_lat - lat) / DEGREE_PER_PIXEL) as u32;
@@ -60,10 +60,10 @@ impl ElevationMap {
         let val3 = self.data[index(x, y + 1)] as f64;
         let val4 = self.data[index(x + 1, y + 1)] as f64;
 
-        let result = ((1.0 - x_ratio) * (1.0 - y_ratio) * val1) + 
-                     (x_ratio * (1.0 - y_ratio) * val2) + 
-                     ((1.0 - x_ratio) * y_ratio * val3) + 
-                     (x_ratio * y_ratio * val4);
+        let result = ((1.0 - x_ratio) * (1.0 - y_ratio) * val1)
+            + (x_ratio * (1.0 - y_ratio) * val2)
+            + ((1.0 - x_ratio) * y_ratio * val3)
+            + (x_ratio * y_ratio * val4);
 
         Some(result)
     }
@@ -84,8 +84,9 @@ impl ElevationMap {
         for i in -1..=2 {
             for j in -1..=2 {
                 let weight = Self::cubic_weight(i as f64 - (x_float - x as f64))
-                           * Self::cubic_weight(j as f64 - (y_float - y as f64));
-                interpolated_value += weight * self.data[(y + j) as usize * self.width as usize + (x + i) as usize] as f64;
+                    * Self::cubic_weight(j as f64 - (y_float - y as f64));
+                interpolated_value += weight
+                    * self.data[(y + j) as usize * self.width as usize + (x + i) as usize] as f64;
             }
         }
 

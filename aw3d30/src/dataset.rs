@@ -1,11 +1,13 @@
-use std::path::PathBuf;
-use crate::dataset_naming::{tile_id_for, tileset_id_for, tileset_url, tile_id_from_archive_filename};
-use std::io::Cursor;
+use crate::coordinate_ops::{get_pixel_ranges, ranges_length, RangeInfo};
+use crate::dataset_naming::{
+    tile_id_for, tile_id_from_archive_filename, tileset_id_for, tileset_url,
+};
+use crate::elevation_map::ElevationMap;
 use crate::tile::Tile;
 use crate::Result;
-use crate::elevation_map::ElevationMap;
-use crate::coordinate_ops::{get_pixel_ranges, RangeInfo, ranges_length};
-use log::{info, debug};
+use log::{debug, info};
+use std::io::Cursor;
+use std::path::PathBuf;
 
 pub struct Dataset {
     storage_root: PathBuf,
@@ -13,7 +15,9 @@ pub struct Dataset {
 
 impl Dataset {
     pub fn new(storage_root: impl Into<PathBuf>) -> Self {
-        Self { storage_root:  storage_root.into() }
+        Self {
+            storage_root: storage_root.into(),
+        }
     }
 
     fn ensure_has_tile_for(&self, latitude: f64, longitude: f64) -> Result<()> {
@@ -29,11 +33,15 @@ impl Dataset {
             tileset_resp.into_reader().read_to_end(&mut data)?;
             info!("Download completed, caching tileset.");
             let mut zip = zip::ZipArchive::new(Cursor::new(data))?;
-            for name in 0..zip.len() {              let mut file = zip.by_index(name)?;
+            for name in 0..zip.len() {
+                let mut file = zip.by_index(name)?;
                 if !file.name().ends_with("DSM.tif") {
                     continue;
                 }
-                let file_path = self.storage_root.join(tile_id_from_archive_filename(file.name())?).with_extension("ztif");
+                let file_path = self
+                    .storage_root
+                    .join(tile_id_from_archive_filename(file.name())?)
+                    .with_extension("ztif");
                 debug!("Extracting {} to {}", file.name(), file_path.display());
                 let mut dest = std::fs::File::create(&file_path)?;
                 zstd::stream::copy_encode(&mut file, &mut dest, 22)?;
@@ -46,9 +54,15 @@ impl Dataset {
     fn tile_for(&self, lat: f64, lon: f64) -> Result<Tile> {
         self.ensure_has_tile_for(lat, lon)?;
         Tile::for_coords(lat, lon, self.storage_root.as_path())
-}
+    }
 
-    pub fn create_elevation_map_for_area(&self, min_lat: f64, min_lon: f64, max_lat: f64, max_lon: f64) -> Result<ElevationMap> {
+    pub fn create_elevation_map_for_area(
+        &self,
+        min_lat: f64,
+        min_lon: f64,
+        max_lat: f64,
+        max_lon: f64,
+    ) -> Result<ElevationMap> {
         let x_ranges = get_pixel_ranges(min_lon, max_lon);
         let y_ranges = get_pixel_ranges(min_lat, max_lat); // Latitude is decreasing in the tiles, so should in our elevation map as well, but we'll compensate for it when going through them.
         let mut result = vec![];
@@ -63,9 +77,13 @@ impl Dataset {
             height: ranges_length(&y_ranges),
             data: result,
         })
-            }
+    }
 
-    fn create_elevation_map_block(&self, x_ranges: &[RangeInfo], y_range: &RangeInfo) -> Result<Vec<i16>> {
+    fn create_elevation_map_block(
+        &self,
+        x_ranges: &[RangeInfo],
+        y_range: &RangeInfo,
+    ) -> Result<Vec<i16>> {
         let mut result = vec![];
         let mut tiles = vec![];
         for x_range in x_ranges {

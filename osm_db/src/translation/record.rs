@@ -106,15 +106,9 @@ impl TranslationRecord {
             }
         }
         for (discriminator, unknown) in self.unknown_fields.into_iter() {
-            let target_unknown = target
-                .unknown_fields
-                .entry(discriminator)
-                .or_default();
+            let target_unknown = target.unknown_fields.entry(discriminator).or_default();
             for (field, mut values) in unknown.into_iter() {
-                target_unknown
-                    .entry(field)
-                    .or_default()
-                    .append(&mut values);
+                target_unknown.entry(field).or_default().append(&mut values);
             }
         }
         for (discriminator, members) in self.missing_enum_members.into_iter() {
@@ -127,10 +121,7 @@ impl TranslationRecord {
             }
         }
         for (discriminator, violations) in self.type_violations.into_iter() {
-            let other_violations = target
-                .type_violations
-                .entry(discriminator)
-                .or_default();
+            let other_violations = target.type_violations.entry(discriminator).or_default();
             for (field, mut values) in violations.into_iter() {
                 other_violations
                     .entry(field)

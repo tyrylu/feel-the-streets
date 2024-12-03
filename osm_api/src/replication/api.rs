@@ -1,8 +1,8 @@
 use super::change::RawOSMChanges;
 use super::{OSMChanges, ReplicationState, SequenceNumber};
-use crate::Result;
-use crate::raw_changeset::RawChangesets;
 use crate::changeset::Changeset;
+use crate::raw_changeset::RawChangesets;
+use crate::Result;
 use flate2::read::GzDecoder;
 use std::io::BufReader;
 use ureq::{Agent, AgentBuilder};
@@ -72,14 +72,14 @@ impl ReplicationApiClient {
         )))?;
         Ok(changes.changesets.into_iter().map(From::from).collect())
     }
-
-
 }
 
 impl Default for ReplicationApiClient {
     fn default() -> Self {
         Self {
-            agent: AgentBuilder::new().user_agent(&format!("Feel the streets v{}", env!("CARGO_PKG_VERSION"))).build(),
+            agent: AgentBuilder::new()
+                .user_agent(&format!("Feel the streets v{}", env!("CARGO_PKG_VERSION")))
+                .build(),
         }
     }
 }

@@ -12,7 +12,7 @@ fn main() -> Result<()> {
         Box::new(ProcessOSMChangesTask)
     })?;
     worker.use_scheduler(scheduler);
-        info!("Scheduled jobs registered and scheduler set, about to run worker.");
+    info!("Scheduled jobs registered and scheduler set, about to run worker.");
     worker.run()?;
     Ok(())
 }

@@ -3,7 +3,7 @@ use crate::raw_object::{OSMObject as RawOSMObject, RelationMember, Tag};
 use crate::{Error, Result};
 use hashbrown::HashMap;
 use serde::{Deserialize, Serialize};
-use smol_str::{SmolStr, format_smolstr};
+use smol_str::{format_smolstr, SmolStr};
 use std::convert::TryFrom;
 use std::iter;
 use std::str::FromStr;
