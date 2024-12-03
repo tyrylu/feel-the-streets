@@ -20,5 +20,6 @@ thiserror = "2.0.3"
 hashbrown = { version = "0.15.2", features = ["serde"] }
 dirs-next = "2.0.0"
 base64 = "0.22.1"
-wkb = "0.7.1"
+wkb = "0.8.0"
 geo-types = "0.7.14"
+geo-traits = "0.2.0"

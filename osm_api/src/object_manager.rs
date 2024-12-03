@@ -340,9 +340,11 @@ impl OSMObjectManager {
     ) -> Result<Option<Vec<u8>>> {
         match self.get_geometry_of(object, object_bounds)? {
             None => Ok(None),
-            Some(geom) => Ok(Some(
-                wkb::geom_to_wkb(&geom).map_err(|e| Error::WKBWriteError(format!("{e:?}")))?,
-            )),
+            Some(geom) => {
+                let mut wkb_data = Vec::new();
+                wkb::writer::write_geometry(&mut wkb_data, &geom, wkb::Endianness::LittleEndian).map_err(|e| Error::WKBWriteError(format!("{e:?}")))?;
+                Ok(Some(wkb_data))
+             },
         }
     }
 

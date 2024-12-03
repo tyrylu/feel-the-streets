@@ -7,6 +7,7 @@ use crate::semantic_change::{RelationshipChange, SemanticChange};
 use crate::{entities_query::EntitiesQuery, entity_relationship::RootedEntityRelationship};
 use crate::{Error, Result};
 use base64::prelude::*;
+use geo_traits::to_geo::ToGeoGeometry;
 use log::{debug, error, info, trace, warn};
 use osm_api::SmolStr;
 use rusqlite::types::ToSql;
@@ -612,7 +613,7 @@ impl AreaDatabase {
         // Note that we support only little-endian WKB geometries.
         if geom[0] == 1 && geom[1] == 7 {
             let cloned_geom = geom.to_vec();
-            let parsed_geom = wkb::wkb_to_geom(&mut cloned_geom.as_slice()).unwrap();
+            let parsed_geom = wkb::reader::read_wkb(&mut cloned_geom.as_slice()).unwrap().to_geometry();
             if let geo_types::Geometry::GeometryCollection(coll) = parsed_geom {
                 let mut output_wkb = if coll.0.len() == 1 {
                     vec![]
@@ -623,8 +624,9 @@ impl AreaDatabase {
                     out
                 };
                 for part in coll {
-                    output_wkb
-                        .append(&mut self.make_valid_safe(&wkb::geom_to_wkb(&part).unwrap())?);
+                    let mut wkb_part = Vec::new();
+                    wkb::writer::write_geometry(&mut wkb_part, &part, wkb::Endianness::LittleEndian).unwrap();                     output_wkb
+                        .append(&mut self.make_valid_safe(&wkb_part)?);
                 }
                 trace!("Resulting collection after making valid: {:?}.", output_wkb);
                 Ok(output_wkb.into())

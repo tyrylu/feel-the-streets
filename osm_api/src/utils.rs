@@ -1,5 +1,6 @@
 use crate::object::OSMObject;
 use geo_types::{Coord, Geometry, LineString};
+use geo_traits::to_geo::ToGeoGeometry;
 use once_cell::sync::Lazy;
 use std::collections::HashMap;
 
@@ -122,6 +123,8 @@ pub(crate) fn unnest_geometry(geom: Geometry<f64>) -> Geometry<f64> {
 }
 
 pub fn unnest_wkb_geometry(mut geom: &[u8]) -> Vec<u8> {
-    let parsed = wkb::wkb_to_geom(&mut geom).expect("Unnest, could not parse geometry");
-    wkb::geom_to_wkb(&unnest_geometry(parsed)).expect("Unnest, could not write geometry")
+    let parsed = wkb::reader::read_wkb(&mut geom).expect("Unnest, could not parse geometry").to_geometry();
+    let mut raw_wkb = Vec::new();
+    wkb::writer::write_geometry(&mut raw_wkb, &unnest_geometry(parsed), wkb::Endianness::LittleEndian).expect("Unnest, could not write geometry");
+    raw_wkb
 }
