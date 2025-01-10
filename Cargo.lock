@@ -173,7 +173,7 @@ dependencies = [
  "bincode",
  "log",
  "serde",
- "thiserror 2.0.6",
+ "thiserror 2.0.10",
  "tiff",
  "ureq",
  "zip",
@@ -1621,7 +1621,7 @@ dependencies = [
  "sled",
  "smol_str",
  "tempfile",
- "thiserror 2.0.6",
+ "thiserror 2.0.10",
  "ureq",
  "wkb",
  "zstd_util",
@@ -1645,7 +1645,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_yaml",
- "thiserror 2.0.6",
+ "thiserror 2.0.10",
  "uom",
  "wkb",
  "zstd_util",
@@ -2021,7 +2021,7 @@ dependencies = [
  "log",
  "osm_db",
  "redis 0.27.6",
- "thiserror 2.0.6",
+ "thiserror 2.0.10",
 ]
 
 [[package]]
@@ -2282,7 +2282,7 @@ dependencies = [
  "serde",
  "serde_json",
  "tera",
- "thiserror 2.0.6",
+ "thiserror 2.0.10",
  "tokio",
  "tower-http",
  "tracing-subscriber",
@@ -2515,11 +2515,11 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
-version = "2.0.6"
+version = "2.0.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8fec2a1820ebd077e2b90c4df007bebf344cd394098a13c563957d0afc83ea47"
+checksum = "a3ac7f54ca534db81081ef1c1e7f6ea8a3ef428d2fc069097c079443d24124d3"
 dependencies = [
- "thiserror-impl 2.0.6",
+ "thiserror-impl 2.0.10",
 ]
 
 [[package]]
@@ -2535,9 +2535,9 @@ dependencies = [
 
 [[package]]
 name = "thiserror-impl"
-version = "2.0.6"
+version = "2.0.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d65750cab40f4ff1929fb1ba509e9914eb756131cef4210da8d5d700d26f6312"
+checksum = "9e9465d30713b56a37ede7185763c3492a91be2f5fa68d958c44e41ab9248beb"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3322,7 +3322,7 @@ dependencies = [
  "pbkdf2",
  "rand",
  "sha1",
- "thiserror 2.0.6",
+ "thiserror 2.0.10",
  "time",
  "zeroize",
  "zopfli",
