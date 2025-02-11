@@ -12,7 +12,7 @@ ureq = { version = "2.12.1", default-features = false, features = ["tls"] }
 log = "0.4.25"
 itertools = "0.14.0"
 regex = "1.11.1"
-once_cell = "1.20.2"
+once_cell = "1.20.3"
 chrono = { version = "0.4.39", default-features = false, features = ["std", "clock"] }
 tempfile = "3.16.0"
 bincode = "1.3.3"
