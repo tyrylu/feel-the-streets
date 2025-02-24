@@ -24,7 +24,7 @@ zstd_util = "0.1.4"
 crossbeam-channel = "0.5.14"
 sled = "0.34.7"
 quick-xml = {version="0.37.2", features=["serialize", "overlapped-lists"]}
-flate2 = "1.0.35"
+flate2 = "1.1.0"
 backon = "1.4.0"
 geo-traits = "0.2.0"
 
