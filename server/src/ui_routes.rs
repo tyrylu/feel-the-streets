@@ -87,5 +87,5 @@ pub async fn area_detail(
 pub fn routes() -> Router<AppState> {
     Router::new()
         .route("/areas", get(areas))
-        .route("/areas/:area_id", get(area_detail))
+        .route("/areas/{area_id}", get(area_detail))
 }

@@ -157,7 +157,7 @@ pub async fn osm_object_names() -> Result<Json<CacheMap>> {
 pub fn routes() -> Router<AppState> {
     Router::new()
         .route("/areas", get(areas).post(maybe_create_area))
-        .route("/areas/:area_osm_id/download", get(download_area))
+        .route("/areas/{area_osm_id}/download", get(download_area))
         .route("/ping", get(ping))
         .route("/motd", get(motd))
         .route("/create_client", post(create_client))
