@@ -22,7 +22,7 @@ async fn main() -> Result<()> {
     let app = Router::new()
         .nest_service("/static", ServeDir::new("static"))
         .nest("/api", api_routes::routes())
-        .nest("/", ui_routes::routes())
+        .merge(ui_routes::routes())
         .layer(TraceLayer::new_for_http())
         .with_state(state);
     let addr = "127.0.0.1:8000";
