@@ -10,6 +10,6 @@ serde = { version = "1.0.218", features = ["derive"] }
 thiserror = "2.0.12"
 tiff = "0.9.1"
 ureq = "2.12.1"
-zip = "2.2.2"
+zip = "2.2.3"
 zstd = "0.13.3"
 
