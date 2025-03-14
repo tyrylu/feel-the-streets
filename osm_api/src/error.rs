@@ -17,7 +17,9 @@ pub enum Error {
     #[error("WKB write error: {0}")]
     WKBWriteError(String),
     #[error("Serialization error: {0}")]
-    SerializationError(#[from] bincode::Error),
+    SerializationError(#[from] bincode::error::EncodeError),
+    #[error("Deserialization error: {0}")]
+    DeserializationError(#[from] bincode::error::DecodeError),
     #[error("Zstd operation error: {0}")]
     ZstdError(#[from] zstd_util::Error),
     #[error("Replication API error: {0}")]

@@ -1,9 +1,9 @@
 use crate::coordinate_ops::DEGREE_PER_PIXEL;
 use crate::Result;
-use serde::{Deserialize, Serialize};
+use bincode::{Decode, Encode};
 use std::io::Cursor;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Decode, Encode)]
 pub struct ElevationMap {
     pub(crate) origin_lat: f64,
     pub(crate) origin_lon: f64,
@@ -94,13 +94,13 @@ impl ElevationMap {
     }
 
     pub fn serialize(&self) -> Result<Vec<u8>> {
-        let data = bincode::serialize(self)?;
+        let data = bincode::encode_to_vec(self, bincode::config::legacy())?;
         let dest = zstd::encode_all(Cursor::new(data), 22)?;
         Ok(dest)
     }
 
     pub fn from_serialized(data: &[u8]) -> Result<Self> {
         let decompressed = zstd::decode_all(Cursor::new(data))?;
-        Ok(bincode::deserialize(&decompressed)?)
+        Ok(bincode::decode_from_slice(&decompressed, bincode::config::legacy())?.0)
     }
 }
