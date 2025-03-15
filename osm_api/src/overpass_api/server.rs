@@ -12,7 +12,8 @@ use std::sync::Arc;
 use std::thread;
 use std::time::Instant;
 use tempfile::tempfile;
-use ureq::{Agent, Request};
+use ureq::{Agent, RequestBuilder};
+use ureq::typestate::WithBody;
 
 static AVAILABLE_SLOTS_RE: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"^(\d+) slots available now.").unwrap());
@@ -22,10 +23,10 @@ static SLOT_AVAILABLE_AFTER_RE: Lazy<Regex> = Lazy::new(|| {
 static RATE_LIMIT_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^Rate limit: (\d+)").unwrap());
 
 fn query_executor(server: Server, query: ServerQuery, wake_sender: Sender<()>) {
-    let req = server.prepare_run_query();
     let try_run_query = || {
+        let req = server.prepare_run_query();
         run_query(
-            req.clone(),
+            req,
             &query.query,
             query.result_to_tempfile,
             &wake_sender,
@@ -49,7 +50,7 @@ fn query_executor(server: Server, query: ServerQuery, wake_sender: Sender<()>) {
 }
 
 fn run_query(
-    req: Request,
+    req: RequestBuilder<WithBody>,
     query: &str,
     result_to_tempfile: bool,
     wake_sender: &Sender<()>,
@@ -57,18 +58,18 @@ fn run_query(
     let start = Instant::now();
     debug!(
         "Calling interpreter endpoint {} with query {}",
-        req.url(),
+        req.uri_ref().unwrap(),
         query
     );
-    let resp = req.send_form(&[("data", query)])?;
+    let resp = req.send_form([("data", query)])?;
     debug!("Request successfully finished after {:?}.", start.elapsed());
     // Maybe wake the dispatcher
     wake_sender.send(()).unwrap();
     if !result_to_tempfile {
-        Ok(Box::new(resp.into_reader()))
+        Ok(Box::new(resp.into_body().into_reader()))
     } else {
         let mut file = tempfile()?;
-        io::copy(&mut resp.into_reader(), &mut file)?;
+        io::copy(&mut resp.into_body().into_reader(), &mut file)?;
         file.rewind()?;
         Ok(Box::new(file))
     }
@@ -161,7 +162,7 @@ struct Server {
 impl Server {
     fn new(url: &'static str) -> Self {
         Self {
-            agent: Agent::new(),
+            agent: ureq::agent(),
             url,
         }
     }
@@ -170,7 +171,8 @@ impl Server {
             .agent
             .get(&format!("{}/api/status", self.url))
             .call()?
-            .into_string()?)
+            .into_body()
+            .read_to_string()?)
     }
 
     fn get_api_status(&self) -> Result<ServerStatus> {
@@ -202,7 +204,7 @@ impl Server {
         Ok(status)
     }
 
-    fn prepare_run_query(&self) -> Request {
+    fn prepare_run_query(&self) -> RequestBuilder<WithBody> {
         let final_url = format!("{}/api/interpreter", self.url);
         self.agent.post(&final_url)
     }

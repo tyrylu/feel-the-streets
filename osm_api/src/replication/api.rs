@@ -5,7 +5,7 @@ use crate::raw_changeset::RawChangesets;
 use crate::Result;
 use flate2::read::GzDecoder;
 use std::io::BufReader;
-use ureq::{Agent, AgentBuilder};
+use ureq::{Agent, config::Config};
 
 const PLANET_REPLICATION_BASE: &str = "https://planet.openstreetmap.org/replication";
 
@@ -20,7 +20,8 @@ impl ReplicationApiClient {
                 .agent
                 .get(&format!("{PLANET_REPLICATION_BASE}/minute/state.txt"))
                 .call()?
-                .into_string()?,
+                .into_body()
+                .read_to_string()?,
         )?)
     }
 
@@ -32,6 +33,7 @@ impl ReplicationApiClient {
                     number.data_path()
                 ))
                 .call()?
+                .into_body()
                 .into_reader(),
         )))?;
         changes.try_into()
@@ -46,7 +48,8 @@ impl ReplicationApiClient {
                     number.state_path()
                 ))
                 .call()?
-                .into_string()?,
+                .into_body()
+                .read_to_string()?,
         )?)
     }
 
@@ -56,7 +59,8 @@ impl ReplicationApiClient {
                 .agent
                 .get(&format!("{PLANET_REPLICATION_BASE}/changesets/state.yaml"))
                 .call()?
-                .into_string()?,
+                .into_body()
+                .read_to_string()?,
         )?)
     }
 
@@ -68,6 +72,7 @@ impl ReplicationApiClient {
                     number.changesets_path()
                 ))
                 .call()?
+                .into_body()
                 .into_reader(),
         )))?;
         Ok(changes.changesets.into_iter().map(From::from).collect())
@@ -76,10 +81,10 @@ impl ReplicationApiClient {
 
 impl Default for ReplicationApiClient {
     fn default() -> Self {
-        Self {
-            agent: AgentBuilder::new()
-                .user_agent(&format!("Feel the streets v{}", env!("CARGO_PKG_VERSION")))
-                .build(),
-        }
+        let agent = Config::builder()
+        .user_agent(&format!("Feel the streets v{}", env!("CARGO_PKG_VERSION")))
+        .build()
+        .new_agent();
+        Self { agent }
     }
 }

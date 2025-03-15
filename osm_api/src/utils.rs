@@ -122,7 +122,7 @@ pub(crate) fn unnest_geometry(geom: Geometry<f64>) -> Geometry<f64> {
     }
 }
 
-pub fn unnest_wkb_geometry(mut geom: &[u8]) -> Vec<u8> {
+pub fn unnest_wkb_geometry(geom: &[u8]) -> Vec<u8> {
     let parsed = wkb::reader::read_wkb(geom)
         .expect("Unnest, could not parse geometry")
         .to_geometry();

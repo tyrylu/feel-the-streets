@@ -8,7 +8,7 @@ bincode = "2.0.1"
 log = "0.4.26"
 thiserror = "2.0.12"
 tiff = "0.9.1"
-ureq = "2.12.1"
+ureq = "3.0.9"
 zip = "2.2.3"
 zstd = "0.13.3"
 

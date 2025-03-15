@@ -1,12 +1,12 @@
 use crate::coordinate_ops::{get_pixel_ranges, ranges_length, RangeInfo};
 use crate::dataset_naming::{
-    tile_id_for, tile_id_from_archive_filename, tileset_id_for, tileset_url,
+    tile_id_for, tile_id_from_archive_filename, tileset_url,
 };
 use crate::elevation_map::ElevationMap;
 use crate::tile::Tile;
 use crate::Result;
 use log::{debug, info};
-use std::io::Cursor;
+use std::io::{Cursor, Read};
 use std::path::PathBuf;
 
 pub struct Dataset {
@@ -22,15 +22,15 @@ impl Dataset {
 
     fn ensure_has_tile_for(&self, latitude: f64, longitude: f64) -> Result<()> {
         let tile_id = tile_id_for(latitude, longitude);
-        let tileset_id = tileset_id_for(latitude, longitude);
         let tileset_url = tileset_url(latitude, longitude);
         let tile_path = self.storage_root.join(&tile_id).with_extension("ztif");
         if !tile_path.exists() {
             std::fs::create_dir_all(&self.storage_root)?;
             let tileset_resp = ureq::get(&tileset_url).call()?;
-            info!("Received request for tile {} which was missing from local storage, downloading containing tileset {} of size {} bytes.", tile_id, tileset_id, tileset_resp.header("Content-Length").unwrap());
-            let mut data = vec![];
-            tileset_resp.into_reader().read_to_end(&mut data)?;
+            let content_length = tileset_resp.body().content_length().unwrap();
+            info!("Received request for tile {} which was missing from local storage, downloading containing tileset of size {} bytes.", tile_id, content_length);
+            let mut data = Vec::with_capacity(content_length as usize);
+            tileset_resp.into_body().into_reader().read_to_end(&mut data)?;
             info!("Download completed, caching tileset.");
             let mut zip = zip::ZipArchive::new(Cursor::new(data))?;
             for name in 0..zip.len() {
