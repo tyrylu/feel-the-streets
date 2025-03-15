@@ -1,33 +1,34 @@
 use osm_db::ToSql;
 use pyo3::prelude::*;
+use pyo3::IntoPyObjectExt;
 use serde_json::Value;
 use std::collections::HashMap;
 use std::sync::Arc;
 
-pub fn convert_value(val: &Value, py: &Python) -> PyObject {
+pub fn convert_value(val: &Value, py: &Python) -> Py<PyAny> {
     match val {
-        Value::Bool(b) => (*b).into_py(*py),
-        Value::String(str) => str.into_py(*py),
+        Value::Bool(b) => (*b).into_py_any(*py).unwrap(),
+        Value::String(str) => str.into_py_any(*py).unwrap(),
         Value::Number(n) => {
             if n.is_i64() {
-                n.as_i64().unwrap().into_py(*py)
+                n.as_i64().unwrap().into_py_any(*py).unwrap()
             } else {
-                n.as_f64().unwrap().into_py(*py)
+                n.as_f64().unwrap().into_py_any(*py).unwrap()
             }
         }
         Value::Array(vals) => vals
             .iter()
             .map(|v| convert_value(v, py))
-            .collect::<Vec<PyObject>>()
-            .into_py(*py),
+            .collect::<Vec<Py<PyAny>>>()
+            .into_py_any(*py).unwrap(),
         Value::Object(o) => {
             let mut ret = HashMap::new();
             for (k, v) in o.iter() {
                 ret.insert(k, convert_value(v, py));
             }
-            ret.into_py(*py)
+            ret.into_py_any(*py).unwrap()
         }
-        Value::Null => py.None(),
+        Value::Null => py.None().into_py_any(*py).unwrap(),
     }
 }
 

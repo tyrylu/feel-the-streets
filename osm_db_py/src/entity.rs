@@ -25,7 +25,7 @@ impl PyEntity {
 
     #[getter]
     pub fn geometry(&self) -> PyObject {
-        Python::with_gil(|py| PyBytes::new_bound(py, &self.inner.geometry).into())
+        Python::with_gil(|py| PyBytes::new(py, &self.inner.geometry).into())
     }
 
     #[getter]
@@ -33,7 +33,7 @@ impl PyEntity {
         self.inner.discriminator.as_str()
     }
 
-    pub fn value_of_field(&mut self, key: &str) -> PyObject {
+    pub fn value_of_field(&mut self, key: &str) -> Py<PyAny> {
         Python::with_gil(|py| conversions::convert_value(self.inner.value_of_field(key), &py))
     }
 

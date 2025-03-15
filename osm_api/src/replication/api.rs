@@ -82,7 +82,7 @@ impl ReplicationApiClient {
 impl Default for ReplicationApiClient {
     fn default() -> Self {
         let agent = Config::builder()
-        .user_agent(&format!("Feel the streets v{}", env!("CARGO_PKG_VERSION")))
+        .user_agent(format!("Feel the streets v{}", env!("CARGO_PKG_VERSION")))
         .build()
         .new_agent();
         Self { agent }

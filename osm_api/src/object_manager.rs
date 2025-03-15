@@ -35,7 +35,7 @@ static ZSTD_CONTEXT: Lazy<Mutex<ZstdContext>> = Lazy::new(|| {
 type ObjectInArea = (SmolStr, Vec<u8>);
 
 fn serialize_and_compress(object: &OSMObject) -> Result<Vec<u8>> {
-    let serialized = bincode::serde::encode_to_vec(&object, bincode::config::legacy())?;
+    let serialized = bincode::serde::encode_to_vec(object, bincode::config::legacy())?;
     Ok(ZSTD_CONTEXT.lock().unwrap().compress(&serialized)?)
 }
 
