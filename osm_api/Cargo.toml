@@ -16,7 +16,7 @@ once_cell = "1.21.3"
 chrono = { version = "0.4.40", default-features = false, features = ["std", "clock"] }
 tempfile = "3.19.1"
 bincode = {version="2.0.1", features=["serde"]}
-hashbrown = { version = "0.15.2", features = ["serde"] }
+hashbrown = { version = "0.15.3", features = ["serde"] }
 wkb = "0.8.0"
 geo-types = "0.7.16"
 smol_str = { version = "0.3.2", features = ["serde"] }
