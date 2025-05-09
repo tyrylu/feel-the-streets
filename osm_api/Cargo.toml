@@ -26,6 +26,6 @@ sled = "0.34.7"
 quick-xml = {version="0.37.5", features=["serialize", "overlapped-lists"]}
 flate2 = "1.1.1"
 backon = "1.5.0"
-geo-traits = "0.2.0"
+geo-traits = "0.3.0"
 
 [features]

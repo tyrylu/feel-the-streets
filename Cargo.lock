@@ -889,6 +889,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "geo-traits"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2e7c353d12a704ccfab1ba8bfb1a7fe6cb18b665bf89d37f4f7890edcd260206"
+dependencies = [
+ "geo-types",
+]
+
+[[package]]
 name = "geo-types"
 version = "0.7.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1638,7 +1647,7 @@ dependencies = [
  "chrono",
  "crossbeam-channel",
  "flate2",
- "geo-traits",
+ "geo-traits 0.3.0",
  "geo-types",
  "hashbrown",
  "itertools",
@@ -1664,7 +1673,7 @@ dependencies = [
  "aw3d30",
  "base64",
  "dirs-next",
- "geo-traits",
+ "geo-traits 0.3.0",
  "geo-types",
  "hashbrown",
  "indexmap",
@@ -3272,7 +3281,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b1e2c084338d6407d24c5a43208aca32128a5d62107eab5ca18314395c4aa3f0"
 dependencies = [
  "byteorder",
- "geo-traits",
+ "geo-traits 0.2.0",
  "num_enum",
  "thiserror 1.0.69",
 ]
