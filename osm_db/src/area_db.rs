@@ -16,6 +16,7 @@ use std::borrow::Cow;
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::time::Instant;
+use wkb::writer as wkb_writer;
 
 const INIT_AREA_DB_SQL: &str = include_str!("init_area_db.sql");
 const INSERT_ENTITY_SQL: &str = "insert into entities (id, discriminator, geometry, effective_width, data) values (:id, :discriminator, geomFromWKB(:geometry, 4326), :effective_width, :data)";
@@ -627,10 +628,10 @@ impl AreaDatabase {
                 };
                 for part in coll {
                     let mut wkb_part = Vec::new();
-                    wkb::writer::write_geometry(
+                    wkb_writer::write_geometry(
                         &mut wkb_part,
                         &part,
-                        wkb::Endianness::LittleEndian,
+                        &wkb_writer::WriteOptions::default(),
                     )
                     .unwrap();
                     output_wkb.append(&mut self.make_valid_safe(&wkb_part)?);

@@ -3,6 +3,7 @@ use geo_traits::to_geo::ToGeoGeometry;
 use geo_types::{Coord, Geometry, LineString};
 use once_cell::sync::Lazy;
 use std::collections::HashMap;
+use wkb::writer as wkb_writer;
 
 const POLYGON_CRITERIA_STR: &str = include_str!("polygon_criteria.json");
 static POLYGON_CRITERIA: Lazy<Vec<PolygonCreationCriterion>> = Lazy::new(|| {
@@ -127,10 +128,10 @@ pub fn unnest_wkb_geometry(geom: &[u8]) -> Vec<u8> {
         .expect("Unnest, could not parse geometry")
         .to_geometry();
     let mut raw_wkb = Vec::new();
-    wkb::writer::write_geometry(
+    wkb_writer::write_geometry(
         &mut raw_wkb,
         &unnest_geometry(parsed),
-        wkb::Endianness::LittleEndian,
+        &wkb_writer::WriteOptions::default(),
     )
     .expect("Unnest, could not write geometry");
     raw_wkb

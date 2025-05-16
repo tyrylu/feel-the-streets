@@ -21,6 +21,7 @@ use std::fs;
 use std::io::{BufRead, BufReader, Read};
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
+use wkb::writer as wkb_writer;
 use zstd_util::ZstdContext;
 
 pub const ANY_TIME: Option<&DateTime<Utc>> = None;
@@ -342,7 +343,7 @@ impl OSMObjectManager {
             None => Ok(None),
             Some(geom) => {
                 let mut wkb_data = Vec::new();
-                wkb::writer::write_geometry(&mut wkb_data, &geom, wkb::Endianness::LittleEndian)
+                wkb_writer::write_geometry(&mut wkb_data, &geom, &wkb_writer::WriteOptions::default())
                     .map_err(|e| Error::WKBWriteError(format!("{e:?}")))?;
                 Ok(Some(wkb_data))
             }
