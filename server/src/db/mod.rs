@@ -6,17 +6,16 @@ use crate::Result;
 use osm_api::object::{OSMObject, OSMObjectType};
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::{BoundaryRect, SmolStr};
-use rusqlite::named_params;
+use rusqlite::{named_params, LoadExtensionGuard};
 pub use rusqlite::Connection;
 use std::collections::HashSet;
 
 pub fn connect_to_server_db() -> Result<Connection> {
     let conn = Connection::open("server.db")?;
     unsafe {
-        conn.load_extension_enable()?;
-        conn.load_extension("mod_spatialite", None)?;
+        let _guard = LoadExtensionGuard::new(&conn)?;
+        conn.load_extension("mod_spatialite", None::<&str>)?;
     }
-    conn.load_extension_disable()?;
     conn.execute("CREATE TABLE IF NOT EXISTS area_entities (area_id INTEGER, entity_id TEXT, PRIMARY KEY (area_id, entity_id))", [])?;
     conn.execute("CREATE TABLE IF NOT EXISTS entity_geometry_parts (entity_id TEXT, contained_entity_id TEXT, PRIMARY KEY (entity_id, contained_entity_id))", [])?;
     conn.execute("CREATE TABLE IF NOT EXISTS changesets (changeset_id INTEGER primary key, changesets_batch INTEGER, min_lat FLOAT, max_lat FLOAT, min_lon FLOAT, max_lon FLOAT)", [])?;
