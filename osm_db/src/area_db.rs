@@ -11,7 +11,7 @@ use geo_traits::to_geo::ToGeoGeometry;
 use log::{debug, error, info, trace, warn};
 use osm_api::SmolStr;
 use rusqlite::types::ToSql;
-use rusqlite::{named_params, params, Connection, OpenFlags, Row};
+use rusqlite::{named_params, params, Connection, LoadExtensionGuard, OpenFlags, Row};
 use std::borrow::Cow;
 use std::collections::HashMap;
 use std::path::PathBuf;
@@ -63,9 +63,8 @@ pub(crate) fn row_to_entity(row: &Row) -> core::result::Result<Entity, rusqlite:
 
 fn init_extensions(conn: &Connection) -> Result<()> {
     unsafe {
-        conn.load_extension_enable()?;
-        conn.load_extension("mod_spatialite", None)?;
-        conn.load_extension_disable()?;
+        let _guard = LoadExtensionGuard::new(conn)?;
+        conn.load_extension("mod_spatialite", None::<&str>)?;
     }
     Ok(())
 }
