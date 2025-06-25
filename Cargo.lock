@@ -2037,9 +2037,9 @@ dependencies = [
 
 [[package]]
 name = "redis"
-version = "0.32.1"
+version = "0.32.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c65f367b70919b9600eb6a77436dacd7131fc185cc3bda949a97ab27bfd6213e"
+checksum = "f2f6fd3fd5bb3a9a48819ae5cbad501968f208c1abd139649e7e2cf5d7f4b40b"
 dependencies = [
  "combine",
  "itoa",
@@ -2057,7 +2057,7 @@ version = "0.1.0"
 dependencies = [
  "log",
  "osm_db",
- "redis 0.32.1",
+ "redis 0.32.2",
  "thiserror 2.0.12",
 ]
 
