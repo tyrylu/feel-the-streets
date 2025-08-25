@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 bincode = "2.0.1"
 log = "0.4.27"
-thiserror = "2.0.14"
+thiserror = "2.0.16"
 tiff = "0.10.0"
 ureq = "3.0.12"
 zip = "4.3.0"
