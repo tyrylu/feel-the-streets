@@ -16,7 +16,7 @@ impl<'a> EntitiesQueryExecutor<'a> {
         }
     }
 
-    pub fn prepare_execute(&mut self, conn: &'a AreaDatabase) -> rusqlite::Result<Rows> {
+    pub fn prepare_execute(&mut self, conn: &'a AreaDatabase) -> rusqlite::Result<Rows<'_>> {
         debug!("About to execute query {}", self.query.to_query_sql());
         self.statement = Some(conn.conn.prepare_cached(&self.query.to_query_sql())?);
         let orig_params = self.query.to_query_params();

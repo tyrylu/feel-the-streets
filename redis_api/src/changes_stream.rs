@@ -205,7 +205,7 @@ impl ChangesStream {
         Ok(removed)
     }
 
-    pub fn begin_batch(&mut self) -> ChangesBatch {
+    pub fn begin_batch(&mut self) -> ChangesBatch<'_> {
         ChangesBatch::for_stream(self)
     }
 

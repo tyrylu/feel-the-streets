@@ -115,7 +115,7 @@ impl OSMObjectManager {
         })
     }
 
-    pub fn get_ids_retrieved_from_network(&self) -> Ref<HashSet<SmolStr>> {
+    pub fn get_ids_retrieved_from_network(&self) -> Ref<'_, HashSet<SmolStr>> {
         self.retrieved_from_network.borrow()
     }
 
@@ -638,7 +638,7 @@ impl OSMObjectManager {
         if polys.len() == 1 {
             Ok(Some(polys[0].clone().into()))
         } else if polys.is_empty() {
-            return Ok(None);
+            Ok(None)
         } else {
             Ok(Some(Geometry::GeometryCollection(polys.into())))
         }

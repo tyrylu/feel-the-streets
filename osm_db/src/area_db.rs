@@ -603,7 +603,7 @@ impl AreaDatabase {
         Ok(results)
     }
 
-    pub fn make_geometry_valid<'a>(&'a self, geom: &'a [u8]) -> Result<Cow<[u8]>> {
+    pub fn make_geometry_valid<'a>(&'a self, geom: &'a [u8]) -> Result<Cow<'a, [u8]>> {
         // We don't want to introduce a mutable reference for a simple parsing, and we don't represent geometries as typed objects, so that's the reason for this check.
         trace!("Making geometry {:?} valid.", geom);
         if self.geometry_is_valid(geom)? {
