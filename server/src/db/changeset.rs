@@ -10,8 +10,6 @@ pub struct InsertableChangeset {
 }
 
 pub(crate) struct Changeset {
-    pub id: u32,
-    pub batch: u32,
     pub bounds: BoundaryRect,
 }
 

@@ -205,8 +205,6 @@ pub(crate) fn get_changeset(conn: &Connection, changeset_id: u64) -> Result<Opti
     let mut rows = stmt.query([changeset_id])?;
     if let Some(row) = rows.next()? {
         Ok(Some(Changeset {
-            id: row.get_unwrap(0),
-            batch: row.get_unwrap(1),
             bounds: BoundaryRect {
                 min_x: row.get_unwrap(4),
                 min_y: row.get_unwrap(2),
