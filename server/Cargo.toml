@@ -5,7 +5,7 @@ authors = ["Lukáš Tyrychtr <lukastyrychtr@gmail.com>"]
 edition = "2021"
 
 [dependencies]
-log = "0.4.27"
+log = "0.4.28"
 aw3d30 = {path="../aw3d30"}
 osm_db = {path="../osm_db"}
 osm_api = {path="../osm_api"}
