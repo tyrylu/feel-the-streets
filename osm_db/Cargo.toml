@@ -16,7 +16,7 @@ once_cell = "1.21.3"
 log = "0.4.28"
 uom = "0.37.0"
 rusqlite = { "version" = "~0.37", "features" = ["bundled-windows", "load_extension"] }
-thiserror = "2.0.16"
+thiserror = "2.0.17"
 hashbrown = { version = "0.16.0", features = ["serde"] }
 dirs-next = "2.0.0"
 base64 = "0.22.1"
