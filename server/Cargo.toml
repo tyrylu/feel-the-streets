@@ -18,7 +18,7 @@ dotenvy = "0.15.7"
 base64 = "0.22.1"
 doitlater = "0.4.0"
 redis_api = {path = "../redis_api"}
-axum = "0.8.4"
+axum = "0.8.6"
 tera = "1.20.0"
 axum-extra = { version = "0.10.1", features = ["async-read-body"] }
 tokio = { version = "1.47.1", features = ["fs", "macros", "rt", "rt-multi-thread"] }
