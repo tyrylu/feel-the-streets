@@ -150,7 +150,7 @@ version = "0.1.0"
 dependencies = [
  "bincode",
  "log",
- "thiserror 2.0.16",
+ "thiserror 2.0.17",
  "tiff",
  "ureq",
  "zip",
@@ -704,7 +704,7 @@ dependencies = [
  "log",
  "redis",
  "serde",
- "thiserror 2.0.16",
+ "thiserror 2.0.17",
  "typetag",
 ]
 
@@ -1661,7 +1661,7 @@ dependencies = [
  "sled",
  "smol_str",
  "tempfile",
- "thiserror 2.0.16",
+ "thiserror 2.0.17",
  "ureq",
  "wkb",
  "zstd_util",
@@ -1685,7 +1685,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_yaml",
- "thiserror 2.0.16",
+ "thiserror 2.0.17",
  "uom",
  "wkb",
  "zstd_util",
@@ -1759,7 +1759,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1db05f56d34358a8b1066f67cbb203ee3e7ed2ba674a6263a1d5ec6db2204323"
 dependencies = [
  "memchr",
- "thiserror 2.0.16",
+ "thiserror 2.0.17",
  "ucd-trie",
 ]
 
@@ -2063,7 +2063,7 @@ dependencies = [
  "log",
  "osm_db",
  "redis",
- "thiserror 2.0.16",
+ "thiserror 2.0.17",
 ]
 
 [[package]]
@@ -2331,7 +2331,7 @@ dependencies = [
  "serde",
  "serde_json",
  "tera",
- "thiserror 2.0.16",
+ "thiserror 2.0.17",
  "tokio",
  "tower-http",
  "tracing-subscriber",
@@ -2548,11 +2548,11 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
-version = "2.0.16"
+version = "2.0.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3467d614147380f2e4e374161426ff399c91084acd2363eaf549172b3d5e60c0"
+checksum = "f63587ca0f12b72a0600bcba1d40081f830876000bb46dd2337a3051618f4fc8"
 dependencies = [
- "thiserror-impl 2.0.16",
+ "thiserror-impl 2.0.17",
 ]
 
 [[package]]
@@ -2568,9 +2568,9 @@ dependencies = [
 
 [[package]]
 name = "thiserror-impl"
-version = "2.0.16"
+version = "2.0.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6c5e1be1c48b9172ee610da68fd9cd2770e7a4056cb3fc98710ee6906f0c7960"
+checksum = "3ff15c8ecd7de3849db632e14d18d2571fa09dfc5ed93479bc4485c7a517c913"
 dependencies = [
  "proc-macro2",
  "quote",
