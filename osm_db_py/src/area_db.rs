@@ -33,7 +33,7 @@ impl PyAreaDatabase {
     }
 
     pub fn get_entities(&self, py: Python, query: &PyEntitiesQuery) -> PyResult<Vec<PyEntity>> {
-        py.allow_threads(
+        py.detach(
             move || match self.inner.lock().unwrap().get_entities(&query.inner) {
                 Ok(res) => Ok(res.into_iter().map(|e| PyEntity { inner: e }).collect()),
                 Err(e) => Err(exceptions::PyValueError::new_err(format!(

@@ -30,8 +30,8 @@ impl DictChange {
     }
 
     #[getter]
-    fn new_value(&self) -> Option<PyObject> {
-        Python::with_gil(|py| match &self.inner {
+    fn new_value(&self, py: Python) -> Option<Py<PyAny>> {
+        match &self.inner {
             EntryChange::Create { value, .. } => {
                 Some(crate::conversions::convert_value(value, &py))
             }
@@ -39,16 +39,16 @@ impl DictChange {
                 Some(crate::conversions::convert_value(new_value, &py))
             }
             EntryChange::Remove { .. } => None,
-        })
+        }
     }
     #[getter]
-    fn old_value(&self) -> Option<PyObject> {
-        Python::with_gil(|py| match &self.inner {
+    fn old_value(&self, py: Python) -> Option<Py<PyAny>> {
+        match &self.inner {
             EntryChange::Update { old_value, .. } => {
                 Some(crate::conversions::convert_value(old_value, &py))
             }
             EntryChange::Create { .. } | EntryChange::Remove { .. } => None,
-        })
+        }
     }
 }
 

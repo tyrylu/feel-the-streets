@@ -660,7 +660,7 @@ impl OSMObjectManager {
         self.cache_objects_from(readable, true)
     }
 
-    pub fn cached_objects(&self) -> Box<dyn (Iterator<Item = OSMObject>)> {
+    pub fn cached_objects(&self) -> Box<dyn Iterator<Item = OSMObject>> {
         Box::new(
             self.cache
                 .iter()

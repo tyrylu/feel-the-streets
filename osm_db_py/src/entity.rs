@@ -24,8 +24,8 @@ impl PyEntity {
     }
 
     #[getter]
-    pub fn geometry(&self) -> PyObject {
-        Python::with_gil(|py| PyBytes::new(py, &self.inner.geometry).into())
+    pub fn geometry<'py>(&self, py: Python<'py>) -> Bound<'py, PyBytes> {
+        PyBytes::new(py, &self.inner.geometry)
     }
 
     #[getter]
@@ -33,8 +33,8 @@ impl PyEntity {
         self.inner.discriminator.as_str()
     }
 
-    pub fn value_of_field(&mut self, key: &str) -> Py<PyAny> {
-        Python::with_gil(|py| conversions::convert_value(self.inner.value_of_field(key), &py))
+    pub fn value_of_field(&mut self, key: &str, py: Python) -> Py<PyAny> {
+        conversions::convert_value(self.inner.value_of_field(key), &py)
     }
 
     pub fn defined_field_names(&mut self) -> Vec<&String> {

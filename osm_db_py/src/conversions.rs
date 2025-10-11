@@ -33,7 +33,7 @@ pub fn convert_value(val: &Value, py: &Python) -> Py<PyAny> {
 }
 
 pub fn convert_object_for_query(
-    obj: &PyObject,
+    obj: &Py<PyAny>,
     py: Python,
 ) -> Option<Arc<dyn ToSql + Send + Sync>> {
     if let Ok(val) = obj.extract::<String>(py) {

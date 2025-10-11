@@ -16,7 +16,7 @@ impl FieldNamed {
         FieldNamed { name }
     }
 
-    pub fn eq(&self, val: PyObject, py: Python) -> PyResult<PyFieldCondition> {
+    pub fn eq(&self, val: Py<PyAny>, py: Python) -> PyResult<PyFieldCondition> {
         if let Some(converted) = conversions::convert_object_for_query(&val, py) {
             Ok(PyFieldCondition::new(FieldCondition::new(
                 self.name.clone(),
@@ -29,7 +29,7 @@ impl FieldNamed {
         }
     }
 
-    pub fn neq(&self, val: PyObject, py: Python) -> PyResult<PyFieldCondition> {
+    pub fn neq(&self, val: Py<PyAny>, py: Python) -> PyResult<PyFieldCondition> {
         if let Some(converted) = conversions::convert_object_for_query(&val, py) {
             Ok(PyFieldCondition::new(FieldCondition::new(
                 self.name.clone(),
@@ -41,7 +41,8 @@ impl FieldNamed {
             ))
         }
     }
-    pub fn lt(&self, val: PyObject, py: Python) -> PyResult<PyFieldCondition> {
+
+    pub fn lt(&self, val: Py<PyAny>, py: Python) -> PyResult<PyFieldCondition> {
         if let Some(converted) = conversions::convert_object_for_query(&val, py) {
             Ok(PyFieldCondition::new(FieldCondition::new(
                 self.name.clone(),
@@ -54,7 +55,7 @@ impl FieldNamed {
         }
     }
 
-    pub fn le(&self, val: PyObject, py: Python) -> PyResult<PyFieldCondition> {
+    pub fn le(&self, val: Py<PyAny>, py: Python) -> PyResult<PyFieldCondition> {
         if let Some(converted) = conversions::convert_object_for_query(&val, py) {
             Ok(PyFieldCondition::new(FieldCondition::new(
                 self.name.clone(),
@@ -66,7 +67,8 @@ impl FieldNamed {
             ))
         }
     }
-    pub fn gt(&self, val: PyObject, py: Python) -> PyResult<PyFieldCondition> {
+
+    pub fn gt(&self, val: Py<PyAny>, py: Python) -> PyResult<PyFieldCondition> {
         if let Some(converted) = conversions::convert_object_for_query(&val, py) {
             Ok(PyFieldCondition::new(FieldCondition::new(
                 self.name.clone(),
@@ -78,7 +80,8 @@ impl FieldNamed {
             ))
         }
     }
-    pub fn ge(&self, val: PyObject, py: Python) -> PyResult<PyFieldCondition> {
+
+    pub fn ge(&self, val: Py<PyAny>, py: Python) -> PyResult<PyFieldCondition> {
         if let Some(converted) = conversions::convert_object_for_query(&val, py) {
             Ok(PyFieldCondition::new(FieldCondition::new(
                 self.name.clone(),
@@ -90,7 +93,8 @@ impl FieldNamed {
             ))
         }
     }
-    pub fn like(&self, val: PyObject, py: Python) -> PyResult<PyFieldCondition> {
+
+    pub fn like(&self, val: Py<PyAny>, py: Python) -> PyResult<PyFieldCondition> {
         if let Some(converted) = conversions::convert_object_for_query(&val, py) {
             Ok(PyFieldCondition::new(FieldCondition::new(
                 self.name.clone(),
@@ -102,9 +106,11 @@ impl FieldNamed {
             ))
         }
     }
+
     pub fn is_null(&self) -> PyFieldCondition {
         PyFieldCondition::new(FieldCondition::new(self.name.clone(), Condition::IsNull))
     }
+
     pub fn is_not_null(&self) -> PyFieldCondition {
         PyFieldCondition::new(FieldCondition::new(self.name.clone(), Condition::IsNotNull))
     }
