@@ -343,8 +343,12 @@ impl OSMObjectManager {
             None => Ok(None),
             Some(geom) => {
                 let mut wkb_data = Vec::new();
-                wkb_writer::write_geometry(&mut wkb_data, &geom, &wkb_writer::WriteOptions::default())
-                    .map_err(|e| Error::WKBWriteError(format!("{e:?}")))?;
+                wkb_writer::write_geometry(
+                    &mut wkb_data,
+                    &geom,
+                    &wkb_writer::WriteOptions::default(),
+                )
+                .map_err(|e| Error::WKBWriteError(format!("{e:?}")))?;
                 Ok(Some(wkb_data))
             }
         }

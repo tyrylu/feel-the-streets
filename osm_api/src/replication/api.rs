@@ -5,7 +5,7 @@ use crate::raw_changeset::RawChangesets;
 use crate::Result;
 use flate2::read::GzDecoder;
 use std::io::BufReader;
-use ureq::{Agent, config::Config};
+use ureq::{config::Config, Agent};
 
 const PLANET_REPLICATION_BASE: &str = "https://planet.openstreetmap.org/replication";
 
@@ -82,9 +82,9 @@ impl ReplicationApiClient {
 impl Default for ReplicationApiClient {
     fn default() -> Self {
         let agent = Config::builder()
-        .user_agent(format!("Feel the streets v{}", env!("CARGO_PKG_VERSION")))
-        .build()
-        .new_agent();
+            .user_agent(format!("Feel the streets v{}", env!("CARGO_PKG_VERSION")))
+            .build()
+            .new_agent();
         Self { agent }
     }
 }

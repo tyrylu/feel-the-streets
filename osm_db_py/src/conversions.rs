@@ -20,7 +20,8 @@ pub fn convert_value(val: &Value, py: &Python) -> Py<PyAny> {
             .iter()
             .map(|v| convert_value(v, py))
             .collect::<Vec<Py<PyAny>>>()
-            .into_py_any(*py).unwrap(),
+            .into_py_any(*py)
+            .unwrap(),
         Value::Object(o) => {
             let mut ret = HashMap::new();
             for (k, v) in o.iter() {

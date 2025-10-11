@@ -1,7 +1,5 @@
 use crate::coordinate_ops::{get_pixel_ranges, ranges_length, RangeInfo};
-use crate::dataset_naming::{
-    tile_id_for, tile_id_from_archive_filename, tileset_url,
-};
+use crate::dataset_naming::{tile_id_for, tile_id_from_archive_filename, tileset_url};
 use crate::elevation_map::ElevationMap;
 use crate::tile::Tile;
 use crate::Result;
@@ -30,7 +28,10 @@ impl Dataset {
             let content_length = tileset_resp.body().content_length().unwrap();
             info!("Received request for tile {} which was missing from local storage, downloading containing tileset of size {} bytes.", tile_id, content_length);
             let mut data = Vec::with_capacity(content_length as usize);
-            tileset_resp.into_body().into_reader().read_to_end(&mut data)?;
+            tileset_resp
+                .into_body()
+                .into_reader()
+                .read_to_end(&mut data)?;
             info!("Download completed, caching tileset.");
             let mut zip = zip::ZipArchive::new(Cursor::new(data))?;
             for name in 0..zip.len() {

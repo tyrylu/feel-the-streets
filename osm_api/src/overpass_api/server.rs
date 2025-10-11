@@ -12,8 +12,8 @@ use std::sync::Arc;
 use std::thread;
 use std::time::Instant;
 use tempfile::tempfile;
-use ureq::{Agent, RequestBuilder};
 use ureq::typestate::WithBody;
+use ureq::{Agent, RequestBuilder};
 
 static AVAILABLE_SLOTS_RE: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"^(\d+) slots available now.").unwrap());
@@ -25,12 +25,7 @@ static RATE_LIMIT_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^Rate limit: (\d+)
 fn query_executor(server: Server, query: ServerQuery, wake_sender: Sender<()>) {
     let try_run_query = || {
         let req = server.prepare_run_query();
-        run_query(
-            req,
-            &query.query,
-            query.result_to_tempfile,
-            &wake_sender,
-        )
+        run_query(req, &query.query, query.result_to_tempfile, &wake_sender)
     };
     let ret = try_run_query
         .retry(ExponentialBuilder::default())

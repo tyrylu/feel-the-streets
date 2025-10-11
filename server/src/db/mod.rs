@@ -6,8 +6,8 @@ use crate::Result;
 use osm_api::object::{OSMObject, OSMObjectType};
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::{BoundaryRect, SmolStr};
-use rusqlite::{named_params, LoadExtensionGuard};
 pub use rusqlite::Connection;
+use rusqlite::{named_params, LoadExtensionGuard};
 use std::collections::HashSet;
 
 pub fn connect_to_server_db() -> Result<Connection> {
