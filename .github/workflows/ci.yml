@@ -85,19 +85,19 @@ jobs:
       run: cp target/release/*.exe to_deploy
     - name: Upload Windows artifacts
       if: runner.os == 'Windows'  
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: to_deploy_windows
         path: to_deploy
     - name: Upload Linux artifacts
       if: runner.os == 'Linux' && runner.arch != 'ARM64'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: to_deploy_linux
         path: to_deploy
     - name: Upload Python app binary
       if: runner.os == 'Windows'  
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: fts_app
         path: dist/fts
