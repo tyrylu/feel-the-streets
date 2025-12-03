@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 bincode = "2.0.1"
-log = "0.4.28"
+log = "0.4.29"
 thiserror = "2.0.17"
 tiff = "0.10.3"
 ureq = "3.1.4"
