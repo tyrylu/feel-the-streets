@@ -29,12 +29,12 @@ pub(crate) fn fill_cache_with_missing_changesets(
             let changeset = InsertableChangeset::from(api_changeset);
             db::insert_or_update_changeset(&conn, &changeset, batch)?;
         }
+        state_tracking::save_latest_sequence_number(STATE_FILE, batch)?;
         info!(
             "Inserted {} changesets from changesets batch {}.",
             num_changesets, batch
         );
     }
-    state_tracking::save_latest_sequence_number(STATE_FILE, to_batch.0)?;
     info!("Finished filling changesets cache.");
     Ok(())
 }
