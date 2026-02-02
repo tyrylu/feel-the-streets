@@ -21,13 +21,15 @@ pub enum ChangeType {
 }
 
 #[pymodule]
-fn osm_db(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    #[pyfn(m)]
+mod osm_db {
+    use super::*;
+
+    #[pyfunction]
     pub fn all_known_discriminators() -> Vec<&'static String> {
         ::osm_db::entity_metadata::all_known_discriminators()
     }
 
-    #[pyfn(m)]
+    #[pyfunction]
     fn init_logging(py: Python, level: &str) -> PyResult<()> {
         let filter = log::LevelFilter::from_str(level).map_err(|e| {
             PyRuntimeError::new_err(format!(
@@ -43,16 +45,27 @@ fn osm_db(m: &Bound<'_, PyModule>) -> PyResult<()> {
             })?;
         Ok(())
     }
-    m.add_class::<ChangeType>()?;
-    m.add_class::<semantic_change::PySemanticChange>()?;
-    m.add_class::<dict_change::DictChange>()?;
-    m.add_class::<entity::PyEntity>()?;
-    m.add_class::<entity_metadata::PyEntityMetadata>()?;
-    m.add_class::<entity_metadata::PyField>()?;
-    m.add_class::<entity_metadata::PyEnum>()?;
-    m.add_class::<entities_query::PyEntitiesQuery>()?;
-    m.add_class::<field_condition::PyFieldCondition>()?;
-    m.add_class::<field_named::FieldNamed>()?;
-    m.add_class::<area_db::PyAreaDatabase>()?;
-    Ok(())
+
+    #[pymodule_export]
+    use super::ChangeType;
+    #[pymodule_export]
+    use semantic_change::PySemanticChange;
+    #[pymodule_export]
+    use dict_change::DictChange;
+    #[pymodule_export]
+    use entity::PyEntity;
+    #[pymodule_export]
+    use entity_metadata::PyEntityMetadata;
+    #[pymodule_export]
+    use entity_metadata::PyField;
+    #[pymodule_export]
+    use entity_metadata::PyEnum;
+    #[pymodule_export]
+    use entities_query::PyEntitiesQuery;
+    #[pymodule_export]
+    use field_condition::PyFieldCondition;
+    #[pymodule_export]
+    use field_named::FieldNamed;
+    #[pymodule_export]
+    use area_db::PyAreaDatabase;
 }

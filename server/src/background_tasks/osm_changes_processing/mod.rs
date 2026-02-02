@@ -65,6 +65,7 @@ pub fn process_osm_changes(initial_sn: u32) -> Result<u32> {
         DateTime::parse_from_rfc3339(&db::newest_osm_object_timestamp(&server_db)?)?;
     for sn in initial_sn..=latest_state.sequence_number.0 {
         process_osm_change(sn, &r_client, &manager, &server_db, &newest_timestamp)?;
+        
     }
     Ok(latest_state.sequence_number.0)
 }
@@ -79,7 +80,7 @@ fn process_osm_change(
     let number = SequenceNumber::from_u32(sn)?;
     let info = r_client.get_changes_batch_info(&number)?;
     if info.timestamp <= *newest_timestamp {
-        info!("Not processing changes batch {}, it is too old.", sn);
+        info!("Not processing changes batch {}, it is from {}, but our newest timestamp is {}.", sn, info.timestamp, newest_timestamp);
         return Ok(());
     }
     // Ignore a change which is not at least a minute old, because otherwise we already applyed it when creating the area.

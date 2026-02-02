@@ -156,16 +156,16 @@ impl EntitiesQuery {
         for (idx, discriminator) in self.excluded_discriminators.iter().enumerate() {
             params.push((format!(":excluded_discriminator{idx}"), discriminator));
         }
-        if self.child_id.is_some() {
-            params.push((":parent_id".to_string(), self.child_id.as_ref().unwrap()));
+        if let Some(id) = &self.child_id {
+            params.push((":parent_id".to_string(), id));
         }
-        if self.parent_id.is_some() {
-            params.push((":child_id".to_string(), self.parent_id.as_ref().unwrap()));
+        if let Some(id) = &self.parent_id {
+            params.push((":child_id".to_string(), id));
         }
-        if self.relationship_kind.is_some() {
+        if let Some(kind) = &self.relationship_kind {
             params.push((
                 ":relationship_kind".to_string(),
-                self.relationship_kind.as_ref().unwrap(),
+                kind,
             ));
         }
         for (idx, condition) in self.conditions.iter().enumerate() {
