@@ -25,10 +25,10 @@ pub struct Servers {
 impl Default for Servers {
     fn default() -> Self {
         Self::with_server_urls(vec![
-            "https://z.overpass-api.de",
-            "https://lz4.overpass-api.de",
-            "https://overpass.kumi.systems",
-            // "https://maps.mail.ru/osm/tools/overpass",
+            "https://overpass-api.de",
+            "https://overpass.private.coffee",
+            "https://overpass.osm.jp",
+            "https://maps.mail.ru/osm/tools/overpass",
         ])
     }
 }
