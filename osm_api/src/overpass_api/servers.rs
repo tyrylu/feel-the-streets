@@ -49,7 +49,7 @@ impl Servers {
     }
 
     pub fn run_query(&self, query: &str, result_to_tempfile: bool) -> Result<Box<dyn Read + Send>> {
-        for retry in 0..00 {
+        for retry in 0..100 {
             let (tx, rx) = crossbeam_channel::bounded(1);
             self.commands_sender
                 .send(ServerQuery {
