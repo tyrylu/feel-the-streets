@@ -38,7 +38,7 @@ static ZSTD_CONTEXT: Lazy<Mutex<ZstdContext>> = Lazy::new(|| {
 type ObjectInArea = (SmolStr, Vec<u8>);
 
 fn serialize_and_compress(object: &OSMObject) -> Result<Vec<u8>> {
-    let serialized = bincode::serde::encode_to_vec(object, bincode::config::legacy())?;
+    let serialized = bitcode::serialize(object)?;
     Ok(ZSTD_CONTEXT.lock().unwrap().compress(&serialized)?)
 }
 
@@ -57,7 +57,7 @@ pub fn open_cache(past_time: Option<&DateTime<impl TimeZone>>) -> Result<Databas
 
 fn deserialize_compressed(compressed: &[u8]) -> Result<OSMObject> {
     let serialized = ZSTD_CONTEXT.lock().unwrap().decompress(compressed)?;
-    Ok(bincode::serde::decode_from_slice(&serialized, bincode::config::legacy())?.0)
+    Ok(bitcode::deserialize(&serialized)?)
 }
 
 fn translate_type_shortcut(shortcut: char) -> &'static str {

@@ -1567,7 +1567,7 @@ name = "osm_api"
 version = "0.2.0"
 dependencies = [
  "backon",
- "bincode",
+ "bitcode",
  "chrono",
  "crossbeam-channel",
  "flate2",

@@ -24,10 +24,8 @@ pub enum Error {
     HttpError(Box<ureq::Error>),
     #[error("WKB write error: {0}")]
     WKBWriteError(String),
-    #[error("Serialization error: {0}")]
-    SerializationError(#[from] bincode::error::EncodeError),
     #[error("Deserialization error: {0}")]
-    DeserializationError(#[from] bincode::error::DecodeError),
+    DeserializationError(#[from] bitcode::Error),
     #[error("Zstd operation error: {0}")]
     ZstdError(#[from] zstd_util::Error),
     #[error("Replication API error: {0}")]
