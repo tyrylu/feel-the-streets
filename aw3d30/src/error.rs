@@ -9,9 +9,7 @@ pub enum Error {
     #[error("Tiff error: {0}")]
     Tiff(#[from] tiff::TiffError),
     #[error("Map serialization error: {0}")]
-    MapSerialization(#[from] bincode::error::EncodeError),
-    #[error("Map deserialization error: {0}")]
-    MapDeserialization(#[from] bincode::error::DecodeError),
+    MapSerialization(#[from] bitcode::Error),
     #[error("Invalid archive filename {0}")]
     InvalidArchiveFilename(String),
     #[error("Unexpected pixel format")]

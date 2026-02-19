@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-bincode = "2.0.1"
+bitcode = "0.6.9"
 log = "0.4.29"
 thiserror = "2.0.18"
 tiff = "0.11.3"
