@@ -49,23 +49,23 @@ mod osm_db {
     #[pymodule_export]
     use super::ChangeType;
     #[pymodule_export]
-    use semantic_change::PySemanticChange;
+    use area_db::PyAreaDatabase;
     #[pymodule_export]
     use dict_change::DictChange;
+    #[pymodule_export]
+    use entities_query::PyEntitiesQuery;
     #[pymodule_export]
     use entity::PyEntity;
     #[pymodule_export]
     use entity_metadata::PyEntityMetadata;
     #[pymodule_export]
-    use entity_metadata::PyField;
-    #[pymodule_export]
     use entity_metadata::PyEnum;
     #[pymodule_export]
-    use entities_query::PyEntitiesQuery;
+    use entity_metadata::PyField;
     #[pymodule_export]
     use field_condition::PyFieldCondition;
     #[pymodule_export]
     use field_named::FieldNamed;
     #[pymodule_export]
-    use area_db::PyAreaDatabase;
+    use semantic_change::PySemanticChange;
 }

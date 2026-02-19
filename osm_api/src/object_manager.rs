@@ -11,8 +11,8 @@ use itertools::Itertools;
 use log::{debug, info, trace, warn};
 use once_cell::sync::Lazy;
 use quick_xml::de::Deserializer;
-use serde::Deserialize;
 use redb::{Database, ReadableDatabase, ReadableTable, TableDefinition};
+use serde::Deserialize;
 
 const OBJECTS_TABLE: TableDefinition<&str, &[u8]> = TableDefinition::new("osm_objects");
 use smol_str::{format_smolstr, SmolStr};
@@ -44,7 +44,10 @@ fn serialize_and_compress(object: &OSMObject) -> Result<Vec<u8>> {
 
 pub fn open_cache(past_time: Option<&DateTime<impl TimeZone>>) -> Result<Database> {
     let cache_path = if let Some(time) = past_time {
-        format!("entities_cache_{}.redb", time.with_timezone(&Utc).timestamp())
+        format!(
+            "entities_cache_{}.redb",
+            time.with_timezone(&Utc).timestamp()
+        )
     } else {
         "entities_cache.redb".to_string()
     };
@@ -660,8 +663,6 @@ impl OSMObjectManager {
             Ok(Some(Geometry::GeometryCollection(polys.into())))
         }
     }
-
-
 
     pub fn get_area_parents(&self, area_id: i64) -> Result<Vec<OSMObject>> {
         // We're intentionally ignoring the past time, as this query times out with any past time value, and these areas will most likely be valid in our timeframes.

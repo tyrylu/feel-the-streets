@@ -163,10 +163,7 @@ impl EntitiesQuery {
             params.push((":child_id".to_string(), id));
         }
         if let Some(kind) = &self.relationship_kind {
-            params.push((
-                ":relationship_kind".to_string(),
-                kind,
-            ));
+            params.push((":relationship_kind".to_string(), kind));
         }
         for (idx, condition) in self.conditions.iter().enumerate() {
             if let Some(mut vals) = condition.to_param_values(idx) {

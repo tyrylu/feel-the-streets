@@ -48,4 +48,4 @@ impl From<redb::TransactionError> for Error {
     fn from(value: redb::TransactionError) -> Self {
         Error::DiskCacheTransactionError(Box::new(value))
     }
-}   
+}
