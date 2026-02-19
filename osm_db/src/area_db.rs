@@ -110,7 +110,13 @@ impl AreaDatabase {
         init_extensions(&conn)?;
         let mut db = AreaDatabase::common_construct(conn)?;
         if let Some(map_data) = db.get_elevation_map()? {
-            db.elevation_map = Some(ElevationMap::from_serialized(&map_data)?);
+            
+            if let Ok(map) = ElevationMap::from_serialized(&map_data) {
+                db.elevation_map = Some(map);
+            }
+            else {
+                warn!("Failed to load elevation map for area {}.", area);
+            }
         }
         Ok(db)
     }
