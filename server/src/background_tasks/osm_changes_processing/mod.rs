@@ -234,7 +234,7 @@ fn handle_modification<'a>(
         if let Some((new_entity, new_related_ids)) =
             translator::translate(object, &bounds, manager, record)?
         {
-            manager.cache_object(object);
+            manager.cache_object(object)?;
             // TODO: Find a cheaper way of regenerating the geometric parts
             db::delete_entity_geometry_parts(conn, &object_id)?;
             db::insert_entity_geometry_parts(conn, manager, object)?;
@@ -356,7 +356,7 @@ fn handle_creation<'a>(
         return Ok(());
     }
     // It will be at least in one of the areas, co cache it
-    manager.cache_object(object);
+    manager.cache_object(object)?;
     for area in areas {
         let bounds = area.bounds(conn)?;
         if let Some((entity, related_ids)) =

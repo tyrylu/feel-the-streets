@@ -48,7 +48,7 @@ pub fn create_area_database_worker(
     let from_network_ids = manager.get_ids_retrieved_from_network();
     let mut area_db = AreaDatabase::create(area)?;
     let mut newest_timestamp = "2000-01-01T00:00:00Z".to_string();
-    area_db.insert_entities(manager.cached_objects().filter_map(|obj| {
+    area_db.insert_entities(manager.cached_objects()?.filter_map(|obj| {
         if !from_network_ids.contains(&obj.unique_id()) {
             return None;
         }

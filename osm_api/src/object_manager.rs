@@ -12,7 +12,9 @@ use log::{debug, info, trace, warn};
 use once_cell::sync::Lazy;
 use quick_xml::de::Deserializer;
 use serde::Deserialize;
-use sled::Db;
+use redb::{Database, ReadableDatabase, ReadableTable, TableDefinition};
+
+const OBJECTS_TABLE: TableDefinition<&str, &[u8]> = TableDefinition::new("osm_objects");
 use smol_str::{format_smolstr, SmolStr};
 use std::cell::{Ref, RefCell};
 use std::cmp;
@@ -40,13 +42,17 @@ fn serialize_and_compress(object: &OSMObject) -> Result<Vec<u8>> {
     Ok(ZSTD_CONTEXT.lock().unwrap().compress(&serialized)?)
 }
 
-pub fn open_cache(past_time: Option<&DateTime<impl TimeZone>>) -> Result<Db> {
+pub fn open_cache(past_time: Option<&DateTime<impl TimeZone>>) -> Result<Database> {
     let cache_path = if let Some(time) = past_time {
-        format!("entities_cache_{}", time.with_timezone(&Utc).timestamp())
+        format!("entities_cache_{}.redb", time.with_timezone(&Utc).timestamp())
     } else {
-        "entities_cache".to_string()
+        "entities_cache.redb".to_string()
     };
-    Ok(sled::open(cache_path)?)
+    let db = Database::create(&cache_path)?;
+    let txn = db.begin_write()?;
+    txn.open_table(OBJECTS_TABLE)?;
+    txn.commit()?;
+    Ok(db)
 }
 
 fn deserialize_compressed(compressed: &[u8]) -> Result<OSMObject> {
@@ -82,7 +88,7 @@ fn format_data_retrieval(area: i64) -> String {
 pub struct OSMObjectManager {
     geometries_cache: RefCell<HashMap<ObjectInArea, Option<Geometry<f64>>>>,
     api_servers: Arc<Servers>,
-    cache: Arc<Db>,
+    cache: Arc<Database>,
     retrieved_from_network: RefCell<HashSet<SmolStr>>,
     cache_queries: RefCell<u32>,
     cache_hits: RefCell<u32>,
@@ -102,7 +108,7 @@ impl OSMObjectManager {
     pub fn new_multithread(
         past_time: Option<&DateTime<impl TimeZone>>,
         servers: Arc<Servers>,
-        cache: Arc<Db>,
+        cache: Arc<Database>,
     ) -> Result<Self> {
         Ok(OSMObjectManager {
             api_servers: servers,
@@ -119,25 +125,33 @@ impl OSMObjectManager {
         self.retrieved_from_network.borrow()
     }
 
-    pub fn cache_object(&self, object: &OSMObject) {
-        let compressed = serialize_and_compress(object).expect("Could not serialize object");
-        self.cache
-            .insert(object.unique_id().as_bytes(), compressed)
-            .expect("Could not cache object.");
+    pub fn cache_object(&self, object: &OSMObject) -> Result<()> {
+        let compressed = serialize_and_compress(object)?;
+        let txn = self.cache.begin_write()?;
+        {
+            let mut table = txn.open_table(OBJECTS_TABLE)?;
+            table.insert(object.unique_id().as_str(), compressed.as_slice())?;
+        }
+        txn.commit()?;
+        Ok(())
     }
 
-    fn has_object(&self, id: &str) -> bool {
+    fn has_object(&self, id: &str) -> Result<bool> {
         *self.cache_queries.borrow_mut() += 1;
-        let exists = self.cache.contains_key(id).expect("Cache query failed.");
+        let txn = self.cache.begin_read()?;
+        let table = txn.open_table(OBJECTS_TABLE)?;
+        let exists = table.get(id)?.is_some();
         if exists {
             *self.cache_hits.borrow_mut() += 1;
         }
-        exists
+        Ok(exists)
     }
 
     fn get_cached_object(&self, id: &str) -> Result<Option<OSMObject>> {
-        if let Some(data) = self.cache.get(id)? {
-            Ok(Some(deserialize_compressed(data.as_ref())?))
+        let txn = self.cache.begin_read()?;
+        let table = txn.open_table(OBJECTS_TABLE)?;
+        if let Some(data) = table.get(id)? {
+            Ok(Some(deserialize_compressed(data.value())?))
         } else {
             Ok(None)
         }
@@ -168,13 +182,12 @@ impl OSMObjectManager {
             self.retrieved_from_network
                 .borrow_mut()
                 .insert(internal_object.unique_id());
-            self.cache_object(&internal_object);
+            self.cache_object(&internal_object)?;
             if return_objects {
                 objects.push(internal_object);
             }
         }
         debug!("Caching finished after {:?}", start.elapsed());
-        self.flush_cache();
         Ok(objects)
     }
 
@@ -245,7 +258,7 @@ impl OSMObjectManager {
                     for node in nodes {
                         total_examined += 1;
                         let node_id = format_smolstr!("n{node}");
-                        if !self.has_object(&node_id) {
+                        if !self.has_object(&node_id)? {
                             debug!("Node with id {} missing.", node_id);
                             missing.push(node_id);
                         }
@@ -254,7 +267,7 @@ impl OSMObjectManager {
                 Relation { ref members, .. } => {
                     for member in members {
                         total_examined += 1;
-                        if !self.has_object(&member.unique_reference()) {
+                        if !self.has_object(&member.unique_reference())? {
                             debug!("Object {} is missing.", member.unique_reference());
                             missing.push(member.unique_reference());
                         }
@@ -297,7 +310,7 @@ impl OSMObjectManager {
     }
 
     pub fn get_object(&self, id: &str) -> Result<Option<OSMObject>> {
-        if !self.has_object(id) {
+        if !self.has_object(id)? {
             self.lookup_objects(&mut [id])?;
         }
         self.get_cached_object(id)
@@ -648,9 +661,7 @@ impl OSMObjectManager {
         }
     }
 
-    fn flush_cache(&self) {
-        self.cache.flush().expect("Flush failed.");
-    }
+
 
     pub fn get_area_parents(&self, area_id: i64) -> Result<Vec<OSMObject>> {
         // We're intentionally ignoring the past time, as this query times out with any past time value, and these areas will most likely be valid in our timeframes.
@@ -664,17 +675,24 @@ impl OSMObjectManager {
         self.cache_objects_from(readable, true)
     }
 
-    pub fn cached_objects(&self) -> Box<dyn Iterator<Item = OSMObject>> {
-        Box::new(
-            self.cache
-                .iter()
-                .filter_map(|pair| pair.ok())
-                .map(|(_k, v)| deserialize_compressed(&v).expect("Could not deserialize object")),
-        )
+    pub fn cached_objects(&self) -> Result<Box<dyn Iterator<Item = OSMObject>>> {
+        let txn = self.cache.begin_read()?;
+        let table = txn.open_table(OBJECTS_TABLE)?;
+        let mut objects = vec![];
+        for result in table.iter()? {
+            let (_, v) = result?;
+            objects.push(deserialize_compressed(v.value())?);
+        }
+        Ok(Box::new(objects.into_iter()))
     }
 
     pub fn remove_cached_object(&self, id: &str) -> Result<()> {
-        self.cache.remove(id)?;
+        let txn = self.cache.begin_write()?;
+        {
+            let mut table = txn.open_table(OBJECTS_TABLE)?;
+            table.remove(id)?;
+        }
+        txn.commit()?;
         Ok(())
     }
 }

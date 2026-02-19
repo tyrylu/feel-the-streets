@@ -5,7 +5,15 @@ pub enum Error {
     #[error("I/O error: {0}")]
     IoError(#[from] std::io::Error),
     #[error("Disk cache error: {0}")]
-    DiskCacheError(#[from] sled::Error),
+    DiskCacheError(#[from] redb::DatabaseError),
+    #[error("Disk cache transaction error: {0}")]
+    DiskCacheTransactionError(Box<redb::TransactionError>),
+    #[error("Disk cache table error: {0}")]
+    DiskCacheTableError(#[from] redb::TableError),
+    #[error("Disk cache storage error: {0}")]
+    DiskCacheStorageError(#[from] redb::StorageError),
+    #[error("Disk cache commit error: {0}")]
+    DiskCacheCommitError(#[from] redb::CommitError),
     #[error("XML reading error: {0}")]
     XmlReaderError(#[from] quick_xml::Error),
     #[error("XML attribute conversion error: {0}")]
@@ -37,3 +45,9 @@ impl From<ureq::Error> for Error {
         Error::HttpError(Box::new(value))
     }
 }
+
+impl From<redb::TransactionError> for Error {
+    fn from(value: redb::TransactionError) -> Self {
+        Error::DiskCacheTransactionError(Box::new(value))
+    }
+}   
