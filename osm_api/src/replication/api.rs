@@ -26,7 +26,7 @@ impl ReplicationApiClient {
     }
 
     pub fn get_change(&self, number: SequenceNumber) -> Result<OSMChanges> {
-        let changes: RawOSMChanges = quick_xml::de::from_reader(BufReader::new(GzDecoder::new(
+        let changes: RawOSMChanges = quick_xml::de::from_reader(BufReader::with_capacity(1024*1024, GzDecoder::new(
             self.agent
                 .get(&format!(
                     "{PLANET_REPLICATION_BASE}/minute/{}",
