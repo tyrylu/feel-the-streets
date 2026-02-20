@@ -65,7 +65,7 @@ impl ReplicationApiClient {
     }
 
     pub fn get_changesets(&self, number: SequenceNumber) -> Result<Vec<Changeset>> {
-        let changes: RawChangesets = quick_xml::de::from_reader(BufReader::new(GzDecoder::new(
+        let changes: RawChangesets = quick_xml::de::from_reader(BufReader::with_capacity(1024*1024, GzDecoder::new(
             self.agent
                 .get(&format!(
                     "{PLANET_REPLICATION_BASE}/changesets/{}",
