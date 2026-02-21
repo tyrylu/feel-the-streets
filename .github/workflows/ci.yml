@@ -29,8 +29,7 @@ jobs:
       run: sudo apt install sqlite3 libsqlite3-dev python3-dev libpython3-dev
     - name: Build
       run: cargo build --verbose
-    - name: Run tests, skipping Linux due to a weird inventory link failure
-      if: runner.os == 'Windows'
+    - name: Run tests
       run: cargo test --verbose
     - name: Build in release mode
       run: cargo build --release
