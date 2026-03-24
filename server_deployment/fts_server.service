@@ -1,7 +1,7 @@
 [Unit]
 Description=FTS server
-Requires=rabbitmq.service
-After=rabbitmq.service
+Requires=valkey.service
+After=valkey.service
 [Service]
 ExecStart=/srv/feel-the-streets/server
 WorkingDirectory=/srv/feel-the-streets
