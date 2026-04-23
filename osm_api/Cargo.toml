@@ -21,7 +21,7 @@ geo-types = "0.7.18"
 smol_str = { version = "0.3.6", features = ["serde"] }
 zstd_util = "0.1.5"
 crossbeam-channel = "0.5.15"
-redb = "4.0.0"
+redb = "4.1.0"
 quick-xml = {version="0.39.1", features=["serialize", "overlapped-lists"]}
 flate2 = "1.1.8"
 backon = "1.6.0"
