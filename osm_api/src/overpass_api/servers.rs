@@ -27,7 +27,7 @@ impl Default for Servers {
         Self::with_server_urls(vec![
             "https://overpass-api.de",
             "https://overpass.private.coffee",
-            "https://maps.mail.ru/osm/tools/overpass",
+//            "https://maps.mail.ru/osm/tools/overpass",
         ])
     }
 }
