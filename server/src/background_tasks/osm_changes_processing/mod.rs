@@ -129,6 +129,7 @@ fn process_osm_change(
         handle_geometry_change(&entity_id, server_db, manager, &mut changes_container)?;
     }
     for (area_id, info) in changes_container.iter_mut() {
+        trace!("About to apply changes for area {}.", area_id);
         let mut area = Area::find_by_osm_id(*area_id, server_db)
             .unwrap_or_else(|_| panic!("Area record for area {} should exist", area_id));
         area.state = AreaState::ApplyingChanges;
