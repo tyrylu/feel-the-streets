@@ -72,7 +72,7 @@ pub async fn area_detail(
     let relationship_counts = area_db.get_entity_relationship_counts_by_kind()?;
     Ok(Html(state.templates.render(
         "area_detail.html.tera",
-        &Context::from_serialize(Tctxt {
+        &Context::from_serialize(&Tctxt {
             area,
             change_counts,
             redownload_requests,

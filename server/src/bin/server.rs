@@ -13,7 +13,8 @@ use tower_http::trace::TraceLayer;
 async fn main() -> Result<()> {
     let _dotenv_path = dotenvy::dotenv().expect("Failed to setup environment from env file");
     server::init_logging();
-    let tera = Tera::new("templates/*")?;
+    let mut tera = Tera::new();
+    tera.load_from_glob("templates/*")?;
     let db_conn = Arc::new(Mutex::new(db::connect_to_server_db()?));
     let state = AppState {
         templates: tera,
