@@ -5,7 +5,7 @@ authors = ["Lukáš Tyrychtr <lukastyrychtr@gmail.com>"]
 edition = "2021"
 
 [dependencies]
-log = "0.4.32"
+log = "0.4.33"
 aw3d30 = {path="../aw3d30"}
 osm_db = {path="../osm_db"}
 osm_api = {path="../osm_api"}
@@ -21,6 +21,6 @@ redis_api = {path = "../redis_api"}
 axum = "0.8.9"
 tera = {version="2.0.0", features=["glob_fs"]}
 axum-extra = { version = "0.12.6", features = ["async-read-body"] }
-tokio = { version = "1.52.3", features = ["fs", "macros", "rt", "rt-multi-thread"] }
+tokio = { version = "1.53.0", features = ["fs", "macros", "rt", "rt-multi-thread"] }
 tracing-subscriber = {version="0.3.23", features=["env-filter"]}
 tower-http = { version = "0.7.0", features = ["trace", "fs"] }
