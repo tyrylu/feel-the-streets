@@ -11,11 +11,11 @@ osm_api = {path="../osm_api"}
 osm_db = {path="../osm_db"}
 redis_api = {path = "../redis_api"}
 server={path="../server"}
-anyhow = "1.0.103"
+anyhow = "1.0.104"
 dotenvy = "0.15.7"
 url = "2.5.8"
 ureq = { version = "3.3.0", default-features = false, features = ["rustls", "json"] }
-serde = { version = "1.0.228", features = ["derive"] }
-clap = { version = "4.6.2", features = ["derive"] }
+serde = { version = "1.0.229", features = ["derive"] }
+clap = { version = "4.6.4", features = ["derive"] }
 
 [features]
