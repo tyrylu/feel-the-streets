@@ -12,7 +12,6 @@ pub mod ui_routes;
 pub use error::Error;
 use std::io::IsTerminal;
 use std::sync::{Arc, Mutex};
-use tera::Tera;
 use tracing_subscriber::prelude::*;
 
 pub type Result<T> = core::result::Result<T, Error>;
@@ -20,7 +19,6 @@ pub type Result<T> = core::result::Result<T, Error>;
 #[derive(Clone)]
 pub struct AppState {
     pub db_conn: Arc<Mutex<rusqlite::Connection>>,
-    pub templates: Tera,
 }
 
 pub fn init_logging() {

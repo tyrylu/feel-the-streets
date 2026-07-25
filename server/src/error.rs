@@ -34,8 +34,8 @@ pub enum Error {
     RedisApiError(#[from] redis_api::Error),
     #[error("Doitlater error: {0}")]
     DoItLaterError(#[from] doitlater::Error),
-    #[error("Tera error: {0}")]
-    TeraError(#[from] tera::Error),
+    #[error("Askama error: {0}")]
+    AskamaError(#[from] askama::Error),
     #[error("Failed to join a Tokio task: {0}")]
     JoinError(#[from] tokio::task::JoinError),
     #[error("Aw3d30 error: {0}")]

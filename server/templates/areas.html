@@ -1,4 +1,4 @@
-{% extends "base.html.tera" %}
+{% extends "base.html" %}
 {% block title %}Available areas{% endblock %}
 {% block extra_head %}
 <script src="/static/js/sortable.js"></script>
@@ -25,9 +25,9 @@
             <td>{{ area.state }}</td>
             <td>{{ area.updated_at }}</td>
             <td data-sort="{{ area.db_size }}">{{ area.db_size | filesizeformat }}</td>
-            <td>{{ stream_infos[area.id].len }}</td>
-            <td data-sort="{{ stream_infos[area.id].memory_usage }}">{{ stream_infos[area.id].memory_usage | filesizeformat }}</td>
-            <td>{{ stream_infos[area.id].number_of_clients }}</td>
+            <td>{{ stream_infos[&area.id].len }}</td>
+            <td data-sort="{{ stream_infos[&area.id].memory_usage }}">{{ stream_infos[&area.id].memory_usage | filesizeformat }}</td>
+            <td>{{ stream_infos[&area.id].number_of_clients }}</td>
         </tr>
         {% endfor %}
     </tbody>

@@ -1,4 +1,4 @@
-{% extends "base.html.tera" %}
+{% extends "base.html" %}
 {% block title %}Details of area {{ area.name }}{% endblock %}
 {% block extra_head %}
 <script src="/static/js/sortable.js"></script>
@@ -17,9 +17,9 @@
         </tr>
     </thead>
     <tbody>
-        {% for type, count in entity_counts %}
+        {% for (entity_type, count) in entity_counts %}
         <tr>
-            <td>{{ type }}</td>
+            <td>{{ entity_type }}</td>
             <td>{{ count }}</td>
         </tr>
     {% endfor %}
@@ -35,11 +35,11 @@
     </tr>
 </thead>
 <tbody>
-    {% for client, num_changes in change_counts %}
+    {% for (client, num_changes) in change_counts %}
     <tr>
         <td>{{ client }}</td>
         <td>{{ num_changes }}</td>
-        <td>{{ client in redownload_requests }}</td>
+        <td>{{ redownload_requests.contains(&client) }}</td>
     </tr>
     {% endfor %}
 </tbody>
@@ -53,9 +53,9 @@
         </tr>
     </thead>
     <tbody>
-        {% for type, count in relationship_counts %}
+        {% for (rel_type, count) in relationship_counts %}
         <tr>
-            <td>{{ type }}</td>
+            <td>{{ rel_type }}</td>
             <td>{{ count }}</td>
         </tr>
     {% endfor %}

@@ -5,6 +5,7 @@ use osm_db::AreaDatabase;
 use rusqlite::types::{FromSql, ToSql};
 use rusqlite::{Connection, Row};
 use serde::Serialize;
+use std::fmt::Display;
 use std::fs;
 
 const ALL_AREA_COLUMNS: &str = "id, osm_id, name, state, created_at, updated_at, newest_osm_object_timestamp, db_size, parent_osm_ids, geometry";
@@ -58,6 +59,19 @@ impl ToSql for AreaState {
             AreaState::Updated => Ok("updated".to_string().into()),
             AreaState::Frozen => Ok("frozen".to_string().into()),
         }
+    }
+}
+
+impl Display for AreaState {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let state_str = match self {
+            AreaState::Creating => "Creating",
+            AreaState::ApplyingChanges => "Applying Changes",
+            AreaState::GettingChanges => "Getting Changes",
+            AreaState::Updated => "Updated",
+            AreaState::Frozen => "Frozen",
+        };
+        write!(f, "{}", state_str)
     }
 }
 

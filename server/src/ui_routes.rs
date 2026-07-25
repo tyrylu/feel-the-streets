@@ -1,5 +1,6 @@
 use crate::area::Area;
 use crate::{AppState, Result};
+use askama::Template;
 use axum::{
     extract::{Path, State},
     response::Html,
@@ -9,20 +10,19 @@ use axum::{
 use osm_db::AreaDatabase;
 use redis_api::ChangesStream;
 use std::collections::HashMap;
-use tera::Context;
 
 pub async fn areas(State(state): State<AppState>) -> Result<Html<String>> {
-    #[derive(serde::Serialize)]
     struct StreamInfo {
         len: usize,
         memory_usage: u64,
         number_of_clients: usize,
     }
 
-    #[derive(serde::Serialize)]
+    #[derive(Template)]
+    #[template(path = "areas.html")]
     struct TCtxt {
         areas: Vec<Area>,
-        stream_infos: HashMap<String, StreamInfo>,
+        stream_infos: HashMap<i32, StreamInfo>,
     }
     let areas = Area::all(&state.db_conn.lock().unwrap())?;
     let mut ctx = TCtxt {
@@ -33,7 +33,7 @@ pub async fn areas(State(state): State<AppState>) -> Result<Html<String>> {
     for area in &ctx.areas {
         stream.connect_to_stream(area.osm_id);
         ctx.stream_infos.insert(
-            area.id.to_string(),
+            area.id,
             StreamInfo {
                 len: stream.len()?,
                 memory_usage: stream.memory_usage()?,
@@ -41,17 +41,15 @@ pub async fn areas(State(state): State<AppState>) -> Result<Html<String>> {
             },
         );
     }
-    Ok(Html(state.templates.render(
-        "areas.html.tera",
-        &Context::from_serialize(&ctx)?,
-    )?))
+    Ok(Html(ctx.render()?))
 }
 
 pub async fn area_detail(
     Path(area_id): Path<i32>,
     State(state): State<AppState>,
 ) -> Result<Html<String>> {
-    #[derive(serde::Serialize)]
+    #[derive(Template)]
+    #[template(path = "area_detail.html")]
     struct Tctxt {
         area: Area,
         change_counts: HashMap<String, u64>,
@@ -70,9 +68,7 @@ pub async fn area_detail(
     let entity_relationship_count = area_db.num_entity_relationships()?;
     let entity_counts = area_db.get_entity_counts_by_discriminator()?;
     let relationship_counts = area_db.get_entity_relationship_counts_by_kind()?;
-    Ok(Html(state.templates.render(
-        "area_detail.html.tera",
-        &Context::from_serialize(&Tctxt {
+    Ok(Html(Tctxt {
             area,
             change_counts,
             redownload_requests,
@@ -80,8 +76,8 @@ pub async fn area_detail(
             entity_relationship_count,
             entity_counts,
             relationship_counts,
-        })?,
-    )?))
+        }.render()?,
+    ))
 }
 
 pub fn routes() -> Router<AppState> {
