@@ -23,7 +23,7 @@ def url_for(path):
 
 def get_areas_with_name(name):
     query = f'[out:json];area["name"="{name}"];out meta;'
-    resp = requests.get("https://overpass-api.de/api/interpreter", params={"data": query})
+    resp = requests.get("https://overpass-api.de/api/interpreter", params={"data": query}, headers={"User-Agent": "fts-client"})
     if resp.status_code != 200:
         raise RateLimitedError()
     results = {}
