@@ -74,8 +74,6 @@ jobs:
       run: cp fts.dict to_deploy
     - name: Copy common artifacts, part 3
       run: cp -r static to_deploy
-    - name: Copy common artifacts, part 4
-      run: cp -r templates to_deploy
     - name: Copy Linux artifacts
       if: runner.os == 'Linux'
       run: cp target/release/{oesc,server,worker,create_area,recreate_all_areas,libosm_db\.so} to_deploy
