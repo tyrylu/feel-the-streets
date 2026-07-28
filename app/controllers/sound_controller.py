@@ -4,7 +4,6 @@ import random
 from typing import DefaultDict, Dict
 import anglr
 from blinker import Signal
-from shapely import wkb
 from osm_db import Enum
 from ..services import sound, config, menu_service, map
 from ..geometry_utils import to_latlon
@@ -163,14 +162,14 @@ class SoundController:
         current_sounds = self._interesting_sounds.get(current_road, {})
         if interesting_road in current_sounds:
             return # We already spawned this one
-        current_road_geom = wkb.loads(current_road.geometry)
-        interesting_road_geom = wkb.loads(interesting_road.geometry)
+        current_road_geom = current_road.geometry
+        interesting_road_geom = interesting_road.geometry
         intersection = current_road_geom.intersection(interesting_road_geom)
-        if not intersection:
+        if not intersection or intersection.is_empty():
             return # There's no intersection of the roads
         dest_latlon = None
-        if intersection.geom_type == "Point":
-            dest_latlon = to_latlon(intersection)
+        if intersection.geom_type() == "Point":
+            dest_latlon = to_latlon(intersection.point_coords())
         else:
             log.warning("No way how to determine the point to spawn the sound at for intersection %s.", intersection)
         if dest_latlon:
