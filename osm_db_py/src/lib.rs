@@ -10,6 +10,7 @@ mod entity;
 mod entity_metadata;
 mod field_condition;
 mod field_named;
+mod geo_utils;
 mod geometry;
 mod geometry_cache;
 mod semantic_change;
@@ -72,4 +73,19 @@ mod osm_db {
     use geometry::PyGeometry;
     #[pymodule_export]
     use semantic_change::PySemanticChange;
+
+    #[pymodule_export]
+    use geo_utils::equirectangular_project;
+    #[pymodule_export]
+    use geo_utils::geodesic_bearing;
+    #[pymodule_export]
+    use geo_utils::geodesic_destination;
+    #[pymodule_export]
+    use geo_utils::geodesic_destination2;
+    #[pymodule_export]
+    use geo_utils::geodesic_distance;
+    #[pymodule_export]
+    use geo_utils::geodesic_distance_and_bearings;
+    #[pymodule_export]
+    use geo_utils::geodesic_area;
 }
