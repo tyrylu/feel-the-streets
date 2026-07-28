@@ -1,6 +1,6 @@
 import logging
 from osm_db import EntitiesQuery, FieldNamed, AreaDatabase, geodesic_area, equirectangular_project
-from pygeodesy.ellipsoidalVincenty import LatLon
+from .latlon import LatLon
 from .geometry_utils import distance_filter, effective_width_filter, xy_ranges_bounding_square
 from .measuring import measure
 from .models import Bookmark

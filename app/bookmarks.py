@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QListWidget, QPushButton, QMessageBox, QInputDialog
-from pygeodesy.ellipsoidalVincenty import LatLon
+from .latlon import LatLon
 from .base_dialog import BaseDialog
 from .geometry_utils import distance_between, bearing_to
 from .humanization_utils import format_number

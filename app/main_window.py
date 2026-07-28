@@ -2,7 +2,7 @@ import sys
 from PySide6.QtWidgets import QMainWindow, QDialog, QProgressDialog, QMessageBox, QWidget, QApplication
 import os
 import webbrowser
-from pygeodesy.ellipsoidalVincenty import LatLon
+from .latlon import LatLon
 from .entities import Person
 from .controllers import InteractivePersonController, ApplicationController, SoundController, AnnouncementsController, LastLocationController, MovementRestrictionController, InterestingEntitiesController, SpeechController, PositionAdjustmentController
 from .area_selection import AreaSelectionDialog

@@ -9,7 +9,7 @@ from osm_db import (
     geodesic_destination,
 )
 import pydantic
-from pygeodesy.ellipsoidalVincenty import LatLon, VincentyError
+from .latlon import LatLon
 from .measuring import measure
 
 log = logging.getLogger(__name__)

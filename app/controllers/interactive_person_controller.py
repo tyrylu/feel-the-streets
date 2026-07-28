@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QInputDialog, QMessageBox, QApplication
-from pygeodesy.ellipsoidalVincenty import LatLon
+from ..latlon import LatLon
 from ..entities import entity_post_enter
 from ..humanization_utils import describe_entity, format_number, format_relationship
 from ..services import speech, map, config, menu_service

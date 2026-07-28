@@ -8,7 +8,7 @@ from ..map import Map
 from ..geometry_utils import to_latlon, closest_point_to, distance_between, bearing_to
 from ..humanization_utils import describe_entity, format_number, format_rel_bearing
 from ..services import config
-from pygeodesy.ellipsoidalVincenty import LatLon
+from ..latlon import LatLon
 
 class Entity(BaseModel):
     use_step_sounds: ClassVar[bool] = False
