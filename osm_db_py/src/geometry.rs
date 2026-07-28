@@ -1,4 +1,4 @@
-use geo::{coord, Geometry, LineString};
+use geo::{coord, Geometry, LineString, Point};
 use pyo3::exceptions::PyValueError;
 use pyo3::prelude::*;
 use std::sync::Arc;
@@ -148,6 +148,164 @@ impl PyGeometry {
             _ => Err(PyValueError::new_err(
                 "parts() is only supported for GeometryCollection and Multi* geometries",
             )),
+        }
+    }
+
+    /// Returns a representative interior point of any geometry as (x, y) / (lon, lat).
+    pub fn representative_point(&self) -> PyResult<(f64, f64)> {
+        use geo::InteriorPoint;
+        let pt: Option<Point<f64>> = self.inner.interior_point();
+        pt.map(|p| (p.x(), p.y()))
+            .ok_or_else(|| PyValueError::new_err("geometry has no interior point (is it empty?)"))
+    }
+
+    /// Returns the (x, y) / (lon, lat) of the closest point on this geometry to the given point.
+    /// Uses planar (Euclidean) distance — correct for relative comparisons within a city area.
+    pub fn closest_point(&self, x: f64, y: f64) -> PyResult<(f64, f64)> {
+        use geo::ClosestPoint;
+        let query = Point::new(x, y);
+        let result = match self.inner.as_ref() {
+            Geometry::Point(p) => geo::Closest::SinglePoint(*p),
+            Geometry::Line(l) => l.closest_point(&query),
+            Geometry::LineString(ls) => ls.closest_point(&query),
+            Geometry::Polygon(p) => p.closest_point(&query),
+            Geometry::MultiPoint(mp) => mp.closest_point(&query),
+            Geometry::MultiLineString(mls) => mls.closest_point(&query),
+            Geometry::MultiPolygon(mp) => mp.closest_point(&query),
+            Geometry::GeometryCollection(gc) => gc.closest_point(&query),
+            Geometry::Rect(r) => r.to_polygon().closest_point(&query),
+            Geometry::Triangle(t) => t.to_polygon().closest_point(&query),
+        };
+        match result {
+            geo::Closest::SinglePoint(p) | geo::Closest::Intersection(p) => Ok((p.x(), p.y())),
+            geo::Closest::Indeterminate => Err(PyValueError::new_err(
+                "closest_point: result is indeterminate (degenerate geometry?)",
+            )),
+        }
+    }
+
+    /// Returns the planar (Euclidean) distance from this geometry to a point (x, y).
+    /// Used for finding the closest line segment — only relative ordering matters.
+    pub fn euclidean_distance_to_point(&self, x: f64, y: f64) -> f64 {
+        use geo::Distance;
+        use geo::Euclidean;
+        let query = Point::new(x, y);
+        match self.inner.as_ref() {
+            Geometry::Point(p) => Euclidean.distance(p, &query),
+            Geometry::Line(l) => Euclidean.distance(l, &query),
+            Geometry::LineString(ls) => Euclidean.distance(ls, &query),
+            Geometry::Polygon(p) => Euclidean.distance(p, &query),
+            Geometry::MultiPoint(mp) => Euclidean.distance(mp, &query),
+            Geometry::MultiLineString(mls) => Euclidean.distance(mls, &query),
+            Geometry::MultiPolygon(mp) => Euclidean.distance(mp, &query),
+            Geometry::GeometryCollection(gc) => {
+                gc.iter()
+                    .map(|g| PyGeometry::from_geo(g.clone()).euclidean_distance_to_point(x, y))
+                    .fold(f64::INFINITY, f64::min)
+            }
+            Geometry::Rect(r) => {
+                let p = r.to_polygon();
+                Euclidean.distance(&p, &query)
+            }
+            Geometry::Triangle(t) => {
+                let p = t.to_polygon();
+                Euclidean.distance(&p, &query)
+            }
+        }
+    }
+
+    /// Returns true if this geometry spatially contains the other geometry.
+    pub fn contains(&self, other: &PyGeometry) -> bool {
+        use geo::Contains;
+        // geo::Contains is only implemented for certain type pairs; dispatch manually.
+        match (self.inner.as_ref(), other.inner.as_ref()) {
+            (Geometry::Polygon(a), Geometry::Point(b)) => a.contains(b),
+            (Geometry::Polygon(a), Geometry::LineString(b)) => a.contains(b),
+            (Geometry::Polygon(a), Geometry::Polygon(b)) => a.contains(b),
+            (Geometry::MultiPolygon(a), Geometry::Point(b)) => a.contains(b),
+            (Geometry::MultiPolygon(a), Geometry::LineString(b)) => a.contains(b),
+            (Geometry::LineString(a), Geometry::Point(b)) => a.contains(b),
+            // For any other combination fall back to bounding-box containment as a best-effort.
+            _ => {
+                use geo::BoundingRect;
+                let bbox_self = self.inner.bounding_rect();
+                let bbox_other = other.inner.bounding_rect();
+                match (bbox_self, bbox_other) {
+                    (Some(a), Some(b)) => {
+                        a.min().x <= b.min().x
+                            && a.min().y <= b.min().y
+                            && a.max().x >= b.max().x
+                            && a.max().y >= b.max().y
+                    }
+                    _ => false,
+                }
+            }
+        }
+    }
+
+    /// Computes the intersection of two geometries.
+    ///
+    /// For LineString × LineString (the road-crossing use case) this returns a Point
+    /// geometry at the first intersection found, or an empty geometry collection if
+    /// the lines do not intersect.
+    ///
+    /// For Polygon types this delegates to geo's BooleanOps.
+    pub fn intersection(&self, other: &PyGeometry) -> PyResult<PyGeometry> {
+        use geo::line_intersection::{line_intersection, LineIntersection};
+
+        // Extract all Line segments from a geometry (LineString or Line).
+        fn extract_lines(g: &Geometry<f64>) -> Vec<geo::Line<f64>> {
+            match g {
+                Geometry::LineString(ls) => ls.lines().collect(),
+                Geometry::Line(l) => vec![*l],
+                _ => vec![],
+            }
+        }
+
+        match (self.inner.as_ref(), other.inner.as_ref()) {
+            // LineString × LineString — find the first point intersection.
+            (
+                Geometry::LineString(_) | Geometry::Line(_),
+                Geometry::LineString(_) | Geometry::Line(_),
+            ) => {
+                let lines_a = extract_lines(self.inner.as_ref());
+                let lines_b = extract_lines(other.inner.as_ref());
+                for seg_a in &lines_a {
+                    for seg_b in &lines_b {
+                        if let Some(result) = line_intersection(*seg_a, *seg_b) {
+                            let pt = match result {
+                                LineIntersection::SinglePoint { intersection, .. } => {
+                                    intersection
+                                }
+                                LineIntersection::Collinear { intersection } => {
+                                    intersection.start_point().into()
+                                }
+                            };
+                            return Ok(PyGeometry::from_geo(Geometry::Point(Point::from(pt))));
+                        }
+                    }
+                }
+                // No intersection found — return an empty GeometryCollection.
+                Ok(PyGeometry::from_geo(Geometry::GeometryCollection(
+                    geo::GeometryCollection::default(),
+                )))
+            }
+            // Polygon × Polygon — use BooleanOps.
+            (Geometry::Polygon(a), Geometry::Polygon(b)) => {
+                use geo::BooleanOps;
+                let result = a.intersection(b);
+                Ok(PyGeometry::from_geo(Geometry::MultiPolygon(result)))
+            }
+            (Geometry::MultiPolygon(a), Geometry::MultiPolygon(b)) => {
+                use geo::BooleanOps;
+                let result = a.intersection(b);
+                Ok(PyGeometry::from_geo(Geometry::MultiPolygon(result)))
+            }
+            _ => Err(PyValueError::new_err(format!(
+                "intersection() not supported between {} and {}",
+                self.geom_type(),
+                other.geom_type()
+            ))),
         }
     }
 }
