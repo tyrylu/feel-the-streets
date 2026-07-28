@@ -5,7 +5,7 @@ import osm_db
 from . import entity_pre_move, entity_post_move, entity_pre_enter, entity_post_enter, entity_pre_leave, entity_post_leave, entity_rotated, entity_move_rejected, MoveValidationResult
 from ..measuring import measure
 from ..map import Map
-from ..geometry_utils import to_shapely_point, to_latlon, closest_point_to, distance_between, bearing_to
+from ..geometry_utils import to_latlon, closest_point_to, distance_between, bearing_to
 from ..humanization_utils import describe_entity, format_number, format_rel_bearing
 from ..services import config
 from pygeodesy.ellipsoidalVincenty import LatLon
@@ -71,7 +71,8 @@ class Entity(BaseModel):
     def move_by(self, pos_delta, force=False, direction=None):
         if not direction:
             direction = self.direction
-        pos, new_dir = self.position.destination2(pos_delta, direction)
+        new_lat, new_lon, new_dir = osm_db.geodesic_destination2(self.position.lat, self.position.lon, pos_delta, direction)
+        pos = LatLon(new_lat, new_lon)
         if self.move_to(pos, force):
             self.set_direction(new_dir, True)
     
@@ -92,8 +93,8 @@ class Entity(BaseModel):
 
     @property
     def position_point(self):
-        """The entity's position as a shapely Point."""
-        return to_shapely_point(self.position)
+        """The entity's position as a (lon, lat) coordinate tuple."""
+        return (self.position.lon, self.position.lat)
 
     @property
     def inside_of_roads(self):
