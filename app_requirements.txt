@@ -1,5 +1,4 @@
 pydantic # 153 ms
-pygeodesy # 74 ms
 appdirs # 43 ms
 accessible_output2 # 90
 blinker # 10 ms
@@ -7,7 +6,6 @@ pyside6_essentials # 899 ms
 anglr # 1 ms
 pyopenal # 454 ms
 pyogg # 303 ms
-shapely # 230 ms
 jinja2 # 76 ms
 requests # 413 ms
 atomicwrites # 4 ms
