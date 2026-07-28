@@ -11,6 +11,7 @@ mod entity_metadata;
 mod field_condition;
 mod field_named;
 mod geometry;
+mod geometry_cache;
 mod semantic_change;
 
 #[pyclass(eq, eq_int)]

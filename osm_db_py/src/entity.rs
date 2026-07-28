@@ -1,4 +1,6 @@
 use crate::conversions;
+use crate::geometry::PyGeometry;
+use crate::geometry_cache;
 use osm_db::entity::Entity;
 use pyo3::basic::CompareOp;
 use pyo3::prelude::*;
@@ -24,8 +26,13 @@ impl PyEntity {
     }
 
     #[getter]
-    pub fn geometry<'py>(&self, py: Python<'py>) -> Bound<'py, PyBytes> {
+    pub fn geometry_bytes<'py>(&self, py: Python<'py>) -> Bound<'py, PyBytes> {
         PyBytes::new(py, &self.inner.geometry)
+    }
+
+    #[getter]
+    pub fn geometry(&self) -> PyGeometry {
+        geometry_cache::get_or_parse(&self.inner.id, &self.inner.geometry)
     }
 
     #[getter]
