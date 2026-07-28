@@ -1,11 +1,6 @@
 import logging
-from osm_db import EntitiesQuery, FieldNamed, AreaDatabase
-from pygeodesy.ellipsoidalVincenty import LatLon, areaOf
-from pygeodesy.etm import ExactTransverseMercator
-from shapely import wkb
-from shapely import ops as shapely_ops
-from shapely.geometry.point import Point
-from shapely.geometry.polygon import Polygon
+from osm_db import EntitiesQuery, FieldNamed, AreaDatabase, geodesic_area, equirectangular_project
+from pygeodesy.ellipsoidalVincenty import LatLon
 from .geometry_utils import distance_filter, effective_width_filter, xy_ranges_bounding_square
 from .measuring import measure
 from .models import Bookmark
@@ -19,7 +14,9 @@ class Map:
         self._name = area_name
         self._db = AreaDatabase.open_existing(map_id, False)
         self._rough_distant_cache = None
-        self._projection = ExactTransverseMercator(lon0=self.default_start_location.lon)
+        start = self.default_start_location
+        self._ref_lat = start.lat
+        self._ref_lon = start.lon
     
     def intersections_at_position(self, position, effective_width, fast=True):
         x, y = (position.lon, position.lat)
@@ -47,9 +44,9 @@ class Map:
         with measure("Index query"):
             rough_distant = self._db.get_entities(query)
         if fast:
-            rough_distant = [e for e in rough_distant if len(e.geometry) < 100000]
+            rough_distant = [e for e in rough_distant if len(e.geometry_bytes) < 100000]
             self._rough_distant_cache = (position, rough_distant)
-        log.debug("Huge geometry lengths: %s", [len(e.geometry) for e in rough_distant if len(e.geometry) > 100000])
+        log.debug("Huge geometry lengths: %s", [len(e.geometry_bytes) for e in rough_distant if len(e.geometry_bytes) > 100000])
         return rough_distant
     
     def within_distance(self, position, distance, fast=True):
@@ -91,24 +88,25 @@ class Map:
         query.set_limit(1)
         query.set_included_discriminators(["Place"])
         query.add_condition(FieldNamed("name").eq(self._name))
-        candidates =self._db.get_entities(query)
+        candidates = self._db.get_entities(query)
         if not candidates:
             log.warning("Area %s does not have a Place entity, falling back to the first entity in the database.", self._name)
             query = EntitiesQuery()
             query.set_limit(1)
             candidates = self._db.get_entities(query)
         entity = candidates[0]
-        geom = wkb.loads(entity.geometry)
-        if not isinstance(geom, Point):
-            geom = geom.representative_point()
-        lon = geom.x
-        lat = geom.y
+        geom = entity.geometry
+        if geom.geom_type() != "Point":
+            lon, lat = geom.representative_point()
+        else:
+            lon, lat = geom.point_coords()
         return LatLon(lat, lon)
       
     def parents_of(self, entity):
         query = EntitiesQuery()
         query.set_parent_id(entity.id)
         return self._db.get_entities(query)
+
     def children_of(self, entity):
         query = EntitiesQuery()
         query.set_child_id(entity.id)
@@ -128,25 +126,14 @@ class Map:
         query.add_condition(FieldNamed("name").eq(name))
         return self.get_entities(query)
 
-    def _project(self, lat, lon):
-        coords = self._projection.forward(lat, lon)
-        return coords.easting, coords.northing
-
     def project_latlon(self, latlon):
-        return self._project(latlon.lat, latlon.lon)
-    
-    def project_geometry(self, geometry):
-        return shapely_ops.transform(self._project, geometry)
-    
+        return equirectangular_project(latlon.lat, latlon.lon, self._ref_lat, self._ref_lon)
+
     def entity_area(self, entity):
-        geom = wkb.loads(entity.geometry)
-        if geom.geom_type == "Polygon":
-            ext_coords = [LatLon(y, x) for x, y in geom.exterior.coords]
-            ext_area = areaOf(ext_coords)
-            int_areas = 0
-            for interior in geom.interiors:
-                int_coords = [LatLon(y, x) for x, y in interior.coords]
-                int_areas += areaOf(int_coords)
+        geom = entity.geometry
+        if geom.geom_type() == "Polygon":
+            ext_area = geodesic_area(geom.exterior_coords())
+            int_areas = sum(geodesic_area(ring) for ring in geom.interior_rings())
             return ext_area - int_areas
         else:
             return 0
