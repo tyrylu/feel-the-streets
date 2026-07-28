@@ -10,6 +10,7 @@ mod entity;
 mod entity_metadata;
 mod field_condition;
 mod field_named;
+mod geometry;
 mod semantic_change;
 
 #[pyclass(eq, eq_int)]
@@ -66,6 +67,8 @@ mod osm_db {
     use field_condition::PyFieldCondition;
     #[pymodule_export]
     use field_named::FieldNamed;
+    #[pymodule_export]
+    use geometry::PyGeometry;
     #[pymodule_export]
     use semantic_change::PySemanticChange;
 }
