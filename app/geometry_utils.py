@@ -1,43 +1,48 @@
 from collections import defaultdict
 import logging
 from typing import Optional
-from shapely import wkb, geometry
-from shapely.geometry.linestring import LineString
+from osm_db import (
+    Geometry,
+    geodesic_distance,
+    geodesic_bearing,
+    geodesic_distance_and_bearings,
+    geodesic_destination,
+)
 import pydantic
 from pygeodesy.ellipsoidalVincenty import LatLon, VincentyError
 from .measuring import measure
 
 log = logging.getLogger(__name__)
 
-def to_shapely_point(latlon):
-    return geometry.point.Point(latlon.lon, latlon.lat)
-
-def to_latlon(shapely_point):
-    return LatLon(shapely_point.y, shapely_point.x)
+def to_latlon(xy_tuple):
+    """Convert a (x, y) / (lon, lat) coordinate tuple to a LatLon."""
+    return LatLon(xy_tuple[1], xy_tuple[0])
 
 def distance_between(point1, point2):
     try:
-        return point1.distanceTo(point2)
-    except VincentyError:
+        return geodesic_distance(point1.lat, point1.lon, point2.lat, point2.lon)
+    except Exception:
         return 0
 
 def bearing_to(initial, target):
     try:
-        return initial.initialBearingTo(target)
-    except:
+        return geodesic_bearing(initial.lat, initial.lon, target.lat, target.lon)
+    except Exception:
         return 0
 
 def bearings_to(initial, target):
     try:
-        _dist, initial, final = initial.distanceTo3(target)
-        return initial, final
-    except:
+        dist, initial_bearing, final_bearing = geodesic_distance_and_bearings(
+            initial.lat, initial.lon, target.lat, target.lon
+        )
+        return initial_bearing, final_bearing
+    except Exception:
         return 0, 0
 
 class LineSegment(pydantic.BaseModel):
-    line: LineString
-    start: geometry.point.Point
-    end: geometry.point.Point
+    line: Geometry
+    start: tuple
+    end: tuple
     length: Optional[float] = None
     angle: Optional[float] = None
     end_angle: Optional[float] = None
@@ -62,7 +67,7 @@ def merge_similar_line_segments(line_segments, precision):
     for segment in line_segments:
         segment.calculate_angle()
         if round(segment.angle, precision) == current_angle:
-            current_segment = LineSegment(start=current_segment.start, end=segment.end, line=LineString([current_segment.line.coords[0], segment.line.coords[1]]))
+            current_segment = LineSegment(start=current_segment.start, end=segment.end, line=Geometry.from_linestring([current_segment.line.coords()[0], segment.line.coords()[1]]))
         else:
             merged.append(current_segment)
             current_segment = segment
@@ -71,21 +76,21 @@ def merge_similar_line_segments(line_segments, precision):
     return merged
 
 def get_line_segments(line):
-    x_coords, y_coords = line.coords.xy
-    num_coords = len(x_coords) - 1 # Every segment must have two points, so for example, for two points we get one segment, for three segments we get two, etc.
+    coords = line.coords()
+    num_coords = len(coords) - 1 # Every segment must have two points, so for example, for two points we get one segment, for three segments we get two, etc.
     segments = []
     for segment in range(num_coords):
-        x1, y1 = x_coords[segment], y_coords[segment]
-        x2, y2 = x_coords[segment + 1], y_coords[segment + 1]
-        line_segment = LineString([(x1, y1),(x2, y2)])
-        segments.append(LineSegment(line=line_segment, start=geometry.point.Point(x1, y1), end=geometry.point.Point(x2, y2)))
+        x1, y1 = coords[segment]
+        x2, y2 = coords[segment + 1]
+        line_segment = Geometry.from_linestring([(x1, y1), (x2, y2)])
+        segments.append(LineSegment(line=line_segment, start=(x1, y1), end=(x2, y2)))
     return segments
 
 def find_closest_line_segment_of(segments, point):
     min_dist = 10**20
     best_segment: Optional[LineSegment] = None
     for line_segment in segments:
-        dist = line_segment.line.distance(point)
+        dist = line_segment.line.euclidean_distance_to_point(point[0], point[1])
         if dist < min_dist:
             min_dist = dist
             best_segment = line_segment
@@ -99,69 +104,71 @@ def get_closest_line_segment(point, line):
 
 def xy_ranges_bounding_square(center_latlon, side):
     # First, get the x bounds
-    side1 = center_latlon.destination(side/2, 0)
-    edge1 = side1.destination(side/2, 270)
-    min_x = edge1.lon
-    max_y = edge1.lat
-    edge2 = side1.destination(side/2, 90)
-    max_x = edge2.lon
-    edge3 = edge2.destination(side, 180)
-    min_y = edge3.lat
+    side1_lat, side1_lon = geodesic_destination(center_latlon.lat, center_latlon.lon, side/2, 0)
+    edge1_lat, edge1_lon = geodesic_destination(side1_lat, side1_lon, side/2, 270)
+    min_x = edge1_lon
+    max_y = edge1_lat
+    _edge2_lat, edge2_lon = geodesic_destination(side1_lat, side1_lon, side/2, 90)
+    max_x = edge2_lon
+    edge3_lat, _edge3_lon = geodesic_destination(edge1_lat, edge2_lon, side, 180)
+    min_y = edge3_lat
     # Note that if the square would be positioned just right, the max/min invariants would not hold, but for the foreseeable future usages it should be okay.
     return min_x, min_y, max_x, max_y
 
 def closest_point_from_geoms(geoms, point):
-    min = float("inf")
+    min_dist = float("inf")
     min_point = None
     for geom in geoms:
         geom_point = closest_point_to(point, geom, convert=False)
-        dist = point.distance(geom_point)
-        if dist < min:
-            min = dist
+        dist = geom.euclidean_distance_to_point(geom_point[0], geom_point[1])
+        if dist < min_dist:
+            min_dist = dist
             min_point = geom_point
     return min_point
 
 def closest_point_to(point, geom, convert=True):
-    if convert:
-        geom = wkb.loads(geom)
-    if geom.geom_type == "Point":
-        return geom
-    elif geom.geom_type == "LineString":
-        return geom.interpolate(geom.project(point))
-    elif geom.geom_type == "Polygon":
-        exterior_line = LineString(geom.exterior)
-        return exterior_line.interpolate(exterior_line.project(point))
-    elif geom.geom_type in {"GeometryCollection", "MultiPolygon"}:
-        return closest_point_from_geoms(geom.geoms, point)
+    # If geom is raw bytes (geometry_bytes), parse via Geometry — but with the new API,
+    # entity.geometry already returns a Geometry object, so convert=True is kept for
+    # backwards compatibility with any remaining bytes usage.
+    if convert and not isinstance(geom, Geometry):
+        raise TypeError("Expected a Geometry object; raw bytes are no longer supported here")
+    geom_type = geom.geom_type()
+    if geom_type == "Point":
+        return geom.point_coords()
+    elif geom_type in {"LineString", "MultiLineString", "GeometryCollection", "MultiPolygon"}:
+        return geom.closest_point(point[0], point[1])
+    elif geom_type == "Polygon":
+        return geom.closest_point(point[0], point[1])
     else:
-        raise RuntimeError("Can not process geometry of type %s."%geom.geom_type)
+        raise RuntimeError("Can not process geometry of type %s." % geom_type)
 
 def get_road_section_angle(pov, road):
-    pov_point = to_shapely_point(pov.position)
-    road_line = wkb.loads(road.geometry)
+    pov_point = (pov.position.lon, pov.position.lat)
+    road_line = road.geometry
     closest_segment = get_closest_line_segment(pov_point, road_line)
     closest_segment.calculate_angle()
     return closest_segment.angle
 
 def distance_filter(entities, position, distance):
-    with measure("Shapely & pygeodesi distance filtering"):
+    with measure("Geometry distance filtering"):
         res_entities = []
-        shapely_point = to_shapely_point(position)
+        point = (position.lon, position.lat)
         for entity in entities:
-            closest = closest_point_to(shapely_point, entity.geometry)
+            closest = closest_point_to(point, entity.geometry)
             closest_latlon = to_latlon(closest)
             cur_distance = distance_between(closest_latlon, position)
             if cur_distance <= distance:
                 res_entities.append(entity)
         return res_entities
+
 def effective_width_filter(entities, position):
-    with measure("Shapely & pygeodesi effective distance filtering"):
+    with measure("Geometry effective distance filtering"):
         res_entities = []
-        shapely_point = to_shapely_point(position)
+        point = (position.lon, position.lat)
         for entity in entities:
             if not entity.effective_width:
                 continue
-            closest = closest_point_to(shapely_point, entity.geometry)
+            closest = closest_point_to(point, entity.geometry)
             closest_latlon = to_latlon(closest)
             cur_distance = distance_between(closest_latlon, position)
             if cur_distance <= entity.effective_width / 2:
@@ -170,10 +177,11 @@ def effective_width_filter(entities, position):
 
 def canonicalize_line(line):
     """Ensures a consistent order of a line's coordinates."""
-    coord1 = LatLon(line.coords[0][1], line.coords[0][0])
-    coord2 = LatLon(line.coords[1][1], line.coords[1][0])
+    coords = line.coords()
+    coord1 = to_latlon(coords[0])
+    coord2 = to_latlon(coords[1])
     if bearing_to(coord1, coord2) > 180:
-        return LineString(reversed(line.coords))
+        return Geometry.from_linestring(list(reversed(coords)))
     else:
         return line
 
@@ -181,7 +189,8 @@ def xy_tuple_to_latlon(xy_tuple):
     return LatLon(xy_tuple[1], xy_tuple[0])
 
 def line_segment_part_bearing(linestring, starting_segment_index):
-    return bearing_to(xy_tuple_to_latlon(linestring.coords[starting_segment_index]), xy_tuple_to_latlon(linestring.coords[starting_segment_index + 1]))
+    coords = linestring.coords()
+    return bearing_to(xy_tuple_to_latlon(coords[starting_segment_index]), xy_tuple_to_latlon(coords[starting_segment_index + 1]))
 
 def select_mergeable_line(merge_with, merge_candidates, merge_at_end):
     if len(merge_candidates) == 1:
@@ -193,11 +202,11 @@ def select_mergeable_line(merge_with, merge_candidates, merge_at_end):
         base_index = 0
         candidate_index = -2
     base_bearing = line_segment_part_bearing(merge_with, base_index)
-    closest_diff = abs(base_bearing -line_segment_part_bearing(merge_candidates[0], candidate_index))
+    closest_diff = abs(base_bearing - line_segment_part_bearing(merge_candidates[0], candidate_index))
     closest_candidate = merge_candidates[0]
     for candidate in merge_candidates[1:]:
         bearing = line_segment_part_bearing(candidate, candidate_index)
-        diff = abs(base_bearing -bearing)
+        diff = abs(base_bearing - bearing)
         if diff < closest_diff:
             closest_diff = diff
             closest_candidate = candidate
@@ -205,16 +214,16 @@ def select_mergeable_line(merge_with, merge_candidates, merge_at_end):
 
 def get_complete_road_line(road):
     from .services import map
-    road_line = wkb.loads(road.geometry)
+    road_line = road.geometry
     road_name = road.value_of_field("name")
     if not road_name:
         return road_line
-    if road_line.is_closed:
+    if road_line.is_closed():
         return road_line
     other_road_parts = map().get_entities_named(road_name)
     other_road_parts = [part for part in other_road_parts if part.id != road.id and part.is_road_like]
-    lines = [wkb.loads(part.geometry) for part in other_road_parts]
-    lines = [l for l in lines if l.geom_type == "LineString" and not l.is_closed]
+    lines = [part.geometry for part in other_road_parts]
+    lines = [l for l in lines if l.geom_type() == "LineString" and not l.is_closed()]
     if not lines:
         return road_line
     lines.append(road_line)
@@ -224,42 +233,48 @@ def get_complete_road_line(road):
     results = []
     for line in lines:
         line = canonicalize_line(line)
-        start_points[line.coords[0]].append(line)
-        end_points[line.coords[-1]].append(line)
+        coords = line.coords()
+        start_points[coords[0]].append(line)
+        end_points[coords[-1]].append(line)
         to_check.append(line)
     while to_check:
         candidate = to_check.pop()
-        begins_with_lines = end_points.get(candidate.coords[0])
-        continues_with_lines = start_points.get(candidate.coords[-1])
+        candidate_coords = candidate.coords()
+        begins_with_lines = end_points.get(candidate_coords[0])
+        continues_with_lines = start_points.get(candidate_coords[-1])
         if begins_with_lines or continues_with_lines:
-            start_points[candidate.coords[0]].remove(candidate)
-            end_points[candidate.coords[-1]].remove(candidate)
+            start_points[candidate_coords[0]].remove(candidate)
+            end_points[candidate_coords[-1]].remove(candidate)
         if begins_with_lines:
             begins_with = select_mergeable_line(candidate, begins_with_lines, merge_at_end=False)
             to_check.remove(begins_with)
-            end_points[begins_with.coords[-1]].remove(begins_with)
-            start_points[begins_with.coords[0]].remove(begins_with)
-            merged = LineString(list(begins_with.coords) + list(candidate.coords[1:]))
-            start_points[merged.coords[0]].append(merged)
-            end_points[merged.coords[-1]].append(merged)
+            bw_coords = begins_with.coords()
+            end_points[bw_coords[-1]].remove(begins_with)
+            start_points[bw_coords[0]].remove(begins_with)
+            merged = Geometry.from_linestring(list(bw_coords) + list(candidate_coords[1:]))
+            merged_coords = merged.coords()
+            start_points[merged_coords[0]].append(merged)
+            end_points[merged_coords[-1]].append(merged)
             to_check.append(merged)
         elif continues_with_lines:
             continues_with = select_mergeable_line(candidate, continues_with_lines, merge_at_end=True)
             to_check.remove(continues_with)
-            start_points[continues_with.coords[0]].remove(continues_with)
-            end_points[continues_with.coords[-1]].remove(continues_with)
-            merged = LineString(list(candidate.coords[:-1]) + list(continues_with.coords))
-            start_points[merged.coords[0]].append(merged)
-            end_points[merged.coords[-1]].append(merged)
+            cw_coords = continues_with.coords()
+            start_points[cw_coords[0]].remove(continues_with)
+            end_points[cw_coords[-1]].remove(continues_with)
+            merged = Geometry.from_linestring(list(candidate_coords[:-1]) + list(cw_coords))
+            merged_coords = merged.coords()
+            start_points[merged_coords[0]].append(merged)
+            end_points[merged_coords[-1]].append(merged)
             to_check.append(merged)
         else:
-            start_points[candidate.coords[0]].remove(candidate)
-            end_points[candidate.coords[-1]].remove(candidate)
+            start_points[candidate_coords[0]].remove(candidate)
+            end_points[candidate_coords[-1]].remove(candidate)
             results.append(candidate)
     for result in results:
         if result.contains(road_line):
             return result
-    
+
 def calculate_absolute_distances(segments, entity):
     """Calculates how far could the entity based on its position trawel along the line represented by the segments in both directions, e. g. to the start or the end points of the whole line. Assumes that the closest segment calculation has already been done, e. g. that the LineSegment.current property is set correctly."""
     from_start = 0
@@ -319,18 +334,18 @@ def get_smaller_turn(turn_choices):
 
 def get_crossing_point(base_road, known_crossing_part, candidates):
     """Returns the point where the base_road intersects with the known_crossing_part. If that intersection is more complex, finds the correct point using the candidates as help."""
-    base_geom = wkb.loads(base_road.geometry)
-    part_geom = wkb.loads(known_crossing_part.geometry)
+    base_geom = base_road.geometry
+    part_geom = known_crossing_part.geometry
     intersection = base_geom.intersection(part_geom)
-    if intersection.is_empty:
+    if intersection.is_empty():
         return None
-    if intersection.geom_type == "Point":
+    if intersection.geom_type() == "Point":
         return intersection
     # Did not find a point intersection so try to find one from the candidates, they might have simpler ones
     for candidate in candidates:
-        candidate_geom = wkb.loads(candidate.geometry)
+        candidate_geom = candidate.geometry
         candidate_intersection = base_geom.intersection(candidate_geom)
-        if not  candidate_intersection.is_empty and intersection.distance(candidate_intersection) == 0.0 and candidate_intersection.geom_type == "Point":
+        if not candidate_intersection.is_empty() and intersection.euclidean_distance_to_point(*candidate_intersection.point_coords()) == 0.0 and candidate_intersection.geom_type() == "Point":
             return candidate_intersection
     log.warning("Did not find a point intersection for base road %s, known crossing part %s and candidates %s.", base_road.id, known_crossing_part.id, [c.id for c in candidates])
     return None
