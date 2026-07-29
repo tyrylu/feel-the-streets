@@ -176,31 +176,9 @@ impl PyGeometry {
     /// Returns the planar (Euclidean) distance from this geometry to a point (x, y).
     /// Used for finding the closest line segment — only relative ordering matters.
     pub fn euclidean_distance_to_point(&self, x: f64, y: f64) -> f64 {
-        use geo::Distance;
-        use geo::Euclidean;
+                use geo::{Distance, Euclidean};
         let query = Point::new(x, y);
-        match self.inner.as_ref() {
-            Geometry::Point(p) => Euclidean.distance(p, &query),
-            Geometry::Line(l) => Euclidean.distance(l, &query),
-            Geometry::LineString(ls) => Euclidean.distance(ls, &query),
-            Geometry::Polygon(p) => Euclidean.distance(p, &query),
-            Geometry::MultiPoint(mp) => Euclidean.distance(mp, &query),
-            Geometry::MultiLineString(mls) => Euclidean.distance(mls, &query),
-            Geometry::MultiPolygon(mp) => Euclidean.distance(mp, &query),
-            Geometry::GeometryCollection(gc) => {
-                gc.iter()
-                    .map(|g| PyGeometry::from_geo(g.clone()).euclidean_distance_to_point(x, y))
-                    .fold(f64::INFINITY, f64::min)
-            }
-            Geometry::Rect(r) => {
-                let p = r.to_polygon();
-                Euclidean.distance(&p, &query)
-            }
-            Geometry::Triangle(t) => {
-                let p = t.to_polygon();
-                Euclidean.distance(&p, &query)
-            }
-        }
+        Euclidean.distance(self.inner.as_ref(), &query)
     }
 
     /// Returns true if this geometry spatially contains the other geometry.
