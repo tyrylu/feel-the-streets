@@ -122,7 +122,7 @@ pub fn translate(
                     )))
                 }
                 None => {
-                    debug!("Failed to generate geometry for object {:?}, likely because of the object boundary filtering", &object);
+                    debug!("Failed to generate geometry for object {:?}, likely because of the object boundary filtering", object);
                     Ok(None)
                 }
             }
