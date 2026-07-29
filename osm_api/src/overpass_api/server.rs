@@ -56,10 +56,12 @@ fn run_query(
         req.uri_ref().unwrap(),
         query
     );
-    let resp = req.send_form([("data", query)])?;
-    debug!("Request successfully finished after {:?}.", start.elapsed());
-    // Maybe wake the dispatcher
+    let res = req.send_form([("data", query)]);
     wake_sender.send(()).unwrap();
+    match res {
+        Ok(resp) => {
+    
+    debug!("Request successfullyfinished after {:?}.", start.elapsed());
     if !result_to_tempfile {
         Ok(Box::new(resp.into_body().into_reader()))
     } else {
@@ -67,6 +69,12 @@ fn run_query(
         io::copy(&mut resp.into_body().into_reader(), &mut file)?;
         file.rewind()?;
         Ok(Box::new(file))
+    }
+}
+Err(e) => {
+    debug!("Request failed after {:?}.", start.elapsed());
+    Err(e.into())
+}
     }
 }
 
