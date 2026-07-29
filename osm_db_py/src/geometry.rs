@@ -164,18 +164,7 @@ impl PyGeometry {
     pub fn closest_point(&self, x: f64, y: f64) -> PyResult<(f64, f64)> {
         use geo::ClosestPoint;
         let query = Point::new(x, y);
-        let result = match self.inner.as_ref() {
-            Geometry::Point(p) => geo::Closest::SinglePoint(*p),
-            Geometry::Line(l) => l.closest_point(&query),
-            Geometry::LineString(ls) => ls.closest_point(&query),
-            Geometry::Polygon(p) => p.closest_point(&query),
-            Geometry::MultiPoint(mp) => mp.closest_point(&query),
-            Geometry::MultiLineString(mls) => mls.closest_point(&query),
-            Geometry::MultiPolygon(mp) => mp.closest_point(&query),
-            Geometry::GeometryCollection(gc) => gc.closest_point(&query),
-            Geometry::Rect(r) => r.to_polygon().closest_point(&query),
-            Geometry::Triangle(t) => t.to_polygon().closest_point(&query),
-        };
+        let result = self.inner.closest_point(&query);
         match result {
             geo::Closest::SinglePoint(p) | geo::Closest::Intersection(p) => Ok((p.x(), p.y())),
             geo::Closest::Indeterminate => Err(PyValueError::new_err(
@@ -217,30 +206,7 @@ impl PyGeometry {
     /// Returns true if this geometry spatially contains the other geometry.
     pub fn contains(&self, other: &PyGeometry) -> bool {
         use geo::Contains;
-        // geo::Contains is only implemented for certain type pairs; dispatch manually.
-        match (self.inner.as_ref(), other.inner.as_ref()) {
-            (Geometry::Polygon(a), Geometry::Point(b)) => a.contains(b),
-            (Geometry::Polygon(a), Geometry::LineString(b)) => a.contains(b),
-            (Geometry::Polygon(a), Geometry::Polygon(b)) => a.contains(b),
-            (Geometry::MultiPolygon(a), Geometry::Point(b)) => a.contains(b),
-            (Geometry::MultiPolygon(a), Geometry::LineString(b)) => a.contains(b),
-            (Geometry::LineString(a), Geometry::Point(b)) => a.contains(b),
-            // For any other combination fall back to bounding-box containment as a best-effort.
-            _ => {
-                use geo::BoundingRect;
-                let bbox_self = self.inner.bounding_rect();
-                let bbox_other = other.inner.bounding_rect();
-                match (bbox_self, bbox_other) {
-                    (Some(a), Some(b)) => {
-                        a.min().x <= b.min().x
-                            && a.min().y <= b.min().y
-                            && a.max().x >= b.max().x
-                            && a.max().y >= b.max().y
-                    }
-                    _ => false,
-                }
-            }
-        }
+        self.inner.contains(other.inner.as_ref())
     }
 
     /// Computes the intersection of two geometries.

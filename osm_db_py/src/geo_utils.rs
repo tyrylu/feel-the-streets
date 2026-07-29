@@ -76,7 +76,7 @@ pub fn geodesic_area(coords: Vec<(f64, f64)>) -> f64 {
         .map(|&(x, y)| geo::coord! { x: x, y: y })
         .collect();
     let polygon = geo::Polygon::new(ls, vec![]);
-    polygon.geodesic_area_unsigned()
+    polygon.geodesic_area_signed().abs()
 }
 
 /// Project `(lat, lon)` to local flat (easting, northing) in metres, relative to a
