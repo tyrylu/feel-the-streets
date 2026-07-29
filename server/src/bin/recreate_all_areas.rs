@@ -1,9 +1,10 @@
 use chrono::Utc;
-use log::info;
+use log::{error, info};
 use osm_api::object_manager::OSMObjectManager;
 use osm_api::overpass_api::Servers;
 use server::names_cache::OSMObjectNamesCache;
 use server::{area::Area, background_tasks::area_db_creation, db, Result};
+use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
 use std::sync::{Arc, Mutex};
@@ -18,8 +19,10 @@ async fn async_main() -> Result<()> {
     let cache = Arc::new(osm_api::object_manager::open_cache(Some(&now))?);
     let names_cache = Arc::new(Mutex::new(OSMObjectNamesCache::load()?));
     let mut tasks = vec![];
+    let mut prev_sizes = HashMap::new();
     for area in Area::all(&server_conn.lock().unwrap())? {
         let area_file = format!("{}.db", area.osm_id);
+        prev_sizes.insert(area.osm_id, area.db_size);
         if Path::new(&area_file).exists() {
             fs::remove_file(&area_file)?;
         }
@@ -39,10 +42,18 @@ async fn async_main() -> Result<()> {
     }
     for task in tasks {
         if let Err(e) = task.await {
-            println!("Failed to recreate area, error: {e}");
+            error!("Failed to recreate area, error: {e}");
         }
     }
     names_cache.lock().unwrap().save()?;
+    for area in Area::all(&server_conn.lock().unwrap())? {
+        let new_size = area.db_size;
+        let prev_size = prev_sizes.get(&area.osm_id).copied().unwrap_or(0);
+        info!(
+            "Area {} ({}) recreated, previous size: {}, new size: {}",
+            area.osm_id, area.name, prev_size, new_size
+        );
+    }
     Ok(())
 }
 
