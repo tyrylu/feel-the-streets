@@ -1,5 +1,5 @@
-from PySide6.QtCore import qVersion
-if qVersion() >= "6.8":
+from PySide6.QtCore import __version_info__
+if __version_info__ >= (6, 8):
     available = True
     from PySide6.QtGui import QGuiApplication, QAccessible, QAccessibleAnnouncementEvent
 else:
