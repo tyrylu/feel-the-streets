@@ -27,5 +27,6 @@ flate2 = "1.1.9"
 backon = "1.6.0"
 geo-traits = "0.3.0"
 bitcode = { version = "0.6.9", features = ["serde"] }
+rand = "0.10.2"
 
 [features]
