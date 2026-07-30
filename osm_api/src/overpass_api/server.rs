@@ -210,6 +210,6 @@ impl Server {
 
     fn prepare_run_query(&self) -> RequestBuilder<WithBody> {
         let final_url = format!("{}/api/interpreter", self.url);
-        self.agent.post(&final_url)
+        self.agent.post(&final_url).header("Accept-Encoding", "")
     }
 }
