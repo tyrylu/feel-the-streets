@@ -62,7 +62,6 @@ fn run_query(
         Ok(resp) => {
     
     debug!("Request successfullyfinished after {:?}.", start.elapsed());
-    debug!("Content length: {:?}", resp.headers()["Content-Length"]);
     if !result_to_tempfile {
         Ok(Box::new(resp.into_body().into_reader()))
     } else {
