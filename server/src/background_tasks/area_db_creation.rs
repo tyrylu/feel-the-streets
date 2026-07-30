@@ -50,6 +50,7 @@ pub fn create_area_database_worker(
     let mut translated_count = 0;
     let mut area_db = AreaDatabase::create(area)?;
     let mut newest_timestamp = "2000-01-01T00:00:00Z".to_string();
+    db::begin_transaction(&area_db_conn.lock().unwrap())?;
     area_db.insert_entities(manager.cached_objects()?.filter_map(|obj| {
         if !from_network_ids.contains(&obj.unique_id()) {
             return None;
@@ -67,6 +68,7 @@ pub fn create_area_database_worker(
         }
         entity
     }))?;
+    db::commit_transaction(&area_db_conn.lock().unwrap())?;
     drop(from_network_ids);
     area_db.begin()?;
     infer_additional_relationships_for(&area_db)?;
