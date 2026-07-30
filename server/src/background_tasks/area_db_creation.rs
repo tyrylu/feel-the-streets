@@ -46,6 +46,8 @@ pub fn create_area_database_worker(
     let area_bounds = db::get_geometry_bounds(&area_db_conn.lock().unwrap(), &area_geom)?;
     info!("Using area bounds: {:?}", area_bounds);
     let from_network_ids = manager.get_ids_retrieved_from_network();
+    let network_objects_count = from_network_ids.len();
+    let mut translated_count = 0;
     let mut area_db = AreaDatabase::create(area)?;
     let mut newest_timestamp = "2000-01-01T00:00:00Z".to_string();
     area_db.insert_entities(manager.cached_objects()?.filter_map(|obj| {
@@ -55,6 +57,7 @@ pub fn create_area_database_worker(
         let entity = translator::translate(&obj, &area_bounds, &manager, &mut record)
             .expect("Translation failure.");
         if let Some(ent) = &entity {
+            translated_count += 1;
             let ts_clone = newest_timestamp.clone();
             newest_timestamp = ts_clone.max(obj.timestamp.clone());
             db::insert_area_entity(&area_db_conn.lock().unwrap(), area, &ent.0.id)
@@ -79,7 +82,7 @@ pub fn create_area_database_worker(
         &area_db_conn.lock().unwrap(),
     )?;
     record.save_to_file(&format!("creation_{area}.json"))?;
-    info!("Area {} created successfully.", area);
+    info!("Area {} created successfully, {} OSM objects translated into {} entities.", area, network_objects_count, translated_count);
     Ok(())
 }
 
