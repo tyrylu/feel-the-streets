@@ -11,7 +11,7 @@ use itertools::Itertools;
 use log::{debug, info, trace, warn};
 use once_cell::sync::Lazy;
 use quick_xml::de::Deserializer;
-use redb::{Database, ReadableDatabase, ReadableTable, TableDefinition};
+use redb::{Database, ReadableDatabase, ReadableTable, TableDefinition, WriteTransaction};
 use serde::Deserialize;
 
 const OBJECTS_TABLE: TableDefinition<&str, &[u8]> = TableDefinition::new("osm_objects");
@@ -128,14 +128,19 @@ impl OSMObjectManager {
         self.retrieved_from_network.borrow()
     }
 
-    pub fn cache_object(&self, object: &OSMObject) -> Result<()> {
+pub fn cache_object(&self, object: &OSMObject) -> Result<()> {
+        let wtxn = self.cache.begin_write()?;
+        self.cache_object_internal(object, &wtxn)?;
+        wtxn.commit()?;
+        Ok(())
+    }
+
+    fn cache_object_internal(&self, object: &OSMObject, wtxn: &WriteTransaction) -> Result<()> {
         let compressed = serialize_and_compress(object)?;
-        let txn = self.cache.begin_write()?;
         {
-            let mut table = txn.open_table(OBJECTS_TABLE)?;
+            let mut table = wtxn.open_table(OBJECTS_TABLE)?;
             table.insert(object.unique_id().as_str(), compressed.as_slice())?;
         }
-        txn.commit()?;
         Ok(())
     }
 
@@ -179,17 +184,19 @@ impl OSMObjectManager {
             cached_readable.read_line(&mut line)?;
         }
         let mut de = Deserializer::from_reader(cached_readable);
+        let wtxn = self.cache.begin_write()?;
         while let Ok(obj) = OSMObjectOrRemark::deserialize(&mut de) {
             let raw: RawOSMObject = obj.try_into()?;
             let internal_object: OSMObject = raw.try_into()?;
             self.retrieved_from_network
                 .borrow_mut()
                 .insert(internal_object.unique_id());
-            self.cache_object(&internal_object)?;
+            self.cache_object_internal(&internal_object, &wtxn)?;
             if return_objects {
                 objects.push(internal_object);
             }
         }
+        wtxn.commit()?;
         debug!("Caching finished after {:?}", start.elapsed());
         Ok(objects)
     }
