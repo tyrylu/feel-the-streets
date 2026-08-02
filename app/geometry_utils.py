@@ -135,9 +135,7 @@ def closest_point_to(point, geom, convert=True):
     geom_type = geom.geom_type()
     if geom_type == "Point":
         return geom.point_coords()
-    elif geom_type in {"LineString", "MultiLineString", "GeometryCollection", "MultiPolygon"}:
-        return geom.closest_point(point[0], point[1])
-    elif geom_type == "Polygon":
+    elif geom_type in {"LineString", "MultiLineString", "GeometryCollection", "Polygon", "MultiPolygon"}:
         return geom.closest_point(point[0], point[1])
     else:
         raise RuntimeError("Can not process geometry of type %s." % geom_type)
@@ -153,7 +151,10 @@ def distance_filter(entities, position, distance):
     with measure("Geometry distance filtering"):
         res_entities = []
         point = (position.lon, position.lat)
+        point_geom = Geometry.from_linestring([point, point])
         for entity in entities:
+            if entity.geometry.contains(point_geom):
+                continue
             closest = closest_point_to(point, entity.geometry)
             closest_latlon = to_latlon(closest)
             cur_distance = distance_between(closest_latlon, position)
