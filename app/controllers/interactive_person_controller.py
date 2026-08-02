@@ -75,8 +75,8 @@ class InteractivePersonController:
     def _position_impl(self, objects):    
         if objects:
             speech().silence()
-            for obj in objects:
-                speech().speak(describe_entity(obj), add_to_history=False)
+            msg = ", ".join([describe_entity(obj) for obj in objects])
+            speech().speak(msg, add_to_history=False)
         else:
             speech().speak(_("Not known."), add_to_history=False)
     
