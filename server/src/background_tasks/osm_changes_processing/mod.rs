@@ -319,8 +319,9 @@ fn handle_geometry_change(
             .get_entity(entity_id)?
             .unwrap_or_else(|| {
                 panic!(
-                    "The summary says we have entity {}, but it is not there",
-                    entity_id
+                    "The summary says we have entity {} in area {}, but it is not there",
+                    entity_id,
+                    area_id
                 )
             })
             .geometry;
