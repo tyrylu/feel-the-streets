@@ -1643,6 +1643,7 @@ dependencies = [
  "osm_db",
  "redis_api",
  "serde",
+ "serde_json",
  "server",
  "ureq",
  "url",

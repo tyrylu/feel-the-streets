@@ -6,6 +6,23 @@ use std::collections::HashMap;
 use std::fs::File;
 use std::io::Write;
 
+/// A flat, sorted entry used in the review report.
+pub struct SortedEntry {
+    pub key: String,
+    pub count: usize,
+    pub examples: Vec<String>,
+}
+
+/// All data needed to render a review report, with items pre-sorted by count descending.
+pub struct TranslationSummary {
+    pub missing_enum_members: Vec<SortedEntry>,
+    pub type_violations: Vec<SortedEntry>,
+    pub unknown_fields: Vec<SortedEntry>,
+    pub missing_required_fields: Vec<SortedEntry>,
+    /// Each entry's `key` is a tag-combination fingerprint, `count` is occurrences.
+    pub interesting_object_combinations: Vec<SortedEntry>,
+}
+
 #[derive(Serialize, Deserialize)]
 pub struct TranslationRecord {
     type_violations: HashMap<String, HashMap<String, Vec<String>>>,
@@ -83,6 +100,85 @@ impl TranslationRecord {
             .entry(field.to_string())
             .or_default()
             .push(value.to_string());
+    }
+
+    pub fn summarize(&self) -> TranslationSummary {
+        // Helper: flatten a HashMap<String, HashMap<String, Vec<String>>> into sorted entries.
+        fn flatten_vec_map(
+            map: &HashMap<String, HashMap<String, Vec<String>>>,
+        ) -> Vec<SortedEntry> {
+            let mut entries: Vec<SortedEntry> = map
+                .iter()
+                .flat_map(|(outer, inner)| {
+                    inner.iter().map(move |(inner_key, values)| SortedEntry {
+                        key: format!("{outer}.{inner_key}"),
+                        count: values.len(),
+                        examples: {
+                            let mut seen = std::collections::HashSet::new();
+                            let mut uniq: Vec<String> = Vec::new();
+                            for v in values {
+                                if seen.insert(v.clone()) {
+                                    uniq.push(v.clone());
+                                }
+                            }
+                            uniq.truncate(5);
+                            uniq
+                        },
+                    })
+                })
+                .collect();
+            entries.sort_by(|a, b| b.count.cmp(&a.count));
+            entries
+        }
+
+        // Helper: flatten a HashMap<String, HashMap<String, u32>> into sorted entries.
+        fn flatten_count_map(
+            map: &HashMap<String, HashMap<String, u32>>,
+            sep: char,
+        ) -> Vec<SortedEntry> {
+            let mut entries: Vec<SortedEntry> = map
+                .iter()
+                .flat_map(|(outer, inner)| {
+                    inner.iter().map(move |(inner_key, &count)| SortedEntry {
+                        key: format!("{outer}{sep}{inner_key}"),
+                        count: count as usize,
+                        examples: vec![],
+                    })
+                })
+                .collect();
+            entries.sort_by(|a, b| b.count.cmp(&a.count));
+            entries
+        }
+
+        // Interesting objects: build tag-combination fingerprints.
+        let mut combo_counts: HashMap<String, usize> = HashMap::new();
+        for obj in &self.potentially_interesting_objects {
+            let mut pairs: Vec<String> = obj
+                .tags
+                .iter()
+                .map(|(k, v)| format!("{k}={v}"))
+                .collect();
+            pairs.sort();
+            let fingerprint = pairs.join(", ");
+            *combo_counts.entry(fingerprint).or_insert(0) += 1;
+        }
+        let mut interesting: Vec<SortedEntry> = combo_counts
+            .into_iter()
+            .map(|(key, count)| SortedEntry {
+                key,
+                count,
+                examples: vec![],
+            })
+            .collect();
+        interesting.sort_by(|a, b| b.count.cmp(&a.count));
+
+        TranslationSummary {
+            missing_enum_members: flatten_count_map(&self.missing_enum_members, ':'),
+            type_violations: flatten_vec_map(&self.type_violations),
+            unknown_fields: flatten_vec_map(&self.unknown_fields),
+            missing_required_fields: flatten_count_map(&self.missing_required_fields, '.'),
+            interesting_object_combinations: interesting,
+        }
     }
 
     pub fn save_to_file(&self, path: &str) -> Result<()> {

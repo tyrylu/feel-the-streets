@@ -55,4 +55,13 @@ pub enum Command {
     RegenerateParentOSMIds,
     /// Regenerates area geometries
     RegenerateAreaGeometries,
+    /// Reviews all creation records in the creation_records/ directory, reporting issues sorted by occurrence count.
+    ReviewCreationRecords {
+        /// Only show items with at least this many total occurrences.
+        #[clap(long, default_value = "1")]
+        min_count: u32,
+        /// Only show a specific category: enum, type, fields, required, interesting.
+        #[clap(long)]
+        category: Option<String>,
+    },
 }

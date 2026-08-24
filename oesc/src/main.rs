@@ -8,6 +8,7 @@ mod regenerate_geometries;
 mod regenerate_parent_osm_ids;
 mod remove_field;
 mod request_redownload;
+mod review_creation_records;
 mod view_field_usage;
 
 use command::{Args, Command};
@@ -38,5 +39,9 @@ fn main() -> Result<()> {
         }
         Command::RegenerateParentOSMIds => regenerate_parent_osm_ids::regenerate_parent_osm_ids(),
         Command::RegenerateAreaGeometries => regenerate_geometries::regenerate_area_geometries(),
+        Command::ReviewCreationRecords {
+            min_count,
+            category,
+        } => review_creation_records::review_creation_records(min_count, category),
     }
 }
