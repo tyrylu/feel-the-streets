@@ -150,8 +150,9 @@ impl ServerStatus {
     fn wait_for_available_slot(&self) {
         if !self.has_available_slot() {
             let dur = self.slot_available_after().to_std().unwrap();
-            info!("Overpass API endpoint at {} ran out of slots, going to sleep for {:?} to make one.", self.url, dur);
-            thread::sleep(dur);
+            let wait_dur = dur + dur;
+            info!("Overpass API endpoint at {} ran out of slots, going to sleep for {:?} to make one.", self.url, wait_dur);
+            thread::sleep(wait_dur);
         }
     }
 }
