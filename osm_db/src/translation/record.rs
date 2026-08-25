@@ -3,6 +3,7 @@ use crate::Result;
 use osm_api::object::OSMObject;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::cmp::Reverse;
 use std::fs::File;
 use std::io::Write;
 
@@ -127,7 +128,7 @@ impl TranslationRecord {
                     })
                 })
                 .collect();
-            entries.sort_by(|a, b| b.count.cmp(&a.count));
+            entries.sort_by_key(|a| Reverse(a.count));
             entries
         }
 
@@ -146,7 +147,7 @@ impl TranslationRecord {
                     })
                 })
                 .collect();
-            entries.sort_by(|a, b| b.count.cmp(&a.count));
+            entries.sort_by_key(|a| Reverse(a.count));
             entries
         }
 
@@ -170,7 +171,7 @@ impl TranslationRecord {
                 examples: vec![],
             })
             .collect();
-        interesting.sort_by(|a, b| b.count.cmp(&a.count));
+        interesting.sort_by_key(|a| Reverse(a.count));
 
         TranslationSummary {
             missing_enum_members: flatten_count_map(&self.missing_enum_members, ':'),
