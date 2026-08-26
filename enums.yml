@@ -120,7 +120,35 @@ BoardType:
   timetable: 19
   transport: 20
   'yes': 21
-  architeture: 22
+  architeture: 22 # Map it to architecture when we can
+  information: 23
+  welcome_sign: 24
+  public_transport: 25
+  rules: 26
+  warning: 27
+  sight: 28
+  tourism: 29
+  planet_walk: 30
+  art: 31
+  poetry: 32
+  fitness: 33
+  geography: 34
+  qr_code: 35
+  government: 36
+  person: 37
+  agriculture: 38
+  nature_bs: 39
+  parking: 40
+  industrial: 41
+  name: 42
+  education: 43
+  water: 44
+  česká_republika: 45
+  mushrooms: 46
+  forestry: 47
+  digitální: 48
+  stele: 49
+
 BorderType:
   nation: 0
 BoundaryType:
@@ -251,6 +279,57 @@ CraftType:
   winery: 25
   caterer: 26
   gardener: 27
+  electronics_repair: 28
+  blacksmith: 29
+  metal_construction: 30
+  joiner: 31
+  pottery: 32
+  painter: 33
+  cleaning: 34
+  printer: 35
+  signmaker: 36
+  floorer: 37
+  builder: 38
+  dental_technician: 39
+  chimney_sweeper: 40
+  plastic: 41
+  atelier: 42
+  saddler: 43
+  beekeeper: 44
+  tinsmit: 45
+  cabinet_maker: 46
+  interior_decorator: 47
+  distillery: 48
+  tiler: 49
+  'yes': 50
+  bakery: 51
+  agricultural_engines: 52
+  sawmill: 53
+  insulation: 54
+  engraver: 55
+  grinding_mill: 56
+  optician: 57
+  clockmaker: 58
+  carpet_layer: 59
+  organ_builder: 60
+  rigger: 61
+  stone_fitter: 62
+  clothes_mendling: 63
+  roastery: 64
+  grinder: 65
+  boatbuilder: 66
+  welder: 67
+  plastic_rubber: 68
+  restoration: 69
+  glass_working: 70
+  scaffolder: 71
+  luthier: 72
+  furniture: 73
+  computer: 74
+  information_electronics: 75
+  homebuilder: 76
+  sailmaker: 77
+
 TrafficSignalsType:
   some: 0
   signals: 1
@@ -269,6 +348,9 @@ CicleWayKind:
 DisusedType:
   quarry: 0
   'yes': 1
+  lock_gate: 2
+  multipolygon: 3
+  shop: 4
 DoorType:
   'yes': 0
   overhead: 1
@@ -304,8 +386,42 @@ AccessType:
   use_sidepath: 24
   on_request: 25
   opposite: 26
-  destinaton: 27
+  destinaton: 27 # Map to destination when we can
   limited: 28
+  permit: 29
+  optional_sidepath: 30
+  service: 31
+  discouraged: 32
+  residents: 33
+  bus: 34
+  local: 35
+  employees: 36
+  members: 37
+  conditional: 38
+  opposite_lane: 39
+  notspecified: 40
+  key: 41
+  students: 42
+  foot: 43
+  visitors: 44
+  not_suitable: 45
+  tunnel: 46
+  only: 47
+  automatic: 48
+  both: 49
+  gate: 50
+  motorcar: 51
+  prs: 52
+  staff: 53
+  access: 54
+  surface_not_suitable: 55
+  exit: 56
+  motor_vehicle: 57
+  entry: 58
+  car_sharing: 59
+  not_specified: 60 # Map to notspecified when we can
+  wheelchair: 61
+  hinged: 62
 LeisureType:
   none: 0
   swimming_pool: 1
@@ -356,6 +472,30 @@ LeisureType:
   me: 46
   bowling_alley: 47
   multipolygon: 48
+  sports_hall: 49
+  bandstand: 50
+  schoolyard: 51
+  indoor_play: 52
+  escape_game: 53
+  fishing: 54
+  trampoline_park: 55
+  practice_pitch: 56
+  resort: 57
+  shooting_ground: 58
+  high_ropes_course: 59
+  drawing_surface: 60
+  sports: 61
+  piste: 62
+  soccer_golf: 63
+  swimming_pool_sauna: 64
+  relax_room: 65
+  model_racetrack: 66
+  bathing_place: 67
+  beach: 68
+  hammocks: 69
+  spa: 70
+  bike_park: 71
+  site: 72
 AmenityType:
   none: 0
   restaurant: 1
@@ -763,6 +903,94 @@ ManMadeType:
   wayside_shrine: 53
   mineshaft: 54
   heat: 55
+  manhole: 56
+  gantry: 57
+  planter: 58
+  water_tap: 59
+  utility_pole: 60
+  charge_point: 61
+  column: 62
+  ventilation_shaft: 63
+  pumping_station: 64
+  spoil_heap: 65
+  tunnel: 66
+  courtyard: 67
+  multipolygon: 68
+  carpet_hanger: 69
+  drinking_fountain: 70
+  obelisk: 71
+  goods_conveyor: 72
+  groyne: 73
+  satellite_dish: 74
+  fuel_pump: 75
+  gully: 76
+  quay: 77
+  breakwater: 78
+  video_wall: 79
+  heap: 80
+  acoustic_beacon: 81
+  buttress: 82
+  "forester's_lodge": 83
+  construction: 84
+  dolphin: 85
+  hayrack: 86
+  ski_jump: 87
+  spring_box: 88
+  telephone_box: 89
+  wildlife_crossing: 90
+  ceremonial_gate: 91
+  lamp: 92
+  cooling: 93
+  dovecote: 94
+  shaft: 95
+  compass_rose: 96
+  windpump: 97
+  field_shelter: 98
+  homeless_shelter: 99
+  container_terminal: 100
+  cutting: 101
+  reinforced_slope: 102
+  nesting_site: 103
+  cairn: 104
+  pole: 105
+  guard_stone: 106
+  rf: 107
+  overflow: 108
+  diving_board: 109
+  mount: 110
+  industrial: 111
+  composting_plant: 112
+  ice_house: 113
+  glass: 114
+  birdhouse: 115
+  petroleum_well: 116
+  gas_station: 117
+  scoreboard: 118
+  airshaft: 119
+  layer: 120
+  hose: 121
+  meridian_marker: 122
+  service_area: 123
+  bird_feeder: 124
+  scale: 125
+  wildlife_opening: 126
+  technical_area: 127
+  vent: 128
+  pump: 129
+  pond: 130
+  distillates_storage: 131
+  arch: 132
+  river_wave: 133
+  ventilation: 134
+  soakhole: 135
+  mine: 136
+  pipe: 137
+  air_shaft: 138 # Map it to airshaft or the way round
+  rainwater_plant: 139
+  flare: 140
+  stone_circle: 141
+  MDF: 142
+
 SportType:
   none: 0
   tennis: 1
@@ -859,6 +1087,60 @@ SportType:
   model_aerodrome: 90
   aikido: 91
   jumping: 92
+  four_square: 93
+  multipolygon: 94
+  site: 95
+  futsal: 96
+  calisthenics: 97
+  padel: 98
+  horseshoes: 99
+  pickleball: 100
+  korfball: 101
+  fronton: 102
+  '10pin': 103
+  cricket: 104
+  darts: 105
+  orienteering: 106
+  '9pin': 107
+  netball: 108
+  shuffleboard: 109
+  batting_cage: 110
+  jogging: 111
+  paddle_tennis: 112
+  paddel: 113
+  martial_arts: 114
+  pelota: 115
+  showball: 116
+  pilates: 117
+  racquet: 118
+  taekwondo: 119
+  dog_agility: 120
+  bullfighting: 121
+  free_flying: 122
+  wrestling: 123
+  firefighting: 124
+  mtb: 125
+  wakeboarding: 126
+  windsurfing: 127
+  pole_dance: 128
+  crossfit: 129
+  minisoccer: 130
+  czech_handball: 131
+  five-a-side: 132
+  soo: 133
+  gym: 134
+  speedway: 135
+  kickboxing: 136
+  judo: 137
+  frontón: 138 # Map it to fronton or the way round
+  jiju-jitsu: 139
+  rc: 140
+  excercise: 141
+  frontenis: 142
+  bodybuilding: 143
+  ball_hockey: 144
+
+
 BarrierType:
   none: 0
   wall: 1
@@ -900,6 +1182,52 @@ BarrierType:
   recommended: 38
   'no': 39
   ramp: 40
+  wicket_gate: 41
+  parking_bumper: 42
+  planter: 43
+  ditch: 44
+  full_height_turnstile: 45
+  sump_buster: 46
+  hemispere: 47
+  sliding_beam: 48
+  bump_gate: 49
+  partly: 50
+  step: 51
+  bus_trap: 52
+  coupure: 53
+  bar: 54
+  sliding_gate: 55
+  delineators: 56
+  tank_trap: 57
+  blocks: 58
+  traffic_island: 59
+  debris: 60
+  cable_barrier: 61
+  hekomheining: 62
+  barrier_board: 63
+  road_damage: 64
+  door: 65
+  knee_rail: 66
+  flowerpot: 67
+  motorcycle_barrier: 68
+  metal: 69
+  edge: 70
+  sign: 71
+  concrete_barrier: 72
+  ladder: 73
+  sand: 74
+  double: 75
+  delinators: 76
+  horse_barrier: 77
+  block_row: 78
+  hromada_štěrku: 79
+  'swing_gate:single': 80
+  ticket_barrier: 81
+  chicane: 82
+  single: 83
+  parking_lock: 84
+  flood_wall: 85
+
 SmokingType:
   none: 0
   outside: 1
@@ -931,6 +1259,28 @@ TourismType:
   disused: 19
   apartment: 20
   wine_cellar: 21
+  camp_pitch: 22
+  multipolygon: 23
+  aquarium: 24
+  winderness_hut: 25
+  hunting_lodge: 26
+  quest: 27
+  route: 28
+  checkpoint: 29
+  cabin: 30
+  site: 31
+  photopoint: 32
+  resort: 33
+  proposed: 34
+  spa_resort: 35
+  nature_centre: 36
+  square: 37
+  nature: 38
+  graffiti: 39
+  tours: 40
+  trail_riding_station: 41
+  bridge: 42
+  'removed:information': 43
 CrossingType:
   'no': -1
   unknown: 0
@@ -939,7 +1289,7 @@ CrossingType:
   traffic_signals: 4
   unmarked: 5
   crossing: 6
-  island_ucontrolled: 7
+  island_ucontrolled: 7 # Map it to island_uncontrolled when we can
   marked: 8
   surface: 9
   'yes': 10
@@ -947,6 +1297,19 @@ CrossingType:
   cycle: 12
   controlled: 13
   zebra: 14
+  pedestrian_signals: 15
+  informal: 16
+  separate: 17
+  pedestrian: 18
+  bridge: 19
+  footway: 20
+  pelican: 21
+  standard: 22
+  sensor_operated: 23
+  cycleway: 24
+  tunnel: 25
+  foot: 26
+
 HistoricType:
   none: -1
   wayside_shrine: 0
@@ -978,6 +1341,70 @@ HistoricType:
   stone: 26
   multipolygon: 27
   road: 28
+  house: 29
+  hollow_way: 30
+  church: 31
+  fort: 32
+  citywall: 33
+  manor: 34
+  bridge: 35
+  canal: 36
+  roman_road: 37
+  milestone: 38
+  warehouse: 39
+  locomotive: 40
+  cannon: 41
+  construction: 42
+  wayside_chapel: 43
+  site: 44
+  aqueduct: 45
+  railway_car: 46
+  villa: 47
+  railway_station: 48
+  chapel: 49
+  route: 50
+  pillory: 51
+  mine: 52
+  pub: 53
+  tower: 54
+  statue: 55
+  district: 56
+  townhall: 57
+  industrial: 58
+  ship: 59
+  fortification: 60
+  school: 61
+  tree: 62
+  advertising: 63
+  way: 64
+  bunker: 65
+  helicopter: 66
+  mine_shaft: 67
+  tram: 68
+  well: 69
+  vehicle: 70
+  museum: 71
+  turbine: 72
+  theatre: 73
+  prison: 74
+  border: 75
+  anchor: 76
+  heritage_building: 77
+  plaque: 78
+  windmill: 79
+  patient_cross: 80
+  folly: 81
+  armoury: 82
+  fountain: 83
+  synagogue: 84
+  old_house: 85
+  cathedral: 86
+  technical_monument: 87
+  railway_cart: 88
+  station: 89
+  machine: 90
+  bandstand: 91
+
 TrafficCalmingType:
   none: 0
   'yes': 1
@@ -990,6 +1417,17 @@ TrafficCalmingType:
   island: 9
   cushion: 10
   hump: 11
+  'no': 12
+  choker: 13
+  mini_bumps: 14
+  painted_island: 15
+  choked_table: 16
+  choked_cushion: 17
+  visiblepaint: 18
+  painted_cushion: 19
+  jersey_barrier: 20
+  rosette: 21
+
 WaterWayType:
   none: 0
   canal: 1
@@ -1007,6 +1445,42 @@ WaterWayType:
   lock: 13
   dock: 14
   waterway: 15
+  fairway: 16
+  milestone: 17
+  rapids: 18
+  stream_end: 19
+  confluence: 20
+  derelict_canal: 21
+  fish_pass: 22
+  sluice_gate: 23
+  hazard: 24
+  pressurised: 25
+  drystream: 26
+  turning_point: 27
+  flowline: 28
+  check_dam: 29
+  drawbridge: 30
+  bifurcation: 31
+  canoe_pass: 32
+  debris_screen: 33
+  wash: 34
+  water: 35
+  boat_lift: 36
+  multipolygon: 37
+  flow_control: 38
+  water_point: 39
+  regulator: 40
+  security_lock: 41
+  fuel: 42
+  egress: 43
+  source: 44
+  route: 45
+  boundary: 46
+  put_in: 47
+  crossing: 48
+  construction: 49
+  cascade: 50
+
 NaturalType:
   none: -1
   wetland: 0
@@ -1036,6 +1510,36 @@ NaturalType:
   mud: 24
   valley: 25
   hill: 26
+  coastline: 27
+  shrub: 28
+  multipolygon: 29
+  shrubbery: 30
+  mountain_range: 31
+  gully: 32
+  fresno: 33
+  earth_bank: 34
+  tree_stump: 35
+  volcano: 36
+  cape: 37
+  plateau: 38
+  'yes': 39
+  greenery: 40
+  fell: 41
+  gorge: 42
+  birds_nest: 43
+  tree_group: 44
+  bay: 45
+  basin: 46
+  boundary: 47
+  site: 48
+  forest: 49
+  fallen_tree: 50
+  palaeontological_site: 51
+  land: 52
+  peninsula: 53
+  hot_spring: 54
+
+
 BuildingType:
   unknown: 0
   'yes': 1
@@ -1195,6 +1699,28 @@ AerialWayType:
   papi: 18
   parking_position: 19
   proposed: 20
+  jet_bridge: 21
+  t-bar: 22
+  gondola: 23
+  highway_strip: 24
+  magic_carpet: 25
+  rope_tow: 26
+  stopway: 27
+  multipolygon: 28
+  fuel: 29
+  zip_line: 30
+  blast_pad: 31
+  route: 32
+  tower: 33
+  threshold: 34
+  model_runway: 35
+  aerialway: 36
+  razed: 37
+  j-bar: 38
+  dronepad: 39
+  goods: 40
+  model_taxiway: 41
+  vdf: 42
 RailWayType:
   none: -1
   rail: 0
@@ -1234,9 +1760,63 @@ RailWayType:
   defect_detector: 34
   isolated_track_section: 35
   traverser: 36
-  staton: 37
+  staton: 37 # Map to station
   site: 38
   workshop: 39
+  tram_level_crossing: 40
+  tram_crossing: 41
+  vacancy_detection: 42
+  platform_edge: 43
+  derail: 44
+  power_supply: 45
+  platform_marker: 46
+  rail_brake: 47
+  balise_group: 48
+  yard: 49
+  owner_change: 50
+  beacon: 51
+  lubracator: 52
+  light_rail: 53
+  tertiary: 54
+  phone: 55
+  train_station_entrance: 56
+  hirail_access: 57
+  spur_junction: 58
+  tram_stop: 59
+  veltilation_shaft: 60
+  expansion_device: 61
+  historic: 62
+  hump_yard: 63
+  loading_ramp: 64
+  radio: 65
+  monorail: 66
+  pit: 67
+  residential: 68
+  ashpit: 69
+  engine_shed: 70
+  branch: 71
+  'no': 72
+  museum: 73
+  siren: 74
+  air_shaft: 75
+  container_terminal: 76
+  station_site: 77
+  car_shuttle: 78
+  wash: 79
+  defect_detectors: 80 # Map to defect_detector
+  tunnel_portal: 81
+  aei: 82
+  cross_section: 83
+  rail_ramp: 84
+  track_scale: 85
+  blockpost: 86
+  speed_monitoring: 87
+  tracks: 88
+  fuel: 89
+  pedestrian: 90
+  multipolygon: 91
+  route: 92
+
 TunnelType:
   'no': 0
   'yes': 1
@@ -1355,8 +1935,44 @@ LandType:
   flowerbed: 36
   park: 37
   community_food_growing: 38
-  vliage_grenn: 39
+  vliage_grenn: 39 # Map to village_green
   service: 40
+  multipolygon: 41
+  logging: 42
+  religious: 43
+  greenery: 44
+  education: 45
+  tree_pit: 46
+  institutional: 47
+  aquaculture: 48
+  shrubs: 49
+  winter_sports: 50
+  lock_gate: 51
+  apiary: 52
+  government: 53
+  civic_admin: 54
+  fairground: 55
+  traffic_island: 56
+  depot: 57
+  prison: 58
+  artwork: 59
+  harbour: 60
+  fire_station: 61
+  ga: 62
+  salt_pond: 63
+  midden: 64
+  storage: 65
+  research: 66
+  collection: 67
+  barren: 68
+  plantation: 69
+  leisure: 70
+  clearing: 71
+  public_works: 72
+  observatory: 73
+  exposition: 74
+  farm: 75
+  protectednaturalarea: 76
 BuildingPartType:
   'yes': 0
   civic: 1
@@ -1533,6 +2149,53 @@ ConstructionType:
   highway_link: 40
   unclassified: 41
   motorway_junction: 42
+  detached: 43
+  path: 44
+  industrial: 45
+  education: 46
+  school: 47
+  station: 48
+  rail: 49
+  civic: 50
+  hospital: 51
+  warehouse: 52
+  platform: 53
+  kindergarten: 54
+  garage: 55
+  home: 56
+  park: 57
+  subway: 58
+  road: 59
+  cicletrack: 60
+  semidetached: 61
+  footpath: 62
+  theatre: 63
+  renaturation: 64
+  utility_tunnel: 65
+  port: 66
+  mixed_use: 67
+  golf_course: 68
+  community_centre: 69
+  fire_station: 70
+  basin: 71
+  terrace: 72swimming_pool: 73
+  pitch: 74
+  stable: 75
+  stadium: 76
+  tertiary_link: 77
+  brownfield: 78
+  civic_admin: 79
+  sports_facilities: 80
+  church: 81
+  railway_station: 82
+  fair: 83
+  government: 84
+  university: 85
+  traffic_signals: 86
+  bunker: 87
+  sports_hall: 88
+  schoolpart: 89
+  
 IndustrialType:
   factory: 0
   distributor: 1
@@ -1696,6 +2359,23 @@ RouteType:
   light_rail: 20
   running: 21
   funicular: 22
+  'disused:route': 23
+  pipeline: 24
+  horse: 25
+  worship: 26
+  waterway: 27
+  fitness_trail: 28
+  sculptural: 29
+  network: 30
+  superroute: 31
+  aerialway: 32
+  walking: 33
+  detour: 34
+  historic_railway: 35
+  bicycle_old: 36
+  inline_skates: 37
+  canoe: 38
+
 SurveillanceKind:
   guard: 0
   camera: 1
@@ -1726,6 +2406,14 @@ AreaType:
   track: 10
   construction: 11
   elevator: 12
+  multipolygon: 13
+  traffic_island: 14
+  parking_space: 15
+  steps: 16
+  bus: 17
+  res: 18
+  sidewalk: 19
+
 PlaceType:
   village: 0
   hamlet: 1
@@ -1740,6 +2428,19 @@ PlaceType:
   farm: 10
   isolated_dwelling: 11
   country: 12
+  quarter: 13
+  city_block: 14
+  plot: 15
+  state: 16
+  multipolygon: 17
+  borough: 18
+  region: 19
+  municipality: 20
+  county: 21
+  street: 22
+  'yes': 23
+  historic: 24
+  peninsula: 25
 AttractionType:
   animal: 0
   water_slide: 1
@@ -1749,6 +2450,11 @@ TransformerType:
   distribution: 0
   traction: 1
   minor_distribution: 2
+  main: 3
+  'yes': 4
+  phase_angle_regulator: 5
+  generator: 6
+
 TrailVisibility:
   excellent: 0
   good: 1
@@ -1776,7 +2482,25 @@ GardenType:
   castle: 3
   arboretum: 4
   residentia: 5
-  residental: 6
+  residental: 6 # Map to residential
+  private: 7
+  urban: 8
+  street_side: 9
+  community: 10
+  landscaping: 11
+  school: 12
+  commercial: 13
+  kitchen: 14
+  public: 15
+  facade_garden: 16
+  community_green: 17
+  flowerbed: 18
+  roof_garden: 19
+  rock_garden: 20
+  educational: 21
+  municipal: 22
+  pollinator: 23
+  vegetable_garden: 24
 RouteImportance:
   major: 0
   local: 1
@@ -1812,6 +2536,9 @@ MemorialType:
   statue: 3
   plate: 4
   war_memorial: 5
+  anchor: 6
+  technical_monument: 7
+
 Material:
   glass: 0
   steel: 1
@@ -1845,6 +2572,16 @@ ArtWorkType:
 AdvertisingType:
   billboard: 0
   totem: 1
+  column: 2
+  poster_box: 3
+  board: 4
+  sign: 5
+  'yes': 6
+  letter_board: 7
+  screen: 8
+  kiosk: 9
+  sculpture: 10
+
 NoticeImpact:
   upstream: 1
   downstream: 2
@@ -1939,6 +2676,18 @@ EntranceType:
   garage: 7
   entrance: 8
   gate: 9
+  staircase: 10
+  shop: 11
+  secondary: 12
+  parking: 13
+  'no': 14
+  elevator: 15
+  cafe: 16
+  toylets: 17
+  wheelchair: 18
+  hostel: 19
+  office: 20
+
 PowerSubstationType:
   unspecified: 0
   distribution: 1
@@ -1975,6 +2724,17 @@ PowerType:
   pole: 14
   generator: 15
   line: 16
+  catenary_mast: 17
+  catenary_portal: 18
+  power: 19
+  multipolygon: 20
+  circuit: 21
+  connection: 22
+  compensator: 23
+  proposed: 24
+  street_cabinet: 25
+  construction: 26
+
 TowerType:
   communication: 1
   observation: 2
@@ -1988,6 +2748,35 @@ TowerType:
   meteo: 10
   fire: 11
   anchor: 12
+  defensive: 13
+  watchtower: 14
+  ventilation: 15
+  radar: 16
+  cooling_tower: 17
+  diving: 18
+  popinjay: 19
+  telecommunication: 20
+  bridge: 21
+  concrete: 22
+  BTS: 23
+  monitoring: 24
+  lightning: 25
+  fortification: 26
+  transition: 27
+  water_tower: 28
+  flare_tower: 29
+  aircraft_control: 30
+  minaret: 31
+  clock: 32
+  airport_control: 33
+  firefighter_training: 34
+  advertising: 35
+  waterfacility: 36
+  navigation: 37
+  hose: 38
+  fire_station: 39
+  emergency_communication: 40
+
 ShelterType:
   unknown: 0
   public_transport: 1
@@ -2038,6 +2827,82 @@ OfficeType:
   logistics: 28
   reception: 29
   energy_supplier: 30
+  diplomatic: 31
+  association: 32
+  advertising_agency: 33
+  consulting: 34
+  multipolygon: 35
+  notary: 36
+  accountant: 37
+  financial_advisor: 38
+  tax_advisor: 39
+  political_party: 40
+  engineer: 41
+  security: 42
+  union: 43
+  foundation: 44
+  graphic_design: 45
+  moving_company: 46
+  newspaper: 47
+  property_management: 48
+  university: 49
+  construction_company: 50
+  health_insurance: 51
+  surveyor: 52
+  charity: 53
+  cooperative: 54
+  geodesist: 55
+  transport: 56
+  quango: 57
+  production: 58
+  labour_union: 59
+  forestry: 60
+  parish: 61
+  building: 62
+  'KIEM vzw': 63
+  florist: 64
+  computer: 65
+  bureau: 66
+  event_management: 67
+  translator: 68
+  careers: 69
+harbour_master: 70
+pest_control: 71
+healthcare: 72
+facility_management: 73
+laboratory: 74
+bail_bond_agent: 75
+mail: 76
+education: 77
+rental: 78
+power_utility: 79
+management: 80
+visa: 81
+conservator: 82
+disused: 83
+chamber: 84
+graphics_design: 85
+radio_station: 86
+adoption_agency: 87
+private_investigator: 88
+energy_provider: 89 # Map to energy_supplier when we can do this
+call_center: 90
+  prevention: 91
+  nursing_service: 92
+  museum: 93
+  construction: 94
+  bank: 95
+  lost_property: 96
+  courier: 97
+  travel_agency: 98
+  realestate: 99
+  medical_publisher: 100
+  wedding_planner: 101
+  contractor: 102
+  interior_design: 103
+  dating_agency: 104
+  commerce: 105
+
 ParkingLaneType:
   no_parking: 0
   diagonal: 1
@@ -2055,6 +2920,10 @@ FireHydrantType:
   pillar: 1
   wall: 2
   underground: 3
+  pipe: 4
+  suction_point: 5
+  wall-mounted: 6
+
 FireHydrantPosition:
   sidewalk: 0
   green: 1
@@ -2158,6 +3027,73 @@ PlaygroundType:
   climbingframe: 4
   roundabout: 5
   balancebeam: 6
+  structure: 7
+  springy: 8
+  seesaw: 9
+  playhouse: 10
+  hopscotch: 11
+  trampoline: 12
+  zipwire: 13
+  climbingwall: 14
+  horizontal_bar: 15
+  agility_trail: 16
+  cushion: 17
+  activitypanel: 18
+  funnel_ball: 19
+  spinner: 20
+  forest: 21
+  water: 22
+  aerialrotator: 23
+  tunnel_tube: 24
+  platform: 25
+  excercise: 26
+  musical_instrument: 27
+  splash_pad: 28
+  climbing_pole: 29
+  ladder: 30
+  climbing: 31
+  map: 32
+  basketrotator: 33
+  rope_traverse: 34
+  blackboard: 35
+  wobble_bridge: 36
+  monkey_bars: 37
+  climbing_rope: 38
+  spinning_disc: 39
+  sledding: 40
+  pump: 41
+  maze: 42
+  tire_swing: 43
+  spinner_bowl: 44
+  bridge: 45
+  table: 46
+  rope_swing: 47
+  construction: 48
+  'yes': 49
+  multi_play: 50
+  stepping_stones: 51
+  stepping_posts: 52
+  verticalbar: 53
+  vortices: 54
+  belt_bridge: 55
+  traffic_park: 56
+  hammock: 57
+  ropebridge: 58
+  track: 59
+  stepping_post: 60
+  sadpit: 61
+  balance: 62
+  teenshelter: 63
+  footway: 64
+  stepping_stone: 65
+  steps: 66
+  recreation_ground: 67
+  light_stone: 68
+  sand_pulley: 69
+  chess_table: 70
+  swingbasket: 71
+  bouncy_castle: 72
+  dome: 73
 GeneratorType:
   unknown: 0
   kaplan_turbine: 1
@@ -2413,6 +3349,24 @@ SocialFacilityType:
   shelter: 2
   outreach: 3
   advice: 4
+  nursing_home: 5
+  food_bank: 6
+  ambulatory_care: 7
+  day_care: 8
+  soup_kitchen: 9
+  social_club: 10
+  office: 11
+  clothing_bank: 12
+  workshop: 13
+  hospice: 14
+  community_centre: 15
+  counselling: 16
+  registrationcentre: 17
+  ambulant_care: 18 # Map to ambulatory_care when we can do this
+  psychological_counselling: 19
+  consulting: 20
+  healthcare: 21
+
 SocialFacilityUser:
   unspecified: 0
   senior: 1
