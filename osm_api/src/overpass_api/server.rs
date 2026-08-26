@@ -87,6 +87,10 @@ pub fn requests_dispatcher(
     let mut in_flight_requests = 0;
     let (wake_tx, wake_rx) = crossbeam_channel::unbounded();
     while !should_exit.load(Ordering::SeqCst) {
+        // Drain any completions that finished since the last iteration to keep in_flight_requests accurate.
+        while let Ok(()) = wake_rx.try_recv() {
+            in_flight_requests -= 1;
+        }
         // Wait until we have at least one available slot
         let status = server.get_api_status().expect("Could not get status");
         status.wait_for_available_slot();
