@@ -17,6 +17,15 @@ LoadingGauge:
   GB+: 0
   GC: 1
   GB: 2
+  TSI_GC: 3
+  TSI_GB: 4
+  W6A: 5
+  TSI_GB1: 6
+  UIC: 7
+  TSI_GA: 8
+  W10: 9
+  W8: 10
+
 PowerDesign:
   h-frame: 0
   donau: 1
@@ -151,6 +160,25 @@ BoardType:
 
 BorderType:
   nation: 0
+  cadastral_community: 1
+  municipality: 2
+  town: 3
+  administrative_district: 4
+  district: 5
+  region: 6
+  township: 7
+  city: 8
+  borough: 9
+  territorial: 10
+  quarter: 11
+  village: 12
+  statistical_region: 13
+  military_area: 14
+  neighborhood: 15
+  county: 16
+  state: 17
+  province: 18
+  baseline: 19
 BoundaryType:
   some: 0
   national_park: 1
@@ -165,6 +193,28 @@ BoundaryType:
   religious_administration: 10
   stone: 11
   boundary: 12
+  cadastral: 13
+  postal_code: 14
+  mathematical_point: 15
+  geomorphological-unit: 16
+  state_border: 17
+  place: 18
+  statistical: 19
+  political: 20
+  hazard: 21
+  waterway: 22
+  region: 23
+  national: 24
+  low_emission_zone: 25
+  neighborhood: 26
+  forestry: 27
+  suburb: 28
+  geomorphological_unit: 29 # Map it to geomorphological-unit when we can
+  maritime: 30
+  administrative_cooperation: 31
+  local_authority: 32
+  water_protection_area: 33
+  multipolygon: 34
 MarkerType:
   none: 0
   stone: 1
@@ -645,6 +695,103 @@ AmenityType:
   recycling: 145
   waste_basket: 146
   waste_disposal: 147
+  letter_box: 148
+  parcel_locker: 149
+  fountain: 150
+  social_facility: 151
+  car_sharing: 152
+  events_venue: 153
+  weightbridge: 154
+  multipolygon: 155
+  internet_cafe: 156
+  language_school: 157
+  lounger: 158
+  prep_school: 159
+  research_institute: 160
+  post_depot: 161
+  smoking_area: 162
+  watering_place: 163
+  food_sharing: 164
+  traffic_park: 165
+  dressing_room: 166
+  public_bath: 167
+  water_point: 168
+  game_feeding: 169
+  hookah_lounge: 170
+  library_dropoff: 171
+  money_transfer: 172
+  place_of_mourning: 173
+  dancing_school: 174
+  training: 175
+  clothes_drier: 176
+  mist_spraying_cooler: 177
+  waste_transfer_station: 178
+  funeral_hall: 179
+  exhibition_centre: 180
+  binoculars: 181
+  stage: 182
+  sanitary_dump_station: 183
+  payment_terminal: 184
+  chair: 185
+  auditorium: 186
+  scout_camp: 187
+  animal_boarding: 188
+  locker: 189
+  student_accomodation: 190
+  animal_breeding: 191
+  sky_rental: 192
+  dog_toylet: 193
+  mobility_hub: 194
+  rental: 195
+  mortuary: 196
+  security_booth: 197
+  payment_centre: 198
+  site: 199
+  bycicle_wash: 200
+  vacant: 201
+  device_charging_station: 202
+  bird_bath: 203
+  lounge: 204
+  stables: 205
+  festival_grounds: 206
+  workshop: 207
+  fixme: 208
+  ranger_station: 209
+  vehicle_ramp: 210
+  cloakroom: 211
+  public_hall: 212
+  events_centre: 213
+  piano: 214
+  spa: 215
+  give_box: 216
+  changing_table: 217
+  clubhouse: 218
+  car_pooling: 219
+  boat_storage: 220
+  flight_school: 221
+  bell: 222
+  karaoke_box: 223
+  area: 224
+  waiting_area: 225
+  printer: 226
+  culture_center: 227
+  washing_machine: 228
+  sailing_school: 229
+  plaza: 230
+  indoor_sports_centre: 231
+  kitchen: 232
+  stadium: 233
+  parking_exit: 234
+  courier: 235
+  information: 236
+  toylet: 237
+  music_garden: 238
+  hitching_post: 239
+  refugee_housing: 240
+  esoterica: 241
+  notice_board: 242
+  lost_property_office: 243
+  
 ShopType:
   none: 0
   unknown: 0
@@ -2020,6 +2167,20 @@ Location:
   outdoor: 3
   overground: 4
   bridge: 5
+  roof: 6
+  aboweground: 7
+  surface: 8
+  overhead: 9
+  onbridge: 10
+  rooftop: 11
+  wall: 12
+  transition: 13
+  hallinside: 14
+  under_bridge: 15
+  underwater: 16
+  tree: 17
+  pole: 18
+
 BridgeStructure:
   beam: 1
   arch: 2
@@ -2178,7 +2339,8 @@ ConstructionType:
   community_centre: 69
   fire_station: 70
   basin: 71
-  terrace: 72swimming_pool: 73
+  terrace: 72
+  swimming_pool: 73
   pitch: 74
   stable: 75
   stadium: 76
@@ -2195,7 +2357,7 @@ ConstructionType:
   bunker: 87
   sports_hall: 88
   schoolpart: 89
-  
+
 IndustrialType:
   factory: 0
   distributor: 1
@@ -2264,6 +2426,19 @@ GolfRelation:
 KerbType:
   lowered: 1
   raised: 2
+  flush: 3
+  'no': 4
+  rolled: 5
+  'yes': 6
+  normal: 7
+  one: 8
+  regular: 9
+  unknown: 10
+  rounded: 11
+  both: 12
+  lowered_and_sloped: 13
+  beveled: 14
+
 WheelchairAccess:
   'no': 0
   'yes': 1
@@ -2326,6 +2501,20 @@ ParkingType:
   carports: 9
   sheds: 10
   'yes': 11
+  street_side: 12
+  multi-storey: 13
+  half_on_kerb: 14
+  garage_boxes: 15
+  site: 16
+  on_kerb: 17
+  'no': 18
+  layby: 19
+  garages: 20
+  shoulder: 21
+  entrance: 22
+  access: 23
+  service: 24
+
 RestrictionType:
   no_right_turn: 0
   only_right_turn: 1
@@ -2866,27 +3055,27 @@ OfficeType:
   event_management: 67
   translator: 68
   careers: 69
-harbour_master: 70
-pest_control: 71
-healthcare: 72
-facility_management: 73
-laboratory: 74
-bail_bond_agent: 75
-mail: 76
-education: 77
-rental: 78
-power_utility: 79
-management: 80
-visa: 81
-conservator: 82
-disused: 83
-chamber: 84
-graphics_design: 85
-radio_station: 86
-adoption_agency: 87
-private_investigator: 88
-energy_provider: 89 # Map to energy_supplier when we can do this
-call_center: 90
+  harbour_master: 70
+  pest_control: 71
+  healthcare: 72
+  facility_management: 73
+  laboratory: 74
+  bail_bond_agent: 75
+  mail: 76
+  education: 77
+  rental: 78
+  power_utility: 79
+  management: 80
+  visa: 81
+  conservator: 82
+  disused: 83
+  chamber: 84
+  graphics_design: 85
+  radio_station: 86
+  adoption_agency: 87
+  private_investigator: 88
+  energy_provider: 89 # Map to energy_supplier when we can do this
+  call_center: 90
   prevention: 91
   nursing_service: 92
   museum: 93
@@ -3236,6 +3425,25 @@ CycleWayType:
   segregated: 11
   soft_lane: 12
   oposite_track: 13
+  separate: 14
+  shoulder: 15
+  opposite_share_busway: 16
+  right: 17
+  traffic_island: 18
+  sidepath: 19
+  shared: 20
+  both: 21
+  pictogram: 22
+  sidewalk: 23
+  link: 24
+  use_sidepath: 25
+  left: 26
+  see: 27
+  marked: 28
+  designated: 29
+  construction: 30
+  line: 31
+
 CutlineType:
   pipeline: 0
 MaxspeedType:
