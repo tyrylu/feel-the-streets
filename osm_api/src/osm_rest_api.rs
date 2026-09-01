@@ -1,12 +1,8 @@
-/// Client for the OSM REST API v0.6 (api.openstreetmap.org).
-///
-/// Used as an alternative to Overpass for current-data queries, which avoids
-/// Overpass rate limits during ongoing change processing.
 use crate::object::OSMObject;
 use crate::raw_object::{OSMObject as RawOSMObject, OSMObjectOrRemark};
 use crate::{Error, Result};
 use itertools::Itertools;
-use log::{debug, info};
+use log::debug;
 use once_cell::sync::Lazy;
 use quick_xml::de::Deserializer;
 use serde::Deserialize;
@@ -36,18 +32,6 @@ fn type_plural(prefix: char) -> &'static str {
     }
 }
 
-/// Parse a standard OSM API XML response body into a list of `OSMObject`s.
-///
-/// The OSM API returns:
-/// ```xml
-/// <?xml version="1.0" encoding="UTF-8"?>
-/// <osm version="0.6" ...>
-///   <node .../>
-///   ...
-/// </osm>
-/// ```
-/// Unlike the Overpass response there is no `<note>` or `<meta>` line,
-/// so we only skip the XML declaration and the `<osm>` opening tag (2 lines).
 fn parse_osm_xml_response(body: impl std::io::Read) -> Result<Vec<OSMObject>> {
     let mut reader = BufReader::with_capacity(65536, body);
     let mut line = String::new();
@@ -74,10 +58,6 @@ fn parse_osm_xml_response(body: impl std::io::Read) -> Result<Vec<OSMObject>> {
     Ok(objects)
 }
 
-/// Fetch multiple OSM objects by their prefixed IDs (e.g. `"n123"`, `"w456"`, `"r789"`).
-///
-/// Objects are batched by type and sent as multi-fetch GET requests to the OSM REST API.
-/// Only current (latest) versions are returned; this must not be used for historical queries.
 pub fn fetch_objects_by_ids(ids: &mut [SmolStr]) -> Result<Vec<OSMObject>> {
     if ids.is_empty() {
         return Ok(vec![]);
@@ -95,7 +75,7 @@ pub fn fetch_objects_by_ids(ids: &mut [SmolStr]) -> Result<Vec<OSMObject>> {
         for chunk in numeric_ids.chunks(BATCH_SIZE) {
             let ids_str = chunk.join(",");
             let url = format!("{OSM_API_BASE}/{type_p}");
-            info!(
+            debug!(
                 "Fetching {} {type_p} from OSM REST API",
                 chunk.len()
             );
@@ -109,15 +89,4 @@ pub fn fetch_objects_by_ids(ids: &mut [SmolStr]) -> Result<Vec<OSMObject>> {
     }
 
     Ok(results)
-}
-
-/// Fetch all relations that contain the given relation ID as a member.
-///
-/// Equivalent to the Overpass query `rel(<id>);<<` but uses the OSM REST API.
-/// Returns current (not historical) data.
-pub fn fetch_parent_relations(relation_id: u64) -> Result<Vec<OSMObject>> {
-    let url = format!("{OSM_API_BASE}/relation/{relation_id}/relations");
-    info!("Fetching parent relations of r{relation_id} from OSM REST API");
-    let resp = AGENT.get(&url).call()?;
-    parse_osm_xml_response(resp.into_body().into_reader())
 }
