@@ -17,7 +17,7 @@ class PositionAdjustmentController:
                 crossing_possibilities = [r for r in request_interesting_entities.send(self)[0][1] if r.is_road_like and r not in enters and r not in self._controlled.is_inside_of]
                 intersection = get_crossing_point(current_roads[-1], place, crossing_possibilities)
                 if intersection:
-                    self._controlled.move_to(to_latlon(intersection), force=True)
+                    self._controlled.move_to(to_latlon(intersection.coords()[0]), force=True)
                     return MoveValidationResult.cancel
         return MoveValidationResult.accept
 
