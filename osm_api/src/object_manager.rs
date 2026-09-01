@@ -218,6 +218,25 @@ pub fn cache_object(&self, object: &OSMObject) -> Result<()> {
     }
 
     fn lookup_objects<S: AsRef<str>>(&self, ids: &mut [S]) -> Result<()> {
+        if self.past_time.is_none() {
+            // No historical date: use the OSM REST API, which avoids Overpass rate limits.
+            let smol_ids: Vec<smol_str::SmolStr> =
+                ids.iter().map(|s| smol_str::SmolStr::new(s.as_ref())).collect();
+            let mut smol_ids = smol_ids;
+            let objects = crate::osm_rest_api::fetch_objects_by_ids(&mut smol_ids)?;
+            let wtxn = self.cache.begin_write()?;
+            for obj in &objects {
+                self.retrieved_from_network
+                    .borrow_mut()
+                    .insert(obj.unique_id());
+                self.cache_object_internal(obj, &wtxn)?;
+            }
+            wtxn.commit()?;
+            self.ensure_has_cached_dependencies_for(&objects)?;
+            return Ok(());
+        }
+
+        // Historical query: must use Overpass (OSM REST API has no time-travel support).
         fn batch_size_for_object_type(object_type: char) -> usize {
             match object_type {
                 'n' => 4512,

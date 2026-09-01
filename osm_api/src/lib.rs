@@ -6,6 +6,7 @@ pub mod changeset;
 mod error;
 pub mod object;
 pub mod object_manager;
+pub mod osm_rest_api;
 pub mod overpass_api;
 mod raw_changeset;
 mod raw_object;
