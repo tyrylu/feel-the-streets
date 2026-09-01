@@ -12,8 +12,7 @@ use std::io::BufReader;
 use ureq::Agent;
 
 const OSM_API_BASE: &str = "https://api.openstreetmap.org/api/0.6";
-/// Safe batch size: 700 × 11 chars ("12345678901,") = ~7700 chars, well under the 8207 limit.
-const BATCH_SIZE: usize = 700;
+const BATCH_SIZE: usize = 600;
 
 static AGENT: Lazy<Agent> = Lazy::new(|| {
     Agent::new_with_config(
