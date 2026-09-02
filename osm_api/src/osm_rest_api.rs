@@ -12,7 +12,7 @@ use std::io::BufReader;
 use ureq::Agent;
 
 const OSM_API_BASE: &str = "https://api.openstreetmap.org/api/0.6";
-const BATCH_SIZE: usize = 600;
+const BATCH_SIZE: usize = 500;
 
 static AGENT: Lazy<Agent> = Lazy::new(|| {
     Agent::new_with_config(
