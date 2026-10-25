@@ -36,14 +36,14 @@ impl Dataset {
             let mut zip = zip::ZipArchive::new(Cursor::new(data))?;
             for name in 0..zip.len() {
                 let mut file = zip.by_index(name)?;
-                if !file.name().ends_with("DSM.tif") {
+                if !file.name()?.ends_with("DSM.tif") {
                     continue;
                 }
                 let file_path = self
                     .storage_root
-                    .join(tile_id_from_archive_filename(file.name())?)
+                    .join(tile_id_from_archive_filename(file.name()?.as_ref())?)
                     .with_extension("ztif");
-                debug!("Extracting {} to {}", file.name(), file_path.display());
+                debug!("Extracting {} to {}", file.name()?.as_ref(), file_path.display());
                 let mut dest = std::fs::File::create(&file_path)?;
                 zstd::stream::copy_encode(&mut file, &mut dest, 22)?;
             }
