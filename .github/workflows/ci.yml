@@ -17,7 +17,7 @@ jobs:
       if: runner.arch != 'ARM64'
       uses: actions/setup-python@v7
       with:
-        python-version: '3.8'
+        python-version: '3.14'
     - name: Install latest stable
       uses: actions-rs/toolchain@v1
       with:
